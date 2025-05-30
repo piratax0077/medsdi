@@ -3,13 +3,12 @@
 
     <!--****Container Completo****-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content">
+        <div class="pcoded-content mt-top">
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
-                        <div class="col-md-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 mt-2">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis lugares de atención</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -103,14 +102,14 @@
                                                     </td>
                                                     <td class="align-middle">
                                                         {{-- horario --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_horario_lugar_atencion({{ $l->id }})">
+                                                        <button type="button" class="btn btn-primary btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_horario_lugar_atencion({{ $l->id }})">
                                                             <i class="fas fa-clock"></i>
                                                         </button>
 
                                                     </td>
                                                     <td class="align-middle">
                                                         {{-- procedimientos --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_procedimiento_lugar_atencion({{ $l->id }}, {{ $id_profesional }});">
+                                                        <button type="button" class="btn btn-purple btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_procedimiento_lugar_atencion({{ $l->id }}, {{ $id_profesional }});">
                                                             <i class="fas fa-procedures"></i>
                                                         </button>
 
@@ -532,12 +531,12 @@
                     <form id="">
                         <input type="hidden" name="mi_horario_id_lugar_atencion" id="mi_horario_id_lugar_atencion">
                         <div class="form-row">
-                            <div class="col-sm-12 mb-1">
+                            <div class="col-sm-12">
                                 <h6 class="t-aten">Tipo de agenda</h6>
                             </div>
                             <div class="col-sm-12 mb-2">
                                 <div class="form-group fill">
-                                    <!--<label class="floating-label-activo-sm">Tipo de agenda </label>-->
+                                    <label class="floating-label-activo-sm">Seleccione </label>
                                     <select name="tipo_agenda_medica" id="tipo_agenda_medica" class="form-control form-control-sm" onclick="validar_tipo_agenda();">
 
                                         @if($profesional->id_especialidad == 2)
@@ -557,14 +556,14 @@
                                 <h6 class="text-c-blue mb-3">Duraci&oacute;n</h6>
                             </div> --}}
 
-                            <div class="col-sm-12 mb-2">
+                            <div class="col-sm-12 mb-1">
                                 <h6 class="t-aten">Horario de Atenci&oacute;n</h6>
                             </div>
                             {{-- <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Tipo Agenda </label>
                                     <select name="tipo_agenda_medica" id="tipo_agenda_medica" class=" form-control" onclick="validar_tipo_agenda();">
-                                        <option value="0">Seleccione Tipo Agenda</option>
+                                        <option value="0">Seleccione tipo de agenda</option>
                                         <option value="1">Atención General</option>
                                         <option value="2">Atención Dental</option>
                                         <option value="3">Atención Telemedicina</option>
@@ -573,7 +572,7 @@
                                     </select>
                                 </div>
                             </div> --}}
-                            <div class="col-sm-6 mb-2">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Duraci&oacute;n de Consultas M&eacute;dicas </label>
                                     <select name="duracion_horario" id="duracion_horario" class=" form-control form-control-sm">
@@ -585,7 +584,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 mb-2">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Día de atención</label>
                                     <select name="dia_horario" id="dia_horario" class=" form-control form-control-sm">
@@ -600,7 +599,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 mb-2">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Desde </label>
                                     <select name="hora_inicio_horario" id="hora_inicio_horario" class=" form-control form-control-sm">
@@ -637,7 +636,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-6 mb-2">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Hasta </label>
                                     <select name="hora_termino_horario" id="hora_termino_horario" class=" form-control form-control-sm">
@@ -673,21 +672,20 @@
                                         <option value="22:00">22:00</option>
                                     </select>
                                 </div>
-
                             </div>
 
-                            <div class="col-sm-12 mb-2 text-center">
-                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm" data-dismiss="modal"><i class="fa fa-plus"></i> Agregar horario de atención</button>
+                            <div class="col-sm-12 mb-2">
+                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm float-md-right" data-dismiss="modal"><i class="fa fa-plus"></i> Agregar horario de atención</button>
                                 {{-- <button type="button" id="cerrar_modal_horario2" class="btn btn-danger btn-sm">Cancelar</button> --}}
                             </div>
                             <div class="col-sm-12 mt-2 mb-2">
                                 <table id="mi_horario_table" class="table table-sm">
                                     <thead>
                                         <tr>
-											<th class="text-center align-middle">T. Agenda</th>
-                                            <th class="text-center align-middle">Desde</th>
-                                            <th class="text-center align-middle">Hasta</th>
-                                            <th class="text-center align-middle">D&iacute;a</th>
+											<th class="align-middle">Agenda</th>
+                                            <th class="align-middle">Desde</th>
+                                            <th class="align-middle">Hasta</th>
+                                            <th class="align-middle">D&iacute;a</th>
                                             <th class="text-center align-middle">Acci&oacute;n</th>
                                         </tr>
                                     </thead>
@@ -862,9 +860,8 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 mb-3 mt-2 text-center">
-                            <button type="button" onclick="registrar_mi_procedimiento_lugar_atencion()" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
-                            <!--<button type="button" id="cancelar_modal_agrear_editar_procedimientos" class="btn btn-danger btn-sm" onclick="cancelar_modal_agrear_editar_procedimientos();">Cancelar</button>-->
+                        <div class="col-sm-12 mb-3 mt-2">
+                            <button type="button" onclick="registrar_mi_procedimiento_lugar_atencion()" class="btn btn-info float-md-right btn-sm"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
                         </div>
                         <div class="col-sm-12 mt-3 mb-3">
                             {{--  <table id="" class="table table-sm table-responsive">  --}}

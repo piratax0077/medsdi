@@ -2,7 +2,7 @@
     <div class="card-a">
         <div class="card-header-a" id="exam_esp">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
-                Examen Odontológico General DEF
+                Examen Odontológico General
             </button>
         </div>
         <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">

@@ -59,7 +59,7 @@
                             <div class="form-row mt-1">
                                 <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
                                 <div class="col-9 ml-2 text-secondary">
-
+                                    {{ $paciente->Prevision()->first()->nombre }}
                                 </div>
                             </div>
                             <hr class="mt-2">
@@ -179,7 +179,8 @@
                             <div class="form-row mt-1">
                                 <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
                                 <div class="col-9 ml-2 text-secondary">
-
+                                    <input type="text" class="form-control" id="paciente_convenio_edit"
+                                        value="{{ $paciente->Prevision()->first()->nombre }}">
                                 </div>
                             </div>
                             <hr class="mt-2">
@@ -550,7 +551,7 @@
                         <div class="col-7 ml-2 text-secondary listas_sidebar">
                             <ul>
 
-                                @if (isset($alergias))
+                                @if (isset($alergias) && count($alergias) > 0)
                                     @foreach ($alergias as $alergia)
                                         <li>{{ $alergia->nombre_alergia }}</li>
                                     @endforeach
@@ -566,7 +567,13 @@
                         <label class="col-4  text-dark font-weight-bolder">Discapacidad</label>
                         <div class="col-7  ml-2 text-secondary">
                             <ul>
-                                <li>Visual</li>
+                                @if (isset($discapacidades) && count($discapacidades) > 0)
+                                    @foreach ($discapacidades as $d)
+                                        <li>{{ $d->nombre }}</li>
+                                    @endforeach
+                                @else
+                                    <li>Sin registro</li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -616,7 +623,7 @@
                             @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->transfusion == 1)
                                 Si
                             @else
-                                No
+                                Sin registro
                             @endif
                         </div>
                     </div>
@@ -627,19 +634,19 @@
                             @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos == 1)
                                 Si
                             @else
-                                No
+                                Sin registro
                             @endif
                         </div>
                     </div>
-                    <div class="form-row mt-3 mb-5">
+                    {{-- <div class="form-row mt-3 mb-5">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                             <button type="button" class="btn btn-primary-light-c btn-xxs"><i
                                     class="feather icon-edit"></i> Editar información</button>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
-            <div class="card-sidebar">
+            {{-- <div class="card-sidebar">
                 <div class="card-header-sidebar" id="headingThree">
                     <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left text-info collapsed" type="button"
@@ -691,7 +698,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             {{--  <div class="card-sidebar">
                 <div class="card-header-sidebar" id="headingThree">

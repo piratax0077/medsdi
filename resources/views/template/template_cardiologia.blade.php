@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
 
-    
+
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
 
@@ -262,7 +262,7 @@
             array.slice(0, 4).forEach(element => {
                 $('#table_examen_' + element).DataTable();
             });
-            
+
 
             $('#tabla_examen_cirugia_d').DataTable({
                 "paging": false,
@@ -601,6 +601,23 @@
                 })
 
         });
+
+        function cargarIgual(input)
+        {
+
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                equivalente.val(actual.val());
+            });
+
+            // let actual = $('#'+input);
+            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+
+            // equivalente.val(actual.val());
+
+        }
 	</script>
     @yield('js_inferior')
     @yield('page-script')

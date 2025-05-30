@@ -2429,7 +2429,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ isset($fichaAtencion->hipotesis_diagnostico) ? $fichaAtencion->hipotesis_diagnostico : '' }}">
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,dg_ingreso" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ isset($fichaAtencion->hipotesis_diagnostico) ? $fichaAtencion->hipotesis_diagnostico : '' }}">
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Indicaciones</label>
@@ -2864,7 +2864,22 @@
 @include("general.reserva_hora.modal.tomar_hora_dental")
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cantidadInput = document.getElementById("cantidad");
+        const precioInput = document.getElementById("precio");
+        const totalInput = document.getElementById("total");
 
+        // Calcula el total automáticamente cuando se ingresan datos
+        function calcularTotal() {
+            const cantidad = parseFloat(cantidadInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            totalInput.value = (cantidad * precio).toFixed(2);
+        }
+
+        cantidadInput.addEventListener("input", calcularTotal);
+        precioInput.addEventListener("input", calcularTotal);
+
+    });
     $(document).ready(function(){
         $('.tratamiento-autocomplete').each(function() {
             $(this).autocomplete({
@@ -2947,6 +2962,22 @@
         mostrar_nuevo_pieza_pfu(random);
         mostrar_nuevo_pieza_pfp(random);
     });
+
+    function cargarIgual(input){
+
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                equivalente.val(actual.val());
+            });
+            {{--
+            let actual = $('#'+input);
+            let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+
+            equivalente.val(actual.val());
+            --}}
+        }
 
     function evaluar_para_carga_detalle(select, div, input, valor)
     {
@@ -6077,6 +6108,9 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                         $('#table_pagos_reasignar_odontograma tbody').append(fila);
                     }
                 });
+                // limpiar formulario
+                $('#diag_presupuesto_pieza_g').val('');
+                $('#paciente_piezas_dentales_ex').val(null).trigger('change');
             }else{
                 swal({
                     icon:'error',

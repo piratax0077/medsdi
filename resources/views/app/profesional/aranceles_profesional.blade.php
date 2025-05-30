@@ -71,7 +71,7 @@ p {
                 </div>
                 <div class="card">
                     <div class="card-header bg-info">
-                        <h6 class="f-18 text-white">Ingresar procedimiento</h6>
+                        <h6 class="f-18 text-white">Ingresar procedimiento &nbsp; &nbsp; {{ $profesional->TipoEspecialidad()->first()->nombre }}</h6>
                     </div>
                     <div class="card-body">
                         <div class="form-row">
@@ -387,7 +387,7 @@ p {
                     });
 
                     // Redibuja la tabla
-                    table.draw();
+                    table_procedimientos_propios.draw();
 
                     // Actualizar la tabla DataTable
                     let trabajos = response.trabajos;
@@ -468,7 +468,7 @@ p {
                         const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
                         table_procedimientos_propios.row.add([
                             p.descripcion,
-                            p.cantidad_uco,
+                            p.uco,
                             '$'+p.valor,
                             `
                             <div class="form-check">

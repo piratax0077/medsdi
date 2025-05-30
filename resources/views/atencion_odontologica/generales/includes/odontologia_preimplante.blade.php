@@ -794,22 +794,7 @@
     }
 </script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const cantidadInput = document.getElementById("cantidad");
-        const precioInput = document.getElementById("precio");
-        const totalInput = document.getElementById("total");
 
-        // Calcula el total automáticamente cuando se ingresan datos
-        function calcularTotal() {
-            const cantidad = parseFloat(cantidadInput.value) || 0;
-            const precio = parseFloat(precioInput.value) || 0;
-            totalInput.value = (cantidad * precio).toFixed(2);
-        }
-
-        cantidadInput.addEventListener("input", calcularTotal);
-        precioInput.addEventListener("input", calcularTotal);
-
-    });
 
     function guardar_insumo(){
         let nombreInsumo = $('#nombreInsumo option:selected').text();

@@ -300,8 +300,6 @@
             $('#info_contacto-edit').css('display', 'block');
         }
 
-
-
         function cancelarInformacionContacto(){
             $('#info_contacto').css('display', 'block');
             $('#info_contacto-edit').css('display', 'none');
@@ -654,6 +652,23 @@
 
 
         };
+
+        function cargarIgual(input)
+        {
+
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                equivalente.val(actual.val());
+            });
+
+            // let actual = $('#'+input);
+            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+
+            // equivalente.val(actual.val());
+
+        }
 	</script>
     @yield('js_inferior')
     @yield('page-script')

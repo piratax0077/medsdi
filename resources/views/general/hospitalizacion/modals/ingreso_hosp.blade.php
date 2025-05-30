@@ -41,11 +41,7 @@
                                         href="#archivos-hosp-pab" role="tab" aria-controls="archivos-hosp-pab"
                                         aria-selected="false">Archivos</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="comentarios-hosp-pab-tab" data-toggle="tab"
-                                        href="#comentarios-hosp-pab" role="tab" aria-controls="comentarios-hosp-pab"
-                                        aria-selected="false">Comentarios</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -111,9 +107,11 @@
                                                 <label class="floating-label-activo-sm">Motivo</label>
                                                 <select name="motivo_hosp" id="motivo_hosp"
                                                     data-titulo="Otro Tratamiento"
+                                                    data-input_igual="motivo_hosp_indicaciones"
                                                     class="form-control form-control-sm"
-                                                    onchange="evaluar_para_carga_detalle('motivo_hosp','div_motivo_hosp','obs_motivo_hosp',5);">
-                                                    <option value="1" selected>Cirugía</option>
+                                                    onchange="evaluar_para_carga_detalle('motivo_hosp','div_motivo_hosp','obs_motivo_hosp',5);" onblur="cargarIgualSelect('motivo_hosp')">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="1">Cirugía</option>
                                                     <option value="2">Tratamiento Médico</option>
                                                     <option value="3">Estudio Clínico</option>
                                                     <option value="4">Observación</option>
@@ -124,7 +122,7 @@
                                                 <label class="floating-label-activo-sm">Otro tratamiento
                                                     (Describir)</label>
                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" rows="1"
-                                                    onfocus="this.rows=3" onblur="this.rows=1;" name="obs_motivo_hosp" id="obs_motivo_hosp"></textarea>
+                                                    onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="motivo_hosp_indicaciones" name="obs_motivo_hosp" id="obs_motivo_hosp" onchange="cargarIgual('obs_motivo_hosp')"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -229,7 +227,7 @@
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                     <label class="floating-label-activo-sm">Clínica - Hospital</label>
                                                     <input type="text" class="form-control form-control-sm" id="hosp_en"
-                                                        name="hosp_en" value="">
+                                                        name="hosp_en" value="{{ $lugar_atencion->nombre }}">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                     <label class="floating-label-activo-sm">Diagnósticos </label>
@@ -258,898 +256,79 @@
                                     </div>
                                 </div>
                                 <!--INDICACIONES INGRESO-->
-                                <div class="tab-pane fade show" id="indicaciones-hosp" role="tabpanel"
-                                    aria-labelledby="indicaciones-hosp-tab">
-                                    <div id="evol_med_urgencia" class="open" aria-labelledby="med_urgen"
-                                        data-parent="#med_urgen">
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <h6 class="t-aten">Indicaciones de ingreso</h6>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="card-informacion">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <ul class="nav nav-tabs nav-fill  mb-10" id="med_urgen"
-                                                                        role="tablist">
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link f-16 text-reset active"
-                                                                                id="urg_ex_ingreso_tab" data-toggle="tab"
-                                                                                href="#urg_ex_ingreso" role="tab"
-                                                                                aria-controls="urg_ex_ingreso"
-                                                                                aria-selected="true">Evolución</a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link text-reset"
-                                                                                id="receta_urg-tab" data-toggle="tab"
-                                                                                href="#receta_urg" role="tab"
-                                                                                aria-controls="receta_urg"
-                                                                                aria-selected="true">Receta e Indicaciones</a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link text-reset"
-                                                                                id="sol_examenes_urg-tab" data-toggle="tab"
-                                                                                href="#sol_examenes_urg" role="tab"
-                                                                                aria-controls="sol_examenes_urg"
-                                                                                aria-selected="true">Sol. Exámenes</a>
-                                                                        </li>
-                                                                        <li class="nav-item">
-                                                                            <a class="nav-link text-reset"
-                                                                                id="urg_dest_ind-tab" data-toggle="tab"
-                                                                                href="#urg_dest_ind" role="tab"
-                                                                                aria-controls="urg_dest_ind"
-                                                                                aria-selected="true">Otras indicaciones y cuidados</a>
-                                                                        </li>
-                                                                    </ul>
+                                <div class="tab-pane fade show" id="indicaciones-hosp" role="tabpanel"  aria-labelledby="indicaciones-hosp-tab">
+                                    <div id="evol_med_urgencia" class="open" aria-labelledby="med_urgen"   data-parent="#med_urgen">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <h6 class="t-aten">Indicaciones de ingreso</h6>
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div class="card-informacion">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="" class="floating-label-activo-sm">Motivo</label>
+                                                                    <input type="text" name="motivo_hosp_indicaciones" id="motivo_hosp_indicaciones" class="form-control form-control-sm" value="Cirugía">
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                            <div id="form-servicios">
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Indicaciones Exámenes Preparaciones</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="ind_grales_hosp" id="ind_grales_hosp"></textarea>
 
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <table class="table" id="tabla_medicamentos">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Nombre</th>
+                                                                            <th>Dosis</th>
+                                                                            <th>Frecuencia</th>
+                                                                            <th>Acción</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <!-- Aquí se insertarán los medicamentos -->
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
 
-                                                                <div class="tab-content" id="med_urgen">
-                                                                    <!--INGRESO-->
-                                                                    <div class="tab-pane fade show active" id="urg_ex_ingreso"
-                                                                        role="tabpanel" aria-labelledby="urg_ex_ingreso_tab">
-                                                                        <div class="row">
-                                                                            <!--Evoluciones-->
-                                                                            <div class="col-md-12">
-                                                                                <form id="form_ingreso_paciente"
-                                                                                    action="{{ ROUTE('cirugia.registrar_hospitalizacion_cirugia') }}"
-                                                                                    method="POST">
-                                                                                    @csrf
-                                                                                    <input type="hidden"
-                                                                                        name="medicamentos_cirugia"
-                                                                                        id="medicamentos_cirugia">
-                                                                                    <input type="hidden"
-                                                                                        name="examenes_cirugia"
-                                                                                        id="examenes_cirugia">
-                                                                                    <input type="hidden"
-                                                                                        name="interconsultas_cirugia"
-                                                                                        id="interconsultas_cirugia">
+                                                            <div class="col-12 my-2">
+                                                                <button type="button" class="btn btn-success btn-sm float-right" onclick="mostrar_nuevo_medicamento(1000)"><i class="fas fa-plus"></i> Nuevo medicamento</button>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-6" id="contenedor_nuevo_medicamento">
 
-                                                                                    <input type="hidden" name="tipo_cirugia"
-                                                                                        id="tipo_cirugia" value="quirurgica">
-                                                                                    @if (isset($sala_hospitalizacion))
-                                                                                        <input type="hidden"
-                                                                                            name="id_sala_hospitalizacion"
-                                                                                            id="id_sala_hospitalizacion"
-                                                                                            value="{{ $sala_hospitalizacion->id }}">
-                                                                                    @endif
-
-
-                                                                                    <div class="form-row">
-                                                                                        <!--Evoluciones-->
-                                                                                        <div class="col-sm-12 mt-3 ">
-                                                                                            @if (isset($sala_hospitalizaciones))
-                                                                                                {{-- {{ dd($recuperacion) }} --}}
-                                                                                                @foreach ($sala_hospitalizaciones as $sala_hosp)
-                                                                                                    <div class="form-row">
-                                                                                                        <div
-                                                                                                            class="form-group col-md-2">
-                                                                                                            <h6
-                                                                                                                class="text-secondary">
-                                                                                                            </h6>
-                                                                                                            <h6
-                                                                                                                class="text-secondary">
-                                                                                                                {{ $sala_hosp->created_at }}
-                                                                                                            </h6>
-                                                                                                        </div>
-                                                                                                        <div
-                                                                                                            class="form-group col-md-10">
-                                                                                                            <label
-                                                                                                                class="floating-label-activo-sm">Evolución</label>
-                                                                                                            <input
-                                                                                                                class="form-control form-control-sm"
-                                                                                                                name="evolucion1{{ $sala_hosp->id }}"
-                                                                                                                id="evolucion1"
-                                                                                                                value="{{ $sala_hosp->evolucion }}"
-                                                                                                                disabled>
-                                                                                                        </div>
-
-                                                                                                        @if (isset($sala_hosp->medicamentos) &&
-                                                                                                                $sala_hosp->medicamentos != null &&
-                                                                                                                $sala_hosp->medicamentos != '' &&
-                                                                                                                $sala_hosp->medicamentos != '[]')
-                                                                                                            <div
-                                                                                                                class="form-group col-md-6">
-
-                                                                                                                <div
-                                                                                                                    class="card">
-                                                                                                                    <div
-                                                                                                                        class="card-header bg-info align-middle">
-                                                                                                                        <h6
-                                                                                                                            class="float-left d-inline">
-                                                                                                                            Medicamentos
-                                                                                                                        </h6>
-                                                                                                                    </div>
-                                                                                                                    @foreach ($sala_hosp->medicamentos as $medicamento)
-                                                                                                                        <div
-                                                                                                                            class="card-body shadow-none">
-                                                                                                                            <div
-                                                                                                                                class="col-md-12">
-                                                                                                                                <span>{{ $medicamento->producto }}</span>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    @endforeach
-                                                                                                                </div>
-
-                                                                                                            </div>
-                                                                                                        @else
-                                                                                                        @endif
-                                                                                                        @if (isset($sala_hosp->examenes) &&
-                                                                                                                $sala_hosp->examenes != null &&
-                                                                                                                $sala_hosp->examenes != '' &&
-                                                                                                                $sala_hosp->examenes != '[]')
-                                                                                                            <div
-                                                                                                                class="form-group col-md-6">
-                                                                                                                <div
-                                                                                                                    class="card">
-                                                                                                                    <div
-                                                                                                                        class="card-header bg-info align-middle">
-                                                                                                                        <h6
-                                                                                                                            class="float-left d-inline">
-                                                                                                                            Examenes
-                                                                                                                        </h6>
-                                                                                                                    </div>
-                                                                                                                    @foreach ($sala_hosp->examenes as $examen)
-                                                                                                                        <div
-                                                                                                                            class="card-body shadow-none">
-                                                                                                                            <div
-                                                                                                                                class="col-md-12">
-                                                                                                                                <span>
-                                                                                                                                    {{ $examen->tipo_examen . ' - ' . $examen->examen }}
-                                                                                                                                </span>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    @endforeach
-                                                                                                                </div>
-
-                                                                                                            </div>
-                                                                                                        @else
-                                                                                                        @endif
-
-                                                                                                        @if (isset($sala_hosp->interconsultas) &&
-                                                                                                                $sala_hosp->interconsultas != null &&
-                                                                                                                $sala_hosp->interconsultas != '' &&
-                                                                                                                $sala_hosp->interconsultas != '[]')
-                                                                                                            <div
-                                                                                                                class="form-group col-md-6">
-
-                                                                                                                <div
-                                                                                                                    class="card">
-                                                                                                                    <div
-                                                                                                                        class="card-header bg-info align-middle">
-                                                                                                                        <h6
-                                                                                                                            class="float-left d-inline">
-                                                                                                                            Interconsulta/s
-                                                                                                                        </h6>
-                                                                                                                    </div>
-                                                                                                                    @foreach ($sala_hosp->interconsultas as $interconsulta)
-                                                                                                                        <div
-                                                                                                                            class="card-body shadow-none">
-                                                                                                                            <div
-                                                                                                                                class="col-md-12">
-                                                                                                                                <span>
-                                                                                                                                    {{ $interconsulta->nombre_esp . ' - ' . $interconsulta->hipotesis }}
-                                                                                                                                </span>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    @endforeach
-                                                                                                                </div>
-
-                                                                                                            </div>
-                                                                                                        @else
-                                                                                                        @endif
-
-                                                                                                    </div>
-                                                                                                @endforeach
-                                                                                                <div class="form-row">
-                                                                                                    <div
-                                                                                                        class="form-group col-md-2">
-
-                                                                                                        <script>
-                                                                                                            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-                                                                                                                "Octubre", "Noviembre", "Diciembre");
-                                                                                                            var diasSemana = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
-                                                                                                            var f = new Date();
-
-                                                                                                            document.write("<b> " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f
-                                                                                                                .getFullYear() + "</b>");
-                                                                                                        </script>
-                                                                                                    </div>
-                                                                                                    <div
-                                                                                                        class="form-group col-md-10">
-                                                                                                        <label
-                                                                                                            class="floating-label">Evolución</label>
-                                                                                                        <textarea class="form-control form-control-sm" name="evolucion1" id="evolucion1" rows="2"
-                                                                                                            onfocus="this.rows=4" onblur="this.rows=3;"></textarea>
-                                                                                                    </div>
-
-                                                                                                </div>
-                                                                                                <div class="form-row">
-                                                                                                    <div
-                                                                                                        class="form-group col-md-12">
-                                                                                                        <h6
-                                                                                                            class="text-c-blue">
-                                                                                                            Resumen de
-                                                                                                            evoluciones</h6>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="form-row">
-                                                                                                    <div
-                                                                                                        class="form-group col-md-12">
-                                                                                                        <textarea class="form-control form-control-sm" name="resumen_evolucion" id="resumen_evolucion" rows="3"
-                                                                                                            onfocus="this.rows=5" onblur="this.rows=4;"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            @else
-
-                                                                                                <div id="contenedor_evoluciones_paciente">
-                                                                                                    @foreach ($controles_ciclo as $cc)
-                                                                                                    <div class="form-row">
-                                                                                                        <div class="form-group col-md-2">
-                                                                                                            <p class="pt-3 d-inline">
-                                                                                                                {{ $cc->created_at->format('d/m/Y H:i') }} {{ $cc->nombre }}
-                                                                                                            </p>
-                                                                                                        </div>
-                                                                                                        <div class="form-group col-md-10">
-                                                                                                            <div class="form-row">
-
-                                                                                                                <div class="form-group col-md-12">
-                                                                                                                    <label class="floating-label">Evolución</label>
-                                                                                                                    <textarea class="form-control form-control-sm" name="evolucion1" id="evolucion1" rows="2" onfocus="this.rows=4" onblur="this.rows=3;">{{ $cc->evolucion }}</textarea>
-                                                                                                                </div>
-                                                                                                                <hr>
-
-                                                                                                            </div>
-
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="form-row">
-                                                                                                        <div class="form-group col-md-12">
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="form-group col-md-12">
-                                                                                                                    <h6 class="text-c-blue">
-                                                                                                                        Resumen de
-                                                                                                                        evoluciones e
-                                                                                                                        interconsultas</h6>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="form-group col-md-12">
-                                                                                                                    <textarea class="form-control form-control-sm" name="resumen_evolucion" id="resumen_evolucion" rows="3" onfocus="this.rows=5" onblur="this.rows=4;">{{ $cc->resumen }}</textarea>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                                                                                                                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminarEvolucionPaciente()"><i class="feather icon-x"></i> </button>
-                                                                                                                    <button type="button" class="btn btn-icon btn-success-light-c" onclick="agregarEvolucionPaciente()"><i class="feather icon-save"></i> </button>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    @endforeach
-
-                                                                                                </div>
-
-                                                                                                    <h6>Evoluciones</h6>
-                                                                                                    <div
-                                                                                                        id="contenedor_nueva_evolucion">
-                                                                                                    </div>
-                                                                                                    <button type="button"
-                                                                                                        class="btn btn-info-light-c btn-xxs d-inline float-right"
-                                                                                                        onclick="mostrarNuevaEvolucionPaciente({{ $contador_div_evaluaciones }})"><i
-                                                                                                            class="feather icon-plus"></i>
-                                                                                                        Nueva evolución</button>
-
-                                                                                            @endif
-
-
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm">Control enfermería</label>
+                                                                    <select name="control_enfermeria_hosp" id="control_enfermeria_hosp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('control_enfermeria_hosp','div_control_enfermeria_hosp','obs_control_enfermeria',4);">
+                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="1">Cada media hora</option>
+                                                                        <option value="2">Cada 1 hora</option>
+                                                                        <option value="3">Cada 6 hora</option>
+                                                                        <option value="4">Otro</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div id="div_control_enfermeria_hosp" style="display: none">
+                                                                        <p>hola</p>
                                                                     </div>
-                                                                    <!--RECETARIO-->
-                                                                    <div class="tab-pane fade show " id="receta_urg"
-                                                                        role="tabpanel" aria-labelledby="receta_urg_tab">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
-                                                                                <h6 class="t-aten">Recetas e Indicaciones</h6>
-                                                                            </div>
-                                                                            <div class="col-md-12 ">
-                                                                                <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
-                                                                                    @foreach ($tipos_receta as $tipo_receta)
-                                                                                        <li class="nav-item">
-                                                                                            <a class="nav-link-wizard {{ $loop->first ? 'active' : '' }}"
-                                                                                                onclick="mostrarFormularioReceta({{ $tipo_receta->id }})"
-                                                                                                id="rec_t{{ $tipo_receta->id }}"
-                                                                                                data-toggle="pill"
-                                                                                                href="#rec_{{ $tipo_receta->id }}"
-                                                                                                role="tab"
-                                                                                                aria-controls="rec_{{ $tipo_receta->id }}"
-                                                                                                aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                                                                                Receta
-                                                                                                {{ $tipo_receta->descripcion }}
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    @endforeach
-
-                                                                                    <li class="nav-item">
-                                                                                        <a class="nav-link-wizard"
-                                                                                            onclick="mostrarFormularioReceta(3)"
-                                                                                            id="procedimiento_div_tab"
-                                                                                            data-toggle="pill"
-                                                                                            href="#procedimiento_div"
-                                                                                            role="tab"
-                                                                                            aria-controls="procedimiento_div"
-                                                                                            aria-selected="true"
-                                                                                            toogle="true">Procedimientos</a>
-                                                                                    </li>
-                                                                                    <li class="nav-item">
-                                                                                        <a class="nav-link-wizard"
-                                                                                            onclick="mostrarFormularioReceta(4)"
-                                                                                            id="curaciones_div_tab"
-                                                                                            data-toggle="pill"
-                                                                                            href="#curaciones_div"
-                                                                                            role="tab"
-                                                                                            aria-controls="procedimiento_div"
-                                                                                            aria-selected="true"
-                                                                                            toogle="true">Curaciones</a>
-                                                                                    </li>
-                                                                                    {{-- <li class="nav-item">
-                                                                                        <a class="nav-link-wizard" onclick="mostrarFormularioReceta(4)" id="indicaciones_tab" data-toggle="pill" href="#indicaciones" role="tab" aria-controls="indicaciones" aria-selected="true" toogle="true">Otras Indicaciones</a>
-                                                                                    </li> --}}
-                                                                                </ul>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-md-12">
-                                                                                <div class="tab-content"
-                                                                                    id="pills-tablas_examenes">
-                                                                                    <!--TAB 1-->
-                                                                                    <div class="tab-pane fade show active"
-                                                                                        id="rec_1" role="tabpanel"
-                                                                                        aria-labelledby="rec_1">
-
-                                                                                    </div>
-
-
-                                                                                    <!--TAB 2-->
-                                                                                    <div class="tab-pane fade show"
-                                                                                        id="rec_2" role="tabpanel"
-                                                                                        aria-labelledby="rec_2">
-
-                                                                                    </div>
-
-                                                                                    <!--TAB 3-->
-                                                                                    <div class="tab-pane fade show"
-                                                                                        id="procedimiento_div"
-                                                                                        role="tabpanel"
-                                                                                        aria-labelledby="procedimiento_div_tab">
-                                                                                        <div class="form-row">
-
-
-
-                                                                                        </div>
-
-                                                                                    </div>
-
-                                                                                    <!--TAB 4-->
-                                                                                    <div class="tab-pane fade show"
-                                                                                        id="curaciones_div" role="tabpanel"
-                                                                                        aria-labelledby="curaciones_div_tab">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12">
-                                                                                                <div class="table-responsive">
-                                                                                                    <table
-                                                                                                        id="tabla_curaciones_procedimientos"
-                                                                                                        class="table table-bordered table-xs">
-                                                                                                        <thead>
-                                                                                                            <tr>
-                                                                                                                <td class="text-center align-middle text-wrap hidden"
-                                                                                                                    hidden="hidden">
-                                                                                                                    id_procedimiento
-                                                                                                                </td>
-                                                                                                                <td
-                                                                                                                    class="text-center align-middle text-wrap">
-                                                                                                                    Procedimiento
-                                                                                                                </td>
-                                                                                                                <td
-                                                                                                                    class="text-center align-middle text-wrap">
-                                                                                                                    Vigilar
-                                                                                                                    Signos de
-                                                                                                                    Alerta</td>
-                                                                                                                <th
-                                                                                                                    class="text-center align-middle">
-                                                                                                                    Eliminar
-                                                                                                                </th>
-                                                                                                            </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-                                                                                                            @foreach ($curaciones as $c)
-                                                                                                                <tr>
-                                                                                                                    <td class="text-center align-middle text-wrap hidden"
-                                                                                                                        hidden="hidden">
-                                                                                                                        {{ $c->id }}
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="text-center align-middle text-wrap">
-                                                                                                                        {{ $c->datos_curacion->nombre_procedimiento }}
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="text-center align-middle text-wrap">
-                                                                                                                        <input
-                                                                                                                            type="text"
-                                                                                                                            id="ind_vig_sig{{ $c->id }}"
-                                                                                                                            name="ind_vig_sig{{ $c->id }}"
-                                                                                                                            class="form-control form-control-sm">
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="text-center align-middle">
-                                                                                                                        <button
-                                                                                                                            type="button"
-                                                                                                                            class="btn btn-danger btn-sm"
-                                                                                                                            onclick="eliminarCuracion({{ $c->id }})"><i
-                                                                                                                                class="fa fa-trash"></i></button>
-                                                                                                                    </td>
-                                                                                                                </tr>
-                                                                                                                </tr>
-                                                                                                            @endforeach
-                                                                                                        </tbody>
-                                                                                                    </table>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <!--DIV DE TABLA -->
-
-
-                                                                                    <!--Cierre: Tabla-->
-                                                                                    <!-- DIV MEDICAMENTO FALTANTE-->
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12">
-                                                                                            <div class="col-sm-12 mt-3 mb-2">
-                                                                                                <div
-                                                                                                    class="custom-control custom-switch">
-                                                                                                    <input type="checkbox"
-                                                                                                        class="custom-control-input"
-                                                                                                        id="ranking_recetas_switch">
-                                                                                                    <label
-                                                                                                        class="custom-control-label text-primary"
-                                                                                                        for="ranking_recetas_switch"><strong><u>Ranking
-                                                                                                                de
-                                                                                                                recetas
-                                                                                                                controladas del
-                                                                                                                paciente</u></strong></label>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row"
-                                                                                                id="ranking_recetas"
-                                                                                                style="display:none">
-                                                                                                <div
-                                                                                                    class="col-sm-12 col-md-12">
-                                                                                                    <h6
-                                                                                                        class="text-c-blue mb-3">
-                                                                                                        Recetas propias</h6>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="col-sm-6 col-md-6">
-                                                                                                    <div
-                                                                                                        class="form-group fill">
-                                                                                                        <label
-                                                                                                            class="floating-label">Tipo
-                                                                                                            de control</label>
-                                                                                                        <select
-                                                                                                            class="form-control form-control-sm"
-                                                                                                            id=""
-                                                                                                            name="">
-                                                                                                            <option>Seleccione
-                                                                                                                una opción
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="S"
-                                                                                                                data-select2-id="0">
-                                                                                                                Seleccione una
-                                                                                                                opción</option>
-                                                                                                            <option
-                                                                                                                value="1">
-                                                                                                                Control
-                                                                                                                Psicotrópicos
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="2">
-                                                                                                                Control
-                                                                                                                Estupefacientes
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="3">
-                                                                                                                Receta cheque
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="4">
-                                                                                                                Receta Retenida
-                                                                                                                Simple
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="5">
-                                                                                                                Receta Retenida
-                                                                                                                C/Codeína
-                                                                                                            </option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="col-sm-6 col-md-6">
-                                                                                                    <input
-                                                                                                        class="form-control form-control-sm"
-                                                                                                        type="text"
-                                                                                                        placeholder="Nº de recetas">
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="col-sm-12 col-md-12">
-                                                                                                    <h6
-                                                                                                        class="text-c-blue mb-3">
-                                                                                                        Recetas totales</h6>
-                                                                                                </div>
-                                                                                                <div class="col-sm-6">
-                                                                                                    <div
-                                                                                                        class="form-group fill">
-                                                                                                        <label
-                                                                                                            class="floating-label">Tipo
-                                                                                                            de control</label>
-                                                                                                        <select
-                                                                                                            class="form-control form-control-sm"
-                                                                                                            id=""
-                                                                                                            name="">
-                                                                                                            <option
-                                                                                                                value="S"
-                                                                                                                data-select2-id="0">
-                                                                                                                Seleccione una
-                                                                                                                opción</option>
-                                                                                                            <option
-                                                                                                                value="1">
-                                                                                                                Control
-                                                                                                                Psicotrópicos
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="2">
-                                                                                                                Control
-                                                                                                                Estupefacientes
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="3">
-                                                                                                                Receta cheque
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="4">
-                                                                                                                Receta Retenida
-                                                                                                                Simple
-                                                                                                            </option>
-                                                                                                            <option
-                                                                                                                value="5">
-                                                                                                                Receta Retenida
-                                                                                                                C/Codeína
-                                                                                                            </option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="col-sm-6 col-md-6">
-                                                                                                    <input
-                                                                                                        class="form-control form-control-sm"
-                                                                                                        type="text"
-                                                                                                        placeholder="Nº de recetas">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--SOL EXÁMENES-->
-                                                                    <div class="tab-pane fade show" id="sol_examenes_urg"
-                                                                        role="tabpanel"
-                                                                        aria-labelledby="sol_examenes_urg-tab">
-                                                                        <div class="form-row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
-                                                                                <h6 class="t-aten">Solicitud de exámenes</h6>
-                                                                            </div>
-                                                                            <div class="col-sm-12 mt-2">
-                                                                                <div class="form-group">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Tipo
-                                                                                        Examen</label>
-                                                                                    <select
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="tipo_examen"
-                                                                                        id="tipo_examen"
-                                                                                        onchange="">
-                                                                                        <option
-                                                                                            value="0">
-                                                                                            Seleccione</option>
-                                                                                        @foreach ($examenMedico as $exa)
-                                                                                            <option
-                                                                                                value="{{ $exa->cod_examen }}">
-                                                                                                {{ $exa->nombre_examen }}
-                                                                                            </option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 mt-2">
-                                                                                <div class="form-group fill">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Sub-tipo
-                                                                                        de
-                                                                                        Examen</label>
-
-                                                                                    <select
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="sub_tipo_examen"
-                                                                                        id="sub_tipo_examen">
-                                                                                        <option
-                                                                                            value="">
-                                                                                            Seleccione</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 mt-2">
-                                                                                <div class="form-group fill">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Examen</label>
-                                                                                    <select
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="examen"
-                                                                                        id="examen">
-                                                                                        <option
-                                                                                            value="">
-                                                                                            Seleccione</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-6 mt-2">
-                                                                                <div class="form-group fill">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Lado</label>
-                                                                                    <select
-                                                                                        class="form-control form-control-sm"
-                                                                                        id="lado"
-                                                                                        name="lado">
-                                                                                        <option
-                                                                                            value="0">
-                                                                                            Seleccione</option>
-                                                                                        <option
-                                                                                            value="Derecho">
-                                                                                            Derecho</option>
-                                                                                        <option
-                                                                                            value="Izquierdo">
-                                                                                            Izquierdo</option>
-                                                                                        <option
-                                                                                            value="Bilateral">
-                                                                                            Bilateral</option>
-                                                                                        <option value="N/C"
-                                                                                            selected>No
-                                                                                            corresponde</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-6 mt-2">
-                                                                                <div class="form-group fill">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Prioridad</label>
-                                                                                    <select
-                                                                                        class="form-control form-control-sm"
-                                                                                        id="prioridad"
-                                                                                        name="prioridad">
-                                                                                        <option
-                                                                                            value="0">
-                                                                                            Seleccione</option>
-                                                                                        <option
-                                                                                            value="1">
-                                                                                            Baja</option>
-                                                                                        <option value="2"
-                                                                                            selected>Media
-                                                                                        </option>
-                                                                                        <option
-                                                                                            value="3">
-                                                                                            Alta</option>
-                                                                                        <option
-                                                                                            value="4">
-                                                                                            Urgente</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-
-
-                                                                            <div class="col-sm-12 mt-3">
-                                                                                <div class="form-group mb-1">
-                                                                                    <label><strong>Con
-                                                                                            Contraste</strong></label>
-                                                                                    <div
-                                                                                        class="switch switch-success d-inline m-r-10">
-                                                                                        <input type="checkbox"
-                                                                                            id="imagenologia_con_contraste"
-                                                                                            disabled='disabled'>
-                                                                                        <label
-                                                                                            for="imagenologia_con_contraste"
-                                                                                            class="cr"></label>
-                                                                                    </div>
-                                                                                    <div  class="p-2 rounded alert-primary font-weight-bold alert-primary"
-                                                                                        id="mensaje_imagenologia_con_contraste"
-                                                                                        style="display:none;">
-                                                                                        Acaba de seleccionar
-                                                                                        Imagen con
-                                                                                        Constraste. El examen de
-                                                                                        Creatinina fue adjuntado
-                                                                                        correctamente.</div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <button type="button"
-                                                                                    onclick="indicar_examen_cirugia();"
-                                                                                    id="agregar_examen_tabla"
-                                                                                    class="btn btn-success btn-sm float-right">
-                                                                                    <i lass="feather icon-plus"></i>
-                                                                                    Añadir examen
-                                                                                </button>
-                                                                            </div>
-                                                                            <div class="col-sm-12 mt-3">
-                                                                                <!--**** Al agregar un examen, se debe cargar la tabla *****-->
-                                                                                <!--Tabla-->
-                                                                                <div class="table-responsive">
-                                                                                    <table
-                                                                                        id="tabla_examen_cirugia"
-                                                                                        class="table table-bordered table-xs tabla_examenes_ficha">
-                                                                                        <thead>
-                                                                                            <tr>
-                                                                                                <th class="text-center align-middle"
-                                                                                                    style="display:none">
-                                                                                                    id</th>
-                                                                                                <th class="text-center align-middle"
-                                                                                                    style="display:none">
-                                                                                                    Nombre
-                                                                                                    Examen</th>
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Nombre
-                                                                                                    Examen</th>
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Lado</th>
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Tipo</th>
-                                                                                                {{--  <th class="text-center align-middle">Sub-Tipo</th>  --}}
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Prioridad
-                                                                                                </th>
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Con
-                                                                                                    Contraste
-                                                                                                </th>
-                                                                                                <th
-                                                                                                    class="text-center align-middle">
-                                                                                                    Acción
-                                                                                                </th>
-                                                                                            </tr>
-                                                                                        </thead>
-                                                                                        <tbody>
-                                                                                            @foreach ($examenes_solicitados as $examen)
-                                                                                                <tr>
-                                                                                                    <td class="text-center align-middle"
-                                                                                                        style="display:none">
-                                                                                                        {{ $examen->id }}
-                                                                                                    </td>
-                                                                                                    <td class="text-center align-middle"
-                                                                                                        style="display:none">
-                                                                                                        {{ $examen->datos_examen->examen }}
-                                                                                                    </td>
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        {{ $examen->datos_examen->examen }}
-                                                                                                    </td>
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        {{ $examen->datos_examen->lado }}
-                                                                                                    </td>
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        {{ $examen->datos_examen->tipo_examen }}
-                                                                                                    </td>
-                                                                                                    {{--  <td class="text-center align-middle">{{ $examen->sub_tipo }}</td>  --}}
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        {{ $examen->datos_examen->prioridad }}
-                                                                                                    </td>
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        {{ $examen->datos_examen->imagenologia_con_contraste }}
-                                                                                                    </td>
-                                                                                                    <td
-                                                                                                        class="text-center align-middle">
-                                                                                                        <button
-                                                                                                            type="button"
-                                                                                                            class="btn btn-danger btn-icon"
-                                                                                                            onclick="eliminar_examen_cirugia({{ $examen->id }})"><i
-                                                                                                                class="feather icon-x"></i></button>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            @endforeach
-                                                                                        </tbody>
-                                                                                    </table>
-                                                                                </div>
-                                                                                <!--Cierre Tabla-->
-                                                                            </div>
-
-                                                                        </div>
-                                                                        <hr>
-                                                                        <div class="form-row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                                                                <button type="button"
-                                                                                    onclick="registro_examen_ficha();"
-                                                                                    data-dismiss="modal"
-                                                                                    class="btn btn-info text-center"><i class="feather icon-check"></i> Generar orden
-                                                                                    de
-                                                                                    examen
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--INDICACIONES Y DESTINO-->
-                                                                    <div class="tab-pane fade show" id="urg_dest_ind"
-                                                                        role="tabpanel" aria-labelledby="urg_dest_ind-tab">
-                                                                        <div class="form-row my-3">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div class="form-group">
-                                                                                    <label for="otras_ind" class="floating-label-activo-sm">Otras indicaciones y cuidados</label>
-                                                                                    <textarea class="form-control form-control-sm" name="otras_ind" id="otras_ind" cols="30" rows="10"></textarea>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                                                                <button type="button" class="btn btn-info" onclick="registrar_salida_paciente()"> <i class="feather icon-save"></i> Guardar</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label for="otras_ind_hosp" class="floating-label-activo-sm">Otras indicaciones</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otras_ind_hosp" id="otras_ind_hosp"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1166,22 +345,6 @@
                                         </div>
                                     </form>
                                 </div>
-                                <!--COMENTARIOS-->
-                                <div class="tab-pane fade show" id="comentarios-hosp-pab" role="tabpanel"
-                                    aria-labelledby="comentarios-hosp-pab-tab">
-                                    <form>
-                                        <div class="form-row mb-2">
-                                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                                <h6 class="mb-3 text-c-blue">COMENTARIOS</h6>
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Comentarios</label>
-                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3"
-                                                        onblur="this.rows=1;" name="otros_hosp" id="otros_hosp"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -1189,8 +352,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info">Guardar y enviar</button>
-                <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>
+                <button type="button" class="btn btn-info" onclick="guardar_hospitalizacion()">Guardar y enviar</button>
+                <button type="button" class="btn btn-primary" onclick="generar_pdf_hospitalizacion()">Ver formulario (PDF)</button>
 
             </div>
         </div>
@@ -1199,11 +362,22 @@
 
 
 <script>
-    /*CERRAR MODAL*/
-    function cerrarihosp()
-    {
-        $('#ingreso_m_modal').modal('show');
+
+    function cargarIgualSelect(input) {
+        console.log(input);
+        let actual = $('#' + input);
+        let textoSeleccionado = actual.find('option:selected').text(); // Aquí capturas el texto
+        let equivalentes = actual.attr('data-input_igual').split(',');
+
+        $.each(equivalentes, function(index, value) {
+            var equivalente = $('#' + value);
+            equivalente.val(textoSeleccionado);
+        });
     }
+
+
+    /*CERRAR MODAL*/
+
     function cerrarihosp() {
         $('#ingreso_m_modal').modal ('hide');
       }
@@ -1742,205 +916,7 @@
 
     }
 
-    function eliminarCuracion(id) {
-        swal({
-                title: "¿Estás seguro?",
-                text: "Una vez eliminado, no podrás recuperar este registro!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: "{{ route('eliminar_curacion') }}",
-                        type: "POST",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            "id": id,
-                            "id_paciente": $('#id_paciente').val()
-                        },
-                        success: function(data) {
 
-                            // convertir json a objeto
-                            var obj = JSON.parse(data);
-                            var curaciones = obj.curaciones;
-                            $('#tabla_curaciones_servicio tbody').empty();
-                            $('#tabla_curaciones_procedimientos tbody').empty();
-                            curaciones.forEach(curacion => {
-                                let datos = curacion.datos_curacion;
-                                $('#tabla_curaciones_servicio tbody').append(`
-                                <tr>
-                                    <td>${curacion.fecha} ${curacion.hora} <br> ${curacion.responsable}</td>
-                                    <td class="text-center align-middle">${datos.nombre_procedimiento}</td>
-                                    <td class="text-center align-middle">
-                                        <input type="text" class="form-control form-control-sm" id="vigilancia_curacion_servicio${curacion.id}" />
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <div class="switch switch-success d-inline">
-                                            <input type="checkbox" id="curaciones_servicio_listo${curacion.id}" checked="">
-                                            <label for="curaciones_servicio_listo${curacion.id}" class="cr"></label>
-                                        </div>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos_">
-                                            Insumos
-                                        </button>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-outline-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
-                                $('#tabla_curaciones_procedimientos tbody').append(`
-                            <tr>
-                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">1</td>
-                                <td class="text-center align-middle text-wrap">Retiro de puntos</td>
-                                <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig1" name="ind_vig_sig1" class="form-control form-control-sm"></td>
-                                                                            <td class="text-center align-middle">
-                                                                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(1)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                                                            </td>
-                                                                        </tr>
-                            `);
-                            });
-
-                        },
-                        error: function(data) {
-                            console.log(data);
-                        }
-                    });
-                }
-            });
-
-    }
-
-    function mostrarNuevaEvolucionPaciente(counter) {
-        let url = "{{ route('profesional.mostrar_nueva_evolucion_paciente_hosp') }}";
-        $.ajax({
-            url: url,
-            type: 'post',
-            data: {
-                counter: counter,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(resp) {
-                console.log(resp);
-                $('#contenedor_nueva_evolucion').html(resp);
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    }
-
-    function eliminarEvolucionPaciente(id) {
-        let idEvolucion = $('#evolucion' + id).val();
-        console.log(idEvolucion);
-        // Elimina el elemento con el ID proporcionado
-        $('#contenedor_evolucion_' + id).remove();
-    }
-
-    function calcularPAM(idEvolucion = null) {
-        var id = idEvolucion ? idEvolucion : '';
-        var pas = $('#pas' + id).val();
-        if (pas == '') {
-            pas = 0;
-        }
-        var pad = $('#pad' + id).val();
-        // if(pad == ''){
-        //     pad = 0;
-        // }
-        // var pam = ((parseInt(pas) * 2) + parseInt(pad)) / 3;
-        // $('#pam' + id).val(pam.toFixed(2));
-
-        var resultado = ((parseInt(pad) * 2) + parseInt(pas));
-        $('#pam' + id).val((parseInt(resultado) / 3).toFixed(2));
-    }
-
-    function calcularIMC(idEvolucion = null) {
-        var id = idEvolucion ? idEvolucion : '';
-        var talla = $('#talla' + id).val();
-        var peso = $('#peso' + id).val();
-        console.log(talla);
-        console.log(peso);
-        if (talla == '' || peso == '') {
-            return;
-        }
-        var height = talla / 100;
-        var imc = peso / (height ** 2);
-        $('#imc' + id).val(imc.toFixed(2));
-    }
-
-    function eliminarEvolucionAgregada(id) {
-        swal({
-            title: 'Advertencia',
-            text: '¿Está seguro de eliminar esta evolución?',
-            icon: 'warning',
-            buttons: ['Cancelar', 'Aceptar'],
-            dangerMode: true
-        }).then((aceptar) => {
-            if (aceptar) {
-                confirmarEliminarEvolucionAgregada(id);
-            }
-        })
-    }
-
-    function confirmarEliminarEvolucionAgregada(id) {
-        let url = "{{ route('enfermeria.eliminar_evolucion_agregada') }}";
-        var urlParams = new URLSearchParams(window.location.search);
-        var idPaciente = urlParams.get('id_paciente');
-        $.ajax({
-            url: url,
-            type: 'post',
-            data: {
-                id: id,
-                id_paciente: idPaciente,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(resp) {
-                console.log(resp);
-                let mensaje = resp.mensaje;
-                let vista = resp.vista;
-                if (mensaje == 'OK') {
-                    swal({
-                        title: 'Éxito',
-                        text: 'Evolución eliminada correctamente',
-                        icon: 'success',
-                        button: 'Aceptar'
-                    });
-                    $('#contenedor_evoluciones_paciente').empty();
-                    $('#contenedor_evoluciones_paciente').append(vista);
-                } else {
-                    swal({
-                        title: 'Error',
-                        text: mensaje,
-                        icon: 'error',
-                        button: 'Aceptar'
-                    })
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    }
-
-    function mostrarDatosRespiracion(e, idEvolucion = null) {
-        console.log(e);
-        let id = idEvolucion ? idEvolucion : '';
-        let value = e.target.value;
-        console.log(value);
-        if (value == 0) {
-            $('#select_info_respiracion_servicio' + id).addClass('d-none');
-        } else {
-            $('#select_info_respiracion_servicio' + id).removeClass('d-none');
-        }
-
-    }
 
     // function agregarEvolucionPaciente(idEvolucion = null) {
     //     var id = idEvolucion ? idEvolucion : '';
@@ -2233,4 +1209,305 @@
         });
 
     }
+
+    function generar_pdf_hospitalizacion() {
+        let id_paciente = $('#id_paciente').val();
+        let id_ficha_atencion = $('#id_fc').val();
+        let hospen = $('#hospen').val();
+        let hospen_text = $('#hospen option:selected').text();
+        let nom_inst = $('#nom_inst').val();
+        let hosp_enserv = $('#hosp_enserv').val();
+        let hos_enserv_text = $('#hosp_enserv option:selected').text();
+        let motivo_hosp = $('#motivo_hosp').val();
+        let motivo_hosp_text = $('#motivo_hosp option:selected').text();
+        let obs_hospitalizar = $('#obs_hospitalizar').val();
+        let ingreso_sol_pab_modal_otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes').val();
+        let ingreso_sol_pab_modal_otros_antecedentes_text = $('#ingreso_sol_pab_modal_otros_antecedentes option:selected').text();
+
+        // Nuevos campos
+        let hosp_origen = $('#hosp_en').val();
+        let diagn_ingreso = $('#dg_ingreso').val();
+        let serv_hosp = $('#serv_hosp').val();
+        let prepararCirugia = $('#esp-3').is(':checked') ? 1 : 0;
+        let otras_ind = $('#otras_ind').val();
+
+        let motivo_hosp_indicaciones = $('#motivo_hosp_indicaciones').val();
+        let ind_grales_hosp = $('#ind_grales_hosp').val();
+        let nombre_medicamento_indicaciones = $('#nombre_medicamento_indicaciones').val();
+        let dosis_medicamento_indicaciones = $('#dosis_medicamento_indicaciones').val();
+        let frecuencia_medicamento_indicaciones = $('#frecuencia_medicamento_indicaciones').val();
+        let control_enfermeria_hosp = $('#control_enfermeria_hosp').val();
+        let control_enfermeria_hosp_text = $('#control_enfermeria_hosp option:selected').text();
+
+        let otras_ind_hosp = $('#otras_ind_hosp').val();
+
+        // Validación
+        let valido = 1;
+        let mensaje = '';
+        if (motivo_hosp == 0) {
+            valido = 0;
+            mensaje += '<li>Motivo de hospitalización</li>';
+        }
+
+        if (nom_inst == '') {
+            valido = 0;
+            mensaje += '<li>Nombre de la institución</li>';
+        }
+
+        if(ind_grales_hosp == ''){
+            valido = 0;
+            mensaje += '<li>Indicaciones examenes preparación</li>';
+        }
+
+        if(control_enfermeria_hosp == 0){
+            valido = 0;
+            mensaje += '<li>Control de enfermería</li>';
+
+        }
+
+        // if (ingreso_sol_pab_modal_otros_antecedentes == '') {
+        //     valido = 0;
+        //     mensaje += '<li>Observaciones antecedentes médicos</li>';
+        // }
+
+        if (valido == 0) {
+            $('#ingreso_m_modal').modal('hide');
+            return swal({
+                title: "Campos requeridos",
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                dangerMode: true,
+            }).then(() => {
+                $('#ingreso_m_modal').modal('show');
+            });
+        }
+
+            let data = {
+                id_ficha_atencion: id_ficha_atencion,
+                id_paciente: id_paciente,
+                hospen: hospen,
+                hospen_text: hospen_text,
+                nom_inst: nom_inst,
+                hosp_enserv: hosp_enserv,
+                hosp_enserv_text: hos_enserv_text,
+                motivo_hosp: motivo_hosp,
+                motivo_hosp_text: motivo_hosp_text,
+                obs_hospitalizar: obs_hospitalizar,
+                ingreso_sol_pab_modal_otros_antecedentes: ingreso_sol_pab_modal_otros_antecedentes,
+                ingreso_sol_pab_modal_otros_antecedentes_text: ingreso_sol_pab_modal_otros_antecedentes_text,
+                hosp_origen: hosp_origen,
+                diagn_ingreso: diagn_ingreso,
+                serv_hosp: serv_hosp,
+                preparar_cirugia: prepararCirugia,
+                otras_ind: otras_ind,
+                motivo_hosp_indicaciones: motivo_hosp_indicaciones,
+                ind_grales_hosp: ind_grales_hosp,
+                nombre_medicamento: nombre_medicamento_indicaciones,
+                dosis_medicamento: dosis_medicamento_indicaciones,
+                frecuencia_medicamento: frecuencia_medicamento_indicaciones,
+                control_enfermeria: control_enfermeria_hosp,
+                control_enfermeria_text: control_enfermeria_hosp_text,
+                otras_indicaciones: otras_ind,
+                medicamentos: JSON.stringify(
+                    (typeof medicamentos_hospitalizacion !== 'undefined' && Array.isArray(medicamentos_hospitalizacion))
+                        ? medicamentos_hospitalizacion
+                        : []
+                ),
+                _token: CSRF_TOKEN
+            };
+
+            let url = '{{ route("profesional.paciente.orden_hospitalizacion") }}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function (resp) {
+                    console.log(resp);
+                    if (resp.success) {
+                        let width = 800;
+                        let height = 600;
+                        let left = (screen.width - width) / 2;
+                        let top = (screen.height - height) / 2;
+                        window.open(resp.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                        swal({
+                            title: "PDF generado",
+                            text: "El PDF ha sido generado correctamente.",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: resp.mensaje,
+                            icon: "error",
+                            buttons: "Aceptar",
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error.responseText);
+                }
+            });
+    }
+
+    function guardar_hospitalizacion() {
+        let id_paciente = $('#id_paciente').val();
+        let id_ficha_atencion = $('#id_fc').val();
+        let hospen = $('#hospen').val();
+        let hospen_text = $('#hospen option:selected').text();
+        let nom_inst = $('#nom_inst').val();
+        let hosp_enserv = $('#hosp_enserv').val();
+        let hos_enserv_text = $('#hosp_enserv option:selected').text();
+        let motivo_hosp = $('#motivo_hosp').val();
+        let motivo_hosp_text = $('#motivo_hosp option:selected').text();
+        let obs_hospitalizar = $('#obs_hospitalizar').val();
+        let ingreso_sol_pab_modal_otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes').val();
+        let ingreso_sol_pab_modal_otros_antecedentes_text = $('#ingreso_sol_pab_modal_otros_antecedentes option:selected').text();
+
+        // Nuevos campos
+        let hosp_origen = $('#hosp_en').val();
+        let diagn_ingreso = $('#dg_ingreso').val();
+        let serv_hosp = $('#serv_hosp').val();
+        let prepararCirugia = $('#esp-3').is(':checked') ? 1 : 0;
+        let otras_ind = $('#otras_ind').val();
+
+        let motivo_hosp_indicaciones = $('#motivo_hosp_indicaciones').val();
+        let ind_grales_hosp = $('#ind_grales_hosp').val();
+        let nombre_medicamento_indicaciones = $('#nombre_medicamento_indicaciones').val();
+        let dosis_medicamento_indicaciones = $('#dosis_medicamento_indicaciones').val();
+        let frecuencia_medicamento_indicaciones = $('#frecuencia_medicamento_indicaciones').val();
+        let control_enfermeria_hosp = $('#control_enfermeria_hosp').val();
+        let control_enfermeria_hosp_text = $('#control_enfermeria_hosp option:selected').text();
+
+        let otras_ind_hosp = $('#otras_ind_hosp').val();
+
+
+        let valido = 1;
+        let mensaje = '';
+
+
+        if (nom_inst == '') {
+            valido = 0;
+            mensaje += "<li>Debe ingresar el nombre de la institución.</li>";
+        }
+
+        if (motivo_hosp == '') {
+            valido = 0;
+            mensaje += "<li>Debe seleccionar un motivo de hospitalización.</li>";
+        }
+
+
+         if (valido == 0) {
+            $('#ingreso_m_modal').modal('hide');
+            return swal({
+                title: "Campos requeridos",
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                dangerMode: true,
+            }).then(() => {
+                $('#ingreso_m_modal').modal('show');
+            });
+        }
+
+        let data = {
+                id_ficha_atencion: id_ficha_atencion,
+                id_paciente: id_paciente,
+                hospen: hospen,
+                hospen_text: hospen_text,
+                nom_inst: nom_inst,
+                hosp_enserv: hosp_enserv,
+                hosp_enserv_text: hos_enserv_text,
+                motivo_hosp: motivo_hosp,
+                motivo_hosp_text: motivo_hosp_text,
+                obs_hospitalizar: obs_hospitalizar,
+                ingreso_sol_pab_modal_otros_antecedentes: ingreso_sol_pab_modal_otros_antecedentes,
+                ingreso_sol_pab_modal_otros_antecedentes_text: ingreso_sol_pab_modal_otros_antecedentes_text,
+                hosp_origen: hosp_origen,
+                diagn_ingreso: diagn_ingreso,
+                serv_hosp: serv_hosp,
+                preparar_cirugia: prepararCirugia,
+                otras_ind: otras_ind,
+                motivo_hosp_indicaciones: motivo_hosp_indicaciones,
+                ind_grales_hosp: ind_grales_hosp,
+                nombre_medicamento: nombre_medicamento_indicaciones,
+                dosis_medicamento: dosis_medicamento_indicaciones,
+                frecuencia_medicamento: frecuencia_medicamento_indicaciones,
+                control_enfermeria: control_enfermeria_hosp,
+                otras_indicaciones: otras_ind,
+                medicamentos: JSON.stringify(
+                    (typeof medicamentos_hospitalizacion !== 'undefined' && Array.isArray(medicamentos_hospitalizacion))
+                        ? medicamentos_hospitalizacion
+                        : []
+                ),
+                _token: CSRF_TOKEN
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: '{{ route("profesional.paciente.guardar_hospitalizacion") }}',
+            type: 'POST',
+            data: data,
+            success: function (resp) {
+                console.log(resp);
+                if (resp.success) {
+                    swal({
+                        title: "Guardado",
+                        text: "La solicitud de hospitalización se guardó correctamente.",
+                        icon: "success",
+                        buttons: "Aceptar"
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: resp.mensaje || "Ocurrió un error al guardar.",
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                }
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText);
+                swal({
+                    title: "Error",
+                    text: "Ocurrió un error inesperado.",
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        });
+    }
+
+    function mostrar_nuevo_medicamento(counter){
+        let url = "{{ ROUTE('profesional.mostrar_nuevo_medicamento_hosp') }}";
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                counter: counter,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(resp) {
+                console.log(resp);
+                $('#contenedor_nuevo_medicamento').empty();
+                $('#contenedor_nuevo_medicamento').append(resp.v);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
 </script>

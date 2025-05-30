@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                         <label class="floating-label-activo-sm">Otros Antecedentes Medicos</label>
-                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_otros_antecedentes" id="ingreso_sol_pab_modal_otros_antecedentes" value="">
+                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_otros_antecedentes_m" id="ingreso_sol_pab_modal_otros_antecedentes_m" value="">
                                         <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas" id="ingreso_sol_pab_modal_patalogias_cronicas" value="{{ $patalogias_cronicas }}">
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                         <label class="floating-label-activo-sm">Clínica - Hospital</label>
-                                        <input type="text" class="form-control form-control-sm" id="ingreso_sol_pab_modal_hospital" name="ingreso_sol_pab_modal_hospital" placeholder="Ingrese Email o WhatsApp">
+                                        <input type="text" class="form-control form-control-sm" id="ingreso_sol_pab_modal_hospital" name="ingreso_sol_pab_modal_hospital" value="{{ $lugar_atencion->nombre }}" placeholder="Ingrese Email o WhatsApp">
                                         <input type="hidden" name="ingreso_sol_pab_modal_id_hospital" id="ingreso_sol_pab_modal_id_hospital" value="">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -230,6 +230,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_pabellon()">PDF</button>
                 <button type="button" class="btn btn-sm btn-info" onclick="registrar_solicitud_pabellon();"><i class="feather icon-save" ></i> Guardar y enviar solicitud</button>
             </div>
         </div>
@@ -247,6 +248,7 @@
     function cerrarspab() {
         $('#ingreso_sol_pab_modal').modal ('hide');
       }
+/*CIERRE: CERRAR MODAL*/
 
 
 
@@ -440,7 +442,7 @@
                         html = '';
                         html += '<div class="form-group col-md-6 col-lg-6 col-xl-6">';
                         html += '    <label class="floating-label-activo-sm">'+value.posicion+'</label>';
-                        html += '    <label type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_'+index+'" id="ingreso_sol_pab_modal_'+index+'">'+value.profesional.nombre+' '+value.profesional.apellido_uno+'</label>';
+                        html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_'+index+'" id="ingreso_sol_pab_modal_'+index+'" value="'+value.profesional.nombre+' '+value.profesional.apellido_uno+'">';
                         html += '</div>';
                         lista_id_profesionales += value.id_tipo_especialidad+','+value.id_sub_tipo_especialidad+','+value.posicion+','+value.id_profesional+'|';
                         $('#ingreso_sol_pab_modal_lista_profesionales').val(lista_id_profesionales);
@@ -586,7 +588,7 @@
     function mostrar_tabla_nuevos_profesionales()
     {
         $('#lista_equipo_nuevo').hide();
-
+        $('#ingreso_sol_pab_modal_lista_profesionales').val('');
         var html = '';
         $('#lista_equipo_nuevo').html(html);
         if(lista_profesionales_eq_nuevo.length>0)
@@ -594,6 +596,7 @@
             $('#lista_equipo_nuevo').show();
             $.each(lista_profesionales_eq_nuevo, function (index, value)
             {
+                var lista_id_profesionales = '';
                 html = '';
                 html += '<div class="form-group col-md-5 col-lg-5 col-xl-5" >';
                 html += '    <label class="floating-label-activo-sm">'+value.posicion+'</label>';
@@ -603,6 +606,8 @@
                 html += '<button type="button" class="btn btn-xs btn-danger has-ripple aling-right" style="" onclick="eliminar_nuevo_profesional('+index+')"><i class="feather icon-x" aria-hidden="true"></i><span class="ripple ripple-animate"></span></button>';
                 html += '</div>';
                 $('#lista_equipo_nuevo').append(html);
+                lista_id_profesionales += value.id_tipo_especialidad+','+value.id_sub_tipo_especialidad+','+value.posicion+','+value.id_profesional+'|';
+                $('#ingreso_sol_pab_modal_lista_profesionales').val(lista_id_profesionales);
             });
         }
     }
@@ -624,7 +629,7 @@
         var id_profesional = $('#id_profesional_fc').val();
         var id_ficha_atencion = $('#id_fc').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
-        var otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes').val();
+        var otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes_m').val();
         var patalogias_cronicas = $('#ingreso_sol_pab_modal_patalogias_cronicas').val();
         var hospital = $('#ingreso_sol_pab_modal_hospital').val();
         var id_hospita = $('#ingreso_sol_pab_modal_id_hospita').val();
@@ -656,7 +661,46 @@
             especialidad += ' {{ $profesional->SubTipoEspecialidad->first()->nombre }}';
         @endif
 
-        let url = "{{ route('solicitud.pabellon.registrar') }}";
+        var valido = 1;
+        var mensaje = '';
+
+        if(fecha_hora_operacion == ''){
+            valido = 0;
+            mensaje += '<li>Fecha y hora operación</li>';
+        }
+
+        if(operacion == ''){
+            valido = 0;
+            mensaje += '<li>Operación</li>';
+        }
+
+        if(diagnostico_preoperatorio == ''){
+            valido = 0;
+            mensaje += '<li>Diagnóstico</li>';
+        }
+
+        if(equipamiento_especial == ''){
+            valido = 0;
+            mensaje += '<li>Equipamento especial</li>';
+        }
+
+        if(comentarios == ''){
+            valido = 0;
+            mensaje += '<li>Comentarios</li>';
+        }
+
+        if(tipo_cirugia == ''){
+            valido = 0;
+            mensaje += '<li>Tipo cirugía</li>';
+        }
+
+        if(otros_antecedentes == ''){
+            valido = 0;
+            mensaje += '<li>Otros antecedentes</li>';
+        }
+
+        if(valido == 1){
+            let url = "{{ route('solicitud.pabellon.registrar') }}";
             $.ajax({
                 url: url,
                 type: "post",
@@ -695,7 +739,7 @@
                 if (resp.estado == 1)
                 {
                     console.log('registro');
-                    $('#ingreso_sol_pab_modal_otros_antecedentes').val();
+                    $('#ingreso_sol_pab_modal_otros_antecedentes_m').val();
                     $('#ingreso_sol_pab_modal_patalogias_cronicas').val();
                     $('#ingreso_sol_pab_modal_hospital').val();
                     $('#ingreso_sol_pab_modal_id_hospita').val();
@@ -737,6 +781,215 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
 
+        }else{
+            swal({
+                title: "Solicitud de Pabellon.",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+            });
+        }
+
+
+
+    }
+
+    function generar_pdf_pabellon(){
+        console.log('generar pdf pabellon');
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
+        var id_ficha_atencion = $('#id_fc').val();
+        var id_lugar_atencion = $('#id_lugar_atencion').val();
+        var otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes_m').val();
+        var patalogias_cronicas = $('#ingreso_sol_pab_modal_patalogias_cronicas').val();
+        var hospital = $('#ingreso_sol_pab_modal_hospital').val();
+        var id_hospita = $('#ingreso_sol_pab_modal_id_hospita').val();
+        var diagnostico_preoperatorio = $('#ingreso_sol_pab_modal_diagnostico_preoperatorio').val();
+        var tipo_cirugia = $('#ingreso_sol_pab_modal_tipo_cirugia').val();
+        var grado_urgencia = $('#ingreso_sol_pab_modal_grado_urgencia').val();
+        var operacion = $('#ingreso_sol_pab_modal_operacion').val();
+        var cirugia = $('#ingreso_sol_pab_modal_cirugia').val();
+        var anestesia = $('#ingreso_sol_pab_modal_anestesia').val();
+        var fecha_hora_operacion = $('#ingreso_sol_pab_modal_fecha_hora_operacion').val();
+        var mi_equipo = $('#ingreso_sol_pab_modal_mi_equipo').val();
+        var lista_profesionales = $('#ingreso_sol_pab_modal_lista_profesionales').val();
+
+        var nombre_equipo = '';
+        if($('#ingreso_sol_pab_modal_nombre_equipo').length > 0 )
+            nombre_equipo = $('#ingreso_sol_pab_modal_nombre_equipo').val();
+
+        var descripcion_equipo = '';
+        if($('#ingreso_sol_pab_modal_descripcion_equipo').length > 0 )
+            descripcion_equipo = $('#ingreso_sol_pab_modal_descripcion_equipo').val();
+
+        var equipamiento_especial = $('#ingreso_sol_pab_modal_equipamiento_especial').val();
+        var comentarios = $('#ingreso_sol_pab_modal_comentarios').val();
+        var _token = CSRF_TOKEN;
+
+        var especialidad = '';
+        especialidad = '{{ $profesional->TipoEspecialidad->first()->nombre }}';
+        @if(!empty($profesional->SubTipoEspecialidad) )
+            especialidad += ' {{ $profesional->SubTipoEspecialidad->first()->nombre }}';
+        @endif
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(fecha_hora_operacion == ''){
+            valido = 0;
+            mensaje += '<li>Fecha y hora operación</li>';
+        }
+
+        if(operacion == ''){
+            valido = 0;
+            mensaje += '<li>Operación</li>';
+        }
+
+        if(diagnostico_preoperatorio == ''){
+            valido = 0;
+            mensaje += '<li>Diagnóstico</li>';
+        }
+
+        if(equipamiento_especial == ''){
+            valido = 0;
+            mensaje += '<li>Equipamento especial</li>';
+        }
+
+        if(comentarios == ''){
+            valido = 0;
+            mensaje += '<li>Comentarios</li>';
+        }
+
+        if(tipo_cirugia == ''){
+            valido = 0;
+            mensaje += '<li>Tipo cirugía</li>';
+        }
+
+        if(otros_antecedentes == ''){
+            valido = 0;
+            mensaje += '<li>Otros antecedentes</li>';
+        }
+
+        let data = {
+                _token : _token,
+                grado_urgencia : grado_urgencia,
+                id_hospital : id_hospita,
+                hospital : hospital ,
+                fecha_hora_operacion : fecha_hora_operacion,
+                operacion : operacion,
+                codigo_cirugia : cirugia,
+                equipamiento_especial : equipamiento_especial,
+                especialidad_1 : especialidad,
+                comentarios : comentarios,
+                tipo_cirugia : tipo_cirugia,
+                patalogias_cronicas : patalogias_cronicas,
+                otros_antecedentes : otros_antecedentes,
+                diagnostico_preoperatorio : diagnostico_preoperatorio,
+                tipo_hospitalizacion : '',
+                // cirujano,
+                instrumental_especial : '',
+                insumos_especiales : '',
+                id_paciente : id_paciente,
+                id_profesional : id_profesional,
+                id_ficha_atencion : id_ficha_atencion,
+                id_lugar_atencion : id_lugar_atencion,
+                nombre_equipo: nombre_equipo,
+                descripcion_equipo: descripcion_equipo,
+                lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
+                lista_profesionales : lista_profesionales,
+        }
+        if(valido == 1){
+            console.log(data);
+            let url = "{{ route('solicitud.pabellon.pdf') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    _token : _token,
+                    grado_urgencia : grado_urgencia,
+                    id_hospital : id_hospita,
+                    hospital : hospital ,
+                    fecha_hora_operacion : fecha_hora_operacion,
+                    operacion : operacion,
+                    codigo_cirugia : cirugia,
+                    equipamiento_especial : equipamiento_especial,
+                    especialidad_1 : especialidad,
+                    comentarios : comentarios,
+                    tipo_cirugia : tipo_cirugia,
+                    patalogias_cronicas : patalogias_cronicas,
+                    otros_antecedentes : otros_antecedentes,
+                    diagnostico_preoperatorio : diagnostico_preoperatorio,
+                    tipo_hospitalizacion : '',
+                    // cirujano,
+                    instrumental_especial : '',
+                    insumos_especiales : '',
+                    id_paciente : id_paciente,
+                    id_profesional : id_profesional,
+                    id_ficha_atencion : id_ficha_atencion,
+                    id_lugar_atencion : id_lugar_atencion,
+                    nombre_equipo: nombre_equipo,
+                    descripcion_equipo: descripcion_equipo,
+                    lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
+                    lista_profesionales : lista_profesionales,
+                },
+            })
+            .done(function(resp) {
+                console.log(resp);
+
+                if (resp.estado == 1)
+                {
+                    console.log('registro');
+                    let width = 800;
+                    let height = 600;
+                    let left = (screen.width - width) / 2;
+                    let top = (screen.height - height) / 2;
+                    window.open(resp.response.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    swal({
+                        title: "PDF generado",
+                        text: "El PDF ha sido generado correctamente.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                    lista_profesionales_eq_nuevo = [];
+                }else{
+                    console.log('falla registro');
+                    // ocultamos el modal
+                    $('#ingreso_sol_pab_modal').modal('hide');
+                    swal({
+                        title: "Solicitud de Pabellon.",
+                        text: 'Solicitud con problema intente de nuevo',
+                        icon: "error",
+                    })
+                    .then(function(){
+                        $('#ingreso_sol_pab_modal').modal('show');
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }else{
+            console.log('falla registro');
+            // ocultamos el modal
+            $('#ingreso_sol_pab_modal').modal('hide');
+            swal({
+                title: "Solicitud de Pabellon.",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+            })
+            .then(function(){
+                $('#ingreso_sol_pab_modal').modal('show');
+            });
+        }
 
     }
 

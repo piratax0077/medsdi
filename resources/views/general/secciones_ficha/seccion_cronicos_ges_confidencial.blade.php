@@ -1312,7 +1312,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">Desactivar Antecedente</h5>
                 <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
-                
+
             </div>
             <div class="modal-body">
                 <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
@@ -3133,7 +3133,7 @@
                             <tr>
                                 <td class="f-16 font-weight-bold">Tipo de Discapacidad</td>
                                 <td>
-                                    <select class="form-control form-control-sm" name="discapacidad_tipo" id="discapacidad_tipo">
+                                    <select class="form-control form-control-sm" name="nombre" id="nombre">
                                         <option value="Auditíva">Auditíva</option>
                                         <option value="Visual">Visual</option>
                                         <option value="Locomotora">Locomotora </option>
@@ -3456,7 +3456,7 @@
                                 `;
                                 html_ +=`
                                     <tr>
-                                        <td>${e.antecedente_data.discapacidad_tipo}</td>
+                                        <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.discapacidad_grado}</td>
                                         <td>${e.antecedente_data.discapacidad_permanente}</td>
                                         <td>${e.antecedente_data.fecha_regitro}</td>
