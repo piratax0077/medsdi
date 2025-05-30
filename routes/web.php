@@ -1382,7 +1382,6 @@ Route::group([
     Route::get('/atencion/audifono/venta', [App\Http\Controllers\LaboratorioController::class, 'audifonosVenta'])->name('laboratorio.profesional.audifono.venta');
     Route::get('/atencion/audifono/control', [App\Http\Controllers\LaboratorioController::class, 'audifonosControl'])->name('laboratorio.profesional.audifono.control');
 
-
 });
 
 
@@ -1517,6 +1516,9 @@ Route::group([
 	/** FONOAUDIOLOGIA OCTAVO PAR */
     Route::post('Ficha_Atencion/crear/fonoaudiologia', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_octa_par'])->name('ficha.otro.prof.registrar_octavo_par');
     Route::post('Ficha_Atencion/crear/fonoaudiologia/general', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_lab_general'])->name('ficha.otro.prof.registrar_lab_general');
+
+    /*** RAYOS x */
+    Route::post('Ficha_Atencion/crear/rayo', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_lab_rayos'])->name('ficha.otro.prof.registrar_lab_rayos');
 
 });
 
