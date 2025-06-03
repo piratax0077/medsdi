@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\FichaAtencion;
+use App\Models\FichaAtencionRayo;
 use App\Models\HoraMedica;
+use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\ProcedimientosCentro;
+use App\Models\Profesional;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class FichaAtencionRayosController extends Controller
@@ -58,13 +62,13 @@ class FichaAtencionRayosController extends Controller
             $id_paciente = $request->id_paciente_fc;
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-<<<<<<< HEAD
-            $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
-            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+			
+																						
+																						  
 
-            $ficha->motivo = $procedimiento->nombre;
-            $ficha->hipotesis_diagnostico = $procedimiento->nombre;
-=======
+													
+																   
+	   
             $paciente = Paciente::find($request->id_paciente_fc);
             // $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
 
@@ -93,7 +97,7 @@ class FichaAtencionRayosController extends Controller
 
             $ficha->motivo = $nombre_procedimiento;
             $ficha->hipotesis_diagnostico = $nombre_procedimiento;
->>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
+												
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
 
@@ -113,18 +117,18 @@ class FichaAtencionRayosController extends Controller
 
             $ficha->finalizada = 1;
 
-<<<<<<< HEAD
+			
 
+										
+													 
+			 
+																	 
+	   
             $registro_archivo = array();
             if(!empty($request->input_lista_archivo))
             {
-                $paciente = Paciente::find($request->id_paciente_fc);
-=======
-            $registro_archivo = array();
-            if(!empty($request->input_lista_archivo))
-            {
 
->>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
+												
                 $array_archivo = json_decode($request->input_lista_archivo);
 
                 $resulto_img = array();
@@ -161,21 +165,21 @@ class FichaAtencionRayosController extends Controller
 
             if ($ficha->save())
             {
-<<<<<<< HEAD
-                //  finalizar hora medica
-                $hora_medica->id_estado = 6;
-                $mensaje_estado_hora_medica = '';
-                if (!$hora_medica->save()) {
-                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
-                }
-                else
-                {
-                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
-                }
-                $mensaje .= $mensaje_estado_hora_medica;
+			
+										 
+											
+												 
+											
+																								 
+				 
+					
+				 
+																						 
+				 
+														
 
-                $mensaje .= 'Ficha Clínica  guardada de forma correcta\n';
-=======
+																		   
+	   
 
                 /** registro en ficha atencion rayo */
                 $fichaRayo = new FichaAtencionRayo();
@@ -230,7 +234,7 @@ class FichaAtencionRayosController extends Controller
                 }
 
 
->>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
+												
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
@@ -256,8 +260,8 @@ class FichaAtencionRayosController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-<<<<<<< HEAD
-=======
+			
+	   
 
     public function generarPdfInformeRayos(Request $request)
     {
@@ -383,5 +387,5 @@ class FichaAtencionRayosController extends Controller
             die();
         }
     }
->>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
+												
 }
