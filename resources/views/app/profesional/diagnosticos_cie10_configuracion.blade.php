@@ -3,14 +3,13 @@
 
     <!--Container Completo-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content">
+        <div class="pcoded-content m-top">
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
-                        <div class="col-md-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Diagnósticos CIE 1O</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
@@ -37,7 +36,7 @@
                                         <button class="btn btn-info btn-sm" type="button" id="button-addon2" onclick="buscar_diagnosticos_cie10();"><i class="feather icon-search"></i> Buscar</button>
                                       </div>
                                     </div>
-                                    <small>Por cada búsqueda si realiza modificación debe "Guardar Diagnósticos Seleccionados".</small>
+                                    <small>SI REALIZA MODIFICACIÓN DEBE "GUARDAR DIAGNÓSTICOS SELECCIONADOS" POR CADA BÚSQUEDA .</small>
                                 </div>
                                 <!--<div class="col-md-12">
                                     <div class="form-group row">
@@ -47,7 +46,7 @@
                                         <small>Por cada busqueda si realiza modificación debe "Guardar Diagnósticos Seleccionados"</small>
                                     </div>
                                 </div>-->
-                                <div class="col-md-8">
+                                <div class="col-sm-12 col-md-8 col-lg-8 col-xl-9 col-xxl-9">
                                     <div class="form-group">
                                         <div class="switch switch-success d-inline m-r-10">
                                             <input type="checkbox" id="todos_diagnosticos_cie10" onchange="activar_diagnosticos_cie10();">
@@ -57,8 +56,8 @@
                                         <label for="todos_diagnosticos_cie10" class="cr">Activar todos los diagnósticos seleccionados</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="btn btn-primary-light-c btn-sm" onclick="guardar_diagnosticos_cie10_profesional();"><i class="feather icon-save"></i> Guardar diagnósticos seleccionados</div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3 col-xxl-3 float-md-right mt-3">
+                                    <div class="btn btn-primary-light-c btn-xxs btn-block" onclick="guardar_diagnosticos_cie10_profesional();"><i class="feather icon-save"></i> Guardar diagnósticos seleccionados</div>
                                 </div>
                             </div>
                         </div>

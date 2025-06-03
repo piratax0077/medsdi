@@ -2611,21 +2611,21 @@
         }
         if (apellido_uno_paciente == '') {
             valido = 0;
-            mensaje += 'Apellido Paterno de Pacientet requerido\n';
+            mensaje += 'Apellido Paterno de Paciente requerido\n';
         }
         if (apellido_dos_paciente == '') {
             valido = 0;
-            mensaje += 'Apellido Materno de Pacientet requerido\n';
+            mensaje += 'Apellido Materno de Paciente requerido\n';
         }
         if (fecha_nacimiento == '') {
             valido = 0;
-            mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
+            mensaje += 'Fecha de Nacimiento del Paciente requerido\n';
         } else {
             //fecha_nacimiento = formatDateDB(fecha_nacimiento);
         }
         if (sexo_paciente == '') {
             valido = 0;
-            mensaje += 'Sexo del Pacientet requerido\n';
+            mensaje += 'Sexo del Paciente requerido\n';
         }
         if(direccion == '')
         {
@@ -2637,12 +2637,12 @@
             valido = 0;
             mensaje += 'numero del Paciente requerido\n';
         }
-        if(region == '')
+        if(region == '' || region == null)
         {
             valido = 0;
             mensaje += 'region del Paciente requerido\n';
         }
-        if(ciudad == '')
+        if(ciudad == '' || region == null || ciudad == 0)
         {
             valido = 0;
             mensaje += 'ciudad del Paciente requerido\n';

@@ -1,0 +1,18 @@
+diff a/app/Http/Controllers/EscritorioProfesional.php b/app/Http/Controllers/EscritorioProfesional.php	(rejected hunks)
+@@ -570,13 +570,13 @@
+                 $direccion_escritorio = 'app.profesional.escritorio_profesional';
+                 if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                 {
+-                    /** profesional de laboratorio */
+-                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
++                    /** profesional de laboratorio ORL*/
++                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio_orl';
+                 }
+                 else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                 {
+                     /** tecnico rayos */
+-                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
++                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio_rayos';
+                 }
+                 else
+                 {

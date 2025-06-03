@@ -32,7 +32,7 @@
                             <div class="card subir py-3">
                                 <a href="{{ ROUTE('profesional.lugares_atencion') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3" src="{{ asset('images/iconos/lugar.svg') }}"
+                                        <img class="wid-70 text-center mb-3" src="{{ asset('images/iconos/lugar.svg') }}"
                                             alt="Mis Lugares de Atención">
                                         <h5>
                                             Mis lugares de atención
@@ -45,7 +45,7 @@
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.mis_asistentes') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                             src="{{ asset('images/iconos/mis_asistentes.svg') }}" alt="Mis Asistentes">
                                         <h5>
                                             Mis asistentes
@@ -59,7 +59,21 @@
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.diagnosticos_cie10') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
+                                            src="{{ asset('images/iconos/diagnosticos-frecuentes.svg') }}"
+                                            alt=" Configuración Diagnósticos CIE-10">
+                                        <h5>
+                                            Configuración Diagnósticos CIE-10
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                            <div class="card subir py-3">
+                                <a href="#">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-70 text-center mb-3"
                                             src="{{ asset('images/iconos/configurar-lab.png') }}"
                                             alt="Diagnósticos Frecuentes CIE 10">
                                         <h5>
@@ -71,9 +85,9 @@
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                             <div class="card subir py-3">
-                                <a href="busq_secretaria.php">
+                                <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/asistente-online.svg') }}"
 
                                         alt="Profesional">
@@ -89,12 +103,12 @@
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.aranceles') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/adm_comercial.png') }}"
 
                                         alt="Profesional">
                                         <h5 class="f-16">
-                                            Configuracion de mis aranceles
+                                            Configurar mis aranceles
                                         </h5>
                                     </div>
                                 </a>
@@ -103,9 +117,9 @@
                         @endif
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                             <div class="card subir py-3">
-                                <a href="busq_secretaria.php">
+                                <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/configurar-ficha-medica.png') }}"
 
                                         alt="Profesional">
@@ -120,7 +134,7 @@
                             <div class="card subir py-3">
                                 <a href="{{ ROUTE('profesional.mis_propios_convenios') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/convenios.png') }}"
 
                                         alt="Profesional">
@@ -136,7 +150,7 @@
                             <div class="card subir py-3">
                                 <a href="{{ ROUTE('profesional.tons') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/usuario_asistente.svg') }}"
 
                                         alt="Profesional">
@@ -152,7 +166,7 @@
                             <div class="card subir py-3">
                                 <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
+                                        <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/usuario_asistente.svg') }}"
 
                                         alt="Profesional">

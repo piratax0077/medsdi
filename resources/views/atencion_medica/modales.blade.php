@@ -93,6 +93,9 @@
                 @if($profesional->TipoEspecialidad()->first()->nombre == 'SIQUIATRÍA' )
                 <a id="boton_3" class="fas fa-bone fa-2x" data-toggle="canvas" data-target="#form_siquiatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Siquiatría" data-placement="left"></a>
                 @endif
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Neurología' )
+                <a id="boton_3" class="fas fa-bone fa-2x" data-toggle="canvas" data-target="#form_neuro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Neurología" data-placement="left"></a>
+                @endif
             </div>
             <div class="btn-mas">
                 <label for="btn-mas" class="fa fa-plus"></label>

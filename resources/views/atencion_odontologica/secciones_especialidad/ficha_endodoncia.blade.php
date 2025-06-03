@@ -2330,7 +2330,22 @@
     setTimeout(function(){
         $('#mensaje_ficha').hide();
     }, 5000);
+    document.addEventListener("DOMContentLoaded", function () {
+        const cantidadInput = document.getElementById("cantidad");
+        const precioInput = document.getElementById("precio");
+        const totalInput = document.getElementById("total");
 
+        // Calcula el total automáticamente cuando se ingresan datos
+        function calcularTotal() {
+            const cantidad = parseFloat(cantidadInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            totalInput.value = (cantidad * precio).toFixed(2);
+        }
+
+        cantidadInput.addEventListener("input", calcularTotal);
+        precioInput.addEventListener("input", calcularTotal);
+
+    });
     $(document).ready(function() {
 
         mostrar_nueva_pieza_ex_radio_end(1000);
@@ -6162,7 +6177,7 @@ function cargar_a_presupuesto_end_g_confirmar(){
                     }
                 });
                 // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
-                let table_odon_gral = $('#table_piezas_presupuesto_endo').DataTable();
+                let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
                 table_odon_gral.clear().draw();
 
                 odontograma.forEach(function(pieza){
@@ -6177,6 +6192,24 @@ function cargar_a_presupuesto_end_g_confirmar(){
 
 
                 });
+                let table_endo = $('#table_piezas_presupuesto_endo').DataTable();
+                table_endo.clear().draw();
+
+                odontograma.forEach(function(pieza){
+                    // if(pieza.tipo == 'endo'){
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_endo.row.add([
+                            pieza.pieza,
+                            pieza.descripcion,
+                            formatoMoneda(formatoMoneda(pieza.valor)),
+                            '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                        ]).draw(false).node(); // Obtener el nodo de la fila
+                    // }
+                });
+                // limpiar formulario
+                $('#diag_presupuesto_pieza_g_endo').val('');
+                $('#paciente_piezas_dentales_end_ex_').val(null).trigger('change');
             }else{
                 swal({
                     icon:'error',
@@ -6452,6 +6485,40 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                         $('#table_pagos_reasignar_odontograma tbody').append(fila);
                     }
                 });
+                // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                table_odon_gral.clear().draw();
+
+                odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+
+                });
+                let table_endo = $('#table_piezas_presupuesto_endo').DataTable();
+                table_endo.clear().draw();
+
+                odontograma.forEach(function(pieza){
+                    // if(pieza.tipo == 'endo'){
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_endo.row.add([
+                            pieza.pieza,
+                            pieza.descripcion,
+                            formatoMoneda(formatoMoneda(pieza.valor)),
+                            '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                        ]).draw(false).node(); // Obtener el nodo de la fila
+                    // }
+                });
+                // limpiar formulario
+                $('#diag_presupuesto_pieza_g').val('');
+                $('#paciente_piezas_dentales_ex').val(null).trigger('change');
             }else{
                 swal({
                     icon:'error',

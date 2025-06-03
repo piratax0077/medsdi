@@ -2,14 +2,13 @@
 @section('content')
     <!--****Container Completo****-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content">
+        <div class="pcoded-content m-top">
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mt-2">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis asistentes</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -44,7 +43,7 @@
                                     <h4 class="text-white f-20 d-inline ">Mis asistentes</h4>
                                     {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
                                         <i class="feather icon-plus"></i> Registrar Contrato Profesional </button> --}}
-                                        <button type="button" class="btn btn-sm btn-outline-light d-inline has-ripple" onclick="asociar_profesional();">Asociar Otros profesionales<span class="ripple ripple-animate"></span></button>
+                                        <button type="button" class="btn btn-sm btn-light d-inline float-right" onclick="asociar_profesional();"><i class="feather icon-plus"></i> Asociar otros profesionales</button>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +51,7 @@
                         <div class="card-body">
                             <div style="overflow-x:auto;">
                                 <div class="table-responsive">
-                                    <table id="res-config" class="display table table-sm dt-responsive nowrap"
+                                    <table class="display table table-sm dt-responsive nowrap"
                                         style="width:100%">
                                         <thead>
                                             <tr>
@@ -93,7 +92,7 @@
                                                                 NO DISPONIBLE
                                                             @endif
                                                         </td>
-                                                        <td>
+                                                        <td class="text-center">
                                                             <button onclick="desasociar_asistente({{ $a->id }});"
                                                                 type="button" class="btn btn-danger btn-sm btn-icon"
                                                                 data-toggle="tooltip" data-placement="top" title="Desasociar">
@@ -120,12 +119,12 @@
                                                             <span>{{ $asis_la->Asistentes()->first()->email }}</span><br>
                                                             <span>{{ $asis_la->Asistentes()->first()->telefono_uno }}</span>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span></span><br>
                                                             <span></span><br>
                                                             <span></span>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             @if(isset($asis_la->Asistentes()->first()->id_direccion))
                                                                 {{ $asis_la->Asistentes()->first()->Direccion()->first()->direccion }}<br>
                                                                 {{ $asis_la->Asistentes()->first()->Direccion()->first()->Ciudad()->first()->nombre }}
@@ -134,7 +133,7 @@
                                                             @endif
 
                                                         </td>
-                                                        <td class="text-center align-middle">
+                                                        <td class="align-middle text-center">
                                                             <button type="button"
                                                                 onclick="desasociar_asistente({{ $asis_la->Asistentes()->first()->id }})"
                                                                 class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"

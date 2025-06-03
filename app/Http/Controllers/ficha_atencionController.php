@@ -377,6 +377,7 @@ class ficha_atencionController extends Controller
         }
 
         $antecedentes_paciente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
         if (isset($antecedentes_paciente))
         {
             $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
@@ -2053,6 +2054,7 @@ class ficha_atencionController extends Controller
 
         $insumos_bodega = $this->dame_insumos_bodega($id_ficha_atencion);
 
+
         $examanes_tto_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id, $id_ficha_atencion);
 
         $examenes_post_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id,$id_ficha_atencion,'post');
@@ -2227,8 +2229,19 @@ class ficha_atencionController extends Controller
 
         $comunas_contacto_emer = $this->dame_comunas_contacto_emergencia($paciente->id);
         $paciente->comunas_contacto_emer = $comunas_contacto_emer;
+
+        $discapacidades = Antecedente::where('id_paciente', $paciente->id)->where('id_tipo_antecedente',8)->where('estado',1)->get();
+        if(count($discapacidades) > 0){
+            foreach($discapacidades as $d){
+                $data = json_decode($d->data);
+                $d->nombre = $data->nombre;
+            }
+        }
+
+
         return view($ruta_blade)->with(
-            [   'examenes_plan_tratamiento_broncoscopia' => $examenes_plan_tratamiento_broncoscopia,
+            [
+                'examenes_plan_tratamiento_broncoscopia' => $examenes_plan_tratamiento_broncoscopia,
                 'examenes_plan_tratamiento_rx' => $examenes_plan_tratamiento_rx,
                 'examenes_plan_tratamiento' => $examenes_plan_tratamiento,
                 'examenes_plan_tratamiento_otros' => $examenes_plan_tratamiento_otros,
@@ -2346,8 +2359,9 @@ class ficha_atencionController extends Controller
                 'ciudad' => $ciudad,
                 'examenMedico' => $examenMedico,
                 // 'medicamentos_cronicos' => $medicamentos_cronicos,
-                // 'alergias' => $alergias,
+                'alergias' => $alergias,
                 // 'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
+                'discapacidades' => $discapacidades,
                 'patoligias_cronicas' => $patoligias_cronicas,
                 'fichaAtencion' => $fichaAtencion,
                 'id_lugar_atencion' => $request->lugar_atencion_id,
@@ -2705,6 +2719,8 @@ class ficha_atencionController extends Controller
 
         return PdfController::generarPDF($titulo, compact('titulo', 'cuerpo','array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente','detalle_orden'), 'Exámenes '.$paciente->rut, 'pdf_solicitud_examen_tipo');
     }
+
+
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
 

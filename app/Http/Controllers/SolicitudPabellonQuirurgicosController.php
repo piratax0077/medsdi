@@ -70,11 +70,11 @@ class SolicitudPabellonQuirurgicosController extends Controller
             $error['tipo_cirugia'] = 'campo requerido\n';
             $valido = 0;
         }
-        if(empty($request->patalogias_cronicas))
-        {
-            $error['patalogias_cronicas'] = 'campo requerido\n';
-            $valido = 0;
-        }
+        // if(empty($request->patalogias_cronicas))
+        // {
+        //     $error['patalogias_cronicas'] = 'campo requerido\n';
+        //     $valido = 0;
+        // }
         if(empty($request->otros_antecedentes))
         {
             $error['otros_antecedentes'] = 'campo requerido\n';
@@ -355,6 +355,8 @@ class SolicitudPabellonQuirurgicosController extends Controller
 
         return $datos;
     }
+
+
 
 
     static public function registroSolicitudPabellonEquipo($id_solicitudes_pabellones_quirurgicos, $id_tipo_especialidad, $id_sub_tipo_especialidad, $posicion, $id_profesional)

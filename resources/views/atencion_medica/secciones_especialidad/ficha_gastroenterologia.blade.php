@@ -6,9 +6,9 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_cirugia_gen" aria-selected="true">Atención Especialidad</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="endosc_gastrica-tab" data-toggle="tab" href="#endosc_gastrica" role="tab" aria-controls="endosc_gastrica" aria-selected="false">Endoscopía Digestiva Alta</a>
-                    </li>
+                    </li>  --}}
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

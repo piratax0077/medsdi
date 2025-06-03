@@ -307,12 +307,18 @@
                                                 id="perd_osea_marg_post_impl_otro{{ $counter }}">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Obs. Al control del
                                                 implante</label>
                                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
                                                 name="obs_control_post_implante_otro{{ $counter }}" id="obs_control_post_implante_otro{{ $counter }}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Procedimiento Propuesto</label>
+                                            <input type="text" name="procedimiento_post_impl_autocomplete{{ $counter }}" id="procedimiento_post_impl_autocomplete{{ $counter }}" class="form-control form-control-sm tratamiento-autocomplete">
                                         </div>
                                     </div>
                                 </div>
@@ -336,6 +342,40 @@
 
 
 <script>
+    $(document).ready(function(){
+    $('.tratamiento-autocomplete').each(function () {
+        $(this).autocomplete({
+            source: function (request, response) {
+                // Fetch data
+                $.ajax({
+                    url: getDiagnosticoDentalUrl,
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.length == 0) {
+                            $('.diagnostico_activo').hide();
+                            $('.diagnostico_inactivo').show();
+                        } else {
+                            $('.diagnostico_activo').show();
+                            $('.diagnostico_inactivo').hide();
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $(this).val(ui.item.label);
+                $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                return false;
+            }
+        });
+    });
+    });
     function ocultar_pieza_dental_post_impl() {
         $('#pieza_post_implantada').empty();
     }
@@ -760,7 +800,7 @@
     }
 
     function cargar_a_presupuesto_manten_impl(numero_pieza){
-        var ttoPiezas = 'Mantención de implantes'; // id de mantencion de implantes
+        var ttoPiezas = $('#procedimiento_post_impl_autocomplete1000').val(); // id de mantencion de implantes
         var piezasSeleccionadas = [];
         piezasSeleccionadas.push(numero_pieza);
         let valido = 1;

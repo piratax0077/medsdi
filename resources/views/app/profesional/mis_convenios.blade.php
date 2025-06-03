@@ -8,20 +8,17 @@
 </style>
 <!--Container Completo-->
 <div class="pcoded-main-container">
-    <div class="pcoded-content">
+    <div class="pcoded-content m-top">
         <div class="page-header">
             <div class="page-block">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-2">
                         <div class="page-header-title">
-                            <h5 class="font-weight-bolder">Mis Convenios</h5>
                         </div>
                         <ul class="breadcrumb mb-4">
-                            <li class="breadcrumb-item">
-                                <a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                    <i class="feather icon-home"></i>
-                                </a>
-                            </li>
+                              <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip" data-placement="top" title="Volver al panel de configuración">Panel de Configuración</a></li>
+
                             <li class="breadcrumb-item">
                                 <a href="#">Convenios</a>
                             </li>
@@ -30,49 +27,50 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header bg-info">
-                    <h5 class="text-white font-weight-bolder">Convenios</h5>
-                    <button class="btn btn-info btn-sm mx-2 has-ripple float-right" data-toggle="modal" data-target="#nuevoConvenioInstitucion"><i class="fa fa-plus" aria-hidden="true"></i>Registrar nuevo convenio</button>
-                </div>
-                <div class="card-body" id="card_body_convenios_profesional">
-                    <table id="tabla_convenios_profesional" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="text-wrap text-center align-middle">Convenio</th>
-                                <th class="text-center align-middle">Rut</th>
-                                <th class="text-center align-middle">Tipo</th>
-                                <th class="text-center align-middle">Fecha Inicial</th>
-                                <th class="text-center align-middle">Fecha Final</th>
-                                <th class="text-center align-middle">Descuento</th>
-                                <th class="text-center align-middle">Accion</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($convenios_empresas as $convenio)
+    <div class="row bg-gris">
+            <div class="col-sm-12">
+                <div class="card mt-n4">
+                    <div class="card-header bg-info">
+                        <h6 class="text-white font-weight-bolder f-18 d-inline">Mis Convenios</h6>
+                        <button class="btn btn-light btn-sm d-inline float-md-right" data-toggle="modal" data-target="#nuevoConvenioInstitucion"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo convenio</button>
+                    </div>
+                    <div class="card-body" id="card_body_convenios_profesional">
+                        <table id="tabla_convenios_profesional" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                            <thead>
                                 <tr>
-                                    <td class="align-middle text-center">{{ $convenio->nombre_convenio }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->rut_empresa }}</td>
-                                    <td class="align-middle text-center">
-
-                                    </td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_inicio }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_termino }}</td>
-
-                                    <td class="align-middle text-center">{{ $convenio->porcentaje }}%</td>
-                                    <td class="align-middle text-center">
-                                        <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_tipo_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
-                                    </td>
+                                    <th class="text-wrap text-center align-middle">Convenio</th>
+                                    <th class="align-middle">Rut</th>
+                                    <th class="align-middle">Tipo</th>
+                                    <th class="align-middle">Fecha Inicial</th>
+                                    <th class="align-middle">Fecha Final</th>
+                                    <th class="align-middle">Descuento</th>
+                                    <th class="align-middle">Accion</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach($convenios_empresas as $convenio)
+                                    <tr>
+                                        <td class="align-middle">{{ $convenio->nombre_convenio }}</td>
+                                        <td class="align-middle">{{ $convenio->rut_empresa }}</td>
+                                        <td class="align-middle">
+
+                                        </td>
+                                        <td class="align-middle">{{ $convenio->fecha_inicio }}</td>
+                                        <td class="align-middle">{{ $convenio->fecha_termino }}</td>
+
+                                        <td class="align-middle">{{ $convenio->porcentaje }}%</td>
+                                        <td class="align-middle">
+                                            <button class="btn btn-warning btn-icon" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_tipo_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
-    </div>
+        </div>
 </div>
 <!-- DATOS DE VITAL IMPORTANCIA -->
 <input type="hidden" name="id_convenio_profesional" id="id_convenio_profesional" value="">

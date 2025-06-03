@@ -4,14 +4,13 @@
 
     <!--Container Completo-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content">
+        <div class="pcoded-content m-top">
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mt-2">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Flujo de Caja DANI ACA</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -47,7 +46,7 @@
                 </div>
             </div>
             <!--Cierre: Header-->
-              <div class="row">
+              <div class="row  mt-n3">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                     <div class="user-profile user-card pt-0 mt-2">
                         <div class="card-body py-0">
@@ -56,7 +55,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                         <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link text-reset active" id="recibo-caja-prof-tab" data-toggle="tab" href="#recibo-caja-prof" role="tab" aria-controls="recibo-caja-prof" aria-selected="true">Recibo de caja</a>
+                                                <a class="nav-link text-reset active" id="recibo-caja-prof-tab" data-toggle="tab" href="#recibo-caja-prof" role="tab" aria-controls="recibo-caja-prof" aria-selected="true">Rendiciones de caja</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link text-reset" id="recepcion-programa-prof-tab" data-toggle="tab" href="#recepcion-programa-prof" role="tab" aria-controls="recepcion-programa-prof" aria-selected="true">Recepción de programas</a>
@@ -79,7 +78,7 @@
                 </div>
             </div>
             <!--TABLAS-->
-            <div class="row">
+            <div class="row bg-gris">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                     <div class="tab-content" id="pills-tabContent">
                         {{-- PESTAÑA RENDICION DE CAJA --}}
@@ -273,7 +272,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 pt-2">
-                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-outline-primary btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="">Iniciar proceso de cobro</button>
+                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-info btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick=""><i class="feather icon-check"></i> Iniciar proceso de cobro</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -536,22 +535,22 @@
                                 </div>
                                 <!--BOTONES DE PESTAÑAS-->
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card py-0">
                                             <div class="card-body pb-2 pt-2">
-                                                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                                <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="btn btn-sm btn-outline-info mr-1 active" id="pills-bonos_por_cobrar-tab" data-toggle="pill" href="#pills-bonos_por_cobrar" role="tab" aria-controls="pills-bonos_por_cobrar" aria-selected="true">
+                                                        <a class="nav-link-aten text-reset active" id="pills-bonos_por_cobrar-tab" data-toggle="pill" href="#pills-bonos_por_cobrar" role="tab" aria-controls="pills-bonos_por_cobrar" aria-selected="true">
                                                             Bonos por cobrar
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="btn btn-sm btn-outline-info mr-1" id="pills-bonos_enviados-tab" data-toggle="pill" href="#pills-bonos_enviados" role="tab" aria-controls="pills-bonos_enviados" aria-selected="true">
+                                                        <a class="nav-link-aten text-reset" id="pills-bonos_enviados-tab" data-toggle="pill" href="#pills-bonos_enviados" role="tab" aria-controls="pills-bonos_enviados" aria-selected="true">
                                                             Bonos enviados a cobro (archivo CSV)
                                                         </a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="btn btn-sm btn-outline-info mr-1" id="pills-bonos_totales-tab" data-toggle="pill" href="#pills-bonos_totales" role="tab" aria-controls="pills-bonos_totales" aria-selected="true">
+                                                        <a class="nav-link-aten text-reset" id="pills-bonos_totales-tab" data-toggle="pill" href="#pills-bonos_totales" role="tab" aria-controls="pills-bonos_totales" aria-selected="true">
                                                             Bonos totales
                                                         </a>
                                                     </li>
@@ -562,140 +561,139 @@
                                 </div>
 
                                 <!--PESTAÑAS-->
-                                  <div class="row">
-                                          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                            <div class="tab-content">
-                                                <div class="tab-pane show active" id="pills-bonos_por_cobrar" role="tabpanel" aria-labelledby="pills-bonos_por_cobrar-tab">
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <h5 class="text-c-blue d-inline float-left f-18">Bonos por cobrar</h5>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <div class="dt-responsive table-responsive">
-                                                                        <table id="tabla_gestion_bonos" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th class="align-middle">Convenio</th>
-                                                                                    <th class="align-middle">Código</th>
-                                                                                    <th class="align-middle">Tipo</th>
-                                                                                    <th class="align-middle">Clase</th>
-                                                                                    <th class="align-middle">Fecha de atención</th>
-                                                                                    <th class="align-middle">Paciente</th>
-                                                                                    <th class="align-middle">Valor total</th>
-                                                                                    <th class="align-middle">Estado consulta</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @if( isset($bonos_rendidos) )
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                        <div class="tab-content">
+                                            <div class="tab-pane show active" id="pills-bonos_por_cobrar" role="tabpanel" aria-labelledby="pills-bonos_por_cobrar-tab">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <h5 class="text-c-blue d-inline float-left f-18">Bonos por cobrar</h5>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="tabla_gestion_bonos" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                <th class="align-middle">Código</th>
+                                                                                <th class="align-middle">Tipo</th>
+                                                                                <th class="align-middle">Clase</th>
+                                                                                <th class="align-middle">Fecha de atención</th>
+                                                                                <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Valor total</th>
+                                                                                <th class="align-middle">Estado consulta</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @if( isset($bonos_rendidos) )
 
-                                                                                    @foreach($bonos_rendidos as $key_br => $value_br)
-                                                                                        <tr >
-                                                                                            <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->numero_bono }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                                            <td class="align-middle">
-                                                                                                @if($value_br->id_clase_bono == 1)
-                                                                                                            Bono Emitido por Institucion
-                                                                                                        @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
-                                                                                                            Boucher
-                                                                                                        @elseif($value_br->id_clase_bono == 4)
-                                                                                                            Bono Web
-                                                                                                        @elseif($value_br->id_clase_bono == 5)
-                                                                                                            Bono Web Pre-Pago
-                                                                                                        @elseif($value_br->id_clase_bono == 6)
-                                                                                                            Particular
-                                                                                                        @elseif($value_br->id_clase_bono == 7)
-                                                                                                            Copago
-                                                                                                        @else
-                                                                                                            Otro
-                                                                                                        @endif
-                                                                                            </td>
-                                                                                            <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
-                                                                                            <td class="align-middle">
-                                                                                                <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
-                                                                                                <span>{{ $value_br->Paciente()->first()->rut }}</span>
-                                                                                            </td>
-                                                                                            <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->estado_consulta == 1 ? 'EN ESPERA' : 'OTRO' }}</td>
+                                                                                @foreach($bonos_rendidos as $key_br => $value_br)
+                                                                                    <tr >
+                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->numero_bono }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
+                                                                                        <td class="align-middle">
+                                                                                            @if($value_br->id_clase_bono == 1)
+                                                                                                        Bono Emitido por Institucion
+                                                                                                    @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
+                                                                                                        Boucher
+                                                                                                    @elseif($value_br->id_clase_bono == 4)
+                                                                                                        Bono Web
+                                                                                                    @elseif($value_br->id_clase_bono == 5)
+                                                                                                        Bono Web Pre-Pago
+                                                                                                    @elseif($value_br->id_clase_bono == 6)
+                                                                                                        Particular
+                                                                                                    @elseif($value_br->id_clase_bono == 7)
+                                                                                                        Copago
+                                                                                                    @else
+                                                                                                        Otro
+                                                                                                    @endif
+                                                                                        </td>
+                                                                                        <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
+                                                                                        <td class="align-middle">
+                                                                                            <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                            <span>{{ $value_br->Paciente()->first()->rut }}</span>
+                                                                                        </td>
+                                                                                        <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->estado_consulta == 1 ? 'EN ESPERA' : 'OTRO' }}</td>
 
-                                                                                        </tr>
-                                                                                    @endforeach
-                                                                                @endif
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            @endif
 
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <button id="arch_csv" type="button" class="btn btn-info float-right d-inline iniciar_procesocobro shadow-sm" onclick="generarCSV()"><i class="feather icon-file"></i> Generar archivo CSV</button>
-                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <button id="arch_csv" type="button" class="btn btn-info float-right d-inline iniciar_procesocobro shadow-sm" onclick="generarCSV()"><i class="feather icon-file"></i> Generar archivo CSV</button>
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="tab-pane" id="pills-bonos_enviados" role="tabpanel" aria-labelledby="pills-bonos_enviados-tab">
-                                                    <div class="row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <h5 class="text-c-blue d-inline float-left f-18">Bonos generados CSV</h5>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <div class="card">
-                                                                <div class="card-body">
-                                                                    <div class="dt-responsive table-responsive">
-                                                                        <table id="tabla_gestion_bonos_generados" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th class="align-middle">Convenio</th>
-                                                                                    <th class="align-middle">Código</th>
-                                                                                    <th class="align-middle">Tipo</th>
-                                                                                    <th class="align-middle">Clase</th>
-                                                                                    <th class="align-middle">Fecha de atención</th>
-                                                                                    <th class="align-middle">Paciente</th>
-                                                                                    <th class="align-middle">Valor total</th>
-                                                                                    <th class="align-middle">Estado consulta</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                @if( isset($bonos_rendidos_generados) )
+                                            <div class="tab-pane" id="pills-bonos_enviados" role="tabpanel" aria-labelledby="pills-bonos_enviados-tab">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <h5 class="text-c-blue d-inline float-left f-18">Bonos enviados a cobro (archivo CSV)</h5>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="tabla_gestion_bonos_generados" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                <th class="align-middle">Código</th>
+                                                                                <th class="align-middle">Tipo</th>
+                                                                                <th class="align-middle">Clase</th>
+                                                                                <th class="align-middle">Fecha de atención</th>
+                                                                                <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Valor total</th>
+                                                                                <th class="align-middle">Estado consulta</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @if( isset($bonos_rendidos_generados) )
 
-                                                                                    @foreach($bonos_rendidos_generados as $key_br => $value_br)
-                                                                                        <tr>
-                                                                                            <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->numero_bono }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                                            <td class="align-middle">
-                                                                                                @if($value_br->id_clase_bono == 1)
-                                                                                                    Bono Emitido por Institucion
-                                                                                                @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
-                                                                                                    Boucher
-                                                                                                @elseif($value_br->id_clase_bono == 4)
-                                                                                                    Bono Web
-                                                                                                @elseif($value_br->id_clase_bono == 5)
-                                                                                                    Bono Web Pre-Pago
-                                                                                                @elseif($value_br->id_clase_bono == 6)
-                                                                                                    Particular
-                                                                                                @elseif($value_br->id_clase_bono == 7)
-                                                                                                    Copago
-                                                                                                @else
-                                                                                                    Otro
-                                                                                                @endif
-                                                                                            </td>
-                                                                                            <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
-                                                                                            <td class="align-middle">
-                                                                                                <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
-                                                                                                <span>{{ $value_br->Paciente()->first()->rut }}</span>
-                                                                                            </td>
-                                                                                            <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->estado_consulta }}</td>
-                                                                                        </tr>
-                                                                                    @endforeach
-                                                                                @endif
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
+                                                                                @foreach($bonos_rendidos_generados as $key_br => $value_br)
+                                                                                    <tr>
+                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->numero_bono }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
+                                                                                        <td class="align-middle">
+                                                                                            @if($value_br->id_clase_bono == 1)
+                                                                                                Bono Emitido por Institucion
+                                                                                            @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
+                                                                                                Boucher
+                                                                                            @elseif($value_br->id_clase_bono == 4)
+                                                                                                Bono Web
+                                                                                            @elseif($value_br->id_clase_bono == 5)
+                                                                                                Bono Web Pre-Pago
+                                                                                            @elseif($value_br->id_clase_bono == 6)
+                                                                                                Particular
+                                                                                            @elseif($value_br->id_clase_bono == 7)
+                                                                                                Copago
+                                                                                            @else
+                                                                                                Otro
+                                                                                            @endif
+                                                                                        </td>
+                                                                                        <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
+                                                                                        <td class="align-middle">
+                                                                                            <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                            <span>{{ $value_br->Paciente()->first()->rut }}</span>
+                                                                                        </td>
+                                                                                        <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
+                                                                                        <td class="align-middle">{{ $value_br->estado_consulta }}</td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -704,7 +702,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                </div>
                         </div>
 
 

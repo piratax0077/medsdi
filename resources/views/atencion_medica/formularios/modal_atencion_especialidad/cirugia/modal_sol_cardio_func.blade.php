@@ -28,7 +28,7 @@
                         </div>
                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <label class="floating-label-activo-sm">Diagnóstico</label>
-                            <input class="form-control" type="text" id="diagnostico_especialidad">
+                            <input type="text" class="form-control" data-input_igual="descripcion_hipotesis,diagnostico_rx,diagnostico_comunes,diagnostico_endoscopico" name="diagnostico_especialidad" id="diagnostico_especialidad" onchange="cargarIgual('diagnostico_especialidad');" >
                         </div>
                     </div>
                     <div class="form-row">

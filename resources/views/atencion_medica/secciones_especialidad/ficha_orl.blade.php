@@ -42,9 +42,9 @@
                         <li class="nav-item-secciones">
                             <a class="nav-secciones text-uppercase" id="rinofibro-tab" data-toggle="tab" href="#rinofibro" role="tab" aria-controls="rinofibro" aria-selected="false">Rinofibrolaringoscopía</a>
                         </li>
-                        <li class="nav-item-secciones">
+                        {{--  <li class="nav-item-secciones">
                             <a class="nav-secciones text-uppercase" id="ocho_par-tab" data-toggle="tab" href="#ocho_par" role="tab" aria-controls="ocho_par" aria-selected="false">8° par</a>
-                        </li>
+                        </li>  --}}
                     </ul>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -532,7 +532,7 @@
                                 <!-- CIERRE: GUARDAR EXAMEN -->
                             </div>
                             <!--INFORME EXAMEN DEL 8° PAR CRANEANO-->
-                            <div class="tab-pane fade" id="ocho_par" role="tabpanel" aria-labelledby="ocho_par-tab">
+                            {{--  <div class="tab-pane fade" id="ocho_par" role="tabpanel" aria-labelledby="ocho_par-tab">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                          <h6 class="f-18 text-c-blue mb-2">Informe examen del 8° par craneano</h6>
@@ -1909,7 +1909,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>  --}}
                         </div>
                     </form>
                 </div>
@@ -1922,7 +1922,23 @@
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
+                     /** MENSAJE*/
+       /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
 
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
             /* formatear rut */
             $("#solicitado_por_rut_rfl").rut({
                 formatOn: 'keyup',
@@ -1982,22 +1998,7 @@
             });
 			
 
-            /** CARGAR mensaje */
-            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional');
-            $('#mensaje_ficha').show();
-            setTimeout(function(){
-                $('#mensaje_ficha').hide();
-            }, 5000);
-
-            @if($fichas->count()>0)
-                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
-            @else
-                $('#mensaje_historias').html(' Primera consulta del paciente. ');
-            @endif
-                $('#mensaje_historias').show();
-                setTimeout(function(){
-                    $('#mensaje_historias').hide();
-                }, 6000);
+           
 
 
 

@@ -9,9 +9,9 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="endosc_gastrica-tab" data-toggle="tab" href="#endosc_gastrica" role="tab" aria-controls="endosc_gastrica" aria-selected="false">Endoscopía Digestiva Alta</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="colonoscopia-tab" data-toggle="tab" href="#colonoscopia" role="tab" aria-controls="colonoscopia" aria-selected="false">Endoscopía Digestiva Baja</a>
-                    </li>
+                    </li>  --}}
 				</ul>
             </div>
 
@@ -69,7 +69,7 @@
                                 <div class="col-md-12">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-                                        
+
                                         <!--Formulario / Menor de edad-->
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
@@ -333,7 +333,7 @@
                                     <h6 class="text-c-blue f-20">Informe Colonoscopía</h6>
                                 </div>
                             </div>
-             
+
                             <div class="row div_form_examen_edb">
                                 <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
                                 {!! $examen['edb'] !!}
@@ -927,8 +927,10 @@
         {
             if($('#biopsia_check_'+alias_examen).prop('checked'))
 			{
+                console.log(alias_examen);
 				$('#m_biopsia_cir').modal('show');
                 $('#biopsia_'+alias_examen).val(1);
+                dame_examenes_biopsia();
 			}
             else
             {
@@ -951,6 +953,31 @@
 		// 		$('#m_biopsia_cir').modal('show');
 		// 	}
         // }
+
+        function dame_examenes_biopsia(){
+            let id_ficha_atencion = $('#id_fc').val();
+            console.log(id_ficha_atencion);
+            let url = "{{ ROUTE('profesional.dame_examenes_biopsia') }}";
+
+            $.ajax({
+                type:'get',
+                data:{
+                    id_ficha_atencion: id_ficha_atencion,
+                },
+                url: url,
+                success: function(examenes){
+                    console.log(examenes);
+                    if(examenes.length > 0){
+                        examenes.forEach(e => {
+                            agregarFilaBiopsia(e);
+                        });
+                    }
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
 
 		function muestra_hp_abrir_div(alias_examen)
 		{

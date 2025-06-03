@@ -1015,7 +1015,6 @@
                                         odonto.pieza,
                                         odonto.descripcion,
                                         formatoMoneda(odonto.valor),
-                                        0,
                                         '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i></button>'
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila

@@ -1,4 +1,4 @@
-@extends('template.medicina.template')
+@extends('template.template_neuro')
 @section('Content')
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -49,12 +49,12 @@
                                                         <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                                     @endif
                                                 </li>  --}}
-                                                {{--  <li class="nav-item">
-                                                    <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                                </li>  --}}
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
+                                                    <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                                 </li>
+                                                {{--  <li class="nav-item">
+                                                    <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
+                                                </li>  --}}
                                                 {{-- <li class="nav-item">
                                                     <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
                                                 </li> --}}
@@ -75,21 +75,21 @@
                             @include('atencion_medica.secciones_especialidad.ficha_neurologia')
                         </div>
                         <!--Licencia-->
-                        {{-- <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
-                            {{-- @include('general.secciones_ficha.licencia') --}}
-                        </div>
-                        <!--Ficha Médica Única-->
+                        {{--  <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
+                            @include('general.secciones_ficha.licencia')
+                        </div>  --}}
+                        {{--  <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            {{--  @include('general.secciones_ficha.fmu')  --}}
-                        </div>
+                            @include('general.secciones_ficha.fmu')
+                        </div>  --}}
                        <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                             @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
-                        <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
-                            {{--  @include('general.secciones_ficha.bandeja_examenes')  --}}
-                        </div>
+                        {{--  <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
+                            @include('general.secciones_ficha.bandeja_examenes')
+                        </div>  --}}
                         <!--Hospitalización-->
                         {{-- <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
                             @include('general.hospitalizacion.hospitalizacion')
@@ -100,12 +100,30 @@
             <!--CIERRE CONTENIDO DE TAB-->
 
             <!-- SIDE BAR  -->
-            @include("atencion_medica.modales")
-            {{-- base de botones de sidebar --}}
-            @include("atencion_medica.include.sidebar_derecho_orl")
-            @include("general.modal.modal_no_disponible")
 
         </div>
+        @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.postura_neuro")
+        @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.sensibilidad")
+          @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.interconsulta_kine")
+ <!--Cierre: Container Completo-->
+
+
+    <!-- SIDE BAR ORL -->
+    {{--  @include("atencion_medica.modales")  --}}
+    @include("atencion_medica.include.sidebar_derecho_gastroenterologia")
+    @include("general.modal.modal_no_disponible")
+
+
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_fuerza_superior")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_fuerza_inferior")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_func_global")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.e_tono")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.metria")
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.pares_craneanos")
+
+    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.reflejos")
     </div>
-@endsection
+
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection
+
