@@ -1342,6 +1342,9 @@ class CertificadoController extends Controller
                     // 25. USOS PERSONALES
                     case '25':
                         break;
+                    // 26. INFORME RADIOLOGICO
+                    case '26':
+                        break;
                     default:
                         # code...
                         break;

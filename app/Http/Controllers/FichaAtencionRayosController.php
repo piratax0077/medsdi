@@ -58,11 +58,42 @@ class FichaAtencionRayosController extends Controller
             $id_paciente = $request->id_paciente_fc;
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+<<<<<<< HEAD
             $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
             $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
 
             $ficha->motivo = $procedimiento->nombre;
             $ficha->hipotesis_diagnostico = $procedimiento->nombre;
+=======
+            $paciente = Paciente::find($request->id_paciente_fc);
+            // $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
+
+            $idProcedimiento = $hora_medica->id_procedimiento;
+            $nombre_procedimiento = '';
+            if (strpos($idProcedimiento, '|') !== false) {
+                // Convertir la cadena en un array de IDs
+                $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                // Obtener todos los procedimientos que coincidan con los IDs
+                $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+            } else {
+                // Caso de un solo ID (número)
+                $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+            }
+
+            if($procedimientoCentroTem)
+            {
+                foreach ($procedimientoCentroTem as $key_nom_temp => $value_nom_temp) {
+                    $nombre_procedimiento .= $value_nom_temp->nombre.'; ';
+                }
+            }
+
+
+            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+
+            $ficha->motivo = $nombre_procedimiento;
+            $ficha->hipotesis_diagnostico = $nombre_procedimiento;
+>>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
 
@@ -82,11 +113,18 @@ class FichaAtencionRayosController extends Controller
 
             $ficha->finalizada = 1;
 
+<<<<<<< HEAD
 
             $registro_archivo = array();
             if(!empty($request->input_lista_archivo))
             {
                 $paciente = Paciente::find($request->id_paciente_fc);
+=======
+            $registro_archivo = array();
+            if(!empty($request->input_lista_archivo))
+            {
+
+>>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
                 $array_archivo = json_decode($request->input_lista_archivo);
 
                 $resulto_img = array();
@@ -123,6 +161,7 @@ class FichaAtencionRayosController extends Controller
 
             if ($ficha->save())
             {
+<<<<<<< HEAD
                 //  finalizar hora medica
                 $hora_medica->id_estado = 6;
                 $mensaje_estado_hora_medica = '';
@@ -136,6 +175,62 @@ class FichaAtencionRayosController extends Controller
                 $mensaje .= $mensaje_estado_hora_medica;
 
                 $mensaje .= 'Ficha Clínica  guardada de forma correcta\n';
+=======
+
+                /** registro en ficha atencion rayo */
+                $fichaRayo = new FichaAtencionRayo();
+
+                $fichaRayo->token = uniqid('RY');
+                $fichaRayo->id_ficha_atencion = $ficha->id;
+                $fichaRayo->id_paciente = $paciente->id;
+                $fichaRayo->id_profesional = $id_profesional;
+                $fichaRayo->id_procedimiento = $hora_medica->id_procedimiento;
+
+                if(empty($request->informe_radio))
+                {
+                    $fichaRayo->estado_informe = 0;
+                    $fichaRayo->informe = '';
+                    $fichaRayo->id_usuario_informe = 0;
+                }
+                else
+                {
+                    $fichaRayo->estado_informe = 1;
+                    $fichaRayo->informe = $request->informe_radio;
+                    $fichaRayo->id_usuario_informe = Auth::user()->id;
+                }
+
+                if(!empty($registro_archivo))
+                {
+                    $fichaRayo->estado_archivo = 1;
+                    $fichaRayo->archivo = json_encode($registro_archivo);
+                }
+                else
+                {
+                    $fichaRayo->estado_archivo = 0;
+                    $fichaRayo->archivo = '';
+                }
+
+                $fichaRayo->estado = 1;
+
+                if($fichaRayo->save())
+                {
+                    //  finalizar hora medica
+                    $hora_medica->id_estado = 6;
+                    $mensaje_estado_hora_medica = '';
+                    if (!$hora_medica->save()) {
+                        $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                    }
+                    else
+                    {
+                        $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                    }
+                    $mensaje .= $mensaje_estado_hora_medica;
+
+                    $mensaje .= 'Ficha Clínica  guardada de forma correcta\n';
+                }
+
+
+>>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
@@ -161,4 +256,132 @@ class FichaAtencionRayosController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
+<<<<<<< HEAD
+=======
+
+    public function generarPdfInformeRayos(Request $request)
+    {
+        if(!empty($request->t))
+        {
+            $fichaRayo = FichaAtencionRayo::where('token', $request->t)->get()->first();
+            if($fichaRayo)
+            {
+
+                $ficha_atencion = FichaAtencion::find($fichaRayo->id_ficha_atencion);
+                $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+                $paciente = Paciente::find($fichaRayo->id_paciente);
+                $profesional = Profesional::find($fichaRayo->id_profesional);
+
+                // Certificados y QR
+                $token_receta = '';
+                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+                if ($temp_token['estado'] != 1) {
+                    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 1);
+                }
+                $token_receta = $temp_token['certificado'];
+                $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+                $qr_documento = GeneradorQrController::generar($url_documento);
+
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 26, $ficha_atencion->id);
+                if ($temp_token['estado'] != 1) {
+                    $temp_token = CertificadoController::certificadoProfesional($profesional->id, rand(1114, 999), 26, $ficha_atencion->id);
+                }
+                $token_profesional = $temp_token['certificado'];
+                $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+                $qr_profesional = GeneradorQrController::generar($url_documento);
+
+                $array_ficha_atencion = [
+                    'id' => $ficha_atencion->id,
+                    'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                    'token' => $token_receta,
+                    'url' => $url_documento,
+                    'qr' => $qr_documento,
+                ];
+
+                $array_ficha_atencion = [
+                    'id' => $ficha_atencion->id,
+                    'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                    'token' => $token_receta,
+                    'url' => $url_documento,
+                    'qr' => $qr_documento,
+                ];
+
+                $array_lugar_atencion = [
+                    'id' => $lugar_atencion->id,
+                    'nombre' => $lugar_atencion->nombre
+                ];
+
+                $array_profesional = [
+                    'id' => $profesional->id,
+                    'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                    'rut' => $profesional->rut,
+                    'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+                    'token' => $token_profesional,
+                    'url' => $url_profesional,
+                    'qr' => $qr_profesional,
+                ];
+
+                $direccion = $paciente->Direccion()->first();
+                $array_paciente = [
+                    'id' => $paciente->id,
+                    'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                    'fecha_nac' => $paciente->fecha_nac,
+                    'rut' => $paciente->rut,
+                    'sexo' => $paciente->sexo,
+                    'direccion' => $direccion->direccion.' '.$direccion->numero_dir.', '.$direccion->Ciudad()->first()->nombre
+                ];
+
+                $cuerpo = [
+                    'array_ficha_atencion' => $array_ficha_atencion,
+                    'array_lugar_atencion' => $array_lugar_atencion,
+                    'array_profesional' => $array_profesional,
+                    'array_paciente' => $array_paciente,
+                ];
+
+                $titulo = 'Informe de Radiológico';
+
+                $lista_imagenes = array();
+
+                // if($fichaRayo->estado_archivo == 1)
+                // {
+                //     $archivos_temp = json_decode($fichaRayo->archivo); // Sin el parámetro true
+
+                //     if (json_last_error() === JSON_ERROR_NONE) {
+
+                //         $archivos_temp = json_decode($archivos_temp); // Sin el parámetro true
+                //         // Recorrer el array de archivos
+                //         foreach ($archivos_temp as $archivo) {
+                //             // echo "Nombre: " . $archivo->nombre . "<br>";
+                //             // echo "URL: " . $archivo->url . "<br><br>";
+
+                //             if(file_exists(asset('storage/archivo/archivo/'.$archivo->nombre)))
+                //             {
+                //                 var_dump('existe');
+                //                 $lista_imagenes[] = base64_encode(file_get_contents(asset('storage/imagenes/examen/'.$archivo->nombre)));
+                //             }
+                //         }
+                //     } else {
+                //         // echo "Error al decodificar el JSON: " . json_last_error_msg();
+                //     }
+
+                //     // var_dump($lista_temp);
+                //     var_dump($lista_imagenes);
+                //     die();
+                // }
+
+                return PdfController::generarPDF($titulo, compact('fichaRayo','lista_imagenes', 'ficha_atencion', 'lugar_atencion', 'paciente', 'profesional', 'array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente'), 'Informe'.$paciente->rut, 'pdf_informe_radiologico');
+            }
+            else
+            {
+                echo 'Ficha no encontrada';
+                die();
+            }
+        }
+        else
+        {
+            echo 'campo requerido';
+            die();
+        }
+    }
+>>>>>>> 383d176abb75a5fcdd279718b6ffc4ceb8a257c3
 }

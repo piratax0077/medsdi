@@ -319,7 +319,7 @@ class CargaImagenController extends Controller
 
         $request->validate([
             // 'file' => 'required|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/x-msexcel,application/x-excel|max:4096'
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv|max:4096',
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png,gif,bmp,webp,svg|max:4096',
             // 'file' => 'required|in:doc,csv,xlsx,xls,docx,pdf|max:4096'
         ]);
         // verificar si existe un archivo
@@ -330,7 +330,7 @@ class CargaImagenController extends Controller
         }
 
         $rules = [
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv|max:10240', // 10MB
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv, jpg, jpeg, png, gif, bmp, webp, svg.|max:10240', // 10MB
         ];
 		// Mensajes de error personalizados
         $messages = [
