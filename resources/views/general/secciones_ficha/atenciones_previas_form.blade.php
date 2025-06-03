@@ -26,7 +26,9 @@
                                                         <th>Ficha clínica</th>
                                                         <th>Exámenes</th>
                                                         <th>Recetas</th>
-
+                                                        @if($profesional->id_sub_tipo_especialidad == 11)
+                                                        <th>Ev. Especialidad</th>
+                                                        @endif
                                                         @if ($profesional->id_especialidad == 2)
                                                             <th>Presupuestos</th>
                                                         @endif
@@ -71,6 +73,13 @@
                                                                             class="feather icon-file-plus"></i>
                                                                         Ver</button>
                                                                 </td>
+                                                                 @if($profesional->id_sub_tipo_especialidad == 11)
+                                                                <td><button type="button"
+                                                                            class="btn btn-xxs btn-primary-light-c"
+                                                                            @if (isset($f->id)) onclick="buscar_evaluaciones_especialidad({{ $f->id }});" @endif><i
+                                                                                class="feather icon-folder"></i>
+                                                                            Ver</button></td>
+                                                                @endif
                                                                 @if ($profesional->id_especialidad == 2)
                                                                     <td>
                                                                         <button type="button"
@@ -79,8 +88,6 @@
                                                                                 class="feather icon-folder"></i>
                                                                             PDF</button>
                                                                     </td>
-                                                                @endif
-                                                                @if ($profesional->id_especialidad == 2)
                                                                     <td>
                                                                         <button type="button"
                                                                             class="btn btn-xxs btn-success-light-c"
@@ -119,6 +126,7 @@
         @include('general.secciones_ficha.modal_atencion_previa.hist_trabajos_dental')
         @include('general.secciones_ficha.modal_atencion_previa.hist_evoluciones_dental')
         @include('general.secciones_ficha.modal_atencion_previa.hist_cons')
+        @include('general.secciones_ficha.modal_atencion_previa.evaluaciones_especialidad')
         <script>
             $(document).ready(function() {
                 $('#table_atenciones_profesional').DataTable({

@@ -10,7 +10,7 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
                         <label class="floating-label-activo-sm" for="motivo">Motivo de consulta</label>
-                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo" placeholder="{{ $placeholder_motivo_consulta }}">
+                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo" placeholder="{{ $placeholder_motivo_consulta }}" value="">
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
                         <label class="floating-label-activo-sm" for="antecedentes">Antecedentes Especialidad</label>

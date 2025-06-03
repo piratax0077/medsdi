@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamenBiopsia;
 use App\Models\ExamenEspecialidad;
 use App\Models\ExamenEspecialidadImg;
 use App\Models\ExamenEspecialidadTemplate;
@@ -243,7 +244,7 @@ class ExamenEspecialidadController extends Controller
                                     $cant_img_row++;
                                 }
                             }
-						 
+
 
                             if($cant_img_row == 3)
                             {
@@ -472,9 +473,9 @@ class ExamenEspecialidadController extends Controller
                     $cuerpo_img .= '<td style="padding:5px;width:33.33%">';
                     $img_temp = base64_encode(file_get_contents(asset('storage/imagenes/temp/'.$img[2])));
                     if(isset($img[4]))
-                        $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img[2].'"><br/>'.$img[4].'';
+                         $cuerpo_img .= '<img style="width:80%; height: 180px;" src="data:image/png;base64,'.$img_temp.'" alt="'.$img[2].'"><br/><span style="text-transform: uppercase; font-weight: bold; margin-top: 5px; text-align: center;">'.$img[4].'</span>';
                     else
-                        $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img[2].'">';
+                        $cuerpo_img .= '<img style="width:80%; height: 180px;" src="data:image/png;base64,'.$img_temp.'" alt="'.$img[2].'">';
 
                     $cuerpo_img .= '</td>';
 
@@ -569,8 +570,10 @@ class ExamenEspecialidadController extends Controller
             // echo json_encode($imagenes);
             // die();
 
+            $biopsias = ExamenBiopsia::where('id_ficha_atencion', $ficha_atencion->id)->get()->toArray();
+
             // return  PdfController::generarPDF($tipo->nombre, compact('imagenes', 'registro', 'array_lugar_atencion', 'array_profesional', 'array_paciente','array_ficha_atencion'), $nombre_archivo, 'pdf_orl_rino',$pdf_tipo);
-            return  PdfController::generarPDF($tipo->nombre, compact('template_pdf', 'array_lugar_atencion', 'array_profesional', 'array_paciente','array_ficha_atencion'), $nombre_archivo, 'pdf_orl_rino',$pdf_tipo);
+            return  PdfController::generarPDF($tipo->nombre, compact('template_pdf', 'array_lugar_atencion', 'array_profesional', 'array_paciente','array_ficha_atencion','biopsias'), $nombre_archivo, 'pdf_orl_rino',$pdf_tipo);
         }
         else
         {

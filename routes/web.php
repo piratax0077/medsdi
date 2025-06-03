@@ -509,6 +509,7 @@ Route::group([
     Route::get('Cargar_datos_contacto', [App\Http\Controllers\EscritorioProfesional::class, 'cargar_datos_contacto'])->name('profesional.cargar_datos_contacto');
     Route::get('Inicio', [App\Http\Controllers\EscritorioProfesional::class, 'index'])->name('profesional.home');
     Route::get('Mis_pacientes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_pacientes'])->name('profesional.pacientes');
+    Route::get('Mis_pacientes_ajax', [App\Http\Controllers\EscritorioProfesional::class, 'mis_pacientes_ajax'])->name('profesional.mis_pacientes.ajax');
     Route::get('Recetas', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_receta_ficha'])->name('profesional.buscar_recetas');
     Route::get('Examenes', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_examen_ficha'])->name('profesional.buscar_examenes');
     Route::get('Editar_paciente/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'ver_paciente'])->name('profesional.editar_paciente');
@@ -2513,5 +2514,7 @@ Route::post('/mostrar_nuevo_medicamento_hosp',[App\Http\Controllers\EscritorioPr
 Route::post('/guardar_examen_biopsia',[App\Http\Controllers\EscritorioProfesional::class,'guardar_examen_biopsia'])->name('profesional.guardar_examen_biopsia');
 Route::get('/dame_examenes_biopsia',[App\Http\Controllers\EscritorioProfesional::class,'dame_examenes_biopsia'])->name('profesional.dame_examenes_biopsia');
 Route::get('/eliminar_examen_biopsia',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_examen_biopsia'])->name('profesional.eliminar_examen_biopsia');
+Route::get('/generar_pdf_biopsias',[App\Http\Controllers\EscritorioProfesional::class,'generar_pdf_biopsias'])->name('profesional.generar_pdf_biopsias');
+Route::get('/dame_evaluaciones_especialidad',[App\Http\Controllers\EscritorioProfesional::class,'buscar_evaluaciones_especialidad'])->name('profesional.buscar_evaluaciones_especialidad');
 Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');
 Route::get('/paciente/datos/cargar/prereserva/registrar',[App\Http\Controllers\EscritorioPaciente::class, 'registrarCargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva.registrar');

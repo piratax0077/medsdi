@@ -75,6 +75,12 @@ class Paciente extends Model
         return $this->belongsTo(FichaAtencion::class, 'id', 'id_paciente');
     }
 
+    public function fichasAtencion()
+    {
+        return $this->hasMany(FichaAtencion::class, 'id_paciente', 'id');
+    }
+
+
     public function FichaAtencionConfi()
     {
         return $this->belongsTo(FichaAtencion::class, 'id', 'id_paciente')->where('confidencial', true);

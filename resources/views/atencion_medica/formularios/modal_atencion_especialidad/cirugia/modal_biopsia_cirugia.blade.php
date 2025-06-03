@@ -109,9 +109,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <button type="button" class="btn btn-success btn-sm float-right">Generar PDF</button>
-                        </div>
+
                     </div>
                 </form>
             </div>
@@ -204,7 +202,7 @@ function guardar_biopsia() {
 }
 
 function limpiarCamposBiopsia(){
-    $('#fecha_biopsia').val('');
+    // $('#fecha_biopsia').val('');
     $('#n_orden_biopsia').val('');
     $('#zona1').val('');
     $('#zona2').val('');
@@ -220,11 +218,11 @@ function agregarFilaBiopsia(examen) {
 
     tabla.row.add([
         examen.fecha,
-        examen.n_orden,
+        examen.id,
         examen.localizacion,
         examen.zona, // Usamos solo una vez la agrupación de frascos
         examen.patologo,
-        '<button type="button" class="btn btn-sm btn-danger" onclick="eliminar_ex_biopsia('+examen.id+')">Eliminar</button>'
+        '<button type="button" class="btn btn-sm btn-danger mr-1" onclick="eliminar_ex_biopsia('+examen.id+')">Eliminar</button><button type="button" class="btn btn-sm btn-primary" onclick="ver_pdf_ex_biopsia('+examen.id+')">PDF</button>'
     ]).draw(false);
 }
 
@@ -242,7 +240,20 @@ function eliminar_ex_biopsia(id){
                     icon:'success',
                     text:'Exito, se ha eliminado la biopsia',
                 });
-                quitarFilaBiopsia(response.examen);
+                let examenes = response.examenes;
+                const tabla = $('#table_ex_biopsias').DataTable(); // Ya está inicializada
+                tabla.clear().draw(); // 🔥 Limpiar la tabla antes de agregar filas nuevas
+                examenes.forEach(examen => {
+                    tabla.row.add([
+                        examen.fecha,
+                        examen.n_orden,
+                        examen.localizacion,
+                        examen.zona, // Usamos solo una vez la agrupación de frascos
+                        examen.patologo,
+                        '<button type="button" class="btn btn-sm btn-danger" onclick="eliminar_ex_biopsia('+examen.id+')">Eliminar</button>'
+                    ]).draw(false);
+                });
+
             } else {
                 alert('Ocurrió un error al eliminar el examen.');
             }
@@ -252,6 +263,39 @@ function eliminar_ex_biopsia(id){
             alert('Error al eliminar examen.');
         }
     });
+}
+
+function ver_pdf_ex_biopsia(id){
+    // $.ajax({
+    //     url: '{{ ROUTE("profesional.generar_pdf_biopsias") }}', // Cambia esta ruta según tu backend
+    //     method: 'get',
+    //     data: {
+    //         id:id,
+    //         id_ficha_atencion: $('#id_fc').val()
+    //     },
+    //     success: function(response) {
+    //         console.log(response);
+    //         if (response.success) {
+
+    //         } else {
+    //             alert('Ocurrió un error al eliminar el examen.');
+    //         }
+    //     },
+    //     error: function(xhr) {
+    //         console.log(xhr.responseText);
+    //         alert('Error al eliminar examen.');
+    //     }
+    // });
+    var data ='id_ficha_atencion='+$('#id_fc').val()+'&id='+id;
+    Fancybox.show(
+        [
+            {
+            src: '{{ route("profesional.generar_pdf_biopsias") }}?'+data,
+            type: "iframe",
+            preload: false,
+            },
+        ]
+    );
 }
 
 </script>

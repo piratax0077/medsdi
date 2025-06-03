@@ -1216,9 +1216,6 @@
             });
         }
 
-
-
-
         function generar_pdf_historial(id_ficha_clinica){
             let url = "{{ route('profesional.generar_pdf_presupuesto_dental_hist') }}";
             let id_paciente = dame_id_paciente();
@@ -1266,7 +1263,7 @@
                         });
                     }
                 }
-            })
+            });
         }
 
         function buscar_receta_ficha(id) {

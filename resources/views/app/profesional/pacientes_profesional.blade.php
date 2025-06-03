@@ -40,7 +40,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <table id="res-config" class="display table table-striped dt-responsive nowrap table-xs"
+                                <table id="pacientes-table" class="display table table-striped dt-responsive nowrap table-xs"
                                     style="width:100%">
                                     <thead>
                                         <tr>
@@ -54,85 +54,7 @@
                                             <th>Lugares de Atención</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @if (isset($paciente) && count($paciente) > 0 && $paciente != null && $paciente != '')
-                                            @foreach ($paciente as $p)
-                                                <tr>
-                                                    <td class="text-uppercase align-middle font-weight-bold">
-                                                        {{ $p->nombres . ' ' . $p->apellido_uno . ' ' . $p->apellido_dos }}<br>
-                                                        {{ $p->rut }}<br>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{ \Carbon\Carbon::parse($p->fecha_nac)->format('d/m/Y') }}</td>
-                                                    <td class="align-middle">{{ $p->Prevision()->first()->nombre }}
-                                                    </td>
-                                                    <td class="text-lowercas align-middle">
-                                                        {{ $p->email }}<br>
-                                                        {{ $p->telefono_uno }}
-                                                    </td>
-                                                    <td>
-                                                        @if($p->id_usuario)
-                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Mi_Ficha_Medica']) }}"
-                                                            class="btn btn-primary btn-icon" data-toggle="tooltip"
-                                                            data-placement="top" title="Ficha Médica Única"><i
-                                                                class="feather icon-file-plus"></i></a>
-                                                        @endif
-                                                        <a href="{{ ROUTE('profesional.atenciones_previas_paciente', $p->id) }}"
-                                                            class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
-                                                            title="Atenciones previas"><i class="feather icon-activity"></i></a>
 
-                                                            <!--EMITIR DOCUMENTOS-->
-                                                            <a href="#"
-                                                            class="btn btn-icon btn-orange" onclick="emitir_doc()" data-toggle="tooltip" data-placement="top"
-                                                            title="Emitir documentos"><i class="feather icon-file-text"></i></a>
-
-                                                        <!--<a onclick="autorizacion_ficha_medica_unica({{ $p->id }});"
-                                                            class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"
-                                                            data-placement="top" title="Ficha Médica Única"><i
-                                                                class="feather icon-file-plus"></i></a>-->
-														@if($p->id_usuario)
-                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Profesional/Editar_paciente/'.$p->id, 'id_tipo' => 9]) }}"
-                                                            class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
-                                                            data-placement="top" title="Editar datos medicos del paciente"><i
-                                                                class="feather icon-edit"></i></a>
-                                                        @endif
-                                                        @if($profesional->id_especialidad == 2)
-                                                            <button
-                                                                class="btn btn-secondary btn-sm btn-icon"
-                                                                data-toggle="tooltip"
-                                                                data-placement="top"
-                                                                title="Historial de presupuestos"
-                                                                onclick="verPresupuestos({{ $p->id }})"
-                                                            >
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        @endif
-
-													</td>
-													<td>
-                                                         <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
-                                                    </td>
-                                                    {{-- @if ($p->id_premium == null)
-                                                        <td><span
-                                                                class="badge badge-primary">Normal</span>
-                                                        </td>
-                                                    @else
-                                                        <td><span
-                                                                class="badge badge-success">Premium</span>
-                                                        </td>
-                                                    @endif --}}
-                                                    <td>
-                                                        @if ($p->lugares_atencion)
-                                                            @foreach ( $p->lugares_atencion as $la_temp )
-                                                                {{ $la_temp }}<br/>
-                                                            @endforeach
-
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -271,6 +193,25 @@
 @endsection
 
 @section('page-script')
+<script>
+$(document).ready(function() {
+    $('#pacientes-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route("profesional.mis_pacientes.ajax") }}',
+        columns: [
+            { data: 'nombre_completo', name: 'nombre_completo' },
+            { data: 'fecha_nacimiento', name: 'fecha_nacimiento' },
+            { data: 'convenio', name: 'convenio' },
+            { data: 'contacto', name: 'contacto' },
+            { data: 'acciones', name: 'acciones', orderable: false, searchable: false },
+            { data: 'mensaje', name: 'mensaje', orderable: false, searchable: false },
+            { data: 'lugares_atencion', name: 'lugares_atencion', orderable: false, searchable: false },
+        ]
+    });
+});
+</script>
+
 <script>
 
     function enviar_mensaje_paciente(id_paciente){

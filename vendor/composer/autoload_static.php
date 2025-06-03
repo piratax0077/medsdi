@@ -39,6 +39,7 @@ class ComposerStaticInit1f5c8d04a064efd29333a28b503a0713
         '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
         'a095a384963ea027a2e1dadea949b026' => __DIR__ . '/../..' . '/app/Helpers/Funciones.php',
     );
 
@@ -50,6 +51,10 @@ class ComposerStaticInit1f5c8d04a064efd29333a28b503a0713
         'Z' => 
         array (
             'ZipStream\\' => 10,
+        ),
+        'Y' => 
+        array (
+            'Yajra\\DataTables\\' => 17,
         ),
         'W' => 
         array (
@@ -225,6 +230,10 @@ class ComposerStaticInit1f5c8d04a064efd29333a28b503a0713
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Yajra\\DataTables\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
         ),
         'Whoops\\' => 
         array (
@@ -980,6 +989,7 @@ class ComposerStaticInit1f5c8d04a064efd29333a28b503a0713
         'App\\Models\\EvolucionPacienteHospital' => __DIR__ . '/../..' . '/app/Models/EvolucionPacienteHospital.php',
         'App\\Models\\EvolucionUrgencia' => __DIR__ . '/../..' . '/app/Models/EvolucionUrgencia.php',
         'App\\Models\\Examen' => __DIR__ . '/../..' . '/app/Models/Examen.php',
+        'App\\Models\\ExamenBiopsia' => __DIR__ . '/../..' . '/app/Models/ExamenBiopsia.php',
         'App\\Models\\ExamenCapacidadConstPerceptiva' => __DIR__ . '/../..' . '/app/Models/ExamenCapacidadConstPerceptiva.php',
         'App\\Models\\ExamenCerebelo' => __DIR__ . '/../..' . '/app/Models/ExamenCerebelo.php',
         'App\\Models\\ExamenConcienciaComp' => __DIR__ . '/../..' . '/app/Models/ExamenConcienciaComp.php',
@@ -8346,6 +8356,22 @@ class ComposerStaticInit1f5c8d04a064efd29333a28b503a0713
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'Yajra\\DataTables\\ApiResourceDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/ApiResourceDataTable.php',
+        'Yajra\\DataTables\\CollectionDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/CollectionDataTable.php',
+        'Yajra\\DataTables\\Contracts\\DataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/DataTable.php',
+        'Yajra\\DataTables\\Contracts\\Formatter' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/Formatter.php',
+        'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
+        'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
+        'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
+        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
+        'Yajra\\DataTables\\Processors\\DataProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/DataProcessor.php',
+        'Yajra\\DataTables\\Processors\\RowProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/RowProcessor.php',
+        'Yajra\\DataTables\\QueryDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/QueryDataTable.php',
+        'Yajra\\DataTables\\Utilities\\Config' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Config.php',
+        'Yajra\\DataTables\\Utilities\\Helper' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Helper.php',
+        'Yajra\\DataTables\\Utilities\\Request' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Request.php',
         'ZipStream\\CentralDirectoryFileHeader' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/CentralDirectoryFileHeader.php',
         'ZipStream\\CompressionMethod' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/CompressionMethod.php',
         'ZipStream\\DataDescriptor' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/DataDescriptor.php',

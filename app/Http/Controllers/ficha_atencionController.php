@@ -990,14 +990,18 @@ class ficha_atencionController extends Controller
             $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
             $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
 
+            $fichaTipo['cda'] = FichaCirugiaDigestivaGeneralAdulto::where('id_ficha_atencion', $hora->id_ficha_atencion)->first();
+
             $lista_examen_especial = '';
             $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+
             foreach ($examen_tipo as $key => $value)
             {
                 $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
                 $lista_examen_especial .= $value->ExamenEspecialidadTemplate->alias.','.$value->id.','.$value->ExamenEspecialidadTemplate->id.'|';
             }
             $lista_examen_especial = substr($lista_examen_especial, 0, -1);
+
 
             /** examenes de la especialidad */
             $examenes_especialidad = '';
@@ -2237,7 +2241,6 @@ class ficha_atencionController extends Controller
                 $d->nombre = $data->nombre;
             }
         }
-
 
         return view($ruta_blade)->with(
             [
@@ -6711,6 +6714,7 @@ class ficha_atencionController extends Controller
     /** REGISTRO FICHA ATENCION Y CIRUGIA DIGESTIVA GENERAL*/
     public function store_cdg(Request $request)
     {
+
         $campos_requeridos = 0;
         $mensaje = '';
         if(empty( trim($request->descripcion_hipotesis)))
@@ -7011,6 +7015,7 @@ class ficha_atencionController extends Controller
                         $ficha_cd->cirug_cda = 0;
                     }
                     $ficha_cd->obs_plan_trat_cda = $request->obs_plan_trat_cda;
+                    $ficha_cd->lista_imagenes_cda = $request->input_lista_imagenes;
 
                     /** CIRUGIA DIGESTIVA BAJA */
                     $ficha_cd->cdb_ex_fisico_ab = $request->cdb_ex_fisico_ab;

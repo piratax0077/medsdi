@@ -250,6 +250,7 @@
 
             {!! $cuerpo['template_pdf'] !!}
 
+
         </div>
     </main>
 </html>

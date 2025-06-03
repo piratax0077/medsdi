@@ -99,13 +99,15 @@
             </div>
         </div>
 
+
+
         <!-- SIDE BAR ORL -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_medica.include.sidebar_derecho_orl"){{-- modales y data de sidebar especialidad --}}
         @include("general.modal.modal_no_disponible")
     </div>
     <!--Cierre: Container Completo-->
-
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 
 @endsection

@@ -41,6 +41,7 @@
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+                    <input type="hidden" name="input_lista_biopsias" id="input_lista_biopsias" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
                     @php
@@ -967,6 +968,8 @@
                 url: url,
                 success: function(examenes){
                     console.log(examenes);
+                    var tabla = $('#table_ex_biopsias').DataTable();
+                    tabla.clear().draw();
                     if(examenes.length > 0){
                         examenes.forEach(e => {
                             agregarFilaBiopsia(e);

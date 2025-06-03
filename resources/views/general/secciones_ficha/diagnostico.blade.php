@@ -11,7 +11,7 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_hipotesis">Hipótesis diagnóstica</label>
-                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')">
+                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons,diag_endos_eda" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ isset($fichaAtencion) ? $fichaAtencion->hipotesis_diagnostico : '' }}">
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
@@ -22,12 +22,12 @@
                         <label class="floating-label-activo-sm" for="indicaciones">Indicaciones</label>
                         <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
                     </div>
-                    <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                    {{--  <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
                         <div class="custom-control custom-switch" >
                             <input type="checkbox" class="custom-control-input accor-closed  collapsed" id="motivo1"  data-toggle="collapse" data-target="#motivo1_c" aria-expanded="false" aria-controls="motivo1_c">
                             <label class="custom-control-label font-weight-bold text-c-blue" for="motivo1">Ingresar Plan de tratamiento</label>
                         </div>
-                    </div>
+                    </div>  --}}
                     <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div id="motivo1_c" class="collapse" aria-labelledby="motivo1" data-parent="#motivo1">
                             <div class="card-body-aten-a">
@@ -129,7 +129,7 @@
                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_ex_comunes()";><i class="feather icon-edit-1"></i> Examenes Frecuentes</button>
                                             </div>
                                         </div>
-                                        
+
                                         @endif
                                           @if($subtipo && $subtipo->nombre == 'Homeopatía' )
                                        <div class="form-row">
