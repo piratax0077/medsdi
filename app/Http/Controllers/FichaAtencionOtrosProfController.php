@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\FichaAtencion;
 use App\Models\FichaOtrosProfesionales;
 use App\Models\FichaOtProfControl;
 use App\Models\FichaKinesiologia;
@@ -2476,4 +2476,5 @@ class FichaAtencionOtrosProfController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
+
 }

@@ -115,6 +115,11 @@
                                                 @endforeach
                                             @endif
 
+                                            {{-- EXAMENES DE RADIOLOGIA --}}
+                                            @if (isset($reg_exam_rayo))
+
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>

@@ -216,6 +216,16 @@
                                                 <div class="card-body-aten-a">
                                                     <div class="form-row">
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <ul>
+                                                                @foreach ($procedimientoCentro as $procedimiento)
+                                                                    <li>{{ $procedimiento->nombre }}</li>
+                                                                @endforeach
+                                                            </ul>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <textarea class="form-control caja-texto form-control-sm mb-9"  rows="15"  onfocus="this.rows=15" onblur="this.rows=15;" name="informe_radio" id="informe_radio" placeholder="Informe de examen realizado"></textarea>
                                                         </div>
                                                     </div>
@@ -403,8 +413,8 @@
             },
 
             acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
-            maxFilesize: 4,
-            maxFiles: 4,
+            maxFilesize: 25,
+            maxFiles: 10,
             /** El texto utilizado antes de que se eliminen los archivos. */
             dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 

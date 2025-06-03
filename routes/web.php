@@ -1519,9 +1519,12 @@ Route::group([
     Route::post('Ficha_Atencion/crear/fonoaudiologia/general', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_lab_general'])->name('ficha.otro.prof.registrar_lab_general');
 
     /*** RAYOS x */
-    Route::post('Ficha_Atencion/crear/rayo', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_lab_rayos'])->name('ficha.otro.prof.registrar_lab_rayos');
+    Route::post('Ficha_Atencion/crear/rayo', [App\Http\Controllers\FichaAtencionRayosController::class, 'store_fono_lab_rayos'])->name('ficha.otro.prof.registrar_lab_rayos');
+
 
 });
+/**VER INFORME RAYOS */
+Route::get('informe/rayo/{t}', [App\Http\Controllers\FichaAtencionRayosController::class, 'generarPdfInformeRayos'])->name('rayos.ver.informe.rayos');
 
 /**--CENTRO MEDICO--**/
 Route::group([

@@ -47,7 +47,7 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item"><i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil</a>
+                                            <a class="dropdown-item"><i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de mi perfil</a>
                                             <a class="dropdown-item"><i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
                                         </div>
                                     </div>
@@ -1851,51 +1851,10 @@
                                     </div>
                                 </div>
 
-                                <!--Servicios-->
-                                <div class="col-md-6">
-                                    <div class="card">
-                                        <div class="card-header pt-3 pb-2 bg-light">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
-                                                    <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-6 col-md-12">
-                                                    <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-wrap text-left align-middle">Servicio</th>
-                                                                <th class="text-wrap text-left align-middle">Responsable</th>
-                                                                <th class="text-wrap text-left align-middle">Acción</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($servicios_internos as $servicio)
-                                                            <tr>
-                                                                <td class="align-middle text-left">{{ $servicio->nombre }}</td>
-                                                                <td class="align-middle text-left">{{ $servicio->nombre_responsable . ' ' . $servicio->apellido_uno_responsable . ' ' . $servicio->apellido_dos_responsable }}</td>
-                                                                <td class="align-middle text-left">
-                                                                    <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_servicio_cm({{ $servicio->id }})"><i class="fas fa-edit"></i></button>
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm({{ $servicio->id }});"><i class="feather icon-trash"></i></button>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                              
 
                                 <!-- Procedimientos -->
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="card">
                                         <div class="card-header pt-3 pb-2 bg-light">
                                             <div class="row">
@@ -1943,7 +1902,48 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                  <!--Servicios-->
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header pt-3 pb-2 bg-light">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
+                                                    <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-md-12">
+                                                    <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-wrap text-left align-middle">Servicio</th>
+                                                                <th class="text-wrap text-left align-middle">Responsable</th>
+                                                                <th class="text-wrap text-left align-middle">Acción</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($servicios_internos as $servicio)
+                                                            <tr>
+                                                                <td class="align-middle text-left">{{ $servicio->nombre }}</td>
+                                                                <td class="align-middle text-left">{{ $servicio->nombre_responsable . ' ' . $servicio->apellido_uno_responsable . ' ' . $servicio->apellido_dos_responsable }}</td>
+                                                                <td class="align-middle text-left">
+                                                                    <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_servicio_cm({{ $servicio->id }})"><i class="fas fa-edit"></i></button>
+                                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm({{ $servicio->id }});"><i class="feather icon-trash"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
