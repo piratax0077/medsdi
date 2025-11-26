@@ -35,6 +35,7 @@ use App\Models\ResultadoExamen;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
 use App\Models\ContactoEmergencia;
+use App\Models\ExamenesBocaGeneral;
 use Illuminate\Http\Request;
 
 use ArrayObject;
@@ -1384,8 +1385,31 @@ class AppPacienteController extends Controller
 
     //RECETAS ONLINE
     public function getMisExamenes(Request $request) {
-        return $request;
+        
+        $datos = array();
+        $error = array();
+        $campos_requeridos = 0;
+
+        if(empty($request->id_paciente)||(int)$request->id_paciente==0) // id_paciente id_usuario
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
+        if($campos_requeridos==0)
+        {
+            $paciente = Paciente::where('id_usuario',$request->id_paciente)->first();
+
+            $registros = ExamenesBocaGeneral::where('id_paciente',$paciente->id)->get();
+
+            $datos['estado'] = 1;
+            $datos['registros'] = $registros;
+
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
     }
+
     public function getMisRecetas(Request $request) {
         $datos = array();
         $error = array();
