@@ -1,0 +1,33 @@
+@media (min-width: 992px) { 
+
+.subir{   
+  transform: translate(0px);
+  transition: 0.5s;
+}
+
+.subir:hover{ 
+  transform: translateY(-10px);
+  transition: 0.5s;
+}
+
+ }
+
+.card-color{
+	transition: 0.5s;
+	background: #3366CC;
+
+}
+
+.card-color:hover{
+	transition: 0.5s;
+	background: #1CBEBE;
+
+}
+
+ @media (max-width: 768px) { 
+
+ h4{
+ 	font-size: 16px;
+ }
+
+}
