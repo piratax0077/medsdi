@@ -3,6 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
+use App\Models\Paciente;
+use App\Models\PacientesDependientes;
+use App\Models\ProcedimientosCentro;
+use Illuminate\Support\Facades\Auth;
+use App\Models\AcompananteDependiente;
+use App\Models\Instituciones;
+use App\Models\Sucursal;
+use App\Models\SucursalHorario;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\TipoEspecialidad;
@@ -93,4 +101,183 @@ class CentroMedicoController extends Controller
 
         return ['profesionales' => $profesionales];
     }
+
+    public function obtenerDatosPacientePorRut(Request $request){
+   
+        $datos = array();
+        if(empty($request->id_dependiente_activo))
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)
+                        ->with(['Prevision' => function($query){
+                            $query->select('id', 'nombre');
+                        }])
+                        ->with(['Direccion' => function($query){
+                            $query->with('Ciudad')->first();
+                        }])
+                        ->first();
+        }
+        else
+        {
+            $paciente = Paciente::where('id', $request->id_dependiente_activo)
+                        ->with(['Prevision' => function($query){
+                            $query->select('id', 'nombre');
+                        }])
+                        ->with(['Direccion' => function($query){
+                            $query->with('Ciudad')->first();
+                        }])
+                        ->first();
+
+            /** BUSCAR INFORMACION DE DEPENDIENTES */
+            $info_depen = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+
+            if($info_depen)
+            {
+                /** BUSCAR RESPONSABLES */
+                $filtro_temp = array();
+                $filtro_temp[] = array('id_dependiente', $info_depen->id_paciente);
+                $registro_depen = AcompananteDependiente::where($filtro_temp)->where('id_tipo', 1)->with('acompanante');
+                $registro_temp = AcompananteDependiente::where('id_responsable', $info_depen->id_responsable)->whereNull('id_dependiente')->where('id_tipo', 2)->with('acompanante')->union($registro_depen)->get();
+                $paciente['acompanante'] = $registro_temp;
+
+                /** BUSCAR REPRESENTENATE */
+                $registro_representante = Paciente::where('id_usuario', Auth::user()->id)->first();
+                $paciente['representante'] = $registro_representante;
+            }
+            else
+            {
+                $paciente['acompanante'] = null;
+                $paciente['representante'] = null;
+            }
+
+            $paciente['edad'] = $this->obtener_edad_segun_fecha($paciente->fecha_nac);
+        }
+
+
+        if($paciente)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'Registros';
+            $datos['registro'] = $paciente;
+            $datos['profesional'] = Profesional::where('id', $request->id_profesional)
+                                                ->with('Especialidad')
+                                                ->with('TipoEspecialidad')
+                                                ->with('SubTipoEspecialidad')
+                                                ->first();
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'registros no encontrados';
+        }
+
+        return $datos;
+    }
+
+    public function obtener_edad_segun_fecha($fecha_nacimiento)
+    {
+        $fecha_actual = new \DateTime();
+        $fecha_nac = new \DateTime($fecha_nacimiento);
+        $edad = $fecha_actual->diff($fecha_nac);
+        return $edad->y;
+    }
+
+    public function confirmarReserva(Request $request){
+        $datos = array();
+        // Aquí debes implementar la lógica para guardar la reserva en la base de datos
+        // Usando los datos recibidos en $request
+
+        // Ejemplo de datos recibidos:
+        $id_paciente = $request->id_paciente;
+        $id_profesional = $request->id_profesional;
+        $id_lugar_atencion = $request->id_lugar_atencion;
+        $fecha_consulta = $request->fecha_consulta;
+        $hora_consulta = $request->hora_consulta;
+
+        // Lógica para guardar la reserva (debes adaptarla a tu modelo y base de datos)
+        // ...
+
+        // Suponiendo que la reserva se guarda correctamente
+        $datos['estado'] = 1;
+        $datos['msj'] = 'Reserva confirmada exitosamente';
+
+        return $datos;
+    }
+
+    public function buscarExamenes(Request $request){
+        $examenes = ProcedimientosCentro::where('id_lugar_atencion', $request->id_centro_medico)->get();
+        return $examenes;
+    }
+
+    public function buscarSucursalesLaboratorio(Request $request){
+        $institucion = Instituciones::where('id_lugar_atencion', $request->id_laboratorio)->first();
+        $sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
+        return $sucursales;
+    }
+
+    public function buscarProfesionalesExamen(Request $request){
+     
+        $sucursal = Sucursal::where('id', $request->id_sucursal)->first();
+        $institucion = Instituciones::where('id', $sucursal->id_institucion)->first();
+    
+        $id_examen = $request->id_examen;
+        $id_lugar_atencion = $institucion->id_lugar_atencion;
+        $profesionalesLugarAtencion = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $id_lugar_atencion)->get();
+     
+        $profesionales = [];
+        foreach($profesionalesLugarAtencion as $p){
+            $profesional = Profesional::where('id',$p->id_profesional)->first();
+            if($profesional){
+                array_push($profesionales, $profesional);
+            }
+        }
+        return ['profesionales' => $profesionales];
+    }
+
+    public function horasExamenProfesionalLugarAtencion(Request $request){
+        $datos = array();
+        $institucion = Instituciones::where('id_lugar_atencion', $request->id_lugar_atencion)->first();
+        $horario = SucursalHorario::where('id_institucion', $institucion->id)
+                                        // ->where('id_lugar_atencion', $request->lugar_atencion)
+                                        // ->tipoAgenda($request->tipo_agenda)
+                                        ->orderBy('dia', 'ASC')
+                                        ->get();
+
+        $dias_no_laborales = ['1','2','3','4','5','6','7'];
+        $dias_laborales = [];
+
+        foreach ($horario as $hor) {
+            $ho = explode(',', $hor->dia);
+            foreach ($ho as $h) {
+                $h = trim($h);
+                // Agregar a días laborales si no está ya
+                if (!in_array($h, $dias_laborales)) {
+                    $dias_laborales[] = $h;
+                }
+
+                // Quitar de los días no laborales si está presente
+                if (($key = array_search($h, $dias_no_laborales)) !== false) {
+                    unset($dias_no_laborales[$key]);
+                }
+            }
+        }
+
+        // Ordenar los arrays si quieres mantener un orden consistente
+        sort($dias_laborales);
+        sort($dias_no_laborales);
+
+        $horario_agenda_laboral = implode(',', $dias_laborales);
+        $horario_agenda_no_laboral = implode(',', $dias_no_laborales);
+
+        $datos['estado'] = 1;
+        $datos['msj'] = 'registros';
+        $datos['registros'] = array(
+            'horario_agenda_laboral' => $horario_agenda_laboral,
+            'horario_agenda_no_laboral' => $horario_agenda_no_laboral
+        );
+
+        return $datos;
+    }
+
+    
+    
 }

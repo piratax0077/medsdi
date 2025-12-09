@@ -3,22 +3,20 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización </h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización - <script>
+                        var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                            "Octubre", "Noviembre", "Diciembre");
+
+                        var f = new Date();
+                        document.write(f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                    </script>
+                </h5>
                 <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" onclick="cerrarihosp();"><span aria-hidden="true">×</span></button>
                 </button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <script>
-                                var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-                                    "Octubre", "Noviembre", "Diciembre");
-
-                                var f = new Date();
-                                document.write(f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                            </script>
-                        </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
@@ -34,13 +32,13 @@
                                 <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="indicaciones-hosp-tab" data-toggle="tab"
                                         href="#indicaciones-hosp" role="tab" aria-controls="indicaciones-hosp"
-                                        aria-selected="false">Indicaciones ingreso</a>
+                                        aria-selected="false" onclick="dame_examenes_hosp()">Indicaciones ingreso</a>
                                 </li>
-                                <li class="nav-item">
+                                {{--  <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="archivos-hosp-pab-tab" data-toggle="tab"
                                         href="#archivos-hosp-pab" role="tab" aria-controls="archivos-hosp-pab"
                                         aria-selected="false">Archivos</a>
-                                </li>
+                                </li>  --}}
 
                             </ul>
                         </div>
@@ -57,80 +55,88 @@
                                         </div>
                                     </div>
                                     <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Hospitalizar en:</label>
-                                                <select name="hospen" id="hospen" data-titulo="Hospitalización"
-                                                    class="form-control form-control-sm"
-                                                    onchange="evaluar_para_carga_detalle('hospen','div_detalle_hospen','obs_hospen',3);">
-                                                    <option value="1" selected>Clínica</option>
-                                                    <option value="2">Hospital</option>
-                                                    <option value="3">Otro (Describir)</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_detalle_hospen" style="display:none">
-                                                <label class="floating-label-activo-sm">Otro lugar (Describir)</label>
-                                                <textarea class="form-control caja-texto form-control-sm" rows="1"
-                                                    onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hospen" id="obs_hospen"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nombre de la
-                                                    Institución</label>
-                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Hospitalizar" rows="1"
-                                                    onfocus="this.rows=2" onblur="this.rows=1;" name="nom_inst" id="nom_inst"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Servicio</label>
-                                                <select name="hosp_enserv" id="hosp_enserv"
-                                                    data-titulo="Es Urgencia Qx.?"
-                                                    class="form-control form-control-sm"
-                                                    onchange="evaluar_para_carga_detalle('hosp_enserv','div_detalle_hosp_enserv','obs_hosp_enserv',4);">
-                                                    <option value="1" selected>Servicio Urgencia</option>
-                                                    <option value="2">Sala</option>
-                                                    <option value="3">UTI</option>
-                                                    <option value="4">Otro</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_detalle_hosp_enserv" style="display:none">
-                                                <label class="floating-label-activo-sm">Otro Servicio
-                                                    (Describir)</label>
-                                                <textarea class="form-control caja-texto form-control-sm" rows="1"
-                                                    onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hosp_enserv" id="obs_hosp_enserv"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Motivo</label>
-                                                <select name="motivo_hosp" id="motivo_hosp"
-                                                    data-titulo="Otro Tratamiento"
-                                                    data-input_igual="motivo_hosp_indicaciones"
-                                                    class="form-control form-control-sm"
-                                                    onchange="evaluar_para_carga_detalle('motivo_hosp','div_motivo_hosp','obs_motivo_hosp',5);" onblur="cargarIgualSelect('motivo_hosp')">
-                                                    <option value="0">Seleccione</option>
-                                                    <option value="1">Cirugía</option>
-                                                    <option value="2">Tratamiento Médico</option>
-                                                    <option value="3">Estudio Clínico</option>
-                                                    <option value="4">Observación</option>
-                                                    <option value="5">Otro</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_motivo_hosp" style="display:none">
-                                                <label class="floating-label-activo-sm">Otro tratamiento
-                                                    (Describir)</label>
-                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" rows="1"
-                                                    onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="motivo_hosp_indicaciones" name="obs_motivo_hosp" id="obs_motivo_hosp" onchange="cargarIgual('obs_motivo_hosp')"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Obs. a la
-                                                    Hospitalización</label>
-                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Hospitalizar" rows="1"
-                                                    onfocus="this.rows=4" onblur="this.rows=1;" name="obs_hospitalizar" id="obs_hospitalizar"></textarea>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Hospitalizar en:</label>
+                                                                <select name="hospen" id="hospen" data-titulo="Hospitalización"
+                                                                    class="form-control form-control-sm"
+                                                                    onchange="evaluar_para_carga_detalle('hospen','div_detalle_hospen','obs_hospen',3);">
+                                                                    <option value="1" selected>Clínica</option>
+                                                                    <option value="2">Hospital</option>
+                                                                    <option value="3">Otro (Describir)</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group" id="div_detalle_hospen" style="display:none">
+                                                                <label class="floating-label-activo-sm">Otro lugar (Describir)</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"
+                                                                    onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hospen" id="obs_hospen"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Nombre de la
+                                                                    Institución</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Hospitalizar" rows="1"
+                                                                    onfocus="this.rows=2" onblur="this.rows=1;" name="nom_inst" id="nom_inst"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Servicio</label>
+                                                                <select name="hosp_enserv" id="hosp_enserv"
+                                                                    data-titulo="Es Urgencia Qx.?"
+                                                                    class="form-control form-control-sm"
+                                                                    onchange="evaluar_para_carga_detalle('hosp_enserv','div_detalle_hosp_enserv','obs_hosp_enserv',4);">
+                                                                    <option value="1" selected>Servicio Urgencia</option>
+                                                                    <option value="2">Sala</option>
+                                                                    <option value="3">UTI</option>
+                                                                    <option value="4">Otro</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group" id="div_detalle_hosp_enserv" style="display:none">
+                                                                <label class="floating-label-activo-sm">Otro Servicio
+                                                                    (Describir)</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"
+                                                                    onfocus="this.rows=3" onblur="this.rows=1;" name="obs_hosp_enserv" id="obs_hosp_enserv"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Motivo</label>
+                                                                <select name="motivo_hosp" id="motivo_hosp"
+                                                                    data-titulo="Otro Tratamiento"
+                                                                    data-input_igual="motivo_hosp_indicaciones"
+                                                                    class="form-control form-control-sm"
+                                                                    onchange="evaluar_para_carga_detalle('motivo_hosp','div_motivo_hosp','obs_motivo_hosp',5);" onblur="cargarIgualSelect('motivo_hosp')">
+                                                                    <option value="0">Seleccione</option>
+                                                                    <option value="1">Cirugía</option>
+                                                                    <option value="2">Tratamiento Médico</option>
+                                                                    <option value="3">Estudio Clínico</option>
+                                                                    <option value="4">Observación</option>
+                                                                    <option value="5">Otro</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group" id="div_motivo_hosp" style="display:none">
+                                                                <label class="floating-label-activo-sm">Otro tratamiento
+                                                                    (Describir)</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" rows="1"
+                                                                    onfocus="this.rows=3" onblur="this.rows=1;" data-input_igual="motivo_hosp_indicaciones" name="obs_motivo_hosp" id="obs_motivo_hosp" onchange="cargarIgual('obs_motivo_hosp')"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Obs. a la
+                                                                    Hospitalización</label>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Hospitalizar" rows="1"
+                                                                    onfocus="this.rows=4" onblur="this.rows=1;" name="obs_hospitalizar" id="obs_hospitalizar"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -138,116 +144,128 @@
                                 <!--INFO. INGRESO-->
                                 <div class="tab-pane fade show active" id="info-ingreso-hosp" role="tabpanel"
                                     aria-labelledby="info-ingreso-hosp-tab">
-                                    <div class="card-informacion">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 mb-2">
-                                                    <h6 class="t-aten">INFORMACIÓN DE PACIENTE</h6>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-4">
-                                                    <label class="font-weight-bold ml-0"><strong>Nombre: </strong></label>
-                                                    <label class="ml-0">{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-2">
-                                                    <label class="font-weight-bold ml-0"><strong>FN: </strong></label>
-                                                    <label class="ml-0">{{ $paciente->fecha_naciemiento }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                                                    <label class="font-weight-bold ml-0"><strong>Previsión: </strong></label>
-                                                    <label class="ml-0">{{ $paciente->Prevision->first()->nombre }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-2">
-                                                    <label class="font-weight-bold ml-0"><strong>Teléfono: </strong></label>
-                                                    <label class="ml-0">{{ $paciente->telefono_uno }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                                    <label class="font-weight-bold ml-0"><strong>Email: </strong></label>
-                                                    <label class="ml-0">{{ $paciente->email }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6">
-                                                    <label class="font-weight-bold ml-0 text-danger">Enfermedades Crónicas:</label>
-                                                    <label class="ml-0">
-                                                    @php
-                                                        $patalogias_cronicas = '';
-                                                    @endphp
-                                                    @foreach ($patoligias_cronicas as $patologia_cronica)
-                                                        @php
-                                                            $temp = json_decode($patologia_cronica->data);
-                                                            echo $temp->nombre;
-                                                            $patalogias_cronicas .= $temp->nombre;
-                                                        @endphp
-                                                        @if ($patologia_cronica->comentario)
-                                                            ,{{ $patologia_cronica->comentario }}
+                                     <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="t-aten">Información paciente</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-9 col-xl-4 mb-0">
+                                                            <label class="font-weight-bold ml-0"><strong>Nombre: </strong></label>
+                                                            <label class="ml-0">{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-2 mb-0">
+                                                            <label class="font-weight-bold ml-0"><strong>Edad: </strong></label>
+                                                            <label class="ml-0">{{ \Carbon\Carbon::createFromDate($paciente->fecha_nac)->age; }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-0">
+                                                            <label class="font-weight-bold ml-0"><strong>Previsión: </strong></label>
+                                                            <label class="ml-0">{{ $paciente->Prevision->first()->nombre }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-2 mb-0">
+                                                            <label class="font-weight-bold ml-0"><strong>Teléfono: </strong></label>
+                                                            <label class="ml-0">{{ $paciente->telefono_uno }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-0">
+                                                            <label class="font-weight-bold ml-0"><strong>Email: </strong></label>
+                                                            <label class="ml-0">{{ $paciente->email }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6 mb-0">
+                                                            <label class="font-weight-bold ml-0 text-danger">Enfermedades Crónicas:</label>
+                                                            <label class="ml-0">
                                                             @php
-                                                                $patalogias_cronicas .= ', ' . $patologia_cronica->comentario;
+                                                                $patalogias_cronicas = '';
                                                             @endphp
-                                                        @endif
-                                                        ;
-                                                        @php
-                                                            $patalogias_cronicas .= ';';
-                                                        @endphp
-                                                    @endforeach
-                                                    </label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <label class="floating-label-activo-sm">Otros antecedentes médicos</label>
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        name="ingreso_sol_pab_modal_otros_antecedentes"
-                                                        id="ingreso_sol_pab_modal_otros_antecedentes" value="">
-                                                    <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas"
-                                                        id="ingreso_sol_pab_modal_patalogias_cronicas"
-                                                        value="{{ $patalogias_cronicas }}">
+                                                            @foreach ($patoligias_cronicas as $patologia_cronica)
+                                                                @php
+                                                                    $temp = json_decode($patologia_cronica->data);
+                                                                    echo $temp->nombre;
+                                                                    $patalogias_cronicas .= $temp->nombre;
+                                                                @endphp
+                                                                @if ($patologia_cronica->comentario)
+                                                                    ,{{ $patologia_cronica->comentario }}
+                                                                    @php
+                                                                        $patalogias_cronicas .= ', ' . $patologia_cronica->comentario;
+                                                                    @endphp
+                                                                @endif
+                                                                ;
+                                                                @php
+                                                                    $patalogias_cronicas .= ';';
+                                                                @endphp
+                                                            @endforeach
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 mb-0">
+                                                            <label class="floating-label-activo-sm">Otros antecedentes médicos</label>
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                name="ingreso_sol_pab_modal_otros_antecedentes"
+                                                                id="ingreso_sol_pab_modal_otros_antecedentes" value="">
+                                                            <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas"
+                                                                id="ingreso_sol_pab_modal_patalogias_cronicas"
+                                                                value="{{ $patalogias_cronicas }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-informacion">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 mb-2">
-                                                    <h6 class="t-aten">MÉDICO TRATANTE</h6>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <label class="font-weight-bold ml-0">Nombre:</label>
-                                                    <label
-                                                        class="ml-0">{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <label class="font-weight-bold ml-0">Especialidad:</label>
-                                                    <label class="ml-0">
-                                                        @if ($profesional->SubTipoEspecialidad()->first())
-                                                            {{ $profesional->SubTipoEspecialidad()->first()->nombre }}
-                                                        @else
-                                                            {{ $profesional->TipoEspecialidad()->first()->nombre }}
-                                                        @endif
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <label class="floating-label-activo-sm">Clínica - Hospital</label>
-                                                    <input type="text" class="form-control form-control-sm" id="hosp_en"
-                                                        name="hosp_en" value="{{ $lugar_atencion->nombre }}">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <label class="floating-label-activo-sm">Diagnósticos </label>
-                                                    <textarea class="form-control caja-texto form-control-sm " rows="1" onfocus="this.rows=8"
-                                                        onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso" value=""> </textarea>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Servicio</label>
-                                                        <input type="text" class="form-control form-control-sm"
-                                                            name="serv_hosp" id="serv_hosp" value="">
+                                    <div class="row mt-3">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="t-aten">Médico tratante</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <label class="font-weight-bold ml-0">Nombre:</label>
+                                                            <label
+                                                                class="ml-0">{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</label>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <label class="font-weight-bold ml-0">Especialidad:</label>
+                                                            <label class="ml-0">
+                                                                @if ($profesional->SubTipoEspecialidad()->first())
+                                                                    {{ $profesional->SubTipoEspecialidad()->first()->nombre }}
+                                                                @else
+                                                                    {{ $profesional->TipoEspecialidad()->first()->nombre }}
+                                                                @endif
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-switch">
-                                                            <input type="checkbox" class="custom-control-input"
-                                                                id="esp-3">
-                                                            <label class="custom-control-label" for="esp-3">¿Preparar para
-                                                                Cirugía?</label>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <label class="floating-label-activo-sm">Clínica - Hospital</label>
+                                                            <input type="text" class="form-control form-control-sm" id="hosp_en"
+                                                                name="hosp_en" value="{{ $lugar_atencion->nombre }}">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <label class="floating-label-activo-sm">Diagnósticos </label>
+                                                            <textarea class="form-control caja-texto form-control-sm " rows="1" onfocus="this.rows=8"
+                                                                onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso" value=""> </textarea>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Servicio</label>
+                                                                <input type="text" class="form-control form-control-sm"
+                                                                    name="serv_hosp" id="serv_hosp" value="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                            <div class="form-group">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="esp-3">
+                                                                    <label class="custom-control-label" for="esp-3">¿Preparar para
+                                                                        Cirugía?</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -262,67 +280,184 @@
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <h6 class="t-aten">Indicaciones de ingreso</h6>
                                             </div>
-
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <div class="card-informacion">
                                                     <div class="card-body">
+                                                         <div class="row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-3" id="ingreso-hosp" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset active" id="ingreso-examenes-tab" data-toggle="tab"
+                                                                            href="#ingreso-examenes" role="tab" aria-controls="ingreso-examenes"
+                                                                            aria-selected="true">Exámenes</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="medicamentos-ingreso-hosp-tab"
+                                                                            data-toggle="tab" href="#medicamentos-ingreso-hosp" role="tab"
+                                                                            aria-controls="medicamentos-ingreso-hosp" aria-selected="true">Medicamentos</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset" id="ctrl-enfermeria-tab"
+                                                                            data-toggle="tab" href="#ctrl-enfermeria" role="tab"
+                                                                            aria-controls="ctrl-enfermeria" aria-selected="true">Control enfermería</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
                                                         <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="" class="floating-label-activo-sm">Motivo</label>
-                                                                    <input type="text" name="motivo_hosp_indicaciones" id="motivo_hosp_indicaciones" class="form-control form-control-sm" value="Cirugía">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Indicaciones Exámenes Preparaciones</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="ind_grales_hosp" id="ind_grales_hosp"></textarea>
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="tab-content" id="ingreso-hosp">
+                                                                    <!--EXAMENES-->
+                                                                    <div class="tab-pane fade show active" id="ingreso-examenes" role="tabpanel"
+                                                                        aria-labelledby="ingreso-examenes-tab">
+                                                                        <div class="form-row">
+                                                                        <div class="col-md-12 d-none">
+                                                                            <div class="form-group">
+                                                                                <label for="" class="floating-label-activo-sm">Motivo</label>
+                                                                                <input type="text" name="motivo_hosp_indicaciones" id="motivo_hosp_indicaciones" class="form-control form-control-sm" value="Cirugía">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <button type="button" class="btn btn-info
+                                                                             btn-sm float-right mb-2" onclick="mostrar_nuevo_examen(1000)"><i class="fas fa-plus"></i> Nuevo examen</button>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div id="contenedor_examenes_hosp" class="d-none">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-6">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Tipo Examen</label>
+                                                                                            <select class="form-control form-control-sm" name="tipo_examen_hosp" id="tipo_examen_hosp">
+                                                                                                <option value="0">Seleccione</option>
+                                                                                                @foreach ($examenMedico as $exa)
+                                                                                                    <option value="{{ $exa->cod_examen }}">
+                                                                                                        {{ $exa->nombre_examen }}</option>
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-6">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Sub-tipo de Examen</label>
 
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <table class="table" id="tabla_medicamentos">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Nombre</th>
-                                                                            <th>Dosis</th>
-                                                                            <th>Frecuencia</th>
-                                                                            <th>Acción</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <!-- Aquí se insertarán los medicamentos -->
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                                                            <select class="form-control form-control-sm" name="sub_tipo_examen_hosp" id="sub_tipo_examen_hosp">
+                                                                                                <option value="">Seleccione</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-6">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Examen</label>
+                                                                                            <select class="form-control form-control-sm" name="examen_hosp" id="examen_hosp">
+                                                                                                <option value="">Seleccione</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-6">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Prioridad</label>
+                                                                                            <select class="form-control form-control-sm" id="prioridad_hosp" name="prioridad_hosp">
+                                                                                                <option value="0">Seleccione</option>
+                                                                                                <option value="1">Baja</option>
+                                                                                                <option value="2" selected>Media</option>
+                                                                                                <option value="3">Alta</option>
+                                                                                                <option value="4">Urgente</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 text-center mb-3">
+                                                                                        <button type="button" class="btn btn-danger btn-sm" onclick="$('#contenedor_examenes_hosp').addClass('d-none')"><i class="feather icon-x"></i> Ocultar</button>
+                                                                                        <button type="button" onclick="indicar_examen_ficha();" id="agregar_examen_tabla" class="btn btn-info btn-sm">
+                                                                                            <i class="feather icon-plus"></i>
+                                                                                            Añadir Examen
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
 
-                                                            <div class="col-12 my-2">
-                                                                <button type="button" class="btn btn-success btn-sm float-right" onclick="mostrar_nuevo_medicamento(1000)"><i class="fas fa-plus"></i> Nuevo medicamento</button>
-                                                            </div>
-                                                            <div class="col-lg-12 col-md-6" id="contenedor_nuevo_medicamento">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                                                                            <!--Tabla-->
+                                                                            <div class="table-responsive">
+                                                                                <table id="tabla_examen_ficha_hosp" class="table table-bordered table-xs">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th class="align-middle">Nombre
+                                                                                                Examen</th>
+                                                                                            <th class="align-middle">Tipo</th>
+                                                                                            <th class="align-middle">Sub-Tipo</th>
 
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Control enfermería</label>
-                                                                    <select name="control_enfermeria_hosp" id="control_enfermeria_hosp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('control_enfermeria_hosp','div_control_enfermeria_hosp','obs_control_enfermeria',4);">
-                                                                        <option value="0">Seleccione</option>
-                                                                        <option value="1">Cada media hora</option>
-                                                                        <option value="2">Cada 1 hora</option>
-                                                                        <option value="3">Cada 6 hora</option>
-                                                                        <option value="4">Otro</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <div id="div_control_enfermeria_hosp" style="display: none">
-                                                                        <p>hola</p>
+                                                                                            <th class="align-middle">Prioridad
+                                                                                            </th>
+                                                                                            <th class="align-middle">Acción
+                                                                                            </th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="otras_ind_hosp" class="floating-label-activo-sm">Otras indicaciones</label>
-                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otras_ind_hosp" id="otras_ind_hosp"></textarea>
+                                                                    <!--MEDICAMENTOS-->
+                                                                    <div class="tab-pane fade show" id="medicamentos-ingreso-hosp" role="tabpanel"
+                                                                        aria-labelledby="medicamentos-ingreso-hosp-tab">
+                                                                       <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <button type="button" class="btn btn-info btn-sm float-right mb-2" onclick="mostrar_nuevo_medicamento(1000)"><i class="feather icon-plus"></i> Nuevo medicamento</button>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="contenedor_nuevo_medicamento">
+
+                                                                            </div>
+
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                                                <table class="table table-bordered table-xs" id="tabla_medicamentos">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th>Nombre</th>
+                                                                                            <th>Dosis</th>
+                                                                                            <th>Frecuencia</th>
+                                                                                            <th>Acción</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        <!-- Aquí se insertarán los medicamentos -->
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--CONTROL ENFERMERIA-->
+                                                                    <div class="tab-pane fade show" id="ctrl-enfermeria" role="tabpanel" aria-labelledby="ctrl-enfermeria-tab">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Control enfermería</label>
+                                                                                    <select name="control_enfermeria_hosp" id="control_enfermeria_hosp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('control_enfermeria_hosp','div_control_enfermeria_hosp','obs_control_enfermeria',4);">
+                                                                                        <option value="0">Seleccione</option>
+                                                                                        <option value="1">Cada media hora</option>
+                                                                                        <option value="2">Cada 1 hora</option>
+                                                                                        <option value="3">Cada 6 hora</option>
+                                                                                        <option value="4">Otro</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <div id="div_control_enfermeria_hosp" style="display: none">
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                <div class="form-group">
+                                                                                    <label for="otras_ind_hosp" class="floating-label-activo-sm">Otras indicaciones</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="otras_ind_hosp" id="otras_ind_hosp"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -338,9 +473,14 @@
                                     <form>
                                         <div class="form-row mb-2">
                                             <div class="col-sm-12 col-md-12 col-lg-12">
-                                                <h6 class="mb-2 text-c-blue">ARCHIVOS</h6>
-                                                <div class="dropzone dz-clickable" id="" action="">
-                                                <div class="dz-default dz-message"><button class="dz-button" type="button">Arrastre los archivos al recuadro para subirlos</button></div></div>
+                                                <div class="card-informacion">
+                                                    <div class="card-body">
+                                                        <h6 class="mb-2 text-c-blue">ARCHIVOS</h6>
+                                                        <div class="dropzone dz-clickable" id="" action="">
+                                                            <div class="dropzone" id="misArchivosHosp" action="{{ route('profesional.archivo.carga') }}"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -351,10 +491,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info" onclick="guardar_hospitalizacion()">Guardar y enviar</button>
-                <button type="button" class="btn btn-primary" onclick="generar_pdf_hospitalizacion()">Ver formulario (PDF)</button>
-
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#ingreso_m_modal').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info" onclick="guardar_hospitalizacion()"><i class="feather icon-save"></i> Guardar y enviar</button>
+                <button type="button" class="btn btn-primary" onclick="generar_pdf_hospitalizacion()"><i class="feather icon-file"></i> Ver formulario (PDF)</button>
             </div>
         </div>
     </div>
@@ -362,6 +501,74 @@
 
 
 <script>
+
+$(document).ready(function() {
+    Dropzone.autoDiscover = false;
+
+    var myDropzone_hosp = new Dropzone("#misArchivosHosp", {
+        url: "{{ route('profesional.archivo.carga') }}",
+        method: 'post',
+        createImageThumbnails: true,
+        addRemoveLinks: true,
+        headers: {
+            'X-CSRF-TOKEN': CSRF_TOKEN,
+        },
+        acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+        maxFilesize: 4,
+        maxFiles: 4,
+        dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+        dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+        dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+        dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+        dictInvalidFileType: "No puedes subir archivos de este tipo.",
+        dictCancelUpload: "Cancelar carga",
+        dictUploadCanceled: "Subida cancelada.",
+        dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+        dictRemoveFile: "Eliminar archivo",
+        dictMaxFilesExceeded: "No puede cargar más archivos.",
+        init: function() {
+            myDropzone_hosp = this;
+        },
+        success: function(file, response) {
+            cargar_lista_archivo_ges(myDropzone_hosp, 'ges');
+            if (file.previewElement) {
+                return file.previewElement.classList.add("dz-success");
+            }
+        },
+        error: function(file, message) {
+            if (file.previewElement) {
+                file.previewElement.classList.add("dz-error");
+                if (typeof message !== "string" && message.error) {
+                    message = message.error;
+                } else if (typeof message === "object" && message.message) {
+                    message = message.message;
+                }
+                for (let node of file.previewElement.querySelectorAll("[data-dz-errormessage]")) {
+                    node.textContent = message;
+                }
+            }
+        },
+        removedfile: function(file) {
+            cargar_lista_archivo_ges(myDropzone_hosp, 'ges');
+            if (file.previewElement != null && file.previewElement.parentNode != null) {
+                file.previewElement.parentNode.removeChild(file.previewElement);
+            }
+            return this._updateMaxFilesReachedClass();
+        },
+        canceled: function(file) {
+            cargar_lista_archivo_ges(myDropzone_hosp, 'ges');
+            return this.emit("error", file, this.options.dictUploadCanceled);
+        }
+    });
+});
+    $(document).ready(function(){
+        mostrar_nuevo_examen(1000);
+        mostrar_nuevo_medicamento(1000);
+        $('#tabla_examen_ficha_hosp').DataTable({searching: false, paging: false, info: false});
+        $('#tabla_medicamentos').DataTable({searching: false, paging: false, info: false});
+    });
+
+
 
     function cargarIgualSelect(input) {
         console.log(input);
@@ -527,7 +734,7 @@
                                 <tr>
                                     <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
                                     <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
-                                    <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})"><i class="fas fa-trash"></i></button></td>
+                                    <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_procedimiento_sdi(${procedimiento.id})"><i class="feather icon-x"></i></button></td>
                                 </tr>
                             `);
 
@@ -692,8 +899,8 @@
                                     <input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm">
                                 </td>
                                 <td class="text-center align-middle text-wrap">
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                    <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -1166,7 +1373,7 @@
 
         if(evolucion == ''){
             valido = 0;
-            mensaje += '<li>Campo requerido Evolucion</li>';
+            mensaje += '<li>Campo requerido Evolución</li>';
         }
         if(resumen == ''){
             valido = 0;
@@ -1511,3 +1718,243 @@
     }
 
 </script>
+
+
+@section('js_inferior')
+
+    <script>
+        //funcion para capturar el tipo de examen y buscar los subtipo que estan relacionados con el
+        $('#tipo_examen_hosp').change(function(e) {
+            e.preventDefault();
+            tipo_examen = $('#tipo_examen_hosp').val();
+
+            $("#sub_tipo_examen_hosp").empty();
+            $("#examen_hosp").empty();
+            $.ajax({
+                    url: '{{ route('listar.sub_tipo_examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        tipo_examen: tipo_examen
+                    },
+                })
+                .done(function(response) {
+                    console.log(response);
+                    $('#sub_tipo_examen_hosp').append(`<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#sub_tipo_examen_hosp').append(`<option value="${response[i].id}">
+                                       ${response[i].nombre_examen}
+                                  </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+        //funcion para capturar el sub tipo de examen y buscar los examenes que estan relacionados con el
+        $('#sub_tipo_examen_hosp').change(function(e) {
+            e.preventDefault();
+            sub_tipo_examen = $('#sub_tipo_examen_hosp').val();
+            $.ajax({
+                    url: '{{ route('listar.examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        sub_tipo_examen: sub_tipo_examen
+                    },
+                })
+                .done(function(response) {
+                    $('#examen_hosp').append(`<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen_hosp').append(`<option value="${response[i].id}">
+                                       ${response[i].nombre_examen}
+                                  </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+        function indicar_examen_ficha_hosp() {
+            var id_tipo_examen = $("#tipo_examen_hosp").val();
+            var tipo_examen = $("#tipo_examen_hosp option:selected").text();
+            var id_sub_tipo_examen = $("#sub_tipo_examen_hosp").val();
+            var sub_tipo_examen = $("#sub_tipo_examen_hosp option:selected").text();
+            var id_examen = $('#examen_hosp').val();
+            var examen = $("#examen_hosp option:selected").text();
+            var id_prioridad = $("#prioridad_hosp").val();
+            var prioridad = $("#prioridad_hosp option:selected").text();
+
+            var valido = 1;
+            var mensaje = '';
+
+            if(id_tipo_examen == 0){
+                valido = 0;
+                mensaje += '<li>Tipo examen</li>';
+            }
+
+            if(id_sub_tipo_examen == 0){
+                valido = 0;
+                mensaje += '<li>Sub tipo examen</li>';
+            }
+
+             if(examen == 0){
+                valido = 0;
+                mensaje += '<li>Examen</li>';
+            }
+
+            if(id_prioridad == 0){
+                valido = 0;
+                mensaje += '<li>Prioridad</li>';
+            }
+
+            if(valido == 0){
+                swal({
+                    title: 'Error',
+                    content: {
+                        element: 'div',
+                        attributes: {
+                            innerHTML: mensaje
+                        }
+                    },
+                    icon: 'error'
+                });
+                return false;
+            }
+
+            var data = {
+                tipo_examen: tipo_examen,
+                sub_tipo_examen: sub_tipo_examen,
+                examen: examen,
+                prioridad: prioridad,
+                id_paciente: $('#id_paciente_fc').val(),
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: CSRF_TOKEN
+            }
+
+            var url = "{{ ROUTE('examen.indicar_examen_hosp') }}";
+
+            $.ajax({
+                type:'post',
+                url: url,
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    swal({
+                        icon:'success',
+                        title:'Exito',
+                        text:'Se ha indicado examen correctamente',
+                    });
+                    let examenes = resp.examenes;
+                    let table = $('#tabla_examen_ficha_hosp').DataTable();
+                    // Limpiar la tabla
+                    table.clear();
+
+                    // Agregar cada fila
+                    examenes.forEach(examen => {
+                        table.row.add([
+                            examen.datos_examen.examen,
+                            examen.datos_examen.tipo_examen,
+                            examen.datos_examen.sub_tipo_examen,
+                            examen.datos_examen.prioridad,
+                            `<button type="button" onclick="eliminar_examen_hosp(${examen.id})" class="btn btn-danger btn-icon"><i class="feather icon-x"></i></button>`
+                        ]);
+                    });
+
+                    // Dibujar la tabla con los nuevos datos
+                    table.draw();
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function mostrar_nuevo_examen(counter){
+            $('#contenedor_examenes_hosp').toggleClass('d-none');
+        }
+
+        function dame_examenes_hosp(){
+            let id_ficha_atencion = $('#id_fc').val();
+            let url = "{{ ROUTE('examen.dame_examenes_hosp') }}";
+
+            $.ajax({
+                type:'get',
+                url: url,
+                data:{
+                    id_ficha_atencion: id_ficha_atencion,
+                    id_paciente: $('#id_paciente_fc').val(),
+                },
+                success: function(examenes){
+                    console.log(examenes);
+                    let table = $('#tabla_examen_ficha_hosp').DataTable();
+                    // Limpiar la tabla
+                    table.clear();
+
+                    // Agregar cada fila
+                    examenes.forEach(examen => {
+                        table.row.add([
+                            examen.datos_examen.examen,
+                            examen.datos_examen.tipo_examen,
+                            examen.datos_examen.sub_tipo_examen,
+                            examen.datos_examen.prioridad,
+                            `<button type="button" onclick="eliminar_examen_hosp(${examen.id})" class="btn btn-danger btn-icon"><i class="feather icon-x"></i></button>`
+                        ]);
+                    });
+
+                    // Dibujar la tabla con los nuevos datos
+                    table.draw();
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function eliminar_examen_hosp(id_examen){
+                swal({
+                    title: "Eliminar Examen",
+                    text: "¿Está seguro que desea eliminar el examen?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Aceptar"],
+                    DangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        eliminar_examen_hosp_confirmar(id_examen);
+                    }
+                });
+        }
+
+        function eliminar_examen_hosp_confirmar(id_examen){
+            console.log(id_examen);
+            let url ="{{ ROUTE('examen.eliminar_examen_hosp') }}"
+            $.ajax({
+                type:'get',
+                url: url,
+                data:{
+                    id: id_examen
+                },
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.estado == 1){
+                        swal({
+                            icon:'success',
+                            text: resp.mensaje,
+                        });
+                        dame_examenes_hosp();
+                    }
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+    </script>
+
+@endsection

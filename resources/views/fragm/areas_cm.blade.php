@@ -28,9 +28,24 @@
                                 @endif
                             </td>
                             <td class="align-middle text-left">
-                                <button type="button" class="btn btn-outline-secondary btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="asignar_profesionales_area({{ $area->id }})"><i class="feather icon-edit"></i></button>
-                                <button type="button" class="btn btn-warning btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id }},{{ $institucion->id_lugar_atencion }})"><i class="feather icon-edit"></i></button>
-                                <button type="button" class="btn btn-danger btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-x"></i></button>
+                                <button type="button"
+                                        class="btn btn-info btn-icon"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="Asociar profesionales del área de {{ $area->tipo_area }}"
+                                        data-area-id="{{ $area->id }}"
+                                        data-profesionales="[
+                                            @if($area->profesionales)
+                                                @foreach($area->profesionales as $profesional)
+                                                    {{ $profesional->id_profesional }}{{ !$loop->last ? ',' : '' }}
+                                                @endforeach
+                                            @endif
+                                        ]"
+                                        onclick="asignar_profesionales_area(this)">
+                                        <i class="fa-solid fa-inbox"></i>
+                                    </button>
+                                <button type="button" class="btn btn-warning btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id }},{{ $institucion->id_lugar_atencion }})"><i class="fa-solid fa-pencil-alt"></i></button>
+                                <button type="button" class="btn btn-danger btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                         @endforeach

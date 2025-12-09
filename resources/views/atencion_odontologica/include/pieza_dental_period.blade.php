@@ -6,7 +6,15 @@
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Pieza N°</label>
-                            <input type="text" class="form-control form-control-sm" name="period_historia_pza{{ $counter }}" id="period_historia_pza{{ $counter }}" value="">
+                            <select name="period_historia_pza{{ $counter }}" id="period_historia_pza{{ $counter }}" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                @foreach($odontograma as $o)
+                                @if($o->urgencia == 0)
+                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            {{-- <input type="text" class="form-control form-control-sm" name="period_historia_pza{{ $counter }}" id="period_historia_pza{{ $counter }}" value=""> --}}
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">

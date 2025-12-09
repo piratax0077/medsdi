@@ -155,7 +155,7 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
-   
+
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
@@ -305,7 +305,7 @@
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
-
+            $('#agenda_profesional_asistente').select2();
         });
 
 
@@ -627,6 +627,9 @@
                     tipo_agenda: tipo_agenda,
                 },
                 success: function(data){
+                    console.log(data);
+                    // limpiamos los examenes si es que hubieran cargados
+                    $('#m_agendar_hora_examen_lista_examenes').val('');
                     $('.btn-tipo-agenda').hide();
                     if (data !== 'null')
                     {
@@ -762,6 +765,7 @@
                                                             {
                                                                 if(data.estado == 1)
                                                                 {
+                                                                    $('#m_agendar_hora_examen_lista_examenes').val('');
                                                                     var arrayTemp = [];
                                                                     data.registros.forEach(element => {
                                                                         var rut = element.paciente.rut+' | '

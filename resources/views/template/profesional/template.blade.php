@@ -2398,6 +2398,8 @@
             $('#reserva_hora_representante_correo').val('');
             $('#reserva_hora_representante_telefono_uno').val('');
             $('#reserva_hora_representante_agregar_relacion').val('');
+            $('#contenedor_tratamientos_presupuesto').empty();
+            $('#bono_valor_consulta').val(0);
             evaluar_edad();
             $('.div_representante_nuevo').hide();
             $('.div_representante_existente').hide();
@@ -2428,7 +2430,18 @@
                         if (data !== 'null') {
 
                             $('#div_procedimiento').show();
+                            let tipo_agenda = $('#id_tipo_agenda').val();
 
+                            if(tipo_agenda == 4)
+                            {
+                                $('#examenes').removeClass('d-none');
+                                $('#examenes').addClass('d-block');
+
+                                //carga de datos del paciente
+                            }else{
+                                $('#examenes').removeClass('d-block');
+                                $('#examenes').addClass('d-none');
+                            }
                             data = JSON.parse(data);
                             if (data.tipo_paciente == 'SI') {
 

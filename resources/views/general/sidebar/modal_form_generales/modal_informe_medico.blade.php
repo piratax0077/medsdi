@@ -4,8 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Informe Médico</h5>
-                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close"><span
-                        aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white"  data-dismiss="modal" aria-label="Close" onclick="$('#modal_inf_medico').modal('hide')"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form id="form_informe_medico">
@@ -77,8 +76,8 @@
                             <input type="date" class="form-control form-control-sm" name="fecha_informe_medico"
                                 id="fecha_informe_medico">
                         </div>  --}}
-                        <div class="form-group col-sm-12 col-md-12">
-                            <p class="text-c-blue mb-0 mt-3">El Profesional que suscribe informa que</p>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                            <h6 class="text-c-blue mt-3">El Profesional que suscribe informa que</h6>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Descripción</label>
@@ -93,8 +92,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" onclick="registrar_informe_medico();" class="btn btn-info">Generar Informe</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_inf_medico').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" onclick="registrar_informe_medico();" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Generar Informe</button>
             </div>
         </div>
     </div>

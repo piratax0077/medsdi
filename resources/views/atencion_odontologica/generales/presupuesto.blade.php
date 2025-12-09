@@ -73,7 +73,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="od_abonos_pres-tab" data-toggle="tab"
                                         href="#od_abonos_pres" role="tab" aria-control="od_abonos_pres"
-                                        aria-selected="false">Abonos y Estados de Pago</a>
+                                        aria-selected="false" onclick="actualizar_presupuesto()">Abonos y Estados de Pago</a>
                                 </li>
                             </ul>
                         </div>
@@ -387,7 +387,7 @@
                             <form>
                                 <div class="form-row" id="contenedor_piezas_dentales_presupuesto">
                                     @foreach ($odontograma as $o)
-                                        @if ($o->presupuesto == 1)
+                                        @if ($o->presupuesto == 1 && $o->urgencia == 0)
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <div class="card-informacion">
                                                     <div class="card-body pb-0">
@@ -512,7 +512,7 @@
 
                                 <div class="form-row" id="contenedor_insumos">
                                     @foreach ($insumos_tratamientos as $diagnostico)
-                                        @if ($diagnostico->presupuesto == 1)
+                                        @if ($diagnostico->presupuesto == 1 && $diagnostico->urgencia == 0)
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <div class="card-informacion">
                                                     <div class="card-body pb-0">
@@ -596,12 +596,6 @@
                                             {{ number_format($valores_piezas, 0, ',', '.') }}</p>
                                     </div>
 
-                                    <!-- Descuentos -->
-                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
-                                        <h5 class="text-c-blue mb-0">Descuentos</h5>
-                                        <p id="valores_descuentos_presupuesto">$0.00</p>
-                                    </div>
-
                                     <!-- Insumos -->
                                     <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
                                         <h5 class="text-c-blue mb-0">Insumos</h5>
@@ -609,12 +603,24 @@
                                             {{ number_format($valores_insumos, 0, ',', '.') }}</p>
                                     </div>
 
+                                    <!-- Descuentos -->
+                                    <div class="col-sm-12 col-md-6 col-lg-1 col-xl-1 col-xxl-1 my-2">
+                                        <h5 class="text-c-blue mb-0">Laboratorio</h5>
+                                        <p id="valores_laboratorio">${{ number_format($valores_laboratorio,0,',','.') }}</p>
+                                    </div>
+
+                                    <!-- Descuentos -->
+                                    <div class="col-sm-12 col-md-6 col-lg-1 col-xl-1 col-xxl-1 my-2">
+                                        <h5 class="text-c-blue mb-0">Descuentos</h5>
+                                        <p id="valores_descuentos_presupuesto">$0.00</p>
+                                    </div>
+
                                     <!-- Total Final -->
                                     <div
                                         class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 bg-naranjo rounded-pill py-1 my-1">
                                         <h5 class="text-white mb-0">Total Final</h5>
                                         <p class="text-white" id="valores_total_final_presupuesto">$
-                                            {{ number_format($valores + $valores_piezas + $valores_insumos, 0, ',', '.') }}
+                                            {{ number_format($valores + $valores_piezas + $valores_insumos + $valores_laboratorio, 0, ',', '.') }}
                                         </p>
                                     </div>
 
@@ -681,175 +687,188 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12"
-                                                            id="contenedor_ordenes_trabajos_menores_dental">
-                                                            @if (isset($ordenes_tm))
-                                                                @foreach ($ordenes_tm as $o)
-                                                                    <div class="row">
-                                                                        <div class="col-md-12">
-                                                                            <div class="card-informacion">
-                                                                                <div class="card-body">
-                                                                                    <div class="form-row">
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">Nombre
-                                                                                                Laboratorio</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_nom"
-                                                                                                id="lab_nom"
-                                                                                                value="{{ $o->nombre_lab }}">
+                                                        <div class="col-sm-12 col-md-12" >
+                                                            <div id="contenedor_ordenes_trabajos_menores_dental">
+                                                                @if (isset($ordenes_tm))
+                                                                    @foreach ($ordenes_tm as $o)
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="card-informacion">
+                                                                                    <div class="card-body">
+                                                                                        <div class="form-row">
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Nombre
+                                                                                                    Laboratorio</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_nom"
+                                                                                                    id="lab_nom"
+                                                                                                    value="{{ $o->nombre_lab }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Trabajo
+                                                                                                    Requerido</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_ord_trab"
+                                                                                                    id="lab_ord_trab"
+                                                                                                    value="{{ $o->trabajo_realizar }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">F.envío</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_fenv"
+                                                                                                    id="lab_fenv"
+                                                                                                    value="{{ $o->fecha_envio }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">F.entrega</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_fent"
+                                                                                                    id="lab_fent"
+                                                                                                    value="{{ $o->fecha_entrega }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Estado</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_est"
+                                                                                                    id="lab_est"
+                                                                                                    value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">N°
+                                                                                                    Identificación</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_id_trab"
+                                                                                                    id="lab_id_trab"
+                                                                                                    value="{{ $o->nro_orden }}">
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">Trabajo
-                                                                                                Requerido</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_ord_trab"
-                                                                                                id="lab_ord_trab"
-                                                                                                value="{{ $o->trabajo_realizar }}">
-                                                                                        </div>
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">F.envío</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_fenv"
-                                                                                                id="lab_fenv"
-                                                                                                value="{{ $o->fecha_envio }}">
-                                                                                        </div>
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">F.entrega</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_fent"
-                                                                                                id="lab_fent"
-                                                                                                value="{{ $o->fecha_entrega }}">
-                                                                                        </div>
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">Estado</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_est"
-                                                                                                id="lab_est"
-                                                                                                value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
-                                                                                        </div>
-                                                                                        <div
-                                                                                            class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">N°
-                                                                                                Identificación</label>
-                                                                                            <input type="text"
-                                                                                                class="form-control form-control-sm"
-                                                                                                name="lab_id_trab"
-                                                                                                id="lab_id_trab"
-                                                                                                value="{{ $o->nro_orden }}">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-row">
-                                                                                        <div
-                                                                                            class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                            <label
-                                                                                                class="floating-label-activo-sm">Observaciones</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=4"
-                                                                                                onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                        <div class="form-row">
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Observaciones</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=4"
+                                                                                                    onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+
                                                         </div>
 
-                                                        <div class="col-sm-12 col-md-12"
-                                                            id="contenedor_ordenes_trabajos_mayores_dental">
-                                                            @if (isset($ordenes_tmy))
-                                                                @foreach ($ordenes_tmy as $o)
-                                                                    <div class="card-informacion">
-                                                                        <div class="card-body">
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Nombre
-                                                                                        Laboratorio</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_nom"
-                                                                                        id="lab_nom"
-                                                                                        value="{{ $o->nombre_lab }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Trabajo
-                                                                                        Requerido</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_ord_trab"
-                                                                                        id="lab_ord_trab"
-                                                                                        value="{{ $o->trabajo_realizar }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">F.envío</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_fenv"
-                                                                                        id="lab_fenv"
-                                                                                        value="{{ $o->fecha_envio }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">F.entrega</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_fent"
-                                                                                        id="lab_fent"
-                                                                                        value="{{ $o->fecha_entrega }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">Estado</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_est"
-                                                                                        id="lab_est"
-                                                                                        value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label
-                                                                                        class="floating-label-activo-sm">N°
-                                                                                        Identificación</label>
-                                                                                    <input type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        name="lab_id_trab"
-                                                                                        id="lab_id_trab"
-                                                                                        value="{{ $o->nro_orden }}">
+                                                        <div class="col-sm-12 col-md-12">
+                                                            <div id="contenedor_ordenes_trabajos_mayores_dental">
+                                                                @if (isset($ordenes_tmy))
+                                                                    @foreach ($ordenes_tmy as $o)
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="card-informacion">
+                                                                                    <div class="card-body">
+                                                                                        <div class="form-row">
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Nombre
+                                                                                                    Laboratorio</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_nom"
+                                                                                                    id="lab_nom"
+                                                                                                    value="{{ $o->nombre_lab }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Trabajo
+                                                                                                    Requerido</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_ord_trab"
+                                                                                                    id="lab_ord_trab"
+                                                                                                    value="{{ $o->trabajo_realizar }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">F.envío</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_fenv"
+                                                                                                    id="lab_fenv"
+                                                                                                    value="{{ $o->fecha_envio }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">F.entrega</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_fent"
+                                                                                                    id="lab_fent"
+                                                                                                    value="{{ $o->fecha_entrega }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Estado</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_est"
+                                                                                                    id="lab_est"
+                                                                                                    value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">N°
+                                                                                                    Identificación</label>
+                                                                                                <input type="text"
+                                                                                                    class="form-control form-control-sm"
+                                                                                                    name="lab_id_trab"
+                                                                                                    id="lab_id_trab"
+                                                                                                    value="{{ $o->nro_orden }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label
+                                                                                                    class="floating-label-activo-sm">Observaciones</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=4"
+                                                                                                    onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="form-row">
-                                                                            <div
-                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label
-                                                                                    class="floating-label-activo-sm">Observaciones
-                                                                                </label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=2"
-                                                                                    onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -862,54 +881,145 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col-md-12">
-                                                            <div class="card-informacion">
-                                                                <div class="card-body">
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-3">
-                                                                            <label class="floating-label-activo-sm">N°
-                                                                                Identificación</label>
-                                                                            <input type="text"
-                                                                                class="form-control form-control-sm"
-                                                                                name="lab_id_trab" id="lab_id_trab">
+                                                        <div class="col-md-12" id="contenedor_ordenes_trabajos_menores_dental_presup">
+
+                                                                @foreach ($ordenes_tm as $o)
+                                                                    <div class="card-informacion">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-3">
+                                                                                    <label class="floating-label-activo-sm">N°
+                                                                                        Identificación</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">
+                                                                                        Valor Total</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="lab_cost_tot"
+                                                                                        id="lab_cost_tot" value="{{ number_format($o->valor_prestacion, 0, ',', '.') }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">
+                                                                                        Abonos</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="lab_abon" id="lab_abon" value="0">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">
+                                                                                        Valor Pendiente</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="lab_val_pend"
+                                                                                        id="lab_val_pend" value="{{ number_format($o->valor_prestacion, 0, ',', '.') }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-3 d-flex">
+                                                                                    @if($o->presupuesto == 1)
+                                                                                        <button type="button"
+                                                                                            class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_lab({{ $o->id }},'menor')" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar de presupuesto"><i
+                                                                                                class="fas fa-minus"></i></button>
+                                                                                    @else
+                                                                                        <button type="button"
+                                                                                            class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_lab({{ $o->id }},'menor');" data-bs-toggle="tooltip" data-bs-placement="top" title="Cargar a presupuesto" ><i
+                                                                                                class="feather icon-shopping-cart"></i>
+                                                                                            </button>
+                                                                                    @endif
+                                                                                    <button type="button"
+                                                                                        class="btn btn-info btn-icon"onclick="info_lab({{ $o->id_laboratorio }});"><i
+                                                                                            class="fas fa-info-circle"></i></button>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="form-group col-md-2">
-                                                                            <label class="floating-label-activo-sm">
-                                                                                Valor Total</label>
-                                                                            <input type="text"
-                                                                                class="form-control form-control-sm"
-                                                                                name="lab_cost_tot"
-                                                                                id="lab_cost_tot">
-                                                                        </div>
-                                                                        <div class="form-group col-md-2">
-                                                                            <label class="floating-label-activo-sm">
-                                                                                Abonos</label>
-                                                                            <input type="text"
-                                                                                class="form-control form-control-sm"
-                                                                                name="lab_abon" id="lab_abon">
-                                                                        </div>
-                                                                        <div class="form-group col-md-2">
-                                                                            <label class="floating-label-activo-sm">
-                                                                                Valor Pendiente</label>
-                                                                            <input type="text"
-                                                                                class="form-control form-control-sm"
-                                                                                name="lab_val_pend"
-                                                                                id="lab_val_pend">
-                                                                        </div>
-                                                                        <div class="form-group col-md-3">
-                                                                            <button type="button"
-                                                                                class="btn btn-info-light-c btn-block btn-xs btn-block mb-2"onclick="info_lab();"><i
-                                                                                    class="fas fa-info-circle"></i>
-                                                                                Info Laboratorio</button>
-                                                                        </div>
-                                                                        {{-- <div class="form-group col-md-3">
-                                                                                    <button type="button" class="btn btn-info-light-c btn-block btn-xs btn-block mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
-                                                                                </div> --}}
                                                                     </div>
+                                                                @endforeach
+
+                                                        </div>
+                                                        <div class="col-md-12" id="contenedor_ordenes_trabajos_mayores_dental_presup">
+                                                            @foreach ($ordenes_tmy as $o)
+                                                                <div class="card-informacion">
+                                                                    <div class="card-body">
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-md-3">
+                                                                                <label class="floating-label-activo-sm">N°
+                                                                                    Identificación</label>
+                                                                                <input type="text"
+                                                                                    class="form-control form-control-sm"
+                                                                                    name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">
+                                                                                    Valor Total</label>
+                                                                                <input type="text"
+                                                                                    class="form-control form-control-sm"
+                                                                                    name="lab_cost_tot"
+                                                                                    id="lab_cost_tot" value="{{ number_format($o->valor_prestacion, 0, ',', '.') }}">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">
+                                                                                    Abonos</label>
+                                                                                <input type="text"
+                                                                                    class="form-control form-control-sm"
+                                                                                    name="lab_abon" id="lab_abon" value="0">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">
+                                                                                    Valor Pendiente</label>
+                                                                                <input type="text"
+                                                                                    class="form-control form-control-sm"
+                                                                                    name="lab_val_pend"
+                                                                                    id="lab_val_pend" value="{{ number_format($o->valor_prestacion, 0, ',', '.') }}">
+                                                                            </div>
+                                                                            <div class="form-group col-md-3 d-flex">
+                                                                                @if($o->presupuesto == 1)
+                                                                                    <button type="button"
+                                                                                        class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_lab({{ $o->id }},'mayor')" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar de presupuesto"><i
+                                                                                            class="fas fa-minus"></i></button>
+                                                                                @else
+                                                                                    <button type="button"
+                                                                                        class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_lab({{ $o->id }},'mayor');" data-bs-toggle="tooltip" data-bs-placement="top" title="Cargar a presupuesto" ><i
+                                                                                            class="feather icon-shopping-cart"></i>
+                                                                                        </button>
+                                                                                @endif
+                                                                                <button type="button"
+                                                                                    class="btn btn-info btn-icon"onclick="info_lab({{ $o->id_laboratorio }});"><i
+                                                                                        class="fas fa-info-circle"></i></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row" id="resumen_costos_lab">
+                                                        <div class="col-12">
+                                                            <h6 class="sub-aten">Resumen de costos</h6>
+                                                        </div>
+
+                                                        @php $suma = 0; @endphp
+                                                        @foreach ($ordenes_tm as $o)
+                                                            @if($o->presupuesto == 1)
+                                                                @php $suma += $o->valor_prestacion; @endphp
+                                                            @endif
+                                                        @endforeach
+                                                        @foreach ($ordenes_tmy as $o)
+                                                            @if($o->presupuesto == 1)
+                                                                @php $suma += $o->valor_prestacion; @endphp
+                                                            @endif
+                                                        @endforeach
+                                                        <div class="col-md-6 offset-md-3">
+                                                            <div class="card border-success shadow-sm">
+                                                                <div class="card-body text-center">
+                                                                    <h5 class="card-title mb-1">Total Prestaciones en Presupuesto</h5>
+                                                                    <h4 class="text-success font-weight-bold">{{ number_format($suma, 0, ',', '.') }} CLP</h4>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                                 <!--ESTADOS DE PAGO-->
                                                 <div class="tab-pane fade show " id="od_lab_estadopago"
@@ -1223,7 +1333,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     @foreach ($odontograma as $o)
-                                                                        @if ($o->presupuesto == 1)
+                                                                        @if ($o->presupuesto == 1 && $o->urgencia == 0)
                                                                             @php
                                                                                 if ($o->estado == 0) {
                                                                                     $estado = 'PENDIENTE';
@@ -1279,7 +1389,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if($todos->count() > 0)
                                     <!--P. POR GRUPOS-->
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card">
@@ -1315,9 +1424,9 @@
                                                                     @foreach ($todos as $o)
                                                                         @if ($o->presupuesto == 1)
                                                                             @php
-                                                                                if ($o->estado == 0) {
+                                                                                if ($o->estado == 1) {
                                                                                     $estado = 'PENDIENTE';
-                                                                                } elseif ($o->estado == 1) {
+                                                                                } elseif ($o->estado == 0) {
                                                                                     $estado = 'TERMINADO';
                                                                                     # code...
                                                                                 }
@@ -1368,7 +1477,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
+
                                     <!--INSUMOS Y GASTOS GENERALES-->
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card">
@@ -1384,6 +1493,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th class="align-middle">Insumo</th>
+                                                                    <th class="align-middle">Observaciones</th>
                                                                     <th class="align-middle">Cantidad</th>
                                                                     <th class="align-middle">Sub-total</th>
                                                                     <th class="align-middle">Descuento</th>
@@ -1408,6 +1518,9 @@
                                                                             <td class="align-middle">
                                                                                 {{ $t->insumos }}
                                                                                 {{ $t->nombre_marca }}</td>
+                                                                            <td class="align-middle">
+                                                                                {{ $t->observaciones }}
+                                                                            </td>
                                                                             <td class="align-middle">
                                                                                 {{ $t->cantidad }}</td>
                                                                             <td class="align-middle">
@@ -1449,12 +1562,6 @@
                                             {{ number_format($valores_piezas, 0, ',', '.') }}</p>
                                     </div>
 
-                                    <!-- Descuentos -->
-                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
-                                        <h5 class="mb-0 text-c-blue">Descuentos</h5>
-                                        <p id="valores_descuentos_presupuesto_conf">$0.00</p>
-                                    </div>
-
                                     <!-- Insumos -->
                                     <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
                                         <h5 class="mb-0 text-c-blue">Insumos</h5>
@@ -1462,13 +1569,23 @@
                                             {{ number_format($valores_insumos, 0, ',', '.') }}</p>
                                     </div>
 
+                                    <!-- Laboratorio -->
+                                    <div class="col-sm-12 col-md-6 col-lg-1 col-xl-1 col-xxl-1 my-2">
+                                        <h5 class="mb-0 text-c-blue">Laboratorio</h5>
+                                        <p id="valores_laboratorio_conf">${{ number_format($valores_laboratorio, 0, ',', '.') }}</p>
+                                    </div>
 
+                                    <!-- Descuentos -->
+                                    <div class="col-sm-12 col-md-6 col-lg-1 col-xl-1 col-xxl-1 my-2">
+                                        <h5 class="mb-0 text-c-blue">Descuentos</h5>
+                                        <p id="valores_descuentos_presupuesto_conf">$0.00</p>
+                                    </div>
 
                                     <div
                                         class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2 bg-naranjo  rounded-pill py-1 my-1">
                                         <h5 class="text-white">Total Final</h5>
                                         <p class="text-white" id="valores_total_final_presupuesto_conf">$
-                                            {{ number_format($valores + $valores_piezas + $valores_insumos, 0, ',', '.') }}
+                                            {{ number_format($valores + $valores_piezas + $valores_insumos + $valores_laboratorio, 0, ',', '.') }}
                                         </p>
                                     </div>
 
@@ -1592,7 +1709,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto" id="insumos_obs_tto"
+                            <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto_modal" id="insumos_obs_tto_modal"
                                 cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
                         </div>
 
@@ -1621,277 +1738,379 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- MODAL PAGOS -->
 <div class="modal fade" id="modalPagoPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          	<span aria-hidden="true">&times;</span>
+		        </button>
             </div>
             <div class="modal-body">
-                <div class="modal-body">
-                    <p class="badge badge-warning">Pendiente</p>
-                    <p>Diferencia <span id="diferencia_pago"></span></p>
-                    <form id="pagoForm" class="mt-4">
-                        <!-- Total a pagar (deshabilitado) -->
-                        <div class="mb-3">
-                            <div class="form-group fill">
-                                <label for="total" class="floating-label-activo-sm">Total a pagar</label>
-                                <input type="text" class="form-control form-control-sm" id="total_pago"
-                                    value="" readonly>
-                            </div>
-
-                        </div>
-
-                        <!-- Monto del pago -->
-                        <div class="mb-3">
-                            <div class="form-group fill">
-                                <label for="montoPago" class="floating-label-activo-sm">Monto del Pago</label>
-                                <input type="text" class="form-control form-control-sm" id="montoPago"
-                                    required>
-                            </div>
-
-                        </div>
-
-                        <!-- Monto abonado -->
-                        <div class="mb-3">
-                            <div class="form-group fill">
-                                <label for="montoAbonado" class="floating-label-activo-sm">Monto Abonado</label>
-                                <input type="text" class="form-control form-control-sm" id="montoAbonado"
-                                    value="${{ number_format($valor_abonado, 0, ',', '.') }}" disabled required>
-                            </div>
-
-                        </div>
-
-                        <!-- Método de pago -->
-                        <div class="mb-3">
-                            <div class="form-group fill">
-                                <label for="metodoPago" class="floating-label-activo-sm">Método de Pago</label>
-                                <select class="form-control form-control-sm" id="metodoPago" required>
-                                    <option value="" selected disabled>Seleccione un método</option>
-                                    <option value="efectivo">Efectivo</option>
-                                    <option value="tarjeta">Tarjeta</option>
-                                    <option value="transferencia">Transferencia Bancaria</option>
-                                </select>
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Convenio</label>
-                                <select id="bono_prevision" name="bono_prevision"
-                                    class="form-control form-control-sm">
-                                    <option value="0">Selecione una opción</option>
-                                    @foreach ($prevision as $prev)
-                                        <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
-                                    @endforeach
-                                </select>
-                                {{-- <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
-                            </div> --}}
-                            </div>
-                        </div>
-
-                        <!-- Botón de envío -->
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-success" onclick="confirmar_pago()">Confirmar
-                                Pago</button>
-                        </div>
-                    </form>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table class="table table-responsive table-xs" id="table_pagos_presupuesto">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Metodo de pago</th>
-                                            <th>Pago</th>
-                                            <th>Acciones</th>
-                                        </tr>
-
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($pagos_tratamientos_dentales as $pago)
-                                            <tr>
-                                                <td>{{ $pago->fecha_pago }}</td>
-                                                <td>{{ $pago->metodo_pago }}</td>
-                                                <td>{{ number_format($pago->total, 0, ',', '.') }}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-primary btn-sm"><i
-                                                            class="fas fa-search"></i></button>
-                                                    <button type="button" class="btn btn-danger btn-sm"
-                                                        onclick="eliminar_pago_dental({{ $pago->id }})"><i
-                                                            class="feather icon-x"></i></button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+           		<div class="form-row">
+        			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    	<div class="card-informacion borde-presupuesto">
+                    		<div class="card-body px-2 pt-2 pb-0">
+                    			<div class="form-row">
+                    				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    					<h6 class="text-uppercase text-c-blue mb-1">Saldo pendiente</h6>
+					                     <h6 class="f-14 badge badge-warning mb-3" id="diferencia_pago"></h6>
+					                    <form id="pagoForm" class="mt-2">
+					                    	 </div>
+				                        <!-- Total a pagar (deshabilitado) -->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+				                            <div class="form-group">
+				                                <label for="total" class="floating-label-activo-sm">Total a pagar</label>
+				                                <input type="text" class="form-control form-control-sm" id="total_pago"
+				                                    value="" readonly>
+				                            </div>
+				                        </div>
+                    				</div>
+                    			</div>
+                    		</div>
+                    	</div>
+                	</div>
 
 
+            		<div class="form-row">
+            			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        	<div class="card-informacion">
+                        		<div class="card-body px-2">
+                        			<div class="form-row">
+				                		<!-- Monto del pago -->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+				                            <label for="montoPago" class="floating-label-activo-sm">Monto del Pago</label>
+				                            <input type="text" class="form-control form-control-sm" id="montoPago" name="montoPago"
+				                                required>
+				                        </div>
+				                        <!-- Monto abonado -->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+				                            <label for="montoAbonado" class="floating-label-activo-sm">Monto Abonado</label>
+				                            <input type="text" class="form-control form-control-sm" id="montoAbonado"
+				                                value="${{ number_format($valor_abonado, 0, ',', '.') }}" disabled required>
+				                        </div>
+				                        <!-- Método de pago -->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+				                            <label for="metodoPago" class="floating-label-activo-sm">Método de Pago</label>
+				                            <select class="form-control form-control-sm" id="metodoPago" required>
+				                                <option value="" selected disabled>Seleccione un método</option>
+				                                <option value="efectivo">Efectivo</option>
+				                                <option value="tarjeta">Tarjeta</option>
+				                                <option value="transferencia">Transferencia Bancaria</option>
+				                            </select>
+				                        </div>
+				                        <!--Convenio-->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+				                            <label class="floating-label-activo-sm">Convenio</label>
+				                            <select id="bono_prevision" name="bono_prevision"
+				                                class="form-control form-control-sm">
+				                                <option value="0">Selecione una opción</option>
+				                                @foreach ($prevision as $prev)
+				                                    <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+				                                @endforeach
+				                            </select>
+				                            {{-- <div class="input-group-append">
+				                            <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
+				                        		</div> --}}
+				                        </div>
+				                        <!-- Botón de envío  / BTN CONFIRMACION PAGO-->
+				                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-2">
+				                            <button type="button" class="btn btn-info btn-sm" onclick="confirmar_pago()"><i class="feather icon-check"></i> Confirmar Pago</button>
+				                        </div>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+            		</div>
+                </form>
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        	<div class="card-informacion">
+                        		<div class="card-body px-2">
+                        			<div class="form-row">
+                        				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+				                            <div class="table-responsive">
+				                                <table class="table table-responsive table-xs" id="table_pagos_presupuesto">
+				                                    <thead>
+				                                        <tr>
+				                                            <th>Fecha</th>
+				                                            <th>Metodo de pago</th>
+				                                            <th>Pago</th>
+				                                            <th>Acciones</th>
+				                                        </tr>
 
+				                                    </thead>
+				                                    <tbody>
+				                                        @foreach ($pagos_tratamientos_dentales as $pago)
+				                                            <tr>
+				                                                <td>{{ $pago->fecha_pago }}</td>
+				                                                <td>{{ $pago->metodo_pago }}</td>
+				                                                <td>{{ number_format($pago->total, 0, ',', '.') }}</td>
+				                                                <td>
+				                                                    <button type="button" class="btn btn-primary btn-icon"><i
+				                                                            class="fas fa-search"></i></button>
+				                                                    <button type="button" class="btn btn-danger btn-icon"
+				                                                        onclick="eliminar_pago_dental({{ $pago->id }})"><i
+				                                                            class="feather icon-x"></i></button>
+				                                                </td>
+				                                            </tr>
+				                                        @endforeach
+				                                    </tbody>
+				                                </table>
+				                            </div>
+				                        </div>
+				                    </div>
+		                        </div>
+                        	</div>
+                    	</div>
+             		</div>
+            </div>
+            <!--<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REASIGNACIÓN PRESUPUESTO -->
+<div class="modal fade" id="modalReasignarPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Reasignación del presupuesto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          	<span aria-hidden="true">&times;</span>
+		        </button>
+            </div>
+            <div class="modal-body" id="modal_body_reasignar_presupuesto">
+                <div class="form-row">
+                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                	<div class="card-informacion borde-presupuesto">
+	                		<div class="card-body p-2">
+	                			<div class="form-row">
+				                    <div class="col-md-6">
+				                        <div>
+				                            <h6 class="text-uppercase text-c-blue mb-1">Monto Total</h6>
+				                            <input type="hidden" id="total_presupuesto_a_pagar"
+				                                value="{{ $valores_piezas + $valores + $valores_insumos }}">
+				                            <input type="hidden" name="total_abonado_presupuesto" id="total_abonado_presupuesto"
+				                                value="{{ $valor_abonado }}">
+				                            <input type="hidden" name="total_adeudado_presupuesto"
+				                                id="total_adeudado_presupuesto"
+				                                value="{{ $valores_piezas + $valores + $valores_insumos - $valor_abonado }}">
+				                            <p id="monto_total" class="badge badge-warning mb-3">
+				                                {{ number_format($valores_insumos, 0, ',', '.') }} +
+				                                {{ number_format($valores_piezas, 0, ',', '.') }} =
+				                                {{ number_format($valores_piezas + $valores + $valores_insumos, 0, ',', '.') }}
+				                            </p>
+				                            <h6 class="text-uppercase text-c-blue mb-1">Monto Abonado</h6>
+				                            <p id="monto_abonado" class="badge badge-info mb-3">
+				                                + {{ number_format($valor_abonado, 0, ',', '.') }}
+				                            </p>
+				                            <h6 class="text-uppercase text-c-blue mb-1">Monto Adeudado</h6>
+				                            <p id="monto_adeudado" class="badge badge-danger">
+				                                -
+				                                {{ number_format($valores_piezas + $valores + $valores_insumos - $valor_abonado, 0, ',', '.') }}
+				                            </p>
+				                        </div>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <p class="alert alert-sucess-b" id="info_pagos_seleccionados"></p>
+				                    </div>
+			                    </div>
+			                </div>
+		                </div>
+		            </div>
                 </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <div class="form-row">
+                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                	<div class="card-informacion">
+	                		<div class="card-top">
+	                			<h6 class="text-uppercase text-c-blue">Presupuesto por pieza</h6>
+	                		</div>
+	                		<div class="card-body px-2 py-1">
+	                			<div class="form-row">
+	                				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						                <div class="table-responsive">
+						                    <table class="table table-bordered table-striped table-xs" id="table_pagos_reasignar_odontograma">
+						                        <thead>
+						                            <tr>
+						                                <th>Seleccionar</th>
+						                                <th>Nombre</th>
+						                                <th>Valor</th>
+						                                <th>Acciones</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody>
+						                            @foreach ($odontograma as $o)
+						                                @if ($o->presupuesto == 1)
+						                                    <tr>
+						                                        <td><input type="checkbox" class="valor-checkbox"
+						                                                data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
+						                                                data-info="odonto"></td>
+						                                        <td>{{ $o->pieza }}</td>
+						                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+						                                        <td>
+						                                            <button type="button" class="btn btn-danger btn-sm"
+						                                                onclick="eliminar_odontograma({{ $o->id }})"><i
+						                                                    class="feather icon-x"></i></button>
+						                                        </td>
+						                                    </tr>
+						                                @endif
+						                            @endforeach
+						                        </tbody>
+						                    </table>
+						                </div>
+				               		</div>
+						         </div>
+		            		</div>
+	            		</div>
+	            	</div>
+	            </div>
+
+                <div class="form-row">
+                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                	<div class="card-informacion">
+	                		<div class="card-top">
+	                			<h6 class="text-uppercase text-c-blue">Presupuesto por grupo de piezas</h6>
+	                		</div>
+	                		<div class="card-body px-2 py-1">
+	                			<div class="form-row">
+		                			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						                <div class="table-responsive">
+						                    <table class="table table-bordered table-striped table-xs" id="table_pagos_reasignar_grupos">
+						                        <thead>
+						                            <tr>
+						                                <th>Seleccionar</th>
+						                                <th>Nombre</th>
+						                                <th>Valor</th>
+						                                <th>Acciones</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody>
+						                            @foreach ($todos as $o)
+						                                @if ($o->presupuesto == 1)
+						                                    <tr>
+						                                        <td><input type="checkbox" class="valor-checkbox"
+						                                                data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
+						                                                data-info="gral"></td>
+						                                        <td>{{ $o->diagnostico_tratamiento }}</td>
+						                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+						                                        <td>
+						                                            <button type="button" class="btn btn-danger btn-sm"
+						                                                onclick="eliminar_diagnostico({{ $o->id }},'gral',this)"><i
+						                                                    class="feather icon-x"></i></button>
+						                                        </td>
+						                                    </tr>
+						                                @endif
+						                            @endforeach
+						                        </tbody>
+						                    </table>
+						                </div>
+						            </div>
+					        	</div>
+	            			</div>
+	            		</div>
+	            	</div>
+            	</div>
+		        <div class="form-row">
+		        	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                	<div class="card-informacion">
+	                		<div class="card-top">
+	                			<h6 class="text-uppercase text-c-blue">Insumos y gastos generales</h6>
+	                		</div>
+	                		<div class="card-body px-2 py-1">
+	                			<div class="form-row">
+	                				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+						                <div class="table-responsive">
+						                    <table class="table table-bordered table-striped table-xs" id="table_pagos_reasignar_insumos">
+						                        <thead>
+						                            <tr>
+						                                <th>Seleccionar</th>
+						                                <th>Nombre</th>
+						                                <th>Cantidad</th>
+						                                <th>Valor Unitario</th>
+						                                <th>Total</th>
+						                                <th>Acciones</th>
+						                            </tr>
+						                        </thead>
+						                        <tbody>
+						                            @foreach ($insumos_tratamientos as $i)
+						                                @if ($i->presupuesto == 1)
+						                                    @php $total = $i->cantidad * $i->valor; @endphp
+						                                    <tr>
+						                                        <td><input type="checkbox" class="valor-checkbox"
+						                                                data-valor="{{ $total }}" data-id="{{ $i->id }}"
+						                                                data-info="insumo"></td>
+						                                        <td>{{ $i->insumos }} {{ $i->nombre_marca }}</td>
+						                                        <td>{{ $i->cantidad }}</td>
+						                                        <td>${{ number_format($i->valor, 0, ',', '.') }}</td>
+						                                        <td>${{ number_format($i->cantidad * $i->valor, 0, ',', '.') }}</td>
+						                                        <td>
+						                                            <button type="button" class="btn btn-danger btn-sm"
+						                                                onclick="eliminar_insumo({{ $i->id }})"><i
+						                                                    class="feather icon-x"></i></button>
+						                                        </td>
+						                                    </tr>
+						                                @endif
+						                            @endforeach
+						                        </tbody>
+						                    </table>
+						                </div>
+					             	</div>
+			    				</div>
+	    					</div>
+	    				</div>
+	    			</div>
+    			</div>
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                        <div type="button" class="btn btn-info" onclick="reasignar_presupuesto_modal()"><i class="feather icon-check
+                            "></i>
+                            Reasignar Pago
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="modalReasignarPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel"
+<!-- info_lab_modal -->
+<div class="modal fade" id="info_lab_modal" tabindex="-1" aria-labelledby="info_lab_modalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Reasignación del presupuesto</h5>
+                <h5 class="modal-title" id="info_lab_modalLabel">Información del Laboratorio</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="modal_body_reasignar_presupuesto">
-                <div class="row">
+            <div class="modal-body">
+                <div class="row mb-2">
                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <h5>Monto Total</h5>
-                            <input type="hidden" id="total_presupuesto_a_pagar"
-                                value="{{ $valores_piezas + $valores + $valores_insumos }}">
-                            <input type="hidden" name="total_abonado_presupuesto" id="total_abonado_presupuesto"
-                                value="{{ $valor_abonado }}">
-                            <input type="hidden" name="total_adeudado_presupuesto"
-                                id="total_adeudado_presupuesto"
-                                value="{{ $valores_piezas + $valores + $valores_insumos - $valor_abonado }}">
-                            <p id="monto_total" class="font-weight-bold">
-                                {{ number_format($valores_insumos, 0, ',', '.') }} +
-                                {{ number_format($valores_piezas, 0, ',', '.') }} =
-                                {{ number_format($valores_piezas + $valores + $valores_insumos, 0, ',', '.') }}
-                            </p>
-                            <p id="monto_abonado" class="text-success">
-                                + {{ number_format($valor_abonado, 0, ',', '.') }}
-                            </p>
-                            <p id="monto_adeudado" class="text-danger">
-                                -
-                                {{ number_format($valores_piezas + $valores + $valores_insumos - $valor_abonado, 0, ',', '.') }}
-                            </p>
-                        </div>
+                        <label class="font-weight-bold">Nombre:</label>
+                        <div id="info_lab_nombre"></div>
                     </div>
                     <div class="col-md-6">
-                        <p id="info_pagos_seleccionados"></p>
+                        <label class="font-weight-bold">Dirección:</label>
+                        <div id="info_lab_direccion"></div>
                     </div>
                 </div>
-
-
-
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="table_pagos_reasignar_odontograma">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Seleccionar</th>
-                                <th>Nombre</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($odontograma as $o)
-                                @if ($o->presupuesto == 1)
-                                    <tr>
-                                        <td><input type="checkbox" class="valor-checkbox"
-                                                data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
-                                                data-info="odonto"></td>
-                                        <td>{{ $o->pieza }}</td>
-                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="eliminar_odontograma({{ $o->id }})"><i
-                                                    class="feather icon-x"></i></button>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">Teléfono:</label>
+                        <div id="info_lab_telefono"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">Email:</label>
+                        <div id="info_lab_email"></div>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="table_pagos_reasignar_grupos">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Seleccionar</th>
-                                <th>Nombre</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($todos as $o)
-                                @if ($o->presupuesto == 1)
-                                    <tr>
-                                        <td><input type="checkbox" class="valor-checkbox"
-                                                data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
-                                                data-info="gral"></td>
-                                        <td>{{ $o->diagnostico_tratamiento }}</td>
-                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="eliminar_diagnostico({{ $o->id }},'gral',this)"><i
-                                                    class="feather icon-x"></i></button>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped" id="table_pagos_reasignar_insumos">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Seleccionar</th>
-                                <th>Nombre</th>
-                                <th>Cantidad</th>
-                                <th>Valor Unitario</th>
-                                <th>Total</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($insumos_tratamientos as $i)
-                                @if ($i->presupuesto == 1)
-                                    @php $total = $i->cantidad * $i->valor; @endphp
-                                    <tr>
-                                        <td><input type="checkbox" class="valor-checkbox"
-                                                data-valor="{{ $total }}" data-id="{{ $i->id }}"
-                                                data-info="insumo"></td>
-                                        <td>{{ $i->insumos }} {{ $i->nombre_marca }}</td>
-                                        <td>{{ $i->cantidad }}</td>
-                                        <td>${{ number_format($i->valor, 0, ',', '.') }}</td>
-                                        <td>${{ number_format($i->cantidad * $i->valor, 0, ',', '.') }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="eliminar_insumo({{ $i->id }})"><i
-                                                    class="feather icon-x"></i></button>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary"
-                    onclick="reasignar_presupuesto_modal()">Confirmar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -2164,7 +2383,7 @@
         let insumos = $('#insumos_tto').val();
         let cantidad = $('#insumos_cantidad_tto').val();
         let valor = $('#insumos_valor_tto').val();
-        let observaciones = $('#insumos_obs_tto').val();
+        let observaciones = $('#insumos_obs_tto_modal').val();
         let id_tto = $('#id_pieza_tto').val();
 
         let valido = 1;
@@ -2261,7 +2480,7 @@
         $('#insumos_tto').val('');
         $('#insumos_cantidad_tto').val('');
         $('#insumos_valor_tto').val('');
-        $('#insumos_obs_tto').val('');
+        $('#insumos_obs_tto_modal').val('');
         //    $('#id_pieza_tto').val('');
     }
 
@@ -2277,6 +2496,7 @@
         let data = {
             id_hora_medica: id_hora_medica,
             id_ficha_atencion: $('#id_fc').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             _token: CSRF_TOKEN
         }
 
@@ -2441,6 +2661,7 @@
 
                         table_insumos.row.add([
                             insumo.insumos + ' ' + insumo.nombre_marca, // Nombre del insumo
+                            insumo.observaciones,
                             insumo.cantidad, // Cantidad utilizada
                             insumo.valor, // Unidad de medida
                             total,
@@ -2462,6 +2683,7 @@
                             }
                             let rowNode = table_insumos_pagos.row.add([
                                 insumo.insumos + ' ' + insumo.nombre_marca,
+                                insumo.observaciones,
                                 insumo.cantidad, // Nombre del insumo
                                 formatoMoneda(insumo.valor), // Cantidad utilizada
                                 0, // Unidad de medida
@@ -2522,6 +2744,7 @@
                         }
 
                     });
+                     actualizar_presupuesto();
                 } else {
                     swal({
                         title: 'error',
@@ -2653,6 +2876,7 @@
                             }
                             let rowNode = table_insumos_pagos.row.add([
                                 insumo.insumos + ' ' + insumo.nombre_marca,
+                                insumo.observaciones,
                                 insumo.cantidad, // Nombre del insumo
                                 formatoMoneda(insumo.valor), // Cantidad utilizada
                                 formatoMoneda(insumo.valor_descuento), // Unidad de medida
@@ -2762,9 +2986,9 @@
                     $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                     $('#valores_descuentos_presupuesto').html(formatoMoneda(resp.descuentos));
                     $('#valores_descuentos_presupuesto_conf').html(formatoMoneda(resp.descuentos));
+                    $('#valores_laboratorio_conf').html(formatoMoneda(resp.total_lab));
                     $('#descuento_presup').val(formatoMoneda(resp.descuentos));
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
-                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                     $('#total_presup').val(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
@@ -2773,6 +2997,7 @@
                     $('#subtotal_presup').val(formatoMoneda(resp.total_general));
                     $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(
                         suma_pagado)));
+                    $('#montoAbonado').val(formatoMoneda(parseInt(suma_pagado)));
                     let todos = resp.todos;
 
                     let table_ = $('#presup_estado_pago_gral').DataTable();
@@ -2812,6 +3037,7 @@
                         }
 
                     });
+                    actualizar_presupuesto();
                 }
             },
             error: function(error) {
@@ -2833,8 +3059,20 @@
     }
 
     function reasignar_presupuesto_modal() {
+        swal({
+            title: "¿Esta seguro que desea Reasignar el presupuesto?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Confirmar"],
+            dangerMode: true,
+        }).then((confirm) => {
+            if(confirm){
+                confirmar_reasignar_presupuesto_modal();
+            }
+        });
+    }
 
-
+    function confirmar_reasignar_presupuesto_modal(){
         // Crear objeto JSON con los datos del formulario
         const data = {
             _token: '{{ csrf_token() }}', // Token CSRF
@@ -2921,6 +3159,7 @@
                             }
                             let rowNode = table_insumos_pagos.row.add([
                                 insumo.insumos + ' ' + insumo.nombre_marca,
+                                insumo.observaciones,
                                 insumo.cantidad, // Nombre del insumo
                                 formatoMoneda(insumo.valor), // Cantidad utilizada
                                 0, // Unidad de medida
@@ -2981,7 +3220,6 @@
                 }
             },
         });
-
     }
 </script>
 
@@ -3117,13 +3355,14 @@
                     if (insumo.presupuesto == 1) {
                         if (insumo.estado_pago == 'ok') {
                             var clase = 'bg-success';
-                        } else if (insumo.estado_pago == 'intermedio') {
+                        } else if (insumo.estado_pago == 'incompleto') {
                             var clase = 'bg-warning';
                         } else {
                             var clase = 'bg-danger';
                         }
                         let rowNode = table_insumos_pagos.row.add([
                             insumo.insumos + ' ' + insumo.nombre_marca,
+                            insumo.observaciones,
                             insumo.cantidad, // Nombre del insumo
                             formatoMoneda(insumo.valor), // Cantidad utilizada
                             formatoMoneda(insumo.valor_descuento), // Unidad de medida
@@ -3223,8 +3462,9 @@
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
+                let valores_laboratorio = resp.valores[3];
                 let descuentos = resp.descuentos;
-                let total_general = valores_boca_general + valores_odontograma + valores_insumos -
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_laboratorio -
                     descuentos;
                 $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                 $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
@@ -3232,6 +3472,7 @@
                 $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                 $('#valores_descuentos_presupuesto').html(formatoMoneda(resp.descuentos));
                 $('#valores_descuentos_presupuesto_conf').html(formatoMoneda(resp.descuentos));
+                $('#valores_laboratorio_conf').html(formatoMoneda(resp.total_lab));
                 $('#descuento_presup').val(formatoMoneda(resp.descuentos));
                 $('#descuento_clinico').val(formatoMoneda(resp.descuentos));
                 $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
@@ -3350,6 +3591,7 @@
             success: function(resp) {
                 console.log(resp);
                 $('#mensaje').html('Descuento retirado');
+                $('#tiene_dcto').val(0);
                 // Cambiar el botón para que vuelva a ser "Aplicar convenio"
                 const boton = document.querySelector(
                 `button[onclick="quitar_convenio_tratamiento(${id})"]`);
@@ -3455,6 +3697,7 @@
                         }
                         let rowNode = table_insumos_pagos.row.add([
                             insumo.insumos + ' ' + insumo.nombre_marca,
+                            insumo.observaciones,
                             insumo.cantidad, // Nombre del insumo
                             formatoMoneda(insumo.valor), // Cantidad utilizada
                             0, // Unidad de medida
@@ -3516,7 +3759,8 @@
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
-                let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                let valores_laboratorio = resp.valores[3];
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_laboratorio;
 
                 $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                 $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
@@ -3527,6 +3771,7 @@
                 $('#descuento_presup').val('$' + 0);
                 $('#valores_descuentos_presupuesto').text('$' + 0);
                 $('#valores_descuentos_presupuesto_conf').text('$' + 0);
+                $('#valores_laboratorio_conf').text(formatoMoneda(resp.total_lab));
                 $('#total_presup').val(formatoMoneda(total_general));
                 $('#subtotal_clinico').val(formatoMoneda(valores_odontograma));
                 $('#total_clinico').val(formatoMoneda(valores_odontograma));
@@ -3614,6 +3859,7 @@
                                         );
                     }
                 });
+                actualizar_presupuesto();
             },
             error: function(error) {
                 console.log(error.responseText);
@@ -3635,5 +3881,29 @@
             id_lugar_atencion)
 
         $('#reservar_hora').modal('show');
+    }
+
+    function info_lab(id_lab) {
+        let url = "{{ ROUTE('dental.info_laboratorio') }}";
+        let data = {
+            id_lab: id_lab,
+            _token: CSRF_TOKEN
+        }
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: data,
+            success: function(resp) {
+                console.log(resp);
+                $('#info_lab_nombre').html(resp.laboratorio.nombre);
+                $('#info_lab_direccion').html(resp.direccion.direccion+' '+resp.direccion.numero_dir);
+                $('#info_lab_telefono').html(resp.laboratorio.telefono);
+                $('#info_lab_email').html(resp.laboratorio.email);
+                $('#info_lab_modal').modal('show');
+            },
+            error: function(error) {
+                console.log(error.responseText);
+            }
+        });
     }
 </script>

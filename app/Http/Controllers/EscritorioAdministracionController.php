@@ -801,7 +801,9 @@ class EscritorioAdministracionController extends Controller
 
     public function desactivar_box(Request $req){
         try {
+           
             $box = BoxAtencionServicio::find($req->id);
+      
             $paciente_box = PacienteBox::where('id_box', $req->id)->first();
             if($paciente_box){
                 return ['estado' => 'error', 'msj' => 'No se puede desactivar el box, tiene pacientes asignados'];

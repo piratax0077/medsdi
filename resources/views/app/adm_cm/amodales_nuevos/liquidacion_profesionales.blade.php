@@ -420,7 +420,7 @@
                     let ciudades = $('#comuna_nuevo_profesional_convenio');
 
                     ciudades.find('option').remove();
-                    ciudades.append('<option value="0">seleccione</option>');
+                    ciudades.append('<option value="0">Seleccione</option>');
                     $(data).each(function(i, v) { // indice, valor
                         ciudades.append('<option value="' + v.id + '">' + v.nombre +
                             '</option>');
@@ -469,7 +469,7 @@
                     let especialidades = $('#especialidad_nuevo_profesional_convenio');
 
                     especialidades.find('option').remove();
-                    especialidades.append('<option value="0">seleccione</option>');
+                    especialidades.append('<option value="0">Seleccione</option>');
                     $(registros).each(function(i, v) { // indice, valor
                         especialidades.append('<option value="' + v.id + '">' + v.nombre +
                             '</option>');
@@ -514,7 +514,7 @@
                     let subespecialidades = $('#sub_especialidad_nuevo_profesional');
 
                     subespecialidades.find('option').remove();
-                    subespecialidades.append('<option value="0">seleccione</option>');
+                    subespecialidades.append('<option value="0">Seleccione</option>');
                     $(registros).each(function(i, v) { // indice, valor
                         subespecialidades.append('<option value="' + v.id + '">' + v.nombre +
                             '</option>');

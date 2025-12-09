@@ -34,7 +34,7 @@
                                     <div class="col-sm-12 col-md-12 ">
                                         <h6 class="text-c-blue mb-3">ALIMENTACIÓN SOLIDA</h6>
                                     </div>
-                                </div> 
+                                </div>
                                 <form>
                                     <div class="form-row">
                                         <h6 class="col-sm-3 col-md-3 col-form-label font-weight-bolder">Desayuno</h6>
@@ -119,7 +119,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="guardar_evaluacion_nutricional()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>

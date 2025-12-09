@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Paciente;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -48,27 +49,43 @@ class LoginController extends Controller
         $error = array();
         $valido = 1;
 
-        if(empty($request->user)) {
+        // Obtener datos tanto de form-data como de JSON
+        $user = $request->input('user') ?: $request->json('user');
+        $pass = $request->input('pass') ?: $request->json('pass');
+
+        if(empty($user)) {
             $error['user'] = 'campo requerido';
             $valido = 0;
         }
-        if(empty($request->pass)) {
+        if(empty($pass)) {
             $error['pass'] = 'campo requerido';
             $valido = 0;
         }
 
         if($valido)
         {
-            $user = User::where('email', $request->user)->first();
+            $userModel = User::where('email', $user)->first();
 
-            if($user)
+            if($userModel)
             {
-                if (Auth::attempt(['email' => $request->user, 'password' => $request->pass]))
+                if (Auth::attempt(['email' => $user, 'password' => $pass]))
                 {
+                    // Generar token Sanctum para API
+                    $token = $userModel->createToken('mobile-app')->plainTextToken;
+
+                    $paciente = Paciente::where('id_usuario', $userModel->id)->first();
+                    if($paciente){
+                        $userModel->foto_perfil = $paciente->foto_perfil;
+                    }else{
+                        $userModel->foto_perfil = null;
+                    }
+
                     $datos['estado'] = 1;
                     $datos['msj'] = 'registro';
-                    $datos['user'] = $user;
-                    $datos['roles'] = $user->roles()->get();
+                    $datos['user'] = $userModel;
+                    $datos['paciente'] = $paciente ?: null;
+                    $datos['roles'] = $userModel->roles()->get();
+                    $datos['token'] = $token; // Token para acceder a rutas protegidas
                 }
                 else
                 {
@@ -79,9 +96,8 @@ class LoginController extends Controller
             else
             {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'usuario no encotnrado';
+                $datos['msj'] = 'usuario no encontrado';
             }
-
         }
         else
         {
@@ -89,7 +105,6 @@ class LoginController extends Controller
             $datos['msj'] = 'campos requerido';
             $datos['error'] = $error;
         }
-
 
         return $datos;
     }

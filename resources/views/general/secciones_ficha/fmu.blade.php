@@ -8,16 +8,16 @@
             </div>
             <div class="row mx-1  mt-3">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <h4 class="text-c-blue text-center f-20">Ficha Médica Única</h4>
+                    <h4 class="text-c-blue text-center f-24">Ficha Médica Única</h4>
                     {{--<button type="button" class="btn btn-xs btn-danger d-inline float-right ml-2 mb-2"><i class="feather icon-x"></i> Cerrar</button> --}}
                 </div>
             </div>
             <div class="row mx-1">
-                <!--LADO DERECHO-->
+                <!--DATOS MÉDICOS-->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="card-fmu">
+                            <div class="card-informacion  pt-2">
                                 <div class="card-header-fmu" id="enf-cron">
                                         @php
                                             $cantidad_ante_cronicos = 0;
@@ -84,7 +84,7 @@
                                 <div id="cabecera_info" class="collapse" aria-labelledby="enf-cron" data-parent="#cabecera_info">
                                     <div class="card-body-aten-a" style="padding-top: 0px!important;">
                                         <div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-4">
+											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pb-0">
 												<ul class="nav nav-tabs profile-tabs nav-fill mt-1" id="myTab" role="tablist">
 													<li class="nav-item">
 														<a class="nav-link-aten text-reset active" id="seccion_ident_contacto-tab" data-toggle="tab" href="#seccion_ident_contacto" role="tab" aria-controls="seccion_ident_contacto" aria-selected="true">Contacto</a>
@@ -109,7 +109,7 @@
 										</div>
 
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 pb-2">
                                                 <div class="tab-content" id="at-oftalmo">
                                                     {{-- INFORMACION DE CONTACTO --}}
                                                     <div class="tab-pane fade show active" id="seccion_ident_contacto" role="tabpanel" aria-labelledby="seccion_ident_contacto-tab">
@@ -120,7 +120,7 @@
 																@else
 																	<p><i class="feather icon-home"></i><strong> Dirección</strong> <br></p>
 																@endif
-																	
+
                                                             </div>
                                                             <div class="col-sm-6 col-md-4">
                                                                 <p><i class="feather icon-phone"></i><strong> Telefono</strong> <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>
@@ -135,7 +135,7 @@
                                                     <div class="tab-pane fade" id="seccion_enfer_cronicas" role="tabpanel" aria-labelledby="seccion_enfer_cronicas-tab">
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <table id="table_enfermedades_cronicas" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                <table id="table_enfermedades_cronicas" class="display table table-striped table-xs table-bordered dt-responsive nowrap pb-4" style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>NOMBRE</th>
@@ -165,7 +165,7 @@
                                                     <div class="tab-pane fade" id="seccion_alergias" role="tabpanel" aria-labelledby="seccion_alergias-tab">
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <table id="table_alergias" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                <table id="table_alergias" class="display table table-bordered table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>NOMBRE</th>
@@ -194,7 +194,7 @@
 
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <table id="table_alergias" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                <table id="table_alergias" class="display table table-bordered table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>FECHA CIRUGIA</th>
@@ -239,7 +239,7 @@
 
                                                         <div class="row">
                                                             <div class="col-md-12">
-                                                                <table id="table_discapacidad" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
+                                                                <table id="table_discapacidad" class="display table-bordered  table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Discapacidad</th>
@@ -290,66 +290,84 @@
                     <div class="row">
                         {{-- Tratamientos en curso --}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-                            <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
-                                    <ul>
-                                        <li><strong>Tratamientos en curso</strong></li>
-                                        @if ($tratamiento_activo)
-                                            @foreach ( $tratamiento_activo as $receta)
-                                                @foreach ( $receta['detalle'] as $detalle)
-                                                    @if ($detalle['id_tipo_control'] == 8)
-                                                        <li style="font-size: 12px">
-                                                            Receta Magistral<br/>&nbsp;&nbsp;
-                                                            <span style="font-size: 9px; font-weight: bold;">
-                                                                @php
-                                                                    $producto_detalle_temp = json_decode($detalle['producto']);
-                                                                    // var_dump($producto_detalle_temp[0]) ;
-                                                                @endphp
-                                                                @foreach ( $producto_detalle_temp as $det_temp)
-                                                                    {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
-                                                                @endforeach
-                                                            </span>
-                                                        </li>
-                                                    @else
-                                                        <li style="font-size: 12px">{{ $detalle['producto'] }}<br/>&nbsp;&nbsp;<span style="font-size: 9px; font-weight: bold;">{{ $detalle['farmaco'] }}</span></li>
-                                                    @endif
-                                                @endforeach
-                                            @endforeach
-                                        @else
-                                            <li>No hay registros</li>
-                                        @endif
-                                        <li></li>
-                                    </ul>
+                             <div class="card border-card-purple h-100">
+                                <div class="card-body px-2 py-3">
+                                    <div class="media">
+                                      <img src="{{ asset('images/iconos/tto-curso.png') }}" class=" wid-45 rounded-xl mr-3" alt="Tratamientos en curso">
+                                      <div class="media-body">
+                                        <h5 class="f-16 text-purple font-weight-bold">Tratamientos en curso</h5>
+                                        <ul>
+                                                @if (isset($tratamiento_activo))
+                                                    @foreach ( $tratamiento_activo as $receta)
+                                                        @foreach ( $receta['detalle'] as $detalle)
+                                                            @if ($detalle['id_tipo_control'] == 8)
+                                                                <li style="font-size: 12px" class="text-capitalize"> <i class="fas fa-caret-right text-purple"></i>
+                                                                    Receta Magistral<br/>&nbsp;&nbsp;
+                                                                    <span style="font-size: 9px; font-weight: bold;">
+                                                                        @php
+                                                                            $producto_detalle_temp = json_decode($detalle['producto']);
+                                                                            // var_dump($producto_detalle_temp[0]) ;
+                                                                        @endphp
+                                                                        @foreach ( $producto_detalle_temp as $det_temp)
+                                                                            {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
+                                                                        @endforeach
+                                                                    </span>
+                                                                </li>
+                                                            @else
+                                                                <li style="font-size: 12px"><i class="fas fa-caret-right text-purple"></i>&nbsp;&nbsp;{{ $detalle['producto'] }}</li>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                @else
+                                                    <li>No hay registros</li>
+                                                @endif
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Medicamentos crónicos --}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-                            <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
-                                    <ul>
-                                        <li><strong>Medicamentos crónicos</strong></li>
-                                    </ul>
+                            <div class="card border-card-danger h-100">
+                                <div class="card-body px-2 py-3">
+                                    <div class="media">
+                                      <img src="{{ asset('images/iconos/meds-cronicos.png') }}" class="wid-45 rounded-xl mr-3" alt="Medicamentos Crónicos">
+                                        <div class="media-body">
+                                            <h5 class="f-16 text-danger font-weight-bold">Medicamentos crónicos</h5>
+                                            <ul>
+                                                <li>No hay registros</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {{-- Cirugías recientes --}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
-                            <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
-                                    <ul>
-                                        <li><strong>Cirugías recientes</strong></li>
-                                        @foreach ($antecedentes as $data)
-                                            @if($data->id_tipo_antecedente==3)
-                                                {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
-                                                <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
-                                            @else
-                                                {{-- <li>No hay registros</li> --}}
-                                            @endif
-                                        @endforeach
-                                    </ul>
+                             <div class="card  border-card-info h-100">
+                                <div class="card-body px-2 py-3">
+                                    <div class="media">
+                                      <img src="{{ asset('images/iconos/ant-qx.png') }}" class=" wid-45 rounded-xl mr-3" alt="CX Recientes">
+                                        <div class="media-body">
+                                            <h5 class="f-16 text-info font-weight-bold">Cirugías recientes</h5>
+                                            <ul>
+                                                @if(isset($antecedentes))
+                                                @foreach ($antecedentes as $data)
+                                                    @if($data->id_tipo_antecedente==3)
+                                                        {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
+                                                        <li class="text-capitalize"> <i class="fas fa-caret-right text-info"></i> {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
+                                                    @else
+                                                        {{-- <li>No hay registros</li> --}}
+                                                    @endif
+                                                @endforeach
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -369,20 +387,25 @@
                         {{-- Prótesis y ortesis --}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
                             <div class="card border-card-primary h-100">
-                                <div class="card-body-aten-a">
-                                    <ul>
-                                        <li><strong>Prótesis y ortesis</strong></li>
-                                        <li>No hay registros</li>
-                                    </ul>
+                                <div class="card-body px-2 py-3">
+                                    <div class="media">
+                                      <img src="{{ asset('images/iconos/prot-ort.png') }}" class=" wid-45 rounded-xl mr-3" alt="Prótesis y Ortesis">
+                                        <div class="media-body">
+                                            <h5 class="f-16 text-c-blue font-weight-bold">Prótesis y Ortesis</h5>
+                                            <ul>
+                                                <li>No hay registros</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
-
+                    <!--HISTORIAL MÉDICO-->
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
-                            <h5 class="text-c-blue">Historial médico</h5>
+                            <h5 class="f-20 text-c-blue mb-3">Historial médico</h5>
                         </div>
                         <!--HISTORIAL - Últimos Examenes-->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -782,7 +805,7 @@
         }
 
         function dame_id_paciente(){
-            return {{ $paciente->id }};
+            return $('#id_paciente_fc').val();
         }
     </script>
 

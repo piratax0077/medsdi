@@ -150,9 +150,28 @@
             <div class="row user-profile user-card  align-items-center py-1 pb-3 px-4" style="background-color:#ecf0f5;">
                 <div class="col-md-12 d-inline pt-1">
                     <h5 class="text-primary d-inline mt-2 t-tipo-agenda" style="font-size: 1.2rem;" id="titulo_tipo_agenda"></h5>
-
+                           @include('general.info_simbologia.simbologia_agenda')
                     @include('general.anular_hora.anular_hora')
                     @include('general.bloqueo_hora.bloque_hora')
+
+
+                    @if ($boxes->count() > 0)
+                        <div class="align-middle m-b-25">
+                            <div class="d-inline-block f-11">
+
+                                @if ($lug_prof_box)
+                                    <input type="hidden" name="id_box" id="id_box" value="{{ $lug_prof_box->id_box }}">
+                                    <span><strong>BOX</strong></span> <button type="button" class="btn btn-warning-light-c btn-xxxs" id="btn_ver_modificar_box_prof"  onclick="abrir_editar_box_prof('{{ $lug_prof_box->id }}')"><i class="feather icon-edit"></i></button><br>
+                                    <span><strong id="profesional_box" style="font-size: 16px;">{{ $lug_prof_box->box->tipo_box.' - '.$lug_prof_box->box->numero_box }}</strong></span>
+                                @else
+                                    <input type="hidden" name="id_box" id="id_box" value="">
+                                    <span><strong>BOX</strong></span> <button type="button" class="btn btn-warning-light-c btn-xxxs" id="btn_ver_modificar_box_prof"  onclick="abrir_agregar_box_prof('{{ $profesional->id }}')"><i class="feather icon-edit"></i></button><br>
+                                    <span><strong id="profesional_box" style="font-size: 16px;">-</strong></span>
+                                @endif
+
+                            </div>
+                        </div>
+                    @endif
 
                 </div>
                 <div class="col-md-12 mr-5 px-4 card">
@@ -223,6 +242,16 @@
                             </div>
                         @endif
 
+                        <div id="examenes" class="d-none">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Examenes</label>
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_examen" id="form_reseva_de_horas_id_examen">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         @if($profesional->id_especialidad == 2 )
                             <div class="col-sm-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
                                 <div class="form-group">
@@ -976,7 +1005,7 @@
                                     id="bono_profesional_rut" disabled="disabled">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 bono_valor">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Clase Pago</label>
                                 <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm" onchange="validar_prevision(this)">
@@ -1007,14 +1036,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 bono_valor">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Valor total</label>
                                 <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
                                     class="form-control form-control-sm">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 bono_valor">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Abono</label>
                                 <input name="bono_valor_abono_consulta" id="bono_valor_abono_consulta" type="number"
@@ -1035,7 +1064,7 @@
                                     class="form-control form-control-sm" value="0">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 bono_valor">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Saldo</label>
                                 <input name="bono_valor_saldo_consulta" id="bono_valor_saldo_consulta" type="number"
@@ -1246,12 +1275,28 @@
 
     @include('app.profesional.modales.boton_flotante_agenda_exa_ciru')
 
+    {{-- lugar atencion box profesional --}}
+    @include('general.asignacion_box_prof.asignacion_box_prof')
+
 @endsection
 
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
         $(document).ready(function () {
+            function calcularSaldoConsulta() {
+                let valorConsulta = parseFloat($('#bono_valor_consulta').val()) || 0;
+                let valorAbono = parseFloat($('#bono_valor_abono_consulta').val()) || 0;
+                let saldo = valorConsulta - valorAbono;
+
+                // Opcional: evita negativos si lo deseas
+                // saldo = saldo < 0 ? 0 : saldo;
+
+                $('#bono_valor_saldo_consulta').val(saldo);
+            }
+
+            // Escuchar cambios en ambos campos
+            $('#bono_valor_consulta, #bono_valor_abono_consulta').on('input', calcularSaldoConsulta);
             $('.mask_date').mask("dd/mm/0000", {
                 'translation': {
                     0: {pattern: /[0-9]/},

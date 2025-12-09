@@ -17,7 +17,7 @@
 		<div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white text-center">Revocación Consentimiento Informado </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<button type="button" class="close" onclick="$('#m_rev_cons').modal('hide')" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
             </div>

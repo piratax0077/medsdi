@@ -119,6 +119,7 @@ class ComprasController extends Controller
             'unidades_medidas' => $unidades_medidas,
             'bodegas' => $bodegas,
             'tipos_almacenamiento' => $tipos_almacenamiento,
+            'institucion' => $institucion,
         ]);
     }
 
@@ -301,11 +302,12 @@ class ComprasController extends Controller
 
     public function guardarItemFactura(Request $req){
         try {
+         
             // guardar el nuevo producto
             $producto_controlador = new ProductosController();
             if ($req->nuevo == "SI") {
                 $id_producto = $producto_controlador->guardarProducto($req);
-
+              
                 if($id_producto == false){
                     return ['mensaje' => 'El producto ya existe'];
                 }
@@ -483,7 +485,7 @@ class ComprasController extends Controller
         $detalle->id_compra = $req->id_compra;
         $detalle->id_producto = $producto->id;
         $detalle->fecha_compra = Carbon::now();
-        $detalle->precio_compra = $req->precio;
+        $detalle->precio_compra = $req->precio_compra;
         $detalle->cantidad = $req->cantidad;
         $detalle->id_unidad_medida = $req->unidad_medida;
         $detalle->lote = $req->lote;

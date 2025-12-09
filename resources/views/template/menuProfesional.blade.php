@@ -42,7 +42,7 @@
                     <li class="nav-item pcoded-hasmenu">
                         <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i class="feather icon-activity"></i></span><span class="pcoded-mtext text-center">Mis Herramientas</span></a>
                         <ul class="pcoded-submenu">
-                            <li><a onclick="menuValidarSalidaFicha('recetaonline_profesional.php', 'Receta online' );" >Receta online</a></li>
+                            <li><a onclick="menuValidarSalidaFicha('{{ route('profesional.index_receta_online') }}', 'Receta online' );" >Receta online</a></li>
                             <li><a onclick="menuValidarSalidaFicha('{{ route('profesional.mi_agenda') }}', 'Mi Agenda' );" >Mi Agenda</a></li>
                         </ul>
                     </li>
@@ -86,7 +86,7 @@
                     <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
                     <ul id="listado_patologias_paciente">
                         @foreach ($antecedentes as $a)
-                        @if($a->estado == 1 && $a->id_tipo_antecedente == 2)
+                        @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
                             <li>{{ $a->antecedente_data->nombre }}</li>
                         @endif
                          @endforeach
@@ -184,9 +184,9 @@
                     @endif --}}
                     <hr>
                     <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
-                    <ul id="listado_patologias_paciente">
+                    <ul  id="listado_patologias_paciente">
                         @foreach ($antecedentes as $a)
-                        @if($a->estado == 1 && $a->id_tipo_antecedente == 2)
+                        @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
                             <li>{{ $a->antecedente_data->nombre }}</li>
                         @endif
                          @endforeach

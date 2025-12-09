@@ -835,7 +835,7 @@
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
                                                         <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales({{ $director_cm->id }});" class="btn btn-info">Guardar Cambios</button>
                                                     </div>
                                                 </div>
                                             </form>

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Certificado de reposo</h5>
-                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close"><span
+                <button type="button" class="close text-white"  data-dismiss="modal" aria-label="Close" onclick="$('#modal_certificado_reposo').modal('hide')"><span
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -23,8 +23,8 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12 mb-1 mt-2">
-                            <p class="text-c-blue">El Profesional que suscribe certifica que este paciente debe permanecer en reposo</p>
+                        <div class="col-sm-12 col-md-12 mb-3 mt-2">
+                            <h6 class="text-c-blue">El Profesional que suscribe certifica que este paciente debe permanecer en reposo</h6>
                         </div>
                     </div>
                     <div class="form-row">
@@ -59,8 +59,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" onclick="registrar_cetificado_reposo();" class="btn btn-info">Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_certificado_reposo').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" onclick="registrar_cetificado_reposo();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>

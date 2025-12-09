@@ -9,9 +9,13 @@
             <p><strong>{{ $cuerpo['array_profesional']['nombre'] }}</strong></p>
             <p>{{ $cuerpo['array_profesional']['especialidad'] }}</p>
             <p>Rut: {{ $cuerpo['array_profesional']['rut'] }}</p>
-            <p>RCM: 00000-0</p>
-            <p>Arlegui 934, Viña del Mar</p>
-            <p>V región</p>
+            @if($cuerpo['array_profesional']['id_especialidad'] == 2)
+                <p>ICD: {{ $cuerpo['array_profesional']['num_colegio'] }}</p>
+            @else
+                <p>RCM: {{ $cuerpo['array_profesional']['num_colegio'] }}</p>
+            @endif
+            <p>{{ $cuerpo['array_lugar_atencion']['direccion'] }} </p>
+            <p>{{ $cuerpo['array_lugar_atencion']['region'] }}</p>
         </div>
     </div>
     <div class="contenido-encabezado-dos">

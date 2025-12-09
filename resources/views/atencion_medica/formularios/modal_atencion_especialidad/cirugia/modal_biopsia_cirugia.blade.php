@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
-                                <label class="floating-label">Nº de orden</label>
+                                <label class="floating-label-activo-sm">Nº de orden</label>
                                 <!-- Nº Orden -->
                                 <input type="number" class="form-control form-control-sm" name="n_orden_biopsia" id="n_orden_biopsia">
 
@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
-                                <label class="floating-label">Zona 1 de toma de muestra</label>
+                                <label class="floating-label-activo-sm">Zona 1 de toma de muestra</label>
                                 <input type="text" name="zona1" id="zona1" class="form-control form-control-sm">
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
-                                <label class="floating-label">Zona 2 de toma de muestra</label>
+                                <label class="floating-label-activo-sm">Zona 2 de toma de muestra</label>
                                 <input type="text" name="zona2" id="zona2" class="form-control form-control-sm">
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
-                                <label class="floating-label">Zona 3 de toma de muestra</label>
+                                <label class="floating-label-activo-sm">Zona 3 de toma de muestra</label>
                                 <input type="text" name="zona3" id="zona3" class="form-control form-control-sm">
                             </div>
                         </div>
@@ -69,19 +69,19 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
-                                <label class="floating-label">Zona 4 de toma de muestra</label>
+                                <label class="floating-label-activo-sm">Zona 4 de toma de muestra</label>
                                 <input type="text" name="zona4" id="zona4" class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
-                                <label class="floating-label">Patólogo o Laboratorio</label>
+                                <label class="floating-label-activo-sm">Patólogo o Laboratorio</label>
                                 <input type="text" name="patologo_biopsia" id="patologo_biopsia" class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
-                                <label class="floating-label">Observaciones</label>
+                                <label class="floating-label-activo-sm">Observaciones</label>
                                 <textarea class="form-control caja-texto form-control-sm mt-1" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_biopsia_orl" id="obs_biopsia_orl"></textarea>
                             </div>
                         </div>
@@ -122,6 +122,21 @@
 </div>
 
 <script>
+$(document).ready(function() {
+    // Inicializar la tabla de biopsias
+    $('#table_ex_biopsias').DataTable({
+        "language": {
+            "url": "{{ asset('js/Spanish.json') }}"
+        },
+        "order": [[0, "desc"]], // Ordenar por fecha descendente
+        "columnDefs": [
+            { "orderable": false, "targets": 5 } // Deshabilitar ordenamiento en la columna de acciones
+        ]
+    });
+
+    // Cargar los exámenes de biopsia al abrir el modal
+    dame_examenes_biopsia();
+});
 function guardar_biopsia() {
     let fecha = $('#fecha_biopsia').val();
     let n_orden = $('#n_orden_biopsia').val();
@@ -298,4 +313,30 @@ function ver_pdf_ex_biopsia(id){
     );
 }
 
+ function dame_examenes_biopsia(){
+            let id_ficha_atencion = $('#id_fc').val();
+            console.log(id_ficha_atencion);
+            let url = "{{ ROUTE('profesional.dame_examenes_biopsia') }}";
+
+            $.ajax({
+                type:'get',
+                data:{
+                    id_ficha_atencion: id_ficha_atencion,
+                },
+                url: url,
+                success: function(examenes){
+                    console.log(examenes);
+                    var tabla = $('#table_ex_biopsias').DataTable();
+                    tabla.clear().draw();
+                    if(examenes.length > 0){
+                        examenes.forEach(e => {
+                            agregarFilaBiopsia(e);
+                        });
+                    }
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
 </script>

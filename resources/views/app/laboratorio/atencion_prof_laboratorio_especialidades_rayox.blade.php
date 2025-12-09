@@ -38,10 +38,10 @@
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN LABORATORIO RADIOLOGIA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                <h6 class="mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -49,21 +49,16 @@
                                         $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
                                     {{ $fecha }}
-                                </p>
+                                </h6>
 
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            {{--  <div class="page-header-title">
-                                <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>  --}}
                         </div>
                     </div>
                 </div>
             </div>
             <!--Cierre: Header-->
             <!-- TAB ATENCIÓN -->
-            <div class="user-profile user-card pt-0">
+            <div class="user-profile user-card pt-0 mb-3">
                 <div class="card-body py-0">
                     <div class="user-about-block m-0">
                         <div class="row">
@@ -96,177 +91,168 @@
                 <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                 <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                 @csrf
+                <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+                    <div class="col-md-12 py-0 px-1 mt-n3">
+                        <div class="row mx-0">
+                                    <div class="col-md-12">
+                                        <div class="tab-content mt-3" id="at-tecn_orl">
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="tab-content" id="at-tecn_orl">
+                                            {{-- Atención General --}}
+                                            <div class="tab-pane fade show active" id="ficha_atenc_gral" role="tabpanel" aria-labelledby="ficha_atenc_gral-tab">
 
-                            {{-- Atención General --}}
-                            <div class="tab-pane fade show active" id="ficha_atenc_gral" role="tabpanel" aria-labelledby="ficha_atenc_gral-tab">
+                                                <div class="tab-content" id="tecn-orl-contenido">
+                                                    <!--ATENCIÓN ESPECIALIDAD GENERAL-->
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="card-a">
+                                                                <div class="card-header-a" id="sec_carga_archivo">
+                                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
+                                                                        DERIVADO POR
+                                                                    </button>
+                                                                </div>
+                                                                <div id="sec_carga_archivo_c" class="collapse show" aria-labelledby="sec_carga_archivo" data-parent="#sec_carga_archivo">
+                                                                    <div class="card-body-aten-a">
+                                                                        {{-- derivado  por --}}
+                                                                        <div class="form-row" style="display: ;">
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                                                                                <label class="floating-label-activo-sm">Fecha de examen</label>
+                                                                                <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="{{ date('Y-m-d') }}" readonly>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Examinador</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="Dr. {{ $profesional->apellido_uno }}" readonly>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                                                                                {{-- <label class="floating-label-activo-sm">Derivado por:</label> --}}
+                                                                                {{-- <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value=""> --}}
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-6">
+                                                                                        <input type="hidden" name="solicitado_id_profesional" id="solicitado_id_profesional" value="">
+                                                                                        <label class="floating-label-activo-sm">Derivado por RUT:</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="derivado_por_rut" id="derivado_por_rut" value=""
+                                                                                            onblur="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
+                                                                                            onkeyup="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
+                                                                                            oninput="formatoRut(this);"
+                                                                                        >
 
-                                <div class="tab-content" id="tecn-orl-contenido">
-                                    <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="sec_carga_archivo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
-                                                        DERIVADO POR
-                                                    </button>
-                                                </div>
-                                                <div id="sec_carga_archivo_c" class="collapse show" aria-labelledby="sec_carga_archivo" data-parent="#sec_carga_archivo">
-                                                    <div class="card-body-aten-a">
-                                                        {{-- derivado  por --}}
-                                                        <div class="form-row" style="display: ;">
-                                                            <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                                                                <label class="floating-label-activo-sm">Fecha de examen</label>
-                                                                <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="{{ date('Y-m-d') }}" readonly>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Examinador</label>
-                                                                <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="Dr. {{ $profesional->apellido_uno }}" readonly>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-12 col-lg-7 col-xl-7">
-                                                                {{-- <label class="floating-label-activo-sm">Derivado por:</label> --}}
-                                                                {{-- <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value=""> --}}
-                                                                <div class="row">
-                                                                    <div class="col-sm-6">
-                                                                        <input type="hidden" name="solicitado_id_profesional" id="solicitado_id_profesional" value="">
-                                                                        <label class="floating-label-activo-sm">Derivado por RUT:</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="derivado_por_rut" id="derivado_por_rut" value=""
-                                                                            onblur="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
-                                                                            onkeyup="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
-                                                                            oninput="formatoRut(this);"
-                                                                        >
+                                                                                    </div>
+                                                                                    <div class="col-sm-6">
+                                                                                        <label class="floating-label-activo-sm">Nombre:</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value="">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
+                                                                                        <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row mt-3" id="div_profesional_no_inscrito" style="display: none;">
 
-                                                                    </div>
-                                                                    <div class="col-sm-6">
-                                                                        <label class="floating-label-activo-sm">Nombre:</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value="">
-                                                                    </div>
-                                                                    <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
-                                                                        <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
+                                                                                    <div class="form-group col-md-3">
+                                                                                        <label class="floating-label-activo-sm">Nombre</label>
+                                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_nombre" id="solicitado_nombre" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-3">
+                                                                                        <label class="floating-label-activo-sm">Apellido</label>
+                                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_apellido" id="solicitado_apellido" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-3">
+                                                                                        <label class="floating-label-activo-sm">Telefono</label>
+                                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_telefono" id="solicitado_telefono" >
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-3">
+                                                                                        <label class="floating-label-activo-sm">Email</label>
+                                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_email" id="solicitado_email" >
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                                <label class="floating-label-activo-sm">Nombre paciente</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="nombre_pcte" id="nombre_pcte" value="{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}">
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Edad</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="edad" id="edad" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}" readonly>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                                                <label class="floating-label-activo-sm">Rut</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="rut" id="rut" value="{{ $paciente->rut }}">
+                                                                            </div>
+                                                                            <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                                                                <label class="floating-label-activo-sm">Dirección</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="direccion" id="direccion"
+                                                                                @if (isset($paciente))
+                                                                                    @if ($paciente->Direccion()->first() != null)
+                                                                                        value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}"
+                                                                                    @else
+                                                                                        value="NO HA REGISTRADO DIRECCIÓN !"
+                                                                                    @endif
+                                                                                @else
+                                                                                    value="NO HA REGISTRADO DIRECCIÓN !"
+                                                                                @endif
+                                                                                readonly>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                                                                                <label class="floating-label-activo-sm">Email</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="email" id="email" value="{{ $paciente->email }}" readonly>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row mt-3" id="div_profesional_no_inscrito" style="display: none;">
+                                                            </div>
+                                                        </div>
 
-                                                                    <div class="form-group col-md-3">
-                                                                        <label class="floating-label-activo-sm">Nombre</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_nombre" id="solicitado_nombre" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <label class="floating-label-activo-sm">Apellido</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_apellido" id="solicitado_apellido" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <label class="floating-label-activo-sm">Telefono</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_telefono" id="solicitado_telefono" >
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <label class="floating-label-activo-sm">Email</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_email" id="solicitado_email" >
-                                                                    </div>
 
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="card-a">
+                                                                <div class="card-header-a" id="sec_carga_archivo">
+                                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
+                                                                        INFORME RADIOLÓGICO
+                                                                    </button>
+                                                                </div>
+                                                                <div class="card-body-aten-a">
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <textarea class="form-control caja-texto form-control-sm mb-9"  rows="15"  onfocus="this.rows=15" onblur="this.rows=15;" name="informe_radio" id="informe_radio" placeholder="Informe de examen realizado"></textarea>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Nombre paciente</label>
-                                                                <input type="text" class="form-control form-control-sm" name="nombre_pcte" id="nombre_pcte" value="{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}">
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Edad</label>
-                                                                <input type="text" class="form-control form-control-sm" name="edad" id="edad" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}" readonly>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Rut</label>
-                                                                <input type="text" class="form-control form-control-sm" name="rut" id="rut" value="{{ $paciente->rut }}">
-                                                            </div>
-                                                            <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Dirección</label>
-                                                                <input type="text" class="form-control form-control-sm" name="direccion" id="direccion"
-                                                                @if (isset($paciente))
-                                                                    @if ($paciente->Direccion()->first() != null)
-                                                                        value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}"
-                                                                    @else
-                                                                        value="NO HA REGISTRADO DIRECCIÓN !"
-                                                                    @endif
-                                                                @else
-                                                                    value="NO HA REGISTRADO DIRECCIÓN !"
-                                                                @endif
-                                                                readonly>
-                                                            </div>
-                                                            <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Email</label>
-                                                                <input type="text" class="form-control form-control-sm" name="email" id="email" value="{{ $paciente->email }}" readonly>
+                                                        </div>
+
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="card-a">
+                                                                <div class="card-header-a" id="sec_carga_archivo">
+                                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
+                                                                        CARGA DE ARCHIVOS
+                                                                    </button>
+                                                                </div>
+                                                                <div id="sec_carga_archivo_c" class="collapse show" aria-labelledby="sec_carga_archivo" data-parent="#sec_carga_archivo">
+                                                                    <div class="card-body-aten-a pb-3">
+                                                                        <div class="row">
+                                                                            <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <!-- [ Main Content ] start -->
+                                                                                <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
+                                                                                </div>
+                                                                                <!-- [ file-upload ] end -->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="sec_carga_archivo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
-                                                        INFORME RADIOLÓGICO
-                                                    </button>
-                                                </div>
-                                                <div class="card-body-aten-a">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <ul>
-                                                                @foreach ($procedimientoCentro as $procedimiento)
-                                                                    <li>{{ $procedimiento->nombre }}</li>
-                                                                @endforeach
-                                                            </ul>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <textarea class="form-control caja-texto form-control-sm mb-9"  rows="15"  onfocus="this.rows=15" onblur="this.rows=15;" name="informe_radio" id="informe_radio" placeholder="Informe de examen realizado"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            {{-- atenciones previas --}}
+                                            <div class="tab-pane fade show " id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                                             </div>
-                                        </div>
 
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="sec_carga_archivo">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
-                                                        CARGA DE ARCHIVOS
-                                                    </button>
-                                                </div>
-                                                <div id="sec_carga_archivo_c" class="collapse show" aria-labelledby="sec_carga_archivo" data-parent="#sec_carga_archivo">
-                                                    <div class="card-body-aten-a">
-                                                        <div class="row">
-                                                            <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                <!-- [ Main Content ] start -->
-                                                                <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
-                                                                </div>
-                                                                <!-- [ file-upload ] end -->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            {{-- atenciones previas --}}
-                            <div class="tab-pane fade show " id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
+               
 
 
                 <div class="row">
@@ -280,6 +266,9 @@
                         </div>
                     </div>
                 </div>
+                             </div>
+                </div>
+
             </form>
         </div>
     </div>
@@ -413,8 +402,8 @@
             },
 
             acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
-            maxFilesize: 25,
-            maxFiles: 10,
+            maxFilesize: 4,
+            maxFiles: 4,
             /** El texto utilizado antes de que se eliminen los archivos. */
             dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 

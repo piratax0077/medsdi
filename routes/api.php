@@ -15,6 +15,7 @@ use App\Http\Controllers\DentalController;
 use App\Http\Controllers\CentroMedicoController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,7 +27,7 @@ use App\Http\Controllers\CentroMedicoController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -94,6 +95,8 @@ Route::post('/insertPaciente', [DentalController::class, 'insertPaciente'])->nam
 Route::get('/buscar_ciudad_region', [App\Http\Controllers\DentalController::class, 'buscar_ciudad_region'])->name('api.buscar_ciudad_region');
 Route::get('/dame_regiones', [App\Http\Controllers\DentalController::class, 'dameRegiones'])->name('api.dame_regiones');
 Route::get('/buscar_paciente', [App\Http\Controllers\DentalController::class, 'buscarPaciente'])->name('api.buscar_paciente');
+Route::get('/buscar_paciente_hora_medica', [App\Http\Controllers\DentalController::class, 'buscarPacienteHoraMedica'])->name('api.buscar_paciente_hora_medica');
+Route::post('/agendar_hora_medica', [App\Http\Controllers\DentalController::class, 'agendarHoraMedica'])->name('api.agendar_hora_medica');
 Route::get('/horas_medicas_profesional_lugar_atencion', [App\Http\Controllers\DentalController::class, 'horas_medicas_profesional_lugar_atencion'])->name('api.horas_medicas_profesional_lugar_atencion');
 Route::get('/horas_disponibles_profesional_lugar_atencion', [App\Http\Controllers\DentalController::class, 'horasDisponiblesProfesionalLugarAtencionBuscador'])->name('api.HorasDisponiblesProfesionalLugarAtencionBuscador');
 Route::post('/buscar_profesionales_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesional'])->name('api.buscar_profesionales_cm');
@@ -111,6 +114,41 @@ Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
 Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
 Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
 
+
+/** PACIENTE */
+// Route::middleware(['auth:api'])->group(function () {
+//     Route::get('/paciente/mi_ficha_medica', [App\Http\Controllers\AppPacienteController::class, 'getMiFichaMedica']);
+//     Route::get('/paciente/mis_profesionales', [App\Http\Controllers\AppPacienteController::class, 'getMisProfesionales']);
+//     Route::get('/paciente/mis_horas_medicas', [App\Http\Controllers\AppPacienteController::class, 'getMisHorasMedicas']);
+// });
+
+Route::get('/paciente/mi_ficha_medica', [App\Http\Controllers\AppPacienteController::class, 'getMiFichaMedica']);
+Route::get('/paciente/mis_profesionales', [App\Http\Controllers\AppPacienteController::class, 'getMisProfesionales']);
+Route::get('/paciente/mis_horas_medicas', [App\Http\Controllers\AppPacienteController::class, 'getMisHorasMedicas']);
+Route::post('/paciente/guardar_atencion_medica', [App\Http\Controllers\AppPacienteController::class, 'guardarAtencionMedica']);
+Route::get('/profesionales/especialidades', [App\Http\Controllers\AppPacienteController::class, 'getEspecialidadesProfesionales']);
+Route::get('/profesionales/tipo_especialidades', [App\Http\Controllers\AppPacienteController::class, 'getTipoEspecialidadesProfesionales']);
+Route::get('/profesionales/sub_tipo_especialidades', [App\Http\Controllers\AppPacienteController::class, 'getSubTipoEspecialidadesProfesionales']);
+Route::post('/profesionales/buscar_profesionales', [App\Http\Controllers\AppPacienteController::class, 'buscarProfesionales']);
+Route::get('/profesionales/perfil_profesional', [App\Http\Controllers\AppPacienteController::class, 'getPerfilProfesional']);
+
+//RECETAS ONLINE
+Route::get('/paciente/mis_examenes', [App\Http\Controllers\AppPacienteController::class, 'getMisExamenes']);
+Route::get('/paciente/mis_recetas', [App\Http\Controllers\AppPacienteController::class, 'getMisRecetas']);
+Route::get('/paciente/mis_licencias', [App\Http\Controllers\AppPacienteController::class, 'getMisLicencias']);
+Route::get('/paciente/mis_certificados', [App\Http\Controllers\AppPacienteController::class, 'getMisCertificados']);
+Route::get('/paciente/mis_documentos', [App\Http\Controllers\AppPacienteController::class, 'getMisDocumentos']);
+Route::get('/paciente/mis_controles', [App\Http\Controllers\AppPacienteController::class, 'getMisControles']);
+
+
+Route::get('/profesionales/mis_lugares_atencion', [App\Http\Controllers\AppPacienteController::class, 'getLugaresAtencionProfesional']);
+Route::get('/profesionales/dias_laborales_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getDiasLaboralesLugarAtencionProfesional']);
+Route::get('/profesionales/horas_disponibles_profesional_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getHorasDisponiblesProfesionalLugarAtencionBuscador']);
+Route::post('/paciente/agendar_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'agendarHoraMedica']);
+Route::post('/paciente/anular_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'anularHoraMedica']);
+Route::post('/paciente/confirmar_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'confirmarHoraMedica']);
+Route::get('/paciente/dame_regiones', [App\Http\Controllers\AppPacienteController::class, 'dameRegiones']);
+Route::get('/paciente/dame_ciudades', [App\Http\Controllers\AppPacienteController::class, 'dameCiudades']);
 
 
 //  Escritorio Paciente
@@ -152,3 +190,151 @@ Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlama
 
 
 Route::get('/Ficha_atencion_sub_tipo', [App\Http\Controllers\ficha_atencionController::class, 'get_sub_tipo_examen']);
+
+Route::get('/llamados/televisor/{idTelevisor}', 'App\Http\Controllers\LlamadoPacienteController@getLlamadosPorTelevisor');
+
+// =================== DEBUG AUTH:API MIDDLEWARE ===================
+
+// 1. RUTA SIN MIDDLEWARE (para comparar)
+Route::get('/debug-sin-auth', function (Request $request) {
+    return response()->json([
+        'mensaje' => 'Ruta SIN middleware auth:api funcionando',
+        'timestamp' => now(),
+        'headers' => [
+            'authorization' => $request->header('Authorization'),
+            'x_auth_token' => $request->header('X-Auth-Token'),
+        ]
+    ]);
+});
+
+// 2. RUTA CON MIDDLEWARE auth:api (para probar si funciona)
+Route::middleware(['auth:api'])->get('/debug-con-auth-api', function (Request $request) {
+    return response()->json([
+        'mensaje' => 'Middleware auth:api FUNCIONANDO',
+        'user_id' => $request->user() ? $request->user()->id : null,
+        'user_email' => $request->user() ? $request->user()->email : null,
+        'timestamp' => now(),
+        'headers' => [
+            'authorization' => $request->header('Authorization'),
+            'x_auth_token' => $request->header('X-Auth-Token'),
+        ]
+    ]);
+});
+
+// 3. RUTA CON MIDDLEWARE auth:sanctum (alternativa)
+Route::middleware(['auth:sanctum'])->get('/debug-con-auth-sanctum', function (Request $request) {
+    return response()->json([
+        'mensaje' => 'Middleware auth:sanctum FUNCIONANDO',
+        'user_id' => $request->user() ? $request->user()->id : null,
+        'user_email' => $request->user() ? $request->user()->email : null,
+        'timestamp' => now(),
+        'headers' => [
+            'authorization' => $request->header('Authorization'),
+            'x_auth_token' => $request->header('X-Auth-Token'),
+        ]
+    ]);
+});
+
+// 4. RUTA PARA PROBAR ESPECÍFICAMENTE EL MIDDLEWARE auth:api PASO A PASO
+Route::get('/debug-auth-paso-a-paso', function (Request $request) {
+    try {
+        $resultados = [];
+        
+        // Paso 1: Headers
+        $resultados['paso1_headers'] = [
+            'authorization' => $request->header('Authorization'),
+            'x_auth_token' => $request->header('X-Auth-Token'),
+            'bearer_token' => $request->bearerToken(),
+        ];
+        
+        // Paso 2: Verificar guards
+        try {
+            $resultados['paso2_auth_api_check'] = auth('api')->check();
+        } catch (\Exception $e) {
+            $resultados['paso2_auth_api_check'] = 'ERROR: ' . $e->getMessage();
+        }
+        
+        try {
+            $resultados['paso3_auth_sanctum_check'] = auth('sanctum')->check();
+        } catch (\Exception $e) {
+            $resultados['paso3_auth_sanctum_check'] = 'ERROR: ' . $e->getMessage();
+        }
+        
+        // Paso 4: Intentar obtener usuario
+        try {
+            $user = auth('api')->user();
+            $resultados['paso4_auth_api_user'] = $user ? 'Usuario encontrado: ' . $user->email : 'Usuario no encontrado';
+        } catch (\Exception $e) {
+            $resultados['paso4_auth_api_user'] = 'ERROR: ' . $e->getMessage();
+        }
+        
+        return response()->json([
+            'mensaje' => 'Debug auth paso a paso completado',
+            'resultados' => $resultados,
+            'timestamp' => now(),
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error en debug paso a paso',
+            'mensaje' => $e->getMessage(),
+            'linea' => $e->getLine(),
+        ], 500);
+    }
+});
+
+// =================== FIN DEBUG AUTH:API MIDDLEWARE ===================
+
+// RUTAS PARA FICHA DE ATENCIÓN APP - SIN MIDDLEWARE (autenticación manual en controlador)
+// Crear nueva ficha de atención
+Route::post('/paciente/ficha-atencion-app', [App\Http\Controllers\FichaAtencionAppController::class, 'store']);
+
+// Obtener fichas por paciente
+Route::get('/paciente/ficha-atencion-app/{idPaciente}', [App\Http\Controllers\FichaAtencionAppController::class, 'getFichasPorPaciente']);
+
+// Obtener fichas por profesional
+Route::get('/paciente/ficha-atencion-app/profesional/{rutProfesional}', [App\Http\Controllers\FichaAtencionAppController::class, 'getFichasPorProfesional']);
+
+// Obtener ficha por token
+Route::get('/paciente/ficha-atencion-app/token/{token}', [App\Http\Controllers\FichaAtencionAppController::class, 'getFichaPorToken']);
+
+// Actualizar ficha
+Route::put('/paciente/ficha-atencion-app/{id}', [App\Http\Controllers\FichaAtencionAppController::class, 'update']);
+
+// Desactivar ficha
+Route::delete('/paciente/ficha-atencion-app/{id}', [App\Http\Controllers\FichaAtencionAppController::class, 'destroy']);
+
+// RUTA DE PRUEBA PARA FICHA ATENCIÓN APP (SIN AUTENTICACIÓN)
+Route::post('/test-ficha-atencion-app', function (Request $request) {
+    try {
+        // Datos de ejemplo basados en tu JSON
+        $datosPrueba = [
+            'id_paciente' => $request->input('id_paciente', '3'),
+            'rut_profesional' => $request->input('rut_profesional', '17.174.188-2'),
+            'nombre_profesional' => $request->input('nombre_profesional', 'francisco rojo'),
+            'correo_profesional' => $request->input('correo_profesional', 'francisco@gmail.com'),
+            'telefono_profesional' => $request->input('telefono_profesional', '56932659812d'),
+            'especialidad' => $request->input('especialidad'),
+            'tipo_especialidad' => $request->input('tipo_especialidad'),
+            'sub_tipo_especialidad' => $request->input('sub_tipo_especialidad'),
+            'diagnosticos' => $request->input('diagnosticos', 'qwdwq'),
+            'examenes' => $request->input('examenes', 'examenes'),
+            'medicamentos' => $request->input('medicamentos', 'aspirina'),
+            'rut_dependiente' => $request->input('rut_dependiente'),
+            'token' => $request->input('token', 'test-token-' . time()),
+        ];
+
+        $controller = new App\Http\Controllers\FichaAtencionAppController();
+        $requestTest = new Request($datosPrueba);
+        
+        return $controller->store($requestTest);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error en prueba',
+            'error' => $e->getMessage(),
+            'line' => $e->getLine(),
+        ], 500);
+    }
+});

@@ -373,6 +373,122 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+    public function verHorarioEmpleadoLaboratorio(Request $request)
+     {
+        $datos = array();
+        $filtro = array();
+        $valido = 1;
+        $error = array();
+
+        if(empty($request->id_empleado))
+        {
+            $error['id_empleado'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->tipo_empleado))
+        {
+            $error['tipo_empleado'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido == 1)
+        {
+            if(!empty($request->id))
+                $filtro[] = array('id',$request->id);
+            if(!empty($request->tipo_empleado))
+                $filtro[] = array('tipo_empleado',$request->tipo_empleado);
+            if(!empty($request->id_empleado))
+                $filtro[] = array('id_empleado',$request->id_empleado);
+            if(!empty($request->id_institucion))
+                $filtro[] = array('id_institucion',$request->id_institucion);
+            if(!empty($request->id_lugar_atencion))
+                $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+            if(!empty($request->tipo_contrato))
+                $filtro[] = array('tipo_contrato',$request->tipo_contrato);
+            if(!empty($request->fecha_inicio))
+                $filtro[] = array('fecha_inicio',$request->fecha_inicio);
+            if(!empty($request->fecha_termino))
+                $filtro[] = array('fecha_termino',$request->fecha_termino);
+            if($request->monto_imponible != '')
+                $filtro[] = array('monto_imponible',$request->monto_imponible);
+            if($request->locomocion != '')
+                $filtro[] = array('locomocion',$request->locomocion);
+            if(!empty($request->locomocion_porcentaje))
+                $filtro[] = array('locomocion_porcentaje',$request->locomocion_porcentaje);
+            if($request->colacion != '')
+                $filtro[] = array('colacion',$request->colacion);
+            if(!empty($request->colacion_porcentaje))
+                $filtro[] = array('colacion_porcentaje',$request->colacion_porcentaje);
+            if($request->asignacion_familiar != '')
+                $filtro[] = array('asignacion_familiar',$request->asignacion_familiar);
+            if(!empty($request->asignacion_familiar_cantidad))
+                $filtro[] = array('asignacion_familiar_cantidad',$request->asignacion_familiar_cantidad);
+            if($request->caja_compensacion != '')
+                $filtro[] = array('caja_compensacion',$request->caja_compensacion);
+            if(!empty($request->caja_compensacion_porcentaje))
+                $filtro[] = array('caja_compensacion_porcentaje',$request->caja_compensacion_porcentaje);
+            if(!empty($request->otro))
+                $filtro[] = array('otro',$request->otro);
+            if(!empty($request->dias_laborales))
+                $filtro[] = array('dias_laborales',$request->dias_laborales);
+            if(!empty($request->hora_ingreso))
+                $filtro[] = array('hora_ingreso',$request->hora_ingreso);
+            if(!empty($request->hora_salida))
+                $filtro[] = array('hora_salida',$request->hora_salida);
+            if(!empty($request->hora_inicio_colacion))
+                $filtro[] = array('hora_inicio_colacion',$request->hora_inicio_colacion);
+            if(!empty($request->hora_termino_colacion))
+                $filtro[] = array('hora_termino_colacion',$request->hora_termino_colacion);
+            if(!empty($request->fecha_creacion))
+                $filtro[] = array('fecha_creacion',$request->fecha_creacion);
+            if(!empty($request->id_admin_creador))
+                $filtro[] = array('id_admin_creador',$request->id_admin_creador);
+            if(!empty($request->id_tipo_admin_creador))
+                $filtro[] = array('id_tipo_admin_creador',$request->id_tipo_admin_creador);
+            if(!empty($request->texto_contrato))
+                $filtro[] = array('texto_contrato',$request->texto_contrato);
+            if(!empty($request->pdf_base))
+                $filtro[] = array('pdf_base',$request->pdf_base);
+            if($request->estado_firmado != '')
+                $filtro[] = array('estado_firmado',$request->estado_firmado);
+            if(!empty($request->pdf_firmado))
+                $filtro[] = array('pdf_firmado',$request->pdf_firmado);
+            if($request->estado_inspeccion_trabajo != '')
+                $filtro[] = array('estado_inspeccion_trabajo',$request->estado_inspeccion_trabajo);
+            if(!empty($request->otro_2))
+                $filtro[] = array('otro_2',$request->otro_2);
+            if(!empty($request->estado))
+                $filtro[] = array('estado',$request->estado);
+
+            $registros = ContratoDependiente::select('id','tipo_empleado','id_empleado','id_institucion','id_lugar_atencion','dias_laborales','hora_ingreso','hora_salida','hora_inicio_colacion','hora_termino_colacion')
+                                        ->where($filtro)
+                                        ->with(['Historico' => function ($query){
+                                            $query->select('id_contrato', 'id_user', 'data', 'fecha', 'hora', 'tipo_verificacion_usuario', 'codigo_verificacion_usuario', 'fecha_codigo_usuario', 'tipo_verificacion_tercero', 'codigo_verificacion_tercero', 'fecha_codigo_tercero', 'procesado' );
+                                        }])
+                                        ->get();
+            if($registros)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+                $datos['filtro'] = $filtro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+                $datos['request'] = $request->all();
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
     public function verHorarioEmpleadoAdmin(Request $request)
     {
         $datos = array();
@@ -897,7 +1013,7 @@ class ManejoContratoController extends Controller
     /** REGISTRO NUEVO  */
     public function registrarPersonal(Request $request)
     {
-
+        
         $datos = array();
         $error = array();
         $valido = 1;
@@ -992,7 +1108,418 @@ class ManejoContratoController extends Controller
             }
             else if(in_array((strtoupper($request->tipo_contrato)), $lista_tipo_admi_inst_serv))
             {
+             
                 $result_registro_perfil_administrativo = static::registroPerfilAdministrativo($request);
+               
+                $datos['result_registro_perfil'] = $result_registro_perfil_administrativo;
+
+                if($result_registro_perfil_administrativo['estado'] == 1){
+                    $id_admin = $result_registro_perfil_administrativo['result']->id_administrativo;
+                    $id_admin_user = $result_registro_perfil_administrativo['result']->id_administrativo_usuario;
+
+                    /** CREAR CONTRATO */
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                        {
+                        $lista_roles = $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+
+                    /**
+                     * # TIPOS DE CONTRATOS DEPENDIENTES
+                     * 1. CONTRATO INDEFINIDO
+                     * 2. CONTRATO DEFINIDO
+                     * */
+                    $tipo_contrato = 1;
+                    if(!empty($fecha_termino))
+                        $tipo_contrato = 2;
+
+                    $id_empleado = $id_admin;
+
+                    $registro_contrato = static::registrarContrato( $request->tipo_contrato,0,$id_empleado, $request->rut, $request->nombre, $request->apellido_uno, $request->apellido_dos, $request->telefono, $request->email, $request->id_institucion, $request->id_lugar_atencion, $tipo_contrato, $request->fecha_inicio, $request->fecha_termino, $request->monto_imponible, $request->locomocion, $request->locomocion_porcentaje, $request->colacion, $request->colacion_porcentaje, $request->asignacion_familiar, $request->asignacion_familiar_cantidad, $request->caja_compensacion, $request->caja_compensacion_porcentaje, $request->otro, implode(',', $request->dias_laborales), $request->hora_entrada, $request->hora_salida, $request->hora_entrada_colacion, $request->hora_salida_colacion, date('Y-m-d') , Auth::user()->id, $lista_roles, '','', 0, 0, 0, $request->otro_2, 2);
+                    $datos['registro_contrato'] = $registro_contrato;
+
+                    if($registro_contrato->estado == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Contrato generado';
+
+                        // relacion de personal con institucion (administrativo)
+                        $administrativo_lugar_atencion = new AdminLugarAtencion();
+                        $administrativo_lugar_atencion->id_admin = $id_admin;
+                        $administrativo_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                        $administrativo_lugar_atencion->token = $request->clave_ingreso;
+                        $administrativo_lugar_atencion->id_profesional = NULL;
+                        $administrativo_lugar_atencion->id_institucion = $request->id_institucion;
+                        $administrativo_lugar_atencion->estado = 1;
+
+                        if($administrativo_lugar_atencion->save())
+                        {
+                            $datos['asignacion']['estado'] = 1;
+                            $datos['asignacion']['msj'] = 'Asignacion de administrativo exitosa';
+                        }
+                        else
+                        {
+                            $datos['asignacion']['estado'] = 0;
+                            $datos['asignacion']['msj'] = 'Asignacion de administrativo fallida';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al generar contrato';
+                    }
+
+                }else{
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema con el perfil del Empleado';
+
+                }
+            }
+            else if(in_array((strtoupper($request->tipo_contrato)), $lista_tipo_mantencion))
+            {
+                $result_registro_perfil_mantencion = static::registroPerfilMantencion($request);
+                $datos['result_registro_perfil'] = $result_registro_perfil_mantencion;
+
+                if($result_registro_perfil_mantencion['estado'] == 1){
+                    $id_mantencion = $result_registro_perfil_mantencion['result']->id_mantencion;
+                    $id_mantencion_user = $result_registro_perfil_mantencion['result']->id_mantencion_usuario;
+
+                    /** CREAR CONTRATO */
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                        {
+                        $lista_roles = $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+
+                    /**
+                     * # TIPOS DE CONTRATOS DEPENDIENTES
+                     * 1. CONTRATO INDEFINIDO
+                     * 2. CONTRATO DEFINIDO
+                     * */
+                    $tipo_contrato = 1;
+                    if(!empty($fecha_termino))
+                        $tipo_contrato = 2;
+
+                    $id_empleado = $id_mantencion;
+
+                    $registro_contrato = static::registrarContrato( $request->tipo_contrato,$request->tipo_mantenedor, $id_empleado, $request->rut, $request->nombre, $request->apellido_uno, $request->apellido_dos, $request->telefono, $request->email, $request->id_institucion, $request->id_lugar_atencion, $tipo_contrato, $request->fecha_inicio, $request->fecha_termino, $request->monto_imponible, $request->locomocion, $request->locomocion_porcentaje, $request->colacion, $request->colacion_porcentaje, $request->asignacion_familiar, $request->asignacion_familiar_cantidad, $request->caja_compensacion, $request->caja_compensacion_porcentaje, $request->otro, implode(',', $request->dias_laborales), $request->hora_entrada, $request->hora_salida, $request->hora_entrada_colacion, $request->hora_salida_colacion, date('Y-m-d') , Auth::user()->id, $lista_roles, '','', 0, 0, 0, $request->otro_2, 2);
+                    $datos['registro_contrato'] = $registro_contrato;
+
+                    if($registro_contrato->estado == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Contrato generado';
+
+                        // relacion de personal con institucion (mantencion)
+                        $mantencion_lugar_atencion = new MantencionLugarAtencion();
+                        $mantencion_lugar_atencion->id_admin = $id_mantencion;
+                        $mantencion_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                        $mantencion_lugar_atencion->token = $request->clave_ingreso;
+                        $mantencion_lugar_atencion->id_profesional = NULL;
+                        $mantencion_lugar_atencion->id_institucion = $request->id_institucion;
+                        $mantencion_lugar_atencion->estado = 1;
+
+                        if($mantencion_lugar_atencion->save())
+                        {
+                            $datos['asignacion']['estado'] = 1;
+                            $datos['asignacion']['msj'] = 'Asignacion de mantencion exitosa';
+                        }
+                        else
+                        {
+                            $datos['asignacion']['estado'] = 0;
+                            $datos['asignacion']['msj'] = 'Asignacion de mantencion fallida';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al generar contrato';
+                    }
+
+                }else{
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema con el perfil del Empleado';
+
+                }
+
+
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Contrato no manejado por el momento';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        /** CARGA DE ASISTENTES */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_asistente = array();
+        if($LugarAtencion)
+        {
+            $lista_asistente = $LugarAtencion->AsistenteIntitucion()->get();
+
+            if($lista_asistente)
+            {
+                foreach ($lista_asistente as $key => $value)
+                {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_usuario)->first();
+
+                    $roles = $usuario->roles()->get();
+
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_asistente[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_asistente[$key]->roles = '';
+
+                    /** tipo asistente */
+                    $lista_asistente[$key]->asistente_tipo = AsistenteTipo::find($value->id_asistente_tipo);
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_asistente[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                }
+            }
+        }
+        /** FIN CARGA DE ASISTENTES */
+        $view = view("app.general.asistente.contenedor_asistentes_cm",compact('institucion','tipo_institucion','responsable','lista_asistente'))->render();
+        $datos['asistentes'] = $lista_asistente;
+        $datos['view'] = $view;
+
+        return $datos;
+    }
+
+    /** REGISTRO DE NUEVO PERSONAL LABORATORIO */
+    public function registrarPersonalLaboratorio(Request $request){
+        
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        /** VALIDAR EXISTENCIA DE CONTRATO ACTUAL ACTIVO */
+        $validacion_contrato = ContratoDependiente::where('email', $request->email)->whereIn('estado', [1,2,3])->get();
+        if($validacion_contrato->count() > 0)
+        {
+            $error['validacion_contrado'] = 'El Email esta siendo utilizado en un contrato (Nuevo, Activo o Vencido), valide la información.';
+            // $error['info'] = $validacion_contrato;
+            // $error['count'] = $validacion_contrato->count();
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO');
+            $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO','CONTADOR','ENCARGADO DE BODEGA');
+            $lista_tipo_mantencion = array('GASFITERÍA', 'ELECTRICIDAD', 'CARPINTERÍA', 'PINTURA', 'JARDINERÍA', 'LIMPIEZA', 'MANTENCIÓN');
+
+            /** registro asistente */
+            if(in_array($request->tipo_contrato, $lista_tipo_asitente))
+            {
+              
+                $result_registro_perfil = static::registroPerfil($request);
+               
+                $datos['result_registro_perfil'] = $result_registro_perfil;
+
+                if( $result_registro_perfil->estado == 1)
+                {
+
+                    $id_empleado = $result_registro_perfil->result->id;
+                    $id_empleado_user = $result_registro_perfil->result->id_user;
+
+                    /** CREAR CONTRATO */
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                        {
+                        $lista_roles = $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+
+                    /**
+                     * # TIPOS DE CONTRATOS DEPENDIENTES
+                     * 1. CONTRATO INDEFINIDO
+                     * 2. CONTRATO DEFINIDO
+                     * */
+                    $tipo_contrato = 1;
+                    if(!empty($fecha_termino))
+                        $tipo_contrato = 2;
+
+                    $registro_contrato = static::registrarContrato( $request->tipo_contrato,$request->tipo_mantenedor, $id_empleado, $request->rut, $request->nombre, $request->apellido_uno, $request->apellido_dos, $request->telefono, $request->email, $request->id_institucion, $request->id_lugar_atencion, $tipo_contrato, $request->fecha_inicio, $request->fecha_termino, $request->monto_imponible, $request->locomocion, $request->locomocion_porcentaje, $request->colacion, $request->colacion_porcentaje, $request->asignacion_familiar, $request->asignacion_familiar_cantidad, $request->caja_compensacion, $request->caja_compensacion_porcentaje, $request->otro, implode(',', $request->dias_laborales), $request->hora_entrada, $request->hora_salida, $request->hora_entrada_colacion, $request->hora_salida_colacion, date('Y-m-d') , Auth::user()->id, $lista_roles, '','', 0, 0, 0, $request->otro_2, 2);
+                  
+                    $datos['registro_contrato'] = $registro_contrato;
+
+                    if($registro_contrato->estado == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Contrato generado';
+
+                        // relacion de personal con institucion (asistente)
+                        $asistente_lugar_atencion = new AsistenteLugarAtencion();
+                        $asistente_lugar_atencion->id_asistente = $id_empleado;
+                        $asistente_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                        $asistente_lugar_atencion->token = $request->clave_ingreso;
+                        $asistente_lugar_atencion->id_profesional = NULL;
+                        $asistente_lugar_atencion->id_institucion = $request->id_institucion;
+                        $asistente_lugar_atencion->estado = 1;
+
+                        if($asistente_lugar_atencion->save())
+                        {
+                            $datos['asignacion']['estado'] = 1;
+                            $datos['asignacion']['msj'] = 'Asignacion de asistente exitosa';
+                        }
+                        else
+                        {
+                            $datos['asignacion']['estado'] = 0;
+                            $datos['asignacion']['msj'] = 'Asignacion de asistente fallida';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al generar contrato';
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema con el perfil del Empleado';
+                }
+            }
+            else if(in_array((strtoupper($request->tipo_contrato)), $lista_tipo_admi_inst_serv))
+            {
+             
+                $result_registro_perfil_administrativo = static::registroPerfilAdministrativo($request);
+               
                 $datos['result_registro_perfil'] = $result_registro_perfil_administrativo;
 
                 if($result_registro_perfil_administrativo['estado'] == 1){
@@ -2275,6 +2802,7 @@ class ManejoContratoController extends Controller
 
     static public function registroPerfil($registros)
     {
+   
         $datos = array();
         $error = array();
         $valido = 1;
@@ -2349,6 +2877,7 @@ class ManejoContratoController extends Controller
             $rol_asignar = '';
             $id_asistente = 0;
             $id_asistente_user = 0;
+          
             switch ($registros->tipo_contrato) {
                 case 'ASISTENTE PUBLICO':
                     if($tipo == 0){
@@ -2382,8 +2911,8 @@ class ManejoContratoController extends Controller
                     }
                 case 'ASISTENTE LABORATORIO':
                     if($tipo == 0){
-                        $rol_asignar = 'Asistente Laboratorio';
-                        $tipo = 12;
+                        $rol_asignar = 'AsistenteLaboratorio';
+                        $tipo = 14;
                     }
 
                     $validar_asistente = Asistente::where('email', $registros->email)->first();
@@ -2887,7 +3416,7 @@ class ManejoContratoController extends Controller
                 $registro_administrativo->telefono_uno = $registros->telefono;
                 $registro_administrativo->telefono_dos = '';
                 $registro_administrativo->estado = 1;
-
+              
                 $registro_administrativo->id_admin = (empty($id_asistente_user))?0:$id_asistente_user;
 
                 $direccion = new Direccion();
@@ -2926,10 +3455,12 @@ class ManejoContratoController extends Controller
                         {
                             $datos['user']['estado'] = 1;
                             $datos['user']['result'] = $administrativo_user;
+                            // buscamos el rol
+                            $rol = Roles::where('alias','like', '%'.$registros->tipo_contrato)->first();
+                            
                             /** asignando rol de adminstrador de institucion */
                             // se asigna el rol dependiendo del tipo de contrato que viene en el request
-                            $administrativo_user->assignRole(2);
-                            $administrativo_user->assignRole(23);
+                            $administrativo_user->assignRole($rol->id);
                             $id_administrativo_user = $administrativo_user->id;
 
                             // asignamos el usuario al profesional
@@ -3556,15 +4087,15 @@ class ManejoContratoController extends Controller
         if(Auth::user()->id == 3)
         {
             $id_busqueda = 5;
-            $registro_ = Instituciones::where('id', $id_busqueda)->first();
+            $registro = Instituciones::where('id', $id_busqueda)->first();
         }
         else
         {
-            $registro_ = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
 
-        if($registro_){
-            $LugarAtencion = LugarAtencion::where('id',$registro_->id_lugar_atencion)->first();
+        if($registro){
+            $LugarAtencion = LugarAtencion::where('id',$registro->id_lugar_atencion)->first();
             $filtro = array();
             $filtro[] = array('id_profesional',$request->id_empleado);
             $filtro[] = array('id_lugar_atencion',$LugarAtencion->id);
@@ -4018,6 +4549,110 @@ class ManejoContratoController extends Controller
     public function registrarProfesional(Request $request)
     {
         $datos = array();
+        $error = array();
+        $valido = 1;
+        /** VALIDAR EXISTENCIA DE CONTRATO ACTUAL ACTIVO */
+        $validacion_contrato = ContratoDependienteProfesional::where('email', $request->email)->whereIn('estado', [1,2,3])->get();
+        if($validacion_contrato->count() > 0)
+        {
+            $error['validacion_contrado'] = 'El Email esta siendo utilizado en un contrato (Nuevo, Activo o Vencido), valide la información.';
+            // $error['info'] = $validacion_contrato;
+            // $error['count'] = $validacion_contrato->count();
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $result_registro_perfil = static::registroPerfilProfesional($request);
+
+            if($result_registro_perfil['estado'] == 1){
+
+                $id_profesional = $result_registro_perfil['result']->id_profesional;
+                $id_profesional_usuario = $result_registro_perfil['result']->id_profesional_usuario;
+
+                /** CREAR CONTRATO */
+                $registro = User::find(Auth::user()->id);
+                $roles = $registro->roles()->get();
+                $lista_roles = '';
+                foreach ($roles as $key => $value)
+                    {
+                    $lista_roles = $value->id.'|';
+                }
+                $lista_roles = substr($lista_roles, 0, -1);
+                /**
+                 * # TIPOS DE CONTRATOS DEPENDIENTES
+                 * 1. CONTRATO INDEFINIDO
+                 * 2. CONTRATO DEFINIDO
+                 * */
+                $tipo_contrato = 1;
+                if(!empty($request->fecha_termino))
+                    $tipo_contrato = 2;
+                $request->tipo_contrato = 1;
+
+                $registro_contrato = static::registrarContratoProfesional(
+                    1,
+                    $request->profesion,
+                    $request->especialidad,
+                    $request->sub_especialidad,
+                    $id_profesional,
+                    $request->rut,
+                    $request->nombre,
+                    $request->apellido1,
+                    $request->apellido2,
+                    $request->telefono1,
+                    $request->email,
+                    $request->id_institucion,
+                    $request->id_lugar_atencion,
+                    $tipo_contrato,
+                    $request->fecha_inicio,
+                    $request->fecha_termino,
+                    $request->monto_imponible,
+                    $request->locomocion,
+                    $request->locomocion_porcentaje,
+                    $request->colacion,
+                    $request->colacion_porcentaje,
+                    $request->asignacion_familiar,
+                    $request->asignacion_familiar_cantidad,
+                    $request->caja_compensacion,
+                    $request->caja_compensacion_porcentaje,
+                    '',
+                    implode(',', $request->dias_laborales),
+                    $request->hora_entrada,
+                    $request->hora_salida,
+                    $request->hora_entrada_colacion,
+                    $request->hora_salida_colacion,
+                    $request->banco,
+                    $request->n_cta,
+                    $request->sucursal,
+                    Carbon::now(),
+                );
+                $datos['registro_contrato'] = $registro_contrato;
+                if($registro_contrato->estado == 1)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Registro Exitoso';
+                    $datos['result'] = $registro_contrato;
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al registrar contrato';
+                    $datos['result'] = $registro_contrato;
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function registrarProfesionalLaboratorio(Request $request){
+         $datos = array();
         $error = array();
         $valido = 1;
         /** VALIDAR EXISTENCIA DE CONTRATO ACTUAL ACTIVO */

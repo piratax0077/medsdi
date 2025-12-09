@@ -52,9 +52,9 @@
                                             <div class="col-sm-6 text-center">
 
                                             </div>
-                                            <div class="col-sm-6 text-center">
-                                                <button type="button" id="{{ $cns_temp->alias }}_btn_limpiar" class="btn btn-xs btn-danger-light mr-2" onclick="limpiar_etapa_cns('{{ $cns_temp->alias }}')">Limpiar</button>
-                                                <button type="button" id="{{ $cns_temp->alias }}_btn_guardar" class="btn btn-xs btn-success-light" onclick="registrar_etapa_cns('{{ $cns_temp->alias }}')">Guardar</button>
+                                            <div class="col-sm-6 text-right">
+                                                <button type="button" id="{{ $cns_temp->alias }}_btn_limpiar" class="btn btn-sm btn-danger-light-c mr-2" onclick="limpiar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-x"></i> Limpiar</button>
+                                                <button type="button" id="{{ $cns_temp->alias }}_btn_guardar" class="btn btn-sm btn-info-light-c" onclick="registrar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-save"></i> Guardar</button>
                                             </div>
                                         </div>
                                     </div>

@@ -36,7 +36,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-									
+
                                         <!--Formulario / Menor de edad-->
 										@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
 										<!--Cierre: Formulario / Menor de edad-->
@@ -829,8 +829,8 @@
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm t-blue" for="camara_ant_oi">Camara Anterior</label>
                                                                                                         <select name="camara_ant_oi" data-titulo="Camara Anterior OI" data-seccion="Biomicroscopía" id="camara_ant_oi"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);">
-                                                                                                            <option value="1" selected>Normal</option>
-                                                                                                            <option value="2">Anormal</option>
+                                                                                                            <option value="Normal" selected>Normal</option>
+                                                                                                            <option value="Anormal">Anormal</option>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                     <div class="form-group" id="div_camara_ant_oi" style="display:none;">
@@ -842,8 +842,8 @@
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm t-blue" for="tyndall_oi">Tyndall</label>
                                                                                                         <select name="tyndall_oi"  data-titulo="Tyndall OI" data-seccion="Biomicroscopía" id="tyndall_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);">
-                                                                                                            <option value="1" selected>Negativo</option>
-                                                                                                            <option value="2">Positivo</option>
+                                                                                                            <option value="Negativo" selected>Negativo</option>
+                                                                                                            <option value="Positivo">Positivo</option>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                     <div class="form-group" id="div_tyndall_oi" style="display:none;">
@@ -1284,7 +1284,7 @@
 
 @include('atencion_medica.formularios.modal_atencion_general.modal_enfermedades_cronicas')
 @include("general.modal.modal_no_disponible")
-
+@include('atencion_medica.secciones_especialidad.ficha_oftalmo_tipo')
 {{-- @include('general.hospitalizacion.modals.in_solic_pabellon') --}}
 
 @section('page-script-ficha-atencion')
@@ -1785,6 +1785,7 @@
 
         function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
         {
+            console.log(div_id_data, div_id_detalle, tipo);
             $("#btn_modal_registrar_ficha_tipo_oft").unbind();
 
             if(tipo == 'oft_g')
@@ -2592,5 +2593,610 @@
         //         $('#'+input_solitado_por).val();
         //     }
         // }
+        function cambiar_div(mostrar, ocultar, label, textarea)
+        {
+            $('.'+mostrar).show();
+            $('.'+ocultar).hide();
+            $('#'+label).html( $('#'+textarea).val() );
+        }
+
+        function guardar_tipo_ficha_oft_g()
+        {
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_oft_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_oft_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
+
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_oft') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    agudeza_visual_subj_od : data.modal_agregar_tipo_agudeza_visual_subj_od,
+                    obs_agudeza_visual_subj_od : data.observaciones_obs_agudeza_visual_subj_od,
+                    agudeza_visual_subj_oi : data.modal_agregar_tipo_agudeza_visual_subj_oi,
+                    obs_agudeza_visual_subj_oi : data.observaciones_obs_agudeza_visual_subj_oi,
+                    agudeza_visual_obj_od : data.modal_agregar_tipo_agudeza_visual_obj_od,
+                    obs_agudeza_visual_obj_od : data.observaciones_obs_agudeza_visual_obj_od,
+                    agudeza_visual_obj_oi : data.modal_agregar_tipo_agudeza_visual_obj_oi,
+                    obs_agudeza_visual_obj_oi : data.observaciones_obs_agudeza_visual_obj_oi,
+                    mov_oculares : data.modal_agregar_tipo_mov_oculares,
+                    obs_mov_oculares : data.observaciones_obs_mov_oculares,
+                    autorefracto_od : data.modal_agregar_tipo_autorefracto_od,
+                    obs_autorefracto_od : data.observaciones_obs_autorefracto_od,
+                    autorefracto_oi : data.modal_agregar_tipo_autorefracto_oi,
+                    obs_autorefracto_oi : data.observaciones_obs_autorefracto_oi,
+                    presion_ocular_od : data.modal_agregar_tipo_presion_ocular_od,
+                    obs_presion_ocular_od : data.observaciones_obs_presion_ocular_od,
+                    valor_presion_ocular_od : data.observaciones_valor_presion_ocular_od,
+                    presion_ocular_oi : data.modal_agregar_tipo_presion_ocular_oi,
+                    obs_presion_ocular_oi : data.observaciones_obs_presion_ocular_oi,
+                    valor_presion_ocular_oi : data.observaciones_valor_presion_ocular_od,
+                    campo_visual_od : data.modal_agregar_tipo_campo_visual_od,
+                    obs_campo_visual_od : data.observaciones_obs_campo_visual_od,
+                    campo_visual_oi : data.modal_agregar_tipo_campo_visual_oi,
+                    obs_campo_visual_oi : data.observaciones_obs_campo_visual_oi,
+                    campo_otros_ex_general : data.observaciones_campo_otros_ex_general
+
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function guardar_tipo_ficha_bio()
+        {
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_oft_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_oft_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
+
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_oft_bio') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    parpbiood : data.modal_agregar_tipo_parpbiood,
+                    obs_parpbiood : data.observaciones_obs_parpbiood,
+                    conjuntiva_bio_od : data.modal_agregar_tipo_conjuntiva_bio_od,
+                    obs_conjuntiva_bio_od : data.observaciones_obs_conjuntiva_bio_od,
+                    biocornea_od : data.modal_agregar_tipo_biocornea_od,
+                    obs_biocornea_od : data.observaciones_obs_biocornea_od,
+                    camara_ant_od : data.modal_agregar_tipo_camara_ant_od,
+                    obs_camara_ant_od : data.observaciones_obs_camara_ant_od,
+                    tyndall_od : data.modal_agregar_tipo_tyndall_od,
+                    obs_tyndall_od : data.observaciones_obs_tyndall_od,
+                    cristalino_bio_od : data.modal_agregar_tipo_cristalino_bio_od,
+                    obs_cristalino_bio_od : data.observaciones_obs_cristalino_bio_od,
+                    campo_otros_bio_od : data.observaciones_campo_otros_bio_od,
+                    parpbiooi : data.modal_agregar_tipo_parpbiooi,
+                    obs_parpbiooi : data.observaciones_obs_parpbiooi,
+                    conjuntiva_bio_oi : data.modal_agregar_tipo_conjuntiva_bio_oi,
+                    obs_conjuntiva_bio_oi : data.observaciones_obs_conjuntiva_bio_oi,
+                    biocornea_oi : data.modal_agregar_tipo_biocornea_oi,
+                    obs_biocornea_oi : data.observaciones_obs_biocornea_oi,
+                    camara_ant_oi : data.modal_agregar_tipo_camara_ant_oi,
+                    obs_camara_ant_oi : data.observaciones_obs_camara_ant_oi,
+                    tyndall_oi : data.modal_agregar_tipo_tyndall_oi,
+                    obs_tyndall_oi : data.observaciones_obs_tyndall_oi,
+                    cristalino_bio_oi : data.modal_agregar_tipo_cristalino_bio_oi,
+                    obs_cristalino_bio_oi : data.observaciones_obs_cristalino_bio_oi,
+                    campo_otros_bio_oi : data.observaciones_campo_otros_bio_oi
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function guardar_tipo_ficha_fo()
+        {
+            var registro_f_t_oft_nombre = $('#registro_f_t_oft_nombre').val();
+            var registro_f_t_oft_descripcion = $('#registro_f_t_oft_descripcion').val();
+            var _token = CSRF_TOKEN;
+            if(registro_f_t_oft_nombre == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+            if(registro_f_t_oft_descripcion == ''){
+                swal({
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+            }
+
+
+            var data = [];
+            data.registro_f_t_oft_nombre = registro_f_t_oft_nombre;
+            data.registro_f_t_oft_descripcion = registro_f_t_oft_descripcion;
+
+            $('#registro_f_t_oft_detalle').find('input,textarea').each(function(key, elemento){
+                {{--  console.log($(elemento).attr('id'));  --}}
+                {{--  console.log($(elemento).val());  --}}
+                {{--  console.log($(elemento).prop('nodeName'));  --}}
+                {{--  console.log('*******');  --}}
+
+                data[$(elemento).attr('id')] = $(elemento).val();
+
+            });
+
+            {{--  console.log(data);  --}}
+            url = "{{ route('profesional.ficha_tipo_oft_fondo_ojo') }}";
+            $.ajax({
+
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id_profesional : $('#id_profesional_fc').val(),
+                    ind_esp_cirugia : '',
+                    nombre : data.registro_f_t_oft_nombre,
+                    descripcion : data.registro_f_t_oft_descripcion,
+                    papilas_fo_od : data.modal_agregar_tipo_papilas_fo_od,
+                    obs_papilas_fo_od : data.observaciones_obs_papilas_fo_od,
+                    excavacion_fo_od : data.modal_agregar_tipo_excavacion_fo_od,
+                    obs_excavacion_fo_od : data.observaciones_obs_excavacion_fo_od,
+                    bordes_od : data.modal_agregar_tipo_bordes_od,
+                    obs_bordes_od : data.observaciones_obs_bordes_od,
+                    maculas_fo_od : data.modal_agregar_tipo_maculas_fo_od,
+                    obs_maculas_fo_od : data.observaciones_obs_maculas_fo_od,
+                    vasos_fo_od : data.modal_agregar_tipo_vasos_fo_od,
+                    obs_vasos_fo_od : data.observaciones_obs_vasos_fo_od,
+                    periferia_fo_od : data.modal_agregar_tipo_periferia_fo_od,
+                    obs_periferia_fo_od : data.observaciones_obs_periferia_fo_od,
+                    campo_fo_otros_od : data.observaciones_campo_fo_otros_od,
+                    papilas_fo_oi : data.modal_agregar_tipo_papilas_fo_oi,
+                    obs_papilas_fo_oi : data.observaciones_obs_papilas_fo_oi,
+                    excavacion_fo_oi : data.modal_agregar_tipo_excavacion_fo_oi,
+                    obs_excavacion_fo_oi : data.observaciones_obs_excavacion_fo_oi,
+                    bordes_oi : data.modal_agregar_tipo_bordes_oi,
+                    obs_bordes_oi : data.observaciones_obs_bordes_oi,
+                    maculas_fo_oi : data.modal_agregar_tipo_maculas_fo_oi,
+                    obs_maculas_fo_oi : data.observaciones_obs_maculas_fo_oi,
+                    vasos_fo_oi : data.modal_agregar_tipo_vasos_fo_oi,
+                    obs_vasos_fo_oi : data.observaciones_obs_vasos_fo_oi,
+                    periferia_fo_oi : data.modal_agregar_tipo_periferia_fo_oi,
+                    obs_periferia_fo_oi : data.observaciones_obs_periferia_fo_oi,
+                    campo_fo_otros_oi : data.observaciones_campo_fo_otros_oi,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $('#modal_registrar_ficha_tipo_oft').modal('hide');
+                    swal({
+                        title: "Tipo Ficha Registrado",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Registrar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function cargar_info_ficha_tipo_oft(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-cdg').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);
+                evaluar_para_carga_detalle('agudeza_visual_subj_oi','div_agudeza_visual_subj_oi','obs_agudeza_visual_subj_oi',2);
+                evaluar_para_carga_detalle('agudeza_visual_obj_od','div_agudeza_visual_obj_od','obs_agudeza_visual_obj_od',2);
+                evaluar_para_carga_detalle('agudeza_visual_obj_oi','div_agudeza_visual_obj_oi','obs_agudeza_visual_obj_oi',2);
+                evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);
+                evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);
+                evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);
+                evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);
+                evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);
+                evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);
+                evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_oft') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
+                    });
+                    evaluar_para_carga_detalle('agudeza_visual_subj_od','div_agudeza_visual_subj_od','obs_agudeza_visual_subj_od',2);
+                    evaluar_para_carga_detalle('agudeza_visual_subj_oi','div_agudeza_visual_subj_oi','obs_agudeza_visual_subj_oi',2);
+                    evaluar_para_carga_detalle('agudeza_visual_obj_od','div_agudeza_visual_obj_od','obs_agudeza_visual_obj_od',2);
+                    evaluar_para_carga_detalle('agudeza_visual_obj_oi','div_agudeza_visual_obj_oi','obs_agudeza_visual_obj_oi',2);
+                    evaluar_para_carga_detalle('mov_oculares','div_mov_oculares','obs_mov_oculares',2);
+                    evaluar_para_carga_detalle('autorefracto_od','div_autorefracto_od','obs_autorefracto_od',2);
+                    evaluar_para_carga_detalle('autorefracto_oi','div_autorefracto_oi','obs_autorefracto_oi',2);
+                    evaluar_para_carga_detalle('presion_ocular_od','div_presion_ocular_od','obs_presion_ocular_od',2);
+                    evaluar_para_carga_detalle('presion_ocular_oi','div_presion_ocular_oi','obs_presion_ocular_oi',2);
+                    evaluar_para_carga_detalle('campo_visual_od','div_campo_visual_od','obs_campo_visual_od',2);
+                    evaluar_para_carga_detalle('campo_visual_oi','div_campo_visual_oi','obs_campo_visual_oi',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function cargar_info_ficha_tipo_oft_bio(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-bio').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);
+                evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);
+                evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',3);
+                evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);
+                evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);
+                evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);
+                evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);
+                evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);
+                evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);
+                evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);
+                evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);
+                evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_oft_bio') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
+                    });
+                    evaluar_para_carga_detalle('parpbiood','div_parpbiood','obs_parpbiood',2);
+                    evaluar_para_carga_detalle('conjuntiva_bio_od','div_conjuntiva_bio_od','obs_conjuntiva_bio_od',2);
+                    evaluar_para_carga_detalle('biocornea_od','div_biocornea_od','obs_biocornea_od',3);
+                    evaluar_para_carga_detalle('camara_ant_od','div_camara_ant_od','obs_camara_ant_od',2);
+                    evaluar_para_carga_detalle('tyndall_od','div_tyndall_od','obs_tyndall_od',2);
+                    evaluar_para_carga_detalle('cristalino_bio_od','div_cristalino_bio_od','obs_cristalino_bio_od',2);
+                    evaluar_para_carga_detalle('parpbiooi','div_parpbiooi','obs_parpbiooi',2);
+                    evaluar_para_carga_detalle('conjuntiva_bio_oi','div_conjuntiva_bio_oi','obs_conjuntiva_bio_oi',2);
+                    evaluar_para_carga_detalle('biocornea_oi','div_biocornea_oi','obs_biocornea_oi',3);
+                    evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);
+                    evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);
+                    evaluar_para_carga_detalle('cristalino_bio_oi','div_cristalino_bio_oi','obs_cristalino_bio_oi',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function cargar_info_ficha_tipo_oft_fo(select, div_descripcion)
+        {
+            let id_ft = $('#'+select).val();
+            if(id_ft == '')
+            {
+                $('#'+div_descripcion).html('');
+                $('#form-fo').find('select,textarea').each(function(key, elemento){
+                    if($(elemento).prop('nodeName') == 'SELECT')
+                    {
+                        $(elemento).val(0);
+                    }
+                    else if($(elemento).prop('nodeName') == 'INPUT')
+                    {
+                        $(elemento).val('');
+                    }
+                    else
+                    {
+                        $(elemento).val('');
+                    }
+                });
+
+                evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);
+                evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);
+                evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);
+                evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);
+                evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);
+                evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);
+
+                return false;
+            }
+            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
+
+            url = "{{ route('profesional.buscar_ficha_tipo_oft_fondo_ojo') }}";
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    id_profesional : $('#id_profesional_fc').val(),
+                    id_ficha_tipo :  id_ft,
+                },
+            })
+            .done(function(data)
+            {
+                {{--  console.log('-----------------------');  --}}
+                {{--  console.log(data);  --}}
+                {{--  console.log('-----------------------');  --}}
+                if(data.estado == 1)
+                {
+                    $.each(data.registros, function(index, value)
+                    {
+                        {{--  console.log(index);  --}}
+                        {{--  console.log(value);  --}}
+                        {{--  console.log($('#'+index));  --}}
+
+                        $('#'+index).val(value);
+                    });
+
+                    evaluar_para_carga_detalle('papilas_fo_oi','div_papilas_fo_oi','obs_papilas_fo_oi',2);
+                    evaluar_para_carga_detalle('excavacion_fo_oi','div_excavacion_fo_oi','obs_excavacion_fo_oi',12);
+                    evaluar_para_carga_detalle('bordes_oi','div_bordes_oi','obs_bordes_oi',2);
+                    evaluar_para_carga_detalle('maculas_fo_oi','div_maculas_fo_oi','obs_maculas_fo_oi',2);
+                    evaluar_para_carga_detalle('vasos_fo_oi','div_vasos_fo_oi','obs_vasos_fo_oi',2);
+                    evaluar_para_carga_detalle('periferia_fo_oi','div_periferia_fo_oi','obs_periferia_fo_oi',2);
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Cargar Tipo Ficha.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
     </script>
 @endsection

@@ -60,6 +60,9 @@
 						    </tbody>
 						</table>
 					</div>
+                    <div class="col-12 mb-3">
+                        <canvas id="grafico_presion_control" height="100"></canvas>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -134,59 +137,101 @@
     }
 
     function ver_registros_c_presion(tabla)
-    {
-        $('#'+tabla+' tbody').html('');
+{
+    $('#'+tabla+' tbody').html('');
 
-        let url = "{{ route('paciente.ver_registros_c_presion') }}";
-        $.ajax({
-            url: url,
-            type: "get",
-            data: {},
-        })
-        .done(function(data) {
-            console.log(data)
+    let url = "{{ route('paciente.ver_registros_c_presion') }}";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+    })
+    .done(function(data) {
+        console.log(data)
 
-            if (data != null)
-            {
-                if(data.estado == 1)
-                {
-                    $.each(data.registros, function (key, value)
-                    {
-                        var html = '';
-                        html += '<tr>';
-                        html += '    <td>'+value.fecha+'</td>';
-                        html += '    <td>'+value.sistolica+'</td>';
-                        html += '    <td>'+value.diastólica+'</td>';
-                        html += '    <td>'+value.pulso+'</td>';
-                        if(value.coment != null) html += '    <td>'+value.coment+'</td>';
-                        else html += '    <td> </td>';
-                        html += '    <td> <button type="button" class="btn btn-xs btn-block btn-danger" onclick="eliminar_c_presion(\''+value.id+'\');">Eliminar</button> </td>';
-                        html += '</tr>';
-                        $('#'+tabla+' tbody').append(html);
-                    });
-                }
-                else
-                {
-                    var html = '';
-                    html += '<tr>';
-                    html += '    <td colspan="5">Sin Registros</td>';
-                    html += '</tr>';
-                    $('#'+tabla+' tbody').html(html);
-                }
-            }
-            else
-            {
+        // Arrays para el gráfico
+        const fechas = [];
+        const sistolica = [];
+        const diastolica = [];
+        const pulso = [];
+
+        if (data != null && data.estado == 1) {
+            $.each(data.registros, function (key, value) {
+                fechas.push(value.fecha);
+                sistolica.push(value.sistolica);
+                diastolica.push(value.diastólica);
+                pulso.push(value.pulso);
+
                 var html = '';
                 html += '<tr>';
-                html += '    <td colspan="5">Sin Registros</td>';
+                html += '    <td>'+value.fecha+'</td>';
+                html += '    <td>'+value.sistolica+'</td>';
+                html += '    <td>'+value.diastólica+'</td>';
+                html += '    <td>'+value.pulso+'</td>';
+                if(value.coment != null) html += '    <td>'+value.coment+'</td>';
+                else html += '    <td> </td>';
+                html += '    <td> <button type="button" class="btn btn-xs btn-block btn-danger" onclick="eliminar_c_presion(\''+value.id+'\');">Eliminar</button> </td>';
                 html += '</tr>';
-                $('#'+tabla+' tbody').html(html);
-            }
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
-    }
+                $('#'+tabla+' tbody').append(html);
+            });
+        } else {
+            var html = '';
+            html += '<tr>';
+            html += '    <td colspan="5">Sin Registros</td>';
+            html += '</tr>';
+            $('#'+tabla+' tbody').html(html);
+        }
+
+        // Destruye el gráfico anterior si existe
+        if (window.chartPresionControl) {
+            window.chartPresionControl.destroy();
+        }
+
+        // Crea el gráfico solo si hay datos
+        if (fechas.length > 0) {
+            const ctx = document.getElementById('grafico_presion_control').getContext('2d');
+            window.chartPresionControl = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [
+                        {
+                            label: 'Sistólica',
+                            data: sistolica,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: false,
+                        },
+                        {
+                            label: 'Diastólica',
+                            data: diastolica,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            fill: false,
+                        },
+                        {
+                            label: 'Pulso',
+                            data: pulso,
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Historial de Presión Arterial' }
+                    }
+                }
+            });
+        }
+    })
+    .fail(function(jqXHR, ajaxOptions, thrownError) {
+        console.log(jqXHR, ajaxOptions, thrownError)
+    });
+}
 
     function eliminar_c_presion(id)
     {

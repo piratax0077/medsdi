@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Solicitud Exámenes Endoscópicos</h5>
-                <button type="button" class="close text-white" data-bs-dismiss="modal"><span
+                <button type="button" class="close text-white" data-dismiss="modal"><span
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -111,6 +111,7 @@
 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" onclick="enviar_examenes_paciente(3)"><i class="fas fa-email"></i>Enviar a paciente</button>
                 <button type="button" class="btn btn-danger btn-sm" onclick="cerrarsol_examen_endoscopia();"
                     data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-info btn-sm"> Guardar</button>
@@ -122,6 +123,36 @@
     function sol_examen_endoscopia() {
 
         $('#m_gastroenterologia_end').modal('show');
+        $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 766
+                },
+        })
+        .done(function(response) {
+            $('#examenes_endoscopico').val(null).trigger('change');
+        
+            // Limpiar las opciones existentes
+            $('#examenes_endoscopico').empty();
+            
+            // Agregar opción por defecto
+            $('#examenes_endoscopico').append('<option value="">Seleccione...</option>');
+            
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#examenes_endoscopico').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+            
+            // Reinicializar el select2 si es necesario
+            $('#examenes_endoscopico').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
     }
 
     function cerrarsol_examen_endoscopia() {
@@ -139,6 +170,47 @@
                     preload: false,
                 }, ]
             );
+    }
+
+    function enviar_examenes_paciente(tipo){
+        let id_ficha_atencion = $('#id_fc').val(); // input hidden en tu HTML
+        let url = "{{ route('profesional.examen.enviar_paciente') }}";
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                id_ficha_atencion: id_ficha_atencion,
+                tipo: tipo,
+                id_paciente: $('#id_paciente_fc').val(),
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    swal({
+                        title: 'Éxito',
+                        text: 'Exámenes enviados correctamente.',
+                        icon: 'success',
+                    }).then(() => {
+                        $('#m_gastroenterologia_end').modal('hide');
+                    });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: response.mensaje,
+                        icon: 'error',
+                    })
+                }
+            },
+            error: function(xhr) {
+                swal({
+                    title: 'Error',
+                    text: 'Error al enviar los exámenes.',
+                    icon: 'error',
+                });
+            }
+        });
     }
 </script>
 

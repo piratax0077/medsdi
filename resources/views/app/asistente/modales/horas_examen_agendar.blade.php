@@ -176,6 +176,7 @@
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
                 {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}

@@ -63,9 +63,14 @@
         var dropzone_post;
     }
 
+    if(typeof dropzone_files_odonto == 'undefined'){
+        var dropzone_files_odonto;
+    }
+
     $(document).ready(function(){
         // Configuración de Dropzone
         init_dropzone_imagenes();
+        init_dropzone_files_odonto();
     });
 
     function init_dropzone_imagenes()
@@ -78,7 +83,7 @@
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            paramName: "file[]",
+            paramName: function() { return "file[]"; },
             acceptedFiles: "image/*",
             maxFilesize: 4,
             maxFiles: 12,
@@ -120,7 +125,7 @@
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            paramName: "file[]",
+            paramName: function() { return "file[]"; },
             acceptedFiles: "image/*",
             maxFilesize: 4, // Tamaño máximo en MB
             maxFiles: 12,
@@ -158,12 +163,36 @@
         });
     }
 
+    function init_dropzone_files_odonto(){
+        // Inicializa Dropzone sobre el nuevo elemento
+        dropzone_files_odonto = new Dropzone("#mis-imagenes", {
+            url: "{{ ROUTE('profesional.imagenes.guardar_dental')  }}",
+            method: 'post',
+            autoProcessQueue: false,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            paramName: "file[]",
+            acceptedFiles: "image/*,application/pdf",
+            maxFilesize: 4,
+            maxFiles: 12,
+            addRemoveLinks: true,
+            dictDefaultMessage: "Arrastra un archivo aquí o haz clic para subirlo.",
+            dictRemoveFile: "Eliminar archivo",
+            success: function (file, response) {
+                console.log("Archivo subido con éxito:", response);
+            },
+            error: function (file, message) {
+                console.error("Error al subir archivo:", message);
+            }
+        });
+    }
 
     function guardar_pieza_imagenes_rx(counter){
         let biopsia = $('#biopsia_check_odont'+counter).is(':checked');
         let zona_motivo = $('#od_biop_zona'+counter).val();
         let observaciones = $('#obs_result_biopsia'+counter).val();
-        let id_paciente = dame_id_paciente();
+        let id_paciente = $('#id_paciente_fc').val();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_profesional = $('#id_profesional').val();
         let id_especialidad = $('#id_especialidad').val();
@@ -203,60 +232,59 @@
                     $('#id_image_pre').val(id_image_pre);
                     $('#id_image_post').val(id_image_post);
 
-                    // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone_pre.getQueuedFiles().length > 0) {
-                        console.log("Iniciando carga de imágenes...");
-                        // Desvinculamos el evento "queuecomplete" antes de procesar la cola
+                    // Verificar qué Dropzones tienen archivos
+                    const hasPre = dropzone_pre && dropzone_pre.getQueuedFiles().length > 0;
+                    const hasPost = dropzone_post && dropzone_post.getQueuedFiles().length > 0;
+
+                    console.log("📊 Estado Dropzones:", {
+                        pre: hasPre ? dropzone_pre.getQueuedFiles().length : 0,
+                        post: hasPost ? dropzone_post.getQueuedFiles().length : 0
+                    });
+
+                    // Función para finalizar la carga
+                    function finalizarCarga() {
+                        setTimeout(() => {
+                            recargar_imagenes_rx('gral');
+                        }, 1000);
+                    }
+
+                    // Función para procesar dropzone_post
+                    function procesarPost() {
+                        if (hasPost) {
+                            console.log("🚀 Procesando POST...");
+                            dropzone_post.off("queuecomplete");
+                            dropzone_post.processQueue();
+
+                            dropzone_post.on("queuecomplete", function() {
+                                console.log("✅ POST completado");
+                                finalizarCarga();
+                            });
+                        } else {
+                            console.log("ℹ️ Sin imágenes POST");
+                            finalizarCarga();
+                        }
+                    }
+
+                    // Procesar PRE primero, luego POST
+                    if (hasPre) {
+                        console.log("🚀 Procesando PRE...");
                         dropzone_pre.off("queuecomplete");
+                        dropzone_pre.processQueue();
 
-                        // Procesar la cola de imágenes
-                        dropzone_pre.processQueue();  // Esto procesará la cola y subirá las imágenes
-
-                        // Usamos un evento para esperar a que se complete la carga de imágenes
                         dropzone_pre.on("queuecomplete", function() {
-                            // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
-                            console.log("Carga de imágenes completada.");
+                            console.log("✅ PRE completado");
+                            procesarPost();
                         });
                     } else {
-                        console.log("No hay imágenes para cargar.");
-                        alert("No has seleccionado imágenes para subir.");
-
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone_pre) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone_pre.destroy();
-                        }
-                    }
-                    // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone_post.getQueuedFiles().length > 0) {
-                        console.log("Iniciando carga de imágenes...");
-                        // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone_post.off("queuecomplete");
-
-                        // Procesar la cola de imágenes
-                        dropzone_post.processQueue();  // Esto procesará la cola y subirá las imágenes
-
-                        // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone_post.on("queuecomplete", function() {
-                            // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
-                            console.log("Carga de imágenes completada.");
-                        });
-                    } else {
-                        console.log("No hay imágenes para cargar.");
-                        alert("No has seleccionado imágenes para subir.");
-
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone_post) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone_post.destroy();
-                        }
+                        console.log("ℹ️ Sin imágenes PRE");
+                        procesarPost();
                     }
 
-                    // Re-inicializar el Dropzone nuevamente
-                    //init_dropzone_imagenes();  // Asegúrate de que la función initDropzone esté disponible
-                    setTimeout(() => {
-                        recargar_imagenes_rx('gral');
-                    }, 1000);
+                    // Si no hay ninguna imagen
+                    if (!hasPre && !hasPost) {
+                        console.warn("⚠️ Sin imágenes");
+                        finalizarCarga();
+                    }
 
                 }
             },
@@ -270,7 +298,7 @@
 
     function recargar_imagenes_rx(seccion){
         let url = "{{ ROUTE('profesional.recargar_imagenes_dental_paciente') }}";
-        let id_paciente = dame_id_paciente();
+        let id_paciente = $('#id_paciente_fc').val();
 
         let data = {
             _token: CSRF_TOKEN,
@@ -286,6 +314,10 @@
                 console.log(resp);
                 $('#contenedor_imagenes_dent').empty();
                 $('#contenedor_imagenes_dent').append(resp.v);
+                if(seccion == 'gral'){
+                    $('#contenedor_pieza_dental_endorx').empty();
+                    $('#contenedor_pieza_dental_endorx').append(resp.v);
+                }
             },
             error: function(error){
                 console.log(error);

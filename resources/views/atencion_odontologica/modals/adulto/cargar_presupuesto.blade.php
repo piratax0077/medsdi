@@ -495,14 +495,20 @@
             let valido = 1;
             let mensaje = '';
 
+            if(id_odontograma == ''){
+                valido = 0;
+                mensaje += '<li>Debe seleccionar pieza</li>';
+
+            }
+
             if(fecha_proc == ''){
                 valido = 0;
                 mensaje += '<li>Debe ingresar la fecha del procedimiento</li>';
             }
-            if(comentarios_tratamiento == ''){
-                valido = 0;
-                mensaje += '<li>Debe ingresar los comentarios del tratamiento</li>';
-            }
+            // if(comentarios_tratamiento == ''){
+            //     valido = 0;
+            //     mensaje += '<li>Debe ingresar los comentarios del tratamiento</li>';
+            // }
 
             if(agenda_control){
                 if(fecha_control == ''){
@@ -737,7 +743,7 @@
 
         function generar_pdf(){
             let url = "{{ route('profesional.generar_pdf_presupuesto_dental') }}";
-            let id_paciente = dame_id_paciente();
+            let id_paciente = $('#id_paciente_fc').val();
             let id_ficha_atencion = $('#id_fc').val();
             let id_lugar_atencion = $('#id_lugar_atencion').val();
             let data = {

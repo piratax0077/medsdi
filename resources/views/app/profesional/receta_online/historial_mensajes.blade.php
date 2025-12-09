@@ -176,11 +176,11 @@
                                 Nuevo Mensaje
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="btn btn-sm btn-outline-info mr-1 " id="pills-mensajes_recibidos-tab" data-toggle="pill" href="#pills-mensajes_recibidos" role="tab" aria-controls="pills-mensajes_recibidos" aria-selected="false">
                                 Recepción de programas
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
 
@@ -200,7 +200,15 @@
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <label class="floating-label-activo-sm">Remitente</label>
-                                    <input type="text" class="form-control form-control-sm" id="remitente_a_profesional" name="remitente_a_profesional" disabled>
+                                    @if(isset($profesional))
+                                    <input type="text" class="form-control form-control-sm" id="remitente_a_profesional" name="remitente_a_profesional" value="{{  $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}" disabled>
+                                    @else
+                                    <input type="text" class="form-control form-control-sm" id="remitente_a_profesional" name="remitente_a_profesional" value="{{ Auth::user()->name }}" disabled>
+                                    @endif
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <label class="floating-label-activo-sm">Receptor</label>
+                                    <input type="text" class="form-control form-control-sm" id="receptor_a_profesional" name="receptor_a_profesional" disabled>
                                 </div>
                                 <input type="hidden" id="id_profesional" name="id_profesional" value="">
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -419,7 +427,7 @@
         }
 
         if(valido == 0){
-            swal({
+            return swal({
                 title: "Campos requeridos",
                 content:{
                     element: "div",
@@ -545,7 +553,7 @@
                 if (data.estado == 1)
                 {
                     $('#id_profesional').val(data.registros[0].id);
-                    $('#remitente_a_profesional').val(data.registros[0].nombre+' '+data.registros[0].apellido_uno+' '+data.registros[0].apellido_dos);
+                    $('#receptor_a_profesional').val(data.registros[0].nombre+' '+data.registros[0].apellido_uno+' '+data.registros[0].apellido_dos);
                     /** encontrado */
                     $('#agregar_profesional_texto_ver_nombre_profesional').html(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
                     $('#agregar_profesional_texto_ver_telefono').html(data.registros[0].profesional_telefono_uno);

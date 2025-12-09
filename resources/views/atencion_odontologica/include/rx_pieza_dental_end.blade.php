@@ -403,6 +403,12 @@ function guardar_nueva_pieza_ex_radio_end(count){
                     initDropzoneEnd();  // Asegúrate de que la función initDropzone esté disponible
                 }
             }
+            mostrar_nueva_pieza_ex_radio_end(1000);
+            swal({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Pieza agregada correctamente'
+            });
         },
         error: function(error){
             console.log(error);

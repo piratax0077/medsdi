@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProfesionalMiEquipo;
 use App\Models\ProfesionalMiEquipoProfesional;
+use App\Models\Profesional;
 use Illuminate\Http\Request;
 
 class ProfesionalMiEquipoController extends Controller
@@ -13,6 +14,7 @@ class ProfesionalMiEquipoController extends Controller
      */
     public function verEquiposProfesional(Request $request)
     {
+
         $datos = array();
         $error = array();
         $filtro = array();
@@ -35,11 +37,20 @@ class ProfesionalMiEquipoController extends Controller
                                             // }])
                                             ->get();
 
+            $filtro_todos[] = array('id_profesional',$request->id_profesional);
+
+            $registros_todos = ProfesionalMiEquipo::where($filtro_todos)
+                                            // ->with(['ProfesionalMiEquipoProfesionales' => function($query){
+                                            //     $query->select();
+                                            // }])
+                                            ->get();
+
             if($registros)
             {
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
                 $datos['registros'] = $registros;
+                $datos['registros_'] = $registros_todos;
             }
             else
             {
@@ -115,6 +126,7 @@ class ProfesionalMiEquipoController extends Controller
 
     public function registroMiEquipoProfesionales(Request $request)
     {
+
         $datos = array();
         $registroEq = static::registrarEquipo( $request->nombre, $request->descripcion, $request->id_profesional );
         if($registroEq->estado == 1)
@@ -130,7 +142,8 @@ class ProfesionalMiEquipoController extends Controller
             {
                 $datos['cant-prof'] = count($request->profesionales);
                 foreach ($request->profesionales as $key => $profesional) {
-                    $registroProf = static::registroEquipoProfesional( $registroEq->last_id, $profesional->id_tipo_especialidad, $profesional->id_sub_tipo_especialidad, $profesional->posicion, $profesional->id_profesional );
+                    $p = Profesional::find($profesional['profesional_id']);
+                    $registroProf = static::registroEquipoProfesional( $registroEq->last_id, $p->id_tipo_especialidad, $p->id_sub_tipo_especialidad, $profesional['posicion'], $p->id );
                     if($registroProf->estado == 1)
                     {
                         $datos['profesionales'][$key]['estado'] = 1;
@@ -158,6 +171,84 @@ class ProfesionalMiEquipoController extends Controller
         }
 
         return $datos;
+    }
+
+    public function eliminarMiEquipoProfesionales(Request $request){
+        $id_equipo = $request->id;
+        $equipo = ProfesionalMiEquipo::find($id_equipo);
+        if($equipo->delete()){
+            return ['estado' => 1];
+        }else{
+            return ['estado' => 0];
+        }
+    }
+
+    public function modificarMiEquipoProfesionales(Request $request){
+
+        $datos = array();
+        $id_equipo = $request->id_equipo_modificar;
+        $registroEq = ProfesionalMiEquipo::find($id_equipo);
+
+        if($registroEq)
+        {
+            $datos['estado'] = 1;
+            $datos['msj-equipo'] = 'Equipo Encontrado';
+            $datos['result-equipo'] = $registroEq;
+            $datos['cant-prof'] = 0;
+            $datos['cant-prof-reg'] = 0;
+            $datos['cant-prof-error'] = 0;
+
+            // eliminamos la lista anterior para que no se dupliquen los registros
+            $registros = ProfesionalMiEquipoProfesional::where('id_profesional_mi_equipo',$registroEq->id)->get();
+
+            foreach($registros as $r) $r->delete();
+
+            if(count($request->profesionales)>0)
+            {
+                $datos['cant-prof'] = count($request->profesionales);
+                foreach ($request->profesionales as $key => $profesional) {
+                    $p = Profesional::find($profesional['profesional_id']);
+
+                    $registroProf = static::registroEquipoProfesional( $registroEq->id, $p->id_tipo_especialidad, $p->id_sub_tipo_especialidad, $profesional['posicion'], $p->id );
+                    if($registroProf->estado == 1)
+                    {
+                        $datos['profesionales'][$key]['estado'] = 1;
+                        $datos['profesionales'][$key]['msj'] = 'Registrado';
+                        $datos['profesionales'][$key]['result'] = $registroProf;
+                        $datos['cant-prof-reg']++;
+                    }
+                    else
+                    {
+                        $datos['profesionales'][$key]['estado'] = 0;
+                        $datos['profesionales'][$key]['msj'] = 'Problema en registro';
+                        $datos['profesionales'][$key]['result'] = $registroProf;
+                        $datos['cant-prof-error']++;
+                    }
+
+                }
+
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'problema en registro de equipo';
+            $datos['result-equipo'] = $registroEq;
+        }
+
+        return $datos;
+    }
+
+    public function modificarEstadoMiEquipoProfesionales(Request $request){
+
+        $id_equipo = $request->id;
+        $equipo = ProfesionalMiEquipo::find($id_equipo);
+        $equipo->estado = $request->habilitado;
+        if($equipo->save()){
+            return ['estado' => 1];
+        }else{
+            return ['estado' => 0];
+        }
     }
 
     static public function registrarEquipo( $nombre, $descripcion, $id_profesional )
@@ -258,9 +349,10 @@ class ProfesionalMiEquipoController extends Controller
             $registro->posicion = $posicion;
             $registro->id_profesional = $id_profesional;
             $registro->estado = 1;
+
             if($registro->save())
             {
-                $datos['estado'] = 0;
+                $datos['estado'] = 1;
                 $datos['msj'] = 'registro';
                 $datos['last_id'] = $registro->id;
             }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CargaArchivoController extends Controller
 {
@@ -64,10 +65,38 @@ class CargaArchivoController extends Controller
     {
         $datos = array();
 
+        // Log inicial para debugging
+        \Log::info('Iniciando moverArchivo', [
+            'nombreArchivo' => $nombreArchivo,
+            'dirDestino' => $dirDestino,
+            'nombreNuevo' => $nombreNuevo,
+            'disco_temp_path' => Storage::disk('archivo_temp')->path(''),
+            'archivo_path_completo' => Storage::disk('archivo_temp')->path($nombreArchivo)
+        ]);
+
+        // Listar archivos en disco temporal para debugging
+        try {
+            $archivos_temp = Storage::disk('archivo_temp')->files();
+            \Log::info('Archivos en disco temporal antes de mover', [
+                'total_archivos' => count($archivos_temp),
+                'archivos' => $archivos_temp,
+                'buscando' => $nombreArchivo
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error listando archivos temporales en moverArchivo', [
+                'error' => $e->getMessage()
+            ]);
+        }
+
         // archivo_temp
         // archivo_archivo
         $exists = Storage::disk('archivo_temp')->exists($nombreArchivo);
         $datos['proceso']['exists'] = $exists;
+
+        \Log::info('Verificación de existencia', [
+            'nombreArchivo' => $nombreArchivo,
+            'exists' => $exists
+        ]);
 
         if($exists)
         {
@@ -93,9 +122,18 @@ class CargaArchivoController extends Controller
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'no encontrado';
+
+            \Log::warning('Archivo no encontrado en moverArchivo', [
+                'nombreArchivo' => $nombreArchivo,
+                'disco_path' => Storage::disk('archivo_temp')->path(''),
+                'archivo_path_buscado' => Storage::disk('archivo_temp')->path($nombreArchivo)
+            ]);
         }
 
-
+        \Log::info('Resultado final moverArchivo', [
+            'nombreArchivo' => $nombreArchivo,
+            'resultado' => $datos
+        ]);
 
         return $datos;
     }

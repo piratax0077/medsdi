@@ -14,7 +14,7 @@
                     </div>
                 </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_neuro') }}" method="POST">
                     <div class="col-sm-12 col-md-12">
                         <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                         <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">

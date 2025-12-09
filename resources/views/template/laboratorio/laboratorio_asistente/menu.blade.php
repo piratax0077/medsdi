@@ -26,7 +26,7 @@
 					<a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext text-center">Mi Escritorio</span></a>
 					<ul class="pcoded-submenu">
 						<li>
-							<a href="escritorio_admin_general_cm.php">Mi Escritorio</a>
+							<a href="{{ route('laboratorio.adm_general.home') }}">Mi Escritorio</a>
 						</li>
 						<li>
 							<a href="admin_cm.php">Administradores</a>

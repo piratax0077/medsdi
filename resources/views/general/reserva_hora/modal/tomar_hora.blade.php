@@ -120,7 +120,7 @@
                                     <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
                                 </div>
                                 <div class="col-md-12 mx-auto" >
-                                    <div class="row" id="modal_reserva_hora_lista_horas">
+                                    <div class="row" id="modal_reserva_hora_lista_horas" style="margin-left: 20px;">
                                         {{--  <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
                                             8:00
                                         </div>  --}}

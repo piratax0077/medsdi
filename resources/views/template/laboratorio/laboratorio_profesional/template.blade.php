@@ -9,6 +9,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+        <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
@@ -25,10 +26,13 @@
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/cotizacion_audifonos.css') }}"> --}}
 
     <!-- select2 selectbonito css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
 
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}" />
@@ -56,7 +60,9 @@
 
     <!-- flatpickr -->
     <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
-
+    <!-- SELECT2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 
 </head>
 
@@ -96,6 +102,7 @@
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
     <script src="{{ asset('js/sidebar.js') }}"></script>
+   
 
     <!-- momnent -->
     <script src="{{ asset('js/moment.min.js') }}"></script>
@@ -125,7 +132,8 @@
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
 
-	<script>
+	<script> 
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         // function cuenta_corriente() {
         //     $('#dat_bancarios').modal('show');
         // }
@@ -149,6 +157,7 @@
 
     </script>
     @yield('page-script')
+        <script src="{{ asset('js/cotizacion_audifonos.js') }}?v={{ time() }}"></script>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const camada1 = document.querySelector('#camada1Odontograma')
-    const contexto1 = camada1.getContext('2d')
+    const contexto1 = camada1.getContext('2d');
 
     const camada2 = document.querySelector('#camada2Odontograma')
     const contexto2 = camada2.getContext('2d')

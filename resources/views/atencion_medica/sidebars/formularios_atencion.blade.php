@@ -1,9 +1,9 @@
 <div id="formularios_atencion" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg"
     data-width="300px" data-offset="true">
-    <header class="bs-canvas-header p-3 bg-info overflow-auto">
-        <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true"
+    <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+        <button type="button" class="bs-canvas-close close" aria-label="Close"><span aria-hidden="true"
                 class="text-light">&times;</span></button>
-        <h5 class="d-inline-block text-light mb-0 float-right mt-1">Formularios Atención</h5>
+        <h5 class="d-inline-block text-light mb-0 mt-1">Formularios Atención</h5>
     </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordion_formularios_atencion">

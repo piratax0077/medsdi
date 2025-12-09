@@ -43,19 +43,19 @@
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
 
-                                    <li class="nav-item" id="nav-fmu">
+                                    {{--  <li class="nav-item" id="nav-fmu">
                                         @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion_op-tab" data-toggle="tab" href="#hospitalizacion_op" role="tab" aria-controls="hospitalizacion_op" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                    </li>  --}}
                                 </ul>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
         </div>
 
         <!-- SIDE BAR sico-->
-        @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
+        {{-- @include("atencion_otros_prof.modales")base de botones de sidebar --}}
         @include("atencion_otros_prof.include.sidebar_derecho_psicologia"){{-- modales y data de sidebar especialidad --}}
         @include("general.modal.modal_no_disponible")
 

@@ -1,5 +1,11 @@
 @extends('template.adm_cm.template')
+
 @section('content')
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -8,13 +14,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="font-weight-bolder">Configurar Mi Institución</h5>
+                                <h5 class="font-weight-bolder">Configurar Mi Institución {{ $institucion->nombre }}</h5>
                             </div>
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
+                                    @if($institucion->id_tipo_institucion == 3)
+                                    <a href="{{ ROUTE('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
+                                    </a>
+                                    @else
                                     <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
+                                    @endif
                                 </li>
                                 <li class="breadcrumb-item">
                                     <a href="#">Configuración</a>
@@ -36,10 +48,13 @@
                             <div class="col-md-12 text-center mt-n3">
                                 <div class="change-profile text-center">
                                     <div class="dropdown w-auto d-inline-block">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
                                             <div class="profile-dp">
                                                 <div class="position-relative d-inline-block">
-                                                    <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}"> alt="User image">
+                                                    <img class="img-radius img-fluid wid-100" id="profile-image"
+                                                        src="{{ $institucion->foto_perfil ? asset('storage/' . $institucion->foto_perfil) : asset('images/iconos/cm-perfiles.png') }}"
+                                                        alt="User image">
                                                 </div>
                                                 <div class="overlay">
                                                     <span>Actualizar</span>
@@ -47,9 +62,15 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item"><i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de mi perfil</a>
-                                            <a class="dropdown-item"><i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
+                                            <a class="dropdown-item" href="#" onclick="document.getElementById('foto-perfil-input').click()">
+                                                <i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="eliminar_foto_perfil()">
+                                                <i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía
+                                            </a>
                                         </div>
+                                        <!-- Input file oculto para seleccionar imagen -->
+                                    <input type="file" id="foto-perfil-input" accept="image/*" style="display: none;" onchange="cambiar_foto_perfil(this)">
                                     </div>
                                 </div>
                             </div>
@@ -68,10 +89,16 @@
                                                             <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador</a>
                                                         </li>
                                                         <li class="nav-item">
-                                                            <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administrador medico</a>
+                                                            <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administración técnica</a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-reset" id="bodegas_serv-tab"
+                                                                data-toggle="tab" href="#bodegas_serv" role="tab"
+                                                                aria-controls="bodegas_serv" aria-selected="false"><i
+                                                                    class="feather icon-home mr-2"></i>Bodegas</a>
                                                         </li>
                                                         @if($institucion->sucursales == 1)
                                                             <li class="nav-item">
@@ -1684,6 +1711,324 @@
                                         <!--Cierre: Card Residencia-->
                                     </div>
                                     @endif
+                                    @if(isset($director_tecnico) && $director_tecnico != null)
+                                    <div class="col-md-4">
+                                        <!--Card Información Básica-->
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                                <h5 class="mb-0 text-white">Datos Personales Director Técnico</h5>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(8,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
+                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                            <!--Datos Personales-->
+                                            <div class="card-body border-top info_basica collapse show" id="info_basica-1">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
+                                                        <div class="col-sm-6 my-auto ml-2"> {{$director_tecnico->rut }} </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
+                                                        <div class="col-sm-6 my-auto ml-2"> {{$director_tecnico->nombre }} </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                            Apellido</label>
+                                                        <div class="col-sm-6 my-auto ml-2"> {{$director_tecnico->apellido_uno }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                            Apellido</label>
+                                                        <div class="col-sm-6 my-auto ml-2"> {{$director_tecnico->apellido_dos }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
+                                                        <div class="col-sm-6 my-auto ml-2">
+                                                            @if ($director_tecnico->sexo == 'F')
+                                                                Mujer
+                                                            @elseif ($director_tecnico->sexo == 'M')
+                                                                Hombre
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
+                                                        <div class="col-sm-6 my-auto ml-2">
+                                                            {{ \Carbon\Carbon::parse($director_tecnico->fecha_nac)->format('d-m-Y') }}
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: Datos Personales-->
+                                            <!--(Editar)Datos Personales-->
+                                            <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_tecnico->rut }}" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_tecnico->nombre }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_tecnico->apellido_uno }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_tecnico->apellido_dos }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
+                                                        <div class="col-sm-7 my-auto">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($director_tecnico->sexo == 'F') checked @endif>
+                                                                <label class="form-check-label" for="inlineRadio2">Mujer</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio1" value="M" @if ($director_tecnico->sexo == 'M') checked @endif>
+                                                                <label class="form-check-label" for="inlineRadio1">Hombre</label>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_tecnico->fecha_nac }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-12 col-form-label"></label>
+                                                        <div class="col-sm-12 d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                            <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: (Editar)Datos Personales-->
+                                        </div>
+                                        <!--Cierre: Card Datos Personales-->
+
+                                        <!--Contraseña-->
+                                        <div class="card">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                                <h5 class="mb-0 text-white">Cambiar contraseña</h5>
+                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                            <!--Contraseña-->
+                                            <div class="card-body pass_personal collapse show" id="pass_personal_1">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label">Contraseña actual</label>
+                                                        <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: Contraseña-->
+                                            <!--(Editar)Contraseña-->
+                                            <div class="card-body pass_personal collapse" id="pass_personal_2">
+                                                <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
+                                                    <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
+                                                    @csrf
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                        <div class="col-sm-7">
+                                                            <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-12 col-form-label"></label>
+                                                        <div class="col-sm-12 d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
+                                                            <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: (Editar)Contraseña-->
+                                        </div>
+                                        <!--Cierre:Contraseña-->
+                                        <!--Card Contacto-->
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                                <h5 class="mb-0 text-white">Contacto</h5>
+                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                            <!--Contacto-->
+                                            <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                            Electrónico</label>
+                                                        <div class="col-sm-6 my-auto ml-2"> {{$director_tecnico->email }} </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                        <div class="col-sm-6 my-auto ml-2">{{$director_tecnico->telefono_uno }}</div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                        <div class="col-sm-6 my-auto ml-2">{{$director_tecnico->telefono_dos }}</div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: Contacto-->
+                                            <!--(Editar) Contacto-->
+                                            <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_tecnico->email }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_tecnico->telefono_uno }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_tecnico->telefono_dos }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-12 col-form-label"></label>
+                                                        <div class="col-sm-12 d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                            <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--(Editar) Contacto-->
+                                        </div>
+                                        <!--Cierre: Card Contacto-->
+                                        <!--Card Residencia-->
+                                        <div class="card">
+                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                                <h5 class="mb-0 text-white">Residencia</h5>
+                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+                                            <!--Residencia-->
+                                            <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                        <div class="col-sm-6 my-auto ml-2">
+                                                            {{$director_tecnico->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
+                                                        <div class="col-sm-6 my-auto ml-2">
+                                                            {{$director_tecnico->Direccion()->first()->Ciudad()->first()->nombre }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                        <div class="col-sm-6 my-auto ml-2">
+                                                            {{$director_tecnico->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--Cierre: Residencia-->
+                                            <!--(Editar) Residencia-->
+                                            <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
+                                                <form>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                        <div class="col-sm-6">
+                                                            <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                                <option value="">Seleccione una Región</option>
+                                                                @if (isset($regiones))
+                                                                    @foreach ($regiones as $region)
+                                                                    <option value="{{ $region->id }}" @if ($region->id ==
+                                                                    $director_tecnico->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
+                                                                        {{ $region->nombre }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
+                                                        <div class="col-sm-6">
+                                                            <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                                <option value="">Seleccione su comuna</option>
+                                                                @if (isset($ciudades))
+                                                                    @foreach ($ciudades as $ciudad)
+                                                                    <option value="{{ $ciudad->id }}" @if ($director_tecnico->Direccion()->first()->id_ciudad == $ciudad->id) selected @endif>
+                                                                        {{ $ciudad->nombre }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_tecnico->Direccion()->first()->direccion }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_tecnico->Direccion()->first()->numero_dir }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-12 col-form-label"></label>
+                                                        <div class="col-sm-12 d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                            <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!--(Editar) Residencia-->
+                                        </div>
+                                        <!--Cierre: Card Residencia-->
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1946,7 +2291,97 @@
                                 </div>
                             </div>
                         </div>
+<!--BODEGAS-->
+                        <div class="tab-pane fade" id="bodegas_serv" role="tabpanel"
+                            aria-labelledby="bodegas_serv-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h6 class="f-18 d-inline mt-3 text-white pt-2">Bodegas</h6>
+                                                    <div class="btn-group mb-2 mr-2 float-right">
+                                                        <button type="button" class="btn btn-light btn-sm mx-2"
+                                                            onclick="añadir_bodega_nueva();"><i class="fa fa-plus"
+                                                                aria-hidden="true"></i>&nbsp;Añadir bodega</button>
+                                                        <button type="button" class="btn btn-light btn-sm"
+                                                            onclick="añadir_bodega();"><i class="fa fa-plus"
+                                                                aria-hidden="true"></i>&nbsp;Añadir nuevo
+                                                            responsable</button>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body" id="contenedor_bodegas">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                </div>
+                                            </div>
+                                            <table id="bodegas_tabla"
+                                                class="display table table-striped dt-responsive nowrap table-xs"
+                                                style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="align-middle">Nombre</th>
+                                                        <th class="align-middle">Ubicacion</th>
+                                                        <th class="align-middle">Productos</th>
+                                                        <th class="align-middle">Productos C/Autorizacion</th>
+                                                        <th class="align-middle">Responsable</th>
+                                                        <th class="align-middle">acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (isset($bodegas))
+                                                        @foreach ($bodegas as $bodega)
+                                                            <tr>
+                                                                <td>{{ $bodega->nombre }}
+                                                                    {{ $bodega->apellido_uno_responsable }}</td>
+                                                                <td>{{ $bodega->direccion }}</td>
+                                                                <td>
+                                                                    <ul>
+                                                                        @foreach ($bodega->tipos_productos as $tp)
+                                                                            <li>{{ $tp }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </td>
+                                                                <td>
+                                                                    <ul>
+                                                                        @foreach ($bodega->tipo_productos_autorizacion as $tp)
+                                                                            <li>{{ $tp }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </td>
+                                                                <td>
+                                                                    <ul>
+                                                                        @foreach ($bodega->responsables as $res)
+                                                                            <li>{{ $res->nombre }}
+                                                                                {{ $res->apellido_uno }}
+                                                                                {{ $res->apellido_dos }}</li>
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button"
+                                                                        class="btn btn-warning btn-icon"
+                                                                        onclick="editar_bodega({{ $bodega->id }});"><i
+                                                                            class="feather icon-edit"></i></button>
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-icon"
+                                                                        onclick="eliminar_bodega({{ $bodega->id }})"><i
+                                                                            class="feather icon-x"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!--SUCURSALES-->
                         <div class="tab-pane fade" id="sucursales" role="tabpanel" aria-labelledby="sucursales-tab">
 
@@ -2281,7 +2716,7 @@
                                         <option value="0">Seleccione</option>
                                         @if(isset($profesionales))
                                         @foreach($profesionales as $profesional)
-                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
                                         @endforeach
                                         @endif
                                     </select>
@@ -2613,7 +3048,11 @@
     <input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
 <!--Cierre: Container Completo-->
 @endsection
-
+@section('modales')
+    @include('app.laboratorio.modales.agregar_bodega')
+    @include('app.laboratorio.modales.agregar_bodega_editar')
+        @include('app.adm_cm.modales.agregar_box')
+@endsection
 
 @section('page-script')
     <!--SCRIPT MODALS-->
@@ -4175,6 +4614,8 @@
             _token: CSRF_TOKEN,
         }
 
+        console.log(data);
+
         let url = "{{ route('adm_cm.editar_direccion_medica') }}";
 
         $.ajax({
@@ -4949,5 +5390,154 @@
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
+
+    function añadir_bodega_nueva() {
+        console.log('añadiendo bodega');
+        $('#agregar_bodega').modal('show');
+    }
+
+    // Funciones para manejo de foto de perfil
+        function cambiar_foto_perfil(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Validar tipo de archivo
+                if (!file.type.startsWith('image/')) {
+                    swal({
+                        title: "Tipo de archivo no válido",
+                        text: "Por favor, selecciona un archivo de imagen válido.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    })
+                    return;
+                }
+
+                // Validar tamaño (ejemplo: máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    swal({
+                        title: "Archivo demasiado grande",
+                        text: "El archivo es demasiado grande. El tamaño máximo es de 5MB.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                    return;
+                }
+
+                // Mostrar preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Enviar al servidor
+                subir_foto_perfil(file);
+            }
+        }
+
+        function subir_foto_perfil(file) {
+            const formData = new FormData();
+            formData.append('foto_perfil', file);
+            formData.append('id_institucion','{{ $institucion->id }}');
+            formData.append('_token', '{{ csrf_token() }}');
+
+            // imprimir el formdata
+            for (var pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            $.ajax({
+                url: '{{ route("adm_cm.actualizar.foto") }}',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        swal({
+                            title: "Foto actualizada",
+                            text: "Tu foto de perfil se ha actualizado correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+
+                        // Actualizar la imagen con la nueva URL si es necesario
+                        if (response.foto_url) {
+                            document.getElementById('profile-image').src = response.foto_url;
+                            document.getElementById('profile-image_menu').src = response.foto_url;
+                        }
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: response.message || 'Error al actualizar la foto',
+                            icon: "error",
+                            buttons: "Aceptar",
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    swal({
+                        title: "Error",
+                        text: "Error al subir la imagen. Inténtalo de nuevo.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+
+                    // Revertir la imagen si hay error
+                    document.getElementById('profile-image').src = '{{ $institucion->foto_perfil ? asset("storage/" . $institucion->foto_perfil) : asset("images/iconos/cm-perfiles.png") }}';
+                }
+            });
+        }
+
+        function eliminar_foto_perfil() {
+            swal({
+                title: "¿Eliminar foto de perfil?",
+                text: "Esta acción no se puede deshacer",
+                icon: "warning",
+                buttons: ["Cancelar", "Eliminar"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: '{{ route("adm_cm.eliminar.foto") }}', // Necesitas crear esta ruta
+                        method: 'POST',
+                        data: {
+                            'id_institucion': '{{ $institucion->id }}',
+                            '_token': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                swal({
+                                    title: "Foto eliminada",
+                                    text: "Tu foto de perfil se ha eliminado correctamente",
+                                    icon: "success",
+                                    buttons: "Aceptar",
+                                });
+                                document.getElementById('profile-image').src = '{{ asset("images/iconos/cm-perfiles.png") }}';
+                                document.getElementById('profile-image_menu').src = '{{ asset("images/iconos/cm-perfiles.png") }}';
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: response.message || 'Error al eliminar la foto',
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            swal({
+                                title: "Error",
+                                text: "Error al eliminar la imagen. Inténtalo de nuevo.",
+                                icon: "error",
+                                buttons: "Aceptar",
+                            });
+                        }
+                    });
+                }
+            });
+        }
     </script>
 @endsection

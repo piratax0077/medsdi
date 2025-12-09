@@ -240,7 +240,7 @@
                             <div class="form-group">
                                 <label for="tiempo_quir_impl{{ $counter }}"
                                     class="floating-label-activo-sm">Tiempo quirúrgico</label>
-                                <input type="number" class="form-control form-control-sm"
+                                <input type="text" class="form-control form-control-sm"
                                     id="tiempo_quir_impl{{ $counter }}" value="{{ $e->tiempo_quirurgico }}">
                             </div>
                         </div>

@@ -1,6 +1,12 @@
 @extends('template.template_cirugia_general')
 @section('Content')
+    <style>
 
+        .ui-autocomplete {
+            z-index: 9999999 !important;
+            position: absolute;
+        }
+    </style>
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -50,9 +56,9 @@
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>  --}}
-                                    {{--  <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                    </li>  --}}
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
@@ -109,6 +115,7 @@
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
+    
 
     </div>
     <!--Cierre: Container Completo-->
@@ -121,6 +128,8 @@
     @include('general.hospitalizacion.modals.in_solic_pabellon')
 	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+        @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('atencion_medica.formularios.modal_atencion_general.modal_indicar_examenes')
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
 

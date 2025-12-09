@@ -32,7 +32,10 @@
                             <a class="btn btn-outline-info btn-sm mr-1 my-1" id="salidas-tab" data-toggle="tab" href="#salidas" role="tab" aria-controls="salidas" aria-selected="false">Salidas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="rechazados-tab" data-toggle="tab" href="#rechazados" role="tab" aria-controls="salidas" aria-selected="false">Rechazados</a>
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="traslados-tab" data-toggle="tab" href="#traslados" role="tab" aria-controls="salidas" aria-selected="false">Traslados entre sucursales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="rechazados-tab" data-toggle="tab" href="#rechazados" role="tab" aria-controls="salidas" aria-selected="false">Rechazados o devueltos</a>
                         </li>
                     </ul>
                 </div>
@@ -94,6 +97,82 @@
                             <div class="row">
                                 <div class="col-12">
                                     <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_salida">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col">Imagen</th>
+
+                                                <th scope="col">Producto</th>
+                                                <th scope="col">Cantidad</th>
+                                                <th scope="col">Tipo</th>
+                                                <th scope="col">Usuario</th>
+                                                <th scope="col">Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($pedidos as $producto)
+                                            <tr>
+                                                <td>{{ $producto->created_at }}</td>
+                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+
+                                                <td>{{ $producto->producto }}</td>
+                                                <td>{{ $producto->cantidad_entregada }}</td>
+                                                <td>{{ $producto->tipo_producto }}</td>
+                                                <td>{{ $producto->usuario }}</td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->id }})"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto({{ $producto->id }})"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="traslados" role="tabpanel" aria-labelledby="traslados-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_traslados">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Fecha</th>
+                                                <th scope="col">Imagen</th>
+
+                                                <th scope="col">Producto</th>
+                                                <th scope="col">Cantidad</th>
+                                                <th scope="col">Tipo</th>
+                                                <th scope="col">Usuario</th>
+                                                <th scope="col">Accion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($pedidos as $producto)
+                                            <tr>
+                                                <td>{{ $producto->created_at }}</td>
+                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+
+                                                <td>{{ $producto->producto }}</td>
+                                                <td>{{ $producto->cantidad_entregada }}</td>
+                                                <td>{{ $producto->tipo_producto }}</td>
+                                                <td>{{ $producto->usuario }}</td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->id }})"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto({{ $producto->id }})"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="rechazados" role="tabpanel" aria-labelledby="rechazados-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_traslados">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Fecha</th>

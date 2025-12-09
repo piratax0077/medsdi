@@ -4,7 +4,7 @@
 
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Respuesta Interconsulta</h5>
-                <button type="button" class="close text-white"  data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-white" onclick="$('#modal_interconsulta_respuesta').modal('hide')"  data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -13,25 +13,25 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Nombre</label>
-                        <label class="form-control form-control-sm" name="nombre_paciente_interconsulta" id="nombre_paciente_interconsulta">{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}</label>
+                        <input class="form-control form-control-sm" name="nombre_paciente_interconsulta" id="nombre_paciente_interconsulta" value="{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}">
                     </div>
                     <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Rut</label>
-                        <label class="form-control form-control-sm"  name="rut_paciente_interconsulta" id="rut_paciente_interconsulta">{{ $paciente->rut }}</label>
+                        <input class="form-control form-control-sm"  name="rut_paciente_interconsulta" id="rut_paciente_interconsulta" value="{{ $paciente->rut }}">
                     </div>
                     <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Edad</label>
-                        <label class="form-control form-control-sm" name="edad_paciente_interconsulta" id="edad_paciente_interconsulta" >{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}</label>
+                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta" id="edad_paciente_interconsulta" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}">
                     </div>
 
                 </div>
 
-                <ul class="nav nav-pills mt-3 mb-4" id="pills-tab-interconsulta" role="tablist">
+                <ul class="nav nav-tabs-aten nav-fill mb-4 mt-3" id="pills-tab-interconsulta" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link-modal active" id="pills-tab-inter-especialidad" data-toggle="pill" href="#pills-inter-especialidad" role="tab" aria-controls="pills-home" aria-selected="true">Interconsulta Especialidad</a>
+                        <a class="nav-link-aten text-reset active" id="pills-tab-inter-especialidad" data-toggle="pill" href="#pills-inter-especialidad" role="tab" aria-controls="pills-home" aria-selected="true">Interconsulta Especialidad</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link-modal" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Responder Interconsulta</a>
+                        <a class="nav-link-aten text-reset" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Responder Interconsulta</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent-interconsulta">
@@ -45,24 +45,24 @@
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
                                     @if(isset($interconsulta) )
-                                        <label class="form-control form-control-sm">{{ $interconsulta->hipotesis }}</label>
+                                        <input class="form-control form-control-sm">{{ $interconsulta->hipotesis }}>
                                     @else
-                                        <label class="form-control form-control-sm"></label>
+                                        <input class="form-control form-control-sm">
                                     @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label class="floating-label-activo-sm">Se desea saber</label>
                                     @if(isset($interconsulta) )
-                                        <label class="form-control form-control-sm" >{{ $interconsulta->comentarios }}</label>
+                                        <input class="form-control form-control-sm" >{{ $interconsulta->comentarios }}>
                                     @else
-                                        <label class="form-control form-control-sm" ></label>
+                                        <input class="form-control form-control-sm">
                                     @endif
                                 </div>
                             </div>
                             <div class="modal-footer pt-2 pb-0">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_interconsulta_respuesta').modal('hide')" ><i class="feather icon-x"></i> Cancelar</button>
                                 @if(!isset($interconsulta) )
-                                <button type="button" onclick="registrar_interconsulta();" class="btn btn-info">Guardar</button>
+                                <button type="button" onclick="registrar_interconsulta();" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Guardar</button>
                                 @endif
                             </div>
                         </form>
@@ -130,8 +130,8 @@
                                 </div>  --}}
                             </div>
                             <div class="modal-footer pt-2 pb-0">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-info" onclick="enviar_respuesta_interconsulta();">Enviar Respuesta</button>
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_interconsulta_respuesta').modal('hide')" ><i class="feather icon-x"></i> Cancelar</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="enviar_respuesta_interconsulta();"><i class="feather icon-check"></i> Enviar Respuesta</button>
                             </div>
                         </form>
                     </div>

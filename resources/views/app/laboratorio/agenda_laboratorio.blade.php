@@ -126,16 +126,16 @@
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
-                            <div class="page-header-title">
-                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                           <div class="page-header-title">
+                              {{--  @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
                                     <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio Radiología</h5>
                                 @else
                                     <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio</h5>
-                                @endif
+                                @endif--}}
 
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_asistente_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('laboratorio.lab_profesional.escritorio_profesional_laboratorio') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
                                     <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio Radiología</a></li>
                                 @else
@@ -152,31 +152,30 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header bg-info">
-                                <p class="f-18 d-inline text-white">
-                                    <span><strong>Laboratorio:&nbsp;&nbsp;</strong></span><!--Nombre del Laboratorio--><span>Laboratorio Clínico</span><!--Tipo de Laboratorio-->
-                                </p>
+                                    <h4 class="font-weight-bold d-inline f-20 text-white">Laboratorio:&nbsp;&nbsp;</h4><!--Nombre del Laboratorio--><span class=" f-20 d-inline text-white">Laboratorio Clínico</span> <!--Tipo de Laboratorio-->
+                                
                             </div>
                             <div class="card-body">
-                                <div class="col-md-12 mr-5 px-4 card">
-                                    <div class="row">
-                                        <div class="col-md-6">
+                                <div class="col-md-12">
+                                    <div class="form-row">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                             <label class="floating-label-activo-sm">Sucursal</label>
                                             <select class="form-control form-control-sm" id="agenda_sucursal" name="agenda_sucursal" onchange="cargarBox();">
                                                 <option value="">Seleccione</option>
                                                 @if($sucursales)
                                                     @foreach($sucursales as $key_suc => $value_suc)
                                                         @if ($loop->first)
-                                                            <option selected value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                            <option selected value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ mb_strtoupper($value_suc->nombre, 'UTF-8') }}</option>
                                                         @else
-                                                            <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                            <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ mb_strtoupper($value_suc->nombre, 'UTF-8') }}</option>
                                                         @endif
                                                     @endforeach
                                                 @endif
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                             <label class="floating-label-activo-sm">Box</label>
-                                            <select class="form-control form-control-sm" id="agenda_box" name="agenda_box" onchange="cargarAgendaSucursal(1, '');">
+                                            <select class="form-control form-control-sm" id="agenda_box" name="agenda_box" onchange="cargarAgendaSucursal();">
                                                 <option value="">Seleccione</option>
                                             </select>
                                         </div>
@@ -199,7 +198,9 @@
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
                     <h5 class="modal-title text-white text-center">Tomar horas</h5>
-                    <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <button id="cerrar_tomar_hora" type="button" class="close" data-bs-dismiss="modal" aria-label="Close" ><span aria-hidden="true">×</span>
+                </button>
+                   
                 </div>
                 <div class="modal-body">
                     {{--  BUSCADOR DE RUT  --}}
@@ -245,7 +246,7 @@
                                         {{-- <option value="">Seleccione</option> --}}
                                         @if ( isset($procedimientos) && !empty($procedimientos) )
                                             @foreach ($procedimientos as $proced )
-                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} {{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}Blq.</option>
+                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} </option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -433,6 +434,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                   
                                    <!-- <tr class="paciente_edit" style="display: none;">
                                         <hr>
                                     </tr>-->
@@ -606,7 +608,7 @@
                                             onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
                                             id="reserva_hora_correo">
                                         <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
-                                        <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label>
+                                        {{-- <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label> --}}
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -985,6 +987,13 @@
                                     id="bono_numero">
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">N° De Boleta</label>
+                                <input type="text" class="form-control form-control-sm" name="numero_boleta"
+                                    id="numero_boleta">
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <label class="floating-label-activo-sm">Convenio</label>
@@ -1205,7 +1214,7 @@
             });
         }
 
-        function cargarAgendaSucursal(fecha)
+        function cargarAgendaSucursal(fecha = '')
         {
             let url = "{{ route('laboratorio.sucursal.horario.agenda') }}";
 
@@ -1229,6 +1238,7 @@
                     if (data.estado == 1)
                     {
                         console.log(data);
+                        console.log(fecha);
                         agendaCalendario(data, fecha, id_lugar_atencion, id_box);
                     }
                     else
@@ -1434,7 +1444,7 @@
 
                         eventClick: function(info) {
                             $('#seccion_examenes').html('');
-
+                     
                             let id_hora_medica = info.event.id;
                             let url = "{{ route('agenda.buscar_hora_medica') }}"
 
@@ -1883,6 +1893,7 @@
                                         $('.div_rut_buscar').show();
                                         $('#agenda_agregar_paciente').modal('show');
                                         $('#reserva_datos_paciente').hide();
+                                        $('#div_procedimiento').hide();
                                         $('#rut_paciente_reserva').val('');
                                         $('#reserva_agregar_paciente_hora').hide();
                                         $('#fecha_consulta').val(date.dateStr);
@@ -2054,6 +2065,7 @@
             evaluar_edad();
             $('.div_representante_nuevo').hide();
             $('.div_representante_existente').hide();
+             $('#div_procedimiento').hide();
 
 
             validar_campo_telefono();
@@ -2185,34 +2197,43 @@
                         {
                             $('#reserva_datos_paciente').hide();
                             $('#reserva_agregar_paciente_hora').show();
+                            let regiones = data.regiones;
+                            console.log(regiones);
 
-                            $('#reserva_hora_nombres_paciente').val(data.nombres);
-                            $('#reserva_hora_apellido_uno').val(data.apellido_uno);
-                            $('#reserva_hora_apellido_dos').val(data.apellido_dos);
+                            regiones.forEach(function(region) {
+                                let opcion = `<option value="${region.id}">${region.nombre}</option>`;
+                                $('#region_agregar').append(opcion);
+                            });
 
-                            $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
+                            $('#div_procedimiento').hide();
 
-                            if (data.sexo != null)
-                                $('#reserva_hora_sexo').val(data.sexo);
-                            else
-                                $('#reserva_hora_sexo').val(0);
+                            // $('#reserva_hora_nombres_paciente').val(data.nombres);
+                            // $('#reserva_hora_apellido_uno').val(data.apellido_uno);
+                            // $('#reserva_hora_apellido_dos').val(data.apellido_dos);
+                            // if(data.fecha_nac != null)
+                            //     $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
+
+                            // if (data.sexo != null)
+                            //     $('#reserva_hora_sexo').val(data.sexo);
+                            // else
+                            //     $('#reserva_hora_sexo').val(0);
 
 
-                            $('#reserva_hora_correo').val(data.email);
-                            $('#region_agregar').val(data.direccion.ciudad.id_region);
-                            buscar_ciudad(data.direccion.id_ciudad);
-                            $('#reserva_hora_direccion').val(data.direccion.direccion);
-                            $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+                            // $('#reserva_hora_correo').val(data.email);
+                            // $('#region_agregar').val(data.direccion.ciudad.id_region);
+                            // buscar_ciudad(data.direccion.id_ciudad);
+                            // $('#reserva_hora_direccion').val(data.direccion.direccion);
+                            // $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
 
-                            $('#reserva_hora_telefono_uno').val(data.telefono_uno);
+                            // $('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
-                            {{--
-                            $('#reserva_hora_profesion').val();
-                            $('#reserva_hora_convenio').val();
-                            $('#reserva_hora_descripcion').val();
-                            --}}
-                            validar_email_agenda();
-                            validar_campo_telefono();
+                            // {{--
+                            // $('#reserva_hora_profesion').val();
+                            // $('#reserva_hora_convenio').val();
+                            // $('#reserva_hora_descripcion').val();
+                            // --}}
+                            // validar_email_agenda();
+                            // validar_campo_telefono();
                         }
 
                     } else {
@@ -2234,6 +2255,51 @@
                     icon: "error",
                 });
             }
+        };
+
+        function buscar_ciudad() {
+
+            let region = $('#region_agregar').val();
+            let url = "{{ route('buscar_ciudad_region') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        region: region,
+                    },
+                })
+                .done(function(data) {
+                    if (data != null) {
+                        data = JSON.parse(data);
+
+                        let ciudades = $('#ciudad_agregar');
+
+                        ciudades.find('option').remove();
+                        ciudades.append('<option value="">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                                '</option>');
+                        })
+
+                    } else {
+
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar las ciudades",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
         };
 
         function evaluar_edad() {
@@ -3028,6 +3094,58 @@
 
         };
 
+        function validar_email_agenda() {
+
+                if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo")
+                    .val().indexOf(
+                        '.', 0) == -1) {
+                    swal({
+                        title: "El correo electrónico introducido no es correcto.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('El correo electrónico introducido no es correcto.');
+                    $("#guardar_reserva_paciente").prop('disabled', true);
+                    return false;
+                }
+
+                let email = $('#reserva_hora_correo').val();
+                let url = "{{ route('profesional.validar_rut') }}";
+
+                $.ajax({
+                        url: url,
+                        type: "get",
+                        data: {
+
+                            email: email,
+
+                        }
+
+                    })
+                    .done(function(data) {
+                        if (data == 'fail') {
+
+                            // console.log(data);
+
+                            $('#mensaje_email_reserva').text('el email ya esta en nuestros registros');
+                            $('#mensaje_email_reserva').show();
+                            $('#reserva_hora_correo').focus();
+
+                            $("#guardar_reserva_paciente").prop('disabled', true);
+
+                        } else {
+                            $('#mensaje_email_reserva').text('');
+                            $('#mensaje_email_reserva').hide();
+                            $("#guardar_reserva_paciente").prop('disabled', false);
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+            }
+
         function agendar_hora_paciente_nuevo() {
 
 
@@ -3817,6 +3935,7 @@
             var bono_profesional_nombre = $('#bono_profesional_nombre').val();
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
+            var numero_boleta = $('#numero_boleta').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
@@ -3873,6 +3992,7 @@
                         convenio: bono_prevision,
                         convenio_nombre: bono_prevision_nombre,
                         numero_bono: bono_numero,
+                        numero_boleta: numero_boleta,
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,

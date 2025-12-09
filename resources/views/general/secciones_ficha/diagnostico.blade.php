@@ -11,7 +11,7 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_hipotesis">Hipótesis diagnóstica</label>
-                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons,diag_endos_eda" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ isset($fichaAtencion) ? $fichaAtencion->hipotesis_diagnostico : '' }}">
+                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons,diag_endos_eda" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="">
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>

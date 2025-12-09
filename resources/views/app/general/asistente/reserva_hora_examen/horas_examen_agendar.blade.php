@@ -192,9 +192,11 @@
                 //_token: _token,
                 id_profesional: id_profesional,
                 lugar_atencion: id_lugar_atencion,
+                tipo_agenda: 4 // agenda de examenes
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
                 {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}
@@ -418,6 +420,7 @@
         let origen = $('#hex_reserva_hora_origen').val();
         let examen = $('#hex_reserva_examen').val();
         let text_examen = $('#hex_reserva_text_examen').html();
+        let id_procedimiento = $('#m_agendar_hora_examen_lista_examenes').val();
 
         $.ajax({
                 url: url,
@@ -431,10 +434,12 @@
                     id_asistente: id_asistente,
                     origen: origen,
                     tipo_hora_medica: 'E',
-                    examen: text_examen
+                    examen: text_examen,
+                    id_procedimiento: id_procedimiento
                 }
             })
             .done(function(data) {
+                console.log(data);
                 if (data != null) {
 
                     data = JSON.parse(data);

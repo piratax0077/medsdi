@@ -273,7 +273,7 @@
     {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
 
 @include('PDF.header')
-@include('PDF.footer_fco')
+@include('PDF.footer')
 
 <main>
     <div>

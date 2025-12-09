@@ -9,4 +9,7 @@ class ExamenesDentalOralRx extends Model
 {
     use HasFactory;
     protected $table = 'examenes_dental_oral_rx';
+    protected $casts = [
+        'numero_piezas' => 'array',  // Laravel automáticamente convierte JSON ↔ array
+    ];
 }

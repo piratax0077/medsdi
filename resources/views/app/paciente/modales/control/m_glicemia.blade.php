@@ -71,6 +71,9 @@
 						    </tbody>
 						</table>
 					</div>
+                    <div class="col-12 mb-3">
+                        <canvas id="grafico_glicemia_control" height="100"></canvas>
+                    </div>
 				</div>
 			</div>
 		</div>
@@ -145,62 +148,104 @@
     }
 
     function ver_registros_c_glicemia(tabla)
-    {
-        $('#'+tabla+' tbody').html('');
+{
+    $('#'+tabla+' tbody').html('');
 
-        let url = "{{ route('paciente.ver_registros_c_glicemia') }}";
-        $.ajax({
-            url: url,
-            type: "get",
-            data: {},
-        })
-        .done(function(data) {
-            console.log(data)
+    let url = "{{ route('paciente.ver_registros_c_glicemia') }}";
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {},
+    })
+    .done(function(data) {
+        console.log(data)
 
-            if (data != null)
-            {
-                if(data.estado == 1)
-                {
-                    let alimento = ['', 'Desayuno', 'Almuerzo', 'Cena', 'Nocturno']
-                    $.each(data.registros, function (key, value)
-                    {
-                        var html = '';
-                        html += '<tr>';
-                        html += '    <td>'+value.fecha+'</td>';
-                        html += '    <td>'+alimento[value.alimento]+'</td>';
-                        html += '    <td>'+value.postprandial+'</td>';
-                        html += '    <td>'+value.preprandial+'</td>';
-                        if(value.noche != null) html += '    <td>'+value.noche+'</td>';
-                        else html += '    <td> </td>';
-                        if(value.observacion != null) html += '    <td>'+value.observacion+'</td>';
-                        else html += '    <td> </td>';
-                        html += '    <td> <button type="button" class="btn btn-xs btn-block btn-danger" onclick="eliminar_c_glicemia(\''+value.id+'\');">Eliminar</button> </td>';
-                        html += '</tr>';
-                        $('#'+tabla+' tbody').append(html);
-                    });
-                }
-                else
-                {
-                    var html = '';
-                    html += '<tr>';
-                    html += '    <td colspan="5">Sin Registros</td>';
-                    html += '</tr>';
-                    $('#'+tabla+' tbody').html(html);
-                }
-            }
-            else
-            {
+        // Arrays para el gráfico
+        const fechas = [];
+        const postprandial = [];
+        const preprandial = [];
+        const nocturno = [];
+
+        if (data != null && data.estado == 1) {
+            let alimento = ['', 'Desayuno', 'Almuerzo', 'Cena', 'Nocturno']
+            $.each(data.registros, function (key, value) {
+                fechas.push(value.fecha);
+                postprandial.push(value.postprandial);
+                preprandial.push(value.preprandial);
+                nocturno.push(value.noche);
+
                 var html = '';
                 html += '<tr>';
-                html += '    <td colspan="5">Sin Registros</td>';
+                html += '    <td>'+value.fecha+'</td>';
+                html += '    <td>'+alimento[value.alimento]+'</td>';
+                html += '    <td>'+value.postprandial+'</td>';
+                html += '    <td>'+value.preprandial+'</td>';
+                if(value.noche != null) html += '    <td>'+value.noche+'</td>';
+                else html += '    <td> </td>';
+                if(value.observacion != null) html += '    <td>'+value.observacion+'</td>';
+                else html += '    <td> </td>';
+                html += '    <td> <button type=\"button\" class=\"btn btn-xs btn-block btn-danger\" onclick=\"eliminar_c_glicemia(\\''+value.id+'\\');\">Eliminar</button> </td>';
                 html += '</tr>';
-                $('#'+tabla+' tbody').html(html);
-            }
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
-    }
+                $('#'+tabla+' tbody').append(html);
+            });
+        } else {
+            var html = '';
+            html += '<tr>';
+            html += '    <td colspan=\"5\">Sin Registros</td>';
+            html += '</tr>';
+            $('#'+tabla+' tbody').html(html);
+        }
+
+        // Destruye el gráfico anterior si existe
+        if (window.chartGlicemiaControl) {
+            window.chartGlicemiaControl.destroy();
+        }
+
+        // Crea el gráfico solo si hay datos
+        if (fechas.length > 0) {
+            const ctx = document.getElementById('grafico_glicemia_control').getContext('2d');
+            window.chartGlicemiaControl = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [
+                        {
+                            label: 'Post-prandial',
+                            data: postprandial,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: false,
+                        },
+                        {
+                            label: 'Pre-prandial',
+                            data: preprandial,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            fill: false,
+                        },
+                        {
+                            label: 'Nocturno',
+                            data: nocturno,
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Historial de Glicemia' }
+                    }
+                }
+            });
+        }
+    })
+    .fail(function(jqXHR, ajaxOptions, thrownError) {
+        console.log(jqXHR, ajaxOptions, thrownError)
+    });
+}
 
     function eliminar_c_glicemia(id)
     {

@@ -72,20 +72,44 @@ class CargaImagenController extends Controller
 
     public function guardarImagenesRxDental(Request $request){
 
+        // Log para debugging
+        \Log::info('guardarImagenesRxDental iniciado', [
+            'files_count' => $request->hasFile('file') ? (is_array($request->file('file')) ? count($request->file('file')) : 1) : 0,
+            'params' => $request->except('file')
+        ]);
+
         // Verifica si los parámetros están presentes
-        $request->validate([
-            'file' => 'required|array|min:1',
-            'file.*' => 'image|max:4096',
+        $validated = $request->validate([
+            'file' => 'required',
             'id_paciente' => 'required|integer',
             'id_lugar_atencion' => 'required|integer',
             'id_especialidad' => 'required|integer',
             'id_profesional' => 'required|integer',
+            'id_examen' => 'nullable|integer',
         ]);
 
         $paths = [];
+        $urls = [];
 
         if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $file) {
+            // Manejar tanto array de archivos como archivo único
+            $files = is_array($request->file('file')) ? $request->file('file') : [$request->file('file')];
+
+            foreach ($files as $file) {
+                // Validar cada archivo individualmente
+                if (!$file->isValid()) {
+                    continue;
+                }
+
+                if ($file->getSize() > 4096 * 1024) { // 4MB en bytes
+                    \Log::warning('Archivo excede tamaño máximo', ['file' => $file->getClientOriginalName()]);
+                    continue;
+                }
+
+                if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif', 'image/webp'])) {
+                    \Log::warning('Tipo de archivo no permitido', ['mime' => $file->getMimeType()]);
+                    continue;
+                }
                 $path = $file->store('images', 'public');
                 $paths[] = $path;
                 $urls[] = Storage::url($path); // Obtén la URL pública de la imagen
@@ -129,34 +153,85 @@ class CargaImagenController extends Controller
 
     public function guardarImagenesRxEndDental(Request $request){
 
-        // Verifica si los parámetros están presentes
-        $request->validate([
-            'file' => 'required|array|min:1',
-            'file.*' => 'image|max:4096',
-            'id_paciente' => 'required|integer',
-            'id_lugar_atencion' => 'required|integer',
-            'id_especialidad' => 'required|integer',
-            'id_profesional' => 'required|integer',
+        // Log inicial para debugging
+        \Log::info('Iniciando guardarImagenesRxEndDental', [
+            'files_count' => $request->hasFile('file') ? count($request->file('file')) : 0,
+            'params' => $request->except('file')
         ]);
+
+        try {
+            // Verifica si los parámetros están presentes
+            $request->validate([
+                'file' => 'required|array|min:1',
+                'file.*' => 'image|max:4096',
+                'id_paciente' => 'required|integer',
+                'id_lugar_atencion' => 'required|integer',
+                'id_especialidad' => 'required|integer',
+                'id_profesional' => 'required|integer',
+                'id_examen' => 'nullable|integer',
+                'tipo_examen' => 'required|string',
+            ]);
+
+            \Log::info('Validación exitosa');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Error de validación', ['errors' => $e->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        }
 
         $paths = [];
 
         if ($request->hasFile('file')) {
-            foreach ($request->file('file') as $file) {
-                $path = $file->store('images', 'public');
-                $paths[] = $path;
+            \Log::info('Procesando archivos', ['count' => count($request->file('file'))]);
 
-                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
-                $publicPath = public_path('storage/images/' . basename($path));
-                File::copy(storage_path('app/public/' . $path), $publicPath);
+            foreach ($request->file('file') as $index => $file) {
+                try {
+                    \Log::info("Procesando archivo {$index}", [
+                        'name' => $file->getClientOriginalName(),
+                        'size' => $file->getSize(),
+                        'mime' => $file->getMimeType()
+                    ]);
+
+                    $path = $file->store('images', 'public');
+                    $paths[] = $path;
+
+                    \Log::info("Archivo guardado en storage", ['path' => $path]);
+
+                    // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
+                    $publicPath = public_path('storage/images/' . basename($path));
+                    File::copy(storage_path('app/public/' . $path), $publicPath);
+
+                    \Log::info("Archivo copiado a public", ['public_path' => $publicPath]);
+
+                } catch (\Exception $e) {
+                    \Log::error("Error procesando archivo {$index}", [
+                        'error' => $e->getMessage(),
+                        'file' => $file->getClientOriginalName()
+                    ]);
+                    throw $e; // Re-throw para que se maneje abajo
+                }
             }
+        } else {
+            \Log::error('No se encontraron archivos en la petición');
         }
 
+        // Determinar tipo de examen
+        $tipo_examen = 1; // Por defecto general
         if($request->tipo_examen == 'endo'){
             $tipo_examen = 2;
         }else if($request->tipo_examen == 'odontop'){
             $tipo_examen = 3; // para odontopediatria
         }
+
+        \Log::info('Creando registro en BD', [
+            'tipo_examen' => $tipo_examen,
+            'paths_count' => count($paths),
+            'id_examen' => $request->id_examen
+        ]);
 
         $imagenes_rx = new ImagenesDentalRxPaciente;
         $imagenes_rx->id_paciente = $request->id_paciente;
@@ -168,22 +243,43 @@ class CargaImagenController extends Controller
         $imagenes_rx->tipo_examen = $tipo_examen;
         $imagenes_rx->estado = 1; // por defecto
 
-        if($imagenes_rx->save()){
-            // Retornar respuesta con los datos procesados
-            return response()->json([
-                'success' => true,
-                'paths' => $paths,
-                'total_imagenes' => count($paths),
+        try {
+            \Log::info('Intentando guardar en BD');
+
+            if($imagenes_rx->save()){
+                \Log::info('Guardado exitoso en BD', ['id' => $imagenes_rx->id]);
+
+                // Retornar respuesta con los datos procesados
+                return response()->json([
+                    'success' => true,
+                    'paths' => $paths,
+                    'total_imagenes' => count($paths),
+                    'message' => 'Imágenes guardadas exitosamente',
+                    'id_registro' => $imagenes_rx->id
+                ]);
+            } else {
+                \Log::error('Error al guardar en BD - save() retornó false');
+
+                return response()->json([
+                    'success' => false,
+                    'paths' => $paths,
+                    'total_imagenes' => count($paths),
+                    'mensaje' => 'Error al guardar en base de datos'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Excepción al guardar en BD', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
-        }else{
+
             return response()->json([
                 'success' => false,
+                'mensaje' => 'Error del servidor: ' . $e->getMessage(),
                 'paths' => $paths,
-                'total_imagenes' => count($paths),
-                'mensaje' => 'error'
-            ]);
+                'total_imagenes' => count($paths)
+            ], 500);
         }
-
 
     }
 
@@ -330,7 +426,7 @@ class CargaImagenController extends Controller
         }
 
         $rules = [
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv, jpg, jpeg, png, gif, bmp, webp, svg.|max:10240', // 10MB
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png,gif,bmp,webp,svg|max:10240', // 10MB
         ];
 		// Mensajes de error personalizados
         $messages = [
@@ -354,18 +450,40 @@ class CargaImagenController extends Controller
         $file_mime_type = $request->file->getClientMimeType();
         $original_file_name = $request->file->getClientOriginalName();
 
-        // $imagenes = $request->file->store('public/archivo/temp'); /** ok */
-        $imagenes = $request->file('file')->store('public/archivo/temp');  /** ok */
+        // Generar nombre único para el archivo temporal
+        $nombre_unico = time() . '_' . uniqid() . '.' . $file_extension;
 
-        /** guardar con nombre */
-        // $imagenes = $request->file->storeAs('public/archivo/temp', $original_file_name);
+        // Log para debugging
+        \Log::info('Guardando archivo temporal', [
+            'original_name' => $original_file_name,
+            'nombre_unico' => $nombre_unico,
+            'extension' => $file_extension,
+            'disco_path' => Storage::disk('archivo_temp')->path(''),
+            'archivo_path_completo' => Storage::disk('archivo_temp')->path($nombre_unico)
+        ]);
 
-        $url = Storage::url($imagenes);
-        $nombre_archivo = str_replace('/storage/archivo/temp/','',$url);
+        // Guardar directamente en el disco archivo_temp con nombre específico
+        $archivo_guardado = Storage::disk('archivo_temp')->putFileAs('', $request->file('file'), $nombre_unico);
+
+        // Log del resultado
+        \Log::info('Resultado guardar archivo temporal', [
+            'nombre_unico' => $nombre_unico,
+            'archivo_guardado' => $archivo_guardado,
+            'archivo_existe_despues' => Storage::disk('archivo_temp')->exists($nombre_unico)
+        ]);        if (!$archivo_guardado) {
+            return response()->json([
+                'estado' => 0,
+                'message' => 'Error al guardar el archivo temporal'
+            ], 500);
+        }
+
+        // Obtener URL del archivo
+        $url = Storage::disk('archivo_temp')->url($nombre_unico);
+
         $datos['estado'] = 1;
         $datos['archivo']['url'] = $url;
         $datos['archivo']['original_file_name'] = $original_file_name;
-        $datos['archivo']['nombre_archivo'] = $nombre_archivo;
+        $datos['archivo']['nombre_archivo'] = $nombre_unico; // Este es el nombre que buscará moverArchivo()
         $datos['archivo']['file_extension'] = $file_extension;
         $datos['archivo']['file_mime_type'] = $file_mime_type;
 

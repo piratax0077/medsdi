@@ -3,7 +3,7 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-light">
 				<h5 class="modal-title text-c-blue mt-1">Información Confidencial</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="confidencia_fmu_cancelar();"><span aria-hidden="true">×</span></button>
+				<button type="button" class="btn btn-primary btn-icon" data-dismiss="modal" aria-label="Close" onclick="confidencia_fmu_cancelar();"><span aria-hidden="true">×</span></button>
                 <input type="hidden" id="confidencial_fmu_id_paciente" value="{{ $paciente->id }}">
 			</div>
 			<div class="modal-body">

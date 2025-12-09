@@ -48,6 +48,10 @@
                     cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}');
                 @endif
             }
+            $('#agenda_agregar_paciente').on('hide.bs.modal', function (e) {
+                $('#examenes').removeClass('d-block');
+                $('#examenes').addClass('d-none');
+            });
         });
 
         function cargarAgendaProfesional(tipo_agenda, id_lugar_atencion, id_profesional, fecha)
@@ -248,6 +252,7 @@
                                                 if (data != null)
                                                 {
                                                     console.log('hola2');
+                                                    
                                                     $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
                                                         $('#datos_consulta_rut').text(data.paciente.rut);
                                                         $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
@@ -268,6 +273,10 @@
                                                         buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
                                                         $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
+														if(data.paciente.fecha_ultima_atencion != null && data.paciente.fecha_ultima_atencion != '')
+                                                            $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
+                                                        else
+                                                            $('#datos_consulta_fecha_ultima').text('No registra atenciones previas');													 
                                                         $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
 
                                                         if (data.paciente.sexo == 'M') {
@@ -289,6 +298,7 @@
                                                         //'Reservada') //Hora pendiente
                                                         $('#hm_anular_hora').show();
                                                         $('#hm_atender_hora').hide();
+                                                        $('#hm_llamar_paciente').hide();
                                                         $('#hm_confirmar_hora').show();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -313,6 +323,12 @@
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                         $('#bono_profesional_rut').val( data.profesional.rut);
 
+														if(data.paciente.presupuestos.length == 0){
+                                                            $('.bono_valor').hide();
+                                                            $('#bono_valor_consulta').val(0);
+                                                        }else{
+                                                            $('.bono_valor').show();
+                                                        }
 
                                                         $('#bono_hora_medica').val(info.event.id);
                                                         $('#bono_id_profesional').val(data.profesional.id);
@@ -347,6 +363,7 @@
                                                         // 'Rechazada')//Hora cancelada
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').hide();
+                                                        $('#hm_llamar_paciente').hide();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#hm_ver_hora').hide();
@@ -366,6 +383,8 @@
                                                         // 'Llamando')//Esperando atención
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').show();
+                                                        $('#hm_llamar_paciente').show();
+                                                        $('#hm_llamar_paciente').attr('onclick', 'llamarPaciente('+$('#id_box').val()+', '+data.profesional.id+', '+data.paciente.id+', '+id_lugar_atencion+', '+id_hora_medica+');');
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -384,6 +403,7 @@
                                                         //'Realizando')
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').show();
+                                                        $('#hm_llamar_paciente').show();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -402,6 +422,7 @@
                                                         //'Realizada')//Paciente atendido
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').hide();
+                                                        $('#hm_llamar_paciente').hide();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -420,6 +441,7 @@
                                                         //'Inasistida')
                                                         $('#hm_anular_hora').hide();
                                                         $('#hm_atender_hora').hide();
+                                                        $('#hm_llamar_paciente').hide();
                                                         $('#hm_confirmar_hora').hide();
                                                         $('#hm_ver_hora').hide();
                                                         $('#hm_espera_paciente_hora').hide();
@@ -429,8 +451,6 @@
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
-
-
                                                     }
 
                                                 }
@@ -688,19 +708,9 @@
                 },
                 success: function(resp){
                     console.log(resp);
+                    $('#n_presupuesto_dental').val(id_presupuesto);
                     let tratamientos = resp.tratamientos;
-                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
-                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
-                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
-                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
-                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
-                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
-                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
-                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
-                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
-                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
-                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
-                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                    let todos = resp.todos;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
                     var bloques = resp.bloques;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
@@ -711,14 +721,14 @@
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
-                            $('#contenedor_tratamientos_presupuesto').append(`
+                        $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
                         }
                     });
-                    maxilar_superior_gral_diagnosticos.forEach(t => {
+                    todos.forEach(t => {
                         if(t.presupuesto == 1){
                         var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
@@ -730,97 +740,6 @@
                             </div>`);
 
                         }
-                    });
-                    maxilar_superior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                        }
-                    });
-                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                        }
-                    });
-                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                        }
-                    });
-                    maxilar_inferior_gral_diagnosticos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-
-                            }
                     });
                     $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
                 },
@@ -851,6 +770,86 @@
                     console.error('Error al enviar datos:', error);
                 }
             });
+        }
+
+        function llamarPaciente(id_box, id_profesional, id_paciente, id_lugar_atencion, id_hora_medica)
+        {
+            mensaje = '';
+            valido = 1;
+            if(id_box == '' || id_box == null || id_box == undefined)
+            {
+                mensaje += 'Campo id_box requerido. ';
+                valido = 0;
+            }
+            if(id_profesional == '' || id_profesional == null || id_profesional == undefined)
+            {
+                mensaje += 'Campo id_profesional requerido. ';
+                valido = 0;
+            }
+            if(id_paciente == '' || id_paciente == null || id_paciente == undefined)
+            {
+                mensaje += 'Campo id_paciente requerido. ';
+                valido = 0;
+            }
+            if(id_lugar_atencion == '' || id_lugar_atencion == null || id_lugar_atencion == undefined)
+            {
+                mensaje += 'Campo id_lugar_atencion requerido. ';
+                valido = 0;
+            }
+            if(id_hora_medica == '' || id_hora_medica == null || id_hora_medica == undefined)
+            {
+                mensaje += 'Campo id_hora_medica requerido. ';
+                valido = 0;
+            }
+            if(valido == 1)
+            {
+                var url = '{{ route('llamado_paciente.llamarPaciente') }}';
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        id_box: id_box,
+                        id_profesional: id_profesional,
+                        id_paciente: id_paciente,
+                        id_lugar_atencion: id_lugar_atencion,
+                        id_hora_medica: id_hora_medica,
+                        _token: CSRF_TOKEN
+                    },
+                    success: function(data) {
+                        if (data.estado == 1) {
+                            swal({
+                                title: "Llamado Paciente",
+                                text: "Paciente llamado correctamente.",
+                                icon: "success"
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Error",
+                                text: data.message,
+                                icon: "error"
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr);
+                        swal({
+                            title: "Error",
+                            text: "Ocurrió un error al llamar al paciente.",
+                            icon: "error"
+                        });
+                    }
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: mensaje,
+                    icon: "error",
+                });
+            }
         }
     </script>
 @endsection

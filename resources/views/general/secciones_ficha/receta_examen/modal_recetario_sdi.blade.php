@@ -34,7 +34,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group">
-                                            <label class="floating-label">Medicamento</label>
+                                            <label class="floating-label-activo-sm">Medicamento</label>
                                             <input type="text" id="nombre_medicamento_ficha_dental" name="nombre_medicamento_ficha_dental" onblur="getDosis_sdi();" class="form-control form-control-sm">
                                             <input type="hidden" id="id_medicamento_ficha_dental" name="id_medicamento_ficha_dental" class="form-control " value="">
                                             <input type="hidden" id="id_medicamento_cant_comp" name="id_medicamento_cant_comp" class="form-control " value="">
@@ -53,7 +53,7 @@
                                     {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Presentación</label>
+                                            <label class="floating-label-activo-sm">Presentación</label>
                                             <select class="form-control form-control-sm" id="dosis_medicamento_ficha_dental" name="dosis_medicamento_ficha_dental" onchange="getFrecuencia_sdi();getCantComp_sdi();">
                                                 <option>Seleccione una opción</option>
                                             </select>
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Posología</label>
+                                            <label class="floating-label-activo-sm">Posología</label>
                                             <select class="form-control form-control-sm" id="frecuencia_medicamento_ficha_dental"
                                                 name="frecuencia_medicamento_ficha_dental">
                                                 <option>Seleccione una opción</option>
@@ -71,19 +71,19 @@
                                     {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Presentación</label>
+                                            <label class="floating-label-activo-sm">Presentación</label>
                                             <input type="text" name="dosis_medicamento_ficha_dental_2" id="dosis_medicamento_ficha_dental_2" class="form-control form-control-sm ">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Posología</label>
+                                            <label class="floating-label-activo-sm">Posología</label>
                                             <input type="text" name="frecuencia_medicamento_ficha_dental_2" id="frecuencia_medicamento_ficha_dental_2" class="form-control form-control-sm ">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Vía de Administración</label>
+                                            <label class="floating-label-activo-sm">Vía de Administración</label>
                                             <select class="form-control form-control-sm" id="via_administracion_ficha_dental" name="via_administracion_ficha_dental" onchange="validar_via_administracion_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">V&iacute;a Oral</option>
@@ -100,13 +100,13 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_observaciones_medicamento_ficha_dental" style="display: none;">
-                                            <label class="floating-label">Otra vía de Administración</label>
+                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
                                             <input type="text" id="observaciones_medicamento_ficha_dental" name="observaciones_medicamento_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Periodo</label>
+                                            <label class="floating-label-activo-sm">Periodo</label>
                                             <select class="form-control form-control-sm" id="periodo_ficha_dental" name="periodo_ficha_dental" onchange="validar_periodo_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">SOS</option>
@@ -123,21 +123,21 @@
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_observaciones_periodo_ficha_dental" style="display: none;">
-                                            <label class="floating-label">Otro Periodo</label>
+                                            <label class="floating-label-activo-sm">Otro Periodo</label>
                                             <input type="text" id="observaciones_periodo_ficha_dental" name="observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
                                     {{-- cantidad de medicamento a despachar o comprar    --}}
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group fill">
-                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
+                                            <label class="floating-label-activo-sm">Cantidad Comprar/Despachar</label>
                                             <select class="form-control form-control-sm" id="cantidad_comprar" name="cantidad_comprar" onchange="validar_cantidad_comprar_sdi();">
                                                 <option value="0">Seleccione</option>
                                                 <option value="999">Otra Cantidad</option>
                                             </select>
                                         </div>
                                         <div class="form-group fill" id="div_otra_cantidad_a_comprar" style="display: none;">
-                                            <label class="floating-label">Otra Cantidad</label>
+                                            <label class="floating-label-activo-sm">Otra Cantidad</label>
                                             <input type="text" id="otra_cantidad_a_comprar" name="otra_cantidad_a_comprar" class="form-control form-control-sm " disabled >
                                         </div>
                                     </div>
@@ -732,6 +732,124 @@
             }
         })
     };
+
+    function ver_examenes_ficha_medica_esp()
+        {
+
+            let url = "{{ route('examenes.ver_examenes') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_ficha = $('#id_fc').val();
+            $('#tabla_examen_esp_oft').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_ficha_atencion:id_ficha
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_examenes_ficha_medica-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle" style="display:none">id</th>';
+                    html += '        <th class="text-center align-middle" style="display:none">Nombre Real</th>';
+                    html += '        <th class="text-center align-middle">Nombre Examen</th>';
+                    html += '        <th class="text-center align-middle">Lado</th>';
+                    html += '        <th class="text-center align-middle">Tipo</th>';
+                    {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
+                    html += '        <th class="text-center align-middle">Prioridad</th>';
+                    html += '        <th class="text-center align-middle">Con Contraste</th>';
+                    html += '        <th class="text-center align-middle">Acción</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+
+                    if(data.estado == 1)
+                    {
+                        let prioridad = ['', 'Baja', 'Media','Alta','Urgente'];
+                        $.each(data.registros, function(index, value)
+                        {
+
+                            if(value.examen == 'CREATININA EN SANGRE')
+                            {
+                                html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
+
+                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
+                                var nombre = '';
+                                if(value.examen_especialidad == '' || value.examen_especialidad == null)
+                                    nombre = value.examen;
+                                else
+                                    nombre = value.examen_especialidad;
+                                html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
+
+                                html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
+                                var text_con_contraste = 'N/C';
+                                if(value.con_contraste == 1)
+                                    text_con_contraste = 'Con Contraste';
+                                html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft_contraste(\'row' + index + '\');">Quitar</div></td>';
+                                html += '</tr>';
+                            }
+                            else
+                            {
+
+                                html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
+
+                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.id_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap" style="display:none">'+value.examen+'</td>';
+                                var nombre = '';
+                                if(value.examen_especialidad == '' || value.examen_especialidad == null)
+                                    nombre = value.examen;
+                                else
+                                    nombre = value.examen_especialidad;
+                                html += '    <td class="text-center align-middle text-wrap">'+nombre+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.otro+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
+                                var text_con_contraste = 'N/C';
+                                if(value.con_contraste == 1)
+                                    text_con_contraste = 'Con Contraste';
+                                html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft(\'row' + index + '\');">Quitar</div></td>';
+                                html += '</tr>';
+                            }
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr class="examenes_sin_registros">';
+                        html += '    <td class="text-center align-middle " colspan="5">'+data.msj+'</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#tabla_examen_esp_oft').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
 
     function getDosis_sdi()
     {

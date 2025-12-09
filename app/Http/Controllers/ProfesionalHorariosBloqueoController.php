@@ -98,7 +98,7 @@ class ProfesionalHorariosBloqueoController extends Controller
                 for ($i=0; $i < $days; $i++)
                 {
                     $hora_bloqueo = new HoraMedica();
-                    $hora_bloqueo->id_paciente = $id_profesional;
+                    $hora_bloqueo->id_paciente = 3; // paciente estandart
                     $hora_bloqueo->id_profesional = $id_profesional;
                     $hora_bloqueo->id_estado = 13;
                     $hora_bloqueo->id_lugar_atencion = $id_lugar_atencion;

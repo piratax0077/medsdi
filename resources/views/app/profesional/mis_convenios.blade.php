@@ -287,7 +287,7 @@
                 $('#id_convenio_profesional').val(id);
                 console.log(response);
                 if(response.estado == 1){
-                    $('#nombre_convenio_edicion').val(response.convenio.nombre_convenio_institucion);
+                    $('#nombre_convenio_prevision_editar').val(response.convenio.nombre_convenio_institucion);
                     $('#tipo_convenio_edicion').val(response.convenio.id_tipo_convenio);
                     $('#porcentaje_dcto_edicion').val(response.convenio.porcentaje_convenio_institucion);
                     $('#tipo_convenio_institucion_edicion').val(response.convenio.id_tipo_convenio_institucion);

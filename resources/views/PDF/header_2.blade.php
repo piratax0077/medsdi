@@ -12,7 +12,11 @@
                     ((!empty($receta->profesional->nombre_sub_tipo_especialidad)?strtoupper($receta->profesional->nombre_sub_tipo_especialidad):''))
                 }}</p>
             <p>Rut: {{ $receta->profesional->rut }}</p>
-            <p>RCM: 00000-0</p>
+            @if($receta->profesional->id_especialidad == 2)
+                <p>ICD: {{ $receta->profesional->num_colegio }}</p>
+            @else
+                <p>RCM: {{ $receta->profesional->num_colegio }}</p>
+            @endif
             <p>Arlegui 934, Viña del Mar</p>
             <p>V región</p>
         </div>
@@ -41,5 +45,6 @@
         </table>
     </div>
     <hr class="">
-    <div class="fecha" style="padding-right: 20px;"><strong>Fecha:</strong> {{ date('d-m-Y') }}</div>
+    <div class="fecha" style="padding-left: 20px;"><strong>Fecha:</strong> {{ date('d-m-Y') }}</div>
+    <p style="font-weight: bold; padding-left: 20px; font-size: 14px;">Rp. </p>
 </header>

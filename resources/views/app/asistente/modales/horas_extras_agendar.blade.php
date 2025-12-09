@@ -177,10 +177,11 @@
             data: {
                 //_token: _token,
                 id_profesional: id_profesional,
-                lugar_atencion: id_lugar_atencion,
+                lugar_atencion: id_lugar_atencion
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
                 {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}

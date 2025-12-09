@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Revocación consentimiento informado</h5>
-                <button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" onclick="$('#m_rev_cons').modal('hide')" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -47,7 +47,7 @@
 
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-xl-12">
-                        <p>1. Soy paciente del profesional <strong>Dr.{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }} </strong> a quien otorgé el Consentimiento Informado con fecha <span id="m_rev_cons_fecha_consentimiento">01-01-1900</span></p>
+                        <p>1. Soy paciente del profesional <strong>Dr.{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }} </strong> a quien otorgué el Consentimiento Informado con fecha <span id="m_rev_cons_fecha_consentimiento"></span></p>
                     </div>
                 </div>
                 <div class="form-row">
@@ -265,6 +265,46 @@
                 {
                     swal({
                         title: "Problema al enviar solicitud de aprobación de Revocación de Consentimiento Informado.",
+                        text: data.msj,
+                        icon: "warning",
+                    });
+                }
+            }
+        });
+    }
+
+    function enviar_revocacion(){
+        var id_consentimiento_pcte = $('#m_rev_cons_id_consentimiento_activo').val();
+        var observaciones_rev = $('#m_rev_cons_motivo').val();
+        var otro = '';
+        var token = CSRF_TOKEN;
+
+        var datos = {};
+        datos._token = token;
+        datos.id_consentimiento_pcte = id_consentimiento_pcte;
+        datos.observaciones_rev = observaciones_rev;
+        datos.otro = otro;
+
+        $.ajax({
+            url: "{{ route('consentimiento.enviar.revocacion') }}",
+            type: 'post',
+            dataType: "json",
+            data: datos,
+            success: function(data) {
+                console.log(data);
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Revocación de Consentimiento Informado.",
+                        text: 'Revocación enviada exitosamente.',
+                        icon: "success",
+                    });
+                    limpiar_revocacion();
+                }
+                else
+                {
+                    swal({
+                        title: "Problema al enviar Revocación de Consentimiento Informado.",
                         text: data.msj,
                         icon: "warning",
                     });

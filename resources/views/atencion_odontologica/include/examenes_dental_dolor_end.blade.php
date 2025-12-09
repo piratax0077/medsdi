@@ -122,7 +122,7 @@
                 </div>
                 <div class="card-footer">
                 <button type="button" class="btn btn-icon btn-danger" onclick="ocultarExamenEnd({{ $counter }})"><i class="feather icon-x"></i></button>
-                <button type="button" class="btn btn-icon btn-info btn-sm"><i class="feather icon-save"></i></button>
+                <button type="button" class="btn btn-icon btn-info btn-sm" onclick="guardar_pieza_dental_end({{ $counter }})"><i class="feather icon-save"></i></button>
                 {{-- <button type="button" class="btn btn-icon btn-info" onclick="agregarEvolucionPaciente()"><i class="feather icon-save"></i> </button> --}}
                 <div>
             </div>

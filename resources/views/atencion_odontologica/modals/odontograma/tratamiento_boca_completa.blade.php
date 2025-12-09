@@ -3,189 +3,99 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_tratamiento_dental">Boca</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span>
-                </button>
+                <h5 class="modal-title text-white">Boca completa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-pills bg-white" id="personal_cm" role="tablist">
-                    <li class="nav-item">
-                        <a class="btn btn-outline-info active btn-sm mr-1 my-1" id="diagnostico_boca_compl_gral-tab" data-toggle="tab" href="#diagnostico_boca_compl_gral" role="tab" aria-controls="diagnostico_boca_compl_gral" aria-selected="false">Diagnostico</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-outline-info btn-sm mr-1 my-1" id="tratamiento_boca_compl-tab" data-toggle="tab" href="#tratamiento_boca_compl" role="tab" aria-controls="tratamiento_boca_compl" aria-selected="false">Tratamiento</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="Profesionales_cm">
-                    <div class="tab-pane fade active show" id="diagnostico_boca_compl_gral" role="tabpanel" aria-labelledby="diagnostico_boca_compl_gral-tab">
-                        <form class="mt-5">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Fecha diagnostico</label>
-                                        <input type="date" class="form-control form-control-sm" name="fecha_diag_boca_compl_gral"
-                                            id="fecha_diag_boca_compl_gral">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Diagnostico</label>
-                                        <input type="text" name="diag_seleccionado_boca_compl_gral_autocomplete" id="diag_seleccionado_boca_compl_gral_autocomplete" class="form-control form-control-sm">
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Comentarios</label>
-                                        <textarea class="form-control caja-texto form-control-sm" rows="2"
-                                            name="comentarios_diag_boca_compl_gral" id="comentarios_diag_boca_compl_gral"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1_diag_boca_compl_gral"
-                                                value="option1">
-                                            <label class="form-check-label" for="inlineCheckbox1_diag_boca_compl_gral">Trabajo terminado</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2_diag_boca_compl_gral"
-                                                value="option1">
-                                            <label class="form-check-label" for="inlineCheckbox2_diag_boca_compl_gral">Agendar control</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success btn-sm  btn-block" onclick="agregar_diagnostico_dental_boca_compl('Boca completa','gral')"><i
-                                                class="fa fa-plus"></i> Agregar Diagnostico</button>
-                                    </div>
+                <form id="form_diagnostico_tratamiento_inferior">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Fecha</label>
+                                <input type="date" class="form-control form-control-sm" id="fecha_registro_boca" name="fecha_registro_boca" value="{{ date('Y-m-d') }}">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Diagnóstico</label>
+                                <select class="form-control form-control-sm" id="diagnostico_combo_boca">
+                                    <option value="0">Seleccione</option>
+                                    @foreach ($diagnosticos as $d)
+                                        <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Tratamiento</label>
+                                <input type="text" class="form-control form-control-sm" id="diag_seleccionado_boca_compl_gral_autocomplete" name="diag_seleccionado_boca_compl_gral_autocomplete">
+                            </div>
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Comentarios</label>
+                                <textarea class="form-control form-control-sm" rows="2" id="comentarios_max_boca" name="comentarios_max_boca"></textarea>
+                            </div>
+                            <div class="form-group d-none">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="terminado_checkbox_boca" value="1">
+                                    <label class="form-check-label" for="terminado_checkbox_boca">Trabajo terminado</label>
                                 </div>
-                                <div class="col-md-4 text-center">
-                                    <img src="{{ asset('img_dental/boca.png') }}">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="control_checkbox_boca" value="1">
+                                    <label class="form-check-label" for="control_checkbox_boca">Agendar control</label>
                                 </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <!--Tabla-->
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-xs">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Fecha</th>
-                                                    <th class="text-center align-middle">Procedimiento</th>
-                                                    <th class="text-center align-middle">Avance</th>
-                                                    <th class="text-center align-middle">Comentarios</th>
-                                                    <th class="text-center align-middle">Eliminar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody_diagnosticos_boca_compl">
-                                                @foreach ($boca_completa_gral_diagnosticos as $t)
-                                                    <tr>
-                                                        <td class="text-center align-middle">{{ $t->fecha }}</td>
-                                                        <td class="text-center align-middle">{{ $t->diagnostico_tratamiento }}</td>
-                                                        <td class="text-center align-middle">{{ $t->terminado == 1 ? 'TERMINADO' : 'PENDIENTE' }}</td>
-                                                        <td class="text-center align-middle">{{ $t->comentario }}</td>
-                                                        <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'gral')"><i
-                                                                    class="fa fa-trash"></i></button>
-                                                                    @if($t->presupuesto == 0)
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral', this)"></button>
-                                                                @else
-                                                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral', this)"></button>
-                                                                @endif
-                                                        </td>
-
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!--Cierre: Tabla-->
-                                </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="guardarDiagnosticoTratamientoBoca()">
+                                    <i class="fa fa-plus"></i> Agregar Diagnóstico/Tratamiento
+                                </button>
                             </div>
-                        </form>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <img src="{{ asset('img_dental/boca.png') }}" class="img-fluid">
+                        </div>
                     </div>
-                    <div class="tab-pane fade" id="tratamiento_boca_compl" role="tabpanel" aria-labelledby="tratamiento_boca_compl-tab">
-                        <form class="mt-5">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Fecha procedimiento</label>
-                                        <input type="date" class="form-control form-control-sm" name="fecha_proc_boca_compl_gral"
-                                            id="fecha_proc_boca_compl_gral">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Procedimiento</label>
-                                        <input type="text" name="proc_seleccionado_boca_compl_gral_autocomplete" id="proc_seleccionado_boca_compl_gral_autocomplete" class="form-control form-control-sm">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Comentarios</label>
-                                        <textarea class="form-control caja-texto form-control-sm" rows="2"
-                                            name="comentarios_tratamiento_boca_compl_gral" id="comentarios_tratamiento_boca_compl_gral"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1_tratamiento_boca_compl_gral"
-                                                value="option1">
-                                            <label class="form-check-label" for="inlineCheckbox1_tratamiento_boca_compl_gral">Trabajo terminado</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox2_tratamiento_boca_compl_gral"
-                                                value="option1">
-                                            <label class="form-check-label" for="inlineCheckbox2_tratamiento_boca_compl_gral">Agendar control</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-success btn-sm  btn-block" onclick="agregar_tratamiento_dental_boca_compl('Boca completa','gral')"><i
-                                                class="fa fa-plus"></i> Agregar Tratamiento</button>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <img src="{{ asset('img_dental/boca.png') }}">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <!--Tabla-->
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-xs">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Fecha</th>
-                                                    <th class="text-center align-middle">Procedimiento</th>
-                                                    <th class="text-center align-middle">Avance</th>
-                                                    <th class="text-center align-middle">Comentarios</th>
-                                                    <th class="text-center align-middle">Eliminar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbody_tratamientos_boca_compl">
-                                                @foreach($boca_completa_gral_tratamientos as $tratamiento)
-                                                <tr>
-                                                    <td class="text-center align-middle">{{$tratamiento->fecha}}</td>
-                                                    <td class="text-center align-middle">{{$tratamiento->diagnostico_tratamiento == '' ? 'SIN INFORMACION' : $tratamiento->diagnostico_tratamiento}}</td>
-                                                    <td class="text-center align-middle">{{$tratamiento->terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}}</td>
-                                                    <td class="text-center align-middle">{{$tratamiento->comentario}}</td>
-                                                    <td class="text-center align-middle">
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'gral')"><i
-                                                                class="feather icon-x"></i></button>
-                                                                @if($tratamiento->presupuesto == 0)
-                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
-                                                            @else
-                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
-                                                            @endif
-                                                    </td>
-                                                </tr>
-
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!--Cierre: Tabla-->
-                                </div>
-                            </div>
-                        </form>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-xs">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Fecha</th>
+                                    <th class="text-center">Diagnóstico</th>
+                                    <th class="text-center">Tratamiento</th>
+                                    <th class="text-center">Comentarios</th>
+                                    <th class="text-center">Avance</th>
+                                    <th class="text-center">Valor</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_diagnosticos_boca_compl">
+                                @foreach($todos as $diagnostico)
+                                @if($diagnostico->localizacion == 'Boca completa')
+                                    <tr>
+                                        <td class="text-center">{{ $diagnostico->fecha }}</td>
+                                        <td class="text-center">{{ $diagnostico->descripcion }}</td>
+                                        <td class="text-center">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                        <td class="text-center">{{ $diagnostico->comentario }}</td>
+                                        <td class="text-center">{{ $diagnostico->terminado ? 'TERMINADO' : 'PENDIENTE' }}</td>
+                                        <td class="text-center">{{ number_format($diagnostico->valor, 0, ',', '.') }}</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_tratamiento_boca_completa({{ $diagnostico->id }},'gral')">
+                                                <i class="feather icon-x"></i>
+                                            </button>
+                                            @if($diagnostico->presupuesto == 0)
+                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $diagnostico->id }},'gral', this)"></button>
+                                            @else
+                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral', this)"></button>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Guardar</button>
+                <button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-info" onclick="guardarTodoInferior()">Guardar</button>
             </div>
         </div>
     </div>
@@ -266,6 +176,7 @@
                                             </thead>
                                             <tbody id="tbody_diagnosticos_boca_compl_endo">
                                                 @foreach ($boca_completa_gral_diagnostico_endo as $t)
+                                                @if($t->localizacion == 'Boca completa')
                                                     <tr>
                                                         <td class="text-center align-middle">{{ $t->fecha }}</td>
                                                         <td class="text-center align-middle">{{ $t->diagnostico_tratamiento }}</td>
@@ -280,6 +191,7 @@
                                                             @endif
                                                         </td>
                                                     </tr>
+                                                    @endif
                                                 @endforeach
                                             </tbody>
                                         </table>
@@ -390,246 +302,146 @@
         $('#tratamiento_boca_completa_endo').modal('show');
     }
 
-    function agregar_tratamiento_dental_boca_compl(localizacion_examen, tipo_examen){
-        let fecha_proc = $('#fecha_proc_boca_compl_'+tipo_examen).val();
-        let proc_seleccionado = $('#proc_seleccionado_boca_compl_'+tipo_examen+'_autocomplete').val();
-        let comentarios_tratamiento = $('#comentarios_tratamiento_boca_compl_'+tipo_examen).val();
-        let trabajo_terminado = $('#inlineCheckbox1_tratamiento_boca_compl_'+tipo_examen).is(':checked')? 'Si' : 'No';
-        let agendar_control = $('#inlineCheckbox2_tratamiento_boca_compl_'+tipo_examen).is(':checked')? 'Si' : 'No';
-        let id_ficha_atencion = $('#id_fc').val();
-        let id_paciente = dame_id_paciente();
-        let id_profesional = $('#id_profesional_fc').val();
-        let id_lugar_atencion = $('#id_lugar_atencion').val();
-        let id_especialidad = $('#id_especialidad').val();
+    function guardarDiagnosticoTratamientoBoca() {
+    const fecha = $('#fecha_registro_boca').val();
+    const diagnostico = $('#diagnostico_combo_boca').val();
+    const tratamiento = $('#diag_seleccionado_boca_compl_gral_autocomplete').val();
+    const comentarios = $('#comentarios_max_boca').val();
+    const terminado = $('#terminado_checkbox_boca').is(':checked') ? 1 : 0;
+    const agendarControl = $('#control_checkbox_boca').is(':checked') ? 1 : 0;
 
-        let valido = 1;
-        let mensaje = '';
+    const id_ficha_atencion = $('#id_fc').val();
+    const id_paciente = $('#id_paciente_fc').val();
+    const id_profesional = $('#id_profesional_fc').val();
+    const id_lugar_atencion = $('#id_lugar_atencion').val();
+    const id_especialidad = $('#id_especialidad').val();
+    const tipo_examen = 'boca_completa';
+    const localizacion_examen = 'Boca completa';
 
-        if(fecha_proc == ''){
-            valido = 0;
-            mensaje += 'Debe seleccionar una fecha para el tratamiento.\n';
-        }
-        if(proc_seleccionado == '-1'){
-            valido = 0;
-            mensaje += 'Debe seleccionar un procedimiento para el tratamiento.\n';
-        }
-        if(comentarios_tratamiento == ''){
-            valido = 0;
-            mensaje += 'Debe agregar un comentario. \n';
-        }
+    let errores = [];
+    if (!fecha) errores.push('Debe seleccionar la fecha.');
+    if (diagnostico === '0') errores.push('Debe seleccionar un diagnóstico.');
+    if (!tratamiento) errores.push('Debe ingresar el tratamiento.');
 
-        if(valido == 0){
+    if (errores.length > 0) {
+        swal({
+            title: 'Advertencia',
+            text: errores.join('\n'),
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    const data = {
+        fecha,
+        diagnostico,
+        tratamiento,
+        comentarios,
+        trabajo_terminado: terminado ? 'Si' : 'No',
+        agendar_control: agendarControl ? 'Si' : 'No',
+        id_ficha_atencion,
+        id_paciente,
+        id_profesional,
+        id_lugar_atencion,
+        id_especialidad,
+        tipo_examen,
+        localizacion_examen,
+        especialidad_examen: 'tratamiento',
+        _token: CSRF_TOKEN
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('profesional.guardar_examen_boca_general') }}",
+        data: data,
+        success: function (response) {
+            cargar_a_presupuesto(response.examen.id,'gral');
+            let diagnosticos = response.todos;
+            let table = $('#table_tto_boca_gral').DataTable();
+            // Limpiar la tabla completamente
+            table.clear().draw();
+
+            // Agregar cada fila nuevamente
+            diagnosticos.forEach(function(diagnostico) {
+                    table.row.add([
+                        diagnostico.fecha,
+                        diagnostico.localizacion,
+                        diagnostico.descripcion,
+                        diagnostico.diagnostico_tratamiento,
+                        diagnostico.comentario,
+                        formatoMoneda(diagnostico.valor),
+                        `
+                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_tratamiento_inf(${diagnostico.id}, 'gral')">
+                            <i class="feather icon-x"></i>
+                        </button>
+                        ${diagnostico.presupuesto == 0
+                            ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id}, 'gral', this)"><i class="feather icon-shopping-cart"></i></button>`
+                            : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id}, 'gral', this)"><i class="feather icon-log-out"></i></button>`
+                        }
+                        `
+                    ]).draw(false);
+            });
+            $('#tbody_diagnosticos_boca_compl').empty();
+
+            diagnosticos.forEach(diagnostico => {
+                if (diagnostico.localizacion == 'Boca completa') {
+                    let html = `<tr>
+                        <td class="text-center align-middle">${diagnostico.fecha}</td>
+                        <td class="text-center align-middle">${diagnostico.descripcion}</td>
+                        <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                        <td class="text-center align-middle">${diagnostico.comentario}</td>
+                        <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                        <td class="text-center align-middle">${number_format(diagnostico.valor)}</td>
+                        <td class="text-center align-middle">
+                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_tratamiento_inf(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                            ${diagnostico.presupuesto == 0
+                                ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="feather icon-shopping-cart"> </i></button>`
+                                : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i></button>`}
+                        </td>
+                    </tr>`;
+                    $('#tbody_diagnosticos_boca_compl').append(html);
+                }
+            });
+
+            // Actualiza los totales
+            let valores_boca_general = response.valores_tratamientos[0];
+            let valores_odontograma = response.valores_tratamientos[1];
+            let valores_insumos = response.valores_tratamientos[2];
+            let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+
+            $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+            $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+            $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+            $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+            $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+            $('#subtotal_clinico').val(formatoMoneda(total_general));
+            $('#total_clinico').val(formatoMoneda(total_general));
+
+            // Limpia el formulario
+            $('#form_diagnostico_tratamiento_inferior')[0].reset();
+            $('#diagnostico_combo_boca').val('0');
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
             swal({
-                title: 'Advertencia',
-                text: mensaje,
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
+                title: 'Error',
+                text: 'No se pudo guardar el diagnóstico/tratamiento.',
+                icon: 'error',
                 confirmButtonText: 'Aceptar'
             });
-            return false;
         }
+    });
+}
 
-        let data = {
-            'fecha': fecha_proc,
-            'diag_seleccionado': proc_seleccionado,
-            'comentarios': comentarios_tratamiento,
-            'trabajo_terminado': trabajo_terminado,
-            'agendar_control': agendar_control,
-            'id_ficha_atencion': id_ficha_atencion,
-            'id_paciente': id_paciente,
-            'id_profesional': id_profesional,
-            'id_lugar_atencion': id_lugar_atencion,
-            'tipo_examen': tipo_examen,
-            'especialidad_examen':'tratamiento',
-            'id_especialidad': id_especialidad,
-            'localizacion_examen': localizacion_examen,
-            '_token': CSRF_TOKEN
-        }
+// Función para formatear moneda (si no la tienes ya definida)
+function number_format(amount) {
+    return new Intl.NumberFormat('es-CL', {
+        minimumFractionDigits: 0
+    }).format(amount);
+}
 
-        let url = "{{ ROUTE('profesional.guardar_examen_boca_general') }}";
-
-        $.ajax({
-            type: 'post',
-            url: url,
-            data: data,
-            success: function(response){
-                console.log(response);
-                if(tipo_examen == 'gral'){
-                    var tratamientos = response.boca_completa_gral_tratamiento;
-                }else if(tipo_examen == 'endo'){
-                    var tratamientos = response.boca_completa_gral_tratamiento_endo;
-                }
-
-                if(tipo_examen == 'gral'){
-                    $('#tbody_tratamientos_boca_compl').empty();
-                    $('#planificacion_boca_completa_tratamientos_gral').empty();
-                    $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
-                    tratamientos.forEach(t => {
-                        $('#tbody_tratamientos_boca_compl').append(`
-                        <tr>
-                            <td class="text-center align-middle">${t.fecha}</td>
-                            <td class="text-center align-middle">${t.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : t.diagnostico_tratamiento}</td>
-                            <td class="text-center align-middle">${t.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
-                            <td class="text-center align-middle">${t.comentario}</td>
-                            <td class="text-center align-middle">
-                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'gral')"><i
-                                        class="feather icon-x"></i></button>
-                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
-                            </td>
-                        </tr>
-                        `);
-                        $('#planificacion_boca_completa_tratamientos_gral').append(`
-                        <div class="form-row">
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Boca completa</label>
-                                                <input type="text" class="form-control form-control-sm" value="${t.tipo_examen} ${t.diagnostico_tratamiento}">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
-                                                    <option selected="" value="1">Uniradicular</option>
-                                                    <option value="2">Biradicular</option>
-                                                    <option value="2">Triradicular</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_piel_tegumnto" style="display:none;">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Convenio</label>
-                                                <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
-                                                    <option selected="" value="1">Convenio</option>
-                                                    <option value="2">Sin Convenio</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>`);
-                        if(t.presupuesto == 1){
-                            $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
-                                </div>
-                            `);
-                        }
-
-                    });
-                }else if(tipo_examen == 'endo'){
-                    $('#tbody_tratamientos_boca_compl_endo').empty();
-                    $('#planificacion_boca_completa_tratamientos_endo').empty();
-                    $('#contenedor_boca_completa_endo_tratamientos_presupuesto').empty();
-                    tratamientos.forEach(t => {
-                        $('#tbody_tratamientos_boca_compl_endo').append(`
-                        <tr>
-                            <td class="text-center align-middle">${t.fecha}</td>
-                            <td class="text-center align-middle">${t.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : t.diagnostico_tratamiento}</td>
-                            <td class="text-center align-middle">${t.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
-                            <td class="text-center align-middle">${t.comentario}</td>
-                            <td class="text-center align-middle">
-                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'endo')"><i
-                                        class="feather icon-x"></i></button>
-                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
-                            </td>
-                        </tr>
-                        `);
-                        $('#planificacion_boca_completa_tratamientos_endo').append(`
-                        <div class="form-row">
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Boca completa</label>
-                                                <input type="text" class="form-control form-control-sm" value="${t.tipo_examen} ${t.diagnostico_tratamiento}">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
-                                                    <option selected="" value="1">Uniradicular</option>
-                                                    <option value="2">Biradicular</option>
-                                                    <option value="2">Triradicular</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_piel_tegumnto" style="display:none;">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Convenio</label>
-                                                <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
-                                                    <option selected="" value="1">Convenio</option>
-                                                    <option value="2">Sin Convenio</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>`);
-                        if(t.presupuesto == 1){
-                            $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
-                                </div>
-                            `);
-                        }
-
-                    });
-                }
-                let valores_examenes = response.valores_tratamientos[0];
-                let valores_piezas = response.valores_tratamientos[1];
-
-                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
-                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
-            },
-            error: function(xhr, status, error){
-                console.log(xhr.responseText);
-            }
-        })
-    }
 
     function agregar_diagnostico_dental_boca_compl(localizacion_examen, tipo_examen){
         let fecha = $('#fecha_diag_boca_compl_'+tipo_examen).val();
@@ -704,6 +516,7 @@
                     $('#planificacion_boca_completa_diagnosticos_gral').empty();
                     $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
+                        if(diagnostico.localizacion == 'Boca completa'){
                         let html = `<tr>
                                     <td class="text-center align-middle">${diagnostico.fecha}</td>
                                     <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
@@ -712,10 +525,11 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl').append(html);
+                        }
                         $('#planificacion_boca_completa_diagnosticos_gral').append(`
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -783,6 +597,7 @@
                     $('#planificacion_boca_completa_diagnosticos_endo').empty();
                     $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
+                          if(diagnostico.localizacion == 'Boca completa'){
                         let html = `<tr>
                                     <td class="text-center align-middle">${diagnostico.fecha}</td>
                                     <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
@@ -791,10 +606,11 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl_endo').append(html);
+                            }
                         $('#planificacion_boca_completa_diagnosticos_endo').append(`
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -921,6 +737,7 @@
                     $('#planificacion_boca_completa_diagnosticos_gral').empty();
                     $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
+                          if(diagnostico.localizacion == 'Boca completa'){
                     let html = `<tr>
                                 <td class="text-center align-middle">${diagnostico.fecha}</td>
                                 <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
@@ -929,10 +746,11 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                     $('#tbody_diagnosticos_boca_compl').append(html);
+                        }
                     $('#planificacion_boca_completa_diagnosticos_gral').append(`
                         <div class="form-row">
                             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -1000,6 +818,7 @@
                     $('#planificacion_boca_completa_diagnosticos_endo').empty();
                     $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
                     diagnosticos_endo.forEach(diagnostico => {
+                          if(diagnostico.localizacion == 'Boca completa'){
                     let html = `<tr>
                                 <td class="text-center align-middle">${diagnostico.fecha}</td>
                                 <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
@@ -1008,10 +827,11 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_diagnosticos_boca_compl_endo').append(html);
+                        }
                             $('#planificacion_boca_completa_diagnosticos_endo').append(`
                             <div class="form-row">
                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -1143,7 +963,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'gral')"><i class="feather icon-x"></i></button>
-                                        ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                     $('#tbody_tratamientos_boca_compl').append(html);
@@ -1157,7 +977,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="feather icon-shopping-cart"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_tratamientos_boca_compl_endo').append(html);

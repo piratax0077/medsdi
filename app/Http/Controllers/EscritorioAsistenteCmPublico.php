@@ -86,6 +86,8 @@ class EscritorioAsistenteCmPublico extends Controller
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
 
+
+
             $url = 'app.asistente_cm_publico.escritorio_asistente'; // institucion
             $asistente->id_lugar_atencion = $id_lugar_atencion;
 

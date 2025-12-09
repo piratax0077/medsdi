@@ -12,23 +12,27 @@ use App\Models\AntecedenteEnferCronica;
 use App\Models\AntecedenteMedicamentoCronico;
 use App\Models\AntecedentesPaciente;
 use App\Models\Articulo;
+use App\Models\AsignacionUrgencia;
 use App\Models\ArticuloFaltante;
 use App\Models\Biopsia;
 use App\Models\Bodega;
 use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
+use App\Models\ControlNutricion;
 use App\Models\Correlativos;
 use App\Models\DiagnosticosDental;
 use App\Models\DiagnosticosDentalProfesional;
 use App\Models\EmpresasConvenios;
 use App\Models\EvolucionPacienteHospital;
 use App\Models\EvolucionUrgencia;
+use App\Models\ExamenAudicion;
 use App\Models\ExamenPlanTratamiento;
 use App\Models\ExamenesBocaGeneral;
 use App\Models\ExamenesDentalDolor;
 use App\Models\ExamenesDentalPieza;
 use App\Models\ExamenesDentalPiezaHistoria;
 use App\Models\ExamenesDentalPiezaPeriod;
+use App\Models\ExamenesDentalPeriodoncia;
 use App\Models\FormularioFaltante;
 use App\Models\Sugerencias;
 use App\Models\Ciudad;
@@ -37,6 +41,7 @@ use App\Models\CnsTipoTemplate;
 use App\Models\ContactoEmergencia;
 use App\Models\ControlObesidad;
 use App\Models\ControlPostQuirurgico;
+use App\Models\CuracionesTipo;
 use App\Models\DeclaracionEno;
 use App\Models\DetalleReceta;
 use App\Models\Diabete;
@@ -50,10 +55,12 @@ use App\Models\ExamenesDentalOralRx;
 use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
 use App\Models\FichaAtencion;
+use App\Models\FichaAtencionRayo;
 use App\Models\FichaCirugiaDigestivaTipo;
 use App\Models\FichaCirugiaGeneral;
 use App\Models\FichaCirugiaGeneralAdulto;
 use App\Models\FichaCirugiaGeneralTipo;
+use App\Models\FichaNeuro;
 use App\Models\FichaOtorrino;
 use App\Models\FichaOrl;
 use App\Models\FichaOtorrinoTipo;
@@ -72,6 +79,7 @@ use App\Models\LugarAtencion;
 use App\Models\MarcasImplantes;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PacienteTriage;
 use App\Models\PagosPresupuestoDental;
 use App\Models\PedidoInsumos;
 use App\Models\PedidoMateriales;
@@ -82,9 +90,12 @@ use App\Models\PresupuestosDental;
 use App\Models\Prevision;
 use App\Models\Producto;
 use App\Models\ProcedimientosPostImplantes;
+use App\Models\ProcedimientosImplantesRehab;
 use App\Models\ProcedimientosGruposPostImplantes;
 use App\Models\Profesional;
+use App\Models\PlanTratamientoOtrosProfesionales;
 use App\Models\Region;
+use App\Models\Responsable;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TratamientosDental;
@@ -251,6 +262,10 @@ class ficha_atencionController extends Controller
 
         $paciente = Paciente::where('id', $hora->id_paciente)->first();
 
+        $necesita_plan_tratamiento = false;
+        $tiene_controles = false;
+        $ultimoControl = 0;
+
         /* FMU CONTACTO EMERGENCIA */
         $pacientes_contacto_emergencia = PacienteContactoEmergencia::with('ContactoEmergencia')->where('id_paciente',$paciente->id)->get();
 
@@ -368,9 +383,9 @@ class ficha_atencionController extends Controller
         if(!empty($hora->id_ficha_atencion))
             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
         $fichaAtencion = FichaAtencion::where($filtro_fichaAtencion)->first();
-
+     
         /* ANTECEDENTES */
-        $antecedentes = Antecedente::where('id_paciente',$paciente->id)->with('users','paciente','tipo_antecendente','profesional')->get();
+        $antecedentes = Antecedente::where('id_paciente',$paciente->id)->with('users','paciente','tipo_antecendente','profesional')->orderBy('id', 'DESC')->get();
         foreach ($antecedentes as $valor)
         {
             $valor['antecedente_data'] = json_decode($valor['data']);
@@ -383,7 +398,7 @@ class ficha_atencionController extends Controller
             $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
             $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
             $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
-            $patoligias_cronicas = Antecedente::where('id_tipo_antecedente', 2)->where('id_paciente', $paciente->id)->where('estado', 1)->get();
+            $patoligias_cronicas = Antecedente::where('id_tipo_antecedente', 1)->where('id_paciente', $paciente->id)->where('estado', 1)->get();
         }
         else
         {
@@ -397,8 +412,9 @@ class ficha_atencionController extends Controller
         $fichas = '';
         $id_ficha_atencion = '';
         $fichaAtencion = '';
+     
         $result_fichas = static::cargarInfoFichaBase($hora);
-
+      
         // echo json_encode($hora);
         // echo '*****************';
         // echo json_encode($result_fichas);
@@ -419,7 +435,7 @@ class ficha_atencionController extends Controller
         $filtro_previas[] = array('confidencial', '0');
         $filtro_previas[] = array('finalizada', 1);
         $filtro_previas[] = array('id_profesional', $profesional->id);
-        $fichas = FichaAtencion::where($filtro_previas)->orderBy('created_at','desc')->get();
+        $fichas = FichaAtencion::where($filtro_previas)->orderBy('id','desc')->get();
 
         // // FICHA DE ATENCION ACTUAL
         // $filtro_fichaAtencion = array();
@@ -987,14 +1003,23 @@ class ficha_atencionController extends Controller
             $examen = array();
             // Cirugía digestiva
             $ruta_blade = 'atencion_medica.atencion_medica_cirugia_digestiva_general';
-            $fichaTipo['cdg'] = FichaCirugiaDigestivaTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
-            $fichaTipo['cg'] = FichaCirugiaGeneralTipo::select('id','nombre','descripcion')->where('id_profesional', $profesional->id)->get();
+            // Obtener el valor de id_procedimiento
+            $idProcedimiento = $hora->id_procedimiento;
 
-            $fichaTipo['cda'] = FichaCirugiaDigestivaGeneralAdulto::where('id_ficha_atencion', $hora->id_ficha_atencion)->first();
+            // Verificar si el valor contiene barras verticales (caso múltiples IDs)
+            if (strpos($idProcedimiento, '|') !== false) {
+                // Convertir la cadena en un array de IDs
+                $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                // Obtener todos los procedimientos que coincidan con los IDs
+                $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+            } else {
+                // Caso de un solo ID (número)
+                $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+            }
 
             $lista_examen_especial = '';
             $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
-
             foreach ($examen_tipo as $key => $value)
             {
                 $examen[$value->ExamenEspecialidadTemplate->alias] = $value->ExamenEspecialidadTemplate->cuerpo;
@@ -1002,9 +1027,12 @@ class ficha_atencionController extends Controller
             }
             $lista_examen_especial = substr($lista_examen_especial, 0, -1);
 
-
             /** examenes de la especialidad */
             $examenes_especialidad = '';
+
+            /** examenes radiologicos */
+            $examenes_radiologicos = '';
+
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
@@ -1117,6 +1145,23 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+            $necesita_plan_tratamiento = true;
+            $controlExistente = PlanTratamientoOtrosProfesionales::where('id_profesional', $hora->id_profesional)
+            ->where('id_paciente', $hora->id_paciente)
+            ->where('estado',1)
+            ->first();
+     
+            if ($controlExistente) {
+                $tiene_controles = true;
+                if($controlExistente->sesion_actual == $controlExistente->numero_sesiones){
+                    $ultimoControl = 1;
+                }else{
+                    $ultimoControl = 0;
+                }
+            }else{
+                $tiene_controles = false;
+            }
+            
         }
         else if($profesional->id_tipo_especialidad == 12 )
         {
@@ -1150,6 +1195,23 @@ class ficha_atencionController extends Controller
 
             /** examenes radiologicos */
             $examenes_radiologicos = '';
+
+            $necesita_plan_tratamiento = true;
+            $controlExistente = PlanTratamientoOtrosProfesionales::where('id_profesional', $hora->id_profesional)
+            ->where('id_paciente', $hora->id_paciente)
+            ->where('estado',1)
+            ->first();
+     
+            if ($controlExistente) {
+                $tiene_controles = true;
+                if($controlExistente->sesion_actual == $controlExistente->numero_sesiones){
+                    $ultimoControl = 1;
+                }else{
+                    $ultimoControl = 0;
+                }
+            }else{
+                $tiene_controles = false;
+            }
         }
         // else if(($profesional->id_tipo_especialidad == 54 || $profesional->id_tipo_especialidad == 55)  && empty($profesional->id_sub_tipo_especialidad))
         else if(($profesional->id_tipo_especialidad == 54 )  && empty($profesional->id_sub_tipo_especialidad))
@@ -1172,6 +1234,20 @@ class ficha_atencionController extends Controller
         {
             // TERAPIA OCUPACIONAL
             $ruta_blade = 'atencion_otros_prof.atencion_terapia_ocup';
+            $fichaTipo = '';
+            $examen = '';
+            $lista_examen_especial = '';
+
+            /** examenes de la especialidad */
+            $examenes_especialidad = '';
+
+            /** examenes radiologicos */
+            $examenes_radiologicos = '';
+        }
+         else if($profesional->id_especialidad == 16)
+        {
+            // QUIROPRAXIA
+            $ruta_blade = 'atencion_medica.atencion_quiropraxia';
             $fichaTipo = '';
             $examen = '';
             $lista_examen_especial = '';
@@ -1527,6 +1603,7 @@ class ficha_atencionController extends Controller
                                                             ->where('id_paciente', $paciente->id)
                                                             ->get();
 
+
         foreach ($examenes_especialidad_realizados as $key_ex_esp_realizado => $value_ex_esp_realizado)
         {
             if($value_ex_esp_realizado->id_sub_tipo_especialidad == 27)
@@ -1643,7 +1720,11 @@ class ficha_atencionController extends Controller
         /** RECETAS */
         $fecha_actual = date("d-m-Y");
         $regisrto_result = array();
-        $lista_recetas = Recomendacion::whereDate('created_at', '>=', date("Y-m-d",strtotime($fecha_actual."- 1 week")) )->pluck('id')->toArray();
+        $lista_recetas = Recomendacion::join('fichas_atenciones', 'recomendacion.atencion', '=', 'fichas_atenciones.id')
+            ->whereDate('recomendacion.created_at', '>=', date("Y-m-d", strtotime($fecha_actual . "- 1 week")))
+            ->where('fichas_atenciones.id_paciente', $paciente->id)
+            ->pluck('recomendacion.id')
+            ->toArray();
         if($lista_recetas)
         {
             $registros = Recomendacion::whereIn('id', $lista_recetas)->get();
@@ -1939,7 +2020,7 @@ class ficha_atencionController extends Controller
         $curaciones = $adm_hospital_controlador->dameCuracionesPaciente($paciente->id);
         $examenControlador = new ExamenMedicoController();
         $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id, $id_ficha_atencion);
-
+        
         $controles_ciclo = $this->dameEvolucionesPacienteHosp($paciente->id);
         $examenes_dental = $this->dameExamenesPiezaDentalDolor($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_dental_end = $this->dameExamenesPiezaDentalEndDolor($paciente->id);
@@ -1971,7 +2052,7 @@ class ficha_atencionController extends Controller
         }
         $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id, $profesional->id_tipo_especialidad);
 
-        $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $profesional->id_tipo_especialidad);
+        $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $id_ficha_atencion);
         foreach($examenes_rx_oral_endodoncia as $ero)
         {
             $ero->numero_piezas = json_decode($ero->numero_piezas);
@@ -2000,7 +2081,7 @@ class ficha_atencionController extends Controller
         $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
 
         $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
-
+        
         $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
         $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
         $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
@@ -2021,16 +2102,32 @@ class ficha_atencionController extends Controller
         $cuarto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
         $quinto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
         $sexto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $septimo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSeptimoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $octavo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaOctavoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
 
         $todos = $this->dameTratamientosBocaGeneral(
             $id_ficha_atencion
         );
-
+        
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+    
+        if($hora->id_presupuesto != 0){
+            $presupuesto_dental = PresupuestosDental::where('id', $hora->id_presupuesto)->first();
+            if($presupuesto_dental){
+                $id_ficha_atencion = $presupuesto_dental->id_ficha_atencion;
+                $id_ficha = $presupuesto_dental->id_ficha_atencion;
+            }else{
+                $id_ficha = $id_ficha_atencion;
+            }
+            
+        }else{
+            $presupuesto_dental = PresupuestosDental::where('id_ficha_atencion', $id_ficha_atencion)->first();
+            $id_ficha = $id_ficha_atencion;
+        }
 
-        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad,null);
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad,null);
         $odontograma_historial = $this->dameOdontogramaPacienteHistorial($paciente->id);
-
+       
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
 
         if($paciente->edad >= 18){
@@ -2041,10 +2138,14 @@ class ficha_atencionController extends Controller
 
         $diagnosticos_dentales = TratamientosDental::where('estado',1)->get();
 
-        $presupuesto_dental = $this->damePresupuestosDental($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
 
+        
         /** EXAMEN OCTAVO PAR */
-        $reg_octavo_par = OctavoPar::where('id_paciente', $paciente->id)->get();
+        $reg_octavo_par = OctavoPar::where('id_paciente', $paciente->id)->with('HoraMedica')->get();
+        /** FIN EXAMEN OCTAVO PAR */
+        /** EXAMEN AUDICION */
+        $reg_audicion = ExamenAudicion::where('id_paciente', $paciente->id)->get();
+        /** FIN EXAMEN AUDICION */
         /** EXAMENES EVALUACION PRE IMPLANTE DENTAL  */
         $examenes_preimplante = $this->dameHistorialDentalImpl($paciente->id,'impl');
 
@@ -2052,27 +2153,35 @@ class ficha_atencionController extends Controller
 
         $examenes_period_period = $this->dameHistorialDentalPeriod($paciente->id);
 
-        $odontograma_especialidad = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
+        $odontograma_especialidad = $this->dameOdontogramaPaciente($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
-        $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha_atencion);
+        $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha);
 
-        $insumos_bodega = $this->dame_insumos_bodega($id_ficha_atencion);
+        $insumos_bodega = $this->dame_insumos_bodega($id_ficha);
 
 
-        $examanes_tto_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id, $id_ficha_atencion);
-
-        $examenes_post_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id,$id_ficha_atencion,'post');
+        $examenes_tto_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id, $id_ficha);
+        
+        $examenes_tto_rehab_implantes = $this->dameProcedimientosImplantesRehab($paciente->id, $profesional->id, $id_ficha);
+     
+        $examenes_post_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id,$id_ficha,'post');
 
         $examenes_post_implantes_grupos = $this->dameProcedimientosGruposImplantes($paciente->id, $profesional->id,'post');
 
         //return $examenes_post_implantes_grupos;
 
-        $examenes_piezas_pfu = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfu');
+        $examenes_piezas_pfu = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, $id_ficha, 'pfu');
 
-        $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfp');
+        $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, $id_ficha, 'pfp');
 
-        $ordenes_tm = $this->dameOrdenesTrabajoMenor($paciente->id, $profesional->id);
-        $ordenes_tmy = $this->dameOrdenesTrabajoMayor($paciente->id, $profesional->id);
+        if($presupuesto_dental){
+            $ordenes_tm = $this->dameOrdenesTrabajoMenor($paciente->id, $profesional->id, $presupuesto_dental->id, $id_ficha);
+            $ordenes_tmy = $this->dameOrdenesTrabajoMayor($paciente->id, $profesional->id, $presupuesto_dental->id, $id_ficha);
+        }else{
+            $ordenes_tm = [];
+            $ordenes_tmy = [];
+        }
+        
 
         $correlativo_otm = $this->dame_correlativo('Orden Trabajo Menor');
 
@@ -2087,17 +2196,19 @@ class ficha_atencionController extends Controller
         $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
 
         $laboratorios = Laboratorio::where('id_lugar_atencion', $request->lugar_atencion_id)->get();
-
+        
         $marcas_implantes = MarcasImplantes::all();
 
-        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $id_ficha_atencion)->get();
+        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $id_ficha)->get();
+
+        $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
         $total_abonado = 0;
         foreach($pagos_tratamientos_dentales as $p){
             $total_abonado += intval($p->total);
         }
 
-        $suma_presupuesto = $valores_tratamientos[0] + $valores_tratamientos[1] + $valores_tratamientos[2];
+        $suma_presupuesto = $valores_tratamientos[0] + $valores_tratamientos[1] + $valores_tratamientos[2] + $valores_tratamientos[3];
 
         $valor_insumos = $valores_tratamientos[2];
 
@@ -2204,7 +2315,9 @@ class ficha_atencionController extends Controller
 
         $proxima_fecha_atencion = HoraMedica::where('fecha_consulta', '>', $hoy)
             ->where('id_paciente',$paciente->id)
+            ->where('id_profesional', $profesional->id)
             ->where('id_estado',1)
+            ->whereNotNull('id_ficha_atencion')
             ->orderBy('fecha_consulta', 'asc') // Ordena por la fecha más cercana
             ->first();
         if($proxima_fecha_atencion){
@@ -2216,16 +2329,17 @@ class ficha_atencionController extends Controller
 
         $epc = new EscritorioProfesional;
         $tons_dental = $epc->dame_relaciones_tons($profesional->id);
-
+        
         if($profesional->id_tipo_especialidad == 18){
             $url_tratamientos_autocomplete = "{{ route('dental.getDiagnosticoDental') }}";
-        }else if($profesional->id_tipo_especialidad == 19){
+        }else if($profesional->id_tipo_especialidad == 16){
             $url_tratamientos_autocomplete = "{{ route('dental.getTratamientoImplantologia') }}";
         }else{
             $url_tratamientos_autocomplete = "{{ route('dental.getDiagnosticoDental') }}";
         }
 
-        $piezas_periodonto = PiezaPeriodontograma::where('id_ficha_atencion', $id_ficha_atencion)->get();
+        $piezas_periodonto = ExamenesDentalPeriodoncia::where('id_ficha_atencion', $id_ficha_atencion)->get();
+        
         $examenes_plan_tratamiento = ExamenPlanTratamiento::where('id_ficha_atencion', $id_ficha_atencion)->where('tipo_examen',1)->get();
         $examenes_plan_tratamiento_rx = ExamenPlanTratamiento::where('id_ficha_atencion', $id_ficha_atencion)->where('tipo_examen',2)->get();
         $examenes_plan_tratamiento_broncoscopia = ExamenPlanTratamiento::where('id_ficha_atencion', $id_ficha_atencion)->where('tipo_examen',3)->get();
@@ -2242,6 +2356,47 @@ class ficha_atencionController extends Controller
             }
         }
 
+		/** EXAMENES DE RADIOLOGIA */
+        $filtro_rayo = array();
+        $filtro_rayo[] = array('estado', 1);
+        $filtro_rayo[] = array('estado_informe', 1);
+        $filtro_rayo[] = array('estado_archivo', 1);
+        $filtro_rayo[] = array('id_paciente', $paciente->id);
+        $reg_exam_rayo = FichaAtencionRayo::where($filtro_rayo)->orderBy('created_at', 'DESC')->get();
+
+        if($reg_exam_rayo && $procedimientoCentroTem == '')
+        {
+            foreach ($reg_exam_rayo as $key_ry => $value_ry)
+            {
+                $idProcedimiento = $value_ry->id_procedimiento;
+
+                // Verificar si el valor contiene barras verticales (caso múltiples IDs)
+                if (strpos($idProcedimiento, '|') !== false) {
+                    // Convertir la cadena en un array de IDs
+                    $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                    // Obtener todos los procedimientos que coincidan con los IDs
+                    $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+                } else {
+                    // Caso de un solo ID (número)
+                    $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+                }
+
+                $nombre_proc_temp = '';
+                foreach ($procedimientoCentroTem as $key_proc_temp => $value_proc_temp)
+                {
+                    $nombre_proc_temp .= $value_proc_temp->nombre.', ';
+                }
+
+                $reg_exam_rayo[$key_ry]->procedimientos = $procedimientoCentroTem;
+                $reg_exam_rayo[$key_ry]->nombre_procedimientos = $nombre_proc_temp;
+            }
+        }
+
+        $trabajos_laboratorio = $this->dame_trabajos_laboratorio($paciente->id, $id_ficha_atencion, $request->lugar_atencion, $profesional->id);
+
+        
+        
         return view($ruta_blade)->with(
             [
                 'examenes_plan_tratamiento_broncoscopia' => $examenes_plan_tratamiento_broncoscopia,
@@ -2269,8 +2424,10 @@ class ficha_atencionController extends Controller
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
                 'valores_insumos' => $valores_tratamientos[2],
+                'valores_laboratorio' => $valores_tratamientos[3],
                 'valor_abonado' => $total_abonado,
-                'examenes_tto_implantes' => $examanes_tto_implantes,
+                'examenes_tto_implantes' => $examenes_tto_implantes,
+                'examenes_tto_rehab_implantes' => $examenes_tto_rehab_implantes,
                 'examenes_post_implantes' => $examenes_post_implantes,
                 'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
                 'examenes_piezas_pfu' => $examenes_piezas_pfu,
@@ -2319,6 +2476,8 @@ class ficha_atencionController extends Controller
                 'cuarto_cuadrante_infantil' => $cuarto_cuadrante_infantil,
                 'quinto_cuadrante_infantil' => $quinto_cuadrante_infantil,
                 'sexto_cuadrante_infantil' => $sexto_cuadrante_infantil,
+                'septimo_cuadrante_infantil' => $septimo_cuadrante_infantil,
+                'octavo_cuadrante_infantil' => $octavo_cuadrante_infantil,
                 'primer_cuadrante_endodoncia' => $primer_cuadrante_endodoncia,
                 'segundo_cuadrante_endodoncia' => $segundo_cuadrante_endodoncia,
                 'tercer_cuadrante_endodoncia' => $tercer_cuadrante_endodoncia,
@@ -2387,7 +2546,7 @@ class ficha_atencionController extends Controller
 				'resultado_examen' => $resultado_examen,
                 'tipo_antecedente' => $tipo_antecedente,
                 'receta_control' => $receta_control,
-
+                'tiene_controles' => $tiene_controles,
                 /** FMU */
                 // 'id_usuario' => $id_usuario,
                 //// 'paciente' => $paciente,
@@ -2421,8 +2580,12 @@ class ficha_atencionController extends Controller
                 'acompanantes'  => $acompanantes,
 
                 'reg_octavo_par'  => $reg_octavo_par,
+                'reg_audicion'  => $reg_audicion,
                 'procedimientoCentro'  => $procedimientoCentroTem,
 
+				'reg_exam_rayo'  => $reg_exam_rayo,
+                'ultimoControl' => $ultimoControl,
+                'laboratorios' => $laboratorios,
             ]
         );
     }
@@ -2452,9 +2615,11 @@ class ficha_atencionController extends Controller
         return $proveedores;
     }
 
-    private function dame_correlativo($tip_doc)
+    public function dame_correlativo($tip_doc)
     {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $fila=Correlativos::where('documento', $tip_doc)
+                        ->where('id_usuario', $profesional->id_usuario)
                         ->first();
 
         if(!is_null($fila))
@@ -2462,33 +2627,54 @@ class ficha_atencionController extends Controller
             $corr=$fila->correlativo;
             $el_siguiente=$corr+1;
             $num=$el_siguiente;
-            //FALTA:VERIFICAR EN LA TABLA RESPECTIVA (boletas o facturas) si hay existe ese número
-            //esto debido a que A VECES en un determinado instante COINCIDE la elección del siguiente correlativo.
 
+        }else{
+            $fila = new Correlativos;
+            $fila->documento = $tip_doc;
+            $fila->id_usuario = $profesional->id_usuario;
+            $fila->correlativo = 0;
+            $fila->serie = 0;
+            $fila->alarma = 50;
+            $fila->estado = 1;
+            $fila->fecha = Carbon::now();
+
+            $fila->save();
+            $num = 1;
         }
 
         return $num;
     }
 
-    public function dameOrdenesTrabajoMenor($id_paciente, $id_profesional){
-        $ordenes = OrdenTrabajoMenor::select('ordenes_trabajos_menores.*','laboratorios.nombre as nombre_lab')
+    public function dameOrdenesTrabajoMenor($id_paciente, $id_profesional,$id_presupuesto, $id_ficha_atencion = null){
+        $ordenes = OrdenTrabajoMenor::select('ordenes_trabajos_menores.*','laboratorios.nombre as nombre_lab','prestaciones_laboratorio.valor as valor_prestacion')
+                                        ->distinct()
                                         ->join('laboratorios','ordenes_trabajos_menores.id_laboratorio','laboratorios.id')
+                                        ->leftjoin('prestaciones_laboratorio','ordenes_trabajos_menores.trabajo_realizar','prestaciones_laboratorio.nombre')
                                         ->where('ordenes_trabajos_menores.id_paciente', $id_paciente)
                                         ->where('ordenes_trabajos_menores.id_profesional',$id_profesional)
+                                        ->when($id_ficha_atencion, function ($query) use ($id_ficha_atencion) {
+                                            return $query->where('ordenes_trabajos_menores.id_ficha_atencion', $id_ficha_atencion);
+                                        })
+                                        ->orderBy('ordenes_trabajos_menores.created_at', 'asc')
                                         ->get();
         return $ordenes;
     }
 
-    public function dameOrdenesTrabajoMayor($id_paciente, $id_profesional){
-        $ordenes = OrdenTrabajoMayor::select('ordenes_trabajos_mayores.*','laboratorios.nombre as nombre_lab')
+    public function dameOrdenesTrabajoMayor($id_paciente, $id_profesional,$id_presupuesto, $id_ficha_atencion = null){
+        $ordenes = OrdenTrabajoMayor::select('ordenes_trabajos_mayores.*','laboratorios.nombre as nombre_lab', 'prestaciones_laboratorio.valor as valor_prestacion')
+                                     
                                         ->leftjoin('laboratorios','ordenes_trabajos_mayores.id_laboratorio','laboratorios.id')
+                                        ->leftjoin('prestaciones_laboratorio','ordenes_trabajos_mayores.trabajo_realizar','prestaciones_laboratorio.nombre')
                                         ->where('ordenes_trabajos_mayores.id_paciente', $id_paciente)
                                         ->where('ordenes_trabajos_mayores.id_profesional',$id_profesional)
+                                        ->when($id_ficha_atencion, function ($query) use ($id_ficha_atencion) {
+                                            return $query->where('ordenes_trabajos_mayores.id_ficha_atencion', $id_ficha_atencion);
+                                        })
                                         ->get();
         return $ordenes;
     }
 
-    public function dameProcedimientosCoronaProtesis($id_paciente, $id_profesional, $seccion = null){
+    public function dameProcedimientosCoronaProtesis($id_paciente, $id_profesional,$id_ficha_atencion, $seccion = null){
         if($seccion == 'pfu'){
             $procedimientos = PiezasDentalCoronaProtesis::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->where('seccion','pfu')->get();
         }else{
@@ -2502,6 +2688,9 @@ class ficha_atencionController extends Controller
         try {
 
             $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
+            foreach($insumos as $i){
+                $i->insumos = mb_strtoupper($i->insumos, 'UTF-8');
+            }
             return $insumos;
         } catch (\Exception $e) {
             //throw $th;
@@ -2544,38 +2733,24 @@ class ficha_atencionController extends Controller
     }
 
     public function damePresupuestosDental($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
-        $presupuestos = PresupuestosDental::where('id_ficha_atencion',$id_ficha_atencion)->first();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $presupuestos = PresupuestosDental::where('id_paciente',$id_paciente)
+        ->where('id_profesional', $profesional->id)
+        ->where('estado',0)
+        ->first();
         return $presupuestos;
     }
 
     public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
         $total_general = 0;
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        // Obtener todos los tratamientos desde dameTratamientosBocaGeneral()
+        $tratamientos = $this->dameTratamientosBocaGeneral($id_ficha_atencion);
 
-         // Lista de funciones a llamar con sus argumentos
-        $funciones = [
-            ['dameMaxilarSuperiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarSuperiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarInferiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarInferiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-            ['dameBocaCompletaGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-            ['dameBocaCompletaGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarInferiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarInferiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarSuperiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
-            ['dameMaxilarSuperiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
-            ['dameCompletaEndoTratamiento', [$id_paciente, $tipo_especialidad]],
-            ['dameCompletaEndoDiagnostico', [$id_paciente, $tipo_especialidad]]
-        ];
-
-       // Recorremos cada función
-        foreach ($funciones as $funcion) {
-            $resultado = call_user_func_array([$this, $funcion[0]], $funcion[1]);
-            foreach ($resultado as $item) {
-                if ($item['presupuesto'] == 1) {
-                    if (isset($item['valor'])) {
-                        $total_general += $item['valor'];
-                    }
-                }
+        foreach ($tratamientos as $item) {
+            // Sumar solo los que están en presupuesto y tienen valor definido
+            if ($item->presupuesto == 1 && isset($item->valor) && $item->urgencia == 0) {
+                $total_general += $item->valor;
             }
         }
 
@@ -2585,7 +2760,7 @@ class ficha_atencionController extends Controller
 
         // Iterar y sumar valores
         foreach ($odontograma as $item) {
-            if($item['presupuesto'] == 1){
+            if($item['presupuesto'] == 1 && $item['urgencia'] == 0){
                 if (isset($item['valor'])) {
                     $total_odontograma += $item['valor'];
                 }
@@ -2599,14 +2774,38 @@ class ficha_atencionController extends Controller
 
         // Iterar y sumar valores
         foreach ($insumos as $item) {
-            if($item['presupuesto'] == 1){
+            if($item['presupuesto'] == 1 && $item['urgencia'] == 0){
                 if (isset($item['valor'])) {
                     $total_insumos += $item['valor'] * $item['cantidad'];
                 }
             }
 
         }
-        return [$total_general, $total_odontograma, $total_insumos];
+
+        $trabajos_laboratorio = $this->dame_trabajos_laboratorio($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id);
+
+        $total_lab = 0;
+
+        foreach ($trabajos_laboratorio as $trabajo) {
+            if($trabajo->presupuesto == 1){
+                $total_lab += $trabajo->valor_prestacion;
+            }
+        }
+
+        return [$total_general, $total_odontograma, $total_insumos, $total_lab];
+    }
+
+    public function dame_trabajos_laboratorio($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $id_presupuesto, $id_profesional = null)
+    {
+        $ficha = FichaAtencion::find($id_ficha_atencion);
+
+        $trabajos = $this->dameOrdenesTrabajoMenor($id_paciente, $id_profesional, $id_presupuesto, $id_ficha_atencion);
+
+        $trabajos_mayor = $this->dameOrdenesTrabajoMayor($id_paciente, $id_profesional,$id_presupuesto, $id_ficha_atencion);
+
+        // Unir los resultados de trabajos menores y mayores
+        $trabajos = $trabajos->merge($trabajos_mayor);
+        return $trabajos;
     }
 
    public function pdf_orden_examenes_tipo_examen(Request $request)
@@ -2623,10 +2822,10 @@ class ficha_atencionController extends Controller
         }
 
         $ficha_atencion = FichaAtencion::find($id_ficha_atencion);
-        $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+        $lugar_atencion = LugarAtencion::with('direccion')->find($ficha_atencion->id_lugar_atencion);
         $paciente = Paciente::find($ficha_atencion->id_paciente);
-        $profesional = Profesional::find($ficha_atencion->id_profesional);
-
+        $profesional = Profesional::with('direccion')->find($ficha_atencion->id_profesional);
+       
         // Certificados y QR
         $token_receta = '';
         $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
@@ -2656,14 +2855,20 @@ class ficha_atencionController extends Controller
 
         $array_lugar_atencion = [
             'id' => $lugar_atencion->id,
-            'nombre' => $lugar_atencion->nombre
+            'nombre' => $lugar_atencion->nombre,
+            'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+            'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
         ];
 
         $array_profesional = [
             'id' => $profesional->id,
             'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
             'rut' => $profesional->rut,
+            'direccion' => $profesional->direccion->direccion.' '.$profesional->direccion->numero_dir.', '.$profesional->direccion->Ciudad()->first()->nombre,
             'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+            'id_especialidad' => $profesional->id_especialidad,
+            'num_colegio' => $profesional->num_colegio,
+            'region' => $profesional->direccion->Ciudad()->first()->Region()->first()->nombre,
             'token' => $token_profesional,
             'url' => $url_profesional,
             'qr' => $qr_profesional,
@@ -2725,9 +2930,13 @@ class ficha_atencionController extends Controller
 
 
 
-    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null, $id_profesional = null){
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if(!is_null($id_profesional)){
+            $profesional = Profesional::find($id_profesional);
+        }
+       
         if($tipo_especialidad == 16){
             $query = OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
@@ -2792,6 +3001,7 @@ class ficha_atencionController extends Controller
                             $odontograma->valor = $d->valor;
                         }
                 }
+                $odontograma->descripcion = mb_strtoupper($odontograma->descripcion, 'UTF-8');
             }
 
             return $odontogramas;
@@ -3330,6 +3540,7 @@ class ficha_atencionController extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaQuintoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
@@ -3348,7 +3559,7 @@ class ficha_atencionController extends Controller
                     ->where('tipo_especialidad', $tipo_especialidad)
                       ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
-                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '9.%'") // Convierte a cadena y filtra
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
         }else{
             $tipo = 2;
@@ -3399,7 +3610,75 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
+    public function dameExamenesPiezaDentalPiezaSeptimoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($tipo_paciente == 'adulto'){
+            $tipo = 1;
+            $otro_tipo = 2;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '7.%'") // Convierte a cadena y filtra
+                    ->get();
+        }else if($tipo_paciente == 'infantil'){
+            $tipo = 3;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '7.%'") // Convierte a cadena y filtra
+                    ->get();
+        }else{
+            $tipo = 2;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '7.%'") // Convierte a cadena y filtra
+                    ->get();
+        }
 
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalPiezaOctavoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($tipo_paciente == 'adulto'){
+            $tipo = 1;
+            $otro_tipo = 2;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '8.%'") // Convierte a cadena y filtra
+                    ->get();
+        }else if($tipo_paciente == 'infantil'){
+            $tipo = 3;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '8.%'") // Convierte a cadena y filtra
+                    ->get();
+        }else{
+            $tipo = 2;
+            $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
+                    ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
+                      ->where('id_profesional', $profesional->id)
+                    ->where('estado', 1)
+                    ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '8.%'") // Convierte a cadena y filtra
+                    ->get();
+        }
+
+        return $examenes;
+    }
 
     public function dameExamenesPiezaDentalPiezaEnd($id_paciente, $id_profesional, $id_ficha_atencion){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
@@ -3407,7 +3686,7 @@ class ficha_atencionController extends Controller
         ->where('id_profesional',$profesional->id)
         ->where('tipo_examen',2)
         ->where('id_ficha_atencion', $id_ficha_atencion)
-        ->where('estado',1)
+        // ->where('estado',1)
         ->get();
         return $examenes;
     }
@@ -3417,35 +3696,32 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameInfoImagenesDentalPaciente($id_paciente,$seccion, $id_ficha_atencion = null)
+    public function dameInfoImagenesDentalPaciente($id_paciente, $seccion, $id_ficha_atencion = null)
     {
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        
+        if (!$profesional) {
+            \Log::warning('Profesional no encontrado', ['user_id' => Auth::user()->id]);
+            return collect(); // Retorna colección vacía
+        }
+    
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('id_profesional',$profesional->id)->where('seccion',$seccion)
-        ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
-            return $query->where('id_ficha_atencion', $id_ficha_atencion);
-        })
-        ->get();
-
-        // Itera sobre cada imagen para procesar `paths_imagenes`
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)
+            ->where('id_profesional', $profesional->id)
+            ->where('seccion', $seccion)
+            ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
+                return $query->where('id_ficha_atencion', $id_ficha_atencion);
+            })
+            ->get();
+    
         foreach ($imagenes as $imagen) {
-            if (!empty($imagen->paths_imagenes)) {
-                $imagenes_decoded = json_decode($imagen->paths_imagenes, true);
-
-                if (json_last_error() === JSON_ERROR_NONE && is_array($imagenes_decoded)) {
-                    $imagen->paths_imagenes = $imagenes_decoded; // ← YA decodificado como array
-                } else {
-                    $imagen->paths_imagenes = [];
-                }
-            } else {
+            if (is_null($imagen->paths_imagenes)) {
                 $imagen->paths_imagenes = [];
             }
         }
-
-
+    
         return $imagenes;
     }
-
 
     public function dameExamenesPiezaDentalOraxRx($id_paciente){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
@@ -3469,14 +3745,14 @@ class ficha_atencionController extends Controller
 
             // Puedes asignar este array al objeto `$e` si lo necesitas
             $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
-            $e->numero_piezas = json_decode($e->numero_piezas);
+            $e->numero_piezas = $e->numero_piezas;
         }
 
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalOraxRxEnd($id_paciente){
-        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+    public function dameExamenesPiezaDentalOraxRxEnd($id_paciente, $id_ficha_atencion){
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->where('tipo_examen',2)->get();
         foreach ($examenes as $e) {
             $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
             $e->imagenes = $imagenes;
@@ -3520,7 +3796,7 @@ class ficha_atencionController extends Controller
     }
 
     public function dameExamenesPiezaDentalDolor($id_paciente, $tipo_especialidad){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('tipo_especialidad',$tipo_especialidad)->get();
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('tipo_especialidad',$tipo_especialidad)->where('estado',1)->get();
         return $examenes;
     }
 
@@ -3734,6 +4010,687 @@ class ficha_atencionController extends Controller
             ]
         );
 
+    }
+
+    public function index_hospital_amb(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $user = Auth::user()->id;
+            $profesional = Profesional::where('id_usuario', $user)->first();
+
+            $id_paciente = $request->id_paciente;
+           
+            if(empty($request->id_paciente)) $id_paciente = 6;
+            $paciente = Paciente::where('pacientes.id', $id_paciente)->first();
+
+            /** carga de direccion en paciente */
+            $direccion = Direccion::find($paciente->id_direccion);
+            if (!$direccion == null)
+            {
+                $ciudad = Ciudad::find($direccion->id_ciudad);
+                if($ciudad)
+                    $region = Region::find($ciudad->id_region);
+                else
+                    $region = null;
+            }
+            else
+            {
+                $direccion = null;
+                $ciudad = null;
+                $region = null;
+            }
+
+            $paciente->direccion = (object)array(
+                'direccion' => $direccion,
+                'ciudad' => $ciudad,
+                'region' => $region,
+            );
+            
+            /* FMU CONTACTO EMERGENCIA */
+            $pacientes_contacto_emergencia = PacienteContactoEmergencia::with('ContactoEmergencia')->where('id_paciente',$paciente->id)->get();
+
+            /* CONTACTO EMERGENCIA */
+            $pacientes_contacto_emergencia = PacienteContactoEmergencia::where('id_paciente',$paciente->id)->first();
+            if(is_object($pacientes_contacto_emergencia))
+            {
+                $contacto_emergencia = ContactoEmergencia::find($pacientes_contacto_emergencia->id_contacto);
+
+                list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
+                $ano_diferencia  = date("Y") - $ano;
+                $mes_diferencia = date("m") - $mes;
+                $dia_diferencia   = date("d") - $dia;
+                if ($dia_diferencia < 0 || $mes_diferencia < 0)
+                $ano_diferencia--;
+
+                $edad = $ano_diferencia;
+                $contacto_emergencia->fecha_nac = $dia.'-'.$mes.'-'.$ano;
+                $contacto_emergencia->edad = $edad;
+
+            }
+            else
+            {
+                $contacto_emergencia = (object) array(
+                    'nombre'=>'N/A',
+                    'apellido_uno'=>'N/A',
+                    'apellido_dos'=>'N/A',
+                    'rut'=>'N/A',
+                    'edad'=>'N/A',
+                    'email'=>'N/A',
+                    'fecha_nac'=>'N/A',
+                    'telefono'=>'N/A',
+                    'parentezco'=>'N/A'
+                );
+            }
+
+            /** FMU ALERGIAS */
+            $paciente_alergias = Antecedente::where('id_paciente', $paciente->id)->where('id_tipo_antecedente', 5)->get();
+
+            /* ANTECEDENTES */
+            $antecedentes = Antecedente::where('id_paciente',$paciente->id)->with('users','paciente','tipo_antecendente','profesional')->get();
+            foreach ($antecedentes as $valor)
+            {
+                $valor['antecedente_data'] = json_decode($valor['data']);
+            }
+
+            $antecedentes_paciente = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+            if (isset($antecedentes_paciente))
+            {
+                $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+                $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+                $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
+                $patoligias_cronicas = Antecedente::where('id_tipo_antecedente', 2)->where('id_paciente', $paciente->id)->where('estado', 1)->get();
+            }
+            else
+            {
+                $medicamentos_cronicos = [];
+                $alergias = [];
+                $antecedentes_quirurgicos = [];
+                $patoligias_cronicas = [];
+            }
+
+            $control_peso = ControlObesidad::where('id_paciente', $paciente->id)->get();
+            $hipertension = Hipertension::where('id_paciente', $paciente->id)->get();
+            $diabetes = Diabete::where('id_paciente', $paciente->id)->get();
+
+            /** resultado de examenes */
+            $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
+            if($resultado_examen)
+            {
+                foreach ($resultado_examen as $key => $value)
+                {
+                    $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                    $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
+                }
+            }
+
+
+            /* ANTECEDENTES */
+            $id_antecedente = $paciente->id_antecedente;
+            if($id_antecedente!=null)
+            {
+                $antecedentes_paciente = AntecedentesPaciente::find($id_antecedente);
+            }
+            else
+            {
+                $antecedentes_paciente = (object) array(
+                    'id'=>'',
+                    'transfusion'=>'N/A',
+                    'dona_organos'=>'N/A',
+                    'dona_organos_parcial'=>'N/A',
+                    'dona_sangre'=>'N/A',
+                    'impedimento_donar'=>'N/A',
+                    'comentario_gs'=>'N/A',
+                    'comentarios'=>'N/A',
+                    'hepatitis'=>'N/A',
+                    'comentario_hepa'=>'N/A',
+                    'id_grupo_sanguineo'=>0,
+                );
+            }
+
+            /* SANGUINEO */
+            $id_grupo_sanguineo = $antecedentes_paciente->id_grupo_sanguineo;
+            if($id_grupo_sanguineo!=0)
+            {
+                $grupo_sanguineo = GrupoSanguineo::find($id_grupo_sanguineo);
+            }
+            else
+            {
+                $grupo_sanguineo = (object) array(
+                    'id'=> 0,
+                    'nombre_gs'=> 'N/A',
+                    'descripcion_gs'=> 'N/A'
+                );
+            }
+
+            /** Control enfermedades Cronicas */
+            $control_enfer_cronicas = array();
+            /** obsidad */
+            $obesidad = ControlObesidad::where('id_paciente', $paciente->id)->get();
+            if($obesidad)
+            {
+                foreach ($obesidad as $key => $value)
+                {
+                    $temp = array(
+                        'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                        'tipo' => 'Obesidad',
+                        'detalle' => array(
+                            'Peso' => $value->peso,
+                            'Variación' => $value->variacion,
+                            'Ideal' => $value->ideal,
+                        )
+                    );
+                    $control_enfer_cronicas[] = $temp;
+                }
+            }
+
+            /** diabetes */
+            $diabetes = Diabete::where('id_paciente', $paciente->id)->get();
+            if($diabetes)
+            {
+                foreach ($diabetes as $key => $value)
+                {
+                    $temp = array(
+                        'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                        'tipo' => 'Diabetes',
+                        'detalle' => array(
+                            'Peso' => $value->peso,
+                            'Piés' => $value->pies,
+                            'HG A1c' => $value->hgac1,
+                            'Colesterol' => $value->colesterol,
+                            'Creatina' => $value->creatina,
+                            'Glicosilada postprandial' => $value->glicosilada_postprandial,
+                            'Glicosilada ayuno' => $value->glicosinada_ayuno,
+                        )
+                    );
+                    $control_enfer_cronicas[] = $temp;
+                }
+            }
+
+            /** hipertensiones */
+            $hipertension = Hipertension::where('id_paciente', $paciente->id)->get();
+            if($hipertension)
+            {
+                foreach ($hipertension as $key => $value)
+                {
+                    $temp = array(
+                        'fecha' => date('d-m-Y', strtotime($value->created_at)),
+                        'tipo' => 'Hipertensión',
+                        'detalle' => array(
+                            'Presión Sistólica' => $value->sistolica,
+                            'Presión Diastólica' => $value->diastolica,
+                            'Presión Ideal' => $value->ideal,
+                        )
+                    );
+                    $control_enfer_cronicas[] = $temp;
+                }
+            }
+
+            /** RESPONSABLES */
+            $responsables = '';
+            /** validar si es dependiente */
+            $array_id_responsable = PacientesDependientes::where('id_paciente', $paciente->id)->pluck('id_responsable')->toArray();
+
+            if(count($array_id_responsable) > 0)
+            {
+                $responsables = Paciente::whereIn('id', $array_id_responsable)->get();
+            }
+
+            $contacto_emergencia_html = "
+                <table class='table table-bordered table-xs'>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido Materno</th>
+                            <th>Apellido Paterno</th>
+                            <th>Rut</th>
+                            <th>Edad</th>
+                            <th>Email</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Teléfono</th>
+                            <th>Parentezco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>$contacto_emergencia->nombre</td>
+                            <td>$contacto_emergencia->apellido_uno</td>
+                            <td>$contacto_emergencia->apellido_dos</td>
+
+                            <td>$contacto_emergencia->rut</td>
+                            <td>$contacto_emergencia->edad</td>
+                            <td>$contacto_emergencia->email</td>
+
+                            <td>$contacto_emergencia->fecha_nac</td>
+                            <td>$contacto_emergencia->telefono</td>
+                            <td>$contacto_emergencia->parentezco</td>
+                        </tr>
+                    </tbody>
+                </table>
+            ";
+
+            $responsables_html = "
+                <table class='table table-bordered table-xs'>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido Materno</th>
+                            <th>Apellido Paterno</th>
+                            <th>Rut</th>
+                            <th>Email</th>
+                            <th>Teléfono </th>
+                        </tr>
+                    </thead>
+                    <tbody>";
+                    if($responsables)
+                    {
+                        foreach ($responsables as $key => $value)
+                        {
+                            $responsables_html .= "<tr>
+                                <td>$value->nombres</td>
+                                <td>$value->apellido_uno</td>
+                                <td>$value->apellido_dos</td>
+                                <td>$value->rut</td>
+                                <td>$value->email</td>
+                                <td>$value->telefono</td>
+                            </tr>";
+                        }
+                    }
+            $responsables_html .=     "</tbody>
+                </table>";
+
+            /** RECETAS */
+            $fecha_actual = date("d-m-Y");
+            $regisrto_result = array();
+            $lista_recetas = Recomendacion::whereDate('created_at', '>=', date("Y-m-d",strtotime($fecha_actual."- 1 week")) )->pluck('id')->toArray();
+            if($lista_recetas)
+            {
+                $registros = Recomendacion::whereIn('id', $lista_recetas)->get();
+                if($registros)
+                {
+                    $regisrto_result = array();
+                    foreach ($registros as $key => $value)
+                    {
+                        $detalle = RecomendacionDetalle::where('id_recomendacion',$value->id)->get();
+                        $detalle_temp = array();
+                        if($detalle)
+                        {
+                            $detalle_temp = array();
+                            foreach ($detalle as $key_det => $value_det)
+                            {
+                                $detalle_temp[] = array(
+                                    'id' => $value_det->id,
+                                    'id_receta' => $value_det->id_recomendacion,
+                                    'id_tipo_control' => decrypt($value_det->control),
+                                    'id_producto' => decrypt($value_det->id_articulo),
+                                    'producto' => decrypt($value_det->articulo),
+                                    'farmaco' => decrypt($value_det->componente),
+                                    'id_presentacion' => decrypt($value_det->id_apariencia),
+                                    'presentacion' => decrypt($value_det->apariencia),
+                                    'id_receta_dosis' => decrypt($value_det->id_cuota),
+                                    'posologia' => decrypt($value_det->cuota),
+                                    'id_via_administracion' => decrypt($value_det->id_regimen),
+                                    'via_administracion' => decrypt($value_det->regimen),
+                                    'id_periodo' => decrypt($value_det->id_lapso),
+                                    'periodo' => decrypt($value_det->lapso),
+                                    'uso_cronico' => decrypt($value_det->uso_frecuente),
+                                    'cantidad_compra' => decrypt($value_det->volumen_compra),
+                                    'cantidad' => decrypt($value_det->volumen),
+                                    'cantidad_vendida' => decrypt($value_det->volumen_entregado),
+                                    'comentario' => decrypt($value_det->comentario),
+                                    'token_doc' => $value_det->cod_doc,
+                                    'estado' => $value_det->estado,
+                                    'created_at' => $value_det->created_at,
+                                    'updated_at' => $value_det->updated_at,
+                                );
+                            }
+                        }
+
+                        $regisrto_result[] = array(
+                            'id' => $value->id,
+                            'id_ficha_atencion' => $value->atencion,
+                            'id_ingreso_paciente' => $value->salida,
+                            'id_recuperacion' => $value->herir,
+                            'id_sala' => $value->cuadro,
+                            'id_paciente' => $value->activo,
+                            'id_profesional' => $value->aficionado,
+                            'id_tipo_control' => $value->control,
+                            'token_doc' => $value->cod_doc,
+                            'token_auto' => $value->cod_auto,
+                            'pdf' => $value->info,
+                            'estado' => $value->estado,
+                            'detalle' => $detalle_temp,
+                            'created_at' => $value->created_at,
+                            'updated_at' => $value->updated_at,
+                        );
+                    }
+                }
+            }
+            // $regisrto_result
+            $receta_activa_html = "
+                <table class='table table-bordered table-xs'>
+                <thead>
+                    <tr>
+                        <th>Fecha Receta</th>
+                        <th>Producto</th>
+                        <th>Presentación</th>
+                        <th>Posologia</th>
+                        <th>Via<br/>Administracion</th>
+                        <th>Periodo</th>
+                        <th>Cantidad Compra</th>
+                    </tr>
+                </thead>
+                <tbody>";
+                if($regisrto_result)
+                {
+                    foreach ($regisrto_result as $key => $value)
+                    {
+                        foreach ($value['detalle'] as $key_detalle => $value_detalle)
+                        {
+                            $receta_activa_html .= "
+                                <tr>
+                                    <td>".date('d-m-Y', strtotime($value['created_at']))."</td>
+                                    <td>".$value_detalle['producto']."<br/><span style=\"font-size:10px;\">".$value_detalle['farmaco']."</span></td>
+                                    <td>".$value_detalle['presentacion']."</td>
+                                    <td>".$value_detalle['posologia']."</td>
+                                    <td>".$value_detalle['via_administracion']."</td>
+                                    <td>".$value_detalle['periodo']."</td>
+                                    <td>".$value_detalle['cantidad_compra']."</td>
+                                </tr>";
+                        }
+                    }
+                }
+            $receta_activa_html .= "
+                </tbody>
+            </table>";
+
+            $datos = (object)array(
+                'contacto_emergencia' =>  $contacto_emergencia_html,
+                'tratamientos_activos' => $receta_activa_html,
+                'confidencial' => '',
+                'responsables' => $responsables_html,
+
+            );
+
+
+            /** EXAMENES DE ESPECIALIDAD REALIZADOS */
+            $examenes_especialidad_realizados = ExamenEspecialidad::select('id', 'id_tipo', 'id_template', 'id_examen_tipo', 'id_sub_tipo_especialidad', 'id_ficha_atencion', 'id_ficha_especialidad', 'id_paciente', 'id_profesional', 'id_asistente', 'nombre', 'revisado', 'estado')
+                                                                // ->with(['HoraMedica' => function($query){
+                                                                //     $query->select('id', 'id_ficha_atencion', 'fecha_realizacion_consulta', 'id_estado');
+                                                                // }])
+                                                                ->with(['ExamenEspecialidadTemplate' => function($query){
+                                                                    $query->select('id', 'nombre', 'alias');
+                                                                }])
+                                                                ->with(['ExamenEspecialidadTipo' => function($query){
+                                                                    $query->select('id', 'nombre', 'descripcion');
+                                                                }])
+                                                                ->with(['SubTipoEspecialidad' => function($query){
+                                                                    $query->select('id', 'nombre');
+                                                                }])
+                                                                ->where('id_paciente', $paciente->id)
+                                                                ->get();
+            foreach ($examenes_especialidad_realizados as $key_ex_esp_realizado => $value_ex_esp_realizado)
+            {
+                if($value_ex_esp_realizado->id_sub_tipo_especialidad == 27)
+                {
+                    $filtro_h_ex_esp_ral = array();
+                    $filtro_h_ex_esp_ral[] = array('id_ficha_otros_prof', $value_ex_esp_realizado->id_ficha_especialidad);
+                    $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                    $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                    $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+                }
+                else if($profesional->id_especialidad != 1)
+                {
+                    $filtro_h_ex_esp_ral = array();
+                    $filtro_h_ex_esp_ral[] = array('id_ficha_otros_prof', $value_ex_esp_realizado->id_ficha_especialidad);
+                    $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                    $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                    $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+                }
+                else
+                {
+                    $filtro_h_ex_esp_ral = array();
+                    $filtro_h_ex_esp_ral[] = array('id_ficha_atencion', $value_ex_esp_realizado->id_ficha_atencion);
+                    $filtro_h_ex_esp_ral[] = array('id_profesional', $value_ex_esp_realizado->id_profesional);
+                    $hora_medica = HoraMedica::where($filtro_h_ex_esp_ral)->get()->first();
+                    $examenes_especialidad_realizados[$key_ex_esp_realizado]->HoraMedica = $hora_medica;
+                }
+            }
+
+            /** resultado de examenes */
+            $resultado_examen = ResultadoExamen::with('ResultadoExamenArchivo')->where('id_paciente', $paciente->id)->get();
+            if($resultado_examen)
+            {
+                foreach ($resultado_examen as $key => $value)
+                {
+                    $result_tipo_ex = ExamenMedico::where('id', $value->tipo_examen)->get()->first();
+                    $resultado_examen[$key]['obj_tipo_examen'] = $result_tipo_ex;
+                }
+            }
+
+            $receta_control = RecetaControl::orderBy('Descripcion')->get();
+
+            
+            $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
+
+            // triage del paciente
+            $pt = PacienteTriage::where('id_paciente', $paciente->id)->first();
+            
+
+            $niveles_urgencia = AsignacionUrgencia::all();
+            // Si existe un paciente en espera
+            if($pt){
+                foreach($niveles_urgencia as $nu){
+                    if($nu->id == $pt->id_triage){
+                        $paciente->clase = $nu->clase_html;
+                        $paciente->descripcion = $nu->descripcion;
+                    }
+                }
+            }
+
+            // $datos['estado'] = 1;
+            // $datos['msj'] = 'exito';
+
+            $responsables = Responsable::all();
+
+            $controles_ciclo = $this->dameEvolucionesPaciente($paciente->id);
+
+            if(count($controles_ciclo) == 0)
+            {
+                // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
+                $contador_div_evaluaciones = 1;
+            }else{
+                // si hay ciclos de control se suma 1 para manejar el id en la vista
+                $contador_div_evaluaciones = count($controles_ciclo) + 1;
+            }
+
+            foreach($controles_ciclo as $cc)
+            {
+                $cc->datos_evolucion = json_decode($cc->datos_evolucion);
+            }
+
+            $tipos_curaciones = CuracionesTipo::all();
+
+            $tipos_receta = TiposReceta::all();
+
+            $detalle_receta_controlador = new DetalleRecetaController();
+            $recetas = $detalle_receta_controlador->dameTodoDetalleRecetaPaciente($paciente['id']);
+           
+            foreach($recetas as $receta)
+            {
+                if($receta->id_dosis == null){
+                    $receta->dosis = $receta->nombre_dosis;
+                }
+
+                $receta->frecuencia = $receta->nombre_frecuencia;
+                
+            }
+
+            // $procedimientos = $this->dameProcedimientosPaciente($paciente->id);
+            // $examenControlador = new ExamenMedicoController();
+            // $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id);
+            // $curaciones = $this->dameCuracionesPaciente($paciente->id);
+            // $curaciones_planas = $this->dameCuracionesPlanasPaciente($paciente->id);
+            // $enfermeraControlador = new EscritorioEnfermerasController();
+            // $curaciones_lpp = $enfermeraControlador->dameCuracionesLppPaciente($paciente->id);
+
+            // return json_encode($examenes_solicitados[0]->datos_examen->lado);
+            // variable que identifica si el usuario es enfermera
+            $enfermera = false;
+
+            // ultimo controla de ciclo 
+            $ultimo_control_ciclo = EvolucionUrgencia::where('id_paciente', $paciente->id)->orderBy('id', 'desc')->first();
+            if($ultimo_control_ciclo)
+                $ultimo_control_ciclo->datos_evolucion = json_decode($ultimo_control_ciclo->datos_evolucion);
+
+                
+
+            $tieneRecetaPendiente_ = false;
+            // buscar recetas con estado 1
+            foreach($recetas as $key => $receta)
+            {
+                if($receta->estado_tratamiento == 1)
+                {
+                    $tieneRecetaPendiente_ = true;
+                    break;
+                }
+            }
+
+        $resumen_recetas = "";
+            foreach($recetas as $r){
+                $resumen_recetas .= "<p>".$r->nombre_medicamento." ".$r->dosis." ".$r->nombre_frecuencia." ".$r->duracion." ".$r->comentario." con fecha ".$r->created_at."</p>";
+            }
+
+
+        // $examen_sad_person = $this->dame_examen_sad_person($paciente->id);
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::all();
+
+        // $tipos_roles_incidentes = TipoRolesIncidentePaciente::all();
+        // $tipos_apreciaciones_paciente = TipoApreciacionClinicaPaciente::all();
+        // $boleta_alcoholemia_paciente = $this->dame_boleta_alcoholemia_paciente($paciente->id);
+
+        $ficha_atencion = FichaAtencion::where('id_paciente', $paciente->id)->first();
+
+        $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+
+            
+            return view('atencion_hospital_ambulatorio.atencion_medica')->with([
+                'paciente' => $paciente,
+                'responsables' => $responsables,
+                'controles_ciclo' => $controles_ciclo,
+                'ultimo_control_ciclo' => $ultimo_control_ciclo,
+                'niveles_urgencia' => $niveles_urgencia,
+                'contador_div_evaluaciones' => $contador_div_evaluaciones,
+                'tipos_curaciones' => $tipos_curaciones,
+                'tipos_receta' => $tipos_receta,
+                'recetas' => $recetas,
+                'tiene_receta_pendiente' => $tieneRecetaPendiente_,
+                'resumen_recetas' => $resumen_recetas,
+                'direccion_txt_ciudad_paciente' => '',
+                'direccion_id_region_paciente' => 1,
+                // 'procedimientos' => $procedimientos,
+                // 'examenes_solicitados' => $examenes_solicitados,
+                // 'examen_sad_person' => $examen_sad_person,
+                // 'rescate_paciente' => $rescate_paciente,
+                // 'examen_drogas' => $examen_drogas ? $examen_drogas : null,
+                // 'curaciones' => $curaciones,
+                // 'curacion_plana' => $curaciones_planas,
+                // 'curaciones_lpp' => $curaciones_lpp,
+                'enfermera' => $enfermera,
+                // 'responsable' => $responsable,
+                'pacientes_contacto_emergencia' => $pacientes_contacto_emergencia,
+                'paciente_alergias' => $paciente_alergias,
+                // 'prevision' => $prevision,
+                'profesional' => $profesional,
+                'ciudades' => $ciudades,
+                'regiones' => $regiones,
+                // 'tipo_roles_incidentes' => $tipos_roles_incidentes,
+                // 'tipos_apreciaciones_paciente' => $tipos_apreciaciones_paciente,
+                // 'boleta_alcoholemia_paciente' => $boleta_alcoholemia_paciente,
+                // // 'medicamento' => $medicamento,
+                // 'hora_medica' => $hora,
+                // 'fichas' => $fichas,
+                // 'ciudades' => $ciudades,
+                // 'regiones' => $regiones,
+                // 'tipo_examen' => $tipoExamen,
+                'control_peso' => $control_peso,
+                'hipertension' => $hipertension,
+                'diabetes' => $diabetes,
+                // 'ciudad' => $ciudad,
+                'examenMedico' => $examenMedico,
+                // 'medicamentos_cronicos' => $medicamentos_cronicos,
+                // 'alergias' => $alergias,
+                // 'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
+                'patoligias_cronicas' => $patoligias_cronicas,
+                // 'fichaAtencion' => $fichaAtencion,
+                'id_lugar_atencion' => $request->lugar_atencion_id,
+                'lugar_atencion' => $lugar_atencion,
+                // 'lugares_atencion ' => $lugares_atencion ,
+                'id_ficha_atencion' => $pt->id_ficha_atencion,
+                'fichaAtencion' => $ficha_atencion,
+                // 'especialidad' => $especialidad,
+                // 'interconsulta' => $interconsulta,
+                // 'fichaTipo' => $fichaTipo,
+                // 'examen_tipo' => $examen_tipo,
+                // 'examen' => $examen,
+                // 'lista_examen_especial' => $lista_examen_especial,
+                // 'examenes_especialidad' => $examenes_especialidad,
+                // 'examenes_radiologicos' => $examenes_radiologicos,
+                'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
+                // 'institucion' => $institucion,
+                // 'cns_tipo' => $cns_tipo,
+                // 'cns_tipo_template' => $cns_tipo_template,
+                // 'cns_registros' => $cns_registros,
+                'resultado_examen' => $resultado_examen,
+                // 'tipo_antecedente' => $tipo_antecedente,
+                'receta_control' => $receta_control,
+
+                /** FMU */
+                // 'id_usuario' => $id_usuario,
+                //// 'paciente' => $paciente,
+                // 'contacto_emergencia' => $contacto_emergencia,
+                'antecedentes_paciente' => $antecedentes_paciente,
+                'grupo_sanguineo' => $grupo_sanguineo,
+                'antecedentes' => $antecedentes,
+                'token' => $request->token,
+                // 'fichas' => $fichas,
+                // 'especialidad' => $especialidad,
+                // 'sub_tipo_especialidad' => $sub_tipo_especialidad,
+                'direccion' => $direccion,
+                'ciudad' => $ciudad,
+                'region' => $region,
+                'datos' => $datos, // TEMPLATE PARA USO EN MODAL INCLUDE
+                'tratamiento_activo' => $regisrto_result,
+                //// 'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
+                //// 'resultado_examen' => $resultado_examen,
+                'control_enfer_cronicas' => $control_enfer_cronicas,
+
+                // 'ficha_ges' => $ges,
+                // 'direccion' => $direccion,
+                /*'contacto' => $contacto,
+                'contacto_direccion'=> $contacto_direccion,
+                'contacto_ciudad' => $contacto_ciudad,*/
+                // 'licencia' => $licencia,
+
+                /** RESPONSABLES */
+                // 'responsables'  => $responsables,
+                // 'acompanantes'  => $acompanantes,
+            ]);
+        }
+        else
+        {
+            
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+            return redirect()->back()->with(['mensaje'=>'Paciente reuqerido']);
+        }
     }
 
     /** no se utiliza  s eutiliza index */
@@ -5131,6 +6088,7 @@ class ficha_atencionController extends Controller
 
     public function registrar_interconsulta(Request $request)
     {
+     
         $datos = array();
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -6457,6 +7415,365 @@ class ficha_atencionController extends Controller
 
     }
 
+
+
+     /** REGISTRO FICHA ATENCION Y NEUROLOGIA*/
+    public function store_neuro(Request $request)
+    {
+        $campos_requeridos = 0;
+        $mensaje = '';
+        if(empty( trim($request->descripcion_hipotesis)))
+        {
+            $campos_requeridos = 1;
+            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+        }
+        else
+        {
+            if(empty($request->descripcion_hipotesis))
+            {
+                $campos_requeridos = 1;
+                $mensaje = 'El Diagnóstico Nuero es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.\n';
+            }
+            else
+            {
+                // if(empty($request->solicitado_id_profesional_rfl))
+                // {
+                //     if(empty($request->solicitado_rut_rfl))
+                //     {
+                //         $campos_requeridos = 1;
+                //         $mensaje = 'Rinofibrolaringoscopía - Campo requerido RUT del Solicitante.\n';
+                //     }
+                //     if(empty($request->solicitado_nombre_rfl))
+                //     {
+                //         $campos_requeridos = 1;
+                //         $mensaje = 'Rinofibrolaringoscopía - Campo requerido NOMBRE del Solicitante.\n';
+                //     }
+                //     if(empty($request->solicitado_apellido_rfl))
+                //     {
+                //         $campos_requeridos = 1;
+                //         $mensaje = 'Rinofibrolaringoscopía - Campo requerido APELLIDO del Solicitante.\n';
+                //     }
+                //     if(empty($request->solicitado_telefono_rfl) || empty($request->solicitado_email_rfl))
+                //     {
+                //         $campos_requeridos = 1;
+                //         $mensaje = 'Rinofibrolaringoscopía - Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                //     }
+                // }
+            }
+        }
+
+        if($campos_requeridos == 0)
+        {
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente_fc;
+            if(!$ficha){
+                $ficha = new FichaAtencion;
+            }
+			$ficha->motivo = $request->motivo;
+            $ficha->antecedentes = $request->antecedentes;
+            $ficha->examen_fisico = $request->examen_fisico;
+
+            $ges = 0;
+            // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
+            if ($request->has('modal_ges')) {
+                $ges = 1;
+            }
+
+            $cronico = 0;
+            // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
+            if ($request->has('enf_cronico')) {
+                $cronico = 1;
+            }
+
+            $confidencial = 0;
+            // if ($request->confidencial == 'on' || $request->confidencial == '1') {
+            if ($request->has('confidencial')) {
+                $confidencial = 1;
+            }
+
+            $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+            $ficha->diagnostico_ce10 = $request->descripcion_cie;
+			$ficha->indicaciones = $request->indicaciones;
+
+            $ficha->cronico = $cronico;
+            $ficha->ges = $ges;
+            $ficha->confidencial = $confidencial;
+            $ficha->id_paciente = $id_paciente;
+            $ficha->id_profesional = $id_profesional;
+            $ficha->finalizada = 1;
+
+            if (!$ficha->save())
+            {
+                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+            }
+            else
+            {
+                $tipo_mensaje = 'success';
+                $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+                if($request->estudio == 1)
+                {
+                    /** registro ficha especialidad */
+                    $ficha_otorrino = new FichaOtorrino();
+                    $ficha_otorrino->id_fichas_atenciones = $ficha->id;
+                    $ficha_otorrino->id_paciente = $id_paciente;
+                    $ficha_otorrino->id_usa_audifono = $request->usa_audifono;
+                    $ficha_otorrino->audifono = $request->audifono;
+                    $ficha_otorrino->apreciacion_auditiva = $request->apreciacion_auditiva;
+                    $ficha_otorrino->aprec_auditiva_def = $request->aprec_auditiva_def;
+                    $ficha_otorrino->examen_oi = $request->examen_oi;
+                    $ficha_otorrino->ex_oi_anormal = $request->ex_oi_anormal;
+                    $ficha_otorrino->examen_od = $request->examen_od;
+                    $ficha_otorrino->ex_od_anormal = $request->examen_od;
+                    $ficha_otorrino->obs_ex_oidos = $request->ex_od_anormal;
+                    $ficha_otorrino->examen_bio_oi = $request->examen_bio_oi;
+                    $ficha_otorrino->obs_examen_bio_oi = $request->obs_examen_bio_oi;
+                    $ficha_otorrino->examen_bio_od = $request->examen_bio_od;
+                    $ficha_otorrino->obs_examen_bio_od = $request->obs_examen_bio_od;
+                    $ficha_otorrino->obs_ex_biom = $request->obs_ex_biom;
+                    $ficha_otorrino->id_tipo_episodios = $request->episodios;
+                    $ficha_otorrino->obs_episodios = $request->detalle_episodios;
+                    $ficha_otorrino->id_tipo_equilibrio = $request->equilibrio;
+                    $ficha_otorrino->obs_equilibrio = $request->detalle_equilibrio;
+                    $ficha_otorrino->id_tipo_ng = $request->ng;
+                    $ficha_otorrino->obs_ng = $request->detalle_ng;
+                    $ficha_otorrino->id_tipo_sint_acomp = $request->sint_acomp;
+                    $ficha_otorrino->obs_sint_acomp = $request->detalle_sint_acompanantes;
+                    $ficha_otorrino->id_tipo_vertigo = $request->tipo_vertigo;
+                    $ficha_otorrino->obs_tipo_vertigo = $request->detalle_tipo_vertigo;
+                    $ficha_otorrino->obs_vestibular = $request->obs_vestibular;
+                    $ficha_otorrino->nariz_general = $request->nariz_general;
+                    $ficha_otorrino->det_nariz_general = $request->det_nariz_general;
+                    $ficha_otorrino->apreciacion_resp = $request->apreciacion_resp;
+                    $ficha_otorrino->aprec_resp_def = $request->aprec_resp_def;
+                    $ficha_otorrino->examen_fni = $request->examen_fni;
+                    $ficha_otorrino->ex_fni_anormal = $request->ex_fni_anormal;
+                    $ficha_otorrino->examen_fnd = $request->examen_fnd;
+                    $ficha_otorrino->ex_fnd_anormal = $request->ex_fnd_anormal;
+                    $ficha_otorrino->obs_ex_nasal = $request->obs_ex_nasal;
+                    $ficha_otorrino->disfonia = $request->disfonia;
+                    $ficha_otorrino->det_disfonia = $request->det_disfonia;
+                    $ficha_otorrino->ex_boca = $request->ex_boca;
+                    $ficha_otorrino->detalle_ex_boca = $request->detalle_ex_boca;
+                    $ficha_otorrino->examen_faringe =$request->examen_faringe;
+                    $ficha_otorrino->ex_farige_anormal = $request->ex_farige_anormal;
+                    $ficha_otorrino->examen_laringe =$request->examen_laringe;
+                    $ficha_otorrino->ex_larige_anormal = $request->ex_larige_anormal;
+                    $ficha_otorrino->obs_examen_laringe = $request->obs_examen_laringe;
+                    $ficha_otorrino->obs_ex_orl = $request->bs_ex_orl;
+                    $ficha_otorrino->hip_diag_orl = $request->diag_spec;
+                    $ficha_otorrino->ind_orl = $request->ind_orl;
+                    $ficha_otorrino->estado = 1;
+
+                    if($ficha_otorrino->save())
+                    {
+                        $datos['ficha_otorrino']['estado'] = 1;
+                        $datos['ficha_otorrino']['msj'] = 'registro exitoso';
+                        $mensaje .= '\n'.'Ficha Otorrino guardada de forma correcta';
+
+                    }
+                    else
+                    {
+                        $datos['ficha_otorrino']['estado'] = 0;
+                        $datos['ficha_otorrino']['msj'] = 'registro NO exitoso';
+                        $mensaje .= '\n'.'Ficha Otorrino No guardada ';
+                    }
+                }
+
+                 /** registro ficha especialidad */
+                $ficha_neuro = new FichaNeuro();
+                $ficha_neuro->id_fichas_atenciones = $ficha->id;
+                $ficha_neuro->id_paciente = $id_paciente;
+				$ficha_neuro->id_profesional = $id_profesional;
+                $ficha_neuro->datos = json_encode($request->all());
+                $ficha_neuro->estado = 1;
+
+                if($ficha_neuro->save())
+                {
+                    $datos['ficha_orl']['estado'] = 1;
+                    $datos['ficha_orl']['msj'] = 'registro exitoso';
+                    $mensaje .= '\n'.'Ficha Neurología guardada de forma correcta';
+
+                }
+                else
+                {
+                    $datos['ficha_orl']['estado'] = 0;
+                    $datos['ficha_orl']['msj'] = 'registro NO exitoso';
+                    $mensaje .= '\n'.'Ficha Neuro No guardada ';
+                }
+                //  finalizar hora medica
+                $hora_medica->id_estado = 6;
+                $mensaje_estado_hora_medica = '';
+                if (!$hora_medica->save()) {
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                }
+                else
+                {
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                }
+                $mensaje .= $mensaje_estado_hora_medica;
+
+
+                /** registro examen especialidad Rinofibrolaringoscopía */
+                $parametro = $request->all();
+                $parametro['id_ficha_neuro'] = $ficha_neuro->id;
+                $examen_json = ExamenEspecialidadController::estructuraJson(1,$parametro);
+
+                if($examen_json['estado'] == 1)
+                {
+                    $examen = '';
+                    /** VALIDAR INFORMACION */
+                    if($examen_json['cant_datos'] > 0)
+                    {
+                        $profesional = Profesional::find($id_profesional);
+
+                        $examen = new ExamenEspecialidad();
+                        $examen->id_tipo = '1';
+                        $examen->id_template = '1';
+                        $examen->id_examen_tipo = '1';
+                        $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidada;
+                        $examen->id_ficha_atencion = $ficha->id;
+                        $examen->id_ficha_especialidad = $ficha_orl->id;
+                        $examen->id_paciente = $id_paciente;
+                        $examen->id_profesional = $id_profesional;
+                        $examen->nombre = 'Neurología';
+                        $examen->cuerpo = $examen_json['json'];
+                        $examen->estado = '1';
+
+                        // if($registro_rfl->save())
+                        if($examen->save())
+                        {
+                            $datos['examen']['estado'] = 1;
+                            $datos['examen']['msj'] = 'registro exitoso';
+                            $mensaje .= 'Ficha Neurología guardada de forma correcta\n';
+
+                            /** registro de imagenes  */
+                            if(!empty($request->input_lista_imagenes))
+                            {
+                                $array_imagenes = json_decode($request->input_lista_imagenes);
+
+                                $resulto_img = array();
+                                foreach ($array_imagenes as $key => $value)
+                                {
+                                    $paciente = Paciente::find($id_paciente);
+                                    // echo json_encode($value);
+                                    $ruta_temp = $value[0];
+                                    $nombre_real = $value[1];
+                                    $nombre_temp = $value[2];
+                                    $file_extension = $value[3];
+                                    $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                    $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                    $registro_img = new ExamenEspecialidadImg();
+                                    $registro_img->id_examen = $examen->id;
+                                    $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                    $registro_img->nombre = $nombre_final;
+                                    $registro_img->otro = '';
+                                    $registro_img->estado = 1;
+
+                                    if($registro_img->save())
+                                    {
+                                        $resulto_img[$key]['estado'] = 1;
+                                        $resulto_img[$key]['msj'] = 'imagen registrada';
+                                    }
+                                    else
+                                    {
+                                        $resulto_img[$key]['estado'] = 0;
+                                        $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                    }
+
+                                }
+                                $datos['examen']['resulto_img'] = $resulto_img;
+
+                            }
+
+                            /** registro de porfesional provisorio */
+                            if(empty($request->solicitado_id_profesional_rfl))
+                            {
+                                $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_rfl, $request->solicitado_apellido_rfl, '', '', $request->solicitado_rut_rfl, $request->solicitado_email_rfl, $request->solicitado_telefono_rfl, '', '', '', '', '', '', '', '', '', 1);
+
+                                if($profesional_provisorio['estado'] == 1)
+                                {
+                                    $datos['registro_prof_provi']['estado'] = 1;
+                                    $datos['registro_prof_provi']['msj'] = 'registro exitoso';
+                                    $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+
+                                    $mensaje .= 'Profesional Prvisorio creado\n';
+                                }
+                                else
+                                {
+                                    $datos['registro_prof_provi']['estado'] = 0;
+                                    $datos['registro_prof_provi']['msj'] = 'falla en registro';
+                                    $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+                                    $mensaje .= 'Profesional Prvisorio creado\n';
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            $datos['examen']['estado'] = 0;
+                            $datos['examen']['msj'] = 'registro NO exitoso';
+                            $mensaje .= 'Ficha Neurología No guardada \n';
+                        }
+                    }
+                }
+                else
+                {
+                    $mensaje .= 'Problema al registrar Examen Espacial';
+                }
+
+                if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                {
+                    // if($request->mostrarpdf == 0 || $request->mostrarpdf =='')
+                    // {
+                    //     return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    // }
+                    // else
+                    {
+                        /** redireccion Redirect funciona correcto */
+                        if(!empty($examen))
+                        {
+                            $array_tem = array(
+                                'lugares_atencion' => $request->id_lugar_atencion,
+                                'pdf' => $request->mostrarpdf,
+                                'tipo' => $request->tipopdf,
+                                'id_examen' => $examen->id,
+                            );
+                        }
+                        else
+                        {
+                            $array_tem = array(
+                                'lugares_atencion' => $request->id_lugar_atencion,
+                                'pdf' => $request->mostrarpdf,
+                                'tipo' => $request->tipopdf,
+                                'id_examen' => 0,
+                            );
+                        }
+                        return \Redirect::route('profesional.mi_agenda',$array_tem)->with($tipo_mensaje, $mensaje);
+                    }
+                }
+                else if($request->cerrarsession == 1)
+                {
+                   //si funciona
+					$request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return \Redirect::route('home.ingreso');
+
+                }
+            }
+        }
+        else
+        {
+            return back()->with('error', $mensaje)->withInput();
+        }
+
+    }
+
     /** REGISTRO FICHA ATENCION Y CIRUGIA GENERAL*/
     public function store_cg(Request $request)
     {
@@ -6709,6 +8026,231 @@ class ficha_atencionController extends Controller
         {
             return back()->with('error', $mensaje)->withInput();
         }
+    }
+
+    public function registrar_ficha_atencion_cirugia_digestiva(Request $request)
+    {
+        try {
+            $campos_requeridos = 0;
+            $mensaje = '';
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente;
+            if(empty(trim($request->solicitado_por)))
+            {
+                $campos_requeridos = 1;
+                $mensaje .= 'Solicitado por es Requerido.<br> Su Endoscopía NO ha sido Guardada aún.<br>';
+            }
+            if(empty( trim($request->desc_endo_gast)))
+            {
+                //$campos_requeridos = 1;
+                $mensaje .= 'La descripción del examen es Requerida.<br> Su Endoscopía NO ha sido Guardada aún.';
+            }
+            else
+            {
+                if(empty($request->diag_endos))
+                {
+                    //$campos_requeridos = 1;
+                    $mensaje .= 'El Diagnóstico Endoscópico es Requerido.<br> Su Endoscopía NO ha sido Guardada aún.<br>';
+                }
+                else
+                {
+
+                }
+            }
+
+            //return $campos_requeridos;
+            if($campos_requeridos == 0)
+            {
+                $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+                $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+
+                $tipo_mensaje = 'success';
+                $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+                //  si cerrarsesion es 2, no se cambia el estado de la hora medica
+                if($request->cerrarsession !== 2)
+                {
+                    $hora_medica->id_estado = 6;
+                }
+
+                $mensaje_estado_hora_medica = '';
+                if (!$hora_medica->save()) {
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                }
+                else
+                {
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                }
+                $mensaje .= $mensaje_estado_hora_medica;
+
+
+
+                /** registro examen especialidad Rinofibrolaringoscopía */
+                $parametro = $request->all();
+                $examen_json = ExamenEspecialidadController::estructuraJson(1,$parametro);
+
+                // return json_encode($examen_json);
+                if($examen_json['estado'] == 1)
+                {
+                    $examen = '';
+                    /** VALIDAR INFORMACION */
+                    if($examen_json['cant_datos'] > 0)
+                    {
+                        $profesional = Profesional::find($id_profesional);
+
+                        $examen = new ExamenEspecialidad();
+                        $examen->id_tipo = '1';
+                        $examen->id_template = '1';
+                        $examen->id_examen_tipo = '1';
+                        $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+                        $examen->id_ficha_atencion = $ficha->id;
+                        $examen->id_ficha_especialidad = $examen->id;
+                        $examen->id_paciente = $id_paciente;
+                        $examen->id_profesional = $id_profesional;
+                        $examen->nombre = 'Endoscopía alta';
+                        $examen->cuerpo = $examen_json['json'];
+                        $examen->estado = '1';
+                        // if($registro_rfl->save())
+                        if($examen->save())
+                        {
+                            $datos['examen']['estado'] = 1;
+                            $datos['examen']['msj'] = 'registro exitoso';
+                            $mensaje .= 'Ficha Endoscopía guardada de forma correcta\n';
+
+                            /** registro de imagenes  */
+                            if(!empty($request->input_lista_imagenes))
+                            {
+                                $array_imagenes = json_decode($request->input_lista_imagenes, true);
+
+                                $resulto_img = array();
+                                foreach ($array_imagenes['eda'] as $key => $value)
+                                {
+                                    $paciente = Paciente::find($id_paciente);
+
+                                    // echo json_encode($value);
+                                    $ruta_temp = $value[0];
+                                    $nombre_real = $value[1];
+                                    $nombre_temp = $value[2];
+                                    $file_extension = $value[3];
+                                    $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                    $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                    $registro_img = new ExamenEspecialidadImg();
+                                    $registro_img->id_examen = $examen->id;
+                                    $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                    $registro_img->nombre = $nombre_final;
+                                    $registro_img->otro = '';
+                                    $registro_img->estado = 1;
+
+                                    if($registro_img->save())
+                                    {
+                                        $resulto_img[$key]['estado'] = 1;
+                                        $resulto_img[$key]['msj'] = 'imagen registrada';
+                                    }
+                                    else
+                                    {
+                                        $resulto_img[$key]['estado'] = 0;
+                                        $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                    }
+
+                                }
+                                $datos['examen']['resulto_img'] = $resulto_img;
+
+                            }
+
+                            /** registro de porfesional provisorio */
+                            if(empty($request->solicitado_id_profesional_rfl))
+                            {
+                                $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_rfl, $request->solicitado_apellido_rfl, '', '', $request->solicitado_rut_rfl, $request->solicitado_email_rfl, $request->solicitado_telefono_rfl, '', '', '', '', '', '', '', '', '', 1);
+
+                                if($profesional_provisorio['estado'] == 1)
+                                {
+                                    $datos['registro_prof_provi']['estado'] = 1;
+                                    $datos['registro_prof_provi']['msj'] = 'registro exitoso';
+                                    $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+
+                                    $mensaje .= 'Profesional Prvisorio creado\n';
+                                }
+                                else
+                                {
+                                    $datos['registro_prof_provi']['estado'] = 0;
+                                    $datos['registro_prof_provi']['msj'] = 'falla en registro';
+                                    $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+                                    $mensaje .= 'Profesional Prvisorio creado\n';
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            $datos['examen']['estado'] = 0;
+                            $datos['examen']['msj'] = 'registro NO exitoso';
+                            $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía No guardada \n';
+                        }
+                    }
+                }
+                else
+                {
+                    $mensaje .= 'Problema al registrar Examen Espacial';
+                }
+
+                if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                {
+                    // if($request->mostrarpdf == 0 || $request->mostrarpdf =='')
+                    // {
+                    //     return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    // }
+                    // else
+                    {
+                        /** redireccion Redirect funciona correcto */
+                        if(!empty($examen))
+                        {
+                            $array_tem = array(
+                                'lugares_atencion' => $request->id_lugar_atencion,
+                                'pdf' => $request->mostrarpdf,
+                                'tipo' => $request->tipopdf,
+                                'id_examen' => $examen->id,
+                            );
+                        }
+                        else
+                        {
+                            $array_tem = array(
+                                'lugares_atencion' => $request->id_lugar_atencion,
+                                'pdf' => $request->mostrarpdf,
+                                'tipo' => $request->tipopdf,
+                                'id_examen' => 0,
+                            );
+                        }
+                        return ['success' => true, 'mensaje' => $mensaje];
+                    }
+                }
+                else if($request->cerrarsession == 1)
+                {
+                //si funciona
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return \Redirect::route('home.ingreso');
+
+                }else{
+                    // se mantiene en la vista actual
+                    $tipo_mensaje = 'success';
+                    $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+                    return ['estado' => 'ok','mensaje' => $mensaje];
+                }
+
+
+            }
+            else
+            {
+                return ['success' => false, 'error' => 'Ha ocurrido un error'];
+            }
+        } catch (\Exception $e) {
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+
+        return ['success' => true];
+
     }
 
     /** REGISTRO FICHA ATENCION Y CIRUGIA DIGESTIVA GENERAL*/
@@ -7015,7 +8557,6 @@ class ficha_atencionController extends Controller
                         $ficha_cd->cirug_cda = 0;
                     }
                     $ficha_cd->obs_plan_trat_cda = $request->obs_plan_trat_cda;
-                    $ficha_cd->lista_imagenes_cda = $request->input_lista_imagenes;
 
                     /** CIRUGIA DIGESTIVA BAJA */
                     $ficha_cd->cdb_ex_fisico_ab = $request->cdb_ex_fisico_ab;
@@ -7820,6 +9361,7 @@ class ficha_atencionController extends Controller
     /** REGISTRO FICHA ATENCION Y OFTALMOLOGIA*/
     public function store_oft(Request $request)
     {
+     
         $campos_requeridos = 1;
         $mensaje = '';
         if(empty( trim($request->descripcion_hipotesis)))
@@ -8451,6 +9993,7 @@ class ficha_atencionController extends Controller
     /** REGISTRO FICHA ATENCION Y DERMATOLOGIA*/
     public function store_dermo(Request $request)
     {
+        return $request;
         $campos_requeridos = 1;
         $mensaje = '';
         if(empty( trim($request->descripcion_hipotesis)))
@@ -8488,6 +10031,8 @@ class ficha_atencionController extends Controller
             $mensaje .='Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
         }
 
+
+
         if($campos_requeridos)
         {
             /** FICHA ATENCION  */
@@ -8519,93 +10064,6 @@ class ficha_atencionController extends Controller
                 $confidencial = 1;
             }
 
-            // //Signos vitales
-            // if ($request->temperatura != '') {
-            //     $ficha->temperatura = $request->temperatura;
-            // } else {
-            //     $ficha->temperatura = null;
-            // }
-
-            // if ($request->pulso != '') {
-            //     $ficha->pulso = $request->pulso;
-            // } else {
-            //     $ficha->pulso = null;
-            // }
-
-            // if ($request->frecuencia_reposo != '') {
-            //     $ficha->frecuencia_reposo = $request->frecuencia_reposo;
-            // } else {
-            //     $ficha->frecuencia_reposo = null;
-            // }
-
-            // if ($request->peso != '') {
-            //     $ficha->peso = $request->peso;
-            // } else {
-            //     $ficha->peso = null;
-            // }
-
-            // if ($request->talla != '') {
-            //     $ficha->talla = $request->talla;
-            // } else {
-            //     $ficha->talla = null;
-            // }
-
-            // if ($request->imc != '') {
-            //     $ficha->imc = $request->imc;
-            // } else {
-            //     $ficha->imc = null;
-            // }
-
-            // if ($request->estado_nutricional != '') {
-            //     $ficha->estado_nutricional = $request->estado_nutricional;
-            // } else {
-            //     $ficha->estado_nutricional = null;
-            // }
-
-            // //presion Arterial
-            // if ($request->presion_bi != '') {
-            //     $ficha->presion_bi = $request->presion_bi;
-            // } else {
-            //     $ficha->presion_bi = null;
-            // }
-
-            // if ($request->presion_bd != '') {
-            //     $ficha->presion_bd = $request->presion_bd;
-            // } else {
-            //     $ficha->presion_bd = null;
-            // }
-
-            // if ($request->presion_de_pie != '') {
-            //     $ficha->presion_de_pie = $request->presion_de_pie;
-            // } else {
-            //     $ficha->presion_de_pie = null;
-            // }
-
-            // if ($request->presion_sentado != '') {
-            //     $ficha->presion_sentado = $request->presion_sentado;
-            // } else {
-            //     $ficha->presion_sentado = null;
-            // }
-
-            // //comunicacion y Traslado
-            // if ($request->ct_estado_conciencia != '') {
-            //     $ficha->ct_estado_conciencia = $request->ct_estado_conciencia;
-            // } else {
-            //     $ficha->ct_estado_conciencia = null;
-            // }
-
-            // if ($request->ct_lenguaje != '') {
-            //     $ficha->ct_lenguaje = $request->ct_lenguaje;
-            // } else {
-            //     $ficha->ct_lenguaje = null;
-            // }
-
-            // if ($request->ct_traslado != '') {
-            //     $ficha->ct_traslado = $request->ct_traslado;
-            // } else {
-            //     $ficha->ct_traslado = null;
-            // }
-
             $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
             $ficha->diagnostico_ce10 = $request->descripcion_cie;
             $ficha->indicaciones = $request->indicaciones;
@@ -8616,6 +10074,7 @@ class ficha_atencionController extends Controller
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
+
             if (!$ficha->save())
             {
                 return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
@@ -8627,8 +10086,6 @@ class ficha_atencionController extends Controller
 
                 /** IMAGENES DE DERMATOLOGIA */
                 $array_imagenes = (array)json_decode($request->input_lista_imagenes);
-                if(array_key_exists('',$array_imagenes))
-
                 $value_img_cons_dermato_pre = 0;
                 $value_img_cons_dermato_post = 0;
                 $value_imagenes_elim_cicat_pre = 0;
@@ -8641,6 +10098,10 @@ class ficha_atencionController extends Controller
                 $value_imagenes_dermabras_post = 0;
                 $value_imagenes_laser_pre = 0;
                 $value_imagenes_laser_post = 0;
+
+                if(array_key_exists('',$array_imagenes))
+
+
                 if(array_key_exists('img_cons_dermato_pre',$array_imagenes))
                     $value_img_cons_dermato_pre = 1;
                 if(array_key_exists('img_cons_dermato_post',$array_imagenes))
@@ -8665,7 +10126,6 @@ class ficha_atencionController extends Controller
                     $value_imagenes_laser_pre = 1;
                 if(array_key_exists('imagenes_laser_post',$array_imagenes))
                     $value_imagenes_laser_post = 1;
-
 
                 /** REGISTRO FICHA DERMATOLOGIA */
                 $ficha_dermo = new FichaDermo();
@@ -9988,43 +11448,52 @@ class ficha_atencionController extends Controller
 
     public function pdf_orden_examenes(Request $request)
     {
-
         $datos = array();
         $examenesPPF = ExamenPPF::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
+      
         if($examenesPPF->count()>0)
         {
+           
             $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
-            $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+         
+            $lugar_atencion = LugarAtencion::with('direccion')->find($ficha_atencion->id_lugar_atencion);
+            
             $profesional = Profesional::find($ficha_atencion->id_profesional);
+       
             $paciente = Paciente::find($ficha_atencion->id_paciente);
-
+        
             $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
-
+          
             $detalle_orden = (object)array();
 
             $token_receta = '';
-            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 1);
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 3, $ficha_atencion->id);
+      
             if($temp_token['estado'] == 1)
             {
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+              
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
             else
             {
-                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 1);
+                $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 3, $ficha_atencion->id);
                 $token_receta = $temp_token['certificado'];
                 $url_documento = CertificadoController::generarUrlDocumento($token_receta);
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
 
+
             $cantidad_recetas = 0;
+        
             foreach ($examenesPPF as $key_examen_ppf => $value_examen_ppf)
             {
                 $nombre_examen = $value_examen_ppf->examen;
 
                 $nombre_parent = '';
                 $examen_base = ExamenMedico::where('nombre_examen', $value_examen_ppf->examen)->where('habilitado',1)->first();
+              
                 if($examen_base->cod_parent !== 0)
                 {
                     $nombre_parent = $examen_base->algo;
@@ -10074,7 +11543,7 @@ class ficha_atencionController extends Controller
 
                 $detalle_orden->$nombre_control[] = $array_examenes;
 
-                $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 1,$ficha_atencion->id) ;
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 3,$ficha_atencion->id) ;
                 if($temp_token['estado'] == 1)
                 {
                     $token_profesional = $temp_token['certificado'];
@@ -10083,7 +11552,7 @@ class ficha_atencionController extends Controller
                 }
                 else
                 {
-                    $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                    $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), rand(1114,999), 3,$ficha_atencion->id);
                     $token_profesional = $temp_token['certificado'];
                     $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                     $qr_profesional = GeneradorQrController::generar($url_documento);
@@ -10095,17 +11564,29 @@ class ficha_atencionController extends Controller
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
                 'url' => $url_documento,
-                'qr' => $qr_documento,
+                'qr' => $qr_documento
             );
+
             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
+                'nombre' => $lugar_atencion->nombre,
+                'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
             );
+
+            if ($profesional->subTipoEspecialidad()->first() == '' || $profesional->subTipoEspecialidad()->first() == null) {
+                $subtipo_especialidad = $profesional->tipoEspecialidad()->first()->nombre;
+            }else{
+                $subtipo_especialidad = $profesional->subTipoEspecialidad()->first()->nombre;
+            }
+
             $array_profesional = array(
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
+                'especialidad' => $subtipo_especialidad,
+                'id_especialidad' => $profesional->id_especialidad,
+                'num_colegio' => $profesional->num_colegio,
                 'token' =>  $token_profesional,
                 'url' =>  $url_profesional,
                 'qr' =>  $qr_profesional,
@@ -11505,14 +12986,12 @@ class ficha_atencionController extends Controller
         {
 
             $profesional = Profesional::find($hora->id_profesional);
-
+            return $profesional;
             if(!$profesional)
             {
                 $user = Auth::user()->id;
                 $profesional = Profesional::where('id_usuario', $user)->first();
             }
-
-            return $profesional;
 
             $paciente = Paciente::find($hora->id_paciente);
 
@@ -11835,6 +13314,47 @@ class ficha_atencionController extends Controller
                                         case 39:// 39	Alimentación y Nutrición
                                             break;
                                         case 40:// 40	Broncopulmonar
+                                            /** FICHAS DE ATENCIONES PREVIAS */
+                                            $filtro_previas = array();
+                                            $filtro_previas[] = array('id_paciente', $paciente->id);
+                                            $filtro_previas[] = array('confidencial', '0');
+                                            $filtro_previas[] = array('finalizada', 1);
+                                            $filtro_previas[] = array('id_profesional', $profesional->id);
+                                            $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                            $datos['ficha_previas'] = $ficha_previas;
+
+                                            /** FICHA ATENCION ACTUAL */
+                                            if(empty($hora->id_ficha_atencion))
+                                            {
+                                                $nueva_ficha_atencion = new FichaAtencion();
+                                                $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                                $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                                $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                                if ($nueva_ficha_atencion->save())
+                                                {
+                                                    $hora->id_estado = 5;
+                                                    $hora->fecha_realizacion_consulta = now();
+                                                    $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                                    $hora->save();
+                                                    $ficha_actual_nueva = $nueva_ficha_atencion;
+                                                }
+                                                else
+                                                {
+                                                    $nueva_ficha_atencion = '';
+                                                }
+                                            }
+                                            else
+                                            {
+                                                $filtro_fichaAtencion = array();
+                                                $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                                $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                                $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                            }
+                                            $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                            $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
                                             break;
                                         case 41:// 41	Diabetología
                                             break;
@@ -12260,7 +13780,7 @@ class ficha_atencionController extends Controller
                         $filtro_previas[] = array('id_profesional', $profesional->id);
                         $filtro_previas[] = array('finalizada', 1);
                         $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
-
+                     
                         $datos['ficha_previas'] = $ficha_previas;
 
                         /** FICHA ATENCION ACTUAL */
@@ -12333,6 +13853,48 @@ class ficha_atencionController extends Controller
                         switch (intval($profesional->id_tipo_especialidad))
                         {
                             case 31:// 31	NUTRICIONISTA GENERAL
+                                                  /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
+
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
                                 break;
                             case 32:// 32	NUTRICIONISTA PEDIÁTRICA
                                 break;
@@ -12494,6 +14056,15 @@ class ficha_atencionController extends Controller
                             $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
                             $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
                             $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
+                            if(!$ficha_actual_nueva){
+                                $ficha_actual_nueva = new FichaOtrosProfesionales();
+                                $ficha_actual_nueva->id_paciente = $paciente->id;
+                                $ficha_actual_nueva->id_profesional = $profesional->id;
+                                $ficha_actual_nueva->id_especialidad = $profesional->id_especialidad;
+                                $ficha_actual_nueva->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                                $ficha_actual_nueva->id_lugar_atencion = $hora->id_lugar_atencion;
+                                $ficha_actual_nueva->save();
+                            }
                         }
 
                         $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
@@ -12669,9 +14240,39 @@ class ficha_atencionController extends Controller
 
     public function dameProcedimientosImplantes($id_paciente, $id_profesional,$id_ficha_atencion, $tipo = null){
         if($tipo == null){
-            $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->where('id_ficha_atencion', $id_ficha_atencion)->get();
+            $procedimientos = ProcedimientosImplantes::select('procedimientos_implantes.*', 'odontogramas_pacientes.tratamiento', 'odontogramas_pacientes.id as id_procedimiento')
+            ->where('procedimientos_implantes.id_paciente',$id_paciente)
+            ->where('procedimientos_implantes.id_profesional', $id_profesional)
+            ->where('procedimientos_implantes.id_ficha_atencion', $id_ficha_atencion)
+            ->leftjoin('odontogramas_pacientes', 'odontogramas_pacientes.id', '=', 'procedimientos_implantes.id_procedimiento')
+            ->get();
         }else{
-            $procedimientos = ProcedimientosPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->where('id_ficha_atencion', $id_ficha_atencion)->get();
+            $procedimientos = ProcedimientosPostImplantes::select('procedimientos_post_implantes.*', 'odontogramas_pacientes.tratamiento', 'odontogramas_pacientes.id as id_procedimiento')
+            ->where('procedimientos_post_implantes.id_paciente',$id_paciente)
+            ->where('procedimientos_post_implantes.id_profesional', $id_profesional)
+            ->where('procedimientos_post_implantes.id_ficha_atencion', $id_ficha_atencion)
+            ->leftjoin('odontogramas_pacientes', 'odontogramas_pacientes.id', '=', 'procedimientos_post_implantes.id_procedimiento')
+            ->get();
+        }
+
+        return $procedimientos;
+    }
+
+    public function dameProcedimientosImplantesRehab($id_paciente, $id_profesional, $id_ficha_atencion, $tipo = null){
+        if($tipo == null){
+            $procedimientos = ProcedimientosImplantesRehab::select('procedimientos_implantes_rehab.*', 'odontogramas_pacientes.tratamiento', 'odontogramas_pacientes.id as id_procedimiento')
+            ->where('procedimientos_implantes_rehab.id_paciente',$id_paciente)
+            ->where('procedimientos_implantes_rehab.id_profesional', $id_profesional)
+            ->where('procedimientos_implantes_rehab.id_ficha_atencion', $id_ficha_atencion)
+            ->leftjoin('odontogramas_pacientes', 'odontogramas_pacientes.id', '=', 'procedimientos_implantes_rehab.id_procedimiento')
+            ->get();
+        }else{
+            $procedimientos = ProcedimientosImplantesRehab::select('procedimientos_post_implantes.*', 'odontogramas_pacientes.tratamiento', 'odontogramas_pacientes.id as id_procedimiento')
+            ->where('procedimientos_post_implantes.id_paciente',$id_paciente)
+            ->where('procedimientos_post_implantes.id_profesional', $id_profesional)
+            ->where('procedimientos_post_implantes.id_ficha_atencion', $id_ficha_atencion)
+            ->leftjoin('odontogramas_pacientes', 'odontogramas_pacientes.id', '=', 'procedimientos_post_implantes.id_procedimiento')
+            ->get();
         }
 
         return $procedimientos;
@@ -12694,13 +14295,15 @@ class ficha_atencionController extends Controller
     {
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($profesional->id_tipo_especialidad !== 16){
-        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor')
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor','tratamientos_dental.descripcion')
             ->leftjoin('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->join('tratamientos_dental','examenes_boca_general.diagnostico','tratamientos_dental.id')
             ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
             ->get();
         }else{
-            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor')
+            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor','tratamientos_dental.descripcion')
             ->join('tratamientos_implantologia', 'examenes_boca_general.diagnostico_tratamiento', '=', 'tratamientos_implantologia.descripcion')
+            ->join('tratamientos_dental','examenes_boca_general.diagnostico','tratamientos_dental.id')
             ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
             ->get();
         }

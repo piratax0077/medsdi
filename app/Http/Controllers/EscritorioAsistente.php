@@ -20,9 +20,11 @@ use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
+use App\Models\LugarAtencionBoxProfesional;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Prevision;
+use App\Models\ProcedimientosCentro;
 use App\Models\Profesional;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
@@ -42,6 +44,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class EscritorioAsistente extends Controller
 {
@@ -365,12 +368,19 @@ class EscritorioAsistente extends Controller
                 $horario_data['periodo_agenda'] = $periodo_agenda;
                 $horario_data['hora_inicio_agenda'] = $hora_inicio_agenda;
                 $horario_data['hora_termino_agenda'] = $hora_termino_agenda;
-
                 $examen_tipo = '';
                 if($profesional->id_sub_tipo_especialidad)
-                    $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
+                    $examen_tipo = ProcedimientosCentro::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->get();
+					// $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->get();
 
                 $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
+
+                // box de profesional
+                $filtro_l_p_b = array();
+                $filtro_l_p_b[] = array('estado', 1);
+                $filtro_l_p_b[] = array('id_lugar_atencion', $request->id_lugar_atencion);
+                $filtro_l_p_b[] = array('id_profesional', $profesional->id);
+                $lug_prof_box = LugarAtencionBoxProfesional::with('box')->where($filtro_l_p_b)->first();
 
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registros';
@@ -382,6 +392,7 @@ class EscritorioAsistente extends Controller
                 $datos['sub_tipo_especialidad'] = $sub_tipo_especialidad;
                 $datos['examen_tipo'] = $examen_tipo;
                 $datos['tipo_agendas'] = $tipo_agendas;
+                $datos['lug_prof_box'] = $lug_prof_box;
                 $datos['request'] = $request->all();
             }
             else
@@ -718,6 +729,11 @@ class EscritorioAsistente extends Controller
                                                                     ->toArray();
 
                 $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
+                foreach($profesional as $p){
+                    $p->nombre = strtoupper($p->nombre);
+                    $p->apellido_uno = strtoupper($p->apellido_uno);
+                    $p->apellido_dos = strtoupper($p->apellido_dos);
+                }
             }
 
             foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
@@ -1502,7 +1518,7 @@ class EscritorioAsistente extends Controller
                             $asunto = 'MED-SDI - Pre Agendada';
                             $body = array(
                                 'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
-								'token_paciente'=> $paciente->token,									
+								'token_paciente'=> $paciente->token,
                                 'fecha'=> $hora_medica->fecha_consulta,
                                 'hora'=> $hora_medica->hora_inicio,
                                 'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
@@ -2632,4 +2648,63 @@ class EscritorioAsistente extends Controller
         return $datos;
     }
 
+    public function actualizarFoto(Request $request)
+    {
+        try {
+            $request->validate([
+                'foto_perfil' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB máximo
+            ]);
+
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+            return $asistente;
+            // Eliminar la foto anterior si existe
+            if ($asistente->foto_perfil) {
+                Storage::disk('public')->delete($asistente->foto_perfil);
+            }
+            
+            // Guardar la nueva foto
+            $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
+            
+            // Actualizar en la base de datos
+            $asistente->update(['foto_perfil' => $path]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto actualizada correctamente',
+                'foto_url' => asset('storage/' . $path)
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la foto: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function eliminarFoto()
+    {
+        try {
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+
+            if ($asistente->foto_perfil) {
+                // Eliminar archivo del storage
+                Storage::disk('public')->delete($asistente->foto_perfil);
+
+                // Actualizar en la base de datos
+                $asistente->update(['foto_perfil' => null]);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto eliminada correctamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la foto: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

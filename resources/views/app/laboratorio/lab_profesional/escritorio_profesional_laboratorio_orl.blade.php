@@ -84,7 +84,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12 mt-3">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio del Laboratorio ORL.</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio Profesional Laboratorio ORL.</h5>
                             </div>
                             <!--<ul class="breadcrumb">
                                     <li class="breadcrumb-item">
@@ -153,7 +153,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-5">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card bg-info mb-3">
                         <div class="card-body pt-2 pb-1">
@@ -165,54 +165,62 @@
                 </div>
             </div>
 
-
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-8">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="card mb-3 subir">
-                                <a href="{{ ROUTE('laboratorio.pacientes.profesional.asistente') }}">
-                                    <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-60 text-center"
-                                            src="{{ asset('images/iconos/pacientes-lab.png') }}">
-                                        <h6 class="mt-1">Pacientes del Lab.</h6>
-                                    </div>
-                                </a>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir">
+                        <a href="{{ ROUTE('laboratorio.pacientes.profesional.asistente') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center"
+                                    src="{{ asset('images/iconos/pacientes-lab.png') }}">
+                                <h6 class="mt-1">Pacientes del Lab.</h6>
                             </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="card mb-3 subir">
-                                <a href="{{ ROUTE('laboratorio.profesional.audifono.venta') }}">
-                                    <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-60 text-center"
-                                            src="{{ asset('images/iconos/audifono-discapacidad.png') }}">
-                                        <h6 class="mt-1">Venta audífonos y repuestos</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                            <div class="card mb-3 subir">
-                                <a href="{{ ROUTE('laboratorio.profesional.audifono.control') }}">
-                                    <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-60 text-center"
-                                            src="{{ asset('images/iconos/paciente-audifono.png') }}">
-                                        {{-- <h6 class="mt-1">Mis usuarios de audífonos </h6> --}}
-                                        <h6 class="mt-1">Control audífonos</h6>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
+                        </a>
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                    <div class="row">
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir">
+                        <a href="{{ ROUTE('laboratorio.profesional.audifono.venta') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center"
+                                    src="{{ asset('images/iconos/audifono-discapacidad.png') }}">
+                                <h6 class="mt-1">Venta audífonos y repuestos</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir">
+                        <a href="{{ ROUTE('laboratorio.profesional.audifono.control') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center"
+                                    src="{{ asset('images/iconos/paciente-audifono.png') }}">
+                                <h6 class="mt-1">Control audífonos</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir">
+                        <a href="{{ ROUTE('laboratorio.estadisticas') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center"
+                                    src="{{ asset('images/iconos/estadisticas.png') }}">
+                                <h6 class="mt-1">Estadísticas</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+                    <div class="row mt-3">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="card mb-3" style="max-width: 100%;">
+                            <a href="http://cronicos.cl/registro.php" target="_blank">
+                            <img class="img-fluid w-100 rounded-xl shadow" src="{{ asset('images/banners/banner-cronicos.svg') }}">
+                        </a>
+                            <!--<div class="card mb-3" style="max-width: 100%;">
                                 <img class="card-img-top" src="{{ asset('images/iconos/inscripciones_2.png') }}">
                                 <div class="card-body p-0">
                                     <a href="http://cronicos.cl/registro.php" target="_blank" class="btn" type="button">
@@ -223,12 +231,12 @@
                                             medicamentos.</h6>
                                     </a>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
-                </div>
 
-            </div>
+
+        
 
 
         </div>

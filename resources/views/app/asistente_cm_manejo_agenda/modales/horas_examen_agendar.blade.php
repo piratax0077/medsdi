@@ -188,9 +188,11 @@
                 //_token: _token,
                 id_profesional: id_profesional,
                 lugar_atencion: id_lugar_atencion,
+                lista_examenes : $('#m_agendar_hora_examen_lista_examenes').val()
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
                 {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}

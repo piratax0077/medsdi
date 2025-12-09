@@ -1,184 +1,273 @@
 <div id="agregar_gasto_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_gasto_cm" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Agregar gasto Institucional</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-row">
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo de gasto</label>
-                                        <select class="form-control form-control-sm" id="tipo_gasto_inst" name="tipo_gasto_inst">
-                                            <option value="0" data-select2-id="0">Seleccione</option>
-                                            <option value="1">Mensual</option>
-                                            <option value="2">Semestral</option>
-                                            <option value="3">Anual</option>
-                                            <option value="4">Esporádico</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Nombre</label>
-                                        <input class="form-control form-control-sm" type="text" id="nombre_gasto_inst">
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Vencimiento</label>
-                                        <input class="form-control form-control-sm" type="date" id="vencimiento_gasto_inst">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-row">
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Emisor</label>
-                                        <input class="form-control form-control-sm" type="text" id="emisor_gasto_inst">
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Folio</label>
-                                        <input class="form-control form-control-sm" type="text" id="folio_gasto_inst">
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Cuenta Contabilidad</label>
-                                        <select class="form-control form-control-sm" id="grupo_gasto_inst" name="grupo_gasto_inst">
-                                            <option value="0">Seleccione</option>
-                                            <option value="1">Generales</option>
-                                            <option value="2">Gastos Comunes</option>
-                                            <option value="3">G. Operativos</option>
-                                            <option value="4">Otros</option>
-                                        </select>
+                <input type="hidden" name="tipo_pago" id="tipo_pago" value="0">
+                <ul class="nav nav-pills bg-white" id="finanzas" role="tablist">
+                    <li class="nav-item active">
+                        <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_general-tab" data-toggle="tab" onclick="$('#tipo_pago').val(0)" href="#pago_general" role="tab" aria-controls="pago_general" aria-selected="false">Pago General<span></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_factura-tab" data-toggle="tab" onclick="$('#tipo_pago').val(1)" href="#pago_factura" role="tab" aria-controls="pago_factura" aria-selected="false">Pago Factura<span class="ripple ripple-animate" ></span></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="gastos">
+                    <div class="tab-pane fade show active pt-3" id="pago_general" role="tabpanel" aria-labelledby="pago_general-tab">
+                        <h5 class="text-center">Agregar Gasto Institucional - Pago General</h5>
+                        <form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Tipo de gasto</label>
+                                                <select class="form-control form-control-sm" id="tipo_gasto_inst" name="tipo_gasto_inst">
+                                                    <option value="0" data-select2-id="0">Seleccione</option>
+                                                    <option value="1">Mensual</option>
+                                                    <option value="2">Semestral</option>
+                                                    <option value="3">Anual</option>
+                                                    <option value="4">Esporádico</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Nombre</label>
+                                                <input class="form-control form-control-sm" type="text" id="nombre_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Vencimiento</label>
+                                                <input class="form-control form-control-sm" type="date" id="vencimiento_gasto_inst">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-row">
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Mes de pago</label>
-                                        {{-- <input class="form-control form-control-sm" type="text" id="mes_pago_gasto_inst"> --}}
-                                        <select  class="form-control form-control-sm" type="text" id="mes_pago_gasto_inst">
-                                            @if (date('m') == 1)
-                                                <option value="1" selected>ENERO</option>
-                                            @else
-                                                <option value="1">ENERO</option>
-                                            @endif
-
-                                            @if (date('m') == 2)
-                                                <option value="2" selected>FEBRERO</option>
-                                            @else
-                                                <option value="2">FEBRERO</option>
-                                            @endif
-
-                                            @if (date('m') == 3)
-                                                <option value="3" selected>MARZO</option>
-                                            @else
-                                                <option value="3">MARZO</option>
-                                            @endif
-
-                                            @if (date('m') == 4)
-                                                <option value="4" selected>ABRIL</option>
-                                            @else
-                                                <option value="4">ABRIL</option>
-                                            @endif
-
-                                            @if (date('m') == 5)
-                                                <option value="5" selected>MAYO</option>
-                                            @else
-                                                <option value="5">MAYO</option>
-                                            @endif
-
-                                            @if (date('m') == 6)
-                                                <option value="6" selected>JUNIO</option>
-                                            @else
-                                                <option value="6">JUNIO</option>
-                                            @endif
-
-                                            @if (date('m') == 7)
-                                                <option value="7" selected>JULIO</option>
-                                            @else
-                                                <option value="7">JULIO</option>
-                                            @endif
-
-                                            @if (date('m') == 8)
-                                                <option value="8" selected>AGOSTO</option>
-                                            @else
-                                                <option value="8">AGOSTO</option>
-                                            @endif
-
-                                            @if (date('m') == 9)
-                                                <option value="9" selected>SEPTIEMBRE</option>
-                                            @else
-                                                <option value="9">SEPTIEMBRE</option>
-                                            @endif
-
-                                            @if (date('m') == 10)
-                                                <option value="10" selected>OCTUBRE</option>
-                                            @else
-                                                <option value="10">OCTUBRE</option>
-                                            @endif
-
-                                            @if (date('m') == 11)
-                                                <option value="11" selected>NOVIEMBRE</option>
-                                            @else
-                                                <option value="11">NOVIEMBRE</option>
-                                            @endif
-
-                                            @if (date('m') == 12)
-                                                <option value="12" selected>DICIEMBRE</option>
-                                            @else
-                                                <option value="12">DICIEMBRE</option>
-                                            @endif
-
-                                        </select>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Emisor</label>
+                                                <input class="form-control form-control-sm" type="text" id="emisor_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Folio</label>
+                                                <input class="form-control form-control-sm" type="text" id="folio_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Cuenta Contabilidad</label>
+                                                <select class="form-control form-control-sm" id="grupo_gasto_inst" name="grupo_gasto_inst">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="1">Generales</option>
+                                                    <option value="2">Gastos Comunes</option>
+                                                    <option value="3">G. Operativos</option>
+                                                    <option value="4">Otros</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Año de pago</label>
-                                        {{-- <input class="form-control form-control-sm" type="text" id="ano_pago_gasto_inst"> --}}
-                                        <select class="form-control form-control-sm" name="ano_pago_gasto_inst" id="ano_pago_gasto_inst">
-                                            @for ($i=2023; $i<=date('Y'); $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4 col-md-4">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Mes de pago</label>
+                                                {{-- <input class="form-control form-control-sm" type="text" id="mes_pago_gasto_inst"> --}}
+                                                <select  class="form-control form-control-sm" type="text" id="mes_pago_gasto_inst">
+                                                    @if (date('m') == 1)
+                                                        <option value="1" selected>ENERO</option>
+                                                    @else
+                                                        <option value="1">ENERO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 2)
+                                                        <option value="2" selected>FEBRERO</option>
+                                                    @else
+                                                        <option value="2">FEBRERO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 3)
+                                                        <option value="3" selected>MARZO</option>
+                                                    @else
+                                                        <option value="3">MARZO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 4)
+                                                        <option value="4" selected>ABRIL</option>
+                                                    @else
+                                                        <option value="4">ABRIL</option>
+                                                    @endif
+
+                                                    @if (date('m') == 5)
+                                                        <option value="5" selected>MAYO</option>
+                                                    @else
+                                                        <option value="5">MAYO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 6)
+                                                        <option value="6" selected>JUNIO</option>
+                                                    @else
+                                                        <option value="6">JUNIO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 7)
+                                                        <option value="7" selected>JULIO</option>
+                                                    @else
+                                                        <option value="7">JULIO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 8)
+                                                        <option value="8" selected>AGOSTO</option>
+                                                    @else
+                                                        <option value="8">AGOSTO</option>
+                                                    @endif
+
+                                                    @if (date('m') == 9)
+                                                        <option value="9" selected>SEPTIEMBRE</option>
+                                                    @else
+                                                        <option value="9">SEPTIEMBRE</option>
+                                                    @endif
+
+                                                    @if (date('m') == 10)
+                                                        <option value="10" selected>OCTUBRE</option>
+                                                    @else
+                                                        <option value="10">OCTUBRE</option>
+                                                    @endif
+
+                                                    @if (date('m') == 11)
+                                                        <option value="11" selected>NOVIEMBRE</option>
+                                                    @else
+                                                        <option value="11">NOVIEMBRE</option>
+                                                    @endif
+
+                                                    @if (date('m') == 12)
+                                                        <option value="12" selected>DICIEMBRE</option>
+                                                    @else
+                                                        <option value="12">DICIEMBRE</option>
+                                                    @endif
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Año de pago</label>
+                                                {{-- <input class="form-control form-control-sm" type="text" id="ano_pago_gasto_inst"> --}}
+                                                <select class="form-control form-control-sm" name="ano_pago_gasto_inst" id="ano_pago_gasto_inst">
+                                                    @for ($i=2023; $i<=date('Y'); $i++)
+                                                        <option value="{{ $i }}">{{ $i }}</option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Modo de pago</label>
-                                        <input class="form-control form-control-sm" type="text" id="modo_pago_gasto_inst">
+                                        <select class="form-control form-control-sm" id="modo_pago_gasto_inst" name="modo_pago_gasto_inst">
+                                            <option value="">Seleccione</option>
+                                            <option value="Transferencia">Transferencia</option>
+                                            <option value="Efectivo">Efectivo</option>
+                                            <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                                            <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="PAC">PAC (Pago Automático de Cuentas)</option>
+                                            <option value="PAT">PAT (Pago Automático con Tarjeta)</option>
+                                            <option value="Débito Automático">Débito Automático</option>
+                                            <option value="WebPay">WebPay</option>
+                                            <option value="Mercado Pago">Mercado Pago</option>
+                                            <option value="PayPal">PayPal</option>
+                                            <option value="Vale Vista">Vale Vista</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-row">
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Monto a pagar</label>
+                                                <input class="form-control form-control-sm" type="number" min="0" id="monto_gasto_inst">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-row">
-                                <div class="col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Monto a pagar</label>
-                                        <input class="form-control form-control-sm" type="number" min="0" id="monto_gasto_inst">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                    <div class="tab-pane fade pt-3" id="pago_factura" role="tabpanel" aria-labelledby="pago_factura-tab">
+                        <h5 class="text-center">Agregar Gasto Institucional - Pago Factura</h5>
+                        <form>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-row">
+                                        
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">N° Factura</label>
+                                                <input class="form-control form-control-sm" type="text" id="numero_factura_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Vencimiento</label>
+                                                <input class="form-control form-control-sm" type="date" id="vencimiento_factura_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Proveedor</label>
+                                                <input class="form-control form-control-sm" type="text" id="proveedor_factura_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Cuenta Contabilidad</label>
+                                                <select class="form-control form-control-sm" id="grupo_factura_gasto_inst" name="grupo_factura_gasto_inst">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="1">Stock</option>
+                                                    <option value="2">Utiles de escritorio</option>
+                                                    <option value="3">Utiles de aseo</option>
+                                                    <option value="4">Mantención</option>
+                                                    <option value="5">Otros</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Modo de pago</label>
+                                                <input class="form-control form-control-sm" type="text" id="modo_pago_factura_gasto_inst">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Monto a pagar</label>
+                                                <input class="form-control form-control-sm" type="number" min="0" id="monto_factura_gasto_inst">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                
             </div>
             <div class="modal-footer">
                 <div class="col-sm-12 col-md-12">
@@ -219,6 +308,7 @@
         var ano_pago = $('#ano_pago_gasto_inst').val();
         var modo_pago = $('#modo_pago_gasto_inst').val();
         var monto = $('#monto_gasto_inst').val();
+        var tipo_pago = $('#tipo_pago').val();
         var _token = CSRF_TOKEN;
 
         let url = "{{ route('gastos.agregar') }}";
@@ -240,6 +330,7 @@
                 ano_pago : ano_pago,
                 modo_pago : modo_pago,
                 monto : monto,
+                tipo_pago : tipo_pago
             }
         })
         .done(function(data) {

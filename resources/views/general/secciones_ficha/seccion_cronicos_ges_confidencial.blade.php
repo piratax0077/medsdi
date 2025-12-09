@@ -168,11 +168,11 @@
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row w-100">
+                    <div class="col-md-8">
                         <h5 class="modal-title text-white">Control de enfermedades crónicas</h5>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
                             <option value="n_C">Seleccione control</option>
                             <option value="cpeso">Obesidad</option>
@@ -185,7 +185,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" onclick="$('#form_enfermedad_cronica').modal('hide')" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -1247,7 +1247,7 @@
                         </select>
 					</div>
 				</div>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#m_agregar_antecedente').modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -3006,17 +3006,17 @@
         {
             var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
             var tipo = $("#nuevo_antecedente").val();
-
+       
             $('#agregar-antecedente').show();
             $('#modificar-antecedente').hide();
             $('#modificar-antecedente-cancelar').hide();
 
             $('#modal-body-input').html('');
             var html = '';
-
+            console.log(tipo);
             switch(tipo)
             {
-                case '1':
+                case '2':
                     html+=`
                         <table class="display table  table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
@@ -3030,7 +3030,7 @@
                         </table>
                     `;
                 break;
-                case '2':
+                case '1':
                     html+=`
                         <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
@@ -3038,7 +3038,7 @@
                                 <td><input class="form-control" type="text" id="nombre"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Comentario</td>
+                                <td class="f-16 font-weight-bold">Comentarios</td>
                                 <td><textarea class="form-control" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3163,8 +3163,12 @@
                     `;
                 break;
             }
-
+            console.log(tipo);
             cargarRegistrosAntecedentes(tipo);
+            // if(tipo == 1){
+            //     cargarRegistrosAntecedentes(tipo);
+            // }
+            
             $('#titulo_antecedente').html('Añadir '+nombre_enfermedad);
             $('#modal-body-input').html(html);
             $('#tipo-antecedente-m').val(tipo);
@@ -3271,7 +3275,7 @@
         });
     }
 
-    const cargarRegistrosAntecedentes = (tipo) => {
+     const cargarRegistrosAntecedentes = (tipo) => {
 
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/ver_registros';
@@ -3285,13 +3289,14 @@
             type: "GET",
             data: data,
             success: (resp)=>{
+                console.log(resp);
                 if(resp.estado==1)
                 {
                     var head_ = '';
                     var html_ = '';
                     var permiso_ = '';
+                    var html_patologias = '';
                     var id_users = parseInt($('#user-id').val());
-                    $('#listado_patologias_paciente').empty();
                     resp.registros.forEach(e => {
 
                         permiso_ = '';
@@ -3300,11 +3305,32 @@
                                 <buttom class="btn btn-icon btn-info feather icon-edit" onclick="verEditarAntecedente(${tipo},${e.id})"></buttom>
                                 <buttom class="btn btn-icon btn-danger feather icon-x" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
                             `;
-
-                        console.log(e.antecedente_data.procedimiento);
+                        console.log(tipo);
                         switch(tipo)
                         {
                             case '1':
+                                $('#listado_patologias_paciente').empty();
+                                head_ =`
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Comentario</th>
+                                        <th>Profesional</th>
+                                        <th>Fecha</th>
+                                        <th></th>
+                                    </tr>
+                                `;
+                                html_ +=`
+                                    <tr>
+                                        <td>${e.antecedente_data.nombre}</td>
+                                        <td>${e.antecedente_data.comentario}</td>
+                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
+                                        <td>${e.antecedente_data.fecha_regitro}</td>
+                                        <td>${permiso_}</td>
+                                    </tr>
+                                `;
+                                html_patologias += `<li>${e.antecedente_data.nombre}</li>`;
+                            break;
+                            case '2':
                                 head_ =`
                                     <tr>
                                         <th>Procedimiento</th>
@@ -3325,27 +3351,7 @@
                                 `;
 
                             break;
-                            case '2':
-                                head_ =`
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Comentario</th>
-                                        <th>Profesional</th>
-                                        <th>Fecha</th>
-                                        <th></th>
-                                    </tr>
-                                `;
-                                html_ +=`
-                                    <tr>
-                                        <td>${e.antecedente_data.nombre}</td>
-                                        <td>${e.antecedente_data.comentario}</td>
-                                        <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
-                                        <td>${e.antecedente_data.fecha_regitro}</td>
-                                        <td>${permiso_}</td>
-                                    </tr>
-                                `;
-                                $('#listado_patologias_paciente').append(`<li>${e.antecedente_data.nombre} </li>`);
-                            break;
+                            
                             case '3':
                                 head_ =`
                                     <tr>
@@ -3470,7 +3476,10 @@
 
                     $('#tabla_antecedentes thead').html(head_);
                     $('#tabla_antecedentes tbody').html(html_);
-
+                    if(tipo == 1){
+                        $('#listado_patologias_paciente').html(html_patologias);
+                    }
+                    
                 }
             },
             error: (resp)=>{

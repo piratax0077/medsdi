@@ -624,7 +624,7 @@
                                 html += '        <div class="card-body pt-0">';
                                 html += '            <div class="user-about-block text-center">';
                                 html += '                <div class="row align-items-end">';
-                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="'+value_registro.img_profesional+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
+                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="storage/'+value_registro.profesionales_foto_perfil+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
                                 html += '                </div>';
                                 html += '            </div>';
                                 html += '            <div class="text-center">';

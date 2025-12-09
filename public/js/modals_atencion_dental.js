@@ -176,13 +176,13 @@ $('#formularios_atencion').on('click', ".accion_modal_informe", function () {
 
 			}
 	     /* Odontograma */
-	        function info_odontograma(pieza){
-                console.log(pieza);
-                let url ="{{ route('odontograma.show', 'pieza') }}";
-                url = url.replace('pieza', pieza);
-                console.log(url);
-	            $('#modal_odontograma').modal('show');
-	        }
+	        // function info_odontograma(pieza){
+            //     console.log(pieza);
+            //     let url ="{{ route('odontograma.show', 'pieza') }}";
+            //     url = url.replace('pieza', pieza);
+            //     console.log(url);
+	        //     $('#modal_odontograma').modal('show');
+	        // }
 		 /* info antecedentes*/
 			function info_info1() {
 				$('#modal_info1').modal('show');

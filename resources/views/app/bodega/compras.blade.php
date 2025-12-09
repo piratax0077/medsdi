@@ -23,12 +23,22 @@
 
                             <ul class="breadcrumb">
 
-                                <li class="breadcrumb-item"><a href="escritorio_admin_general_cm.php" data-toggle="tooltip"
-                                        data-placement="top" title="Volver a mi escritorio"><i
-                                            class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item">
+                                    @if($institucion->id_tipo_institucion == 3)
+                                    <a href="{{ route('laboratorio.adm_general.home') }}" data-toggle="tooltip"
+                                        data-placement="top" title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
+                                    </a>
+                                    @else
+                                    <a href="{{ route('adm_cm.home') }}" data-toggle="tooltip"
+                                        data-placement="top" title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
+                                    </a>
+                                    @endif
+                                </li>
 
                                 <li class="breadcrumb-item"><a href="administracion_cm.php">Administracion del centro
-                                        médico</a></li>
+                                        médico {{ $institucion->nombre }}</a></li>
 
                                 <li class="breadcrumb-item"><a href="compras.php">Compras</a></li>
 
@@ -691,6 +701,20 @@
 
         }
 
+        function evaluar_almacenamiento(){
+            var almacenamiento = $('#almacenamiento').val();
+            if(almacenamiento == 1){
+                $('#fecha_vencimiento').prop('disabled', false);
+                $('#tipo_almacenamiento').prop('disabled', false);
+                $('#tipo_almacenamiento').val('0');
+            } else {
+                $('#fecha_vencimiento').prop('disabled', true);
+                $('#fecha_vencimiento').val('');
+                $('#tipo_almacenamiento').prop('disabled', true);
+                $('#tipo_almacenamiento').val('0');
+            }
+        }
+
         function agregarItem() {
 
             nuevoItem();
@@ -1215,11 +1239,14 @@
 
 
         function guardarItemFactura() {
-
+            var numero_serie = $('#numero_serie').val();
             var codigo_interno = $('#codigo_interno').val();
             var id_compra = $('#id_compra').val();
             var nombre_producto = $('#nombre').val();
-            var precio = $('#precio').val();
+            var precio_neto = $('#precio_neto').val();
+            var precio_venta = $('#precio_venta').val();
+            var precio_compra = $('#precio_compra').val();
+            var precio = precio_neto;
             var stock_minimo = $('#stock_minimo').val();
             var stock_maximo = $('#stock_maximo').val();
             var tipo_producto = $('#producto').val();
@@ -1244,6 +1271,10 @@
                 mensaje += '<li>Debe seleccionar una compra</li>';
                 valido = 0;
             }
+            if(numero_serie === '') {
+                mensaje += '<li>Debe ingresar un número de serie</li>';
+                valido = 0;
+            }
             if (codigo_interno === '') {
                 mensaje += '<li>Debe ingresar un código interno</li>';
                 valido = 0;
@@ -1252,8 +1283,16 @@
                 mensaje += '<li>Debe ingresar un nombre de producto</li>';
                 valido = 0;
             }
-            if (precio === '') {
-                mensaje += '<li>Debe ingresar un precio</li>';
+            if (precio_neto === '') {
+                mensaje += '<li>Debe ingresar un precio neto</li>';
+                valido = 0;
+            }
+            if (precio_venta === '') {
+                mensaje += '<li>Debe ingresar un precio de venta</li>';
+                valido = 0;
+            }
+            if (precio_compra === '') {
+                mensaje += '<li>Debe ingresar un precio de compra</li>';
                 valido = 0;
             }
             if (stock_minimo === '') {
@@ -1328,10 +1367,13 @@
             formData.append('nuevo', nuevo);
             formData.append('id_producto', id_producto);
             formData.append('id_compra', id_compra);
+            formData.append('numero_serie', numero_serie);
             formData.append('codigo_interno', codigo_interno);
             formData.append('nombre_producto', nombre_producto);
             formData.append('cantidad', cantidad);
-            formData.append('precio', precio);
+            formData.append('precio_compra', precio_compra);
+            formData.append('precio_neto', precio_neto);
+            formData.append('precio_venta', precio_venta);
             formData.append('stock_minimo', stock_minimo);
             formData.append('stock_maximo', stock_maximo);
             formData.append('tipo_producto', tipo_producto);
@@ -2274,7 +2316,7 @@
 
         function seleccionarProducto(idproducto) {
 
-            var url = '/seleccionarProducto/' + idproducto;
+            var url = '/Administracion/seleccionarProducto/' + idproducto;
 
 
 
@@ -2891,6 +2933,14 @@
 
                                 <div class="form-group col-md-3">
 
+                                    <label for="numero_serie" class="floating-label-activo-sm">Número de serie</label>
+
+                                    <input type="text" class="form-control form-control-sm" id="numero_serie">
+
+                                </div>
+
+                                <div class="form-group col-md-3">
+
                                     <label for="codigo_interno" class="floating-label-activo-sm">Código interno</label>
 
                                     <input type="text" class="form-control form-control-sm" id="codigo_interno">
@@ -2914,9 +2964,9 @@
                                         <option value="0">Seleccione</option>
 
                                         @foreach ($tipos_producto as $tp)
-
+                                            @if($tp->id_tipo_institucion == 3 && $tp->id_tipo_institucion != 8)
                                             <option value="{{$tp->id}}">{{$tp->nombre}}</option>
-
+                                            @endif
                                         @endforeach
 
                                     </select>
@@ -2924,12 +2974,27 @@
                                 </div>
 
 
+                                <div class="form-group col-md-3">
+
+                                    <label for="precio_compra" class="floating-label-activo-sm">Precio Compra</label>
+
+                                    <input type="number" class="form-control form-control-sm" id="precio_compra">
+
+                                </div>
 
                                 <div class="form-group col-md-3">
 
-                                    <label for="precio" class="floating-label-activo-sm">Precio Neto</label>
+                                    <label for="precio_neto" class="floating-label-activo-sm">Precio Neto</label>
 
-                                    <input type="number" class="form-control form-control-sm" id="precio">
+                                    <input type="number" class="form-control form-control-sm" id="precio_neto">
+
+                                </div>
+
+                                <div class="form-group col-md-3">
+
+                                    <label for="precio_venta" class="floating-label-activo-sm">Precio Venta</label>
+
+                                    <input type="number" class="form-control form-control-sm" id="precio_venta">
 
                                 </div>
 
@@ -3044,7 +3109,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="fecha_vencimiento" class="floating-label-activo-sm">¿Almacenamiento?</label>
-                                    <select name="almacenamiento" id="almacenamiento" class="form-control form-control-sm">
+                                    <select name="almacenamiento" id="almacenamiento" class="form-control form-control-sm" onchange="evaluar_almacenamiento()">
                                         <option value="0">Seleccione</option>
                                         <option value="1">Si</option>
                                         <option value="2">No</option>
@@ -3079,7 +3144,7 @@
 
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="cantidad" class="floating-label-activo-sm">Cantidad</label>
+                                    <label for="cantidad" class="floating-label-activo-sm">Cantidad a ingresar</label>
                                     <input type="number" class="form-control form-control-sm" id="cantidad">
                                 </div>
 
@@ -3088,7 +3153,7 @@
                                     <input type="text" class="form-control form-control-sm" id="lote">
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-6">
                                     <label for="observaciones" class="floating-label-activo-sm">Observaciones</label>
                                     <textarea name="observaciones" id="observaciones" cols="30" rows="3" class="form-control"></textarea>
                                 </div>

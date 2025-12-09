@@ -9,4 +9,10 @@ class OctavoPar extends Model
 {
     use HasFactory;
     protected $table = 'octavo_par';
+
+     //hora medica
+    public function HoraMedica()
+    {
+        return $this->hasOne(HoraMedica::class,'id_otros_profesionales', 'id_otros_profesionales');
+    }
 }

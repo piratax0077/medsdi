@@ -9,6 +9,21 @@ class Instituciones extends Model
 {
     use HasFactory;
     protected $table = 'instituciones';
+    protected $fillable = [
+        'nombre',
+        'razon_social',
+        'rut',
+        'id_tipo_institucion',
+        'id_lugar_atencion',
+        'direccion',
+        'telefono',
+        'email',
+        'id_responsable',
+        'id_responsable_subdireccion',
+        'id_responsable_farmacia',
+        'id_direccion',
+        'foto_perfil'
+    ];
 
 
     public function Direccion()
@@ -24,6 +39,15 @@ class Instituciones extends Model
     public function UsuarioAdministrador()
     {
         return $this->hasOne(AdminInstServ::class, 'id', 'id_responsable');
+    }
+
+    public function UsuarioComercial()
+    {
+        return $this->hasOne(AdminInstServ::class, 'id', 'id_responsable_subdireccion');
+    }
+
+    public function UsuarioFarmacia(){
+        return $this->hasOne(AdminInstServ::class, 'id', 'id_responsable_farmacia');
     }
 
     public function TipoInstitucion()

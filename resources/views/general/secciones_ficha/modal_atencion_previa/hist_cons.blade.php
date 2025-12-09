@@ -529,24 +529,36 @@
 
                     /** IMAGENES */
                     $('#ficha_imagenes').html('');
-                    if(key2 == 'img')
-                    {
-                        /** TITULO */
-                        $('#ficha_imagenes').html('<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center"><h6 class="t-aten">Imagenes</h6></div>');
+                    if (key2 == 'img') {
+                        // Título
+                        $('#ficha_imagenes').append(`
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h6 class="t-aten">IMAGENES</h6>
+                                </div>
+                            </div>
+                        `);
 
-                        /** IMAGENES */
-                        $.each(value, function (key_img, value_img)
-                        {
-                            console.log(value_img);
-                            var html = '';
-                            html += '<div class="col-sm-3">';
-                            html += '   <a data-fancybox="gallery" data-src="'+value_img.url+'" data-caption="'+value_img.nombre+'" >';
-                            html += '       <img src="'+value_img.url+'" class="img-fluid" alt="'+value_img.nombre+'" />';
-                            html += '   </a>';
-                            html += '</div>';
-                            $('#ficha_imagenes').append(html);
+                        // Iniciar fila de imágenes
+                        let html = '<div class="row justify-content-center">';
+
+                        // Agregar cada imagen
+                        $.each(value, function (key_img, value_img) {
+                            html += `
+                                <div class="col-sm-3 col-6 mb-3 text-center">
+                                    <a data-fancybox="gallery" data-src="${value_img.url}" data-caption="${value_img.nombre}">
+                                        <img src="${value_img.url}" class="img-fluid rounded shadow-sm" alt="${value_img.nombre}" />
+                                    </a>
+                                </div>
+                            `;
                         });
+
+                        html += '</div>';
+
+                        // Insertar solo una vez
+                        $('#ficha_imagenes').append(html);
                     }
+
 
                     /** EXAMENES ESPECIALES */
                     $('#ficha_examenes_espec').html('');

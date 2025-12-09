@@ -9,11 +9,24 @@ class Profesional extends Model
 {
     use HasFactory;
     protected $table = 'profesionales';
+    protected $fillable = [
+        'id_usuario',
+        'nombre',
+        'apellido',
+        'telefono',
+        'email',
+        'id_tipo_especialidad',
+        'id_sub_tipo_especialidad',
+        'id_especialidad',
+        'id_direccion',
+        'foto_perfil'
+    ];
 
     public function LugaresAtencion()
     {
         return $this->belongsToMany(LugarAtencion::class, 'profesionales_lugares_atencion', 'id_profesional', 'id_lugar_atencion')
-            ->withPivot('estado');
+            ->withPivot('estado')
+            ->wherePivot('estado', 1);
     }
 
     public function Licencias()

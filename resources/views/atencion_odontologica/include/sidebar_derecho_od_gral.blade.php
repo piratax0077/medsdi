@@ -1,8 +1,8 @@
     <!--Sidebar 3 (dental_implanto)-->
     <div class="position-fixed w-100 h-100"></div>
     <div id="formularios_odontologia" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
-        <header class="bs-canvas-header p-3 bg-info overflow-auto">
-            <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
+        <header class="bs-canvas-header p-3 d-flex justify-content-between bg-info overflow-auto">
+            <button type="button" class="bs-canvas-close close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Odontología</h5>
         </header>
         <div class="bs-canvas-content">
@@ -186,7 +186,7 @@
                     </div>
                 </div>
                <!-- SECCION CONSENTIMIENTOS -->
-                @include('general.sidebar.seccion_consentimientos')
+                {{-- @include('general.sidebar.seccion_consentimientos') --}}
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">

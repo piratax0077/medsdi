@@ -9,11 +9,11 @@
                 <form id="mensajeDifusionForm" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="de">De:</label>
+                        <label for="de" class="floating-label-activo-sm">De:</label>
                         <input type="text" class="form-control" id="de_difusion" name="de_difusion" value="{{ Auth::user()->name }}" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="para">Para:</label>
+                        <label for="para" class="floating-label-activo-sm">Para:</label>
 
                         <select class="form-control form-control-sm" name="msj_para_difusion" id="msj_para_difusion" multiple="multiple">
                             <option value="0">A todos los roles</option>
@@ -24,15 +24,15 @@
 
                     </div>
                     <div class="form-group">
-                        <label for="titulo_msj">Título:</label>
+                        <label for="titulo_msj" class="floating-label-activo-sm">Título:</label>
                         <input type="text" class="form-control" id="titulo_msj_difusion" name="titulo_msj_difusion" required>
                     </div>
                     <div class="form-group">
-                        <label for="detalle_msj">Asunto:</label>
+                        <label for="detalle_msj" class="floating-label-activo-sm">Asunto:</label>
                         <textarea class="form-control" rows="3" id="detalle_msj_difusion" name="detalle_msj_difusion" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="mensaje_msj">Mensaje:</label>
+                        <label for="mensaje_msj" class="floating-label-activo-sm">Mensaje:</label>
                         <textarea class="form-control" rows="5" id="mensaje_msj_difusion" name="mensaje_msj_difusion" required></textarea>
                     </div>
                     <div class="form-group">
@@ -166,7 +166,7 @@
             return;
         }
 
-        if (document.getElementById('msj_para_difusion').value === '') {
+        if (document.getElementById('msj_para_difusion').selectedOptions.length === 0) {
             swal("¡Error!", "El campo 'Para' es obligatorio", "error");
             return;
         }
@@ -188,7 +188,16 @@
 
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('de_difusion', document.getElementById('de_difusion').value);
-        formData.append('msj_para_difusion', document.getElementById('msj_para_difusion').value);
+        
+        // Manejar el select múltiple correctamente
+        var selectElement = document.getElementById('msj_para_difusion');
+        var selectedValues = Array.from(selectElement.selectedOptions).map(option => option.value);
+        
+        // Agregar cada valor seleccionado como elemento de array
+        selectedValues.forEach(function(value) {
+            formData.append('msj_para_difusion[]', value);
+        });
+        
         formData.append('titulo_msj_difusion', document.getElementById('titulo_msj_difusion').value);
         formData.append('detalle_msj_difusion', document.getElementById('detalle_msj_difusion').value);
         formData.append('mensaje_msj_difusion', document.getElementById('mensaje_msj_difusion').value);
@@ -204,6 +213,21 @@
         .then(data => {
             console.log(data);
             // Manejar la respuesta del servidor
+            if(data.estado == 1){
+                swal({
+                    title: "¡Éxito!",
+                    text: "El mensaje de difusión se ha enviado correctamente.",
+                    icon: "success"
+                });
+            }else{
+                swal({
+                    title: "¡Error!",
+                    text: "No se pudo enviar el mensaje de difusión.",
+                    icon: "error"
+                });
+            }
+            // cerrar modal
+            $('#mensajeDifusionModal').modal('hide');
         })
         .catch(error => {
             console.error('Error:', error.responseText);

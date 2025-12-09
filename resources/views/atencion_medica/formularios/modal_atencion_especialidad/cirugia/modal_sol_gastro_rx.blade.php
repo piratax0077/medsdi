@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Solicitud Estudio Radiológico</h5>
-                <button type="button" class="close text-white" data-bs-dismiss="modal"  aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal"  aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -112,6 +112,7 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" onclick="enviar_examenes_paciente(2)"><i class="fas fa-email"></i>Enviar a paciente</button>
                 <button type="button" class="btn btn-danger btn-sm" onclick="sol_rx_gastro();" data-bs-dismiss="modal" >Cancelar</button>
                 <button type="submit" class="btn btn-info btn-sm"> Guardar</button>
             </div>
@@ -124,6 +125,36 @@
     function sol_rx_gastro()
     {
         $('#m_rx_gastro').modal('show');
+         $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 356
+                },
+        })
+        .done(function(response) {
+            $('#examen_rx').val(null).trigger('change');
+        
+            // Limpiar las opciones existentes
+            $('#examen_rx').empty();
+            
+            // Agregar opción por defecto
+            $('#examen_rx').append('<option value="">Seleccione...</option>');
+            
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#examen_rx').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+            
+            // Reinicializar el select2 si es necesario
+            $('#examen_rx').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
     }
     function cerrarsol_rx_gastro() {
         $('#m_rx_gastrol').modal ('hide');

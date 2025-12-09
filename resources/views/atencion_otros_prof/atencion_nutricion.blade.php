@@ -19,7 +19,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <p class="font-italic mt-0 mb-0 text-white float-md-right">
+                            <h6 class="mt-0 mb-0 text-white float-md-right">
                                 @php
                                     $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                     $fecha = \Carbon\Carbon::parse(now());
@@ -27,7 +27,7 @@
                                     $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                 @endphp
                                 {{ $fecha }}
-                            </p>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -44,19 +44,19 @@
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
 
-                                    <li class="nav-item" id="nav-fmu">
+                                    {{--  <li class="nav-item" id="nav-fmu">
                                         @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
+                                        <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de atenciones</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                    </li>  --}}
                                 </ul>
                             </div>
                         </div>

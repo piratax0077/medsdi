@@ -1404,7 +1404,7 @@
 
     function eliminar_tipo_convenio(id){
         swal({
-            title: "¿Esta seguro que desea ELIMINAR el tipo de convenio?",
+            title: "uro que desea ELIMINAR el tipo de convenio?",
             text: "Favor confirme o cancele la solicitud",
             icon: "warning",
             buttons: ["Cancelar", "Confirmar"],

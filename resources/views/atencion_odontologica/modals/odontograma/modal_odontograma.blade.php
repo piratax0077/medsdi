@@ -70,7 +70,7 @@
                 tipo_examen: tipoExamenMap[item.tipo_examen] || 'Otro',
                 caras: item.diagnosticocaras || 'N/A',
                 responsable: item.profesional || 'N/A',
-                estado: item.diagnostico.estado == 1 ? 'TERMINADO' : 'EN ESPERA'
+                estado: item.estado == 1 ? 'TERMINADO' : 'EN ESPERA'
             }));
 
             // Inicializa o actualiza la tabla

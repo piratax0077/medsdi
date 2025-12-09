@@ -3,15 +3,30 @@
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="endosc_gastrica-tab" data-toggle="tab" href="#endosc_gastrica" role="tab" aria-controls="endosc_gastrica" aria-selected="false">Endoscopía Digestiva Alta</a>
-                    </li>
-                    {{--  <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="colonoscopia-tab" data-toggle="tab" href="#colonoscopia" role="tab" aria-controls="colonoscopia" aria-selected="false">Endoscopía Digestiva Baja</a>
-                    </li>  --}}
+                    @if(count($procedimientoCentro) > 0)
+                        @foreach ($procedimientoCentro as $procedimiento)
+                            @php
+                                if($procedimiento->nombre == 'ENDOSCOPÍA DIGESTIVA ALTA') {
+                                    $target = 'endosc_gastrica';
+                                }else if($procedimiento->nombre == 'ENDOSCOPÍA DIGESTIVA BAJA'){
+                                    $target = 'colonoscopia';
+                                }else{
+                                    $target = '';
+                                }
+                            @endphp
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones active text-uppercase" id="{{ $target }}-tab" data-toggle="tab" href="#{{ $target }}" role="tab" aria-controls="{{ $target }}" aria-selected="false">{{ $procedimiento->nombre }}</a>
+                            </li>
+                        @endforeach
+
+                    @else
+                        <li class="nav-item-secciones">
+                            <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
+                        </li>
+                    @endif
+
+
+
 				</ul>
             </div>
 
@@ -64,7 +79,350 @@
 
                     @csrf
                     <div class="tab-content" id="orl-contenido">
-                        <!--ATENCIÓN ESPECIALIDAD GENERAL-->
+                        @if(count($procedimientoCentro) > 0)
+                            @foreach ($procedimientoCentro as $procedimiento)
+                                @php
+                                    if($procedimiento->nombre == 'ENDOSCOPÍA DIGESTIVA ALTA') {
+                                        $target = 'endosc_gastrica';
+                                    }else if($procedimiento->nombre == 'ENDOSCOPÍA DIGESTIVA BAJA'){
+                                        $target = 'colonoscopia';
+                                    }else{
+                                        $target = '';
+                                    }
+                                @endphp
+
+                            @endforeach
+                        <!--INFORME ENDOSCOPÍA DIGESTIVA -->
+                        <div class="tab-pane fade show active" id="{{ $target }}" role="tabpanel" aria-labelledby="{{ $target }}-tab">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <h6 class="text-c-blue f-20">{{ $procedimiento->nombre }}</h6>
+                                </div>
+                            </div>
+                            <div class="row div_form_examen_eda">
+                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
+                            <!-- SOLICITADO POR -->
+                            <div class="col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="solicitado_por">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#solicitado_por_c" aria-expanded="false" aria-controls="solicitado_por_c">
+                                            Solicitado por:
+                                        </button>
+                                    </div>
+                                    <div id="solicitado_por_c" class="collapse show" aria-labelledby="solicitado_por" data-parent="#solicitado_por">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2" >
+                                                    <input type="hidden" name="id_profesional_solicitado_por_eda" id="id_profesional_solicitado_por_eda" value="">
+                                                    <label class="floating-label-activo-sm">RUT</label>
+                                                    <input type="text" class="form-control form-control-sm" name="solicitado_por_rut_eda" id="solicitado_por_rut_eda"
+                                                        onblur="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda', 'solicitado_por_telefono_eda', 'solicitado_por_email_eda', 'div_mensaje_eda', 'mensaje_solicitado_por_eda');"
+                                                        onchange="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda', 'solicitado_por_telefono_eda', 'solicitado_por_email_eda', 'div_mensaje_eda', 'mensaje_solicitado_por_eda');"
+                                                        onkeyup="cargar_profesional(this,'solicitado_por_eda', 'id_profesional_solicitado_por_eda', 'div_profesional_no_inscrito_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda', 'solicitado_por_telefono_eda', 'solicitado_por_email_eda', 'div_mensaje_eda', 'mensaje_solicitado_por_eda');">
+                                                </div>
+                                                <div class="form-group col-md-2" >
+                                                    <label class="floating-label-activo-sm">Solicitado por</label>
+                                                    <input type="text" class="form-control form-control-sm" name="solicitado_por_eda" id="solicitado_por_eda" readonly="readonly">
+                                                </div>
+
+                                                <div class="form-group col-md-4">
+                                                    <label class="floating-label-activo-sm">H.Diagnóstica</label>
+                                                    <input type="text" class="form-control form-control-sm" data-input_igual="hip_diag_spec" name="sospecha_diagnostica_eda" id="sospecha_diagnostica_eda" onchange="cargarIgual('sospecha_diagnostica_eda')">
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label class="floating-label-activo-sm">Premedicación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="premed_eda" id="premed_eda">
+                                                </div>
+
+                                                <div class="form-group col-md-12" id="div_mensaje_eda"  style="display: none;">
+                                                    <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por_eda"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="div_profesional_no_inscrito_eda" style="display: none;">
+
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Nombre</label>
+                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_por_nombre_eda" id="solicitado_por_nombre_eda" onchange="actualizar_solicitado_por('solicitado_por_eda', 'solicitado_por_nombre_eda', 'solicitado_por_apellido_eda');">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Apellido</label>
+                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_por_apellido_eda" id="solicitado_por_apellido_eda" onchange="actualizar_solicitado_por('solicitado_por_eda', 'solicitado_por_nombre_eda','solicitado_por_apellido_eda');">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Telefono</label>
+                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_por_telefono_eda" id="solicitado_por_telefono_eda" >
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Email</label>
+                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_por_email_eda" id="solicitado_por_email_eda" >
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--ANTECEDENTES-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="antec_gastro">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_endosc_gastro" aria-expanded="false" aria-controls="antec_endosc_gastro">
+                                            Antecedentes
+                                        </button>
+                                    </div>
+                                    <div id="antec_endosc_gastro" class="collapse show" aria-labelledby="antec_gastro" data-parent="#antec_gastro">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mx-auto">
+                                                    <label class="floating-label-activo-sm">Antecedentes Generales</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_gen_eda" id="antec_endo_gastrica_gen_eda"></textarea>
+                                                </div>
+                                                <div class="form-group col-md-12 mx-auto">
+                                                    <label class="floating-label-activo-sm">Antecedentes Gastroenterológicos</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="antec_endo_gastrica_go_eda" id="antec_endo_gastrica_go_eda"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--TRAYECTO ESOFAGO-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="esof_endoscopia">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#esof_endoscopia_c" aria-expanded="false" aria-controls="esof_endoscopia_c">
+                                        Trayecto y Esófago
+                                        </button>
+                                    </div>
+                                    <div  id="esof_endoscopia_c"  class="collapse show" aria-labelledby="esof_endoscopia" data-parent="#esof_endoscopia">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mx-auto">
+                                                    <label class="floating-label-activo-sm">Trayecto</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_trayecto_eda" id="esof_trayecto_eda"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mx-auto">
+                                                    <label class="floating-label-activo-sm">Esófago</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="esof_esofago_eda" id="esof_esofago_eda"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--ESTOMAGO-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="orofar">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#orofar-c" aria-expanded="false" aria-controls="orofar-c">
+                                            Estómago
+                                        </button>
+                                    </div>
+                                    <div id="orofar-c" class="collapse show" aria-labelledby="orofar" data-parent="#orofar">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form group row">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Cardias</label>
+                                                            <input id="cardias_eda" name="cardias_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Contenido y Pliegues </label>
+                                                            <input id="cont_pliegues_eda" name="cont_pliegues_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Mucosa</label>
+                                                            <input id="mucosa_eda" name="mucosa_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Ángulo</label>
+                                                            <input id="angulo_eda" name="angulo_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Antro</label>
+                                                            <input id="antro_eda" name="antro_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Píloro</label>
+                                                            <input id="piloro_eda" name="piloro_eda" type="text" class="form-control form-control-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="biopsia_eda" name="biopsia_eda" value="0">
+                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                <input type="checkbox" onchange="biopsia('eda');" id="biopsia_check_eda" name="biopsia_check_eda" value="">
+                                                                <label for="biopsia_check_eda" class="cr"></label>
+                                                            </div>
+                                                            <label>biopsia</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <input type="hidden" id="muestra_hp_eda" name="muestra_hp_eda" value="0">
+                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                <input type="checkbox" onchange="muestra_hp_abrir_div('eda');" id="muestra_hp_check_eda" name="muestra_hp_check_eda" data-diagnostico="diag_endos_eda" data-select="muestra_hp_resultado_eda" value="">
+                                                                <label for="muestra_hp_check_eda" class="cr"></label>
+                                                            </div>
+                                                            <label>Muestra H.P</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3" id="div_select_muestra_hp_eda" style="display:none;">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm" for="name">Resultado</label>
+                                                            <select id="muestra_hp_resultado_eda" name="muestra_hp_resultado_eda" class="form-control control-sm" onchange="cambio_muestra_hp_resultado('muestra_hp_resultado_eda','diag_endos_eda')">
+                                                                <option value="1">Positivo</option>
+                                                                <option value="0" selected="selected">Negativo</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <label class="floating-label-activo-sm">Descripción Examen</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="desc_endo_gast_eda" id="desc_endo_gast_eda"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DUODENO-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="duodeno">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#duodeno-c" aria-expanded="false" aria-controls="duodeno-c">
+                                            Duodéno
+                                        </button>
+                                    </div>
+                                    <div id="duodeno-c" class="collapse show" aria-labelledby="duodeno" data-parent="#duodeno">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <label class="floating-label-activo-sm">Descripción</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="duodeno_eda" id="duodeno_eda"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--GRABACION VOZ-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="voz">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#voz-c" aria-expanded="false" aria-controls="voz-c">
+                                            Grabación VOZ
+                                        </button>
+                                    </div>
+                                    <div id="voz-c" class="collapse show" aria-labelledby="voz" data-parent="#voz">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <label class="floating-label-activo-sm">Descripción</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="voz_eda" id="voz_eda"></textarea>
+                                                    <!-- Botón para grabar voz -->
+                                                    <button type="button" class="btn btn-outline-primary btn-sm mt-1" id="btnGrabarvoz">
+                                                        🎤 Dictar descripción
+                                                    </button>
+                                                    <span id="estado_voz_voz" class="text-muted ml-2"></span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--IMAGENES-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="img_edga">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#img_edga-c" aria-expanded="false" aria-controls="img_edga-c">
+                                            Imagenes.
+                                        </button>
+                                    </div>
+                                    <div id="img_edga-c" class="collapse show" aria-labelledby="img_edga" data-parent="#img_edga">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <!-- [ Main Content ] start -->
+                                                    <div class="dropzone" id="mis-imagenes-eda" action="{{ route('profesional.imagen.carga') }}">
+                                                    <!-- <div class="dropzone" id="mis-imagenes" action="{{ route('profesional.imagen.carga') }}" method="post"  > -->
+                                                    </div>
+                                                    <!-- [ file-upload ] end -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--DIAGNÓSTICO-->
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="diag-endosc_alto">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diag-endosc_alto-c" aria-expanded="false" aria-controls="diag-endosc_alto-c">
+                                            Diagnóstico
+                                        </button>
+                                    </div>
+                                    <div id="diag-endosc_alto-c" class="collapse show" aria-labelledby="diag-endosc_alto" data-parent="#diag-endosc_alto">
+                                        <div class="card-body-aten-a">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-6">
+                                                    <label class="floating-label-activo-sm">Diagnóstico endoscópico</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" data-input_seccion="Diagnóstico endoscópico" data-input_igual="hip_diag_spec" name="diag_endos_eda" id="diag_endos_eda" onchange="cargarCompletar('diag_endos_eda')">Test de ureasa No tomado</textarea>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6">
+                                                    <label class="floating-label-activo-sm">Observaciones</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_eda" id="observaciones_eda"></textarea>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <label class="floating-label-activo-sm">Descripción</label>
+                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="voz_eda_obs_eda" id="voz_eda_obs_eda"></textarea>
+                                                    <!-- Botón para grabar voz -->
+                                                    <button type="button" class="btn btn-outline-primary btn-sm mt-1" id="btnGrabarvoz_obs_eda">
+                                                        🎤 Dictar descripción
+                                                    </button>
+                                                    <span id="estado_voz_voz_eda" class="text-muted ml-2"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <!--GUARDAR EXAMEN-->
+                            <div class="row">
+                                <div class="col-md-12 text-center mb-3">
+                                    <button type="button" class="btn btn-info mt-1" onclick="guardar_ficha_eda();agregar_medicamentos_ficha(); agregar_examenes_ficha(); ">Guardar examen e ir a su agenda </button>
+                                    <button type="button" class="btn btn-primary mt-1" onclick="visualizar_pdf_examen('eda');">Ver examen PDF</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--CIERRE: INFORME ENDOSCOPIA ALTA-->
+                        @else
+                            <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
                             <div class="row">
                                 <div class="col-md-12">
@@ -146,7 +504,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <hr>
-                                                                        <!--<div class="row mb-2">
+                                                                        <div class="row mb-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
@@ -305,51 +663,8 @@
                             </div>
                         </div>
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                        @endif
 
-                        <!--INFORME ENDOSCOPÍA DIGESTIVA ALTA-->
-                        <div class="tab-pane fade" id="endosc_gastrica" role="tabpanel" aria-labelledby="endosc_gastrica-tab">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
-                                    <h6 class="text-c-blue f-20">Informe Endoscopía Digestiva</h6>
-                                </div>
-                            </div>
-                            <div class="row div_form_examen_eda">
-                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
-                                {!! $examen['eda'] !!}
-                            </div>
-                            <!--GUARDAR EXAMEN-->
-                            <div class="row">
-                                <div class="col-md-12 text-center mb-3">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar examen e ir a su agenda">
-                                    <button type="button" class="btn btn-primary mt-1" onclick="visualizar_pdf_examen('eda');">Ver examen PDF</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE: INFORME ENDOSCOPIA ALTA-->
-
-                        <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-                        <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
-                            <div class="row">
-                                <div class="col-md-12 mb-2">
-                                    <h6 class="text-c-blue f-20">Informe Colonoscopía</h6>
-                                </div>
-                            </div>
-
-                            <div class="row div_form_examen_edb">
-                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
-                                {!! $examen['edb'] !!}
-                            </div>
-                            <!--GUARDAR EXAMEN-->
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-12 text-center mb-3">
-                                        <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar examen e ir a su agenda">
-                                        <button type="button" class="btn btn-info mt-1" onclick="visualizar_pdf_examen('edb');">Ver examen PDF</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                     </div>
                 </form>
             </div>
@@ -1473,8 +1788,189 @@
             }
         }
 
+        function guardar_ficha_eda() {
+            let valido = 1;
+            let mensaje = '';
+
+            // Validaciones
+            if ($('#solicitado_por_rut_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>RUT del profesional que solicita</li>';
+            }
+
+            if ($('#solicitado_por_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>Nombre del profesional que solicita</li>';
+            }
+
+            if ($('#sospecha_diagnostica_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>Hipótesis diagnóstica</li>';
+            }
+
+            if ($('#antec_endo_gastrica_gen_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>Antecedentes Generales</li>';
+            }
+
+            if ($('#desc_endo_gast_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>Descripción Endoscópica</li>';
+            }
+
+            if ($('#diag_endos_eda').val().trim() === '') {
+                valido = 0;
+                mensaje += '<li>Diagnóstico Endoscópico</li>';
+            }
+
+            if (valido === 0) {
+                return swal({
+                    title: "Campos requeridos",
+                    content: {
+                        element: "ul",
+                        attributes: {
+                            innerHTML: mensaje,
+                        },
+                    },
+                    icon: "error",
+                    buttons: "Aceptar",
+                    dangerMode: true,
+                });
+            }
+
+            // Recolectar datos del formulario
+            let data = {
+                solicitado_por_rut: $('#solicitado_por_rut_eda').val(),
+                solicitado_por: $('#solicitado_por_eda').val(),
+                id_profesional_solicitado_por: $('#id_profesional_solicitado_por_eda').val(),
+                sospecha_diagnostica: $('#sospecha_diagnostica_eda').val(),
+                premed: $('#premed_eda').val(),
+                solicitado_por_nombre: $('#solicitado_por_nombre_eda').val(),
+                solicitado_por_apellido: $('#solicitado_por_apellido_eda').val(),
+                solicitado_por_telefono: $('#solicitado_por_telefono_eda').val(),
+                solicitado_por_email: $('#solicitado_por_email_eda').val(),
+                antec_endo_gastrica_gen: $('#antec_endo_gastrica_gen_eda').val(),
+                antec_endo_gastrica_go: $('#antec_endo_gastrica_go_eda').val(),
+                id_examen_especialidad_tipo: $('#id_examen_especialidad_tipo_eda').val(),
+                esof_trayecto: $('#esof_trayecto_eda').val(),
+                esof_esofago: $('#esof_esofago_eda').val(),
+                cardias: $('#cardias_eda').val(),
+                cont_pliegues: $('#cont_pliegues_eda').val(),
+                mucosa: $('#mucosa_eda').val(),
+                angulo: $('#angulo_eda').val(),
+                antro: $('#antro_eda').val(),
+                piloro: $('#piloro_eda').val(),
+                biopsia: $('#biopsia_eda').val(),
+                muestra_hp: $('#muestra_hp_eda').val(),
+                muestra_hp_resultado: $('#muestra_hp_resultado_eda').val(),
+                desc_endo_gast: $('#desc_endo_gast_eda').val(),
+                duodeno: $('#duodeno_eda').val(),
+                diag_endos: $('#diag_endos_eda').val(),
+                observaciones: $('#observaciones_eda').val(),
+                hora_medica: $('#hora_medica').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_profesional_fc : $('#id_profesional_fc').val(),
+                cerrarsession: $('#cerrarsession').val(),
+                input_lista_imagenes: $('#input_lista_imagenes').val(),
+                _token: '{{ csrf_token() }}'
+            };
+
+            // Enviar los datos por AJAX
+            $.ajax({
+                url: '{{ route("ficha_atencion.registrar_cirugia_digestiva") }}',
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    console.log(response);
+                    swal("Ficha EDA guardada exitosamente.", { icon: "success" });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al guardar la ficha:', error);
+                    swal("Error al guardar la ficha EDA. Intenta nuevamente.", { icon: "error" });
+                }
+            });
+        }
+
 
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnGrabar = document.getElementById('btnGrabarvoz');
+            const campoTexto = document.getElementById('voz_eda');
+            const estado = document.getElementById('estado_voz_voz');
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                btnGrabar.disabled = true;
+                estado.textContent = 'Navegador no compatible con dictado por voz.';
+                return;
+            }
+
+            const reconocimiento = new SpeechRecognition();
+            reconocimiento.lang = 'es-CL';
+            reconocimiento.continuous = false;
+            reconocimiento.interimResults = false;
+
+            btnGrabar.addEventListener('click', () => {
+                reconocimiento.start();
+                estado.textContent = '🎙️ Escuchando...';
+            });
+
+            reconocimiento.onresult = function (event) {
+                const resultado = event.results[0][0].transcript;
+                campoTexto.value += (campoTexto.value ? ' ' : '') + resultado;
+            };
+
+            reconocimiento.onend = function () {
+                estado.textContent = '✅ Dictado finalizado.';
+            };
+
+            reconocimiento.onerror = function (event) {
+                estado.textContent = '❌ Error: ' + event.error;
+            };
+
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnGrabarObs_eda = document.getElementById('btnGrabarvoz_obs_eda');
+            const campoTextoObs_eda = document.getElementById('voz_eda_obs_eda');
+            const estadoObs_eda = document.getElementById('estado_voz_voz_eda')
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                btnGrabar.disabled = true;
+                estadoObs_eda.textContent = 'Navegador no compatible con dictado por voz.';
+                return;
+            }
+
+            const reconocimiento = new SpeechRecognition();
+            reconocimiento.lang = 'es-CL';
+            reconocimiento.continuous = false;
+            reconocimiento.interimResults = false;
+
+            btnGrabarObs_eda.addEventListener('click', () => {
+                reconocimiento.start();
+                estadoObs_eda.textContent = '🎙️ Escuchando...';
+            });
+
+            reconocimiento.onresult = function (event) {
+                const resultado = event.results[0][0].transcript;
+                campoTextoObs_eda.value += (campoTextoObs_eda.value ? ' ' : '') + resultado;
+            };
+
+            reconocimiento.onend = function () {
+                estadoObs_eda.textContent = '✅ Dictado finalizado.';
+            };
+
+            reconocimiento.onerror = function (event) {
+                estadoObs_eda.textContent = '❌ Error: ' + event.error;
+            };
+
+        });
+    </script>
+
 @endsection
 
 

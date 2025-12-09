@@ -842,9 +842,7 @@
 
         }
 
-        function eliminar_examen(id_row){
-            $('#tabla_examen_cirugia [id='+id_row+']').remove();
-        }
+
 
         function eliminar_examen_contraste(id_row)
         {

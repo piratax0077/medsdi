@@ -11,6 +11,7 @@ class BoxController extends Controller
     //
     public function guardarBoxServicio(Request $request){
         try {
+            
             $existe = BoxCm::where('numero_box', $request->numero_box)->where('id_lugar_atencion', $request->id_lugar_atencion)->first();
             if($existe){
                 return ['estado' => 0, 'mensaje' => 'Ya existe un box con el número ingresado'];

@@ -4,15 +4,34 @@
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_orl-tab" data-toggle="tab" href="#atencion_orl" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención especialidad</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_siquiatrica-tab" data-toggle="tab" href="#atencion_siquiatrica" role="tab" aria-controls="atencion_siquiatrica" aria-selected="true">Atención especialidad</a>
+                    </li>
+                     <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="atencion_sicosocial-tab" data-toggle="tab" href="#atencion_sicosocial" role="tab" aria-controls="atencion_sicosocial" aria-selected="false">Evaluación Psicosocial</a>
                     </li>
                 </ul>
             </div>
+
 			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-12 col-md-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> {{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                <form action="{{ route('ficha.otro.prof.registrar_ficha_siqui') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -29,7 +48,7 @@
                     @csrf
                     <div class="tab-content" id="orl-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                        <div class="tab-pane fade show active" id="atencion_orl" role="tabpanel" aria-labelledby="atencion_orl-tab">
+                        <div class="tab-pane fade show active" id="atencion_siquiatrica" role="tabpanel" aria-labelledby="atencion_siquiatrica-tab">
                             {{--  <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <h6 class="f-20 text-c-blue mb-2">Ficha de atención general</h6>
@@ -43,113 +62,20 @@
                                     <!--Cierre: Formulario / Menor de edad-->
                                 </div>
                                 <!--@include('general.secciones_ficha.motivo')-->
-                                
+
                                 <!--Formulario / Menor de edad-->
-                                        @include('atencion_medica.generales.seccion_menor')
-                                        <!--Cierre: Formulario / Menor de edad-->
+                                @include('atencion_medica.generales.seccion_menor')
+                                <!--Cierre: Formulario / Menor de edad-->
 
-                                        <!--Motivo consulta-->
-                                        @include('general.secciones_ficha.motivo')
+                                <!--Motivo consulta-->
+                                @include('general.secciones_ficha.motivo')
 
-
-                                        
-                                <!--<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="moti-cons">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#moti-cons-c" aria-expanded="false" aria-controls="moti-cons-c">
-                                              Motivo de consulta
-                                            </button>
-                                        </div>
-                                        <div id="moti-cons-c" class="collapse" aria-labelledby="moti-cons" data-parent="#moti-cons">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Motivo de consulta</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="a-prox-psiq" id="a-prox-psiq"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                               
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="anam-prox">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#anam-prox-c" aria-expanded="false" aria-controls="anam-prox-c">
-                                              Anamnesis próxima
-                                            </button>
-                                        </div>
-                                        <div id="anam-prox-c" class="collapse" aria-labelledby="anam-prox" data-parent="#anam-prox">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Anamnesis próxima</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="a-prox-psiq" id="a-prox-psiq"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
-                                <!--ENFERMEDAD ACTUAL (DESARROLLO)-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="enf-act">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#enf-act-c" aria-expanded="false" aria-controls="enf-act-c">
-                                              Enfermedad actual (Desarrollo)
-                                            </button>
-                                        </div>
-                                        <div id="enf-act-c" class="collapse" aria-labelledby="enf-act" data-parent="#enf-act">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Enfermedad actual</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" placeholder="Desarrollo de la enfermedad actual" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="enf-actual-psiq" id="enf-actual-psiq"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--EXAMEN FISICO-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="ex-fisico">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#ex-fisico-c" aria-expanded="false" aria-controls="ex-fisico-c">
-                                              Exámen físico
-                                            </button>
-                                        </div>
-                                        <div id="ex-fisico-c" class="collapse" aria-labelledby="ex-fisico" data-parent="#ex-fisico">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Exámen físico</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ex-fisico-psiq" id="ex-fisico-psiq"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                               <!--EXÁMEN MENTAL-->
+                               <!--Examen MENTAL ACTUAL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="exmental">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exmental-c" aria-expanded="false" aria-controls="exmental-c">
-                                              Exámen mental
+                                              Examen mental actúal
                                             </button>
                                         </div>
                                         <div id="exmental-c" class="collapse" aria-labelledby="exmental" data-parent="#exmental">
@@ -158,39 +84,39 @@
                                                     <div class="form-row">
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Aspecto y actitud</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_presentacion" id="psi_ex_mental_presentacion"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi-actitud" id="psi-actitud"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Conciencia</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_conciencia" id="psi_ex_mental_conciencia"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Psicomotricidad</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_actitud" id="psi_ex_mental_actitud"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Lenguaje</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_antencion_concentracion" id="psi_ex_mental_antencion_concentracion"></textarea>
+                                                            <label class="floating-label-activo-sm">Estado de animo y afecto</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo" id="psi_e_animo"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Pensamiento</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_afectividad" id="psi_ex_mental_afectividad"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam" id="psi_pensam"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Afectividad</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_sensopercepcion" id="psi_ex_mental_sensopercepcion"></textarea>
+                                                            <label class="floating-label-activo-sm">Percepción</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep" id="psi_percep"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Sensopercepción</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_psicomotricidad" id="psi_ex_mental_psicomotricidad"></textarea>
+                                                            <label class="floating-label-activo-sm">Orientación</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion" id="psi_orientacion"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Conciencia de enfermedad</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_higiene" id="psi_ex_mental_higiene"></textarea>
+                                                            <label class="floating-label-activo-sm">Memoria</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria" id="psi_memoria"></textarea>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Atención y concentración</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion" id="psi_concentracion"></textarea>
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Juicio y raciocinio</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio" id="psi_raciocinio"></textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Otros</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ex_mental_alimentacion" id="psi_ex_mental_alimentacion"></textarea>
+                                                            <label class="floating-label-activo-sm">Conciencia de enfermedad/Tratamiento</label>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad" id="psi_con_enfermedad"></textarea>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -198,696 +124,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!--ANTECEDENTES GENERALES-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="ant_gen">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#ant_gen-c" aria-expanded="false" aria-controls="ant_gen-c">
-                                              Antecedentes Generales
-                                            </button>
-                                        </div>
-                                        <div id="ant_gen-c" class="collapse" aria-labelledby="ant_gen" data-parent="#ant_gen">
-                                            <div class="card-body-aten-a">
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="myTab" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="ps_ant_gen_tab" data-toggle="tab" href="#ps_ant_gen" role="tab" aria-controls="ps_ant_gen" aria-selected="true">Generales</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="residencia_tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false">Residencia</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_habitos_tab" data-toggle="tab" href="#psi_habitos" role="tab" aria-controls="psi_habitos" aria-selected="false">Hábitos</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_trabajo_tab" data-toggle="tab" href="#psi_trabajo" role="tab" aria-controls="psi_trabajo" aria-selected="false">Trabajo</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_esparcimiento_tab" data-toggle="tab" href="#psi_esparcimiento" role="tab" aria-controls="psi_esparcimiento" aria-selected="false">Esparcimiento</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_obs_gen_ant_tab" data-toggle="tab" href="#psi_obs_gen_ant" role="tab" aria-controls="psi_obs_gen_ant" aria-selected="false">Observaciones generales</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="tab-content" id="pediat-contenido">
-                                                            <!--GENERALES-->
-                                                            <div class="tab-pane fade show active" id="ps_ant_gen" role="tabpanel" aria-labelledby="ps_ant_gen_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Lugar de nacimiento</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_lugar_nacimiento" id="psi_ant_lugar_nacimiento">
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Estado civil</label>
-                                                                            <select class="form-control form-control-sm" name="psi_ant_gen_estado_civil " id="psi_ant_gen_estado_civil">
-                                                                              <option value="0">Seleccione</option>
-                                                                              <option value="1">Soltero/a</option>
-                                                                              <option value="2">En pareja</option>
-                                                                              <option value="3">Casado/a</option>
-                                                                              <option value="4">Separado/a</option>
-                                                                              <option value="5">Viudo/a</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Nivel de educación</label>
-                                                                            <select class="form-control form-control-sm" name="psi_ant_gen_niv_ed" id="psi_ant_gen_niv_ed">
-                                                                              <option value="0">Seleccione</option>
-                                                                              <option value="1">Básica incompleta</option>
-                                                                              <option value="2">Básica completa</option>
-                                                                              <option value="3">Ens. Media incompleta</option>
-                                                                              <option value="4">Ens. Media completa</option>
-                                                                              <option value="5">Universitaria incompleta</option>
-                                                                              <option value="6">Universitaria completa</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Ocupación</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_gen_ocupacion" id="psi_ant_gen_ocupacion">
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Religión</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_gen_religion" id="psi_ant_gen_religion">
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <!--RESIDENCIA-->
-                                                            <div class="tab-pane fade show" id="residencia" role="tabpanel" aria-labelledby="residencia_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Residencia (Comentarios)</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="¿Con quién vive el paciente?"  onfocus="this.rows=8" onblur="this.rows=1;"name="residencia_psiq_obs" id="residencia_psiq_obs"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <!--HABITOS-->
-                                                            <div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Hábitos (Comentarios)</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Consumo de alcohol, sust. ilícitas, tabaco, sexualidad, otros."  onfocus="this.rows=6" onblur="this.rows=1;"name="habitos-psiq" id="habitos-psiq"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <!--TRABAJO-->
-                                                            <div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Antecedentes laborales (Comentarios)</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_laborales" id="psi_ant_laborales"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <!--ESPARCIMIENTO-->
-                                                            <div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Esparcimiento (Comentarios)</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_esparc" id="psi_ant_esparc"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            <!--OBSERVACIONES GENERALES-->
-                                                            <div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
-                                                                <div class="form-row">
-
-                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <label class="floating-label-activo-sm">Observaciones generales</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_ant_obs_generales" id="psi_ant_obs_generales"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--ANTECEDENTES GENERALES
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="ant_gen">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#ant_gen-c" aria-expanded="false" aria-controls="ant_gen-c">
-                                              Antecedentes Generales
-                                            </button>
-                                        </div>
-                                        <div id="ant_gen-c" class="collapse" aria-labelledby="ant_gen" data-parent="#ant_gen">
-                                            <div class="card-body-aten-a">
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="myTab" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="ps_ant_gen_tab" data-toggle="tab" href="#ps_ant_gen" role="tab" aria-controls="ps_ant_gen" aria-selected="true">Generales</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="residencia_tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false">Residencia</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_habitos_tab" data-toggle="tab" href="#psi_habitos" role="tab" aria-controls="psi_habitos" aria-selected="false">Habitos</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_trabajo_tab" data-toggle="tab" href="#psi_trabajo" role="tab" aria-controls="psi_trabajo" aria-selected="false">Trabajo</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_esparcimiento_tab" data-toggle="tab" href="#psi_esparcimiento" role="tab" aria-controls="psi_esparcimiento" aria-selected="false">Esparcimiento</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="psi_obs_gen_ant_tab" data-toggle="tab" href="#psi_obs_gen_ant" role="tab" aria-controls="psi_obs_gen_ant" aria-selected="false">Observaciones generales</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="tab-content" id="pediat-contenido">
-                                                   
-                                                            <div class="tab-pane fade show active" id="ps_ant_gen" role="tabpanel" aria-labelledby="ps_ant_gen_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Lugar de nacimiento</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_lugar_nacimiento" id="psi_ant_lugar_nacimiento">
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Estado civil</label>
-                                                                            <select class="form-control form-control-sm" name="psi_ant_gen_estado_civil " id="psi_ant_gen_estado_civil">
-                                                                              <option value="0">Seleccione</option>
-                                                                              <option value="1">Soltero/a</option>
-                                                                              <option value="2">En pareja</option>
-                                                                              <option value="3">Casado/a</option>
-                                                                              <option value="4">Separado/a</option>
-                                                                              <option value="5">Viudo/a</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Nivel de educación</label>
-                                                                            <select class="form-control form-control-sm" name="psi_ant_gen_niv_ed" id="psi_ant_gen_niv_ed">
-                                                                              <option value="0">Seleccione</option>
-                                                                              <option value="1">Básica incompleta</option>
-                                                                              <option value="2">Básica completa</option>
-                                                                              <option value="3">Ens. Media incompleta</option>
-                                                                              <option value="4">Ens. Media completa</option>
-                                                                              <option value="5">Universitaria incompleta</option>
-                                                                              <option value="6">Universitaria completa</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Ocupación</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_gen_ocupacion" id="psi_ant_gen_ocupacion">
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                            <label class="floating-label-activo-sm">Religión</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_ant_gen_religion" id="psi_ant_gen_religion">
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                    
-                                                            <div class="tab-pane fade show" id="residencia" role="tabpanel" aria-labelledby="residencia_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                       <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Vive con</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_ant_vive_con" id="psi_ant_vive_con"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_ant_vive_obs" id="psi_ant_vive_obs"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                           
-                                                            <div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Consumo de alcohol</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_alcohol" id="psi_ant_alcohol"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Consumo de tabaco</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_tabaco" id="psi_ant_tabaco"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Consumo de sust. ilicitas</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_sustancias_ilicitas" id="psi_ant_sustancias_ilicitas"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                            <label class="floating-label-activo-sm">Sexualidad</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_sexualidad" id="psi_ant_sexualidad"></textarea>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Comentarios generales</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_com_generales" id="psi_ant_com_generales"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                         
-                                                            <div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Antecedentes laborales</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_laborales" id="psi_ant_laborales"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                            
-                                                            <div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
-                                                                <form>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Esparcimiento</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_esparc" id="psi_ant_esparc"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                 
-                                                            <div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
-                                                                <div class="form-row">
-
-                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <label class="floating-label-activo-sm">Observaciones Generales</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_ant_obs_generales" id="psi_ant_obs_generales"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-                                <!--BIOPATOGRAFÍA-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="biopato">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#biopato-c" aria-expanded="false" aria-controls="biopato-c">
-                                              Historia social / Biopatografía
-                                            </button>
-                                        </div>
-                                        <div id="biopato-c" class="collapse" aria-labelledby="biopato" data-parent="#biopato">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Historia social / Biopatografía (Describir)</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Biografía , experiencias pasadas."  onfocus="this.rows=13" onblur="this.rows=1;"name="biopat-psiq" id="biopat-psiq"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--BIOPATOGRAFÍA
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="biopato">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#biopato-c" aria-expanded="false" aria-controls="biopato-c">
-                                              Biopatografía / historia social
-                                            </button>
-                                        </div>
-                                        <div id="biopato-c" class="collapse" aria-labelledby="biopato" data-parent="#biopato">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Prenatal</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_prenatal" id="psi_biop_prenatal"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Natal</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_natal" id="psi_biop_natal"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Infancia</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_infancia" id="psi_biop_infancia"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Adolescencia</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_adolescencia" id="psi_biop_adolescencia"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Edad adulta</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_edad_adulta" id="psi_biop_edad_adulta"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Adulto mayor</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_ad_mayor" id="psi_biop_ad_mayor"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Actualidad</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_biop_actualidad" id="psi_biop_actualidad"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-                                <!--HISTORIA FAMILIAR-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="hist-familiar">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#hist-familiar-c" aria-expanded="false" aria-controls="hist-familiar-c">
-                                              Historia familiar / Personas significativas
-                                            </button>
-                                        </div>
-                                        <div id="hist-familiar-c" class="collapse" aria-labelledby="hist-familiar" data-parent="#hist-familiar">
-                                            <div class="card-body-aten-a">
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="myTab" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="padres-hf-tab" data-toggle="tab" href="#padres-hf" role="tab" aria-controls="padres-hf" aria-selected="true">Padres</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="hermanos-hf-tab" data-toggle="tab" href="#hermanos-hf" role="tab" aria-controls="hermanos-hf" aria-selected="false">Hermanos</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="relacion-hf-tab" data-toggle="tab" href="#relacion-hf" role="tab" aria-controls="relacion-hf" aria-selected="false">Relación marital</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="hijos-hf-tab" data-toggle="tab" href="#hijos-hf" role="tab" aria-controls="hijos-hf" aria-selected="false">Hijos</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="otros-hf-tab" data-toggle="tab" href="#otros-hf" role="tab" aria-controls="otros-hf" aria-selected="false">Otras personas</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="obs-gen-hf-tab" data-toggle="tab" href="#obs-gen-hf" role="tab" aria-controls="obs-gen-hf" aria-selected="false">Observaciones generales</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="tab-content" id="pediat-contenido">
-                                                            <!--PADRES-->
-                                                            <div class="tab-pane fade show active" id="padres-hf" role="tabpanel" aria-labelledby="padres-hf-tab">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                        <h6 class="text-c-blue mb-3">PADRE</h6>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Nombre padre</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_padre" id="psi_hf_nombre_padre">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Relación con el padre</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_padre" id="psi_hf_rel_padre"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                        <h6 class="text-c-blue mb-3">MADRE</h6>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Nombre madre</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_nombre_madre" id="psi_hf_nombre_madre">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Relación con la madre</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_madre" id="psi_hf_rel_madre"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Relación entre padres</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_entre_padres" id="psi_rel_entre_padres"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--HERMANOS-->
-                                                            <div class="tab-pane fade show" id="hermanos-hf" role="tabpanel" aria-labelledby="hermanos-hf-tab">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <h6 class="text-c-blue mb-3">HERMANOS</h6>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">¿Tiene hermanos/as?</label>
-                                                                            <select class="form-control form-control-sm" name="psi_hf_tiene_hnos" id="psi_hf_tiene_hnos">
-                                                                                <option value="0">Seleccione</option>
-                                                                                <option value="1">No tiene</option>
-                                                                                <option value="2">Si tiene</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Cantidad</label>
-                                                                            <input type="number" class="form-control form-control-sm" name="psi_hf_cantidad_hnos" id="psi_hf_cantidad_hnos">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-hermanos" ><i class="fas fa-save"></i> + Agregar Hermano</button>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div id="contenedor_hermanos">
-                                                                            <div id="hermanos">
-                                                                                <form>
-                                                                                    <div class="form-row">
-                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                            <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm">Nombre Hermano</label>
-                                                                                                <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hno" id="psi_hf_nombre_hno">
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                            <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm">Relación con Hermano</label>
-                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_rel_hf_hno" id="psi_rel_hf_hno"></textarea>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-row">
-                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                            <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm">Relación entre Hermanos</label>
-                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_entre_hijos" id="psi_hf_rel_entre_hijos"></textarea>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                            <!--RELACION MARITAL-->
-                                                            <div class="tab-pane fade show" id="relacion-hf" role="tabpanel" aria-labelledby="relacion-hf-tab">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <h6 class="text-c-blue mb-3">RELACIÓN MARITAL</h6>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Nombre de pareja</label>
-                                                                            <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_pareja" id="psi_hf_nombre_pareja">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Relación con la pareja</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"name="psi_hf_rel_pareja" id="psi_hf_rel_pareja"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"name="psi_rel_hf_pareja_obs" id="psi_rel_hf_pareja_obs"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--HIJOS-->
-                                                            <div class="tab-pane fade" id="hijos-hf" role="tabpanel" aria-labelledby="hijos-hf-tab">
-                                                                <div id="contenedor_hijo">
-                                                                    <div id="hijo">
-                                                                        <form>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">¿Tiene hijos/as?</label>
-                                                                                        <select class="form-control form-control-sm" name="psi_hf_tiene_hijos" id="psi_hf_tiene_hijos">
-                                                                                            <option value="0">Seleccione</option>
-                                                                                            <option value="1">No tiene</option>
-                                                                                            <option value="2">Si tiene</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Cantidad</label>
-                                                                                        <input type="number" class="form-control form-control-sm" name="psi_hf_cantidad_hijos" id="psi_hf_cantidad_hijos">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-hijo" ><i class="fas fa-save"></i> + Agregar Hijos</button>
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Nombre Hijo/a</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hijo" id="psi_hf_nombre_hijo">
-                                                                                    </div>
-
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Relación con Nombre Hijo/a</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_hijo" id="psi_hf_rel_hijo"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Relación entre Hermanos</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_entre_hijos" id="psi_hf_rel_entre_hijos"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--OTRAS PERSONAS-->
-                                                            <div class="tab-pane fade" id="otros-hf" role="tabpanel" aria-labelledby="otros-hf-tab">
-                                                                <div id="contenedor_otro">
-                                                                    <div id="otro">
-                                                                        <form>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Nombre</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_ot_per" id="psi_hf_nombre_ot_per">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm">Relación con (Nombre de la persona)</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_ot_per" id="psi_hf_rel_ot_per"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-otro" ><i class="fas fa-save"></i> + Agregar Otras personas</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--OBSERVACIONES GENERALES-->
-                                                            <div class="tab-pane fade show " id="obs-gen-hf" role="tabpanel" aria-labelledby="obs-gen-tab">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <h6 class="text-c-blue mb-3">OBSERVACIONES GENERALES</h6>
-                                                                    </div>
-                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_obs_generales" id="psi_hf_rel_obs_generales"></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--ANTECEDENTES MÉDICOS, PSIQUIATRICOS, PSICOLÓGICOS-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="a-med">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#a-med-c" aria-expanded="false" aria-controls="a-med-c">
-                                              Antecedentes médicos, psiquiatricos, psicológicos
-                                            </button>
-                                        </div>
-                                        <div id="a-med-c" class="collapse" aria-labelledby="a-med" data-parent="#a-med">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Antecedentes (Describir)</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Describa Ant. medicos, Ant. Suicidio, Enf. Mentales, Trat. Psicológicos o Psiquiatricos, Medicación (actual)"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant-med-psiq-psico" id="ant-med-psiq-psico"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!--ANTECEDENTES MÉDICOS, PSIQUIATRICOS, PSICOLÓGICOS
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-a">
-                                        <div class="card-header-a" id="a-med">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#a-med-c" aria-expanded="false" aria-controls="a-med-c">
-                                              Antecedentes médicos, psiquiatricos, psicológicos
-                                            </button>
-                                        </div>
-                                        <div id="a-med-c" class="collapse" aria-labelledby="a-med" data-parent="#a-med">
-                                            <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Antecedentes médicos</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_medicos" id="psi_am_ant_medicos"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Ant. de suicidio (paciente o familiares)</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_enf_mentales" id="psi_am_ant_enf_mentales"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Ant. de enfermedades mentales (paciente o familiares)</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_suicidio" id="psi_am_ant_suicidio"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Tratamientos psicologicos previos</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psicologicos_prev" id="psi_am_trat_psicologicos_prev"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Tratamientos psiquiátricos previos</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psiquiatricos_prev" id="psi_am_trat_psiquiatricos_prev"></textarea>
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <label class="floating-label-activo-sm">Medicación (actual)</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_medicacion_actual" id="psi_am_medicacion_actual"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-                                
-                                <!--PLAN DE TRATAMIENTO-->
+                                <!--PLAN DE TRATAMIENTO SIQUIATRICO-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="plan-trabajo">
@@ -966,13 +203,13 @@
                                                     </div>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-4">
-                                                            <button type="button" class="btn btn-outline-primary btn-block btn-sm " onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button>
+                                                            <button type="button" class="btn btn-outline-primary btn-block btn-sm mt-1" onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                            <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="ind_ic_psi();"><i class="feather icon-plus"></i> Indicar Interconsulta Psicólogo</button>
+                                                            <button type="button" class="btn btn-outline-primary  btn-block btn-sm mt-1" onclick="ind_ic_psi();"><i class="feather icon-plus"></i> Indicar Interconsulta Psicólogo</button>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                            <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="informe_psi();"><i class="feather icon-plus"></i> Enviar informe</button>
+                                                            <button type="button" class="btn btn-outline-primary btn-block btn-sm mt-1" onclick="informe_psi();"><i class="feather icon-plus"></i> Enviar informe</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -980,29 +217,56 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-								<!--HOSPITALIZACION-->
+                                <!--CRONICOS / GES / CONFIDENCIAL -->
+                                {{--  @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
+                                {{--  @include('general.secciones_ficha.diagnostico')  --}}
+                                <!--Diagnóstico-->
+                                <!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
-                                        <div class="card-header-a" id="hospitalizar_paciente">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
-                                                Hospitalizar Paciente
+                                        <div class="card-header-a" id="diagnostico">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
+                                            Diagnóstico e Indicaciones
                                             </button>
                                         </div>
-                                        <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
-                                            <div class="card-body-aten-a shadow-none">
-                                                @include('general.hospitalizacion.hospitalizar')
+                                        <div id="diagnostico-c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
+                                            <div class="card-body-aten-a">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm"for="hipotesis">Hipótesis diagnóstica</label>
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="hipotesis_certificado,eno_diagnositico_confirmado" name="hipotesis" id="hipotesis" onchange="cargarIgual('hipotesis')">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm"for="indicaciones">Indicaciones</label>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm"for="pronostico">Pronóstico</label>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="pronostico" id="pronostico"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+
+                                                    {{--  <div class="form-group col-md-4">
+                                                        <label class="floating-label-activo-sm"for="indicaciones">DSM-5  (Por grupo Patología)</label>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+                                                    </div>  --}}
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm" for="descripcion_dsm-5">Diagnóstico DSM-5</label>
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="" onchange="cargarIgual('descripcion_dsm-5')">
+                                                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_dsm-5" id="id_descripcion_dsm-5" value="" onchange="cargarIgual('id_descripcion_dsm-5')">
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!--CRONICOS / GES / CONFIDENCIAL -->
-                                {{--  @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
-                                @include('general.secciones_ficha.diagnostico')
-                                <!--Diagnóstico-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
@@ -1028,17 +292,465 @@
 							</div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                         </div>
+                        <div class="tab-pane fade show " id="atencion_sicosocial" role="tabpanel" aria-labelledby="atencion_sicosocial-tab">
+                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="card-a">
+                                    <div class="card-body-aten-a shadow-none">
+                                        <div id="form-eval_sicosocial_adulto">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="neuro" role="tablist">
+                                                         <li class="nav-item">
+                                                            <a class="nav-link-aten text-reset active" id="ant_grales-tab" data-toggle="tab" href="#ant_grales" role="tab" aria-controls="ant_grales" aria-selected="true">Antecedentes Generales</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link-aten text-reset " id="rtel_fam_tab" data-toggle="tab" href="#rtel_fam" role="tab" aria-controls="rtel_fam" aria-selected="false">Relaciones Familiares</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link-aten text-reset " id="biopat_tab" data-toggle="tab" href="#biopat" role="tab" aria-controls="biopat" aria-selected="false">Biopatografía</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link-aten text-reset" id="ex_ment_inicio-tab" data-toggle="tab" href="#ex_ment_inicio" role="tab" aria-control="ex_ment_inicio" aria-selected="false">Examen Mental inicio</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="tab-content" id="siquiatria_adulto">
+                                                           <!--ANTECEDENTES GEN-->
+                                                        <div class="tab-pane fade show active" id="ant_grales" role="tabpanel" aria-labelledby="ant_grales-tab">
+                                                            <div class="row">
+                                                                <div class="col-sm-2">
+                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                        <a class="nav-link-aten text-reset active" id="ant_generales-tab" data-toggle="tab" href="#ant_generales" role="tab" aria-controls="ant_generales" aria-selected="true">Antecedentes Generales</a>
+                                                                        <a class="nav-link-aten text-reset" id="ant_especialidad-tab" data-toggle="tab" href="#ant_especialidad" role="tab" aria-controls="ant_especialidad" aria-selected="true">Antecedentes Especialidad</a>
+                                                                        <a class="nav-link-aten text-reset" id="psi_habitos-tab" data-toggle="tab" href="#psi_habitos" role="tab" aria-controls="psi_habitos" aria-selected="false">Hábitos</a>
+                                                                        <a class="nav-link-aten text-reset" id="psi_trabajo-tab" data-toggle="tab" href="#psi_trabajo" role="tab" aria-controls="psi_trabajo" aria-selected="false">Trabajo</a>
+                                                                        <a class="nav-link-aten text-reset" id="psi_esparcimiento-tab" data-toggle="tab" href="#psi_esparcimiento" role="tab" aria-controls="psi_esparcimiento" aria-selected="false">Esparcimiernto</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-10">
+                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                        <!--ANTECEDENTES GENERALES-->
+                                                                        <div class="tab-pane fade show active" id="ant_generales" role="tabpanel" aria-labelledby="ant_generales-tab">
+                                                                             <form>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Lugar de nacimiento</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_lugar_nacimiento" id="psi_ant_lugar_nacimiento">
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Estado civil</label>
+                                                                                        <select class="form-control form-control-sm" name="psi_ant_gen_estado_civil " id="psi_ant_gen_estado_civil">
+                                                                                        <option value="0">Seleccione</option>
+                                                                                        <option value="1">Soltero/a</option>
+                                                                                        <option value="2">En pareja</option>
+                                                                                        <option value="3">Casado/a</option>
+                                                                                        <option value="4">Separado/a</option>
+                                                                                        <option value="5">Viudo/a</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Nivel de educación</label>
+                                                                                        <select class="form-control form-control-sm" name="psi_ant_gen_niv_ed" id="psi_ant_gen_niv_ed">
+                                                                                        <option value="0">Seleccione</option>
+                                                                                        <option value="1">Básica incompleta</option>
+                                                                                        <option value="2">Básica completa</option>
+                                                                                        <option value="3">Ens. Media incompleta</option>
+                                                                                        <option value="4">Ens. Media completa</option>
+                                                                                        <option value="5">Universitaria incompleta</option>
+                                                                                        <option value="6">Universitaria completa</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Ocupación</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_ocupacion" id="psi_ant_gen_ocupacion">
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Religión</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_religion" id="psi_ant_gen_religion">
+                                                                                    </div>
+
+                                                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <label class="floating-label-activo-sm">Residencia </label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="¿Con quién vive el paciente?"  onfocus="this.rows=8" onblur="this.rows=1;"name="residencia_psiq_obs" id="residencia_psiq_obs"></textarea>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                          <!--ANTECEDENTES ESPECIALIDAD-->
+                                                                        <div class="tab-pane fade show" id="ant_especialidad" role="tabpanel" aria-labelledby="ant_especialidad-tab">
+                                                                            <form>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Antecedentes médicos</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_medicos" id="psi_am_ant_medicos"></textarea>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Ant. de suicidio (paciente o familiares)</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_enf_mentales" id="psi_am_ant_enf_mentales"></textarea>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Ant. de enfermedades mentales (paciente o familiares)</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_suicidio" id="psi_am_ant_suicidio"></textarea>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Tratamientos psicologicos previos</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psicologicos_prev" id="psi_am_trat_psicologicos_prev"></textarea>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Tratamientos psiquiátricos previos</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psiquiatricos_prev" id="psi_am_trat_psiquiatricos_prev"></textarea>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label class="floating-label-activo-sm">Medicación (actual)</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_medicacion_actual" id="psi_am_medicacion_actual"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!--HABITOS-->
+                                                                        <div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
+                                                                            <form>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <label class="floating-label-activo-sm">Hábitos</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Comentario de consumo de alcohol, sust. ilícitas, tabaco, sexualidad, otros."  onfocus="this.rows=6" onblur="this.rows=1;"name="habitos-psiq" id="habitos-psiq"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!--TRABAJO-->
+                                                                        <div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
+                                                                            <form>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <label class="floating-label-activo-sm">Antecedentes laborales</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" placeholder="Comentarios" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_laborales" id="psi_ant_laborales"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!--ESPARCIMIENTO-->
+                                                                        <div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
+                                                                            <form>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <label class="floating-label-activo-sm">Esparcimiento</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  placeholder="Comentarios" onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_esparc" id="psi_ant_esparc"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                        <!--OBSERVACIONES GENERALES-->
+                                                                        <div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
+                                                                            <div class="form-row">
+
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <label class="floating-label-activo-sm">Observaciones generales</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_ant_obs_generales" id="psi_ant_obs_generales"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--RELACIONES FAMILIARES-->
+                                                        <div class="tab-pane fade show " id="rtel_fam" role="tabpanel" aria-labelledby="rtel_fam_tab">
+                                                            <div class="row">
+                                                                <div class="col-sm-3">
+                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                        <a class="nav-link-aten text-reset active" id="ant_padres-tab" data-toggle="tab" href="#ant_padres" role="tab" aria-controls="ant_padres" aria-selected="true">Padres</a>
+                                                                        <a class="nav-link-aten text-reset" id="ant_hermanos-tab" data-toggle="tab" href="#ant_hermanos" role="tab" aria-controls="ant_hermanos" aria-selected="false">Hermanos</a>
+                                                                        <a class="nav-link-aten text-reset" id="marital-tab" data-toggle="tab" href="#marital" role="tab" aria-controls="marital" aria-selected="false">Relación marital</a>
+                                                                        <a class="nav-link-aten text-reset" id="hijos-tab" data-toggle="tab" href="#hijos" role="tab" aria-controls="hijos" aria-selected="false">Hijos</a>
+                                                                        <a class="nav-link-aten text-reset" id="ot_pers-tab" data-toggle="tab" href="#ot_pers" role="tab" aria-controls="ot_pers" aria-selected="false">Otras Personas</a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-9">
+                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                        <div class="tab-pane fade show active" id="ant_padres" role="tabpanel" aria-labelledby="ant_padres-tab">
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <h6 class="text-c-blue mb-3">PADRE</h6>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="nombre_padre" >Nombre padre</label>
+                                                                                            <input type="text" class="form-control form-control-sm" name="nombre_padre" id="nombre_padre">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="rel_padre" >Relación con el padre</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_padre" id="rel_padre"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <h6 class="text-c-blue mb-3">MADRE</h6>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="nombre_madre" >Nombre madre</label>
+                                                                                            <input type="text" class="form-control form-control-sm" namE="nombre_madre" id="nombre_madre">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="rel_madre" >Relación con la madre</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_madre" id="rel_madre"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="rel_entre_padres" >Relación entre padres</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_entre_padres" id="rel_entre_padres"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="ant_hermanos" role="tabpanel" aria-labelledby="ant_hermanos-tab">
+                                                                            <div class="col-sm-12 col-md-12 p-10 m-9" >
+                                                                                <h6 style="text-align: center">Características Hermanos</h6>
+                                                                            </div>
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-row">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <h6 class="text-c-blue mb-3">HERMANOS</h6>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm" for="tiene_hnos">¿Tiene hermanos/as?</label>
+                                                                                                <select class="form-control form-control-sm" name="tiene_hnos" id="tiene_hnos" onclick="evaluar_hermanos()">
+                                                                                                    <option value="0" selected>No tiene</option>
+                                                                                                    <option value="1">Si tiene</option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md- col-lg-6 col-xl-3">
+                                                                                            <div class="btn-group w-100" role="group" aria-label="hnos-ps">
+                                                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-hermanos  wid-90" onclick="agregarHermanos();" disabled><i class="fas fa-plus"></i> Agregar hermano</button>
+                                                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-agregar-hermanos wid-10" onclick="quitarHermano()"><i class="fas fa-minus"></i></button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-3 col-xl-2">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm" for="cantidad_hnos">Cantidad</label>
+                                                                                                <input type="number" class="form-control form-control-sm " name="cantidad_hnos" id="cantidad_hnos" readonly>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div id="contenedor_hermanos">
+                                                                                                {{-- <div id="hermanos">
+                                                                                                    <div class="form-row">
+                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm"for="nombre_hno">Nombre hermano</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" name="nombre_hno" id="nombre_hno">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm"for="rel_hf_hno">Relación con hermano</label>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_hf_hno" id="rel_hf_hno"></textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div> --}}
+                                                                                            </div>
+
+                                                                                            <div class="form-row">
+                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="floating-label-activo-sm"for="rel_entre_hnos">Relación entre hermanos</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_entre_hnos" id="rel_entre_hnos"></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="marital" role="tabpanel" aria-labelledby="marital-tab">
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="text-c-blue mb-3">RELACIÓN MARITAL</h6>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="nombre_pareja">Nombre de pareja</label>
+                                                                                            <input type="text" class="form-control form-control-sm" name="nombre_pareja" id="nombre_pareja">
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="rel_pareja">Relación con la pareja</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"name="rel_pareja" id="rel_pareja"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="rel_hf_pareja_obs">Observaciones</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;"name="rel_hf_pareja_obs" id="rel_hf_pareja_obs"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="hijos" role="tabpanel" aria-labelledby="ehijos-tab">
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="tiene_hijos">¿Tiene hijos/as?</label>
+                                                                                            <select class="form-control form-control-sm" name="tiene_hijos" id="tiene_hijos" onclick="evaluar_hijos();">
+                                                                                                <option value="0" selected>No tiene</option>
+                                                                                                <option value="1">Si tiene</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md- col-lg-6 col-xl-3">
+                                                                                        <div class="btn-group w-100" role="group" aria-label="hijos-ps">
+                                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-hijos wid-90" onclick="agregarHijo();" disabled><i class="fas fa-plus"></i> Agregar hijos</button>
+                                                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-agregar-hijos wid-10" onclick="quitarHijo()"><i class="fas fa-minus"></i></button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm" for="cantidad_hijos">Cantidad</label>
+                                                                                            <input type="number" class="form-control form-control-sm" name="cantidad_hijos" id="cantidad_hijos">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade" id="ot_pers" role="tabpanel" aria-labelledby="ot_pers-tab">
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 float-right mb-2">
+                                                                                            <div class="btn-group float-right" role="group" aria-label="hnos-ps">
+                                                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-otros " onclick="agregarOtro();"><i class="fas fa-plus"></i> Agregar otras personas</button>
+                                                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-agregar-otros" onclick="quitarOtro()"><i class="fas fa-minus"></i></button>
+                                                                                                <input type="hidden" name="cantidad_ot_per" id="cantidad_ot_per" value="1">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div id="contenedor_otro">
+                                                                                        <div class="otro" id="otro_1">
+                                                                                            <div class="form-row">
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="floating-label-activo-sm"for="nombre_ot_per" >Nombre</label>
+                                                                                                        <input type="text" class="form-control form-control-sm" name="nombre_ot_per_1" id="nombre_ot_per_1">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                    <div class="form-group">
+                                                                                                        <label class="floating-label-activo-sm" for="rel_ot_per_1">Relación</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_ot_per_1" id="rel_ot_per_1"></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="form-group fill">
+                                                                                <label class="floating-label-activo-sm" for="obs_ex_generales_fc">Observaciones Generales  Funciones Corticales</label>
+                                                                                <textarea class="form-control form-control-sm" data-titulo="Obs. Otros Antecedentes Importantes" data-seccion="Cap. Constructiva" id="obs_ex_generales_fc" name="obs_ex_generales_fc"  rows="1" onfocus="this.rows=4"  onblur="this.rows=1;"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--BIOPATOLOGIA-->
+                                                        <div class="tab-pane fade show" id="biopat" role="tabpanel" aria-labelledby="biopat-tab">
+                                                           <div class="card-body-aten-a">
+                                                                <form>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <label class="floating-label-activo-sm">Historia social / Biopatografía</label>
+                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Descripción de biografía , experiencias pasadas."  onfocus="this.rows=13" onblur="this.rows=1;"name="biopat-psiq" id="biopat-psiq"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <!--EXAMEN MENTAL INICIO-->
+                                                        <div class="tab-pane fade show" id="ex_ment_inicio" role="tabpanel" aria-labelledby="ex_ment_inicio-tab">
+                                                            <form>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Aspecto y actitud</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi-actitud" id="psi-actitud"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Estado de animo y afecto</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo" id="psi_e_animo"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Pensamiento</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam" id="psi_pensam"></textarea>
+                                                                    </div>
+                                                                   <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Percepción</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep" id="psi_percep"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Orientación</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion" id="psi_orientacion"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Memoria</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria" id="psi_memoria"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Atención y concentración</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion" id="psi_concentracion"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                        <label class="floating-label-activo-sm">Juicio y raciocinio</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio" id="psi_raciocinio"></textarea>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <label class="floating-label-activo-sm">Conciencia de enfermedad/Tratamiento</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad" id="psi_con_enfermedad"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
-
+                     /** MENSAJE*/
+       /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
             /* formatear rut */
             $("#solicitado_por_rut_rfl").rut({
                 formatOn: 'keyup',
@@ -1046,23 +758,6 @@
                 validateOn: 'change',
                 useThousandsSeparator : false
             });
-
-            $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != ''){
-                    $('.btn_agregar_medicamento').removeAttr("disabled");
-                    $('.btn_medicamento_pdf').removeAttr("disabled");
-                    $('.btn_agregar_examen').removeAttr("disabled");
-                    $('.btn_examenes_pdf').removeAttr("disabled");
-                }
-                else
-                {
-                    $('.btn_agregar_medicamento').attr('disabled','disabled');
-                    $('.btn_medicamento_pdf').attr('disabled','disabled');
-                    $('.btn_agregar_examen').attr('disabled','disabled');
-                    $('.btn_examenes_pdf').attr('disabled','disabled');
-                }
-            });
-
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data
@@ -1083,10 +778,10 @@
                     // Set selection
                     $('#descripcion_cie').val(ui.item.label); // display the selected text
                     $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#id_descripcion_cie').trigger('onchange');
                     return false;
                 }
             });
-
             $("#lic_descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data
@@ -1107,16 +802,33 @@
                     // Set selection
                     $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
                     $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#id_lic_descripcion_cie').trigger('onchange');
                     return false;
                 }
             });
-			/** MENSAJE*/
-			    /** CARGAR mensaje */
-				$('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-				$('#mensaje_ficha').show();
-				setTimeout(function(){
-					$('#mensaje_ficha').hide();
-				}, 5000);
+            $("#descripcion_dsm-5").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('profesional.getDSM-5') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#descripcion_dsm-5').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_dsm-5').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
             /** cronico */
             /** autocomplete de medicamentos generales */
             $("#nombre_medicamentocron").autocomplete({
@@ -1143,7 +855,6 @@
                     return false;
                 }
             });
-
             /** autocomplete de medicamentos patologia */
             $("#nombre_medicamentocron_patologia").autocomplete({
                 source: function(request, response) {
@@ -1169,7 +880,6 @@
                     return false;
                 }
             });
-
             /** accion check confidencial */
             $('#confidencial').change(function() {
                 if ($('#confidencial').is(':checked')) {
@@ -1178,7 +888,6 @@
                     $('#confidencial_descripcion').hide();
                 }
             });
-
             /** accion check ges */
             $('#modal_ges').change(function() {
                 if ($('#modal_ges').is(':checked')) {
@@ -1187,7 +896,6 @@
                     $('#form_ges').modal('hide');
                 }
             });
-
             /** busqueda de diagnostico GES */
             $("#nombre_ges").autocomplete({
                 source: function(request, response) {
@@ -1212,10 +920,7 @@
                     return false;
                 }
             });
-
-
         })
-
         /** MANEJO DE IMAGENES */
         var myDropzone ;
         Dropzone.options.misImagenes = {
@@ -1231,49 +936,38 @@
                 'X-CSRF-TOKEN' : CSRF_TOKEN,
                 // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
             },
-
             acceptedFiles: "image/*",
             maxFilesize: 4,
             maxFiles: 12,
             /** El texto utilizado antes de que se eliminen los archivos. */
             dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
             /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
             dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
             /**
              * El texto que se agregará antes del formulario alternativo.
              * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
              * ser ignorado.
              */
             dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
             /**
              * Si el tamaño del archivo es demasiado grande.
              * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
              */
              dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
             /** Si el archivo no coincide con el tipo de archivo. */
             dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
             /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
             dictCancelUpload: "Cancelar carga",
-
             /** El texto que se muestra si una carga se canceló manualmente */
             dictUploadCanceled: "Subida cancelada.",
-
             /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
             dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
             /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
             dictRemoveFile: "Eliminar archivo",
-
             /**
              * Se muestra si `maxFiles` es st y se excede.
              */
             dictMaxFilesExceeded: "No puede cargar más archivos.",
-
             // accept(file, done) {
             //     console.log('-------------accept-----------------------');
             //     cargar_lista_imagenes();
@@ -1282,7 +976,6 @@
             success: function(file, response){
                 // console.log('-------------success-----------------------');
                 cargar_lista_imagenes();
-
                 if (file.previewElement) {
                     return file.previewElement.classList.add("dz-success");
                 }
@@ -1317,9 +1010,6 @@
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
         };
-
-
-
         var lista_imagenes = [];
         function cargar_lista_imagenes()
         {
@@ -1344,12 +1034,8 @@
                     }
                 }
             });
-
-
         }
-
         /** MANEJO DE IMAGENES */
-
         /** REGISTO ANTECEDENTES */
         function carga_campos_antecedente_nuevo()
         {
@@ -1360,7 +1046,6 @@
                 if($('#tipo_antecedente').val() == 'alergia')
                 {
                     html +='';
-
                     html += '<div class="form-row">';
                     html += '    <div class="form-group col-sm-6 col-md-6">';
                     html += '        <label class="floating-label-activo-sm">Seleccione</label>';
@@ -1375,10 +1060,8 @@
                     html += '       <button type="button" class="btn btn-success btn-sm" onclick="agregar_alergia_paciente();">Guardar</button>';
                     html += '    </div>';
                     html += '</div>';
-
                     $('#div_campos_antecedente_nuevo').show();
                     $('#div_campos_antecedente_nuevo').html(html);
-
                      /** autocompletado de alergias */
                     $("#alergia_paciente").autocomplete({
                         source: function(request, response) {
@@ -1400,11 +1083,9 @@
                             // Set selection
                             $('#alergia_paciente').val(ui.item.label); // display the selected text
                             $('#id_alergia_paciente').val(ui.item.value); // save selected id to input
-
                             return false;
                         }
                     });
-
                 }
                 if($('#tipo_antecedente').val() == 'enfermedades_cronicas')
                 {
@@ -1425,9 +1106,7 @@
                 $('#div_campos_antecedente_nuevo').html('');
             }
         }
-
         function agregar_alergia_paciente() {
-
             let alergia = $('#alergia_paciente').val();
             let id_alergia = $('#id_alergia_paciente').val();
             let comentario = $('#alergia_comentario_paciente').val();
@@ -1524,25 +1203,19 @@
 
         }
         /** FIN REGISTRO ANTECEDENTES  */
-
-
         function cargarIgual(input)
         {
-
             let actual = $('#'+input);
             let equivalentes = $('#'+input).attr('data-input_igual').split(',');
             $.each(equivalentes, function( index, value ) {
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
-
             // let actual = $('#'+input);
             // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
-
             // equivalente.val(actual.val());
 
         }
-
         function evaluar_para_carga_detalle(select, div, input, valor)
         {
             var valor_select = $('#'+select+'').val();
@@ -1552,13 +1225,11 @@
                 $('#'+input+'').val('');
             }
         }
-
         // function abrir_modal_guardar_tipo()
         // {
         //     $('#modal_registrar_ficha_tipo_orl').modal('show');
         //     cargarSeccion('registro_f_t_orl_detalle');
         // }
-
         function abrir_modal_guardar_tipo(div_id_data, div_id_detalle, tipo)
         {
             $('#f_t_orl_tipo').val(tipo);
@@ -1592,7 +1263,6 @@
 
             cargarSeccion(div_id_detalle, div_id_data);
         }
-
         function cargarSeccion(div_destino, div_id_data)
         {
             // var tipo = $('#'+select+'').val();
@@ -1658,14 +1328,12 @@
                 seccion_previa = $(elemento).data('seccion');
             });
         }
-
         function cambiar_div(mostrar, ocultar, label, textarea)
         {
             $('.'+mostrar).show();
             $('.'+ocultar).hide();
             $('#'+label).html( $('#'+textarea).val() );
         }
-
         function guardar_tipo_ficha_otorrino()
         {
             var f_t_orl_tipo = $('#f_t_orl_tipo').val();
@@ -1808,7 +1476,6 @@
             });
 
         }
-
         function cargar_info_ficha_tipo_orl(select, div_descripcion, seccion)
         {
             let id_ft = $('#'+select).val();
@@ -1947,7 +1614,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
-
         function agregar_medicamentos_ficha() {
 
 
@@ -1972,7 +1638,6 @@
 
 
         }
-
         function agregar_examenes_ficha() {
             var rows = [];
             $('#tabla_examen_cirugia tr').each(function(i, n) {
@@ -1990,7 +1655,6 @@
             });
             $('#examenes').val(JSON.stringify(rows));
         }
-
         function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
         {
             rut = $(rut).val();
@@ -2072,7 +1736,6 @@
                 $('#mensaje_solicitado_por').html('');
             }
         }
-
         function actualizar_solicitado_por(input_solitado_por, input_nombre, input_apellido)
         {
             var nombre = $('#'+input_nombre).val();
@@ -2088,7 +1751,6 @@
                 $('#'+input_solitado_por).val();
             }
         }
-
         /** CRONICO */
         function getDosis_cronico(id_medicamento, div_dosis) {
 
@@ -2133,7 +1795,6 @@
                 });
 
         };
-
         function getCantCompCronica(div_dosis, div_comp) {
 
             var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
@@ -2178,7 +1839,6 @@
                 });
 
         };
-
         function es_cronico() {
             if ($('#enf_cronico').prop('checked')) {
                 $('#form_enfermedad_cronica').modal('show');
@@ -2197,7 +1857,6 @@
             }
 
         }
-
         function cambiar_enfermedad_cronica() {
 
             if($('#cronicos').val() != 'n_C')
@@ -2294,7 +1953,6 @@
                 $('#titulo_med_patologia').html( 'Medicamentos' );
             }
         }
-
         function registrar_control_obesidad() {
 
             let peso = $('#registro_peso').val();
@@ -2368,7 +2026,6 @@
                 })
             }
         };
-
         function registrar_hipertension() {
 
             let sistolica = $('#presion_sistolica_hipertension').val();
@@ -2445,7 +2102,6 @@
                 })
             }
         };
-
         function registrar_diabetes() {
 
             let peso = $('#peso_diabetes').val();
@@ -2488,7 +2144,6 @@
                     console.log(e);
                 })
         };
-
         function agregar_medicamento_cronico()
         {
 
@@ -2561,7 +2216,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
-
         function ver_medicamento_cronico()
         {
 
@@ -2637,7 +2291,6 @@
             });
 
         }
-
         function eliminar_med_cronico(id)
         {
             let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
@@ -2699,7 +2352,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
-
         {{--  MEDICAMENTOS CRONICOS PATOLOGIA  --}}
         function agregar_medicamento_cronico_patologia(tipo)
         {
@@ -2770,7 +2422,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
-
         function ver_medicamento_cronico_patologia()
         {
 
@@ -2848,7 +2499,6 @@
             });
 
         }
-
         function eliminar_med_cronico_patologia(id)
         {
             let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
@@ -2911,8 +2561,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
-
-
         {{--  mostrar div   --}}
         function mostrar_div(div)
         {
@@ -2926,21 +2574,14 @@
                 $('#senal_med_cronico').addClass('fa-angle-up');
             }
         }
-
-
         {{--  CRONICO VER CONTROL DE HIPERTENSION  --}}
         function ver_control_hipertension()
         {
-
             let url = "{{ route('hipertension.getHipertension') }}";
-
-
             var _token = CSRF_TOKEN;
             var id_paciente = $('#id_paciente_fc').val();
             $('#control_hipertension').html('');
-
             $.ajax({
-
                 url: url,
                 type: "GET",
                 data: {
@@ -2950,7 +2591,6 @@
             })
             .done(function(data)
             {
-
                 if (data !== 'null')
                 {
                     //data = JSON.parse(data);
@@ -2970,13 +2610,11 @@
                     html += '<tbody>';
                     if(data.estado == 1)
                     {
-
                         $.each(data.registros, function(index, value)
                         {
                             var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
                             var fecha = new Date(f_temp);
                             fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
-
                             html += '<tr>';
                             html += '    <td class="text-center align-middle">'+value.id+'</td>';
                             html += '    <td class="text-center align-middle">'+fecha+'</td>';
@@ -2985,15 +2623,12 @@
                             html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
                             html += '</tr>';
                         });
-
                     }
                     else
                     {
-
                         html += '<tr>';
                         html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
                         html += '</tr>';
-
                     }
                     html += '</tbody>';
                     $('#control_hipertension').html(html);
@@ -3002,9 +2637,7 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
-
         }
-
         {{--  CRONICO VER CONTROL DE OBESIDAD  --}}
         function ver_control_obesidad()
         {
@@ -3085,7 +2718,6 @@
 
         }
         /** FIN CRONICO */
-
         /** PERVISUALIZACION DE EXAMEN */
         function visualizar_pdf_examen(tipo_examen)
         {
@@ -3118,6 +2750,287 @@
                 console.log('tipo examen no especificado');
             }
         }
-
     </script>
 @endsection
+<script>
+    function cargarIgual(input)
+    {
+        let actual = $('#'+input);
+        let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+        $.each(equivalentes, function( index, value ) {
+            var equivalente = $('#'+value);
+            equivalente.val(actual.val());
+        });
+
+    }
+    function evaluar_para_carga_detalle(select, div, input, valor)
+    {
+        var valor_select = $('#'+select+'').val();
+        if(valor_select == valor) $('#'+div+'').show();
+        else {
+            $('#'+div+'').hide();
+            $('#'+input+'').val('');
+        }
+    }
+    /** CARGAR mensaje */
+    $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+    $('#mensaje_ficha').show();
+    setTimeout(function(){
+        $('#mensaje_ficha').hide();
+    }, 5000);
+    function evaluar_hermanos() {
+        var valor = $('#tiene_hnos').val();
+
+        if (valor == '0') {
+            $('#cantidad_hnos').attr('disabled', true).val('');
+            $('.btn-agregar-hermanos').attr('disabled', true);
+            $('#contenedor_hermanos').html('');
+        } else if (valor == '1') {
+            if ($('.hermanos').length === 0) {
+                agregarHermanos(); // Solo agrega si no hay ninguno
+            }
+            $('#cantidad_hnos').attr('disabled', true);
+            $('.btn-agregar-hermanos').attr('disabled', false);
+        }
+    }
+    function agregarHermanos() {
+        var cantidad = $('.hermanos').length;
+        if (cantidad >= 10) {
+            swal({
+                title:'Error',
+                text:'No se pueden agregar más de 10 hermanos',
+                icon:'error'
+            });
+            return;
+        }
+
+        cantidad++;
+        var html = '';
+        html += '<div class="hermanos" id="hermanos_' + cantidad + '">';
+        html += '    <div class="form-row">';
+        html += '        <div class="col-sm-12 col-md-6">';
+        html += '            <div class="form-group">';
+        html += '                <label class="floating-label-activo-sm">Nombre Hermano/a</label>';
+        html += '                <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hno_' + cantidad + '" id="psi_hf_nombre_hno_' + cantidad + '">';
+        html += '            </div>';
+        html += '        </div>';
+        html += '        <div class="col-sm-12 col-md-6">';
+        html += '            <div class="form-group">';
+        html += '                <label class="floating-label-activo-sm">Relación con Hermano</label>';
+        html += '                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=8" onblur="this.rows=1;" name="psi_rel_hf_hno_' + cantidad + '" id="psi_hf_rel_hno_' + cantidad + '"></textarea>';
+        html += '            </div>';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+
+        $('#contenedor_hermanos').append(html);
+        $('#cantidad_hnos').val(cantidad);
+    }
+    function quitarHermano() {
+        var cantidad = $('.hermanos').length;
+
+        if (cantidad > 0) {
+            $('#hermanos_' + cantidad).remove();
+            cantidad--;
+            $('#cantidad_hnos').val(cantidad);
+        }
+
+        if (cantidad === 0) {
+            $('#tiene_hnos').val('0');
+            evaluar_hermanos();
+        }
+    }
+    function evaluar_hijos() {
+        var valor = $('#tiene_hijos').val();
+
+        if (valor == '0') {
+            $('#cantidad_hijos').attr('disabled', true).val('');
+            $('.btn-agregar-hijos').attr('disabled', true);
+            $('#contenedor_hijo').html('');
+        } else if (valor == '1') {
+            if ($('.hijos').length === 0) {
+                agregarHijo();
+            }
+            $('#cantidad_hijos').attr('disabled', true);
+            $('.btn-agregar-hijos').attr('disabled', false);
+        }
+    }
+    function agregarHijo(){
+        var cantidad = $('.hijos').length;
+        if (cantidad >= 10) {
+            swal({
+                title:'Error',
+                text:'No se pueden agregar más de 10 hermanos',
+                icon:'error'
+            });
+            return;
+        }
+
+        cantidad++;
+        var html = '';
+        html += '<div class="hijos" id="hijo_'+cantidad+'">';
+        html += '   <div class="form-row">';
+        html += '       <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '           <div class="form-group">';
+        html += '               <label class="floating-label-activo-sm">Nombre Hijo/a</label>';
+        html += '               <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hijo_'+cantidad+'" id="psi_hf_nombre_hijo_'+cantidad+'">';
+        html += '           </div>';
+        html += '       </div>';
+        html += '       <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '           <div class="form-group">';
+        html += '               <label class="floating-label-activo-sm">Relación con Hijo/a</label>';
+        html += '               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_hijo_'+cantidad+'" id="psi_hf_rel_hijo_'+cantidad+'"></textarea>';
+        html += '           </div>';
+        html += '       </div>';
+        html += '   </div>';
+        html += '</div>';
+
+        $('#contenedor_hijo').append(html);
+        $('#cantidad_hijos').val(cantidad);
+    }
+    function quitarHijo() {
+        var cantidad = $('.hijos').length;
+        if (cantidad > 0) {
+            $('#hijo_' + cantidad).remove();
+            cantidad--;
+            $('#cantidad_hijos').val(cantidad);
+        }
+        if (cantidad === 0) {
+            $('#tiene_hijos').val('0');
+            evaluar_hijos();
+        }
+    }
+    /* Ponemos "agregarOtro en el ámbito de toda la página */
+    function agregarOtro(){
+        var cantidad = $('.otro').length;
+        if (cantidad >= 10) {
+            swal({
+                title:'Error',
+                text:'No se pueden agregar más de 10 otros',
+                icon:'error'
+            });
+            return;
+        }
+
+        cantidad++;
+        var html = '';
+        html += '<div class="otro" id="otro_'+cantidad+'">';
+        html += '   <div class="form-row">';
+        html += '       <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '           <div class="form-group">';
+        html += '               <label class="floating-label-activo-sm">Nombre </label>';
+        html += '               <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_ot_per_'+cantidad+'" id="psi_hf_nombre_ot_per_'+cantidad+'">';
+        html += '           </div>';
+        html += '       </div>';
+        html += '       <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '           <div class="form-group">';
+        html += '               <label class="floating-label-activo-sm">Relación </label>';
+        html += '               <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="psi_hf_rel_ot_per_'+cantidad+'" id="psi_hf_rel_ot_per_'+cantidad+'"></textarea>';
+        html += '           </div>';
+        html += '       </div>';
+        html += '   </div>';
+        html += '</div>';
+
+        $('#contenedor_otro').append(html);
+        $('#cantidad_ot_per').val(cantidad);
+
+    }
+    function quitarOtro(){
+        var cantidad = $('.otro').length;
+
+        if (cantidad > 0) {
+            $('#otro_' + cantidad).remove();
+            cantidad--;
+            $('#cantidad_otros').val(cantidad);
+        }
+
+        if (cantidad === 0) {
+            $('#tiene_otros').val('0');
+        }
+    }
+   function IsNumeric(valor) {
+       var log = valor.length;
+       var sw = "S";
+       for (x = 0; x < log; x++) {
+           v1 = valor.substr(x, 1);
+           v2 = parseInt(v1);
+           //Compruebo si es un valor numérico
+           if (isNaN(v2)) {
+               sw = "N";
+           }
+       }
+       if (sw == "S") {
+           return true;
+       } else {
+           return false;
+       }
+   }
+   var primerslap = false;
+   var segundoslap = false;
+
+   function formateafecha(fecha) {
+       var long = fecha.length;
+       var dia;
+       var mes;
+       var ano;
+
+       if ((long >= 2) && (primerslap == false)) {
+           dia = fecha.substr(0, 2);
+           if ((IsNumeric(dia) == true) && (dia <= 31) && (dia != "00")) {
+               fecha = fecha.substr(0, 2) + "/" + fecha.substr(3, 7);
+               primerslap = true;
+           } else {
+               fecha = "";
+               primerslap = false;
+           }
+       } else {
+           dia = fecha.substr(0, 1);
+           if (IsNumeric(dia) == false) {
+               fecha = "";
+           }
+           if ((long <= 2) && (primerslap = true)) {
+               fecha = fecha.substr(0, 1);
+               primerslap = false;
+           }
+       }
+       if ((long >= 5) && (segundoslap == false)) {
+           mes = fecha.substr(3, 2);
+           if ((IsNumeric(mes) == true) && (mes <= 12) && (mes != "00")) {
+               fecha = fecha.substr(0, 5) + "/" + fecha.substr(6, 4);
+               segundoslap = true;
+           } else {
+               fecha = fecha.substr(0, 3);;
+               segundoslap = false;
+           }
+       } else {
+           if ((long <= 5) && (segundoslap = true)) {
+               fecha = fecha.substr(0, 4);
+               segundoslap = false;
+           }
+       }
+       if (long >= 7) {
+           ano = fecha.substr(6, 4);
+           if (IsNumeric(ano) == false) {
+               fecha = fecha.substr(0, 6);
+           } else {
+               if (long == 10) {
+                   if ((ano == 0) || (ano < 1900) || (ano > 2100)) {
+                       fecha = fecha.substr(0, 6);
+                   }
+               }
+           }
+       }
+
+       if (long >= 10) {
+           fecha = fecha.substr(0, 10);
+           dia = fecha.substr(0, 2);
+           mes = fecha.substr(3, 2);
+           ano = fecha.substr(6, 4);
+           // Año no viciesto y es febrero y el dia es mayor a 28
+           if ((ano % 4 != 0) && (mes == 02) && (dia > 28)) {
+               fecha = fecha.substr(0, 2) + "/";
+           }
+       }
+       return (fecha);
+   }
+</script>

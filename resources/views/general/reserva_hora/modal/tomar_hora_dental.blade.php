@@ -122,7 +122,7 @@
                                 <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
                             </div>
                             <div class="col-md-12 mx-auto" >
-                                <div class="row" id="modal_reserva_hora_lista_horas">
+                                <div class="row container" id="modal_reserva_hora_lista_horas">
                                     {{--  <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
                                         8:00
                                     </div>  --}}
@@ -985,6 +985,7 @@ function lugar_atencion_profesional(element, div_destino, value_init = '')
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1) {
                 {{--  console.log(data);  --}}
                 let input_lugar_atencion = $('#'+div_destino);

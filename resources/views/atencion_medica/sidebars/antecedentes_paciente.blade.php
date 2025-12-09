@@ -1,10 +1,10 @@
 <div id="antecedentes_paciente" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg"
     data-width="420px" data-offset="true">
-    <header class="bs-canvas-header p-3 bg-info overflow-auto">
-        <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true"
+    <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+        <button type="button" class="bs-canvas-close close" aria-label="Close"><span aria-hidden="true"
                 class="text-light">&times;</span></button>
-        <h5 class="d-inline text-light mb-0 float-right mt-1">Antecedentes del paciente </h5>
-        <button type="button" class="btn float-right"></button>
+        <h5 class="d-inline text-light mb-0  mt-1">Antecedentes del paciente </h5>
+
     </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordionExample">
@@ -65,7 +65,7 @@
                             <hr class="mt-2">
                             <div class="form-row mt-1">
                                 <label class="col-2 text-dark font-weight-bolder">Dirección</label>
-                                <div class="col-9 ml-2 text-secondary" id="direccion_paciente">
+                                <div class="col-9 ml-2 text-secondary" id="direccion_paciente_">
 
                                     @if (isset($paciente))
                                         @if ($paciente->Direccion()->first() != null)

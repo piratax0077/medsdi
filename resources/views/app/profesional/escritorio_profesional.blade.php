@@ -60,6 +60,7 @@
                                 </div>
                             </a>
                         </div>
+                        @if($agenda_examen)
                         <div class="card subir">
                             <a href="{{ route('profesional.index_transcripcion_examen') }}">
                                 <div class="card-body text-center px-2" style="cursor:pointer">
@@ -68,6 +69,7 @@
                                 </div>
                             </a>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -171,6 +173,7 @@
                                 </div>
                             </a>
                         </div>
+                        @if($director_medico)
                         <div class="card social-widget-card bg-c-info opacidad px-0">
                             <a href="{{ ROUTE('adm_cm.adm_medico') }}" class="btn" type="button">
                                 <div class="card-body">
@@ -179,6 +182,7 @@
                                 </div>
                             </a>
                         </div>
+                        @endif
                         <div class="card social-widget-card bg-c-info opacidad px-0">
                             <a href="{{ route('profesional.flujo_caja') }}" class="btn" type="button">
                                 <div class="card-body">

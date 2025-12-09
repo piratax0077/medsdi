@@ -21,6 +21,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
@@ -31,9 +32,9 @@ class HomeController extends Controller
         if (!isset(Auth::user()->id)) {
             return view('auth.Registros.ingreso_registro');
         }
+
         $usuario = User::where('id', Auth::user()->id)->first();
         $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
-
 
 		if(Auth::user()->id == 3)
 			return redirect('/Acceso');
@@ -137,8 +138,6 @@ class HomeController extends Controller
         // if (count($roles) > 1) {
         //     return redirect('/Acceso');
         // }
-
-        return $roles;
 
         switch ($roles[0]->name) {
             case 'Admin':
@@ -1210,73 +1209,94 @@ class HomeController extends Controller
     /** RECUPERAR CONTRASEÑA */
     public function recuperarcontrasena(Request $request)
     {
-
+		// var_dump($request->input('g-recaptcha-response'));
+		// var_dump($request->ip());
+		// die();
         $email = $request->email;
 
-        if(!empty($email))
+		if(!empty($request->input('g-recaptcha-response')))
         {
-            if(static::validarEmail($email))
-            {
-                $user = User::where('email', $email)->get()->first();
-                if($user)
-                {
-                    $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                    // Output: iNCHNGzByPjhApvn7XBD
-                    $contrasena = static::generate_string($permitted_chars, 5);
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
 
-                    $user->password = Hash::make($contrasena);
-                    if ($user->save())
-                    {
-                        /** envio de correo de confirmacion  */
-                        $blade = 'recuperacion_contrasena';
-                        $to = array(
-                                array('email' => $user->email,'name' => $user->name),
-                            );
-                        $cc = array();
-                        $bcc = array();
-                        $asunto = 'MED-SDI - Recuperacion Contraseña';
-                        $body = array(
-                            'nombre'=>$user->name,
-                            'pass'=>$contrasena,
-                        );
-                        $archivo = '';/** pendiente */
-                        $id_institucion = '';
+            $result = $response->json();
 
-                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-                        if($result_mail['estado'])
-                        {
-                            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n Se ha enviado un correo con la nueva contraseña.');
-                            return back()->with('mensaje', 'Se a actualizado la contraseña. Se ha enviado un correo con la nueva contraseña.');
-                        }
-                        else
-                        {
-                            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n El envio de correo con la nueva contraseña a fallado.');
-                            return back()->with('mensaje', 'Se a actualizado la contraseña. El envio de correo con la nueva contraseña a fallado.');
-                        }
-                    }
-                    else
-                    {
-                        // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
-                        return back()->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
-                    }
-                }
-                else
-                {
-                    // return view('auth.Registros.ingreso_registro')->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos.\n Por favor verifique el correo.');
-                    return back()->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos. Por favor verifique el correo.');
-                }
+            if (!($result['success'] ?? false)) {
+                return back()->withErrors(['captcha' => 'Verifica que no eres un robot.']);
             }
-            else
-            {
-                // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Email no es valido.');
-                return back()->with('mensaje', 'Email no es valido.');
-            }
-        }
+
+			if(!empty($email))
+			{
+				if(static::validarEmail($email))
+				{
+					$user = User::where('email', $email)->get()->first();
+					if($user)
+					{
+						$permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+						// Output: iNCHNGzByPjhApvn7XBD
+						$contrasena = static::generate_string($permitted_chars, 5);
+
+						$user->password = Hash::make($contrasena);
+						if ($user->save())
+						{
+							/** envio de correo de confirmacion  */
+							$blade = 'recuperacion_contrasena';
+							$to = array(
+									array('email' => $user->email,'name' => $user->name),
+								);
+							$cc = array();
+							$bcc = array();
+							$asunto = 'MED-SDI - Recuperacion Contraseña';
+							$body = array(
+								'nombre'=>$user->name,
+								'pass'=>$contrasena,
+							);
+							$archivo = '';/** pendiente */
+							$id_institucion = '';
+
+							$result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+							if($result_mail['estado'])
+							{
+								// return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n Se ha enviado un correo con la nueva contraseña.');
+								return back()->with('mensaje', 'Se a actualizado la contraseña. Se ha enviado un correo con la nueva contraseña.');
+							}
+							else
+							{
+								// return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a actualizado la contraseña.\n El envio de correo con la nueva contraseña a fallado.');
+								return back()->with('mensaje', 'Se a actualizado la contraseña. El envio de correo con la nueva contraseña a fallado.');
+							}
+						}
+						else
+						{
+							// return view('auth.Registros.ingreso_registro')->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
+							return back()->with('mensaje', 'Se a presentado una falla al actualizar la contraseña.');
+						}
+					}
+					else
+					{
+						// return view('auth.Registros.ingreso_registro')->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos.\n Por favor verifique el correo.');
+						return back()->with('mensaje', 'El correo indicado no se encuentra en nuestra base de datos. Por favor verifique el correo.');
+					}
+				}
+				else
+				{
+					// return view('auth.Registros.ingreso_registro')->with('mensaje', 'Email no es valido.');
+					return back()->with('mensaje', 'Email no es valido.');
+				}
+			}
+			else
+			{
+				// return view('auth.Registros.ingreso_registro')->with('mensaje', 'Debe ingresar Email.');
+				return back()->with('mensaje', 'Debe ingresar Email.');
+			}
+		}
         else
         {
-            // return view('auth.Registros.ingreso_registro')->with('mensaje', 'Debe ingresar Email.');
-            return back()->with('mensaje', 'Debe ingresar Email.');
+            return back()->withErrors(['captcha' => 'Verifica que no eres un robot.']);
         }
     }
 

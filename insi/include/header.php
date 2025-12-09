@@ -14,10 +14,10 @@
 					</li>
 					<li class="nav-item mx-2">
 						<a class="nav-link ancla" href="#exam-proc" data-ancla="exam-proc">Exámenes y procedimientos</a>
-					</li><!--
+					</li>
 					<li class="nav-item mx-2">
-						<a class="nav-link ancla" href="#contacto" data-ancla="contacto">Contacto</a>
-					</li>-->
+						<a class="btn btn-primary" href="#" data-toggle="modal" data-target="#modalAgendarHoraExamen">AGENDAR EXAMEN</a>
+					</li>
 					<li class="nav-item mx-2">
 						<a class="btn btn-orange" href="#" role="button" data-toggle="modal" data-target="#modalAgendarHora"><i class="fa-solid fa-calendar-days"></i> AGENDAR HORA</a>
 					</li>
@@ -36,7 +36,7 @@
 </header>
 <!-- Modal -->
 <div class="modal fade" id="modalAgendarHora" tabindex="-1" role="dialog" aria-labelledby="modalAgendarHoraLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
 		<div class="modal-header bg-naranja text-white">
 			<h5 class="modal-title" id="modalAgendarHoraLabel">Agendar Hora</h5>
@@ -45,8 +45,11 @@
 			</button>
 		</div>
       	<div class="modal-body">
+			<!-- Contenido original del modal (selección de hora) -->
+			<div id="modal_contenido_seleccion">
 			<input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
 			<input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
+			<input type="hidden" name="modal_reserva_hora_fecha_consulta" id="modal_reserva_hora_fecha_consulta" value="">
 			<div class="row border p-2">
 				<div class="form-group col-md-12 mb-2 mt-0">
 					<label for="rut_paciente" class="floating-label-activo-sm">Rut Paciente</label>
@@ -67,8 +70,8 @@
 							Información del Paciente
 						</div>
 						<div class="card-body">
-							
-						
+
+
 							<p><strong>Nombre:</strong> <span id="paciente_nombre"></span></p>
 							<p><strong>Apellido Paterno:</strong> <span id="paciente_apellido_uno"></span></p>
 							<p><strong>Apellido Materno:</strong> <span id="paciente_apellido_dos"></span></p>
@@ -78,8 +81,8 @@
 							<p><strong>Fecha Nacimiento:</strong> <span id="paciente_nacimiento"></span></p>
 							<p><strong>Ciudad:</strong> <span id="paciente_ciudad"></span></p>
 							<p><strong>Dirección:</strong> <span id="paciente_direccion"></span></p>
-							
-							
+
+
 						</div>
 					</div>
 				</div>
@@ -135,11 +138,11 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-			<div class="row">
+			<div class="row" id="div_filtros_busqueda">
 				<div class="col-md-4">
-					
+
 					<div class="form-row">
 						<div class="form-group col-md-12 mb-2 mt-0">
 							<label class="floating-label-active-sm mb-0">Profesión</label>
@@ -182,7 +185,7 @@
 				</div> -->
 				<div class="col-md-12">
 					<div class="row" id="div_resultado_busqueda">
-						
+
 					</div>
 				</div>
 
@@ -201,7 +204,7 @@
 							<h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
 						</div>
 						<div class="col-md-12 mx-auto" >
-							<div class="row" id="modal_reserva_hora_lista_horas">
+							<div class="row ml-3" id="modal_reserva_hora_lista_horas">
 								 <!-- <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
 									8:00
 								</div>  -->
@@ -214,7 +217,7 @@
                         <div class="form-row">
                         <div class="form-group col-md-12 mb-2 mt-0">
                         </div>
-                    </div> 
+                    </div>
                 </div>
 			</div>
 			<hr>
@@ -225,11 +228,99 @@
 					<label class="label">Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</label>
 				</div>
 			</div>
+			</div>
+			<!-- Fin contenido selección -->
+
+			<!-- Div Confirmar Reserva (Oculto inicialmente) -->
+			<div id="divConfirmarReserva" class="d-none">
+				<!-- Datos del Paciente -->
+				<div class="card border-0 shadow-sm mb-3">
+					<div class="card-header bg-light">
+						<h6 class="mb-0 text-petroleo"><i class="fa-solid fa-user"></i> Datos del Paciente</h6>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-2"><strong>RUT:</strong> <span id="confirmar_rut"></span></p>
+								<p class="mb-2"><strong>Nombre:</strong> <span id="confirmar_nombre"></span></p>
+								<p class="mb-2"><strong>Fecha Nacimiento:</strong> <span id="confirmar_fecha_nac"></span></p>
+								<p class="mb-2"><strong>Edad:</strong> <span id="confirmar_edad"></span> años</p>
+								<p class="mb-2"><strong>Sexo:</strong> <span id="confirmar_sexo"></span></p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Previsión:</strong> <span id="confirmar_prevision"></span></p>
+								<p class="mb-2"><strong>Email:</strong> <span id="confirmar_email"></span></p>
+								<p class="mb-2"><strong>Teléfono:</strong> <span id="confirmar_telefono"></span></p>
+								<p class="mb-2"><strong>Dirección:</strong> <span id="confirmar_direccion"></span></p>
+								<p class="mb-2"><strong>Ciudad:</strong> <span id="confirmar_ciudad"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Datos de la Cita -->
+				<div class="card border-0 shadow-sm mb-3">
+					<div class="card-header bg-light">
+						<h6 class="mb-0 text-petroleo"><i class="fa-solid fa-calendar-days"></i> Datos de la Cita</h6>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Fecha:</strong> <span id="confirmar_fecha_cita"></span></p>
+								<p class="mb-2"><strong>Hora:</strong> <span id="confirmar_hora_cita"></span></p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Profesional:</strong> <span id="confirmar_profesional"></span></p>
+								<p class="mb-2"><strong>Especialidad:</strong> <span id="confirmar_especialidad"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Inputs ocultos para enviar datos -->
+				<input type="hidden" id="reserva_id_paciente">
+				<input type="hidden" id="reserva_id_profesional">
+				<input type="hidden" id="reserva_id_lugar_atencion">
+				<input type="hidden" id="reserva_fecha_consulta">
+				<input type="hidden" id="reserva_hora_consulta">
+
+				<!-- Botones de acción -->
+				<div class="text-center mt-4">
+					<button type="button" class="btn btn-secondary mx-2" onclick="ocultarConfirmacion();">
+						<i class="fa-solid fa-arrow-left"></i> Volver
+					</button>
+					<button type="button" class="btn btn-info mx-2" onclick="confirmarReserva();">
+						<i class="fa-solid fa-check"></i> Confirmar Reserva
+					</button>
+				</div>
+			</div>
+			<!-- Fin div confirmación -->
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-			<button type="button" class="btn btn-primary">Guardar</button>
 		</div>
     </div>
   </div>
 </div>
+<!-- Fin Modal Agendar Hora -->
+<!-- Modal Agendar Examen -->
+<div class="modal fade" id="modalAgendarHoraExamen" tabindex="-1" role="dialog" aria-labelledby="modalAgendarHoraExamenLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="modalAgendarHoraExamenLabel">Agendar Examen</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      	<div class="modal-body">
+            <!-- Contenido del modal Agendar Examen -->
+            <p>Contenido para agendar examen va aquí.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+  </div>
+</div>
+<!-- Fin Modal Agendar Examen -->

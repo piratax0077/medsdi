@@ -58,6 +58,7 @@ class ConsentimientosController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Registro';
                 $datos['registro'] = $registro;
+                $datos['profesional'] = Profesional::find($registro->id_profesional);
             }
             else
             {
@@ -480,6 +481,8 @@ class ConsentimientosController extends Controller
                 $filtros[] = array('revocacion', $request->revocacion);
             }
 
+            $profesional = Profesional::find($request->id_profesional);
+
             $registros = ConConsentimientosPcte::with(['Paciente' => function ($query){
                                                         $query->select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'sexo', 'email', 'fecha_nac');
                                                 }])
@@ -504,6 +507,7 @@ class ConsentimientosController extends Controller
                 $datos['msj'] = 'registro actualizado';
                 $datos['cantidad'] = $registros->count();
                 $datos['registros'] = $registros;
+                $datos['profesional'] = $profesional;
             }
             else
             {
@@ -584,15 +588,21 @@ class ConsentimientosController extends Controller
                 'url' => $url_documento,
                 'qr' => $qr_documento,
             );
-            $array_lugar_atencion = array(
+             $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
+                'nombre' => $lugar_atencion->nombre,
+                'direccion' => $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre
             );
             $array_profesional = array(
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
                 'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
+                'id_especialidad' => $profesional->id_especialidad,
+                'num_colegio' => $profesional->num_colegio,
+                'direccion' => $profesional->Direccion()->first()->direccion.' '.$profesional->Direccion()->first()->numero_dir.', '.$profesional->Direccion()->first()->Ciudad()->first()->nombre,
+                'region' => $profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre,
                 'token' =>  $token_profesional,
                 'url' =>  $url_profesional,
                 'qr' =>  $qr_profesional,
@@ -618,6 +628,197 @@ class ConsentimientosController extends Controller
             $datos['estado'] = 0;
             $datos['msj'] = 'No se encontraron medicamentos';
         }
+    }
+
+     public function enviar_consentimineto(Request $request)
+    {
+       try {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_consentimiento))
+        {
+            $error['id_consentimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_ficha_atencion))
+        {
+            $error['id_ficha_atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['id_profesional'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = ConConsentimientosPcte::find($request->id_consentimiento);
+
+            $consentimiento = ConConsentimientos::find($registro->id_consent);
+
+            $texto_consentimiento = $consentimiento->texto;
+            $texto_consentimiento = str_replace('{diagnostico}','<span style="font-size: 15px;font-weight: bold;">'.$registro->diagnostico_cons.'</span>', $texto_consentimiento);
+            $texto_consentimiento = str_replace('{cirugia}','<span style="font-size: 15px;font-weight: bold;">'.$registro->cirugia_cons.'</span>', $texto_consentimiento);
+            $texto_consentimiento = str_replace('{nombre_dependiente}','<span style="font-size: 15px;font-weight: bold;">'.$registro->Paciente->nombres.' '.$registro->Paciente->apellido_uno.' '.$registro->Paciente->apellido_dos.'</span>', $texto_consentimiento);
+
+            if($registro)
+            {
+                // verificar si ya se envio
+                if($registro->confirmacion == 0)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Consentimiento ya enviado.';
+                    // notificar por email al paciente
+                    $paciente = Paciente::find($registro->id_paciente);
+                    $profesional = Profesional::find($registro->id_profesional);
+                    $ficha_atencion = FichaAtencion::find($registro->id_fc);
+                    $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+                    $blade = 'consentimiento_enviado';
+                    $to = array(
+                            array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Consentimiento Enviado';
+                    $body = array(
+                        'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                        'fecha'=> $registro->created_at->format('d/m/Y'),
+                        'hora'=> $registro->created_at->format('H:i'),
+                        'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                        'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
+                        'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
+                        'profesional_sub_tipo_especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre ?? null, // Si no existe, no se muestra
+                        // 'institucion'=> $nombre_institucion,
+                        'lugar_atencion'=> $lugar_atencion->nombre,
+                        'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+                        'consentimiento_nombre'=> $registro->Consentimiento->nombre,
+                        'consentimiento_diagnostico'=> $registro->diagnostico_cons,
+                        'texto_consentimiento' => $texto_consentimiento,
+                        'id_consentimiento' => $registro->id,
+                        'id_ficha_atencion' => $registro->id_fc,
+                        'id_paciente' => $registro->id_paciente,
+                        'id_profesional' => $registro->id_profesional,
+                        'token' => $request->token
+                    );
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+                    return $result_mail;
+                    if($result_mail['estado'])
+                    {
+                        $datos['mail']['institucion']['estado'] = 1;
+                        $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['institucion']['estado'] = 0;
+                        $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+                }
+                else
+                {
+                    // enviar consentimiento
+                    $retorno_autorizacion = static::solicitar_autorizacion_cons($registro->id, $request->id_paciente, $request->id_profesional, $registro->Consentimiento->nombre);
+                    if($retorno_autorizacion->estado == 1)
+                    {
+                        // actualizar consentimiento
+                        $registro->id_log_users_devices = $retorno_autorizacion->registro['id'];
+                        $registro->confirmacion = 0; // pendiente de autorizacion
+                        if($registro->save())
+                        {
+                            $datos['estado'] = 1;
+                            $datos['msj'] = 'Consentimiento enviado exitosamente.';
+                            $datos['last_id'] = $registro->id;
+                            $datos['solicitud_autorizacion'] = $retorno_autorizacion;
+                        }
+                        else
+                        {
+                            $datos['estado'] = 0;
+                            $datos['msj'] = 'Problema al actualizar consentimiento.';
+                        }
+                    }
+                    else
+                    {
+                        // error al solicitar autorizacion
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al solicitar autorizacion.';
+                        $datos['error'] = $retorno_autorizacion->msj;
+                    }
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Consentimiento no encontrado.';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+        return $datos;
+       } catch (\Exception $e) {
+        //throw $th;
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'Error al enviar consentimiento: '.$e->getMessage(),
+            'error' => $e->getMessage()
+        ]);
+       }
+
+    }
+
+      public function form_consentimiento(Request $request)
+    {
+        $paciente = Paciente::find($request->id_paciente);
+        return view('app.mail.consentimiento_confirmar', [
+            'id_consentimiento' => $request->id_consentimiento,
+            'id_ficha_atencion' => $request->id_ficha_atencion,
+            'id_paciente' => $request->id_paciente,
+            'paciente' => $paciente,
+            'profesional' => Profesional::find($request->id_profesional),
+            'id_profesional' => $request->id_profesional,
+            'token' => $request->token,
+        ]);
+    }
+
+    public function confirmar_consentimiento(Request $request){
+        $consentimientoPcte = ConConsentimientosPcte::find($request->id_consentimiento);
+        if($consentimientoPcte)
+        {
+            $consentimientoPcte->confirmacion = 1;
+            $log_users_devices = LogUsersDevices::where('token', $request->token)->first();
+            if($log_users_devices){
+                $log_users_devices->estado = 1; // confirmado
+                $log_users_devices->save();
+            }
+            if($consentimientoPcte->save())
+            {
+                return redirect()->route('consentimiento.exito');
+            }
+        }
+        return redirect()->route('consentimiento.error');
+    }
+
+    public function exito_consentimiento()
+    {
+        return view('app.mail.consentimiento_exito');
+    }
+
+    public function error_consentimiento()
+    {
+        return view('app.mail.consentimiento_error');
     }
 
     public function solicitar_autorizacion_revocacion(Request $request)

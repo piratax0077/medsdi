@@ -21,7 +21,7 @@
                                     <a class="nav-link-aten text-reset" id="estudio_rx_tab" data-toggle="tab" href="#estudio_rx" role="tab" aria-controls="estudio_rx" aria-selected="true">Estudio radiológico</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="plan_tto_impl_tab" data-toggle="tab" href="#plan_tto_impl" role="tab" aria-controls="plan_tto_impl" aria-selected="true">Planificación Tratamiento | Presupuesto</a>
+                                    <a class="nav-link-aten text-reset" onclick="$('#paciente_piezas_dentales_ex_impl').select2();" id="plan_tto_impl_tab" onclick="" data-toggle="tab" href="#plan_tto_impl" role="tab" aria-controls="plan_tto_impl" aria-selected="true">Planificación Tratamiento | Presupuesto</a>
                                 </li>
                             </ul>
                         </div>
@@ -50,68 +50,81 @@
                                                     <div class="form-row">
                                                         {{-- Tratamientos en curso --}}
                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
-                                                            <div class="card border-card-primary h-100">
-                                                                <div class="card-body">
-                                                                    <ul>
-                                                                        <li class="f-14 text-c-blue"><strong>Tratamientos en curso</strong></li>
-                                                                        @if (isset($tratamiento_activo))
-                                                                            @foreach ( $tratamiento_activo as $receta)
-                                                                                @foreach ( $receta['detalle'] as $detalle)
-                                                                                    @if ($detalle['id_tipo_control'] == 8)
-                                                                                        <li style="font-size: 12px">
-                                                                                            Receta Magistral<br/>&nbsp;&nbsp;
-                                                                                            <span style="font-size: 9px; font-weight: bold;">
-                                                                                                @php
-                                                                                                    $producto_detalle_temp = json_decode($detalle['producto']);
-                                                                                                    // var_dump($producto_detalle_temp[0]) ;
-                                                                                                @endphp
-                                                                                                @foreach ( $producto_detalle_temp as $det_temp)
-                                                                                                    {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
-                                                                                                @endforeach
-                                                                                            </span>
-                                                                                        </li>
-                                                                                    @else
-                                                                                        <li style="font-size: 12px">{{ $detalle['producto'] }}</li>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endforeach
-                                                                        @else
-                                                                            <li>No hay registros</li>
-                                                                        @endif
-                                                                        <li></li>
-                                                                    </ul>
+                                                            <div class="card shadow-none bg-light-purple border-card-purple h-100">
+                                                                <div class="card-body px-2 py-3">
+                                                                    <div class="media">
+                                                                      <img src="{{ asset('images/iconos/tto-curso.png') }}" class=" wid-50 rounded-xl mr-3" alt="CX Recientes">
+                                                                      <div class="media-body">
+                                                                        <h5 class="f-14 text-purple font-weight-bold">Tratamientos en curso</h5>
+                                                                        <ul>
+                                                                                @if (isset($tratamiento_activo) && count($tratamiento_activo) > 0)
+                                                                                    @foreach ( $tratamiento_activo as $receta)
+                                                                                        @foreach ( $receta['detalle'] as $detalle)
+                                                                                            @if ($detalle['id_tipo_control'] == 8)
+                                                                                                <li style="font-size: 12px">
+                                                                                                    Receta Magistral<br/>&nbsp;&nbsp;
+                                                                                                    <span style="font-size: 9px; font-weight: bold;">
+                                                                                                        @php
+                                                                                                            $producto_detalle_temp = json_decode($detalle['producto']);
+                                                                                                            // var_dump($producto_detalle_temp[0]) ;
+                                                                                                        @endphp
+                                                                                                        @foreach ( $producto_detalle_temp as $det_temp)
+                                                                                                            {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
+                                                                                                        @endforeach
+                                                                                                    </span>
+                                                                                                </li>
+                                                                                            @else
+                                                                                                <li style="font-size: 12px">{{ $detalle['producto'] }}</li>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    @endforeach
+                                                                                @else
+                                                                                    <li>No hay registros</li>
+                                                                                @endif
+                                                                                <li></li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         {{-- Medicamentos crónicos --}}
                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
-                                                            <div class="card border-card-primary h-100">
-                                                                <div class="card-body">
-                                                                    <ul>
-                                                                        <li class="f-14 text-c-blue"><strong>Medicamentos crónicos</strong></li>
-                                                                    </ul>
+                                                            <div class="card shadow-none border-card-danger bg-light-danger h-100">
+                                                                <div class="card-body px-2 py-3">
+                                                                    <div class="media">
+                                                                      <img src="{{ asset('images/iconos/meds-cronicos.png') }}" class="wid-50 rounded-xl mr-3" alt="Medicamentos Crónicos">
+                                                                        <div class="media-body">
+                                                                            <h5 class="f-14 text-danger font-weight-bold">Medicamentos crónicos</h5>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         {{-- Cirugías recientes --}}
                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
-                                                            <div class="card border-card-primary h-100">
-                                                                <div class="card-body-aten-a">
-                                                                    <ul>
-                                                                        <li class="f-14 text-c-blue"><strong>Cirugías recientes</strong></li>
-                                                                        @if(isset($antecedentes))
-                                                                        @foreach ($antecedentes as $data)
-                                                                            @if($data->id_tipo_antecedente==3)
-                                                                                {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
-                                                                                <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
-                                                                            @else
-                                                                                {{-- <li>No hay registros</li> --}}
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @endif
-                                                                    </ul>
+                                                            <div class="card shadow-none bg-light-info border-card-info h-100">
+                                                                <div class="card-body px-2 py-3">
+                                                                    <div class="media">
+                                                                      <img src="{{ asset('images/iconos/ant-qx.png') }}" class=" wid-50 rounded-xl mr-3" alt="CX Recientes">
+                                                                        <div class="media-body">
+                                                                            <h5 class="f-14 text-info font-weight-bold">Cirugías recientes</h5>
+                                                                            <ul>
+                                                                                @if(isset($antecedentes))
+                                                                                @foreach ($antecedentes as $data)
+                                                                                    @if($data->id_tipo_antecedente==3)
+                                                                                        {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
+                                                                                        <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
+                                                                                    @else
+                                                                                        {{-- <li>No hay registros</li> --}}
+                                                                                    @endif
+                                                                                @endforeach
+                                                                                @endif
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -130,12 +143,17 @@
 
                                                         {{-- Prótesis y ortesis --}}
                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3  mb-3">
-                                                            <div class="card border-card-primary h-100">
-                                                                <div class="card-body">
-                                                                    <ul>
-                                                                        <li class="f-14 text-c-blue"><strong>Prótesis y ortesis</strong></li>
-                                                                        <li>No hay registros</li>
-                                                                    </ul>
+                                                            <div class="card shadow-none border-card-primary bg-light-blue h-100">
+                                                                <div class="card-body px-2 py-3">
+                                                                    <div class="media">
+                                                                      <img src="{{ asset('images/iconos/prot-ort.png') }}" class=" wid-50 rounded-xl mr-3" alt="Prótesis y Ortesis">
+                                                                        <div class="media-body">
+                                                                            <h5 class="f-14 text-c-blue font-weight-bold">Prótesis y Ortesis</h5>
+                                                                            <ul>
+                                                                                <li>No hay registros</li>
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -435,14 +453,7 @@
 
                                 <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
                                 <div class="tab-pane fade show" id="estudio_rx" role="tabpanel" aria-labelledby="estudio_rx_tab">
-                                    <div class="form-row mt-2">
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
-                                            <div class="form-group">
 
-                                                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2" onclick="mostrar_nuevas_imagenes_dent_estudio()"><i class="fas fa-plus"></i>CARGAR NUEVA IMAGEN</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div id="contenedor_imagenes_dent_estudio">
                                         @php $count = 1; @endphp
                                         @foreach ($imagenes_preimplante as $imagen)
@@ -560,10 +571,11 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <div class="table-responsive">
-                                                                <table id="table_piezas_presupuesto_odonto" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                <table id="table_piezas_presupuesto_odonto_impl" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Pieza o Grupo</th>
+                                                                            <th>Diagnostico</th>
                                                                             <th>Tratamiento</th>
                                                                             <th>Valor</th>
                                                                             <th>Accion</th>
@@ -571,12 +583,15 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($odontograma as $o)
+                                                                        @if($o->presupuesto == 1 && $o->impl_rehab == 0)
                                                                             <tr>
                                                                                 <td>{{ $o->pieza }}</td>
+                                                                                <td>{{ $o->diagnostico }}</td>
                                                                                 <td>{{ $o->descripcion }}</td>
                                                                                 <td>${{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button></td>
                                                                             </tr>
+                                                                        @endif
                                                                         @endforeach
                                                                     </tbody>
                                                                 </table>
@@ -603,73 +618,92 @@
                                                 </div>
                                                 <div class="card-body">
                                                         <div class="row my-2">
-                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                             <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                                                <label class="custom-control-label" for="customSwitch1">Seleccione maxilar superior</label>
+                                                                <input type="checkbox" class="custom-control-input" id="max_sup_impl" onclick="seleccionar_maxilar_superior_impl()">
+                                                                <label class="custom-control-label" for="max_sup_impl">Seleccione maxilar superior</label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                             <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                                                                <label class="custom-control-label" for="customSwitch2">Seleccione maxilar inferior</label>
+                                                                <input type="checkbox" class="custom-control-input" id="max_inf_impl" onclick="seleccionar_maxilar_inferior_impl()">
+                                                                <label class="custom-control-label" for="max_inf_impl">Seleccione maxilar inferior</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="piezas_presup_impl" onclick="seleccionar_piezas_presup()" checked>
+                                                                <label class="custom-control-label" for="piezas_presup_impl">Piezas presupuesto</label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                                            @include('atencion_odontologica.generales.odontograma_adulto_grupos')
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 col-xxl-9">
+                                                            @include('atencion_odontologica.generales.odontograma_adulto_grupos_implantologia')
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3 col-xxl-3 mt-2">
                                                             <div class="form-row">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="form-group">
-                                                                <label for="" class="floating-label-activo-sm">Grupos</label>
-                                                                <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
-                                                                    <option value="1.1">1.1</option>
-                                                                    <option value="1.2">1.2</option>
-                                                                    <option value="1.3">1.3</option>
-                                                                    <option value="1.4">1.4</option>
-                                                                    <option value="1.5">1.5</option>
-                                                                    <option value="1.6">1.6</option>
-                                                                    <option value="1.7">1.7</option>
-                                                                    <option value="1.8">1.8</option>
-                                                                    <option value="2.1">2.1</option>
-                                                                    <option value="2.2">2.2</option>
-                                                                    <option value="2.3">2.3</option>
-                                                                    <option value="2.4">2.4</option>
-                                                                    <option value="2.5">2.5</option>
-                                                                    <option value="2.6">2.6</option>
-                                                                    <option value="2.7">2.7</option>
-                                                                    <option value="2.8">2.8</option>
-                                                                    <option value="3.1">3.1</option>
-                                                                    <option value="3.2">3.2</option>
-                                                                    <option value="3.3">3.3</option>
-                                                                    <option value="3.4">3.4</option>
-                                                                    <option value="3.5">3.5</option>
-                                                                    <option value="3.6">3.6</option>
-                                                                    <option value="3.7">3.7</option>
-                                                                    <option value="3.8">3.8</option>
-                                                                    <option value="4.1">4.1</option>
-                                                                    <option value="4.2">4.2</option>
-                                                                    <option value="4.3">4.3</option>
-                                                                    <option value="4.4">4.4</option>
-                                                                    <option value="4.5">4.5</option>
-                                                                    <option value="4.6">4.6</option>
-                                                                    <option value="4.7">4.7</option>
-                                                                    <option value="4.8">4.8</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Tratamiento</label>
-                                                                <input type="text" name="diag_presupuesto_pieza_g" id="diag_presupuesto_pieza_g" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
-                                                        </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="form-group">
+                                                                        <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                        <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex_impl" id="paciente_piezas_dentales_ex_impl" multiple="multiple">
+                                                                            <option value="1.1">1.1</option>
+                                                                            <option value="1.2">1.2</option>
+                                                                            <option value="1.3">1.3</option>
+                                                                            <option value="1.4">1.4</option>
+                                                                            <option value="1.5">1.5</option>
+                                                                            <option value="1.6">1.6</option>
+                                                                            <option value="1.7">1.7</option>
+                                                                            <option value="1.8">1.8</option>
+                                                                            <option value="2.1">2.1</option>
+                                                                            <option value="2.2">2.2</option>
+                                                                            <option value="2.3">2.3</option>
+                                                                            <option value="2.4">2.4</option>
+                                                                            <option value="2.5">2.5</option>
+                                                                            <option value="2.6">2.6</option>
+                                                                            <option value="2.7">2.7</option>
+                                                                            <option value="2.8">2.8</option>
+                                                                            <option value="3.1">3.1</option>
+                                                                            <option value="3.2">3.2</option>
+                                                                            <option value="3.3">3.3</option>
+                                                                            <option value="3.4">3.4</option>
+                                                                            <option value="3.5">3.5</option>
+                                                                            <option value="3.6">3.6</option>
+                                                                            <option value="3.7">3.7</option>
+                                                                            <option value="3.8">3.8</option>
+                                                                            <option value="4.1">4.1</option>
+                                                                            <option value="4.2">4.2</option>
+                                                                            <option value="4.3">4.3</option>
+                                                                            <option value="4.4">4.4</option>
+                                                                            <option value="4.5">4.5</option>
+                                                                            <option value="4.6">4.6</option>
+                                                                            <option value="4.7">4.7</option>
+                                                                            <option value="4.8">4.8</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Diagnostico</label>
+                                                                        <select class="form-control form-control-sm" id="diagnostico_combo_g">
+                                                                            <option value="0">Seleccione</option>
+                                                                            @foreach ($diagnosticos as $d)
+                                                                            @if($d->tipo_especialidad == 16 && $d->impl_rehab == 0)
+                                                                                <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                            @endif
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="form-group">
+                                                                        <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                        <input type="text" name="diag_presupuesto_pieza_g_impl" id="diag_presupuesto_pieza_g_impl" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -745,6 +779,7 @@
                                                                     <thead>
                                                                         <tr>
                                                                             <td>Insumo</td>
+                                                                            <td>Observaciones</td>
                                                                             <td>Cantidad</td>
                                                                             <td>Valor</td>
                                                                             <td>Total</td>
@@ -753,25 +788,34 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($insumos_tratamientos as $t)
+                                                                        @if($t->impl_rehab == 0)
                                                                             @php $total = $t->cantidad * $t->valor @endphp
                                                                             <tr>
                                                                                 <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                                <td>{{ $t->observaciones }}</td>
                                                                                 <td>{{ $t->cantidad }}</td>
                                                                                 <td>{{ number_format($t->valor)  }}</td>
                                                                                 <td>{{ number_format($total)  }}</td>
                                                                                 <td>
                                                                                     @if($t->presupuesto == 0 || $t->presupuesto == null)
-                                                                                    <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-save"></i></button>
+                                                                                    <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-shopping-cart"></i></button>
                                                                                     @else
                                                                                     <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
                                                                                     @endif
+                                                                                    <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo({{ $t->id }})"><i class="feather icon-edit"></i></button>
                                                                                     <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
                                                                                 </td>
                                                                             </tr>
+                                                                        @endif
                                                                         @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row mt-2">
+                                                        <div class="col-12 d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-success btn-xxs" onclick="abrirModalCorreo()"><i class="fas fa-email"></i> Enviar por correo</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -787,13 +831,159 @@
         </div>
     </div>
 </div>
+<!-- Modal Enviar Presupuesto -->
+<div class="modal fade" id="modalEnviarPresupuesto" tabindex="-1" role="dialog" aria-labelledby="modalEnviarPresupuestoLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form id="formEnviarPresupuesto">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEnviarPresupuestoLabel">Enviar presupuesto de insumos</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="floating-label-activo-sm" for="selectDestinatarios">Selecciona destinatarios:</label>
+                <select id="selectDestinatarios" class="form-control form-control-sm" multiple="multiple" style="width:100%">
+
+                    <option value="{{ $paciente->email }}">{{$paciente->nombres}} {{ $paciente->apellido_uno }} (Paciente)</option>
+                    <option value="{{ $profesional->email }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} (Profesional)</option>
+                    <option value="bodega@gmail.com">Bodega</option>
+                    <option value="ejemplo@gmail.com">Dirección de presupuestos</option>
+                </select>
+            </div>
+
+
+          <small class="text-muted">Puedes seleccionar varios o escribir correos manualmente.</small>
+          <hr>
+          <div class="form-group">
+            <label class="floating-label-activo-sm">Correo adicional (opcional):</label>
+            <input type="email" class="form-control form-control-sm" id="correoLibre" placeholder="ejemplo@correo.com">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" onclick="enviar_email_presupuesto_insumos()" class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DATOS DE VITAL IMPORTANCIA -->
+<input type="hidden" name="id_insumo_editar" id="id_insumo_editar" value="">
+<input type="hidden" name="tipo_insumo_editar" id="tipo_insumo_editar" value="">
 @include('atencion_odontologica.modals.odontograma.modal_insumos')
+@include('atencion_odontologica.modals.odontograma.modal_insumos_editar')
 <script>
+        // Declarar la variable global arriba del DOMContentLoaded
+        var odontograma_global = @json($odontograma);
+        document.addEventListener("DOMContentLoaded", function () {
+            // Supongamos que ya tienes este JSON cargado
+            const odontograma = odontograma_global;
+            const piezasUnicas = [...new Set(odontograma.map(item => item.pieza))];
+
+            // Seleccionar el <select> y actualizar sus valores
+            const piezasSelect = $('#paciente_piezas_dentales_ex_impl');
+            piezasSelect.val(piezasUnicas).trigger('change');
+
+            // Marcar visualmente las piezas en el odontograma
+            piezasUnicas.forEach(pieza => {
+                $(`.pieza_implantologia[data-pieza_impl="${pieza}"]`).addClass('seleccionada');
+            });
+            // Escuchar cambios en el Select2 para actualizar el odontograma visual
+            piezasSelect.on('change', function () {
+                const piezasSeleccionadas = $(this).val() || [];
+
+                // Recorre todas las piezas visuales
+                $('.pieza_implantologia').each(function () {
+                    const piezaNumero = $(this).data('pieza_impl').toString();
+
+                    if (piezasSeleccionadas.includes(piezaNumero)) {
+                        $(this).addClass('seleccionada');
+                    } else {
+                        $(this).removeClass('seleccionada');
+                    }
+                });
+            });
+        });
+
+    $(document).ready(function() {
+        $('#selectDestinatarios').select2({
+            tags: true,
+            width: '100%',
+            placeholder: 'Selecciona o ingresa correos',
+            dropdownParent: $('#modalEnviarPresupuesto')
+        });
+
+
+    });
+
+
     function abrir_modal_insumos(){
         $('#modal_insumos').modal('show');
     }
-</script>
-<script>
+
+
+    function enviar_email_presupuesto_insumos(){
+        let destinatarios = $('#selectDestinatarios').val();
+        let correoLibre = $('#correoLibre').val();
+        let idPaciente = $('#id_paciente_fc').val();
+        let idFichaAtencion = $('#id_fc').val();
+
+        if(destinatarios.length == 0 && correoLibre == ''){
+            swal({
+                title: "Debe seleccionar al menos un destinatario",
+                icon: "warning",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return;
+        }
+
+        let data = {
+            destinatarios: destinatarios,
+            correoLibre: correoLibre,
+            idPaciente: idPaciente,
+            idFichaAtencion: idFichaAtencion,
+            _token: CSRF_TOKEN
+        };
+
+        $.ajax({
+            url: '{{ ROUTE("enviar.presupuesto.insumos.email") }}',
+            type: 'POST',
+            data: data,
+            success: function(response) {
+                console.log(response);
+                if(response.mensaje == 'ok'){
+                    swal({
+                        title: "Presupuesto enviado correctamente",
+                        icon: "success",
+                        buttons: "Aceptar"
+                    });
+                    $('#modalEnviarPresupuesto').modal('hide');
+                }else{
+                    swal({
+                        title: "Error al enviar el presupuesto",
+                        text: response.detalle,
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                }
+            },
+            error: function(error) {
+                console.error("Error al enviar el presupuesto:", error);
+                swal({
+                    title: "Error al enviar el presupuesto",
+                    text: "Por favor, intente nuevamente.",
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        });
+    }
 
 
     function guardar_insumo(){
@@ -843,8 +1033,9 @@
                 cantidad: cantidad,
                 valor: precio,
                 total: total,
-                id_paciente: dame_id_paciente(),
+                id_paciente: $('#id_paciente_fc').val(),
                 id_ficha_atencion: $('#id_fc').val(),
+                observaciones: $('#insumos_obs_tto').val(),
                 _token: CSRF_TOKEN
             }
 
@@ -883,26 +1074,29 @@
                                     // Botones de acción
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="feather icon-shopping-cart"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-minus"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>`;
                             }
                             table.row.add([
                                 insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.observaciones,
                                 insumo.cantidad,       // Cantidad utilizada
                                 formatoMoneda(insumo.valor),         // Unidad de medida
                                 formatoMoneda(total),
@@ -912,6 +1106,7 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+                        dame_insumos_tratamiento();
                     }
                 },
                 error: function(error){
@@ -937,8 +1132,296 @@
 
     }
 
+    function editar_insumo(){
+        $('#modal_insumos_editar').modal('show');
+    }
 
-    function eliminar_insumo(id){
+
+    function editar_insumo_confirmar(){
+        let id_tipo_insumo = $('#tipoInsumo_editar').val();
+        if(id_tipo_insumo == 1){
+            var marcaInsumo = $('#marcasImplantes_editar option:selected').text();
+        }else{
+            var marcaInsumo = '';
+        }
+        let data = {
+            id: $('#id_insumo_editar').val(),
+            id_tipo_insumo: $('#tipoInsumo_editar').val(),
+            id_insumo: $('#nombreInsumo_editar').val(),
+            insumos: $('#nombreInsumo_editar option:selected').text(),
+            id_marca: $('#marcasImplantes_editar').val(),
+            observaciones: $('#insumos_obs_tto_editar').val(),
+            marca_insumo: marcaInsumo,
+            cantidad: $('#cantidad_editar').val(),
+            precio: $('#precio_editar').val(),
+            id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
+            _token: CSRF_TOKEN
+        }
+        let url = '{{ ROUTE("dental.editar_insumos_tto") }}';
+        $.ajax({
+            url: url,
+            type:'post',
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'ok'){
+                    swal({
+                        icon:'success',
+                        text:'Se a editado insumos correctamente',
+                        title:'Exito'
+                    });
+                    $('#modal_insumos_editar').modal('hide');
+                    // Actualiza la tabla o realiza otras acciones necesarias
+                    let valores_boca_general = resp.valores[0];
+                    let valores_odontograma = resp.valores[1];
+                    let valores_insumos = resp.valores[2];
+                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                    $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                    $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                    $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                    $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                    $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                    $('#total_presupuesto').val(formatoMoneda(total_general));
+                    $('#total_insumos').val(formatoMoneda(valores_insumos));
+                    $('#total_presupuesto_dental').val(total_general);
+                    $('#subtotal_presup').val(formatoMoneda);
+                    $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                    $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+
+
+                    let insumos = resp.insumos;
+                    console.log(insumos);
+                    var tipo = $('#tipo_insumo_editar').val();
+                    console.log(tipo);
+                    if(tipo == 'lab'){
+                        var table = $('#table_insumos_rehab_impl').DataTable();
+                        var rehab = 1
+                    }else{
+                        var table = $('#table_insumos_preimplante').DataTable();
+                        var rehab = 0;
+                    }
+
+                    table.clear();
+
+                    if(rehab == 0){
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="feather icon-shopping-cart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                                }else{
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }
+                            if(insumo.impl_rehab == 0){
+                                table.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad,       // Cantidad utilizada
+                                    formatoMoneda(insumo.valor),         // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            }
+                            //Dibujar la tabla nuevamente con los nuevos datos
+                            table.draw();
+                        });
+                    }else{
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            console.log(insumo.impl_rehab);
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="feather icon-shopping-cart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            if(insumo.impl_rehab == 1){
+                                // Agregar la fila a la tabla
+                                table.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad,       // Cantidad utilizada
+                                    formatoMoneda(insumo.valor),         // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            }
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                    }
+
+
+
+
+                    $('#contenedor_insumos').empty();
+                    insumos.forEach(insumo => {
+                        if(insumo.presupuesto == 1){
+                            let total = insumo.cantidad * insumo.valor;
+                            $('#contenedor_insumos').append(`
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 col-lg-4 fill">
+                                                    <label class="floating-label-activo-sm">Insumo</label>
+                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-1 fill">
+                                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-2 fill">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-2 col-lg-2">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-2 fill">
+                                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                </div>
+                                                <div class="form-group col-md-1 col-lg-1 d-flex">
+
+                                                    <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        }
+
+                    });
+
+                    let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                    //Limpiar la tabla sin perder la configuración de DataTables
+                    table_insumos.clear();
+
+                    insumos.forEach(insumo => {
+                        let total = insumo.cantidad * insumo.valor;
+                        if(insumo.presupuesto == 1){
+                            if(insumo.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(insumo.estado_pago == 'intermedio'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+                            let rowNode = table_insumos.row.add([
+                            `${insumo.insumos} ${insumo.nombre_marca}`,
+                            insumo.observaciones,
+                            insumo.cantidad,         // Nombre del insumo
+                            formatoMoneda(insumo.valor),       // Cantidad utilizada
+                            0,         // Unidad de medida
+                            formatoMoneda(total),
+                            ' <div class="circle '+clase+'"></div>',
+                            ''
+
+                        ]).draw(false).node();
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+
+                    });
+
+                    table_insumos.draw();
+
+                    $('#table_pagos_reasignar_insumos tbody').empty();
+                    insumos.forEach(insumo => {
+                        if(insumo.presupuesto == 1){
+                            let total = insumo.cantidad * insumo.valor;
+                            $('#table_pagos_reasignar_insumos tbody').append(`
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                <td>${insumo.cantidad}</td>
+                                <td>${formatoMoneda(insumo.valor)}</td>
+                                <td>${formatoMoneda(total)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                        }
+
+                    });
+                    let $select = $('#prot_implante_man');
+
+                    // Limpiar opciones actuales
+                    $select.empty();
+
+                    // Agregar nuevas opciones desde resp.insumos
+                    resp.insumos.forEach(insumo => {
+                        let text = insumo.insumos + ' ' + insumo.nombre_marca;
+                        let option = new Option(text, insumo.id, false, false); // false para no seleccionar
+                        $select.append(option);
+                    });
+
+                    // Refrescar Select2
+                    $select.trigger('change');
+                    //dame_insumos_tratamiento();
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+
+    function eliminar_insumo(id, tipo = null){
         swal({
             title: "¿Esta seguro que desea ELIMINAR el insumo dental?",
             text: "Favor confirme o cancele la solicitud",
@@ -948,12 +1431,12 @@
         })
         .then((willDelete) => {
             if(willDelete){
-                confirmar_eliminar_insumo(id);
+                confirmar_eliminar_insumo(id, tipo);
             }
         });
     }
 
-    function confirmar_eliminar_insumo(id){
+    function confirmar_eliminar_insumo(id, tipo = null){
         console.log(id);
         let data = {
             id: id,
@@ -976,33 +1459,40 @@
                         title:'Exito'
                     });
                     let valores_boca_general = resp.valores[0];
-                        let valores_odontograma = resp.valores[1];
-                        let valores_insumos = resp.valores[2];
-                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
-                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
-                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
-                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
-                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
-                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
-                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
-                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
-                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
-                        $('#total_presupuesto').val(formatoMoneda(total_general));
-                        $('#total_insumos').val(formatoMoneda(valores_insumos));
-                        $('#total_presupuesto_dental').val(total_general);
-                        $('#subtotal_presup').val(formatoMoneda);
-                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
-                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+                    let valores_odontograma = resp.valores[1];
+                    let valores_insumos = resp.valores[2];
+                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                    $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                    $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                    $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                    $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                    $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                    $('#total_presupuesto').val(formatoMoneda(total_general));
+                    $('#total_insumos').val(formatoMoneda(valores_insumos));
+                    $('#total_presupuesto_dental').val(total_general);
+                    $('#subtotal_presup').val(formatoMoneda);
+                    $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                    $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
 
 
                     let insumos = resp.insumos;
-                        console.log(insumos);
-                        let table = $('#table_insumos_preimplante').DataTable();
+                    console.log(insumos);
+                    if(tipo && tipo == 'lab'){
+                        var table = $('#table_insumos_rehab_impl').DataTable();
+                        var rehab = 1;
+                    }else{
+                        var table = $('#table_insumos_preimplante').DataTable();
+                        var rehab = 0;
+                    }
 
-                        //Limpiar la tabla sin perder la configuración de DataTables
-                        table.clear();
+                    //Limpiar la tabla sin perder la configuración de DataTables
+                    table.clear();
 
+                    if(rehab == 0){
                         //Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
@@ -1010,147 +1500,197 @@
                                     // Botones de acción
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="feather icon-shopping-cart"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                                }else{
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }
+                            if(insumo.impl_rehab == 0){
+                                table.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad,       // Cantidad utilizada
+                                    formatoMoneda(insumo.valor),         // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            }
+
+                        });
+                    }else{
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            console.log(insumo);
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="feather icon-shopping-cart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                            <i class="fas fa-minus"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>`;
                             }
-                            table.row.add([
-                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
-                                insumo.cantidad,       // Cantidad utilizada
-                                formatoMoneda(insumo.valor),         // Unidad de medida
-                                formatoMoneda(total),
-                                botones
-                            ]);
+                            if(insumo.impl_rehab == 1){
+                                // Agregar la fila a la tabla
+                                table.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad,       // Cantidad utilizada
+                                    formatoMoneda(insumo.valor),         // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            }
                         });
+                    }
 
-                        //Dibujar la tabla nuevamente con los nuevos datos
-                        table.draw();
 
-                        $('#contenedor_insumos').empty();
-                        insumos.forEach(insumo => {
-                            if(insumo.presupuesto == 1){
-                                let total = insumo.cantidad * insumo.valor;
-                                $('#contenedor_insumos').append(`
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <div class="card-informacion">
-                                            <div class="card-body pb-0">
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12 col-lg-4 fill">
-                                                        <label class="floating-label-activo-sm">Insumo</label>
-                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                                    </div>
-                                                    <div class="form-group col-md-3 col-lg-1 fill">
-                                                        <label class="floating-label-activo-sm">Cantidad</label>
-                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                                    </div>
-                                                    <div class="form-group col-md-3 col-lg-2 fill">
-                                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2">
-                                                        <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                                    </div>
-                                                    <div class="form-group col-md-3 col-lg-2 fill">
-                                                        <label class="floating-label-activo-sm">Total Prestación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                                    </div>
-                                                    <div class="form-group col-md-1 col-lg-1 d-flex">
+                    //Dibujar la tabla nuevamente con los nuevos datos
+                    table.draw();
 
-                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
-                                                    </div>
+                    $('#contenedor_insumos').empty();
+                    insumos.forEach(insumo => {
+                        if(insumo.presupuesto == 1){
+                            let total = insumo.cantidad * insumo.valor;
+                            $('#contenedor_insumos').append(`
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 col-lg-4 fill">
+                                                    <label class="floating-label-activo-sm">Insumo</label>
+                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-1 fill">
+                                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-2 fill">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-2 col-lg-2">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                </div>
+                                                <div class="form-group col-md-3 col-lg-2 fill">
+                                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                </div>
+                                                <div class="form-group col-md-1 col-lg-1 d-flex">
+
+                                                    <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                `);
-                            }
-
-                        });
-
-                        let table_insumos = $('#presup_insumos_pago').DataTable();
-
-                        //Limpiar la tabla sin perder la configuración de DataTables
-                        table_insumos.clear();
-
-                        insumos.forEach(insumo => {
-                            let total = insumo.cantidad * insumo.valor;
-                            if(insumo.presupuesto == 1){
-                                if(insumo.estado_pago == 'ok'){
-                                    var clase = 'bg-success';
-                                }else if(insumo.estado_pago == 'intermedio'){
-                                    var clase = 'bg-warning';
-                                }else{
-                                    var clase = 'bg-danger';
-                                }
-                                let rowNode = table_insumos.row.add([
-                                `${insumo.insumos} ${insumo.nombre_marca}`,
-                                insumo.cantidad,         // Nombre del insumo
-                                formatoMoneda(insumo.valor),       // Cantidad utilizada
-                                0,         // Unidad de medida
-                                formatoMoneda(total),
-                                ' <div class="circle '+clase+'"></div>',
-                                ''
-
-                            ]).draw(false).node();
-                             // Agregar clases a la fila
-                             $(rowNode).addClass('text-center align-middle status-circle');
-                            }
-
-                        });
-
-                        table_insumos.draw();
-
-                        $('#table_pagos_reasignar_insumos tbody').empty();
-                        insumos.forEach(insumo => {
-                            if(insumo.presupuesto == 1){
-                                let total = insumo.cantidad * insumo.valor;
-                                $('#table_pagos_reasignar_insumos tbody').append(`
-                                <tr>
-                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
-                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
-                                    <td>${insumo.cantidad}</td>
-                                    <td>${formatoMoneda(insumo.valor)}</td>
-                                    <td>${formatoMoneda(total)}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                </div>
                             `);
+                        }
+
+                    });
+
+                    let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                    //Limpiar la tabla sin perder la configuración de DataTables
+                    table_insumos.clear();
+
+                    insumos.forEach(insumo => {
+                        let total = insumo.cantidad * insumo.valor;
+                        if(insumo.presupuesto == 1){
+                            if(insumo.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(insumo.estado_pago == 'intermedio'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
                             }
+                            let rowNode = table_insumos.row.add([
+                            `${insumo.insumos} ${insumo.nombre_marca}`,
+                            insumo.observaciones,
+                            insumo.cantidad,         // Nombre del insumo
+                            formatoMoneda(insumo.valor),       // Cantidad utilizada
+                            0,         // Unidad de medida
+                            formatoMoneda(total),
+                            ' <div class="circle '+clase+'"></div>',
+                            ''
 
-                        });
-                        let $select = $('#prot_implante_man');
+                        ]).draw(false).node();
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
 
-                        // Limpiar opciones actuales
-                        $select.empty();
+                    });
 
-                        // Agregar nuevas opciones desde resp.insumos
-                        resp.insumos.forEach(insumo => {
-                            let text = insumo.insumos + ' ' + insumo.nombre_marca;
-                            let option = new Option(text, insumo.id, false, false); // false para no seleccionar
-                            $select.append(option);
-                        });
+                    table_insumos.draw();
 
-                        // Refrescar Select2
-                        $select.trigger('change');
+                    $('#table_pagos_reasignar_insumos tbody').empty();
+                    insumos.forEach(insumo => {
+                        if(insumo.presupuesto == 1){
+                            let total = insumo.cantidad * insumo.valor;
+                            $('#table_pagos_reasignar_insumos tbody').append(`
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                <td>${insumo.cantidad}</td>
+                                <td>${formatoMoneda(insumo.valor)}</td>
+                                <td>${formatoMoneda(total)}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                        }
 
+                    });
+                    let $select = $('#prot_implante_man');
+
+                    // Limpiar opciones actuales
+                    $select.empty();
+
+                    // Agregar nuevas opciones desde resp.insumos
+                    resp.insumos.forEach(insumo => {
+                        let text = insumo.insumos + ' ' + insumo.nombre_marca;
+                        let option = new Option(text, insumo.id, false, false); // false para no seleccionar
+                        $select.append(option);
+                    });
+
+                    // Refrescar Select2
+                    $select.trigger('change');
+                    dame_insumos_tratamiento();
                 }
             },
             error: function(error){
@@ -1159,12 +1699,13 @@
         });
     }
 
-    function cargar_a_presupuesto_insumo(id){
+    function cargar_a_presupuesto_insumo(id, tipo = null){
+        console.log(tipo);
         let data = {
             id: id,
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
-            id_paciente: dame_id_paciente(),
+            id_paciente: $('#id_paciente_fc').val(),
             tipo:'insumo',
             _token: CSRF_TOKEN
         }
@@ -1202,51 +1743,105 @@
                         $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                             //limpiar_formulario_insumo();
-                        let insumos = resp.insumos;
-                        console.log(insumos);
-                        let table = $('#table_insumos_preimplante').DataTable();
-
-                        //Limpiar la tabla sin perder la configuración de DataTables
-                        table.clear();
-
-                        //Recorrer el array de insumos y agregarlos a la tabla
-                        insumos.forEach(insumo => {
-                            console.log(insumo);
-                            let total = insumo.cantidad * insumo.valor;
-                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
-                                    // Botones de acción
-                                var botones = `
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>`;
+                            let insumos = resp.insumos;
+                            console.log(insumos);
+                            if(tipo && tipo == 'lab'){
+                                var table = $('#table_insumos_rehab_impl').DataTable();
+                                var rehab = 1;
                             }else{
-                                var botones = `
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>`;
+                                var table = $('#table_insumos_preimplante').DataTable();
+                                var rehab = 0;
                             }
 
-                            table.row.add([
-                                `${insumo.insumos} ${insumo.nombre_marca}`,
-                                insumo.cantidad,       // Cantidad utilizada
-                                formatoMoneda(insumo.valor),         // Unidad de medida
-                                formatoMoneda(total),
-                                botones
-                            ]);
-                        });
+                            //Limpiar la tabla sin perder la configuración de DataTables
+                            table.clear();
 
-                        //Dibujar la tabla nuevamente con los nuevos datos
-                        table.draw();
+                            if(rehab == 0){
+                                //Recorrer el array de insumos y agregarlos a la tabla
+                                insumos.forEach(insumo => {
+                                    let total = insumo.cantidad * insumo.valor;
+                                    if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                            // Botones de acción
+                                        var botones = `
+                                            <td>
+                                                <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="feather icon-shopping-cart"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>`;
+                                        }else{
+                                            var botones = `
+                                                <td>
+                                                    <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                                    <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>`;
+                                        }
+                                    if(insumo.impl_rehab == 0){
+                                        table.row.add([
+                                            `${insumo.insumos} ${insumo.nombre_marca}`,
+                                            insumo.observaciones,
+                                            insumo.cantidad,       // Cantidad utilizada
+                                            formatoMoneda(insumo.valor),         // Unidad de medida
+                                            formatoMoneda(total),
+                                            botones
+                                        ]);
+                                    }
+
+                                });
+                            }else{
+                                //Recorrer el array de insumos y agregarlos a la tabla
+                                insumos.forEach(insumo => {
+                                    console.log(insumo);
+                                    let total = insumo.cantidad * insumo.valor;
+                                    if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                            // Botones de acción
+                                        var botones = `
+                                            <td>
+                                                <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="feather icon-shopping-cart"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>`;
+                                    }else{
+                                        var botones = `
+                                            <td>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>`;
+                                    }
+                                    if(insumo.impl_rehab == 1){
+                                        // Agregar la fila a la tabla
+                                        table.row.add([
+                                            `${insumo.insumos} ${insumo.nombre_marca}`,
+                                            insumo.observaciones,
+                                            insumo.cantidad,       // Cantidad utilizada
+                                            formatoMoneda(insumo.valor),         // Unidad de medida
+                                            formatoMoneda(total),
+                                            botones
+                                        ]);
+                                    }
+                                });
+                            }
+
+
+                            //Dibujar la tabla nuevamente con los nuevos datos
+                            table.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -1307,6 +1902,7 @@
                                 }
                                 let rowNode = table_insumos.row.add([
                                 `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.observaciones,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
@@ -1397,12 +1993,12 @@
         });
     }
 
-    function sacar_de_presupuesto_insumo(id){
+    function sacar_de_presupuesto_insumo(id, tipo = null){
         let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
         let data = {
             id: id,
             tipo:'insumo',
-            id_paciente: dame_id_paciente(),
+            id_paciente: $('#id_paciente_fc').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
              _token: "{{ csrf_token() }}"
@@ -1440,46 +2036,100 @@
                                 //limpiar_formulario_insumo();
 
                         let insumos = resp.insumos;
-                        let table = $('#table_insumos_preimplante').DataTable();
+                        if(tipo && tipo == 'lab'){
+                            var table = $('#table_insumos_rehab_impl').DataTable();
+                            var rehab = 1;
+                        }else{
+                            var table = $('#table_insumos_preimplante').DataTable();
+                            var rehab = 0;
+                        }
 
                         //Limpiar la tabla sin perder la configuración de DataTables
                         table.clear();
 
+                        if(rehab == 0){
+                            //Recorrer el array de insumos y agregarlos a la tabla
+                            insumos.forEach(insumo => {
+                                let total = insumo.cantidad * insumo.valor;
+                                if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                        // Botones de acción
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                    }else{
+                                        var botones = `
+                                            <td>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>`;
+                                    }
+                                if(insumo.impl_rehab == 0){
+                                    table.row.add([
+                                        `${insumo.insumos} ${insumo.nombre_marca}`,
+                                        insumo.observaciones,
+                                        insumo.cantidad,       // Cantidad utilizada
+                                        formatoMoneda(insumo.valor),         // Unidad de medida
+                                        formatoMoneda(total),
+                                        botones
+                                    ]);
+                                }
 
+                            });
+                        }else{
+                            //Recorrer el array de insumos y agregarlos a la tabla
+                            insumos.forEach(insumo => {
+                                console.log(insumo);
+                                let total = insumo.cantidad * insumo.valor;
+                                if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                        // Botones de acción
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }else{
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'${tipo}')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id},'${tipo}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }
+                                if(insumo.impl_rehab == 1){
+                                    // Agregar la fila a la tabla
+                                    table.row.add([
+                                        `${insumo.insumos} ${insumo.nombre_marca}`,
+                                        insumo.observaciones,
+                                        insumo.cantidad,       // Cantidad utilizada
+                                        formatoMoneda(insumo.valor),         // Unidad de medida
+                                        formatoMoneda(total),
+                                        botones
+                                    ]);
+                                }
+                            });
+                        }
 
-                        //Recorrer el array de insumos y agregarlos a la tabla
-                        insumos.forEach(insumo => {
-                            let total = insumo.cantidad * insumo.valor;
-                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
-                            // Botones de acción
-                            var botones = `
-                            <td>
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
-                                    <i class="fas fa-save"></i>
-                                </button>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>`;
-                            }else{
-                                var botones = `
-                                <td>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
-                                        <i class="fas fa-save"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>`;
-                            }
-                            table.row.add([
-                                `${insumo.insumos} ${insumo.nombre_marca}`,
-                                insumo.cantidad,       // Cantidad utilizada
-                                formatoMoneda(insumo.valor),         // Unidad de medida
-                                formatoMoneda(total),
-                                botones
-                            ]);
-                        });
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
@@ -1544,6 +2194,7 @@
                                 }
                                 let rowNode = table_insumos.row.add([
                                 `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.observaciones,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
@@ -1574,7 +2225,7 @@
 
                         // Refrescar Select2
                         $select.trigger('change');
-
+                        actualizar_presupuesto();
                     }else{
                         swal({
                             icon:'error',
@@ -1591,19 +2242,28 @@
         });
     }
 
-    function dame_marcas_implantes(value){
+    function dame_marcas_implantes(value, tipo = 'nuevo'){
         let id_tipo_insumo = value.value;
+        console.log(id_tipo_insumo);
         let tipo_insumo_text = value.options[value.selectedIndex].text;
-        console.log(tipo_insumo_text);
+
         $('#titulo_tipo_insumo').html(tipo_insumo_text);
         if(id_tipo_insumo == 1){
             // quitar la clase d-none al select de marcas
             $('#marcas_implantes_select').removeClass('d-none');
             $('#insumos_select').addClass('d-none');
+            if(tipo == 'editar'){
+                $('#marcas_implantes_select_editar').removeClass('d-none');
+                $('#insumos_select_editar').addClass('d-none');
+            }
         }else{
             // quitar la clase d-none al select de marcas
             $('#marcas_implantes_select').addClass('d-none');
             $('#insumos_select').removeClass('d-none');
+            if(tipo == 'editar'){
+                $('#marcas_implantes_select_editar').addClass('d-none');
+                $('#insumos_select_editar').removeClass('d-none');
+            }
         }
         let url = '{{ ROUTE("dental.dame_implantes_dental") }}';
         let data = {
@@ -1617,17 +2277,247 @@
             data: data,
             success: function(resp){
                 console.log(resp);
-                $('#nombreInsumo').empty();
-                let insumos = resp;
-                insumos.forEach(e => {
-                    $('#nombreInsumo').append(`
-                    <option value="${e.id}"> ${e.descripcion} </option>
-                    `);
-                });
+                if(tipo == 'editar'){
+                    $('#nombreInsumo_editar').empty();
+                    let insumos = resp;
+                    insumos.forEach(e => {
+                        $('#nombreInsumo_editar').append(`
+                        <option value="${e.id}"> ${e.descripcion} </option>
+                        `);
+                    });
+                    return;
+                }else{
+                    $('#nombreInsumo').empty();
+                    let insumos = resp;
+                    insumos.forEach(e => {
+                        $('#nombreInsumo').append(`
+                        <option value="${e.id}"> ${e.descripcion} </option>
+                        `);
+                    });
+                }
+
             },
             error: function(error){
                 console.log(error.responseText);
             }
         })
     }
+
+    function dame_insumo(id, tipo = null){
+        console.log(tipo);
+        $('#id_insumo_editar').val(id);
+        $('#tipo_insumo_editar').val(tipo);
+        let url = '{{ ROUTE("dental.dame_insumo_tto") }}';
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: data,
+            beforeSend: function(){
+                swal({
+                    title: "Cargando insumo...",
+                    text: "Por favor, espere.",
+                    icon: "info",
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+            },
+            success: function(resp){
+                console.log(resp);
+                swal.close();
+                if(resp.mensaje == 'ok'){
+                    $('#modal_insumos_editar').modal('show');
+                    let insumo = resp.insumo;
+                    $('#id_insumo_editar').val(insumo.id);
+                    $('#tipoInsumo_editar').val(insumo.id_tipo_insumo);
+
+                    $('#cantidad_editar').val(insumo.cantidad);
+                    $('#precio_editar').val(insumo.valor);
+                    $('#total_editar').val(insumo.total);
+                    $('#insumos_obs_tto_editar').val(insumo.observaciones);
+                    let total = insumo.cantidad * insumo.valor;
+                    $('#total_editar').val(total);
+                    dame_marcas_implantes_editar(insumo.id_tipo_insumo, insumo.insumos, insumo.id_marca);
+                }else{
+                    swal({
+                        title: "Error al cargar el insumo",
+                        text: resp.detalle,
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                }
+            },
+            error: function(error) {
+                console.error("Error al cargar el insumo:", error);
+                swal({
+                    title: "Error al cargar el insumo",
+                    text: "Por favor, intente nuevamente.",
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        });
+    }
+
+    function dame_marcas_implantes_editar(id, nombreInsumoSeleccionado = null, idMarcaSeleccionada = null){
+        console.log(idMarcaSeleccionada);
+        let url = '{{ ROUTE("dental.dame_implantes_dental") }}';
+        if(id == 1){
+            $('#marcas_implantes_select_editar').removeClass('d-none');
+            $('#insumos_select_editar').addClass('d-none');
+        }else{
+            $('#marcas_implantes_select_editar').addClass('d-none');
+            $('#insumos_select_editar').removeClass('d-none');
+        }
+        let data = {
+            id_tipo_insumo: id,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#nombreInsumo_editar').empty();
+                let insumos = resp;
+
+                insumos.forEach(e => {
+                    $('#nombreInsumo_editar').append(`
+                        <option value="${e.id}" ${nombreInsumoSeleccionado === e.descripcion ? 'selected' : ''}> ${e.descripcion} </option>
+                    `);
+                });
+                if(idMarcaSeleccionada){
+                    $('#marcasImplantes_editar').val(idMarcaSeleccionada);
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
+
+    function seleccionar_maxilar_superior_impl() {
+        const superiorActivo = document.getElementById("max_sup_impl").checked;
+         document.getElementById('piezas_presup_impl').checked = false;
+        const piezas = document.querySelectorAll('.pieza_implantologia');
+        const select = $('#paciente_piezas_dentales_ex_impl');
+
+        piezas.forEach(pieza => {
+            const codigo = pieza.getAttribute('data-pieza_impl');
+
+            if (codigo.startsWith('1.') || codigo.startsWith('2.')) {
+                if (superiorActivo) {
+                    pieza.classList.add('seleccionada');
+
+                    // Selecciona en el Select2 si existe la opción
+                    if (select.find("option[value='" + codigo + "']").length > 0) {
+                        select.find("option[value='" + codigo + "']").prop("selected", true);
+                    }
+                } else {
+                    pieza.classList.remove('seleccionada');
+
+                    // Deselecciona en el Select2
+                    if (select.find("option[value='" + codigo + "']").length > 0) {
+                        select.find("option[value='" + codigo + "']").prop("selected", false);
+                    }
+                }
+            }
+        });
+
+        // Refresca el select2 para que se vea reflejado el cambio
+        select.trigger('change');
+    }
+    function seleccionar_maxilar_inferior_impl(){
+        const inferiorActivo = document.getElementById("max_inf_impl").checked;
+        document.getElementById('piezas_presup_impl').checked = false;
+        const piezas = document.querySelectorAll('.pieza_implantologia');
+        const select = $('#paciente_piezas_dentales_ex_impl');
+
+        piezas.forEach(pieza => {
+            const codigo = pieza.getAttribute('data-pieza_impl');
+
+            if (codigo.startsWith('3.') || codigo.startsWith('4.')) {
+                if (inferiorActivo) {
+                    pieza.classList.add('seleccionada');
+
+                    // Selecciona en el Select2 si existe la opción
+                    if (select.find("option[value='" + codigo + "']").length > 0) {
+                        select.find("option[value='" + codigo + "']").prop("selected", true);
+                    }
+                } else {
+                    pieza.classList.remove('seleccionada');
+
+                    // Deselecciona en el Select2
+                    if (select.find("option[value='" + codigo + "']").length > 0) {
+                        select.find("option[value='" + codigo + "']").prop("selected", false);
+                    }
+                }
+            }
+        });
+
+        // Refresca el select2 para que se vea reflejado el cambio
+        select.trigger('change');
+    }
+
+    function seleccionar_piezas_presup() {
+        const checkbox = document.getElementById('piezas_presup_impl');
+        // Seleccionar el <select> y actualizar sus valores
+        const piezasSelect = $('#paciente_piezas_dentales_ex_impl');
+        // Si está desmarcado
+        if (!checkbox.checked) {
+            // 1. Limpiar select2
+            piezasSelect.val(null).trigger('change');
+
+            // 2. Quitar clase seleccionada a todas las piezas
+            $('.pieza_implantologia').removeClass('seleccionada');
+
+            return; // Salimos de la función
+        }
+        // Desmarcar los switches de maxilares
+        document.getElementById('max_sup_impl').checked = false;
+        document.getElementById('max_inf_impl').checked = false;
+
+
+
+        // Aquí puedes agregar lógica para seleccionar solo piezas de presupuesto si lo necesitas
+        // Supongamos que ya tienes este JSON cargado
+        const odontograma = odontograma_global;
+
+        // Obtener piezas únicas
+        const piezasUnicas = [...new Set(odontograma.map(item => item.pieza))];
+
+
+        piezasSelect.val(piezasUnicas).trigger('change');
+
+        // Marcar visualmente las piezas en el odontograma
+        piezasUnicas.forEach(pieza => {
+            $(`.pieza_implantologia[data-pieza_impl="${pieza}"]`).addClass('seleccionada');
+        });
+        // Escuchar cambios en el Select2 para actualizar el odontograma visual
+        piezasSelect.on('change', function () {
+            const piezasSeleccionadas = $(this).val() || [];
+
+            // Recorre todas las piezas visuales
+            $('.pieza_implantologia').each(function () {
+                const piezaNumero = $(this).data('pieza_impl').toString();
+
+                if (piezasSeleccionadas.includes(piezaNumero)) {
+                    $(this).addClass('seleccionada');
+                } else {
+                    $(this).removeClass('seleccionada');
+                }
+            });
+        });
+    }
+
+    function abrirModalCorreo() {
+        $('#modalEnviarPresupuesto').modal('show');
+    }
 </script>
+

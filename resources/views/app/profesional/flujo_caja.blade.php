@@ -260,7 +260,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                     <div class="card">
                                         <div class="card-body py-1">
-                                            <div class="row">
+                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <div class="switch switch-success d-inline m-r-10">
@@ -272,7 +272,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6 pt-2">
-                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-info btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick=""><i class="feather icon-check"></i> Iniciar proceso de cobro</button>
+                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-info btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="iniciarProcesoCobro()" style="display: none;"><i class="feather icon-check"></i> Iniciar proceso de cobro</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -793,7 +793,7 @@
                                                                     <th class="align-middle">Paciente</th>
                                                                     <th class="align-middle">Valor total</th>
                                                                     <th class="align-middle">Estado consulta</th>
-                                                                    <th class="align-middle">Acciín</th>
+                                                                    <th class="align-middle">Acción</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1084,6 +1084,9 @@
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
+
+            // Inicializar estado del botón de cobro
+            seleccionar_bonos_rendicion();
         });
         $(document).ready(function(){
             $('#tabla_programas').DataTable({
@@ -1604,42 +1607,167 @@
         }
 
         function cambiarEstadoRendicion(element) {
-    const id = element.getAttribute('data-id');
-    const email = element.getAttribute('data-email');
-    const checked = element.checked;
+            const id = element.getAttribute('data-id');
+            const email = element.getAttribute('data-email');
+            const checked = element.checked;
 
-    if (checked) {
-        swal({
-            title: "¿Aprobar rendición?",
-            text: "Una vez aprobada, no podrá ser modificada.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: false,
-        }).then((aceptar) => {
-            if (aceptar) {
-                confirmar_aprobar_rendicion(id, email);
+            if (checked) {
+                swal({
+                    title: "¿Aprobar rendición?",
+                    text: "Una vez aprobada, no podrá ser modificada.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: false,
+                }).then((aceptar) => {
+                    if (aceptar) {
+                        confirmar_aprobar_rendicion(id, email);
+                    } else {
+                        // Si el usuario cancela, revertimos el switch
+                        element.checked = false;
+                        // Actualizar estado de botón de recepción
+                        seleccionar_bonos_rendicion();
+                    }
+                });
             } else {
-                // Si el usuario cancela, revertimos el switch
-                element.checked = false;
+                swal({
+                    title: "¿Rechazar rendición?",
+                    text: "Una vez rechazada, no podrá ser modificada.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                }).then((aceptar) => {
+                    if (aceptar) {
+                        rechazar_rendicion(id, email);
+                    } else {
+                        // Si el usuario cancela, revertimos el switch
+                        element.checked = true;
+                        // Actualizar estado de botón de recepción
+                        seleccionar_bonos_rendicion();
+                    }
+                });
             }
-        });
-    } else {
-        swal({
-            title: "¿Rechazar rendición?",
-            text: "Una vez rechazada, no podrá ser modificada.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((aceptar) => {
-            if (aceptar) {
-                rechazar_rendicion(id, email);
-            } else {
-                // Si el usuario cancela, revertimos el switch
-                element.checked = true;
+
+            // Actualizar el estado del botón de recepción después de cualquier cambio
+            setTimeout(function() {
+                seleccionar_bonos_rendicion();
+            }, 100);
+        }
+
+        function seleccionar_bonos_rendicion(){
+            console.log('seleccionar bonos rendicion');
+
+            // Obtener el estado del checkbox "enviar_todos"
+            var enviarTodos = document.getElementById('enviar_todos');
+            var table = $('#tabla_rendir_caja').DataTable();
+
+            // Usar DataTables API para obtener TODAS las filas (todas las páginas)
+            var allRows = table.rows().nodes();
+            var checkboxes = $(allRows).find('input[id^="switch_rendicion_"]');
+
+            // Si se activó "enviar_todos", seleccionar/deseleccionar todas las rendiciones
+            if (event && event.target && event.target.id === 'enviar_todos') {
+                if (enviarTodos.checked) {
+                    // Si se marca "enviar_todos", seleccionar todas
+                    checkboxes.each(function() {
+                        this.checked = true;
+                    });
+                } else {
+                    // Si se desmarca "enviar_todos", restaurar al estado inicial (solo aprobadas)
+                    checkboxes.each(function() {
+                        // Buscar en la fila padre si el estado es "APROBADA"
+                        var fila = $(this).closest('tr');
+                        var estadoCell = fila.find('td').eq(4); // La columna de estado es la 5ta (índice 4)
+                        var estadoTexto = estadoCell.text().trim();
+
+                        // Solo marcar si el estado es APROBADA
+                        this.checked = (estadoTexto === 'APROBADA');
+                    });
+                }
             }
-        });
-    }
-}
+
+            // Contar rendiciones seleccionadas usando DataTables API
+            var seleccionados = [];
+            checkboxes.each(function() {
+                if (this.checked) {
+                    var rendicionId = $(this).attr('data-id');
+                    if (rendicionId) {
+                        seleccionados.push(rendicionId);
+                    }
+                }
+            });
+
+            console.log('Rendiciones seleccionadas:', seleccionados);
+            console.log('Total checkboxes encontrados:', checkboxes.length);
+
+            // Mostrar/ocultar botón según selección
+            var boton = document.getElementById('iniciar_procesocobro_rendicion_2');
+            if(seleccionados.length > 0){
+                boton.style.display = 'block';
+            }else{
+                boton.style.display = 'none';
+            }
+
+            // Verificar si todas las rendiciones están seleccionadas para marcar/desmarcar "enviar_todos"
+            var todasSeleccionadas = true;
+            checkboxes.each(function() {
+                if (!this.checked) {
+                    todasSeleccionadas = false;
+                    return false; // break del each
+                }
+            });
+
+            // Solo marcar "enviar_todos" si TODAS están seleccionadas
+            enviarTodos.checked = todasSeleccionadas && checkboxes.length > 0;
+
+            return seleccionados;
+        }        function iniciarProcesoCobro() {
+            // Obtener las rendiciones seleccionadas
+            var rendicionesSeleccionadas = seleccionar_bonos_rendicion();
+
+            if (rendicionesSeleccionadas.length === 0) {
+                swal("Error", "Debe seleccionar al menos una rendición para iniciar el proceso de cobro.", "error");
+                return;
+            }
+
+            // Confirmar acción
+            swal({
+                title: "¿Iniciar proceso de cobro?",
+                text: "Se iniciará el proceso de cobro para " + rendicionesSeleccionadas.length + " rendición(es) seleccionada(s).",
+                icon: "warning",
+                buttons: {
+                    cancel: "Cancelar",
+                    confirm: "Confirmar"
+                },
+                dangerMode: false,
+            }).then((confirmed) => {
+                if (confirmed) {
+                    // Aquí puedes agregar la lógica para procesar las rendiciones
+                    console.log("Iniciando proceso de cobro para rendiciones:", rendicionesSeleccionadas);
+
+                    // Ejemplo de llamada AJAX al backend
+                    /*
+                    $.ajax({
+                        url: '{{ route("flujo_caja.profesional.iniciar_cobro") }}',
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            rendiciones: rendicionesSeleccionadas
+                        },
+                        success: function(response) {
+                            swal("¡Éxito!", "Proceso de cobro iniciado correctamente.", "success");
+                            // Recargar tabla o actualizar vista
+                        },
+                        error: function(error) {
+                            swal("Error", "Hubo un problema al iniciar el proceso de cobro.", "error");
+                        }
+                    });
+                    */
+
+                    // Por ahora, solo mostrar mensaje de éxito
+                    swal("¡Proceso iniciado!", "El proceso de cobro ha sido iniciado para las rendiciones seleccionadas.", "success");
+                }
+            });
+        }
 
     </script>
 @endsection

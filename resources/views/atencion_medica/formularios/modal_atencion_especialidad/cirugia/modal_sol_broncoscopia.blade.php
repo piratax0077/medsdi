@@ -131,6 +131,36 @@
 </div>
 <script>
     function sol_examen_broncoscopia() {
+        $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 895
+                },
+        })
+        .done(function(response) {
+            $('#examenes_endoscopico').val(null).trigger('change');
+
+            // Limpiar las opciones existentes
+            $('#examenes_endoscopico').empty();
+
+            // Agregar opción por defecto
+            $('#examenes_endoscopico').append('<option value="">Seleccione...</option>');
+
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#examenes_endoscopico').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+
+            // Reinicializar el select2 si es necesario
+            $('#examenes_endoscopico').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
         $('#m_bronco').modal('show');
     }
 

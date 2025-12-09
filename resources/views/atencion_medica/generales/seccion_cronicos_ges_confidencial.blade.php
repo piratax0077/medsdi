@@ -121,7 +121,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white">Controles de enfermedades crónicas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" onclick="$('#form_enfermedad_cronica').modal('hide')" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

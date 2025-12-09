@@ -6,9 +6,9 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_derma-tab" data-toggle="tab" href="#atencion_derma" role="tab" aria-controls="atencion_derma" aria-selected="true">Atención Especialidad</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{-- <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="in-ven-dermo-tab" data-toggle="tab" href="#in-ven-dermo" role="tab" aria-controls="in-ven-dermo" aria-selected="false">Venéreas</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
 
@@ -19,10 +19,19 @@
                         <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show  role="alert" id="mensaje_historias"></div>
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
                     </div>
                 </div>
             </div>
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
 
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_dermo') }}" method="POST">
@@ -44,7 +53,7 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_derma" role="tabpanel" aria-labelledby="atencion_derma-tab">
                             <div class="row">
-                                                                        
+
 								<!--Formulario / Menor de edad-->
 								@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
 								<!--Cierre: Formulario / Menor de edad-->
@@ -154,16 +163,16 @@
                                                                                 <label class="floating-label-activo-sm" for="elim_cicat">Tipo de Procedimiento</label>
                                                                                 <select class="form-control form-control-sm" name="elim_cicat" id="elim_cicat">
                                                                                     <option value = "0">Seleccione una opción</option>
-                                                                                    <option value = "1">Dermoabrasión</option>
-                                                                                    <option value = "2">Exfoliacion quimica</option>
-                                                                                    <option value = "3">Inyecciones de relleno dérmico</option>
-                                                                                    <option value = "4">Exfoliación por láser y fototerapias</option>
-                                                                                    <option value = "5">Microinjertos</option>
-                                                                                    <option value = "6">Incisión subcutánea. </option>
-                                                                                    <option value = "7">Transferencia de grasa autóloga</option>
-                                                                                    <option value = "8">Inyecciones  intralesionales</option>
-                                                                                    <option value = "9">Crioterapia</option>
-                                                                                    <option value = "10">Cremas tópicas </option>
+                                                                                    <option value = "Dermoabrasión">Dermoabrasión</option>
+                                                                                    <option value = "Exfoliacion quimica">Exfoliacion quimica</option>
+                                                                                    <option value = "Inyecciones de relleno dérmico">Inyecciones de relleno dérmico</option>
+                                                                                    <option value = "Exfoliación por láser y fototerapias">Exfoliación por láser y fototerapias</option>
+                                                                                    <option value = "Microinjertos">Microinjertos</option>
+                                                                                    <option value = "Incisión subcutánea. ">Incisión subcutánea. </option>
+                                                                                    <option value = "Transferencia de grasa autóloga">Transferencia de grasa autóloga</option>
+                                                                                    <option value = "Inyecciones  intralesionales">Inyecciones  intralesionales</option>
+                                                                                    <option value = "Crioterapia">Crioterapia</option>
+                                                                                    <option value = "Cremas tópicas">Cremas tópicas </option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -203,13 +212,13 @@
                                                                                 <label class="floating-label-activo-sm" for="proc_piel_danada"> Tipo de Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="proc_piel_danada" id="proc_piel_danada">
                                                                                     <option value = "0">Seleccione una opción</option>
-                                                                                    <option value = "1">Toxina botulínica tipo A</option>
-                                                                                    <option value = "2">Exfoliacion quimica. </option>
-                                                                                    <option value = "3">Aumento del tejido blando/inyecciones de relleno dérmico</option>
-                                                                                    <option value = "4">Dermoabrasión</option>
-                                                                                    <option value = "5">Rejuvenecimiento de la piel con láser. </option>
-                                                                                    <option value = "6">Luz pulsada intensa</option>
-                                                                                    <option value = "7">Tratamiento con tretinoína</option>
+                                                                                    <option value = "Toxina botulínica tipo A">Toxina botulínica tipo A</option>
+                                                                                    <option value = "Exfoliacion quimica.">Exfoliacion quimica. </option>
+                                                                                    <option value = "Aumento del tejido blando/inyecciones de relleno dérmico">Aumento del tejido blando/inyecciones de relleno dérmico</option>
+                                                                                    <option value = "Dermoabrasión">Dermoabrasión</option>
+                                                                                    <option value = "Rejuvenecimiento de la piel con láser. ">Rejuvenecimiento de la piel con láser. </option>
+                                                                                    <option value = "Luz pulsada intensa">Luz pulsada intensa</option>
+                                                                                    <option value = "Tratamiento con tretinoína">Tratamiento con tretinoína</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -249,11 +258,11 @@
                                                                                 <label class="floating-label-activo-sm" for="exfoliacion_proc">Motivo Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="exfoliacion_proc" id="exfoliacion_proc">
                                                                                     <option value = "0">Seleccione una opción</option>
-                                                                                    <option value = "1">Corregir el color (pigmento) desigual de la piel</option>
-                                                                                    <option value = "2">Eliminar masas precancerosas de la piel</option>
-                                                                                    <option value = "3">Suavizar el acné o tratar las cicatrices que producen</option>
-                                                                                    <option value = "4">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
-                                                                                    <option value = "5">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
+                                                                                    <option value = "Corregir el color (pigmento) desigual de la piel">Corregir el color (pigmento) desigual de la piel</option>
+                                                                                    <option value = "Eliminar masas precancerosas de la piel">Eliminar masas precancerosas de la piel</option>
+                                                                                    <option value = "Suavizar el acné o tratar las cicatrices que producen">Suavizar el acné o tratar las cicatrices que producen</option>
+                                                                                    <option value = "Tratar las arrugas que producen el sol, así como daños y tejido cicatricial">Tratar las arrugas que producen el sol, así como daños y tejido cicatricial</option>
+                                                                                    <option value = "Tratar las imperfecciones de la piel que se deben a la edad ya la herencia">Tratar las imperfecciones de la piel que se deben a la edad ya la herencia</option>
                                                                                     <option value = "6">Otro</option>
                                                                                 </select>
                                                                             </div>
@@ -261,9 +270,9 @@
                                                                                 <label class="floating-label-activo-sm" for="exfoliacion_comp">Compuesto</label>
                                                                                 <select class="form-control form-control-sm" name="exfoliacion_comp" id="exfoliacion_comp">
                                                                                     <option value = "0">Seleccione una opción</option>
-                                                                                    <option value = "1">Alfahidroxiácidos</option>
-                                                                                    <option value = "2">ácido tricloroacético</option>
-                                                                                    <option value = "3">fenol</option>
+                                                                                    <option value = "Alfahidroxiácidos">Alfahidroxiácidos</option>
+                                                                                    <option value = "ácido tricloroacético">ácido tricloroacético</option>
+                                                                                    <option value = "fenol">fenol</option>
                                                                                 </select>
                                                                             </div>
                                                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
@@ -303,8 +312,8 @@
                                                                                 <label class="floating-label-activo-sm" for="dermabras_proc">Tipo de Procedimiento </label>
                                                                                 <select class="form-control form-control-sm" name="dermabras_proc" id="dermabras_proc">
                                                                                     <option value = "0">Seleccione una opción</option>
-                                                                                    <option value = "1">DERMABRASIÓN</option>
-                                                                                    <option value = "2">DERMOPLANING</option>
+                                                                                    <option value = "DERMABRASIÓN">DERMABRASIÓN</option>
+                                                                                    <option value = "DERMOPLANING">DERMOPLANING</option>
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -429,8 +438,8 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row mb-3">
                             <div class="col-md-12 text-center">
-                                <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
                             </div>
                         </div>
                     </div>

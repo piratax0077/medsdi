@@ -337,6 +337,7 @@
             type: "GET",
             data: {
                 rut: rut,
+                id_profesional: $('#id_profesional').val()
             },
         })
         .done(function(data) {

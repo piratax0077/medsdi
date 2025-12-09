@@ -10,17 +10,17 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
                         <label class="floating-label-activo-sm">Motivo de consulta</label>
-                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo" value="{{ isset($fichaAtencion->motivo) ? $fichaAtencion->motivo : ''}}">
+                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo" value="">
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
                         <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
-                        <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes" value="{{ isset($fichaAtencion->antecedentes) ? $fichaAtencion->antecedentes : ''}}">
+                        <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes" value="">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                         <label class="floating-label-activo-sm">Observaciones al Examen de la Especialidad</label>
-                        <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="OBSERVACIONES DE LA CONSULTA Y EXAMEN FISICO RELEVANTE">{{ isset($fichaAtencion->examen_fisico) ? $fichaAtencion->examen_fisico : ''  }}</textarea>
+                        <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="OBSERVACIONES DE LA CONSULTA Y EXAMEN FISICO RELEVANTE"></textarea>
                     </div>
                 </div>
                 <div class="form-row mb-2">

@@ -15,6 +15,9 @@ class Asistente extends Model
 {
     use HasFactory;
     protected $table = 'asistentes';
+    protected $fillable = [
+        'foto_perfil',
+    ];
 
     public function Premium()
     {

@@ -58,16 +58,25 @@
                             <input type="text" class="form-control form-control-sm" name="paciente_rut_trabajo_mayor"
                                 id="paciente_rut_trabajo_mayor" value="{{ $paciente->rut }}" disabled>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12">
+                        <div class="form-group col-sm-11 col-md-11">
                             <label class="floating-label-activo-sm">Laboratorios</label>
                             <select name="lab_trabajo_mayor" id="lab_trabajo_mayor" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
-                                <option value="1">Laboratorio1</option>
-                                <option value="2">Laboratorio2</option>
-                                <option value="3">Laboratorio3</option>
-                                <option value="4">Laboratorio4</option>
+                                @if(isset($laboratorios) && count($laboratorios) > 0)
+                                    @foreach ($laboratorios as $lab)
+                                        <option value="{{ $lab->id }}">{{ $lab->nombre }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="1">Laboratorio1</option>
+                                    <option value="2">Laboratorio2</option>
+                                    <option value="3">Laboratorio3</option>
+                                    <option value="4">Laboratorio4</option>
+                                @endif
 
                             </select>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-1">
+                            <button class="btn btn-success btn-icon" type="button" id="btn_agregar_laboratorio">+</button>
                         </div>
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Guia</label>
@@ -93,12 +102,20 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
+                        <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Trabajo a realizar</label>
                             <input type="text" class="form-control form-control-sm"
                                 name="trabajo_realizar_trabajo_mayor" id="trabajo_realizar_trabajo_mayor">
 
                         </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label class="floating-label-activo-sm">Valor</label>
+                            <input type="text" class="form-control form-control-sm"
+                                name="valor_prestacion_trabajo_mayor" id="valor_prestacion_trabajo_mayor">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Comentarios</label>
                             <input type="text" class="form-control form-control-sm" name="comentarios_trabajo_mayor"
@@ -193,7 +210,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental()">Ver documento en PDF</button>
+                        
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-info" onclick="guardar_trabajo_mayor_dental()">Guardar</button>
                     </div>
@@ -223,7 +240,7 @@
                                 <td>{{ $orden->trabajo_realizar }}</td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos()"><i class="fas fa-user"></i>Solicitar permisos</button>
-                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental()">Ver PDF</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental({{ $orden->id }})">Ver PDF</button>
                                     <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_mayor_dental({{ $orden->id }})"><i class="fas fa-trash"></i></button>
                                 </td>
                              </tr>
@@ -240,109 +257,59 @@
         $('#modal_orden_trabajoM').modal('show');
     }
 
-    function generar_pdf_trabajo_mayor_dental() {
-        console.log('pdf orden trabajo mayor');
-        let campos = [
-            { id: '#nro_orden_trabajo_mayor', nombre: 'N° orden' },
-            { id: '#id_profesional_fc', nombre: 'ID Profesional' },
-            { id: '#id_paciente', nombre: 'ID Paciente' },
-            { id: '#guia_trabajo_mayor', nombre: 'Guía' },
-            { id: '#color_trabajo_mayor', nombre: 'Color' },
-            { id: '#urgencia_trabajo_mayor', nombre: 'Urgencia' },
-            { id: '#material_trabajo_mayor', nombre: 'Material' },
-            { id: '#trabajo_realizar_trabajo_mayor', nombre: 'Trabajo a realizar' },
-            { id: '#comentarios_trabajo_mayor', nombre: 'Comentarios' },
-            { id: '#marca_implante_trabajo_mayor', nombre: 'Marca implante' },
-            { id: '#medida_implante_trabajo_mayor', nombre: 'Medida implante' },
-            { id: '#nro_replicas_trabajo_mayor', nombre: 'N° Réplicas' },
-            { id: '#nro_tornillos_trabajo_mayor', nombre: 'N° Tornillos' },
-            { id: '#otros_trabajo_mayor', nombre: 'Otros' },
-            { id: '#cubetas_trabajo_mayor', nombre: 'Cubetas' },
-            { id: '#p_articulacion_trabajo_mayor', nombre: 'Prueba articulación' },
-            { id: '#p_dientes_trabajo_mayor', nombre: 'Prueba dientes' },
-            { id: '#p_metal_trabajo_mayor', nombre: 'Prueba metal' },
-            { id: '#bizcocho_trabajo_mayor', nombre: 'Bizcocho' },
-            { id: '#terminacion_trabajo_mayor', nombre: 'Terminación' },
-            { id: '#compostura_trabajo_mayor', nombre: 'Compostura' }
-        ];
+    function generar_pdf_trabajo_mayor_dental(id_orden_trabajo) {
+    
+        let url = "{{ ROUTE('dental.generar_pdf_trabajo_mayor') }}";
+       let data = {
+        id_orden_trabajo: id_orden_trabajo,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        _token: CSRF_TOKEN
+       }
 
-        let valido = 1;
-        let mensaje = '';
-        let data = {};
-
-        campos.forEach(campo => {
-            let valor = $(campo.id).val().trim();
-            if (valor === '') {
-                valido = 0;
-                mensaje += `<li>${campo.nombre}</li>`;
-            } else {
-                data[campo.clave] = valor;
-            }
-        });
-
-        if (!valido) {
-            swal({
-                    title: "Campos requeridos",
-                    content:{
-                        element: "div",
-                        attributes:{
-                            innerHTML: mensaje,
-                        },
-                    },
-                    icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                });
-        } else {
-            let url = "{{ ROUTE('dental.generar_pdf_trabajo_mayor') }}";
-        let data = {
-            nro_orden_trabajo_mayor: $('#nro_orden_trabajo_mayor').val(),
-            clinica_doctor_trabajo_mayor: $('#clinica_doctor_trabajo_mayor').val(),
-            rut_profesional_trabajo_mayor: $('#rut_profesional_trabajo_mayor').val(),
-            id_profesional: $('#id_profesional_fc').val(),
-            paciente_trabajo_mayor: $('#id_paciente').val(),
-            guia_trabajo_mayor: $('#guia_trabajo_mayor').val(),
-            color_trabajo_mayor: $('#color_trabajo_mayor').val(),
-            urgencia_trabajo_mayor: $('#urgencia_trabajo_mayor').val(),
-            material_trabajo_mayor: $('#material_trabajo_mayor').val(),
-            trabajo_realizar_trabajo_mayor: $('#trabajo_realizar_trabajo_mayor').val(),
-            comentarios_trabajo_mayor: $('#comentarios_trabajo_mayor').val(),
-            marca_implante_trabajo_mayor: $('#marca_implante_trabajo_mayor').val(),
-            _medida_implantetrabajo_mayor: $('#medida_implante_trabajo_mayor').val(),
-            nro_replicas_trabajo_mayor: $('#nro_replicas_trabajo_mayor').val(),
-            nro_tornillos_trabajo_mayor: $('#nro_tornillos_trabajo_mayor').val(),
-            otros_trabajo_mayor: $('#otros_trabajo_mayor').val(),
-            cubetas_trabajo_mayor: $('#cubetas_trabajo_mayor').val(),
-            p_articulacion_trabajo_mayor: $('#p_articulacion_trabajo_mayor').val(),
-            p_dientes_trabajo_mayor: $('#p_dientes_trabajo_mayor').val(),
-            p_metal_trabajo_mayor: $('#p_metal_trabajo_mayor').val(),
-            bizcocho_trabajo_mayor: $('#bizcocho_trabajo_mayor').val(),
-            terminacion_trabajo_mayor: $('#terminacion_trabajo_mayor').val(),
-            compostura_trabajo_mayor: $('#compostura_trabajo_mayor').val(),
-            id_ficha_atencion: $('#id_fc').val(),
-            id_lugar_atencion: $('#id_lugar_atencion').val(),
-            _token: CSRF_TOKEN
-        }
-
-        $.ajax({
-                type:'post',
-                url: url,
-                data: data,
-                success: function(resp){
-                    console.log(resp);
-                    if(resp.estado == 'ok'){
-                        swal({
-                            icon:'success',
-                            title:'Exito',
-                            text: resp.mensaje
-                        });
-                    }
-                },
-                error: function(error){
-                    console.log(error);
+       $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data == 'error'){
+                    swal({
+                        title:'Error',
+                        text:'Primero debe generar la liquidación.',
+                        icon:'error',
+                        button:"Aceptar"
+                    });
+                    return false;
                 }
-        });
-        }
-    }
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+       });
+    
+}
 
 </script>

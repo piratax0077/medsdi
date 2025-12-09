@@ -357,7 +357,7 @@
                         let contacto = data.contacto;
                         $('#nombre_completo_contacto').text(contacto.nombres);
                         $('#apellidos_contacto').text(contacto.apellido_uno + ' ' + contacto.apellido_dos)
-
+                        $('#direccion_contacto').text(data.direccion.direccion.direccion);
                         $('#email_contacto_').text(contacto.email);
                         $('#telefono_contacto').text(contacto.telefono_uno);
                         $('#comuna_region_contacto').html(contacto.ciudad + '<br> ' + contacto.region);
@@ -461,7 +461,7 @@
                         $('#email_paciente_').text(paciente.email);
                         $('#telefono_paciente').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-
+ $('#direccion_paciente_').text(data.direccion.direccion.direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);

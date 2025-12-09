@@ -243,10 +243,10 @@
                                                     <div class="col-md-6">
                                                         <div class="btn-group mr-2 float-md-right">
                                                             <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_limpieza_mantencion();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal de limpieza y mantención</button>
-                                                            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                            {{-- <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
                                                             <div class="dropdown-menu">
                                                                 <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal de limpieza y mantencion</button>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1703,69 +1703,40 @@
 
     function buscar_profesional(){
 
-let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
+        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
 
-if(id_lugar_atencion == '')
-{
-    swal({
-        title: "Debe seleccionar una sucursal",
-        icon: "error",
-    });
-    return false;
-}
+        if(id_lugar_atencion == '')
+        {
+            swal({
+                title: "Debe seleccionar una sucursal",
+                icon: "error",
+            });
+            return false;
+        }
 
-$('#agregar_profesional_btn_buscar_rut').attr('disabled', 'disabled');
-var rut = $('#agregar_profesional_int_rut').val();
-if(rut == ''){
-    swal({
-        title: "Debe ingresar un RUT",
-        icon: "error",
-    });
-    return false;
-}
-if(!$.validateRut(rut))
-{
-    swal({
-        title: "Debe ingresar un RUT valido",
-        icon: "error",
-    });
-    return false;
-}
+        $('#agregar_profesional_btn_buscar_rut').attr('disabled', 'disabled');
+        var rut = $('#agregar_profesional_int_rut').val();
+        if(rut == ''){
+            swal({
+                title: "Debe ingresar un RUT",
+                icon: "error",
+            });
+            return false;
+        }
+        if(!$.validateRut(rut))
+        {
+            swal({
+                title: "Debe ingresar un RUT valido",
+                icon: "error",
+            });
+            return false;
+        }
 
-{{--  busqueda  --}}
-let profesional_inter = $('#profesional_inter');
-profesional_inter.find('option').remove();
+        {{--  busqueda  --}}
+        let profesional_inter = $('#profesional_inter');
+        profesional_inter.find('option').remove();
 
-let url = "{{ route('profesional.buscador') }}";
-$.ajax({
-    url: url,
-    type: "get",
-    data: {
-        rut: rut
-    },
-})
-.done(function(data) {
-    if (data.estado == 1)
-    {
-        console.log(data);
-        /** encontrado */
-        $('#agregar_profesional_id_profesional').val(data.registros[0].profesionales_id);
-        $('#agregar_profesional_texto_ver_nombre_profesional').html(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
-        $('#agregar_profesional_texto_ver_telefono').html(data.registros[0].profesional_telefono_uno);
-        $('#agregar_profesional_texto_ver_email').html(data.registros[0].profesional_email);
-        $('#agregar_profesional_ver_nombre_profesional').val(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
-        $('#agregar_profesional_ver_telefono').val(data.registros[0].profesional_telefono_uno);
-        $('#agregar_profesional_ver_email').val(data.registros[0].profesional_email);
-
-        $('#div_agregar_profesional_busqueda').hide();
-        $('#div_agregar_profesional_ver_info_prof').show();
-        $('#div_agregar_profesional_formulario_nuevo_prof').hide();
-    }
-    else
-    {
-        /** no encontrado */
-        /** REALIZAR BUSQUEDA TABLA DE PROFESIONALES EXISTENTES EXTERNOS (POR HACER) */
-        let url = "{{ route('personas.buscador') }}";
+        let url = "{{ route('profesional.buscador') }}";
         $.ajax({
             url: url,
             type: "get",
@@ -1773,32 +1744,67 @@ $.ajax({
                 rut: rut
             },
         })
-        .done(function(data2) {
-            if (data2.estado == 1)
+        .done(function(data) {
+            if (data.estado == 1)
             {
+                console.log(data);
                 /** encontrado */
-                $('#agregar_profesional_nuevo_apellido_p').val( data2.registros.appaterno );
-                $('#agregar_profesional_nuevo_apellido_m').val( data2.registros.apmaterno );
-                $('#agregar_profesional_nuevo_telefono').val( '' );
-                $('#agregar_profesional_nuevo_email').val( '' );
+                $('#agregar_profesional_id_profesional').val(data.registros[0].profesionales_id);
+                $('#agregar_profesional_texto_ver_nombre_profesional').html(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
+                $('#agregar_profesional_texto_ver_telefono').html(data.registros[0].profesional_telefono_uno);
+                $('#agregar_profesional_texto_ver_email').html(data.registros[0].profesional_email);
+                $('#agregar_profesional_ver_nombre_profesional').val(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
+                $('#agregar_profesional_ver_telefono').val(data.registros[0].profesional_telefono_uno);
+                $('#agregar_profesional_ver_email').val(data.registros[0].profesional_email);
 
                 $('#div_agregar_profesional_busqueda').hide();
-                $('#div_agregar_profesional_ver_info_prof').hide();
-                $('#div_agregar_profesional_formulario_nuevo_prof').show();
+                $('#div_agregar_profesional_ver_info_prof').show();
+                $('#div_agregar_profesional_formulario_nuevo_prof').hide();
             }
             else
             {
                 /** no encontrado */
-                $('#agregar_profesional_nuevo_nombre').val();
-                $('#agregar_profesional_nuevo_apellido_p').val();
-                $('#agregar_profesional_nuevo_apellido_m').val();
-                $('#agregar_profesional_nuevo_telefono').val();
-                $('#agregar_profesional_nuevo_email').val();
+                /** REALIZAR BUSQUEDA TABLA DE PROFESIONALES EXISTENTES EXTERNOS (POR HACER) */
+                let url = "{{ route('personas.buscador') }}";
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        rut: rut
+                    },
+                })
+                .done(function(data2) {
+                    if (data2.estado == 1)
+                    {
+                        /** encontrado */
+                        $('#agregar_profesional_nuevo_apellido_p').val( data2.registros.appaterno );
+                        $('#agregar_profesional_nuevo_apellido_m').val( data2.registros.apmaterno );
+                        $('#agregar_profesional_nuevo_telefono').val( '' );
+                        $('#agregar_profesional_nuevo_email').val( '' );
 
-                $('#div_agregar_profesional_busqueda').hide();
-                $('#div_agregar_profesional_ver_info_prof').hide();
-                $('#div_agregar_profesional_formulario_nuevo_prof').show();
+                        $('#div_agregar_profesional_busqueda').hide();
+                        $('#div_agregar_profesional_ver_info_prof').hide();
+                        $('#div_agregar_profesional_formulario_nuevo_prof').show();
+                    }
+                    else
+                    {
+                        /** no encontrado */
+                        $('#agregar_profesional_nuevo_nombre').val();
+                        $('#agregar_profesional_nuevo_apellido_p').val();
+                        $('#agregar_profesional_nuevo_apellido_m').val();
+                        $('#agregar_profesional_nuevo_telefono').val();
+                        $('#agregar_profesional_nuevo_email').val();
 
+                        $('#div_agregar_profesional_busqueda').hide();
+                        $('#div_agregar_profesional_ver_info_prof').hide();
+                        $('#div_agregar_profesional_formulario_nuevo_prof').show();
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
             }
 
         })
@@ -1806,12 +1812,6 @@ $.ajax({
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
-
-})
-.fail(function(jqXHR, ajaxOptions, thrownError) {
-    console.log(jqXHR, ajaxOptions, thrownError)
-});
-}
 
 function regresar_a_busqueda()
 {

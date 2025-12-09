@@ -3,12 +3,12 @@
 <head>
 	<?php
 		require_once('include/head.php');
-	?>	
+	?>
 </head>
 <body>
 	<?php
 		//require_once('include/conexion.php');
-	?>	
+	?>
 	<?php
 		require_once('include/header.php');
 	?>
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!--Especialidades Médicas-->
 	<div id="esp-med">
 		<div data-aos="fade-up"
@@ -283,7 +283,7 @@
 					        		<li>Doppler fetal</li>
 					        		<li>3D</li><br>
 					        		<li><strong>Contacto:</strong> (32) 2188947 / (32) 2921287</li>
-					        		<li><strong>Whatsapp:</strong> +569 42498385</li>			        	
+					        		<li><strong>Whatsapp:</strong> +569 42498385</li>
 					        	</ul>
 					        </div>
 					    </div>
@@ -390,7 +390,81 @@
 			</div>
 		</div>
 
+	<!-- Modal Confirmar Reserva -->
+	<div class="modal fade" id="modalConfirmarReserva" tabindex="-1" aria-labelledby="modalConfirmarReservaLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header bg-info text-white">
+					<h5 class="modal-title" id="modalConfirmarReservaLabel">
+						<i class="fa-solid fa-calendar-check"></i> Confirmar Reserva de Hora
+					</h5>
+					<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Datos del Paciente -->
+					<div class="card border-0 shadow-sm mb-3">
+						<div class="card-header bg-light">
+							<h6 class="mb-0 text-petroleo"><i class="fa-solid fa-user"></i> Datos del Paciente</h6>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<p class="mb-2"><strong>RUT:</strong> <span id="confirmar_rut"></span></p>
+									<p class="mb-2"><strong>Nombre:</strong> <span id="confirmar_nombre"></span></p>
+									<p class="mb-2"><strong>Fecha Nacimiento:</strong> <span id="confirmar_fecha_nac"></span></p>
+									<p class="mb-2"><strong>Edad:</strong> <span id="confirmar_edad"></span> años</p>
+									<p class="mb-2"><strong>Sexo:</strong> <span id="confirmar_sexo"></span></p>
+								</div>
+								<div class="col-md-6">
+									<p class="mb-2"><strong>Previsión:</strong> <span id="confirmar_prevision"></span></p>
+									<p class="mb-2"><strong>Email:</strong> <span id="confirmar_email"></span></p>
+									<p class="mb-2"><strong>Teléfono:</strong> <span id="confirmar_telefono"></span></p>
+									<p class="mb-2"><strong>Dirección:</strong> <span id="confirmar_direccion"></span></p>
+									<p class="mb-2"><strong>Ciudad:</strong> <span id="confirmar_ciudad"></span></p>
+								</div>
+							</div>
+						</div>
+					</div>
 
+					<!-- Datos de la Cita -->
+					<div class="card border-0 shadow-sm">
+						<div class="card-header bg-light">
+							<h6 class="mb-0 text-petroleo"><i class="fa-solid fa-calendar-days"></i> Datos de la Cita</h6>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<p class="mb-2"><strong>Fecha:</strong> <span id="confirmar_fecha_cita"></span></p>
+									<p class="mb-2"><strong>Hora:</strong> <span id="confirmar_hora_cita"></span></p>
+								</div>
+								<div class="col-md-6">
+									<p class="mb-2"><strong>Profesional:</strong> <span id="confirmar_profesional"></span></p>
+									<p class="mb-2"><strong>Especialidad:</strong> <span id="confirmar_especialidad"></span></p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Inputs ocultos para enviar datos -->
+					<input type="hidden" id="reserva_id_paciente">
+					<input type="hidden" id="reserva_id_profesional">
+					<input type="hidden" id="reserva_id_lugar_atencion">
+					<input type="hidden" id="reserva_fecha_consulta">
+					<input type="hidden" id="reserva_hora_consulta">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						<i class="fa-solid fa-times"></i> Cancelar
+					</button>
+					<button type="button" class="btn btn-info" onclick="confirmarReserva();">
+						<i class="fa-solid fa-check"></i> Confirmar Reserva
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- DATOS DE VITAL IMPORTANCIA -->
 	<input type="hidden" name="id_paciente" id="id_paciente" value="0">
@@ -402,12 +476,14 @@
 	</footer>
 
 	<script src="assets/js/jquery-3.6.0.min.js"></script>
+	<!-- Flatpickr JS - debe ir después de jQuery -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/popper.min.js"></script>
 	<script src="assets/js/modals.js"></script>
 	<script src="assets/js/aos.js"></script>
-	
-	
+
+
 	<script type="text/javascript">
 		$('.carousel').carousel({
 		interval: 3000
@@ -433,7 +509,7 @@
 			},
 			success: function(resp){
 				let especialidades = resp;
-			
+
 				$('#modal_reserva_id_profesion').empty();
 				$('#modal_reserva_id_profesion').append(`<option value="0">Seleccione </option>`);
 				especialidades.forEach(e => {
@@ -466,7 +542,7 @@
 					$('#modal_reserva_id_tipo_especialidad').empty();
 					console.log(resp);
 					let especialidades = resp;
-				
+
 					$('#modal_reserva_id_especialidad').empty();
 					$('#modal_reserva_id_especialidad').append(`<option value="0">Seleccione </option>`);
 					especialidades.forEach(e => {
@@ -497,7 +573,7 @@
 					console.log(resp);
 					if(resp.value == 'tipos_especialidades'){
 						let especialidades = resp.tipos_especialidades;
-				
+
 						$('#modal_reserva_id_tipo_especialidad').empty();
 						$('#modal_reserva_id_tipo_especialidad').append(`<option value="0">Seleccione </option>`);
 						especialidades.forEach(e => {
@@ -523,12 +599,12 @@
 							html += '            <div class="text-center">';
 							html += '                <a href="#!" data-toggle="modal" data-target="#modal-report">';
 							html += '                    <span class="badge badge-primary mt-2">';
-							
+
 							html += '                    </span>';
 							html += '                    <h6 class="mb-1 mt-2">'+p.nombre+' '+p.apellido_uno+' '+p.apellido_dos+'</h6>';
 							html += '                </a>';
 
-						
+
 
 							html += '                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional('+p.id+');"><i class="feather icon-file-plus"></i> Ver ficha</button>';
 							html += '                <button type="button" class="btn btn-info btn-sm" onclick="hora_medica('+p.id+');"><i class="feather icon-calendar"></i> Reservar hora</button>';
@@ -536,11 +612,11 @@
 							html += '        </div>';
 							html += '    </div>';
 							html += '</div>';
-				
+
 							$('#div_resultado_busqueda').append(html);
 						});
 					}
-					
+
 				},
 				error: function(error){
 					console.log(error.responseText);
@@ -566,7 +642,7 @@
 					id_lugar_atencion: id_lugar_atencion
 				},
 				success: function(resp){
-				
+
 					console.log(resp);
 					let profesionales = resp.profesionales;
 					$('#div_resultado_busqueda').empty();
@@ -582,7 +658,7 @@
 						html += '  </div>';
 						html += '</div>';
 
-				
+
 						$('#div_resultado_busqueda').append(html);
 					});
 				},
@@ -593,8 +669,8 @@
 		}
 
 		function buscarPaciente(event){
-			// AL INGRESAR EL RUT DEL PACIENTE Y SI SE ENCUENTRA PREGUNTAR SI DESEA CARGAR SU INFORMACION, SI ACEPTA 
-			// SE ENVIA UNA CORREO AL PACIENTE ENVIANDOLE UN CODIGO, CON ESE CODIGO SI COINCIDEN SE MUESTRAN LOS DATOS DEL 
+			// AL INGRESAR EL RUT DEL PACIENTE Y SI SE ENCUENTRA PREGUNTAR SI DESEA CARGAR SU INFORMACION, SI ACEPTA
+			// SE ENVIA UNA CORREO AL PACIENTE ENVIANDOLE UN CODIGO, CON ESE CODIGO SI COINCIDEN SE MUESTRAN LOS DATOS DEL
 			//PACIENTE
 			var rut = $('#rut_paciente').val();
 			if(rut == ''){
@@ -633,9 +709,9 @@
 						$('#paciente_direccion').text(paciente.direccion.direccion + ' Nº ' + paciente.direccion.numero_dir);
 
 						$('#id_paciente').val(paciente.id);
-						
+
 						//$('#info_paciente_detalle').show();
-						
+
 						// El resto de tu lógica para llenar los inputs o medicamentos puede seguir como ya está
 						// setTimeout(() => {
 						// 	$('#paciente_saludo').fadeOut();
@@ -658,7 +734,7 @@
 					});
 				}
 			});
-			
+
 		}
 
 		function hora_medica(id_profesional){
@@ -666,7 +742,7 @@
 			let id_lugar_atencion = 12;
 
 			$('#modal_reserva_hora_id_profesional').val(id_profesional);
-	
+
 			let url = 'https://med-sdi.cl/api/horas_medicas_profesional_lugar_atencion';
 
 			$.ajax({
@@ -705,32 +781,30 @@
 						$('#div_resultado_busqueda_hora_').removeClass('d-none');
 						$('#modal_reserva_dias_atencion').html(dias_texto);
 
-						/** calendario */
-						$('#modal_reserva_fecha').attr('disabled',false);
+					/** calendario */
+					$('#modal_reserva_fecha').attr('disabled',false);
 
-						$("#modal_reserva_fecha").flatpickr({
-							"disable": [
-								function(date) {
-									return !dias_activos.includes(String(date.getDay()));
-								}
-							],
-							minDate: "today",
-							maxDate: new Date().fp_incr(60), // 14 days from now
-							locale: {
-								firstDayOfWeek: 1,
-								weekdays: {
-								shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-								longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-								},
-								months: {
-								shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
-								longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-								},
+					$("#modal_reserva_fecha").flatpickr({
+						"disable": [
+							function(date) {
+								return !dias_activos.includes(String(date.getDay()));
+							}
+						],
+						minDate: "today",
+						maxDate: new Date(new Date().setDate(new Date().getDate() + 60)), // 60 days from now
+						locale: {
+							firstDayOfWeek: 1,
+							weekdays: {
+							shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+							longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
 							},
-						});
-						/** fin calendario */
-
-					}
+							months: {
+							shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+							longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+							},
+						},
+					});
+					/** fin calendario */					}
 					else
 					{
 						$('#modal_reserva_dias_atencion').html('NO INFORMADOS');
@@ -757,7 +831,9 @@
 			console.log('cargar_horas_disponibles_calendario_profesion');
 			console.log(dia);
 
-	
+			// Guardar la fecha seleccionada
+			$('#modal_reserva_hora_fecha_consulta').val(dia);
+
 			let url = 'https://med-sdi.cl/api/horas_disponibles_profesional_lugar_atencion';
 			$.ajax({
 				url: url,
@@ -796,6 +872,216 @@
 				console.log(jqXHR, ajaxOptions, thrownError)
 			});
 
+		}
+
+		// Función para generar reserva de cita (mostrar confirmación)
+		function generar_reserva_cita(hora) {
+			let id_paciente = $('#id_paciente').val();
+			let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+			let id_lugar_atencion = 12;
+			let fecha_consulta = $('#modal_reserva_hora_fecha_consulta').val();
+
+			// Llamar a la API para obtener datos del paciente
+			let url = "https://med-sdi.cl/api/obtener_datos_paciente_por_rut_agenda";
+
+			$.ajax({
+				url: url,
+				type: "post",
+				data: {
+					id_paciente: id_paciente,
+					id_profesional: id_profesional,
+					id_lugar_atencion: id_lugar_atencion,
+					fecha_consulta: fecha_consulta,
+					hora: hora
+				},
+			})
+			.done(function(data) {
+				console.log(data);
+				if (data.estado == 1)
+				{
+					// Llenar datos del paciente en la confirmación
+					$('#confirmar_rut').text(data.registro.rut);
+					$('#confirmar_nombre').text(data.registro.nombres + ' ' + data.registro.apellido_uno + ' ' + data.registro.apellido_dos);
+					$('#confirmar_fecha_nac').text(data.registro.fecha_nac);
+					$('#confirmar_edad').text(data.registro.edad + ' años');
+					$('#confirmar_sexo').text(data.registro.sexo == 'M' ? 'Masculino' : 'Femenino');
+					$('#confirmar_prevision').text(data.registro.prevision.nombre);
+					$('#confirmar_email').text(data.registro.email);
+					$('#confirmar_telefono').text(data.registro.telefono_uno);
+					$('#confirmar_direccion').text(data.registro.direccion.direccion + ' ' + data.registro.direccion.numero_dir);
+					$('#confirmar_ciudad').text(data.registro.direccion.ciudad.nombre);
+
+					// Llenar datos de la cita
+					$('#confirmar_fecha_cita').text(fecha_consulta);
+					$('#confirmar_hora_cita').text(hora);
+					$('#confirmar_profesional').text(data.profesional.nombre + ' ' + data.profesional.apellido_uno + ' ' + data.profesional.apellido_dos);
+					let especialidad = '';
+					if(data.profesional.tipo_especialidad){
+						especialidad = data.profesional.tipo_especialidad.nombre;
+					}
+					if(data.profesional.sub_tipo_especialidad){
+						especialidad += ' - ' + data.profesional.sub_tipo_especialidad.nombre;
+					}
+					$('#confirmar_especialidad').text(especialidad);
+
+					// Guardar datos en inputs ocultos
+					$('#reserva_id_paciente').val(data.registro.id);
+					$('#reserva_id_profesional').val(id_profesional);
+					$('#reserva_id_lugar_atencion').val(id_lugar_atencion);
+					$('#reserva_fecha_consulta').val(fecha_consulta);
+					$('#reserva_hora_consulta').val(hora);
+
+					// Ocultar contenido de selección de hora y mostrar confirmación dentro del modal
+					$('#modal_contenido_seleccion').hide();
+					$('#divConfirmarReserva').removeClass('d-none').show();
+				}
+				else
+				{
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: data.msj || 'No se pudo obtener los datos del paciente',
+					});
+				}
+			})
+			.fail(function(jqXHR, ajaxOptions, thrownError) {
+				console.log(jqXHR, ajaxOptions, thrownError);
+				Swal.fire({
+					icon: 'error',
+					title: 'Error',
+					text: 'Error al obtener datos del paciente',
+				});
+			});
+		}
+
+		// Función para confirmar y guardar la reserva
+		function confirmarReserva() {
+			let id_paciente = $('#reserva_id_paciente').val();
+			let id_profesional = $('#reserva_id_profesional').val();
+			let id_lugar_atencion = $('#reserva_id_lugar_atencion').val();
+			let fecha_consulta = $('#reserva_fecha_consulta').val();
+			let hora_consulta = $('#reserva_hora_consulta').val();
+
+			let url = "https://med-sdi.cl/api/confirmar_reserva";
+
+			$.ajax({
+				url: url,
+				type: "post",
+				data: {
+					id_paciente: id_paciente,
+					id_profesional: id_profesional,
+					id_lugar_atencion: id_lugar_atencion,
+					fecha_consulta: fecha_consulta,
+					hora_consulta: hora_consulta
+				},
+			})
+			.done(function(data) {
+				console.log(data);
+
+				// Limpiar modal PRIMERO
+				limpiarModalAgendarHora();
+
+				// Cerrar el modal
+				$('#modalAgendarHora').modal('hide');
+
+				// Esperar 300ms y limpiar completamente los restos del modal
+				setTimeout(function() {
+					// Eliminar todos los backdrops
+					$('.modal-backdrop').remove();
+					// Limpiar estilos del body
+					$('body').removeClass('modal-open').css({'padding-right': '', 'overflow': ''});
+					// Eliminar atributos del modal
+					$('#modalAgendarHora').removeAttr('aria-hidden').removeAttr('style').removeClass('show');
+
+					// Mostrar mensaje de éxito/error
+					if (data.estado == 1) {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Reserva Confirmada!',
+							text: 'Su hora médica ha sido agendada exitosamente.',
+							confirmButtonColor: '#17a2b8'
+						});
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Error',
+							text: data.mensaje || 'No se pudo confirmar la reserva. Intente nuevamente.',
+						});
+					}
+				}, 300);
+			})
+			.fail(function(jqXHR, ajaxOptions, thrownError) {
+				console.log(jqXHR, ajaxOptions, thrownError);
+
+				// Limpiar modal PRIMERO
+				limpiarModalAgendarHora();
+
+				// Cerrar el modal
+				$('#modalAgendarHora').modal('hide');
+
+				// Esperar 300ms y limpiar completamente los restos del modal
+				setTimeout(function() {
+					// Eliminar todos los backdrops
+					$('.modal-backdrop').remove();
+					// Limpiar estilos del body
+					$('body').removeClass('modal-open').css({'padding-right': '', 'overflow': ''});
+					// Eliminar atributos del modal
+					$('#modalAgendarHora').removeAttr('aria-hidden').removeAttr('style').removeClass('show');
+
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Ocurrió un error al procesar su solicitud. Intente nuevamente.',
+					});
+				}, 300);
+			});
+		}
+
+		// Función para ocultar el div de confirmación
+		function ocultarConfirmacion() {
+			$('#divConfirmarReserva').addClass('d-none').hide();
+			$('#modal_contenido_seleccion').show();
+		}
+
+		// Función para limpiar completamente el modal de agendar hora
+		function limpiarModalAgendarHora() {
+			// Limpiar inputs
+			$('#rut_paciente').val('');
+			$('#modal_reserva_hora_id_profesional').val('');
+			$('#modal_reserva_hora_fecha_consulta').val('');
+			$('#id_paciente').val('0');
+			$('#modal_reserva_fecha').val('');
+
+			// Limpiar selects
+			$('#modal_reserva_id_profesion').val('0');
+			$('#modal_reserva_id_especialidad').empty().append('<option value="0">Seleccione</option>');
+			$('#modal_reserva_id_tipo_especialidad').empty().append('<option value="0">Seleccione</option>');
+
+			// Limpiar resultados de búsqueda
+			$('#div_resultado_busqueda').empty();
+			$('#modal_reserva_hora_lista_horas').empty();
+
+			// Ocultar secciones
+			$('#div_resultado_busqueda_hora').addClass('d-none');
+			$('#div_resultado_busqueda_hora_').addClass('d-none');
+			$('#info_paciente_detalle').hide();
+			$('#paciente_saludo').addClass('d-none');
+			$('#form_registro_paciente').hide();
+
+			// Limpiar textos
+			$('#modal_reserva_dias_atencion').text('');
+			$('#modal_reserva_fecha_seleccionada').text('');
+
+			// Asegurarse de que el contenido de selección esté visible
+			$('#modal_contenido_seleccion').show();
+			$('#divConfirmarReserva').addClass('d-none').hide();
+
+			// Limpiar campos de confirmación
+			$('#confirmar_rut, #confirmar_nombre, #confirmar_fecha_nac, #confirmar_edad, #confirmar_sexo').text('');
+			$('#confirmar_prevision, #confirmar_email, #confirmar_telefono, #confirmar_direccion, #confirmar_ciudad').text('');
+			$('#confirmar_fecha_cita, #confirmar_hora_cita, #confirmar_profesional, #confirmar_especialidad').text('');
+			$('#reserva_id_paciente, #reserva_id_profesional, #reserva_id_lugar_atencion').val('');
+			$('#reserva_fecha_consulta, #reserva_hora_consulta').val('');
 		}
 
 		function formatoRut(rut)

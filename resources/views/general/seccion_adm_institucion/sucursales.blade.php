@@ -7,10 +7,10 @@
                         <h6 class="f-18 d-inline mt-3 text-info">Sucursales</h6>
                         <div class="btn-group mb-2 mr-2 float-right">
                             <button type="button" class="btn btn-info btn-sm" onclick="ag_sucursal();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir nueva</button>
-                            <button type="button" class="btn btn-outline-info  btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                            {{-- <button type="button" class="btn btn-outline-info  btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
                             <div class="dropdown-menu">
                                 <button class="dropdown-item" type="button" class="btn  btn-primary" data-toggle="modal" data-target="#modal_agregar_lugar_existente">Desasociar o agregar<br> lugar de atención <br>existente</button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -55,6 +55,8 @@
                                         {{-- <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="asis_sucursal({{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Asistentes"><i class="feather icon-user"></i></button> --}}
                                         <!--Botón Modal-->
                                         <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="hor_sucursal({{ $suc->id_institucion }}, {{ $suc->id_lugar_atencion }}, {{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Horario de sucursal"><i class="feather icon-watch"></i></button>
+                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="adm_boxes({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Administrar boxes"><i class="feather icon-box"></i></button>
+                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="adm_bodegas({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }},{{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Administrar bodegas"><i class="feather icon-archive"></i></button>
                                     </td>
                                 </tr>
 
@@ -91,6 +93,48 @@
 </div>
 
 {{--  MODAL  SUCURSAL  --}}
+<div id="bodegas_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bodegas_sucursal_label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center" id="bodegas_sucursal_label">Administrar bodegas de {{ $institucion->nombre }}
+                    <!--Sin los parentesis, solo cargar el nombre de la sucursal-->
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!--TABLA RESPONSIVA HACIA ABAJO-->
+                        <table id="bodegas_sucursal_tabla"
+                            class="display table table-striped dt-responsive nowrap text-center table-xs"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($bodegas as $bodega)
+                                    <tr>
+                                        <td class="align-middle">{{ $bodega->nombre }}</td>
+                                        <td class="align-middle">{{ $bodega->descripcion }}</td>
+                                        <td class="align-middle">
+                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="asignar_bodega({{ $bodega->id }});" data-toggle="tooltip" data-placement="top" title="Asignar"><i class="feather icon-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="a_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_sucursal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -160,6 +204,13 @@
                             <label class="floating-label-activo-sm">Teléfono (opcional)</label>
                             <input class="form-control form-control-sm" name="a_sucursal_telefono_2" id="a_sucursal_telefono_2"
                                 type="text">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group fill">
+                            <label class="floating-label-activo-sm">Valor del examen (%)</label>
+                            <input class="form-control form-control-sm" name="a_sucursal_valor" id="a_sucursal_valor"
+                                type="number" value="100">
                         </div>
                     </div>
                     {{-- <div class="col-sm-12">
@@ -487,6 +538,156 @@
     </div>
 </div>
 
+<div id="boxes_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="boxes_sucursal">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Administrar boxes de {{ $institucion->nombre }}
+                    <!--Sin los parentesis, solo cargar el nombre de la sucursal-->
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="bodegas_sucursal_id_institucion" id="bodegas_sucursal_id_institucion" value="{{ $institucion->id }}">
+                <input type="hidden" name="bodegas_sucursal_id_lugar_atencion" id="bodegas_sucursal_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!--TABLA RESPONSIVA HACIA ABAJO-->
+                        <table id="boxes_sucursal_tabla"
+                            class="display table table-striped dt-responsive nowrap text-center table-xs"
+                            style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>N° de box</th>
+                                    <th>Tipo especialización</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- Contenido cargado por JS --}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                            <button type="button" class="btn btn-success" onclick="mostrar_formulario_nuevo_box()">Nuevo box</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="formulario_nuevo_box" class="d-none">
+                    <hr>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="col-md-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Asignar N° al box</label>
+                                                <input type="text" name="numero_box" id="numero_box" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Tipo Box</label>
+                                                <select class="form-control form-control-sm" name="tpo_box_servicio" id="tpo_box_servicio" onchange="dame_especializacion_box()">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="Normal">Normal</option>
+                                                    <option value="Especializado">Especializado</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12" id="contenedor_tpo_especializacion">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Tipo de especialización</label>
+                                                <select class="form-control form-control-sm" name="tpo_especializacion" id="tpo_especializacion">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="Oftalmologia">Oftalmología</option>
+                                                    <option value="Otorrino">Otorrino</option>
+                                                    <option value="Odontologia general">Odontologia general</option>
+                                                    <option value="Sala de procedimientos">Sala de procedimientos</option>
+                                                    <option value="Vacunatorio">Vacunatorio</option>
+                                                    <option value="Kinesiologia y rehabilitacion">Kinesiologia y rehabilitacion</option>
+                                                    <option value="Etc">Etc</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 d-none">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Equipamiento</label>
+                                                <select class="form-control form-control-sm" name="equip_ad" id="equip_ad" multiple="multiple">
+                                                    <option value="Carro paro">Carro paro</option>
+                                                    <option value="Oxigenoterápia">Oxigenoterápia</option>
+                                                    <option value="Pabellon de yeso">Pabellon de yeso</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6 d-none">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Cantidad de camillas</label>
+                                                <input type="number" class="form-control form-control-sm" name="n_camillas_box_servicio" id="n_camillas_box_servicio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Ubicación</label>
+                                                <select class="form-control form-control-sm" name="tpo_equip_servicio" id="tpo_equip_servicio">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="1">Piso 1</option>
+                                                    <option value="2">Piso 2</option>
+                                                    <option value="3">Piso 3</option>
+                                                    <option value="4">Piso 4</option>
+                                                    <option value="5">Piso 5</option>
+                                                    <option value="6">Piso 6</option>
+                                                    <option value="7">Piso 7</option>
+                                                    <option value="8">Piso 8</option>
+                                                    <option value="9">Piso 9</option>
+                                                    <option value="10">Piso 10</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Sección</label>
+                                                <select class="form-control form-control-sm" name="seccion_box" id="seccion_box">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="1">Pediatría</option>
+                                                    <option value="2">General</option>
+                                                    <option value="3">Ginecobstetricia</option>
+                                                    <option value="4">Rehabilitación</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="form-group fill">
+                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act_" id="ot_pat_act_"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-sm-12 text-center">
+                                <button type="button" onclick="guardar_box_laboratorio()" class="btn btn-info btn-sm mx-auto" data-toggle="collapse" data-target=".info-basica" aria-expanded="false" aria-controls="info-basica-1 info-basica-2">
+                                    <i class="feather icon-plus"></i> Añadir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+    </div>
+</div>
+
+
+
 <script>
     /*-SUCURSALES-*/
     /*-Agregar sucursal-*/
@@ -510,11 +711,11 @@
         var valido = 1;
         var mensaje = '';
 
-        if( id_sucursal == '' )
-        {
-            mensaje += 'campo requerido id_sucursal\n';
-            valido = 0;
-        }
+        // if( id_sucursal == '' )
+        // {
+        //     mensaje += 'campo requerido id_sucursal\n';
+        //     valido = 0;
+        // }
         if( rut == '' )
         {
             mensaje += 'campo requerido rut\n';
@@ -674,6 +875,44 @@
                 })
             }
 
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function asignar_bodega(id){
+        let url = "{{ route('sucursal.bodega.asignar') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id: id,
+                id_sucursal: $('#bodegas_sucursal_id_sucursal').val(),
+                id_bodega: $('#bodegas_sucursal_id_bodega').val(),
+                id_lugar_atencion: $('#bodegas_sucursal_id_lugar_atencion').val(),
+                _token: CSRF_TOKEN,
+            },
+        })
+        .done(function(data)
+        {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                swal({
+                    title: "Asignar Bodega",
+                    text: "Bodega asignada con éxito",
+                    icon: "success"
+                })
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al asignar bodega",
+                    icon: "error"
+                })
+            }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
@@ -1185,5 +1424,244 @@
         if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
 
         rut.setCustomValidity('');
+    }
+
+    function adm_boxes(id_institucion, id_lugar_atencion)
+    {
+        let url = "{{ route('laboratorio.box') }}";
+        $.ajax({
+
+                url: url,
+                type: "get",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                { 
+                    $('#id_lugar_atencion').val(id_lugar_atencion);
+                    if (data.estado == 1)
+                    {
+                        $('#boxes_sucursal').modal('show');
+                        $('#formulario_nuevo_box').addClass('d-none');
+                        let table = $('#boxes_sucursal_tabla').DataTable();
+                        table.clear().draw();
+                        $.each(data.registros, function (indexInArray, valueOfElement)
+                        {
+                            let tipo_especializacion = valueOfElement.tipo_especializacion ? valueOfElement.tipo_especializacion : 'General';
+
+                            table.row.add( [
+                                valueOfElement.tipo_box,
+                                valueOfElement.numero_box,
+                                tipo_especializacion,
+                                '<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_box_lab('+valueOfElement.id+', '+id_institucion+', '+id_lugar_atencion+');" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button>'
+                            ] ).draw( false );
+                        });
+
+
+                        // cargarAgendaSucursal();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Carga de Box",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Carga de Box",
+                        text: "Falla en Actualización.\nIntente de nuevo.",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+    }
+
+    function adm_bodegas(id_institucion, id_lugar_atencion)
+    {
+        $('#bodegas_sucursal').modal('show');
+        $('#bodegas_sucursal_id_institucion').val(id_institucion);
+        $('#bodegas_sucursal_id_lugar_atencion').val(id_lugar_atencion);
+    }
+
+    function mostrar_formulario_nuevo_box()
+    {
+        $('#formulario_nuevo_box').removeClass('d-none');
+    }
+    
+     function guardar_box_laboratorio(){
+        let numero_box = $('#numero_box').val();
+        let tpo_box_servicio = $('#tpo_box_servicio').val();
+        let id_institucion = $('#id_institucion').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        if(tpo_box_servicio == 'Especializado'){
+            var tpo_especializacion = $('#tpo_especializacion').val();
+        }else{
+            var tpo_especializacion = '';
+        }
+        let tpo_equip_servicio = $('#tpo_equip_servicio').val();
+        let seccion_box = $('#seccion_box').val();
+        let ot_pat_act_ = $('#ot_pat_act_').val();
+        let n_camillas_box_servicio = $('#n_camillas_box_servicio').val();
+        let equip_ad = $('#equip_ad').val();
+        let url = "{{ route('adm_cm.guardar_box_servicio') }}";
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(numero_box == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el número de box</li>';
+        }
+        if(tpo_box_servicio == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el tipo de box</li>';
+        }
+
+        if(tpo_box_servicio == 'Especializado' && tpo_especializacion == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el tipo de especialización</li>';
+        }
+        if(tpo_equip_servicio == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la ubicación del box</li>';
+        }
+        if(seccion_box == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la sección del box</li>';
+        }
+        if(valido == 0){
+            swal({
+                title: "Error",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                numero_box: numero_box,
+                tpo_box_servicio: tpo_box_servicio,
+                tpo_especializacion: tpo_especializacion,
+                tpo_equip_servicio: tpo_equip_servicio,
+                seccion_box: seccion_box,
+                ot_pat_act_: ot_pat_act_,
+                n_camillas_box_servicio: n_camillas_box_servicio,
+                equip_ad: equip_ad,
+                id_institucion: id_institucion,
+                id_lugar_atencion: id_lugar_atencion,
+                _token:'{{ csrf_token() }}'
+            }
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                $('#boxes_sucursal').modal('hide');
+                swal({
+                    title: "Box guardado",
+                    text: "Box guardado correctamente",
+                    icon: "success",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+                $('#tabla_boxes_atencion').empty();
+                $('#tabla_boxes_atencion').append(data.v);
+            }else{
+                swal({
+                    title: "Error",
+                    text: "Error al guardar el box",
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+        });
+    }
+
+     function eliminar_box_lab(id) {
+        swal({
+                title: "Eliminar Box",
+                text: "¿Está seguro que desea eliminar el box?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_box_lab(id);
+                }
+            });
+    }
+
+    function confirmar_eliminar_box_lab(id) {
+        let data = {
+            id: id,
+            id_institucion: $('#id_institucion').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.eliminar_box_servicio') }}";
+        $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if (data.estado == 1) {
+                        // $('#tabla_boxes_atencion').empty();
+                        // $('#tabla_boxes_atencion').append(data.v);
+                        swal({
+                            title: "Box",
+                            text: "Box Eliminado Correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                        // cerrar modal
+                        $('#boxes_sucursal').modal('hide');
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar box",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar box",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
     }
 </script>

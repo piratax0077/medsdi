@@ -100,3 +100,128 @@
         </div>
     </div>
 </div>
+<script>
+    // function indicar_examen_ficha() {
+    //         var tipo_examen = $("#tipo_examen option:selected").text();
+    //         var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
+    //         var examen = $("#examen option:selected").text();
+    //         var prioridad = $("#prioridad option:selected").text();
+
+    //         var i = 1; //contador para asignar id al boton que borrara la fila
+    //         var fila = '<tr class="tr_examen_cirugia" id="row' + i + '"><td>' +
+    //             tipo_examen + '</td><td>' +
+    //             sub_tipo_examen + '</td><td>' +
+    //             examen + '</td><td>' +
+    //             prioridad + '</td><td><button type="button" name="remove" id="' + i +
+    //             '" class="btn btn-danger btn_remove1">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
+
+    //         i++;
+
+    //         $('#tabla_examen_cirugia tr:first').after(fila);
+    //         $("#adicionados1").text(
+    //             ""
+    //         ); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
+    //         var nFilas = $("#tabla_examen_cirugia tr").length;
+    //         $("#adicionados1").append(nFilas - 1);
+    //         $("#sub_tipo_examen").empty();
+    //         $("#examen").empty();
+    //         //$("#frecuencia").empty();
+    //         //$("#periodo").empty();
+    //         //$("#prioridad").empty();
+    //     }
+    function indicar_examen_ficha() {
+        var id_tipo_examen = $("#tipo_examen").val();
+        var tipo_examen = $("#tipo_examen option:selected").text();
+        var id_sub_tipo_examen = $("#sub_tipo_examen").val();
+        var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
+        var id_examen = $('#examen').val();
+        var examen = $("#examen option:selected").text();
+        var id_prioridad = $("#prioridad").val();
+        var prioridad = $("#prioridad option:selected").text();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(id_tipo_examen == 0){
+            valido = 0;
+            mensaje += '<li>Tipo examen</li>';
+        }
+
+        if(id_sub_tipo_examen == 0){
+            valido = 0;
+            mensaje += '<li>Sub tipo examen</li>';
+        }
+
+            if(examen == 0){
+            valido = 0;
+            mensaje += '<li>Examen</li>';
+        }
+
+        if(id_prioridad == 0){
+            valido = 0;
+            mensaje += '<li>Prioridad</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content: {
+                    element: 'div',
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        var data = {
+            tipo_examen: tipo_examen,
+            sub_tipo_examen: sub_tipo_examen,
+            examen: examen,
+            prioridad: prioridad,
+            id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        }
+
+        var url = "{{ ROUTE('examen.indicar_examen') }}";
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                swal({
+                    icon:'success',
+                    title:'Exito',
+                    text:'Se ha indicado examen correctamente',
+                });
+                let examenes = resp.examenes;
+                let table = $('#tabla_examen_ficha').DataTable();
+                // Limpiar la tabla
+                table.clear();
+
+                // Agregar cada fila
+                examenes.forEach(examen => {
+                    table.row.add([
+                        examen.datos_examen.examen,
+                        examen.datos_examen.tipo_examen,
+                        examen.datos_examen.sub_tipo_examen,
+                        examen.datos_examen.prioridad,
+                        `<button type="button" onclick="eliminar_examen(${examen.id})" class="btn btn-danger btn-icon"><i class="feather icon-x"></i></button>`
+                    ]);
+                });
+
+                // Dibujar la tabla con los nuevos datos
+                table.draw();
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+</script>

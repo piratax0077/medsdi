@@ -12,7 +12,7 @@
             <ul class="navbar-nav ml-auto">
 
                 @if(isset($mensajes))
-                    @if(count($mensajes) > 0)
+
                         <li>
                             <div class="dropdown drp-user">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Mensajes" data-placement="button">
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </li>
-                    @endif
+
                 @endif
                 @if (Auth::user())
 
@@ -88,6 +88,12 @@
                                             <li><a href="{{ ROUTE('asistente.home') }}" class="dropdown-item"><i
                                                         class="feather icon-user"></i>Escritorio
                                                     Asistente</a></li>
+                                        @endif
+
+                                        @if (Auth::user()->hasRole('AdministradorMedico'))
+                                            <li><a href="{{ ROUTE('asistente.home') }}" class="dropdown-item"><i
+                                                        class="feather icon-user"></i>Escritorio
+                                                    Administrador Médico</a></li>
                                         @endif
                                     </ul>
                                 </div>

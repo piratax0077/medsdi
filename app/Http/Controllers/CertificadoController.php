@@ -1200,6 +1200,7 @@ class CertificadoController extends Controller
 
     static public function generarUrlDocumento($token)
     {
+
         $valido = 1;
         $retorno = '';
         if(empty($token))

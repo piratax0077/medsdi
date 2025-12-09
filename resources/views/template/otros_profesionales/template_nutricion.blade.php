@@ -59,6 +59,8 @@
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -118,6 +120,8 @@
 
         <!--Formularios Modals-->
         <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <!--Form wizard-->
         <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -266,7 +270,9 @@
                 });
             }
             /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+
         </script>
+
         @yield('js_inferior')
         @yield('page-script')
         @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}

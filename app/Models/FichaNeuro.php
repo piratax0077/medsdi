@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class FichaNeuro extends Model
 {
     use HasFactory;
-    protected $table = 'ficha_neuro_c';
+    protected $table = 'ficha_neuro';
 }

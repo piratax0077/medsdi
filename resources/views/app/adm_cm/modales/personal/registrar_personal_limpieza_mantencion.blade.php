@@ -874,7 +874,7 @@
     }
 
     function que_mantenedor() {
-        // Obtener los elementos de los inputs
+        // Obtener los elementos de los inputs y sus contenedores
         var rzInput = document.getElementById('add_empleado_rz_mantencion');
         var giroInput = document.getElementById('add_empleado_giro_mantencion');
         var apellidoUnoInput = document.getElementById('add_empleado_apellido_uno_mantencion');
@@ -882,38 +882,55 @@
         var fechaNacimientoInput = document.getElementById('add_empleado_fecha_nacimiento_mantencion');
         var sexoInput = document.getElementById('add_empleado_sexo_mantencion');
 
+        // Obtener los contenedores padre (form-group) para ocultar input + label
+        var rzContainer = rzInput.closest('.form-group');
+        var giroContainer = giroInput.closest('.form-group');
+        var apellidoUnoContainer = apellidoUnoInput.closest('.form-group');
+        var apellidoDosContainer = apellidoDosInput.closest('.form-group');
+        var fechaNacimientoContainer = fechaNacimientoInput.closest('.form-group');
+        var sexoContainer = sexoInput.closest('.form-group');
+
         // Verificar cuál opción de radio está seleccionada
         if (document.getElementById('tipo_mantenedor-empresa').checked) {
             console.log('Empresa');
-            // Si se selecciona "Empresa", habilitar los inputs
+            // Si se selecciona "Empresa", mostrar campos de empresa y ocultar campos de persona
+            rzContainer.style.display = 'block';
             rzInput.removeAttribute('disabled');
-            rzInput.style.display = 'block';
+            
+            giroContainer.style.display = 'block';
             giroInput.removeAttribute('disabled');
-            giroInput.style.display = 'block';
+            
+            apellidoUnoContainer.style.display = 'none';
             apellidoUnoInput.setAttribute('disabled', 'disabled');
-            apellidoUnoInput.style.display = 'none';
+            
+            apellidoDosContainer.style.display = 'none';
             apellidoDosInput.setAttribute('disabled', 'disabled');
-            apellidoDosInput.style.display = 'none';
+            
+            fechaNacimientoContainer.style.display = 'none';
             fechaNacimientoInput.setAttribute('disabled', 'disabled');
-            fechaNacimientoInput.style.display = 'none';
+            
+            sexoContainer.style.display = 'none';
             sexoInput.setAttribute('disabled', 'disabled');
-            sexoInput.style.display = 'none';
         } else {
             console.log('Persona Natural');
-            // Si se selecciona "Persona Natural", deshabilitar los inputs
+            // Si se selecciona "Persona Natural", ocultar campos de empresa y mostrar campos de persona
+            rzContainer.style.display = 'none';
             rzInput.setAttribute('disabled', 'disabled');
-            rzInput.style.display = 'none';
+            
+            giroContainer.style.display = 'none';
             giroInput.setAttribute('disabled', 'disabled');
-            giroInput.style.display = 'none';
+            
+            apellidoUnoContainer.style.display = 'block';
             apellidoUnoInput.removeAttribute('disabled');
-            apellidoUnoInput.style.display = 'block';
+            
+            apellidoDosContainer.style.display = 'block';
             apellidoDosInput.removeAttribute('disabled');
-            apellidoDosInput.style.display = 'block';
+            
+            fechaNacimientoContainer.style.display = 'block';
             fechaNacimientoInput.removeAttribute('disabled');
-            fechaNacimientoInput.style.display = 'block';
-
+            
+            sexoContainer.style.display = 'block';
             sexoInput.removeAttribute('disabled');
-            sexoInput.style.display = 'block';
         }
     }
 </script>

@@ -1,131 +1,97 @@
-<div id="pieza_dental_dolor" class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div class="form-row">
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <label class="floating-label-activo-sm">Pieza N°</label>
-                <input type="text" class="form-control form-control-sm" name="pieza_dental_odontop{{ $counter }}" id="pieza_dental_odontop{{ $counter }}">
-            </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Tipo de Dolor</label>
-                    <select name="tipo_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="tipo_dolor_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_dolor{{ $counter }}','div_tipo_dolor{{ $counter }}','obs_tipo_dolor{{ $counter }}',3);">
-                        <option selected  value="1">Espontáneo</option>
-                        <option value="2">Provocado</option>
-                        <option value="3">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_tipo_dolor{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Tipo de dolor</label>
-                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_dolor" id="obs_tipo_dolor"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Intensidad</label>
-                    <select name="intensidad" data-titulo="Ex_cuello" data-seccion="Cuello"  id="intensidad_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intensidad_odontop{{ $counter }}','div_intensidad{{ $counter }}','obs_intensidad{{ $counter }}',4);">
-                        <option selected  value="1">Leve</option>
-                        <option value="2">Moderado</option>
-                        <option value="3">Intenso</option>
-                        <option value="4">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_intensidad{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Intensidad</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_intensidad{{ $counter }}" id="obs_intensidad{{ $counter }}"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Modo dolor</label>
-                    <select name="modo_dolor" data-titulo="Ex_cuello" data-seccion="Cuello"  id="modo_dolor_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('modo_dolor{{ $counter }}','div_modo_dolor{{ $counter }}','obs_modo_dolor{{ $counter }}',3);">
-                        <option selected  value="1">Pulsátil</option>
-                        <option value="2">Permanente</option>
-                        <option value="3">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_modo_dolor{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Modo dolor</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_modo_dolor{{ $counter }}" id="obs_modo_dolor{{ $counter }}"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Localización</label>
-                    <select name="loc_dolor" data-titulo="Ex_cuello" data-seccion="Cuello"  id="loc_dolor_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('loc_dolor_odontop{{ $counter }}','div_loc_dolor{{ $counter }}','obs_loc_dolor{{ $counter }}',3);">
-                        <option selected  value="1">Localizado</option>
-                        <option value="2">Referido</option>
-                        <option value="3">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_loc_dolor{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Localización</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor{{ $counter }}" id="obs_loc_dolor{{ $counter }}"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                    <select name="provocacion_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="provocacion_dolor_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('provocacion_dolor_odontop{{ $counter }}','div_provocacion_dolor{{ $counter }}','obs_provocacion_dolor{{ $counter }}',5);">
-                        <option selected  value="1">Frío</option>
-                        <option value="2">Calor</option>
-                        <option value="3">Actividad</option>
-                        <option value="4">Masticación</option>
-                        <option value="5">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_provocacion_dolor{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_provocacion_dolor{{ $counter }}" id="obs_provocacion_dolor{{ $counter }}"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Cuando duele</label>
-                    <select name="cdo_duele" data-titulo="Ex_cuello" data-seccion="Cuello"  id="cdo_duele_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cdo_duele{{ $counter }}','div_cdo_duele{{ $counter }}','obs_cdo_duele{{ $counter }}',3);">
-                        <option selected  value="1">Palpación</option>
-                        <option value="2">Decubito</option>
-                        <option value="3">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_cdo_duele{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Cuando duele</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cdo_duele{{ $counter }}" id="obs_cdo_duele{{ $counter }}"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Tpo Evolución</label>
-                    <select name="tpo_evolucion" data-titulo="Ex_cuello" data-seccion="Cuello"  id="tpo_evolucion_odontop{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_evolucion_odontop{{ $counter }}','div_tpo_evolucion{{ $counter }}','obs_tpo_evolucion{{ $counter }}',3);">
-                        <option selected  value="1">Menos de 1 Semana</option>
-                        <option value="2">Más de 1 Semana</option>
-                        <option value="3">Otro describir</option>
-                    </select>
-                </div>
-                <div class="form-group" id="div_tpo_evolucion{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Tpo Evolución</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_evolucion{{ $counter }}" id="obs_tpo_evolucion{{ $counter }}"></textarea>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <div class="form-group">
-                    <label class="floating-label-activo-sm">Efecto Analgésicos</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor_odontop{{ $counter }}" id="obs_loc_dolor_odontop{{ $counter }}"></textarea>
-                </div>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="col-sm-12">
-                <div class="form-group">
-                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_dolor_odontop()">X</button>
-                    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_dental_dolor_odontop({{ $counter }})"><i class="fas fa-save"></i></button>
-                </div>
-
-            </div>
+<div class="card-informacion">
+    <div class="form-row">
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Pieza N°</label>
+            <select class="form-control form-control-sm" name="n_pieza_ex_pp_od_gral{{ $counter }}" id="n_pieza_ex_pp_od_gral{{ $counter }}">
+                <option value="0">Seleccione</option>
+                    @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
+                    <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 </div>
+<div class="form-row">
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Resp.Calor</label>
+            <select id="sel_odontopo_resp_calor_odontop{{ $counter }}" name="sel_odontopo_resp_calor_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Resp.Frio</label>
+            <select id="sel_odontopo_resp_frio_odontop{{ $counter }}" name="sel_odontopo_resp_frio_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Eléctrico</label>
+            <select id="sel_odontopo_resp_elect_odontop{{ $counter }}" name="sel_odontopo_resp_elect_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Percusión</label>
+            <select id="sel_odontopo_resp_perc_odontop{{ $counter }}" name="sel_odontopo_resp_perc_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Exploración</label>
+            <select id="sel_odontopo_resp_expl_odontop{{ $counter }}" name="sel_odontopo_resp_expl_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <div class="form-group">
+            <label class="floating-label-activo-sm">Cavitaria</label>
+            <select id="sel_odontopo_cavitaria_odontop{{ $counter }}" name="sel_odontopo_cavitaria_odontop{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                <option><span>N/R </span> No realizada</option>
+                <option><span>↑ </span> Aumentado</option>
+                <option><span>↓ </span> Disminuido</option>
+                <option><span>N </span> Normal</a></option>
+                <option><span>(-) </span> No responde</a></option>
+            </select>
+        </div>
+    </div>
+    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza_odontop({{ $counter }})"><i class="fas fa-save"></i></button>
+</div>
+<input type="hidden" name="tipo_examen" id="tipo_examen" value="{{ $tipo_examen }}">
+</div>
+
 
 <script>
     function ocultar_pieza_dental_dolor_odontop(){

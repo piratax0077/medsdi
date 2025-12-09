@@ -28,11 +28,11 @@
             @else
             <div class="form-group" id="in_hosp_div_detalle_hospen" style="display:none">
             @endif
-                <label class="floating-label-activo-sm">Otro lugar <i>(Describir)</i></label>
+                <label class="floating-label-activo-sm">Otro lugar (Describir)</label>
                 @if(isset($seccion_tipo) && $seccion_tipo != '')
-                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_hospen{{ '_'.$seccion_tipo }}" id="in_hosp_obs_hospen{{ '_'.$seccion_tipo }}"></textarea>
+                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. ¿Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_hospen{{ '_'.$seccion_tipo }}" id="in_hosp_obs_hospen{{ '_'.$seccion_tipo }}"></textarea>
                 @else
-                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_hospen" id="in_hosp_obs_hospen"></textarea>
+                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. ¿Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_hospen" id="in_hosp_obs_hospen"></textarea>
                 @endif
             </div>
         </div>
@@ -93,7 +93,7 @@
             @else
             <div class="form-group" id="in_hosp_div_motivo_hosp" style="display:none">
             @endif
-                <label class="floating-label-activo-sm">Otro tratamiento <i>(Describir)</i></label>
+                <label class="floating-label-activo-sm">Otro tratamiento (Describir)</label>
                 @if(isset($seccion_tipo) && $seccion_tipo != '')
                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Otro Tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_motivo_hosp{{ '_'.$seccion_tipo }}" id="in_hosp_obs_motivo_hosp{{ '_'.$seccion_tipo }}"></textarea>
                 @else

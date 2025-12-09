@@ -893,7 +893,7 @@
                                                             $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
                                                             $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
                                                             $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
-                                                            buscar_ciudad_general('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
+                                                            buscar_ciudad_general('input_reserva_hora_region_asistente','input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
                                                             // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
                                                         }
                                                         else
@@ -1531,6 +1531,7 @@
             var bono_numero = $('#bono_numero').val();
             var bono_valor_seguro = $('#valor_seguro').val();
             var bono_valor_bonificacion = $('#valor_bonificacion').val();
+            var id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
@@ -1607,6 +1608,7 @@
                         numero_bono: bono_numero,
                         valor_atencion: bono_valor_consulta,
                         valor_seguro: bono_valor_seguro,
+                        id_lugar_atencion: id_lugar_atencion,
                         valor_bonificacion: bono_valor_bonificacion,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
@@ -1855,7 +1857,7 @@
 
 								$('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
 								// $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-								buscar_ciudad_general('input_reserva_direccion_ciudad', 'input_reserva_direccion_region', data.direccion.ciudad.id);
+								buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
 
 								$('#rut_paciente_reserva').val('');
 								$('.div_rut_buscar').hide();
@@ -1993,23 +1995,13 @@
                 url: url,
                 data:{
                     id: id_presupuesto,
+                    id_profesional: $('#id_profesional').val(),
                     _token: CSRF_TOKEN
                 },
                 success: function(resp){
                     console.log(resp);
                     let tratamientos = resp.tratamientos;
-                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
-                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
-                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
-                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
-                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
-                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
-                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
-                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
-                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
-                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
-                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
-                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                    let todos = resp.todos;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
                     var bloques = resp.bloques;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
@@ -2028,7 +2020,7 @@
 
 
                     });
-                    maxilar_superior_gral_diagnosticos.forEach(t => {
+                    todos.forEach(t => {
                         if(t.presupuesto == 1){
                         var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
@@ -2037,90 +2029,6 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
                             }
                     });

@@ -33,11 +33,12 @@
                                     <table id="bandeja_entrada" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
                                         <thead>
                                             <tr>
+                                                <th class="d-none">ID</th>
                                                 <th>Fecha</th>
-                                                <th>Nº de orden</th>
                                                 <th>Nombre del examen</th>
-                                                <th>Tipo de Examen</th>
+                                                {{--  <th>Tipo de Examen</th>  --}}
                                                 <th>Examen</th>
+                                                <th>Ver</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -46,9 +47,10 @@
 													@if (!empty($exam->HoraMedica))
 														@if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 0)
 															<tr>
+                                                                <td class="d-none">{{ $exam->id }}</td>
+                                                                <td>{{ $exam->nombre }}</td>
 																<td>{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-																<td>{{ $exam->id }}</td>
-																<td>{{ $exam->nombre }}</td>
+																{{--  <td>{{ $exam->nombre }}</td>  --}}
 																<td>
 																	@if ($exam->SubTipoEspecialidad)
 																		{{ $exam->SubTipoEspecialidad->nombre }}
@@ -70,10 +72,11 @@
                                                 @foreach ( $resultado_examen as $result_ex)
                                                     @if ($result_ex->revisado == 0)
                                                         <tr>
+                                                            <td class="d-none">{{ $result_ex->id }}</td>
                                                             <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
                                                             <td>{{ $result_ex->id }}</td>
                                                             {{-- <td>{{ $result_ex->nombre.' '.$result_ex->apellido_paterno.' '.$result_ex->apellido_materno }}</td> --}}
-                                                            <td>LABORATORIO</td>
+                                                            {{--  <td>LABORATORIO</td>  --}}
                                                             <td>
                                                                 @if ($result_ex->obj_tipo_examen)
                                                                     {{ $result_ex->obj_tipo_examen->nombre_examen }}
@@ -98,12 +101,13 @@
                                                 @foreach ( $reg_octavo_par as $result_oct_par)
                                                     @if ($result_oct_par->revisado == 0)
                                                         <tr>
+                                                            <td class="d-none">{{ $result_oct_par->id }}</td>
                                                             <td>{{ date('d-m-Y',strtotime($result_oct_par->fecha_ex)) }}</td>
                                                             <td>{{ $result_oct_par->id }}</td>
                                                             {{-- <td>{{ $result_oct_par->nombre.' '.$result_oct_par->apellido_paterno.' '.$result_oct_par->apellido_materno }}</td> --}}
-                                                            <td>
+                                                            {{--  <td>
                                                                 OCTAVO PAR
-                                                            </td>
+                                                            </td>  --}}
                                                             <td>
                                                                 OCTAVO PAR
                                                             </td>
@@ -115,8 +119,31 @@
                                                 @endforeach
                                             @endif
 
-                                            {{-- EXAMENES DE RADIOLOGIA --}}
                                             @if (isset($reg_exam_rayo))
+                                                @foreach ($reg_exam_rayo as $result_rayo )
+                                                    @if ($result_rayo->revisado == 0)
+                                                        <tr>
+                                                            <td class="d-none">{{ $result_rayo->id }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($result_rayo->created_at)) }}</td>
+                                                            {{--  <td>{{ $result_rayo->id }}</td>  --}}
+
+                                                            <td>
+                                                                @php
+                                                                    // echo json_encode($result_rayo);
+                                                                @endphp
+                                                                {{ $result_rayo->nombre_procedimientos }}
+                                                            </td>
+                                                            <td>
+                                                                RADIOLOGIA
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenRayo_{{ $result_rayo->id }}" onclick="carga_detalle_rayo('{{ $result_rayo->id }}');"><i class="feather icon-activity"></i> Ver</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+
+                                                @endforeach
+
 
                                             @endif
 
@@ -224,6 +251,33 @@
                                                     @endif
                                                 @endforeach
                                             @endif
+                                            @if (isset($reg_exam_rayo))
+                                                @foreach ($reg_exam_rayo as $result_rayo )
+                                                    @if ($result_rayo->revisado == 1)
+                                                        <tr>
+                                                            <td class="d-none">{{ $result_rayo->id }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($result_rayo->created_at)) }}</td>
+                                                             <td>{{ $result_rayo->id }}</td>
+
+                                                            <td>
+                                                                @php
+                                                                    // echo json_encode($result_rayo);
+                                                                @endphp
+                                                                {{ $result_rayo->nombre_procedimientos }}
+                                                            </td>
+                                                            <td>
+                                                                RADIOLOGIA
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenRayo_{{ $result_rayo->id }}" onclick="carga_detalle_rayo('{{ $result_rayo->id }}');"><i class="feather icon-activity"></i> Revisar</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+
+                                                @endforeach
+
+
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -260,7 +314,7 @@
                                                                     <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
                                                                     <td>{{ $result_ex->id }}</td>
                                                                     {{-- <td>{{ $result_ex->nombre.' '.$result_ex->apellido_paterno.' '.$result_ex->apellido_materno }}</td> --}}
-                                                                    <td>LABORATORIO</td>
+                                                                    <td>{{ $result_ex->nombre_examen }}</td>
                                                                     <td>
                                                                         @if ($result_ex->obj_tipo_examen)
                                                                             {{ $result_ex->obj_tipo_examen->nombre_examen }}
@@ -294,6 +348,36 @@
     </div>
 </div>
 
+<div id="modal_ver_rayo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_ver_rayo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white mt-1" id="modal_eval_hab_preart">Examenes Radilógicos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_ver_rayo').modal('hide');"><span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="mt-2">Fecha del examen <span id="modal_ver_fecha_examan"></span> </h6>
+                    </div>
+                    <div class="col-12">
+                        <h6 class="mt-2">Examen:</h6>
+                        <ul id="modal_ver_lista_examen"></ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" id="modal_ver_rayo_fecha_examen">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_ver_rayo').modal('hide');"><i class="feather icon-x"></i> Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     {{-- ABRIR ARCHIVOS --}}
     function verExamenEspecialidad(id_examen, cambio_estado)
@@ -757,7 +841,98 @@
         });
     }
 
+    function carga_detalle_rayo(id)
+    {
+        $('#modal_ver_rayo').modal('show');
+        let url = "{{ route('resultado.rayo.ver') }}";
+
+        $('#modal_ver_rayo_fecha_examen').html('');
+        $('#modal_ver_fecha_examan').html('');
+        $('#modal_ver_lista_examen').html('');
+
+        $.ajax({
+
+            url: url,
+            type: "GET",
+            data: {
+                id : id,
+            },
+        })
+        .done(function(data) {
+
+            console.log(data);
+            if (data.estado == 1)
+            {
+                $('#modal_ver_fecha_examan').html(data.fecha_examen);
+                $('#modal_ver_lista_examen').html(data.lista_nombre_examnes);
+
+                /** INICIO CARGA DE ARCHIVOS */
+                var html = '';
+                /** INFORM */
+                if(data.registros.estado_informe == 1)
+                {
+                    // Primero crea la URL base y luego añade el token
+                    var url_base = '{{ route("rayos.ver.informe.rayos", ["t" => "TOKEN"]) }}';
+                    var url_pdf = url_base.replace('TOKEN', data.registros.token);
+
+                    html += '<a href="'+url_pdf+'" target="_blank">';
+                    html += '<div class="pdf-icon-container" style="width:200px;height:150px;display:flex;justify-content:center;background:#f5f5f5;flex-direction: column;flex-wrap: nowrap;align-content: center;align-items: center;"><i class="fas fa-file-pdf" style="font-size:48px;color:#e74c3c;"></i><div style="color: #000;">Informe</div></div>';
+                    html += '</a>';
+                }
+
+                /** IMAGEN O PDF */
+                if(data.registros.estado_archivo == 1)
+                {
+                    html += '<div class="gallery">';
+                    html += '' +
+                        $.map(data.lista_imagenes, function(value, index) {
+                            var extension = value.split('.').pop().toLowerCase();
+                            var esPDF = extension === 'pdf';
+
+                            var contenido = esPDF?
+                                '<div class="pdf-icon-container" style="width:200px;height:150px;display:flex;align-items:center;justify-content:center;background:#f5f5f5;"><i class="fas fa-file-pdf" style="font-size:48px;color:#e74c3c;"></i></div>'
+                                : '<img src="'+value+'" alt="" style="width: 200px;">';
+
+                            if (esPDF) {
+                                return '<a href="' + value + '" target="_blank" data-caption="Documento PDF ' + (index + 1) + '">' +
+                                    contenido +
+                                '</a>';
+                            } else {
+                                return '<a href="' + value + '" data-fancybox="gallery" data-caption="Imagen ' + (index + 1) + '">' +
+                                    '<img src="' + value + '" alt="" style="width: 200px;">' +
+                                '</a>';
+                            }
+                        }).join('') +
+                        '</div>';
 
 
+                }
+
+                $('#modal_ver_rayo_fecha_examen').html(html);
+                /** FIN CARGA DE ARCHIVOS */
+
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 
 </script>
+
+{{--  <script>
+    $(document).ready(function() {
+        $('#bandeja_entrada').DataTable({
+            responsive: true,
+            order: [[0, 'desc']]
+        });
+    });
+</script>  --}}
+
+<style>
+    .fancybox__container
+    {
+        z-index: 2031;
+    }
+</style>

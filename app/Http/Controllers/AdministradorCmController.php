@@ -18,6 +18,7 @@ use App\Models\ContratoDependienteProfesional;
 use App\Models\ContratoProfesionalInstitucion;
 use App\Models\ContratoConvenioProfesional;
 use App\Models\CuentaBancariaInst;
+use App\Models\EmpresasConvenios;
 use App\Models\TipoAreasCm;
 use App\Models\TipoProducto;
 use Illuminate\Http\Request;
@@ -46,8 +47,10 @@ use App\Models\Remuneraciones;
 use App\Models\Responsable;
 use App\Models\ResponsableBodega;
 use App\Models\Roles;
+use App\Models\SalaEspera;
 use App\Models\Servicios;
 use App\Models\ServiciosInternos;
+use App\Models\Sucursal;
 use App\Models\TipoAdministrador;
 use App\Models\TipoCuentaBancaria;
 use App\Models\TipoConvenioInstitucion;
@@ -63,6 +66,9 @@ use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
+// storage
+use Illuminate\Support\Facades\Storage;
 
 // DB
 use Illuminate\Support\Facades\DB;
@@ -298,6 +304,7 @@ class AdministradorCmController extends Controller
         }
 
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+
         $lista_administrativo = array();
         if($LugarAtencion)
         {
@@ -305,15 +312,18 @@ class AdministradorCmController extends Controller
 
             if($lista_administrativo)
             {
+                $array_roles = array();
                 foreach ($lista_administrativo as $key => $value)
                 {
 
                     /** roles */
-                    $usuario = User::where('id', $value->id_admin)->first();
+                    $usuario = User::where('id', 2860)->first();
+
                     $roles = $usuario->roles()->get();
-                    $array_roles = array();
+
+
                     foreach ($roles as $key_2 => $value_2) {
-                        array_push($array_roles, $value_2->name);
+                        array_push($array_roles, $value_2->alias);
                     }
 
                     if(!empty($array_roles))
@@ -393,6 +403,7 @@ class AdministradorCmController extends Controller
         /** FIN LISTA CONTRATO */
 
         $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
+
         $tipo_convenio = TipoConvenioInstitucion::where('estado', 1)->get();
 
         return view('app.adm_cm.contratos_nuevos',
@@ -413,7 +424,11 @@ class AdministradorCmController extends Controller
 
     public function agregar_area_cm(Request $request){
         try {
+
             $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+            if(!$institucion){
+                $institucion = Instituciones::find($request->id_institucion);
+            }
             $profesional_responsable = Profesional::find($request->responsable_cargo);
             $area = new AreasCm();
             $area->id_institucion = $institucion->id;
@@ -440,7 +455,9 @@ class AdministradorCmController extends Controller
 
     public function editar_area_cm(Request $request){
         try {
+
             $area = AreasCm::find($request->id_area);
+
             $profesional_responsable = Profesional::find($request->responsable);
             $area->nombre = $profesional_responsable->nombre;
             $area->apellido_uno = $profesional_responsable->apellido_uno;
@@ -448,11 +465,15 @@ class AdministradorCmController extends Controller
             $area->email = $request->email;
             $area->telefono = $request->telefono;
             $area->numero_personas = $request->n_persons;
+            $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+            if(!$institucion){
+                $institucion = Instituciones::find($request->id_institucion);
+            }
             if($area->save()){
                 $areas = $this->dame_areas_cm($area->id_lugar_atencion);
                 $v = view('fragm.areas_cm',[
                     'areas_cm' => $areas,
-                    'institucion' => Instituciones::where('id_usuario', Auth::user()->id)->first()
+                    'institucion' => $institucion
                 ])->render();
                 return ['estado' => 1, 'mensaje' => 'Área actualizada correctamente', 'v' => $v];
             }else{
@@ -465,8 +486,10 @@ class AdministradorCmController extends Controller
 
     public function asignar_profesionales_area(Request $request){
         try {
+
             // Buscar el área por ID
             $area_cm = AreasCm::find($request->id_area);
+
 
             // Verificar si el área existe
             if (!$area_cm) {
@@ -485,6 +508,9 @@ class AdministradorCmController extends Controller
             $areas_cm = $this->dame_areas_cm($area_cm->id_lugar_atencion);
 
             $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+            if(!$institucion){
+                $institucion = Instituciones::find($request->id_institucion);
+            }
 
             $v = view('fragm.areas_cm',[
                 'area' => $area_cm,
@@ -558,6 +584,7 @@ class AdministradorCmController extends Controller
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
 
+
         if($registro)
         {
             // var_dump($registro);
@@ -566,6 +593,8 @@ class AdministradorCmController extends Controller
             /** INSTITUCION */
             $institucion = $registro;
             $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            // $responsable_comercial = AdminInstServ::where('id',$registro->UsuarioComercial()->first()->id)->first();
+            // $responsable_farmacia = AdminInstServ::where('id',$registro->UsuarioFarmacia()->first()->id)->first();
             $tipo_institucion = 'institucion';
 
         }
@@ -616,6 +645,7 @@ class AdministradorCmController extends Controller
                 }
             }
         }
+
 
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
@@ -738,8 +768,10 @@ class AdministradorCmController extends Controller
         $cargos = $lista_tipo_administrador;
 
         $usuario_director_cm = User::find($institucion->id_director_medico);
+
         $usuario_subdirector_cm = User::find($institucion->id_subdirector_medico);
         $usuario_director_gestion_cuidado = User::find($institucion->id_director_gestion_cuidado);
+        $usuario_direccion_tecnica = User::find($institucion->id_director_tecnico);
 
         if($usuario_director_cm){
             $director_cm = Profesional::where('id_usuario',$usuario_director_cm->id)->first();
@@ -759,8 +791,14 @@ class AdministradorCmController extends Controller
             $director_gestion_cuidado = null;
         }
 
+        if($usuario_direccion_tecnica){
+            $direccion_tecnica = Profesional::where('id_usuario',$usuario_direccion_tecnica->id)->first();
+        }else{
+            $direccion_tecnica = null;
+        }
+
         $tipos_laboratorio = TiposLaboratorio::all();
-        $laboratorios = $this->dame_laboratorios($institucion->id);
+        $laboratorios = $this->dame_laboratorios($institucion->id_lugar_atencion);
 
         $boxes_cm = $this->dame_boxes_cm($institucion->id_lugar_atencion);
 
@@ -778,6 +816,22 @@ class AdministradorCmController extends Controller
             $bodega->responsables = $responsables;
         }
 
+		$filtro_se = array();
+        $filtro_se[] = array('estado', 1);
+        $filtro_se[] = array('id_institucion', $institucion->id);
+        $sala_espera = SalaEspera::where($filtro_se)->get();
+
+		$sucursales = Sucursal::where('id_institucion', $institucion->id)
+                        ->with('Direccion')
+                        ->get();
+        foreach ($sucursales as $key => $value)
+        {
+            $ciudad_suc = Ciudad::find($value->direccion->id_ciudad);
+            $region_suc = Region::find($ciudad_suc->id_region);
+            $sucursales[$key]->ciudadObj = $ciudad_suc;
+            $sucursales[$key]->regionObj = $region_suc;
+        }
+
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
             'institucion' => $institucion,
@@ -785,6 +839,7 @@ class AdministradorCmController extends Controller
             'director_cm' => $director_cm ? $director_cm : null,
             'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
             'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
+            'director_tecnico' => $direccion_tecnica ? $direccion_tecnica : null,
             'regiones' => $regiones,
             'ciudades' => $ciudades,
             'cargos' => $cargos,
@@ -802,7 +857,9 @@ class AdministradorCmController extends Controller
             'laboratorios' => $laboratorios,
             'boxes_servicio' => $boxes_cm,
             'tipos_productos' => $tipos_productos,
-            'bodegas' => $bodegas
+            'bodegas' => $bodegas,
+            'sala_espera' => $sala_espera,
+			'sucursales' => $sucursales,
         ]);
     }
 
@@ -817,18 +874,47 @@ class AdministradorCmController extends Controller
         return $boxes;
     }
 
-    public function dame_laboratorios($id_institucion){
-        $laboratorios = Laboratorio::select('laboratorios.*','tipos_laboratorio.nombre as tipo_laboratorio','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
-            ->leftjoin('tipos_laboratorio','laboratorios.id_tipo_laboratorio','=','tipos_laboratorio.id')
-            ->join('direcciones','laboratorios.id_direccion','=','direcciones.id')
-            ->where('laboratorios.id_institucion',$id_institucion)
+    public function dame_laboratorios($id_lugar_atencion){
+        $laboratorios = Sucursal::select('sucursal.*','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
+            ->join('direcciones','sucursal.id_direccion','=','direcciones.id')
+            ->where('sucursal.id_lugar_atencion',$id_lugar_atencion)
             ->get();
 
-        // buscar la ciudad de cada laboratorio por la direccion
         foreach($laboratorios as $laboratorio){
             $ciudad = Ciudad::where('id',$laboratorio->id_ciudad)->first();
             $laboratorio->ciudad = $ciudad->nombre;
+
+            // Asignar nombre del tipo de sucursal
+            switch ($laboratorio->tipo_sucursal) {
+                case 1:
+                    $laboratorio->tipo_sucursal_nombre = 'Clínico';
+                    break;
+                case 2:
+                    $laboratorio->tipo_sucursal_nombre = 'Cardiológico';
+                    break;
+                case 3:
+                    $laboratorio->tipo_sucursal_nombre = 'Anatomía patológica';
+                    break;
+                case 4:
+                    $laboratorio->tipo_sucursal_nombre = 'Otorrinolaringología';
+                    break;
+                case 5:
+                    $laboratorio->tipo_sucursal_nombre = 'Oftalmología';
+                    break;
+                case 6:
+                    $laboratorio->tipo_sucursal_nombre = 'Radiología e Imágenes';
+                    break;
+                case 7:
+                    $laboratorio->tipo_sucursal_nombre = 'Respiratorio';
+                    break;
+                case 8:
+                    $laboratorio->tipo_sucursal_nombre = 'TAC y RNM';
+                    break;
+                default:
+                    $laboratorio->tipo_sucursal_nombre = 'No definido';
+            }
         }
+
         return $laboratorios;
     }
 
@@ -840,6 +926,7 @@ class AdministradorCmController extends Controller
     }
 
     public function eliminar_admin_cm(Request $req){
+
             $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;
@@ -980,6 +1067,8 @@ class AdministradorCmController extends Controller
                 $institucion->id_subdirector_medico = null;
             }else if($req->tipo_admin == 3){
                 $institucion->id_director_gestion_cuidado = null;
+            }else if($req->tipo_admin == 8){
+                $institucion->id_director_tecnico = null;
             }
             $institucion->update();
 
@@ -990,36 +1079,54 @@ class AdministradorCmController extends Controller
 
             if($institucion->id_director_medico){
                 $director_cm = Profesional::where('id_usuario', $institucion->id_director_medico)->first();
+                $cargo = 'director_cm';
             }else{
                 $director_cm = null;
+                $cargo = null;
             }
 
             if($institucion->id_subdirector_medico){
                 $subdirector_cm = Profesional::where('id_usuario', $institucion->id_subdirector_medico)->first();
+                $cargo = 'subdirector_cm';
             }else{
                 $subdirector_cm = null;
+                $cargo = null;
             }
 
             if($institucion->id_director_gestion_cuidado){
                 $director_gestion_cuidado = Profesional::where('id_usuario', $institucion->id_director_gestion_cuidado)->first();
+                $cargo = 'director_gestion_cuidado';
             }else{
                 $director_gestion_cuidado = null;
+                $cargo = null;
             }
 
             if($institucion->id_director_comercial){
                 $director_comercial = Profesional::where('id_usuario', $institucion->id_director_comercial)->first();
+                $cargo = 'director_comercial';
             }else{
                 $director_comercial = null;
+                $cargo = null;
+            }
+
+            if($institucion->id_director_tecnico){
+                $director_tecnico = Profesional::where('id_usuario', $institucion->id_director_tecnico)->first();
+                $cargo = 'director_tecnico';
+            }else{
+                $director_tecnico = null;
+                $cargo = null;
             }
 
             $v = view('fragm.administradores_cm',[
                 'director_cm' => $director_cm ? $director_cm : null,
                 'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
                 'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
+                'director_tecnico' => $director_tecnico ? $director_tecnico : null,
                 'responsable' => $responsable ? $responsable : null,
                 'institucion' => $institucion,
                 'regiones' => $regiones,
                 'ciudades' => $ciudades,
+                'cargo' => $req->tipo_admin
             ])->render();
 
             return ['estado' => 1, 'mensaje' => 'Administrador eliminado', 'v' => $v];
@@ -1551,6 +1658,11 @@ class AdministradorCmController extends Controller
                             ->where('profesionales_lugares_atencion.id_lugar_atencion',$id_lugar_atencion)
                             ->get();
 
+        foreach($profesionales as $p){
+            $p->nombre = strtoupper($p->nombre);
+            $p->apellido_uno = strtoupper($p->apellido_uno);
+            $p->apellido_dos = strtoupper($p->apellido_dos);
+        }
         return $profesionales;
     }
 
@@ -1885,6 +1997,7 @@ class AdministradorCmController extends Controller
     }
 
     public function editarDatosPerfilResponsableMedico(Request $req){
+
         $institucion = '';
         $tipo_institucion = '1';
         $id_busqueda = Auth::user()->id;
@@ -2018,23 +2131,54 @@ class AdministradorCmController extends Controller
                 }
             }
         }
-        // buscar AREA CM ADMINISTRADOR MEDICO de la institucion
-        $area_cm_responsable = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area')
-                            ->join('tipos_areas_cm','tipos_areas_cm.id','=','areas_cm.id_tipo_area_cm')
-                            ->where('areas_cm.id_lugar_atencion',$institucion->id_lugar_atencion)
-                            ->where('areas_cm.id_responsable',$req->id_responsable)
-                            ->where('areas_cm.id_tipo_area_cm',1)
-                            ->first();
 
-        $area_cm_responsable->nombre = $req->nombres;
-        $area_cm_responsable->apellido_uno = $req->apellido_uno;
-        $area_cm_responsable->apellido_dos = $req->apellido_dos;
-        $area_cm_responsable->email = $req->email;
-        $area_cm_responsable->telefono = $req->telefono;
+        $profesional = Profesional::with(['Direccion'])->where('id', $req->id_responsable)->first();
 
-        $area_cm_responsable->save();
+        $profesional->nombre = $req->nombres;
+        $profesional->apellido_uno = $req->apellido_uno;
+        $profesional->apellido_dos = $req->apellido_dos;
+        $profesional->sexo = $req->sexo;
+        $profesional->fecha_nacimiento = $req->fecha_nac;
+        $profesional->email = $req->email;
+        $profesional->telefono_uno = $req->telefono_uno;
+        $profesional->telefono_dos = $req->telefono_dos;
 
-        return ['estado' => 1, 'mensaje' => 'Datos actualizados','area_cm' => $area_cm_responsable];
+        $profesional->save();
+
+        $direccion = Direccion::where('id', $profesional->id_direccion)->first();
+
+        if($direccion)
+        {
+            // $direccion->region = $request->region;
+            $direccion->id_ciudad = $req->ciudad;
+            $direccion->direccion = $req->direccion;
+            $direccion->numero_dir = $req->numero_dir;
+            if($direccion->save())
+            {
+                $success = true;
+            }
+            else
+            {
+                $success = false;
+            }
+        }
+        else
+        {
+            $direccion = new Direccion();
+            // $direccion->region = $request->region;
+            $direccion->id_ciudad = $req->ciudad;
+            $direccion->direccion = $req->direccion;
+            $direccion->numero_dir = $req->numero_dir;
+            if($direccion->save())
+            {
+                $success = true;
+            }
+            else
+            {
+                $success = false;
+            }
+        }
+        return ['estado' => 1, 'mensaje' => 'Datos actualizados','profesional' => $profesional];
     }
 
     // ACTUALIZAR CONTRASEÑA DEL RESPONSABLE DE LA INSTITUCION
@@ -2286,18 +2430,14 @@ class AdministradorCmController extends Controller
     public function examenes(){
         return view('app.adm_cm.examenes');
     }
-	public function vacunatorio_instalaciones(){
-        return view('app.adm_cm.vacunatorio_instalaciones');
-    }
-	public function vacunatorio_pedidos(){
-        return view('app.adm_cm.vacunatorio_pedidos');
-    }
-	public function vacunatorio_personal(){
-        return view('app.adm_cm.vacunatorio_personal');
-    }
-	public function vacunatorio_felicitreclamos(){
-        return view('app.adm_cm.vacunatorio_felicitreclamos');
-    }
+	// public function vacunatorio_instalaciones(){
+    //     return view('app.adm_cm.vacunatorio_instalaciones');
+    // }
+
+	// public function vacunatorio_personal(){
+    //     return view('app.adm_cm.vacunatorio_personal');
+    // }
+
     public function sucursales_cm(){
         return view('app.adm_cm.sucursales_cm');
     }
@@ -2307,6 +2447,25 @@ class AdministradorCmController extends Controller
 	public function at_profesionales(){
         return view('app.adm_cm.at_profesionales');
     }
+
+    public function vacunatorio_pedidos(){
+        return view('app.vacunatorio.vacunatorio_pedidos');
+    }
+    public function centro_enfermeria_integral_pedidos(){
+        return view('centro_enfermeria_integral.cei_pedidos');
+    }
+	// public function vacunatorio_personal(){
+    //     return view('app.adm_cm.vacunatorio_personal');
+    // }
+	public function vacunatorio_felicitreclamos(){
+        return view('app.adm_cm.vacunatorio_felicitreclamos');
+    }
+    public function centro_enfermeria_integral_felicitreclamos(){
+        return view('app.adm_cm.centro_enfermeria_integral_felicitreclamos');
+    }
+
+
+
     public function profesionales()
     {
         $institucion = '';
@@ -2845,7 +3004,12 @@ class AdministradorCmController extends Controller
 
     public function mensaje_difusion(Request $req){
         try {
-            $destinatarios = $req->para;
+            // Obtener destinatarios - puede venir como string o array
+            $destinatarios = $req->msj_para_difusion;
+            if (!is_array($destinatarios)) {
+                $destinatarios = [$destinatarios];
+            }
+
             // Obtener los roles correspondientes
             $roles = Role::whereIn('id', $destinatarios)->get();
             // Obtener los nombres de los roles
@@ -2857,9 +3021,9 @@ class AdministradorCmController extends Controller
             })->get();
 
             $datos_mensaje = [
-                'titulo' => $req->titulo,
-                'asunto' => $req->detalle,
-                'mensaje' => $req->mensaje,
+                'titulo' => $req->titulo_msj_difusion,
+                'asunto' => $req->detalle_msj_difusion,
+                'mensaje' => $req->mensaje_msj_difusion,
             ];
 
             foreach($usuariosConRoles as $usuario){
@@ -4505,6 +4669,7 @@ class AdministradorCmController extends Controller
         $id_lugar_atencion = $contrato->id_lugar_atencion;
 
         $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+        $institucion = Instituciones::where('id_lugar_atencion', $id_lugar_atencion)->first();
 
         $profesionales = $lugares_atencion->profesionales()->get();
 
@@ -4514,6 +4679,7 @@ class AdministradorCmController extends Controller
             'asistente' => $asistente,
             'lugares_atencion' => $lugares_atencion,
             'profesionales' => $profesionales,
+            'institucion' => $institucion,
         );
 
         return view($url, $array_data);
@@ -4807,9 +4973,21 @@ class AdministradorCmController extends Controller
 
         if($valido)
         {
-            $user = User::find($request->id_user);
+            // Buscar al administrativo primero, y luego el usuario asociado
+            $administrativo = AdminInstServ::find($request->id_user);
+            $user = null;
+
+            if($administrativo && $administrativo->id_admin) {
+                $user = User::find($administrativo->id_admin);
+            }
+
+            if(!$user) {
+                // Intentar buscar directamente como usuario si no se encuentra como administrativo
+                $user = User::find($request->id_user);
+            }
 
             $rol = '';
+
             if($user)
             {
                 // roles
@@ -4891,7 +5069,7 @@ class AdministradorCmController extends Controller
             else
             {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'usuario no encontrado';
+                $datos['msj'] = 'usuario no encontrado - ID administrativo: ' . $request->id_user . ($administrativo ? ' (Administrativo encontrado, pero sin usuario asociado)' : ' (Administrativo no encontrado)');
             }
         }
         else
@@ -6251,18 +6429,18 @@ class AdministradorCmController extends Controller
 
     public function editar_direccion_medica(Request $req){
 
-            $institucion = '';
-            $tipo_institucion = '1';
-            $id_busqueda = Auth::user()->id;
-            if(Auth::user()->id == 3)
-            {
-                $id_busqueda = 5;
-                $registro = Instituciones::where('id', $id_busqueda)->first();
-            }
-            else
-            {
-                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
-            }
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
 
         if($registro)
         {
@@ -6322,6 +6500,7 @@ class AdministradorCmController extends Controller
                 }
             }
         }
+
 
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
@@ -6386,16 +6565,16 @@ class AdministradorCmController extends Controller
         }
         try {
 
-            $responsable_ = ProfesionalesLugaresAtencion::where('id', $req->responsable)->first();
-            if($responsable_) $profesional = Profesional::find($responsable_->id_profesional);
+            $profesional = Profesional::find($req->responsable);
 
             $user = User::find($profesional->id_usuario);
+
             // Tabla donde estan todos los tipos de administraciones medicas
             $cargo = TipoAdministrador::where('id', $req->cargo)->first();
 
             $institucion = Instituciones::where('id', $req->id_institucion)->first();
 
-            if($cargo->id == 1){
+            if($cargo->id == 1 || $cargo->id == 7){
                 $institucion->id_director_medico = intval($user->id);
                 $user->assignRole(3); // Profesional
                 $user->assignRole(23); // Director Médico
@@ -6417,6 +6596,11 @@ class AdministradorCmController extends Controller
             if($cargo->id == 4){
                 $institucion->id_director_comercial = intval($user->id);
                 $user->assignRole(9); // Profesional CONTABILIDAD
+            }
+
+            if($cargo->id == 8){
+                $institucion->id_director_tecnico = intval($user->id);
+                $user->assignRole(32); // Administrador Técnico
             }
 
 
@@ -6446,14 +6630,37 @@ class AdministradorCmController extends Controller
                 $director_comercial = null;
             }
 
+            if($institucion->id_director_tecnico){
+                $director_tecnico = Profesional::where('id_usuario', $institucion->id_director_tecnico)->first();
+            }else{
+                $director_tecnico = null;
+            }
+
+           if ($cargo->id == 1 || $cargo->id == 7) {
+                $cargo_str = 'director_cm';
+            } elseif ($cargo->id == 2) {
+                $cargo_str = 'subdirector_cm';
+            } elseif ($cargo->id == 3) {
+                $cargo_str = 'director_gestion_cuidado';
+            } elseif ($cargo->id == 4) {
+                $cargo_str = 'director_comercial';
+            } else if($cargo->id == 8){
+                $cargo_str = 'director_tecnico';
+            } else {
+                $cargo_str = null;
+            }
+
+
             $v = view('fragm.administradores_cm',[
                 'director_cm' => $director_cm ? $director_cm : null,
                 'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
                 'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
+                'director_tecnico' => $director_tecnico ? $director_tecnico : null,
                 'responsable' => $responsable ? $responsable : null,
                 'institucion' => $institucion,
                 'regiones' => $regiones,
                 'ciudades' => $ciudades,
+                'cargo' => $cargo_str
 
             ])->render();
             return ['estado' => 1, 'msj' => 'Cargo registrado', 'v' => $v];
@@ -6470,6 +6677,9 @@ class AdministradorCmController extends Controller
             $lugar_atencion = $area_cm->id_lugar_atencion;
             $area_cm->delete();
             $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+            if(!$institucion){
+                $institucion = Instituciones::find($req->id_institucion);
+            }
             $areas = $this->dame_areas_cm($lugar_atencion);
             $v = view('fragm.areas_cm',[
                 'areas_cm' => $areas,
@@ -7101,10 +7311,11 @@ class AdministradorCmController extends Controller
     public function dame_convenio(Request $req){
         try {
             //code...
-            $convenio = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
-                                        ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
-                                        ->where('convenio_institucion.id', $req->id)
+            $convenio = EmpresasConvenios::select('empresas_convenios.*','tipo_convenio_institucion.nombre as tipo_convenio_institucion')
+                                        ->leftjoin('tipo_convenio_institucion','empresas_convenios.id_tipo_convenio','=','tipo_convenio_institucion.id')
+                                        ->where('empresas_convenios.id', $req->id)
                                         ->first();
+
 
             $convenio->productos = json_decode($convenio->productos_convenio_institucion);
             return ['estado' => 1, 'convenio' => $convenio];
@@ -7879,4 +8090,70 @@ class AdministradorCmController extends Controller
             return $e->getMessage();
         }
     }
+
+    public function actualizarFoto(Request $request)
+    {
+        try {
+
+            // $request->validate([
+            //     'foto_perfil' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            //     'id_institucion' => 'required|integer|exists:instituciones,id'
+            // ]);
+
+            $institucion = Instituciones::where('id', $request->id_institucion)->first();
+
+            if (!$institucion) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Institución no encontrada'
+                ], 404);
+            }
+
+            if ($institucion->foto_perfil) {
+                Storage::disk('public')->delete($institucion->foto_perfil);
+            }
+
+            $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
+            $institucion->update(['foto_perfil' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto actualizada correctamente',
+                'foto_url' => asset('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la foto: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+public function eliminarFoto(Request $request)
+{
+    try {
+        $institucion = Instituciones::where('id', $request->id_institucion)->first();
+        if (!$institucion) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Institución no encontrada'
+            ], 404);
+        }
+
+        if ($institucion->foto_perfil) {
+            Storage::disk('public')->delete($institucion->foto_perfil);
+            $institucion->update(['foto_perfil' => null]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto eliminada correctamente'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al eliminar la foto: ' . $e->getMessage()
+        ], 500);
+    }
+}
 }

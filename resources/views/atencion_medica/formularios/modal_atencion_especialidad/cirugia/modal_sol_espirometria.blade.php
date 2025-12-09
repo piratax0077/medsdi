@@ -165,6 +165,37 @@
 <script>
     function sol_examen_espirometria() {
         console.log('solicitud examen espirometria');
+         $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 765
+                },
+        })
+        .done(function(response) {
+            console.log(response);
+            $('#ex-funcional').val(null).trigger('change');
+
+            // Limpiar las opciones existentes
+            $('#ex-funcional').empty();
+
+            // Agregar opción por defecto
+            $('#ex-funcional').append('<option value="">Seleccione...</option>');
+
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#ex-funcional').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+
+            // Reinicializar el select2 si es necesario
+            $('#ex-funcional').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
         $('#m_espiro').modal('show');
     }
 
@@ -271,53 +302,71 @@
             );
     }
 
-    function eliminarExamen(id, tipo, nombre_examen = null) {
-        if (!confirm("¿Está seguro de eliminar este examen?")) return;
+    function eliminarExamen(id,tipo, nombre_examen = null) {
+        swal({
+            title: "¿Estás seguro?",
+            text: "¿Deseas eliminar este examen?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ route('profesional.examen.eliminar') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        id_ficha_atencion: $('#id_fc').val(),
+                        tipo: tipo,
+                        nombre_examen: nombre_examen,
+                        _token: CSRF_TOKEN
+                    },
+                    success: function (resp) {
+                        console.log(resp);
+                        if (resp.success) {
+                            swal({
+                                title: 'Se ha eliminado con éxito el examen',
+                                icon: 'success',
+                            });
+                            let tbody = $('#table_examen_' + tipo + ' tbody');
+                            tbody.empty(); // Limpiar tabla
 
-        $.ajax({
-            url: "{{ route('profesional.examen.eliminar') }}",
-            type: 'POST',
-            data: {
-                id: id,
-                id_ficha_atencion: $('#id_fc').val(),
-                tipo: tipo,
-                nombre_examen: nombre_examen,
-                _token: CSRF_TOKEN
-            },
-            success: function(resp) {
-                console.log(resp);
-                if (resp.success) {
-                    swal({
-                        title: 'Se ha eliminado con éxito el examen',
-                        icon: 'success',
-                    });
-                    let tbody = $('#table_examen_' + tipo + ' tbody');
-                    tbody.empty(); // Limpiar tabla
-
-                    resp.examenes.forEach(item => {
-                        item.examenes.forEach(nombre_examen => {
-                            tbody.append(`
-                                <tr>
-                                    <td class="text-center align-middle">${item.fecha}</td>
-                                    <td class="align-middle">${nombre_examen}</td>
-                                    <td class="align-middle">${item.diagnostico}</td>
-                                    <td class="align-middle">${item.observaciones || ''}</td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo}, '${nombre_examen}')">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
+                            resp.examenes.forEach(item => {
+                                item.examenes.forEach(nombre_examen => {
+                                    tbody.append(`
+                                        <tr>
+                                            <td class="text-center align-middle">${item.fecha}</td>
+                                            <td class="align-middle">${nombre_examen}</td>
+                                            <td class="align-middle">${item.diagnostico}</td>
+                                            <td class="align-middle">${item.observaciones || ''}</td>
+                                            <td class="text-center align-middle">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo}, '${nombre_examen}')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            });
+                        } else {
+                            swal({
+                                title: "Error",
+                                text: resp.message || "Error al eliminar",
+                                icon: "error",
+                                button: "Aceptar"
+                            });
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        swal({
+                            title: "Error",
+                            text: "No se pudo eliminar el examen.",
+                            icon: "error",
+                            button: "Aceptar"
                         });
-                    });
-                } else {
-                    alert(resp.message || "Error al eliminar");
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                alert("Ocurrió un error al eliminar.");
+                    }
+                });
             }
         });
     }

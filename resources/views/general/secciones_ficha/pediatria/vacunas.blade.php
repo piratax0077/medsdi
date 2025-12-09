@@ -5,64 +5,60 @@
         </div>
         <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
             <div class="card-a">
-                <div class="card-header-a" id="motivop">
-                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivop_c" aria-expanded="false" aria-controls="motivop_c">
-                        Estado de vacunación del menor
-                    </button>
+                <div class="card-header-a ">
+                    <h6 class="text-c-blue f-16 py-1">Estado de vacunación del menor</h6>
                 </div>
-                <div id="motivop_c" class="collapse show" aria-labelledby="motivop" data-parent="#motivop">
-                    <div class="card-body-aten-a">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label class="floating-label-activo-sm">Estado de vacunación</label>
-                                <select class="form-control form-control-sm" id="id_estado_vacuna" name="id_estado_vacuna">
-                                    <option value="">Seleccione</option>
-                                    <option value="AD">Al día</option>
-                                    <option value="AT">Atrasado</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="floating-label-activo-sm">Vacuna correspondiente a edad</label>
-                                <select class="form-control form-control-sm" id="id_vacuna" name="id_vacuna">
-                                    <option>Seleccione</option>
-                                    <optgroup label="Recién Nacido">
-                                        <option value="BCG" data-periodo="Recién Nacido" data-dosis="UNICA">BCG</option>
-                                        <option value="HP-B" data-periodo="Recién Nacido" data-dosis="1">Hepatitis B</option>
-                                    </optgroup>
-                                    <optgroup label="2° mes , 4° mes , 6° mes">
-                                        <option value="HV" data-periodo="2,4 ó 6 mes" data-dosis="1">Hexavalente</option>
-                                        <option value="NC" data-periodo="2,4 ó 6 mes" data-dosis="1">Neumocócica Conjugada (prematuros)</option>
-                                    </optgroup>
-                                    <optgroup label="12 meses">
-                                        <option value="TV-1D" data-periodo="12 mes" data-dosis="1">Tres Vírica 1ª Dosis</option>
-                                        <option value="MC-C" data-periodo="12 mes" data-dosis="1">Meningocócica Conjugada</option>
-                                        <option value="NC-C" data-periodo="12 mes" data-dosis="1">Neumocócica Conjugada</option>
-                                    </optgroup>
-                                    <optgroup label="18 meses">
-                                        <option value="HV" data-periodo="18 mes" data-dosis="2">Hexavalente</option>
-                                        <option value="HP-A" data-periodo="18 mes" data-dosis="1">Hepatitis A</option>
-                                        <option value="VA-1D" data-periodo="18 mes" data-dosis="1">Varícela 1ª Dosis</option>
-                                        <option value="FA" data-periodo="18 mes" data-dosis="UNICA">Fiebre Amarilla(Isla de Pascua)</option>
-                                    </optgroup>
-                                    <optgroup label="Pre-escolar">
-                                        <option value="TV-2D" data-parent="Pre-escolar" data-dosis="2">Tres Vírica 2ª Dosis</option>
-                                        <option value="VA-2D" data-parent="Pre-escolar" data-dosis="2">Varícela 2ª Dosis</option>
-                                    </optgroup>
-                                    <optgroup label="Escolar">
-                                        <option value="dTp" data-periodo="Escolar 1º Básico" data-dosis="1">1º Básico dTp (acelular)</option>
-                                        <option value="VPH-1D" data-periodo="Escolar 4º Básico" data-dosis="1">4º Básico VPH 1ª Dosis</option>
-                                        <option value="VPH-2D" data-periodo="Escolar 5º Básico" data-dosis="2">5º Básico VPH 2ª Dosis</option>
-                                        <option value="dTp" data-periodo="Escolar 8º Básico" data-dosis="2">8º Básico dTp (acelular)</option>
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <label class="floating-label-activo-sm">Incidentes con la vacuna</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=8" onblur="this.rows=1;" name="indicaciones_vacuna" id="indicaciones_vacuna"></textarea>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="registrar_vacuna('1','GEN')"><i class="feather icon-plus"></i> Añadir</button>
-                            </div>
+                <div class="card-body-aten-a">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="floating-label-activo-sm">Estado de vacunación</label>
+                            <select class="form-control form-control-sm" id="id_estado_vacuna" name="id_estado_vacuna">
+                                <option value="">Seleccione</option>
+                                <option value="AD">Al día</option>
+                                <option value="AT">Atrasado</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="floating-label-activo-sm">Vacuna correspondiente a edad</label>
+                            <select class="form-control form-control-sm" id="id_vacuna" name="id_vacuna">
+                                <option>Seleccione</option>
+                                <optgroup label="Recién Nacido">
+                                    <option value="BCG" data-periodo="Recién Nacido" data-dosis="UNICA">BCG</option>
+                                    <option value="HP-B" data-periodo="Recién Nacido" data-dosis="1">Hepatitis B</option>
+                                </optgroup>
+                                <optgroup label="2° mes , 4° mes , 6° mes">
+                                    <option value="HV" data-periodo="2,4 ó 6 mes" data-dosis="1">Hexavalente</option>
+                                    <option value="NC" data-periodo="2,4 ó 6 mes" data-dosis="1">Neumocócica Conjugada (prematuros)</option>
+                                </optgroup>
+                                <optgroup label="12 meses">
+                                    <option value="TV-1D" data-periodo="12 mes" data-dosis="1">Tres Vírica 1ª Dosis</option>
+                                    <option value="MC-C" data-periodo="12 mes" data-dosis="1">Meningocócica Conjugada</option>
+                                    <option value="NC-C" data-periodo="12 mes" data-dosis="1">Neumocócica Conjugada</option>
+                                </optgroup>
+                                <optgroup label="18 meses">
+                                    <option value="HV" data-periodo="18 mes" data-dosis="2">Hexavalente</option>
+                                    <option value="HP-A" data-periodo="18 mes" data-dosis="1">Hepatitis A</option>
+                                    <option value="VA-1D" data-periodo="18 mes" data-dosis="1">Varícela 1ª Dosis</option>
+                                    <option value="FA" data-periodo="18 mes" data-dosis="UNICA">Fiebre Amarilla(Isla de Pascua)</option>
+                                </optgroup>
+                                <optgroup label="Pre-escolar">
+                                    <option value="TV-2D" data-parent="Pre-escolar" data-dosis="2">Tres Vírica 2ª Dosis</option>
+                                    <option value="VA-2D" data-parent="Pre-escolar" data-dosis="2">Varícela 2ª Dosis</option>
+                                </optgroup>
+                                <optgroup label="Escolar">
+                                    <option value="dTp" data-periodo="Escolar 1º Básico" data-dosis="1">1º Básico dTp (acelular)</option>
+                                    <option value="VPH-1D" data-periodo="Escolar 4º Básico" data-dosis="1">4º Básico VPH 1ª Dosis</option>
+                                    <option value="VPH-2D" data-periodo="Escolar 5º Básico" data-dosis="2">5º Básico VPH 2ª Dosis</option>
+                                    <option value="dTp" data-periodo="Escolar 8º Básico" data-dosis="2">8º Básico dTp (acelular)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label class="floating-label-activo-sm">Incidentes con la vacuna</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=8" onblur="this.rows=1;" name="indicaciones_vacuna" id="indicaciones_vacuna"></textarea>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="registrar_vacuna('1','GEN')"><i class="feather icon-plus"></i> Añadir</button>
                         </div>
                     </div>
                 </div>
@@ -70,11 +66,11 @@
         </div>
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
             <div class="card">
-                <div class="card-body px-2">
+                <div class="card-body p-2">
                     <div class="form-row" id="formulario_vac">
                         <div class="col-sm-12 col-md-12">
                             <div class="btn-group btn-block btn-sm" role="group">
-                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="feather icon-file-text"></i> Indicaciones
+                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm dropdown-toggle mb-3" data-toggle="dropdown" aria-expanded="false"><i class="feather icon-file-text"></i> Indicaciones
                                 </button>
                                 <div class="dropdown-menu position-absolute" style="z-index: 2000;">
                                   <a class="dropdown-item" onclick="i_vacunas();"><i class="feather icon-plus"></i> Indicar Vacunas Programa MINSAL</a>
@@ -87,19 +83,19 @@
                         </div>
                         <div class="col-sm-12 col-md-12 px-3">
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se añadio vacuna programa MINSAL</li>
+                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió vacuna programa MINSAL</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se añadio otras vacunas</li>
+                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió otras vacunas</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se modificó carne vacunas generales</li>
+                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se modificó carne vacunas generales</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se modificó carne vacunas especiales</li>
+                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se modificó carne vacunas especiales</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se añadió Interconsulta</li>
+                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió Interconsulta</li>
                             </ul>
                         </div>
                     </div>
@@ -113,12 +109,12 @@
                 <div class="card-header-a">
                     <div class="row">
                         <div class="col-md-9 d-inline">
-                            <h6 class="text-c-blue d-inline">Estado de Vacunación</h6>
+                            <h6 class="text-c-blue d-inline f-16">Estado de Vacunación</h6>
                             
                         </div>
 						<div class="col-md-3 d-inline">
                             
-                            <button type="button" class="btn btn-xs btn-danger-light float-right mr-2" onclick="carnet_pdf();">VER CARNE DE VACUNACIÓN</button>
+                            <button type="button" class="btn btn-sm btn-purple float-right mr-2" onclick="carnet_pdf();"><i class="fas fa-syringe"></i> VER CARNE DE VACUNACIÓN</button>
                         </div>
                     </div>
                 </div>
@@ -129,29 +125,29 @@
                                 <table  class="display table table-striped dt-responsive nowrap table-xs" style="width:100%" id="pediatria_vacunas_generales">
                                     <thead>
                                         <tr>
-                                            <th class="text-center align-middle">FECHA</th>
-                                            <th class="text-center align-middle">VACUNAS</th>
-                                            <th class="text-center align-middle">DOSIS</th>
-                                            <th class="text-center align-middle">EDAD</th>
-                                            <th class="text-center align-middle">OBSERVACION</th>
+                                            <th class="align-middle">FECHA</th>
+                                            <th class="align-middle">VACUNAS</th>
+                                            <th class="align-middle">DOSIS</th>
+                                            <th class="align-middle">EDAD</th>
+                                            <th class="align-middle">OBSERVACIÓN</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="align-middle text-center">
+                                            <td class="text-center">
                                                 <span><strong>RN</strong></span>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="text-center">
                                                 <span>BCG</span><br>
                                                 <span>Hepatitis B</span>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="text-center">
                                                <span>SI</span>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="text-center">
                                                 <span>20/12/2021</span>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="text-center">
                                                 <span>ERITEMA LOCAL</span>
                                             </td>
                                             {{-- <td class="align-middle text-center">
@@ -317,21 +313,21 @@
                     $.each(data.registros, function (key, value) {
                         var html = '';
                         html += '<tr>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="text-center">';
                         html += '        <span><strong>'+value.fecha+'</strong></span>';
                         html += '    </td>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="text-center">';
                         html += '        <span>'+value.nombre_vacuna+'</span>';
                         html += '    </td>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="text-center">';
                         html += '        <span>'+value.texto_dosis+'</span>';
                         html += '    </td>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="text-center">';
                         html += '        <span>'+value.edad+'</span><br/>';
                         // if(value.periodo != null)
                         //     html += '        <span>'+value.periodo+'</span>';
                         html += '    </td>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="text-center">';
                         if(value.observacion_vacuna != null)
                             html += '        <span>'+value.observacion_vacuna+'</span><br/>';
                         if(value.indicaciones_vacuna != null)

@@ -59,7 +59,7 @@
 
     <!-- flatpickr -->
     <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @yield('page-styles')
 
 </head>
@@ -108,7 +108,7 @@
 
     <!--Check-->
     <script src="{{ asset('js/check_atencion_medica.js') }}"></script>
-	
+
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 

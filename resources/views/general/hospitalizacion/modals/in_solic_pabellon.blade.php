@@ -2,19 +2,16 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitar pabellón</h5>
-                <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" onclick="cerrarspab();"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <script>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitar pabellón - <script>
                         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
                         var f=new Date();
                         document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                        </script>
-                    </div>
+                        </script></h5>
+                <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" onclick="cerrarspab();"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                             <li class="nav-item">
@@ -38,199 +35,264 @@
                             <!--INFO. INGRESO-->
                             <div class="tab-pane fade show active" id="sol_pab_info-ingreso" role="tabpanel" aria-labelledby="sol_pab_info-ingreso-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 mb-2">
-                                        <h6 class="text-c-blue">INFORMACIÓN DE PACIENTE</h6>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Nombre</label>
-                                        <label class="label">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Edad</label>
-                                        <label class="label">{{ $paciente->fecha_naciemiento }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Prevision</label>
-                                        <label class="label">{{ $paciente->Prevision->first()->nombre }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Teléfono</label>
-                                        <label class="label">{{ $paciente->telefono_uno }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Email</label>
-                                        <label class="label">{{ $paciente->email }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label">Enfermedades Cronicas:
-
-                                            @php
-                                                $patalogias_cronicas = '';
-                                            @endphp
-                                            @foreach ($patoligias_cronicas as $patologia_cronica)
-                                                @php
-                                                    $temp = json_decode($patologia_cronica->data);
-                                                    echo $temp->nombre;
-                                                    $patalogias_cronicas .= $temp->nombre;
-                                                @endphp
-                                                @if($patologia_cronica->comentario)
-                                                    ,{{ $patologia_cronica->comentario }}
-                                                    @php
-                                                        $patalogias_cronicas .= ', '.$patologia_cronica->comentario;
-                                                    @endphp
-                                                @endif
-                                                ;
-                                                @php
-                                                        $patalogias_cronicas .= ';';
-                                                @endphp
-                                            @endforeach
-                                        </label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                        <label class="floating-label-activo-sm">Otros Antecedentes Medicos</label>
-                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_otros_antecedentes_m" id="ingreso_sol_pab_modal_otros_antecedentes_m" value="">
-                                        <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas" id="ingreso_sol_pab_modal_patalogias_cronicas" value="{{ $patalogias_cronicas }}">
+                                    <div class="col-sm-12 col-md-12">
+                                        <h6 class="text-c-blue mb-2">INFORMACIÓN DE PACIENTE</h6>
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 mb-2">
-                                        <h6 class="text-c-blue">INFORMACIÓN DE PROFESIONAL SOLICITANTE</h6>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label"><strong>Nombre: </strong></label>
-                                        <label class="label">{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}</label>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <label class="label"><strong>Especialidad: </strong></label>
-                                        <label class="label">
-                                            @if($profesional->SubTipoEspecialidad()->first())
-                                                {{ $profesional->SubTipoEspecialidad()->first()->nombre }}
-                                            @else
-                                                {{ $profesional->TipoEspecialidad()->first()->nombre }}
-                                            @endif
-                                        </label>
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                		<div class="card-informacion mb-4">
+                                			<div class="card-body pb-1">
+                                				<div class="form-row">
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0">Nombre</label>
+				                                        <label class="label ml-0">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0">Edad</label>
+				                                        <label class="label ml-0">{{ \Carbon\Carbon::createFromDate($paciente->fecha_nac)->age; }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0">Previsión</label>
+				                                        <label class="label ml-0">{{ $paciente->Prevision->first()->nombre }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0">Teléfono</label>
+				                                        <label class="label ml-0">{{ $paciente->telefono_uno }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0">Email</label>
+				                                        <label class="label ml-0">{{ $paciente->email }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 mb-0">
+				                                        <label class="label font-weight-bold ml-0"><span class="text-danger">Enfermedades Crónicas:</span>
+
+				                                            @php
+				                                                $patalogias_cronicas = '';
+				                                            @endphp
+				                                            @foreach ($patoligias_cronicas as $patologia_cronica)
+				                                                @php
+				                                                    $temp = json_decode($patologia_cronica->data);
+				                                                    echo $temp->nombre;
+				                                                    $patalogias_cronicas .= $temp->nombre;
+				                                                @endphp
+				                                                @if($patologia_cronica->comentario)
+				                                                    ,{{ $patologia_cronica->comentario }}
+				                                                    @php
+				                                                        $patalogias_cronicas .= ', '.$patologia_cronica->comentario;
+				                                                    @endphp
+				                                                @endif
+				                                                ;
+				                                                @php
+				                                                        $patalogias_cronicas .= ';';
+				                                                @endphp
+				                                            @endforeach
+				                                        </label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 mt-2">
+				                                        <label class="floating-label-activo-sm">Otros Antecedentes Médicos</label>
+				                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_otros_antecedentes_m" id="ingreso_sol_pab_modal_otros_antecedentes_m" value="">
+				                                        <input type="hidden" name="ingreso_sol_pab_modal_patalogias_cronicas" id="ingreso_sol_pab_modal_patalogias_cronicas" value="{{ $patalogias_cronicas }}">
+				                                    </div>
+				                                 </div>
+			                                </div>
+			                            </div>
+			                        </div>
+                                </div>
+
+ 								 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <h6 class="text-c-blue mb-2">INFORMACIÓN DEL PROFESIONAL SOLICITANTE</h6>
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 mb-2">
-                                        <h6 class="text-c-blue">INFORMACIÓN DE INGRESO</h6>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                        <label class="floating-label-activo-sm">Clínica - Hospital</label>
-                                        <input type="text" class="form-control form-control-sm" id="ingreso_sol_pab_modal_hospital" name="ingreso_sol_pab_modal_hospital" value="{{ $lugar_atencion->nombre }}" placeholder="Ingrese Email o WhatsApp">
-                                        <input type="hidden" name="ingreso_sol_pab_modal_id_hospital" id="ingreso_sol_pab_modal_id_hospital" value="">
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                        <label class="floating-label-activo-sm">Diagnósticos </label>
-                                        <textarea class="form-control caja-texto form-control-sm " rows="1"  onfocus="this.rows=8" onblur="this.rows=1;" name="ingreso_sol_pab_modal_diagnostico_preoperatorio" id="ingreso_sol_pab_modal_diagnostico_preoperatorio"></textarea>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                        <div class="form-group">
-                                            <label class="floating-label-activo-sm">Tipo pabellón</label>
-                                            <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_tipo_cirugia" id="ingreso_sol_pab_modal_tipo_cirugia">
-                                        </div>
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                		<div class="card-informacion mb-4">
+                                			<div class="card-body pb-0">
+                                				<div class="form-row">
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 pl-0">
+				                                        <label class="label"><strong>Nombre: </strong></label>
+				                                        <label class="label">{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}</label>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 pl-0">
+				                                        <label class="label"><strong>Especialidad: </strong></label>
+				                                        <label class="label">
+				                                            @if($profesional->SubTipoEspecialidad()->first())
+				                                                {{ $profesional->SubTipoEspecialidad()->first()->nombre }}
+				                                            @else
+				                                                {{ $profesional->TipoEspecialidad()->first()->nombre }}
+				                                            @endif
+				                                        </label>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+				                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="text-c-blue mb-2">INFORMACIÓN DE INGRESO</h6>
                                     </div>
                                 </div>
-                                <hr>
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 mb-2">
-                                        <h6 class="text-c-blue">CONSENTIMIENTO INFORMADO</h6>
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                		<div class="card-informacion mb-4">
+                                			<div class="card-body pb-0">
+                                				<div class="form-row">
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+				                                        <label class="floating-label-activo-sm">Clínica - Hospital</label>
+				                                        <input type="text" class="form-control form-control-sm" id="ingreso_sol_pab_modal_hospital" name="ingreso_sol_pab_modal_hospital" value="{{ $lugar_atencion->nombre }}" placeholder="Ingrese Email o WhatsApp">
+				                                        <input type="hidden" name="ingreso_sol_pab_modal_id_hospital" id="ingreso_sol_pab_modal_id_hospital" value="">
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+				                                        <label class="floating-label-activo-sm">Diagnósticos </label>
+				                                        <textarea class="form-control caja-texto form-control-sm " rows="1"  onfocus="this.rows=8" onblur="this.rows=1;" name="ingreso_sol_pab_modal_diagnostico_preoperatorio" id="ingreso_sol_pab_modal_diagnostico_preoperatorio"></textarea>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+				                                        <div class="form-group">
+				                                            <label class="floating-label-activo-sm">Tipo pabellón</label>
+				                                            <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_tipo_cirugia" id="ingreso_sol_pab_modal_tipo_cirugia">
+				                                        </div>
+				                                    </div>
+			                                    </div>
+			                                 </div>
+			                            </div>
+			                        </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <h6 class="text-c-blue mb-2">CONSENTIMIENTO INFORMADO</h6>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                        @if ($paciente->ConConsentimientoPctActiva()->get())
-                                            @foreach ( $paciente->ConConsentimientoPctActiva()->get() as $consentimiento)
-                                                @if($consentimiento->id_fc == $id_ficha_atencion)
-                                                    <button class="btn btn-danger m-1" onclick="ver_pdf_consentimiento('{{ $consentimiento->id }}', '{{ $id_ficha_atencion }}');">Descargar PDF - {{ $consentimiento->Consentimiento()->first()->nombre }}</button>
-                                                @endif
-                                            @endforeach
-                                        @endif
+                                </div>
 
-
-                                    </div>
-
+                                <div class="form-row">
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                		<div class="card-informacion mb-4">
+                                			<div class="card-body pb-0">
+			                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 pl-0">
+			                                        @if ($paciente->ConConsentimientoPctActiva()->get())
+			                                            @foreach ( $paciente->ConConsentimientoPctActiva()->get() as $consentimiento)
+			                                                @if($consentimiento->id_fc == $id_ficha_atencion)
+			                                                    <button class="btn btn-danger m-1" onclick="ver_pdf_consentimiento('{{ $consentimiento->id }}', '{{ $id_ficha_atencion }}');">Descargar PDF - {{ $consentimiento->Consentimiento()->first()->nombre }}</button>
+			                                                 @endif
+			                                            @endforeach
+                                                    @else
+			                                                 <span class="badge badge-warning f-16">No disponible</span>
+			                                        @endif
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        </div>
                                 </div>
                             </div>
                             <!--CIRUGIA-->
                             <div class="tab-pane fade show" id="sol_pab_cirugia-pab" role="tabpanel" aria-labelledby="sol_pab_cirugia-pab-tab">
 
                                 <div class="form-row mb-2">
-                                    <div class="col-md-12 mb-2">
-                                        <h6 class="text-c-blue">CIRUGÍA</h6>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm">Urgencia Quirúrgica</label>
-                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_grado_urgencia" id="ingreso_sol_pab_modal_grado_urgencia">
-                                            <option value="1">Electiva</option>
-                                            <option value="2">Urgencia Quirúrgica</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm">Tipo de cirugía <i>(nombre)</i></label>
-                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_operacion" id="ingreso_sol_pab_modal_operacion">
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm">Codigo Cirugia</label>
-                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_cirugia" id="ingreso_sol_pab_modal_cirugia" readonly>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm">Anestésia</label>
-                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_anestesia" id="ingreso_sol_pab_modal_anestesia">
-                                    </div>
-                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                        <label class="floating-label-activo-sm">Fecha y Hora solicitada</label>
-                                        <input type="datetime-local" class="form-control form-control-sm" name="ingreso_sol_pab_modal_fecha_hora_operacion" id="ingreso_sol_pab_modal_fecha_hora_operacion">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="tit-gen mb-2">CIRUGÍA</h6>
                                     </div>
                                 </div>
-
+                                <div class="form-row">
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                                	<div class="card-informacion">
+	                                		<div class="card-body">
+	                                			<div class="form-row">
+				                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-3">
+				                                        <label class="floating-label-activo-sm">Urgencia Quirúrgica</label>
+				                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_grado_urgencia" id="ingreso_sol_pab_modal_grado_urgencia">
+				                                            <option value="1">Electiva</option>
+				                                            <option value="2">Urgencia Quirúrgica</option>
+				                                        </select>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-6">
+				                                        <label class="floating-label-activo-sm">Tipo de cirugía (Nombre)</label>
+				                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_operacion" id="ingreso_sol_pab_modal_operacion">
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-3">
+				                                        <label class="floating-label-activo-sm">Código Cirugia</label>
+				                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_cirugia" id="ingreso_sol_pab_modal_cirugia" readonly>
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-6">
+				                                        <label class="floating-label-activo-sm">Anestésia</label>
+				                                        <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_anestesia" id="ingreso_sol_pab_modal_anestesia">
+				                                    </div>
+				                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-6">
+				                                        <label class="floating-label-activo-sm">Fecha y hora solicitada</label>
+				                                        <input type="datetime-local" class="form-control form-control-sm" name="ingreso_sol_pab_modal_fecha_hora_operacion" id="ingreso_sol_pab_modal_fecha_hora_operacion">
+				                                    </div>
+				                                </div>
+			                                </div>
+			                            </div>
+			                        </div>
+                                </div>
                             </div>
 
                             <!--EQUIPO-->
                             <div class="tab-pane fade show" id="sol_pab_equipo-pab" role="tabpanel" aria-labelledby="sol_pab_equipo-pab-tab">
-                                <div class="form-row mb-2">
-                                    <div class="col-md-12 mb-2">
-                                        <h6 class="text-c-blue">EQUIPO</h6>
-                                    </div>
-                                    <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                        <label class="floating-label-activo-sm">Cargar Equipo</label>
-                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_mi_equipo" id="ingreso_sol_pab_modal_mi_equipo" onchange="cargar_mi_equipo('ingreso_sol_pab_modal_mi_equipo','lista_profesionales');">
-                                            <option value="0">Seleccione</option>
-                                        </select>
-                                        <input type="hidden" name="ingreso_sol_pab_modal_lista_profesionales" id="ingreso_sol_pab_modal_lista_profesionales" value="">
-                                    </div>
-
-                                    <div class="col-md-12 mb-2">
-                                        <div class="form-row lista_profesionales">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <label class="floating-label-activo-sm">Instrumental especial</label>
-                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_equipamiento_especial" id="ingreso_sol_pab_modal_equipamiento_especial"></textarea>
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="tit-gen mb-3">EQUIPO</h6>
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                	<div class="card-informacion">
+                                		<div class="card-body">
+                                			<div class="form-row">
+			                                    <div class="form-group col-md-6 col-lg-6 col-xl-5">
+			                                        <label class="floating-label-activo-sm">Cargar Equipo</label>
+			                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_mi_equipo" id="ingreso_sol_pab_modal_mi_equipo" onchange="cargar_mi_equipo('ingreso_sol_pab_modal_mi_equipo','lista_profesionales');">
+			                                            <option value="0">Seleccione</option>
+			                                        </select>
+			                                        <input type="hidden" name="ingreso_sol_pab_modal_lista_profesionales" id="ingreso_sol_pab_modal_lista_profesionales" value="">
+			                                    </div>
+			                                    <div class="col-md-12 mb-2">
+			                                        <div class="form-row lista_profesionales">
+
+			                                        </div>
+			                                    </div>
+			                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+			                                        <label class="floating-label-activo-sm">Instrumental especial</label>
+			                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_equipamiento_especial" id="ingreso_sol_pab_modal_equipamiento_especial"></textarea>
+			                                    </div>
+			                                </div>
+			                            </div>
+                                	</div>
+                                	</div>
+                            	</div>
                             </div>
                             <!--COMENTARIOS-->
                             <div class="tab-pane fade show" id="sol_pab_comentarios-pab" role="tabpanel" aria-labelledby="sol_pab_comentarios-pab-tab">
-                                <div class="form-row mb-2">
+                                <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <h6 class="mb-3 text-c-blue">OTROS</h6>
-                                    <div class="form-group">
-                                    <label class="floating-label-activo-sm">Comentarios</label>
-                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_comentarios" id="ingreso_sol_pab_modal_comentarios"></textarea>
-                                    </div>
-                                    </div>
+                                    	<h6 class="mb-3 tit-gen">OTROS</h6>
+                                	</div>
                                 </div>
-                            </div>
+                            	<div class="form-row">
+                                	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+	                                	<div class="card-informacion">
+	                                		<div class="card-body">
+	                                			<div class="form-row">
+				                                    <div class="col-sm-12 col-md-12 col-lg-12 form-group">
+				                                    	<label class="floating-label-activo-sm">Comentarios</label>
+				                                    	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_comentarios" id="ingreso_sol_pab_modal_comentarios"></textarea>
+				                                    </div>
+				                                </div>
+				                            </div>
+				                        </div>
+                                	</div>
+                            	</div>
+                           	</div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_pabellon()">PDF</button>
+                <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_pabellon()"><i class="feather icon-file"></i> PDF</button>
                 <button type="button" class="btn btn-sm btn-info" onclick="registrar_solicitud_pabellon();"><i class="feather icon-save" ></i> Guardar y enviar solicitud</button>
             </div>
         </div>
@@ -338,22 +400,26 @@
             var html = '';
 
             html += '<!-- info equipo -->';
-             html += '<div class="form-group col-md-6 col-lg-6 col-xl-6">';
-             html += '    <label class="floating-label-activo-sm">Nombre Equipo</label>';
-             html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_nombre_equipo" id="ingreso_sol_pab_modal_nombre_equipo">';
-             html += '</div>';
-             html += '<div class="form-group col-md-6 col-lg-6 col-xl-6">';
-             html += '    <label class="floating-label-activo-sm">Descripción Equipo</label>';
-             html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_descripcion_equipo" id="ingreso_sol_pab_modal_descripcion_equipo">';
-             html += '</div>';
+            html += '<div class="form-group col-md-5 col-lg-5 col-xl-5">';
+            html += '    <label class="floating-label-activo-sm">Nombre Equipo</label>';
+            html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_nombre_equipo" id="ingreso_sol_pab_modal_nombre_equipo">';
+            html += '</div>';
+            html += '<div class="form-group col-md-5 col-lg-5 col-xl-5">';
+            html += '    <label class="floating-label-activo-sm">Descripción Equipo</label>';
+            html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_descripcion_equipo" id="ingreso_sol_pab_modal_descripcion_equipo">';
+            html += '</div>';
+            html += '<div class="form-group col-md-2 col-lg-2 col-xl-2">';
+            html += '    <button type="button" class="btn btn-info btn-block btn-sm" onclick="crear_nuevo_equipo()"><i class="feather icon-save"></i> Equipo </button>';
+            html += '</div>';
 
-            html += '<!-- header -->';
-            html += '<div class="form-group col-md-5">Posición</div>';
-            html += '<div class="form-group col-md-5">Profesional</div>';
-            html += '<div class="form-group col-md-2">Agregar</div>';
+            // html += '<!-- header -->';
+            // html += '<div class="form-group col-md-5">Posición</div>';
+            // html += '<div class="form-group col-md-5">Profesional</div>';
+            // html += '<div class="form-group col-md-2">Agregar</div>';
 
             html += '<!-- fromulario -->';
             html += '<div class="form-group col-md-5">';
+            html += '<label class="floating-label-activo-sm">Posición </label>';
             html += '    <select class="form-control form-control-sm equipo_posicion" name="equipo_posicion_1" id="equipo_posicion_1">';
             html += '        <option value="">Seleccione</option>';
             html += '        <option value="CIRUJANO">CIRUJANO</option>';
@@ -363,11 +429,12 @@
             html += '    </select>';
             html += '</div>';
             html += '<div class="form-group col-md-5">';
+            html += '<label class="floating-label-activo-sm">Profesional </label>';
             html += '    <input class="form-control form-control-sm equipo_profesional" type="text" name="equipo_profesional_1" id="equipo_profesional_1">';
             html += '    <input class="form-control form-control-sm equipo_profesional" type="hidden" name="equipo_profesional_id_1" id="equipo_profesional_id_1">';
             html += '</div>';
             html += '<div class="form-group col-md-2">';
-            html += '    <button class="btn btn-xs btn-success" id="btn_registrar_profesional" onclick="guardar_profesional_equipo();"><i class="fa fa-check" aria-hidden="true"></i></button>';
+            html += '    <button class="btn btn-xs btn-info btn-block" id="btn_registrar_profesional" onclick="guardar_profesional_equipo();"><i class="fa fa-check" aria-hidden="true"></i> Registrar</button>';
             html += '</div>';
 
             html += '<!-- formulario de nuevo profesional -->';
@@ -460,6 +527,76 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+    }
+
+    function crear_nuevo_equipo(){
+        let nombre = $('#ingreso_sol_pab_modal_nombre_equipo').val();
+        let descripcion = $('#ingreso_sol_pab_modal_descripcion_equipo').val();
+        let url = "{{ ROUTE('profesional.equipo.crear') }}";
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(nombre == ''){
+            valido = 0;
+            mensaje += '<li>Nombre del equipo</li>';
+        }
+        if(descripcion == ''){
+            valido = 0;
+            mensaje += '<li>Descripción</li>';
+        }
+
+        if(lista_profesionales_eq_nuevo.length == 0){
+            valido = 0;
+            mensaje += '<li>Profesionales</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title:'Error',
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: mensaje
+                    },
+                },
+                icon:'error'
+            });
+
+            return;
+        }
+
+        let data = {
+            nombre: nombre,
+            descripcion: descripcion,
+            id_profesional: $('#id_profesional_fc').val(),
+            profesionales: lista_profesionales_eq_nuevo,
+            _token: CSRF_TOKEN,
+        }
+
+        console.log(data);
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data:data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    swal({
+                        icon:'success',
+                        title:'Exito',
+                        text:'Equipo creado, ahora debe seleccionarlo',
+                    });
+                    $('#ingreso_sol_pab_modal_lista_profesionales').val('');
+                    $('.lista_profesionales').html('');
+                    cargar_lista_equipos('ingreso_sol_pab_modal_mi_equipo');
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
     }
 
     function profesional_autocomplete(select, input_id, div_nuevo)
@@ -600,7 +737,7 @@
                 html = '';
                 html += '<div class="form-group col-md-5 col-lg-5 col-xl-5" >';
                 html += '    <label class="floating-label-activo-sm">'+value.posicion+'</label>';
-                html += '    <label type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_'+index+'" id="ingreso_sol_pab_modal_'+index+'">'+value.profesional_nombre+' '+value.profesional_apellido+'</label>';
+                html += '    <input type="text" class="form-control form-control-sm" name="ingreso_sol_pab_modal_'+index+'" id="ingreso_sol_pab_modal_'+index+'" value="'+value.profesional_nombre+' '+value.profesional_apellido+'" />';
                 html += '</div>';
                 html += '<div class="form-group col-md-1 col-lg-1 col-xl-1" >';
                 html += '<button type="button" class="btn btn-xs btn-danger has-ripple aling-right" style="" onclick="eliminar_nuevo_profesional('+index+')"><i class="feather icon-x" aria-hidden="true"></i><span class="ripple ripple-animate"></span></button>';
@@ -869,10 +1006,10 @@
             mensaje += '<li>Tipo cirugía</li>';
         }
 
-        if(otros_antecedentes == ''){
-            valido = 0;
-            mensaje += '<li>Otros antecedentes</li>';
-        }
+        // if(otros_antecedentes == ''){
+        //     valido = 0;
+        //     mensaje += '<li>Otros antecedentes</li>';
+        // }
 
         let data = {
                 _token : _token,

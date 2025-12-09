@@ -74,6 +74,7 @@ function guardar_area_cm(){
     var e_cont = $('#e_cont').val();
     var tel_c = $('#tel_c').val();
     var n_pers = $('#n_pers').val();
+    var id_institucion = $('#add_empleado_id_institucion').val();
     var token = '{{csrf_token()}}';
 
     var valido = 1;

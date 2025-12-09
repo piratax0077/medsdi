@@ -15,6 +15,7 @@ class SucursalController extends Controller
     {
         return $this->registrar( $request->id_institucion, $request->id_lugar_atencion, $request->rut, $request->nombre, $request->direccion, $request->numero_dir, $request->comuna, $request->id_direccion, $request->email, $request->telefono, $request->telefono_2, $request->otro, $request->estado );
     }
+
     public function registrar( $id_institucion, $id_lugar_atencion, $rut, $nombre, $direccion, $numero_dir, $comuna, $id_direccion, $email, $telefono, $telefono_2, $otro, $estado )
     {
         $datos = array();
@@ -57,6 +58,8 @@ class SucursalController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registro';
                 $datos['last_id'] = $registro->id;
+
+                $this->notificar_nueva_sucursal($registro);
             }
             else
             {
@@ -275,6 +278,13 @@ class SucursalController extends Controller
         }
 
         return $datos;
+    }
+
+    public function notificar_nueva_sucursal($sucursal)
+    {
+        $institucion = Instituciones::find($sucursal->id_institucion);
+
+
     }
 
 }

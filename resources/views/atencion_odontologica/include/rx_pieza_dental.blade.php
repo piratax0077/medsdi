@@ -28,23 +28,38 @@
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Piezas N°</label>
                                 <select class="form-control form-control-sm select2" name="rx_numero_pieza" id="rx_numero_pieza" multiple>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                    <option value="13">13</option>
-                                    <option value="14">14</option>
-                                    <option value="15">15</option>
-                                    <option value="16">16</option>
-                                    <option value="17">17</option>
-                                    <option value="18">18</option>
-                                    <option value="21">21</option>
-                                    <option value="22">22</option>
-                                    <option value="23">23</option>
-                                    <option value="24">24</option>
-                                    <option value="25">25</option>
-                                    <option value="26">26</option>
-                                    <option value="27">27</option>
-                                    <option value="28">28</option>
-                                    <!-- Agrega todas las piezas necesarias -->
+                                    <option value="1.1">1.1</option>
+                                    <option value="1.2">1.2</option>
+                                    <option value="1.3">1.3</option>
+                                    <option value="1.4">1.4</option>
+                                    <option value="1.5">1.5</option>
+                                    <option value="1.6">1.6</option>
+                                    <option value="1.7">1.7</option>
+                                    <option value="1.8">1.8</option>
+                                    <option value="2.1">2.1</option>
+                                    <option value="2.2">2.2</option>
+                                    <option value="2.3">2.3</option>
+                                    <option value="2.4">2.4</option>
+                                    <option value="2.5">2.5</option>
+                                    <option value="2.6">2.6</option>
+                                    <option value="2.7">2.7</option>
+                                    <option value="2.8">2.8</option>
+                                    <option value="3.1">3.1</option>
+                                    <option value="3.2">3.2</option>
+                                    <option value="3.3">3.3</option>
+                                    <option value="3.4">3.4</option>
+                                    <option value="3.5">3.5</option>
+                                    <option value="3.6">3.6</option>
+                                    <option value="3.7">3.7</option>
+                                    <option value="3.8">3.8</option>
+                                    <option value="4.1">4.1</option>
+                                    <option value="4.2">4.2</option>
+                                    <option value="4.3">4.3</option>
+                                    <option value="4.4">4.4</option>
+                                    <option value="4.5">4.5</option>
+                                    <option value="4.6">4.6</option>
+                                    <option value="4.7">4.7</option>
+                                    <option value="4.8">4.8</option>
                                 </select>
 
                             </div>
@@ -112,7 +127,6 @@
 <script>
 if (typeof dropzone === 'undefined') {
     var dropzone;
-    var dropzone_rx;
 }
 $(document).ready(function(){
     $('#rx_numero_pieza').select2({
@@ -140,93 +154,92 @@ function initDropzone() {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        paramName: "file[]",  // Enviar los archivos como un array
+        paramName: function() { return "file[]"; },  // Función que retorna el nombre del parámetro
         acceptedFiles: "image/*",
         maxFilesize: 4,  // Tamaño máximo en MB
         maxFiles: 12,
         addRemoveLinks: true,
         dictDefaultMessage: "Arrastra una imagen aquí o haz clic para subirla.",
         dictRemoveFile: "Eliminar archivo",
-        success: function (file, response) {
-            console.log("Imagen subida con éxito:", response);
-        },
-        error: function (file, message) {
-            console.error("Error al subir imagen:", message);
-        },
-        sending: function (file, xhr, formData) {
-            // Verifica si formData es válido antes de agregar los datos
-            if (formData) {
-                // Agregar parámetros adicionales a formData
-                const idPaciente = dame_id_paciente(); // Suponiendo que tienes esta función definida
-                const idLugarAtencion = document.querySelector("#id_lugar_atencion").value;
-                const idEspecialidad = document.querySelector("#id_especialidad").value;
-                const idProfesional = document.querySelector('#id_profesional_fc').value;
-                const idExamenRx = document.querySelector('#id_examen_oral_rx').value;
+        accept: function(file, done) {
+            // Validar que los campos requeridos existan ANTES de aceptar el archivo
+            const idPaciente = $('#id_paciente_fc').val();
+            const idLugarAtencion = $('#id_lugar_atencion').val();
+            const idEspecialidad = $('#id_especialidad').val();
+            const idProfesional = $('#id_profesional_fc').val();
 
-                formData.append("id_paciente", idPaciente);
-                formData.append("id_lugar_atencion", idLugarAtencion);
-                formData.append("id_especialidad", idEspecialidad);
-                formData.append("id_profesional", idProfesional);
-                formData.append("id_examen", idExamenRx);
-
-                console.log("Datos adicionales enviados:", {
-                    id_paciente: idPaciente,
-                    id_lugar_atencion: idLugarAtencion,
-                    id_especialidad: idEspecialidad,
-                    id_profesional: idProfesional,
-                    id_examen: idExamenRx
-                });
+            if (!idPaciente || !idLugarAtencion || !idEspecialidad || !idProfesional) {
+                done("Faltan datos requeridos. Por favor, asegúrate de que todos los campos estén completos.");
             } else {
-                console.error("formData no está disponible");
+                done(); // Aceptar el archivo
             }
-        }
-    });
-
-    dropzone_rx = new Dropzone("#nuevas-imagenes-dental-oral-paciente", {
-        url: "{{ route('profesional.imagenes.guardar_rx_dental') }}",
-        method: 'post',
-        autoProcessQueue: false,  // No procesar automáticamente
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        paramName: "file[]",  // Enviar los archivos como un array
-        acceptedFiles: "image/*",
-        maxFilesize: 4,  // Tamaño máximo en MB
-        maxFiles: 12,
-        addRemoveLinks: true,
-        dictDefaultMessage: "Arrastra una imagen aquí o haz clic para subirla.",
-        dictRemoveFile: "Eliminar archivo",
         success: function (file, response) {
             console.log("Imagen subida con éxito:", response);
         },
-        error: function (file, message) {
-            console.error("Error al subir imagen:", message);
+        error: function (file, message, xhr) {
+            console.error("Error al subir imagen:", {
+                message: message,
+                file: file.name,
+                xhr: xhr,
+                status: xhr ? xhr.status : 'N/A',
+                responseText: xhr ? xhr.responseText : 'N/A'
+            });
+
+            // Mostrar mensaje de error más detallado
+            let errorMsg = message;
+            if (xhr && xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+                if (xhr.responseJSON.errors) {
+                    errorMsg += "\n" + Object.values(xhr.responseJSON.errors).flat().join(', ');
+                }
+            } else if (xhr && xhr.responseJSON && xhr.responseJSON.errors) {
+                errorMsg = Object.values(xhr.responseJSON.errors).flat().join(', ');
+            }
+
+            swal({
+                title: "Error al subir imagen",
+                text: errorMsg,
+                icon: "error",
+                buttons: "Aceptar"
+            });
         },
         sending: function (file, xhr, formData) {
+            console.log("🚀 Evento sending disparado para:", file.name);
+
             // Verifica si formData es válido antes de agregar los datos
             if (formData) {
-                // Agregar parámetros adicionales a formData
-                const idPaciente = dame_id_paciente(); // Suponiendo que tienes esta función definida
-                const idLugarAtencion = document.querySelector("#id_lugar_atencion").value;
-                const idEspecialidad = document.querySelector("#id_especialidad").value;
-                const idProfesional = document.querySelector('#id_profesional_fc').value;
-                const idExamenRx = document.querySelector('#id_examen_oral_rx').value;
+                // Agregar parámetros adicionales a formData con validación
+                const idPacienteEl = document.getElementById('id_paciente_fc');
+                const idLugarAtencionEl = document.getElementById('id_lugar_atencion');
+                const idEspecialidadEl = document.getElementById('id_especialidad');
+                const idProfesionalEl = document.getElementById('id_profesional_fc');
+                const idExamenRxEl = document.getElementById('id_examen_oral_rx');
 
-                formData.append("id_paciente", idPaciente);
-                formData.append("id_lugar_atencion", idLugarAtencion);
-                formData.append("id_especialidad", idEspecialidad);
-                formData.append("id_profesional", idProfesional);
-                formData.append("id_examen", idExamenRx);
+                const idPaciente = idPacienteEl ? idPacienteEl.value : null;
+                const idLugarAtencion = idLugarAtencionEl ? idLugarAtencionEl.value : null;
+                const idEspecialidad = idEspecialidadEl ? idEspecialidadEl.value : null;
+                const idProfesional = idProfesionalEl ? idProfesionalEl.value : null;
+                const idExamenRx = idExamenRxEl ? idExamenRxEl.value : null;
 
-                console.log("Datos adicionales enviados:", {
+                console.log("📋 Valores obtenidos:", {
                     id_paciente: idPaciente,
                     id_lugar_atencion: idLugarAtencion,
                     id_especialidad: idEspecialidad,
                     id_profesional: idProfesional,
                     id_examen: idExamenRx
                 });
+
+                // Solo agregar si tienen valor
+                if (idPaciente) formData.append("id_paciente", idPaciente);
+                if (idLugarAtencion) formData.append("id_lugar_atencion", idLugarAtencion);
+                if (idEspecialidad) formData.append("id_especialidad", idEspecialidad);
+                if (idProfesional) formData.append("id_profesional", idProfesional);
+                if (idExamenRx) formData.append("id_examen", idExamenRx);
+
+                console.log("✅ FormData preparado para envío");
             } else {
-                console.error("formData no está disponible");
+                console.error("❌ formData no está disponible");
             }
         }
     });
@@ -239,7 +252,7 @@ function guardar_nueva_pieza_ex_radio(counter){
     let espacio_periodontal_aplical = $('#rx_esp_peri_apical'+counter).val();
     let hueso_alveolar_apical = $('#h_apical'+counter).val();
     let obs = $('#obs_ex_oral'+counter).val();
-    let id_paciente = dame_id_paciente();
+    let id_paciente = $('#id_paciente_fc').val();
     let id_lugar_atencion = $('#id_lugar_atencion').val();
     let id_especialidad = $('#id_especialidad').val();
     let id_profesional = $('#id_profesional_fc').val();
@@ -316,7 +329,7 @@ function guardar_nueva_pieza_ex_radio(counter){
                     text:'Pieza agregada correctamente'
                 });
                 setTimeout(() => {
-                    recargar_imagenes_rx();
+                    recargar_imagenes_od_gral();
                 }, 1000);
             } else {
                 $('#pieza_dentalrx').empty();
@@ -329,6 +342,32 @@ function guardar_nueva_pieza_ex_radio(counter){
             // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
             if (dropzone.getQueuedFiles().length > 0) {
                 console.log("Iniciando carga de imágenes...");
+
+                // Validar que todos los campos requeridos existan antes de procesar
+                const requiredFields = {
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    id_especialidad: $('#id_especialidad').val(),
+                    id_profesional: $('#id_profesional_fc').val(),
+                    id_examen: resp.rx.id
+                };
+
+                console.log("Validando campos requeridos:", requiredFields);
+
+                // Verificar si algún campo está vacío
+                const camposVacios = Object.entries(requiredFields).filter(([key, value]) => !value || value === '');
+
+                if (camposVacios.length > 0) {
+                    console.error("Campos vacíos detectados:", camposVacios);
+                    swal({
+                        title: "Error",
+                        text: "Faltan datos requeridos para subir las imágenes: " + camposVacios.map(([key]) => key).join(', '),
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                    return;
+                }
+
                 // Desvinculamos el evento "queuecomplete" antes de procesar la cola
                 dropzone.off("queuecomplete");
 
@@ -365,6 +404,7 @@ function guardar_nueva_pieza_ex_radio(counter){
                 //initDropzone();  // Asegúrate de que la función initDropzone esté disponible
 
             }
+            mostrar_nueva_pieza_ex_radio(1000)
         },
         error: function(error){
             console.log(error);
@@ -372,29 +412,10 @@ function guardar_nueva_pieza_ex_radio(counter){
     });
 }
 
-function recargar_imagenes_rx(){
-    let url = "{{ route('profesional.recargar_piezas_dental_examen_oral_rx') }}";
-    let data = {
-        _token: CSRF_TOKEN,
-        id_paciente: dame_id_paciente()
-    }
-
-    $.ajax({
-        type:'post',
-        data:data,
-        url: url,
-        success: function(resp){
-            console.log(resp);
-            if(resp.mensaje == 'OK'){
-                $('#pieza_dentalrx').empty();
-                $('#pieza_dentalrx').append(resp.v);
-                $('#pieza_dentalrx').find('.select2').select2();
-            }
-        },
-        error: function(error){
-            console.log(error.responseText);
-        }
-    });
+function recargar_imagenes_od_gral() {
+    // Aquí puedes implementar la lógica para recargar las imágenes de odontología general
+    console.log("Recargando imágenes de odontología general...");
+    // Por ejemplo, podrías hacer una llamada AJAX para obtener las imágenes actualizadas
 }
 
 

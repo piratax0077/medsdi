@@ -174,10 +174,10 @@ p {
 <!-- Modal -->
 <div class="modal fade" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-      <div class="modal-content">
+        <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="form-row">
@@ -245,11 +245,11 @@ p {
             </table> --}}
         </div>
         <!--<div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>-->
-      </div>
+        </div>
     </div>
-  </div>
+</div>
 @endsection
 
 @section('page-script')

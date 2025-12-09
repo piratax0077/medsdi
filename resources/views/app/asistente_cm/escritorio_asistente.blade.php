@@ -555,7 +555,7 @@
             var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
 
             if(tipo_agenda_temp != 0)
-                tipo_agenda = tipo_agenda_temp;
+                tipo_agenda = tipo_agenda;
                 console.log('asistente_cm/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {
@@ -863,7 +863,7 @@
                                                             $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
                                                             $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
                                                             $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
-                                                            buscar_ciudad_general('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
+                                                            buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
                                                             // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
                                                         }
                                                         else
@@ -1823,7 +1823,8 @@
 
                             $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
                             // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
+                            console.log('editando region');
+                            buscar_ciudad_general('input_reserva_direccion_ciudad', 'input_reserva_direccion_region', data.direccion.ciudad.id);
 
                             $('#rut_paciente_reserva').val('');
                             $('.div_rut_buscar').hide();

@@ -137,6 +137,7 @@ class EscritorioGeneral extends Controller
             $sql .= "    profesionales.numero_certificado profesional_numero_certificado, ";
             $sql .= "    profesionales.dv_certiicado profesional_dv_certiicado , ";
             $sql .= "    profesionales.id_direccion profesional_id_direccion, ";
+            $sql .= "    profesionales.foto_perfil profesionales_foto_perfil, ";
 
             $sql .= "    profesionales.id_especialidad profesional_id_especialidad, ";
             $sql .= "    especialidades.nombre especialidades_nombre, ";
@@ -614,6 +615,7 @@ class EscritorioGeneral extends Controller
      * @return array()
      */
     public function lugaresAtencionProfesionalBuscador(Request $request){
+
         $datos = array();
 
         $profesional = Profesional::where('id', $request->id_profesional)->first();
@@ -643,6 +645,7 @@ class EscritorioGeneral extends Controller
      * @return array()
      */
     public function diasLaboralesProfesionaLugarAtencionBuscador(Request $request){
+
         $datos = array();
         $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)
                                         ->where('id_lugar_atencion', $request->lugar_atencion)
@@ -862,7 +865,7 @@ class EscritorioGeneral extends Controller
     public function getPersona(Request $request)
     {
         $datos = array();
-        $registro = Personas::select('rut', 'nombre1', 'nombre2', 'appaterno', 'apmaterno')->where('rut', $request->rut)->first();
+        $registro = Personas::select('rut', 'nombre1', 'appaterno', 'apmaterno')->where('rut', $request->rut)->first();
         if($registro)
         {
             $datos['estado'] = 1;
@@ -1579,12 +1582,29 @@ class EscritorioGeneral extends Controller
         $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
         $pc = new EscritorioProfesional;
         $mensajes = $pc->dame_mensajes($mensaje->id_receptor);
+        $mensaje->datos_mensaje->emisor = Profesional::find($mensaje->id_usuario);
+        $mensaje->datos_mensaje->receptor = Profesional::find($mensaje->id_receptor);
+        foreach($mensajes as $m){
+            $m->emisor = User::find($m->id_usuario);
+        }
         return view('app.general.mensajes.profesional')->with([
-            'mensaje' => $mensaje->datos_mensaje->mensaje,
+            'mensaje' => $mensaje->datos_mensaje,
             'mensajes' => $mensajes,
         ]);
     }
 
+    public function mensajeJson($id)
+    {
+        $mensaje = Mensajes::findOrFail($id);
+        $mensaje->estado = 0;
+        $mensaje->update();
+
+        $datos = json_decode($mensaje->datos_mensaje);
+        $datos->emisor = User::find($mensaje->id_usuario);
+        $datos->receptor = Profesional::find($mensaje->id_receptor);
+
+        return response()->json($datos);
+    }
 
 
 }

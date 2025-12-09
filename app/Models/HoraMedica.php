@@ -10,7 +10,7 @@ class HoraMedica extends Model
 {
     use HasFactory;
     protected $table = 'horas_medicas';
-	
+
 	 protected $fillable = [
         'id_paciente',
         'descripcion',  // Reemplaza con el nombre real del primer campo
@@ -55,5 +55,10 @@ class HoraMedica extends Model
     public function ProcedimientoCentro()
     {
         return $this->hasOne(ProcedimientosCentro::class,'id','id_procedimiento');
+    }
+
+    public function FichaAtencion()
+    {
+        return $this->hasOne(FichaAtencion::class,'id','id_ficha_atencion');
     }
 }

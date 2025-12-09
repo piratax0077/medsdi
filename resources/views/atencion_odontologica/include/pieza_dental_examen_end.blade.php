@@ -87,10 +87,8 @@
             </div>
             <div class="card-footer">
             @if($tipo_examen == 'endo')
-                    <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_examen_pieza_end()"><i class="feather icon-x"></i></button>
                     <button type="button" class="btn btn-icon btn-info" onclick="guardar_pieza_examen_pieza_end_({{ $counter }})"><i class="feather icon-save"></i></button>
                     @else
-                    <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_examen_pieza_odontop()"><i class="feather icon-x"></i></button>
                     <button type="button" class="btn btn-icon btn-info" onclick="guardar_pieza_examen_pieza_odontop({{ $counter }})"><i class="feather icon-save"></i></button>
                     @endif
             </div>

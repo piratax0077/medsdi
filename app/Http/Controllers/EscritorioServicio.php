@@ -26,7 +26,6 @@ class EscritorioServicio extends Controller
         $region = Region::all();
         $tipo_servicio = TipoServicio::all();
 
-        return $servicio;
         if (isset($servicio)) {
 
             // return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);

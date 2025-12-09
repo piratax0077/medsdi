@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content" >
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Indicaciones post parto</h5>
+                <h5 class="modal-title text-white text-center">Indicaciones cuidados de la piel</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">

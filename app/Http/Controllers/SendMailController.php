@@ -14,7 +14,7 @@ class SendMailController extends Controller
 
     public function envioCorreoR(Request $request)
     {
-        return static::envioCorreo($request->blade, $request->to, $request->cc, $request->bcc, $request->asunto, $request->body, $request->archivo, $request->id_institucion);
+        return static::envioCorreo($request->blade, $request->to, $request->cc, $request->bcc, $request->asunto, $request->body, $request->archivo, $request->id_institucion, $request->observaciones);
     }
 
     /**
@@ -30,7 +30,7 @@ class SendMailController extends Controller
      * @param int $id_institucion -> 13
      * @return array
      */
-    static public function envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion)
+    static public function envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion, $observacion = null)
     {
 
         $datos = array();
@@ -55,11 +55,12 @@ class SendMailController extends Controller
                 'asunto' => $asunto,
                 'body' => $body,
                 'url_archivo' => $archivo,
+                'observaciones' => $observacion,
                 'id_institucion' => $id_institucion,
             );
-
+       
             $correo = new CorreoGenerico($data);
-
+     
             $listaBlade = array(
                 // PACIENTE
                 // 'bienvenida_paciente_usuario', 'hora_agendada', 'confirmar_hora', 'hora_confirmada_paciente', 'hora_cancelada_paciente', 'hora_anulada_profesional',
@@ -84,9 +85,15 @@ class SendMailController extends Controller
                 // TODOS
                 'recuperacion_contrasena', 'registrar_app',
 
+                 // LABORATORIO
+                'informe_terapia_voz',
+                'campania_promocional',
+
                 // ?
                 // 'resultado_examen_lab',
             );
+
+
 
             if(in_array($blade, $listaBlade))
             {
@@ -99,7 +106,7 @@ class SendMailController extends Controller
             }
             else
             {
-                $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com', 'jcarcamo@med-sdi.cl', 'jlcarcamoaguad@gmail.com');
+                $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com');
                 $enviar_dev = 1;
                 foreach ($to as $key => $value)
                 {
@@ -129,10 +136,17 @@ class SendMailController extends Controller
                 }
             }
 
-            Mail::to($to)
+            try {
+                Mail::to($to)
                     ->cc($cc)
                     ->bcc($bcc)
                     ->send($correo);
+            } catch (\Exception $e) {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Error al enviar correo: ' . $e->getMessage();
+                $datos['trace'] = $e->getTraceAsString();
+                return $datos;
+            }
 
             $id_usuario = '1';
             if(!empty(Auth::user()))

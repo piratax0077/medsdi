@@ -541,69 +541,69 @@
         };
 
         $('#tipo_examen_d').change(function(e) {
-                e.preventDefault();
-                tipo_examen = $('#tipo_examen_d').val();
+            e.preventDefault();
+            tipo_examen = $('#tipo_examen_d').val();
 
-                $("#sub_tipo_examen_d").empty();
-                $("#examen_d").empty();
-                $.ajax({
-                        url: '{{ route('listar.sub_tipo_examen') }}',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            tipo_examen: tipo_examen
-                        },
-                    })
-                    .done(function(response) {
+            $("#sub_tipo_examen_d").empty();
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.sub_tipo_examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        tipo_examen: tipo_examen
+                    },
+                })
+                .done(function(response) {
 
-                        $('#sub_tipo_examen_d').append(
-                            `<option value="0">Seleccione... </option>`);
-                        for (var i = 0; i < response.length; i++) {
-                            $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
-                                        ${response[i].nombre_examen}
-                                    </option>`);
-                        }
+                    $('#sub_tipo_examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
 
-                        /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
-                        if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
-                        else  $('#imagenologia_con_contraste').attr('disabled','disabled');
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    })
+                    /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                    if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                    else  $('#imagenologia_con_contraste').attr('disabled','disabled');
+                })
+                .fail(function() {
+                    console.log("error");
+                })
 
-            });
+        });
 
-            {{--  buscar examenes por el sub tipo de examen  --}}
-            $('#sub_tipo_examen_d').change(function(e) {
+        {{--  buscar examenes por el sub tipo de examen  --}}
+        $('#sub_tipo_examen_d').change(function(e) {
 
-                e.preventDefault();
-                sub_tipo_examen = $('#sub_tipo_examen_d').val();
+            e.preventDefault();
+            sub_tipo_examen = $('#sub_tipo_examen_d').val();
 
-                $("#examen_d").empty();
-                $.ajax({
-                        url: '{{ route('listar.examen') }}',
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            sub_tipo_examen: sub_tipo_examen
-                        },
-                    })
-                    .done(function(response) {
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        sub_tipo_examen: sub_tipo_examen
+                    },
+                })
+                .done(function(response) {
 
-                        $('#examen_d').append(
-                            `<option value="0">Seleccione... </option>`);
-                        for (var i = 0; i < response.length; i++) {
-                            $('#examen_d').append(`<option value="${response[i].cod_examen}">
-                                        ${response[i].nombre_examen}
-                                    </option>`);
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    })
+                    $('#examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
 
-            });
+        });
         function buscar_ciudad_contacto(id_ciudad = 0) {
 
             let region = $('#contacto_region_edit').val();

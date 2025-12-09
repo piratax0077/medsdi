@@ -13,6 +13,9 @@ use App\Models\RecomendacionDetalle;
 use ArrayObject;
 use Illuminate\Http\Request;
 
+// Auth
+use Illuminate\Support\Facades\Auth;
+
 class RecomendacionController extends Controller
 {
     /** RECOMENDACIONES */
@@ -650,6 +653,7 @@ class RecomendacionController extends Controller
 
     public function verPDF(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -665,9 +669,9 @@ class RecomendacionController extends Controller
 
             $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
 
-            $lugar_atencion = LugarAtencion::select('id', 'nombre', 'rut', 'email', 'telefono', 'id_direccion')->find($ficha_atencion->id_lugar_atencion);
+            $lugar_atencion = LugarAtencion::with('direccion')->select('id', 'nombre', 'rut', 'email', 'telefono', 'id_direccion')->find($ficha_atencion->id_lugar_atencion);
 
-            $profesional = Profesional::select('profesionales.id as id', 'profesionales.nombre as nombre', 'profesionales.apellido_uno as apellido_uno', 'profesionales.apellido_dos as apellido_dos',
+            $profesional = Profesional::select('profesionales.id as id', 'profesionales.nombre as nombre', 'profesionales.apellido_uno as apellido_uno', 'profesionales.apellido_dos as apellido_dos','profesionales.num_colegio',
                                                 'profesionales.sexo as sexo', 'profesionales.rut as rut', 'profesionales.email as email', 'profesionales.telefono_uno as telefono_uno', 'profesionales.id_direccion as id_direccion',
                                                 'profesionales.id_especialidad as id_especialidad', 'especialidades.nombre as nombre_especialidades',
                                                 'profesionales.id_tipo_especialidad as id_tipo_especialidad', 'tipos_especialidad.nombre as nombre_tipo_especialidad',
@@ -676,6 +680,14 @@ class RecomendacionController extends Controller
                                         ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'profesionales.id_tipo_especialidad')
                                         ->join('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'profesionales.id_sub_tipo_especialidad')
                                         ->find($ficha_atencion->id_profesional);
+            if(!$profesional){
+                $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            $profesional->direccion = $lugar_atencion->direccion->direccion;
+            $profesional->numero_dir = $lugar_atencion->direccion->numero_dir;
+            $profesional->comuna = $lugar_atencion->direccion->ciudad;
+            $profesional->region = $lugar_atencion->direccion->ciudad->Region;
 
             $paciente = Paciente::select('pacientes.id as id', 'pacientes.rut as rut', 'pacientes.nombres as nombres', 'pacientes.apellido_uno as apellido_uno', 'pacientes.apellido_dos as apellido_dos',
                                             'pacientes.telefono_uno as telefono_uno', 'pacientes.sexo as sexo', 'pacientes.email as email', 'pacientes.fecha_nac as fecha_nac', 'pacientes.id_prevision as id_prevision',
@@ -822,7 +834,7 @@ class RecomendacionController extends Controller
                     $recetaAudifonos[0]['detalle'] = (object)array();
 
                     $cantidad_recetas ++;
-                    $arrayTipo = array('','Intracanal', 'Retroauricular', 'Audigafas', 'Implante', 'Otro Tipo');
+                    $arrayTipo = array('','Audifono Intracanal', 'Audifono Retroauricular', 'Audifono Tipo Audigafas', 'Audifono Implante', $detalleOrlAudifono->otro_tipo);
 
                     $array_medicamento = array(
                         'tipo' => $arrayTipo[$detalleOrlAudifono->tipo],

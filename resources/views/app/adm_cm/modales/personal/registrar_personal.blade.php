@@ -68,7 +68,7 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">RUT:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut" onblur="buscar_persona_rut_nuevo_empleado();">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
@@ -774,6 +774,72 @@
                 $(element).val();
             else
                 $(element).val('');
+        });
+    }
+
+    function buscar_persona_rut_nuevo_empleado()
+    {
+        let rut = $('#add_empleado_rut').val();
+        let url = "{{ route('personas.buscador') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                rut: rut
+            },
+            beforeSend: function() {
+                swal({
+                    title: "Buscando",
+                    text: "Por favor espere...",
+                    icon: "info",
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false,
+                });
+            }
+        })
+        
+        .done(function(data2) {
+            swal.close();
+            console.log(data2);
+            if (data2.estado == 1)
+            {
+                /** encontrado */
+                $('#add_empleado_nombre').val( data2.registros.nombre1 );
+                $('#add_empleado_apellido_uno').val( data2.registros.appaterno );
+                $('#add_empleado_apellido_dos').val( data2.registros.apmaterno );
+                $('#agregar_profesional_nuevo_telefono').val( '' );
+                $('#agregar_profesional_nuevo_email').val( '' );
+
+                $('#div_agregar_profesional_busqueda').hide();
+                $('#div_agregar_profesional_ver_info_prof').hide();
+                $('#div_agregar_profesional_formulario_nuevo_prof').show();
+            }
+            else
+            {
+                swal({
+                    title: "Rut no encontrado",
+                    text: "Rogamos llenar los datos.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+                /** no encontrado */
+                $('#add_empleado_nombre').val();
+                $('#add_empleado_apellido_uno').val();
+                $('#add_empleado_apellido_dos').val();
+                $('#agregar_profesional_nuevo_telefono').val();
+                $('#agregar_profesional_nuevo_email').val();
+
+                $('#div_agregar_profesional_busqueda').hide();
+                $('#div_agregar_profesional_ver_info_prof').hide();
+                $('#div_agregar_profesional_formulario_nuevo_prof').show();
+
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
 </script>

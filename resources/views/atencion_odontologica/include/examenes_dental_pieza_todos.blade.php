@@ -1,4 +1,4 @@
-@php $counter = 1000; @endphp
+@php $counter = 3000; @endphp
 @foreach ($examenes as $examen)
 <div class="card">
     <div class="card-body">
@@ -55,8 +55,8 @@
                         <label class="floating-label-activo-sm">Percusión</label>
                         <select id="sel_endo_resp_perc{{ $counter }}" name="sel_endo_resp_perc{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
                             <option @if($examen->percusion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                            <option @if($examen->percusion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                            <option @if($examen->percusion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                            <option @if($examen->percusion == '↑ Positiva') selected @endif><span>↑ </span> Positiva</option>
+                            <option @if($examen->percusion == '↓ Negativa') selected @endif><span>↓ </span> Negativa</option>
                             <option @if($examen->percusion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
                             <option @if($examen->percusion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
                         </select>
@@ -67,8 +67,8 @@
                         <label class="floating-label-activo-sm">Exploración</label>
                         <select id="sel_endo_resp_expl{{ $counter }}" name="sel_endo_resp_expl{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
                             <option @if($examen->exploracion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                            <option @if($examen->exploracion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                            <option @if($examen->exploracion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                            <option @if($examen->exploracion == '↑ Positiva') selected @endif><span>↑ </span> Positiva</option>
+                            <option @if($examen->exploracion == '↓ Negativa') selected @endif><span>↓ </span> Negativa</option>
                             <option @if($examen->exploracion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
                             <option @if($examen->exploracion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
                         </select>
@@ -79,8 +79,8 @@
                         <label class="floating-label-activo-sm">Cavitaria</label>
                         <select id="sel_endo_cavitaria{{ $counter }}" name="sel_endo_cavitaria{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
                             <option @if($examen->cavitaria == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                            <option @if($examen->cavitaria == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                            <option @if($examen->cavitaria == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                            <option @if($examen->cavitaria == '↑ Positiva') selected @endif><span>↑ </span> Positiva</option>
+                            <option @if($examen->cavitaria == '↓ Negativa') selected @endif><span>↓ </span> Negativa</option>
                             <option @if($examen->cavitaria == 'N Normal') selected @endif><span>N </span> Normal</a></option>
                             <option @if($examen->cavitaria == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
                         </select>

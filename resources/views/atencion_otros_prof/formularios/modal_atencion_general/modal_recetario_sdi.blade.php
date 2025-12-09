@@ -1320,8 +1320,44 @@
 
         }
 
-        function eliminar_examen(id_row){
-            $('#tabla_examen_cirugia [id='+id_row+']').remove();
+        function eliminar_examen(id_examen){
+                swal({
+                    title: "Eliminar Examen",
+                    text: "¿Está seguro que desea eliminar el examen?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Aceptar"],
+                    DangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        eliminar_examen_confirmar(id_examen);
+                    }
+                });
+        }
+
+        function eliminar_examen_confirmar(id_examen){
+            console.log(id_examen);
+            let url ="{{ ROUTE('examen.eliminar_examen_hosp') }}"
+            $.ajax({
+                type:'get',
+                url: url,
+                data:{
+                    id: id_examen
+                },
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.estado == 1){
+                        swal({
+                            icon:'success',
+                            text: resp.mensaje,
+                        });
+                        dame_examenes_hosp();
+                    }
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
         }
 
         function eliminar_examen_contraste(id_row)

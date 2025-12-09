@@ -78,19 +78,398 @@
                                                 <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
                                                     <div class="card-body-aten-a">
                                                         <div class="form-row" id="form-enf">
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Curaciones y procedimientos </label>
-                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Auditívo" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="obs_ex_oidos" id="obs_ex_oidos"></textarea>
+                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                <div class="nav flex-column nav-pills mb-3" id="v-pills-tab"
+                                                                    role="tablist" aria-orientation="vertical">
+                                                                    <a class="nav-link-aten text-reset active" id="cur_plana-tab"
+                                                                        data-toggle="tab" href="#cur_plana" role="tab"
+                                                                        aria-controls="cur_plana" aria-selected="true">Cur. Planas</a>
+                                                                    <a class="nav-link-aten text-reset" id="cur_lpp-tab"
+                                                                        data-toggle="tab" href="#cur_lpp" role="tab"
+                                                                        aria-controls="cur_lpp" aria-selected="false">Curación.LPP</a>
+                                                                    <a class="nav-link-aten text-reset" id="cur_pd-tab"
+                                                                        data-toggle="tab" href="#cur_pd" role="tab"
+                                                                        aria-controls="cur_pd" aria-selected="false">Píe Diabético</a>
+                                                                    <a class="nav-link-aten text-reset" id="cur_quem-tab"
+                                                                        data-toggle="tab" href="#cur_quem" role="tab"
+                                                                        aria-controls="cur_quem" aria-selected="false">Quemados</a>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Observaciones al procedimiento</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="bs_ex_orl" id="obs_ex_orl"></textarea>
+                                                             <div class="col-sm-12 col-md-8 col-lg-8 col-xl-48col-xxl-8">
+                                                                <div class="tab-content" id="v-pills-tabContent">
+                                                                    <!--CURACION PLANA-->
+                                                                    <div class="tab-pane fade show active" id="cur_plana" role="tabpanel" aria-labelledby="cur_plana-tab">
+                                                                        <div class="form-row mx-2">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <h6 class="t-aten d-inline">Curaciones</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                                                <ul class="nav nav-tabs-aten nav-fill mb-10"  id="enf_urgencia" role="tablist">
+                                                                                    <li class="nav-item">
+                                                                                        <a class="nav-link-aten text-reset active" id="val_hda-tab" data-toggle="tab" href="#val_hda" role="tab" aria-controls="val_hda" aria-selected="true">Valoración</a>
+                                                                                    </li>
+                                                                                    <li class="nav-item">
+                                                                                        <a class="nav-link-aten text-reset" id="cur_hda-tab" data-toggle="tab" href="#cur_hda" role="tab"  aria-controls="cur_hda"  aria-selected="true">Curación</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-11">
+                                                                                <div class="tab-content"  id="Curación de lesiones planas">
+                                                                                    <div class="tab-pane fade show active"  id="val_hda" role="tabpanel"   aria-labelledby="val_hda-tab">
+                                                                                        <div class="form-row">
+                                                                                            <div  class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <div class="alert alert-warning"   role="alert">
+                                                                                                    Si desea ocupar el item de  observaciones debe necesariamente  elegir otra opción para sumar el   puntaje.
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm t-red" for="cp_asp">Aspecto</label>
+                                                                                                    <select name="cp_asp"   id="cp_asp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_asp','div_cp_asp','obs_cp_asp',6);actualizarTotal()">
+                                                                                                        <option selected value="0">Seleccione</option>
+                                                                                                        <option value="1">Eritematoso </option>
+                                                                                                        <option value="2">Enrojecido</option>
+                                                                                                        <option value="3">Amarillo pálido</option>
+                                                                                                        <option value="4">Necrótico </option>
+                                                                                                        <option value="6">Observaciones</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"  id="div_cp_asp"   style="display:none;">
+                                                                                                    <label class="floating-label-activo-sm t-red"  for="obs_cp_asp">Obs. <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"  name="obs_cp_asp" id="obs_cp_asp"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button"  class="btn btn-outline-primary btn-sm btn-block"onclick="curac_hda();"> <i class="feather icon-plus"></i>Guía</button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label  class="floating-label-activo-sm t-red"  for="cp_me">Mayor  Extensión</label>
+                                                                                                        <select name="cp_me"  id="cp_me"   onchange="evaluar_para_carga_detalle('cp_me','div_cp_me','obs_cp_me',5);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1" >0-1 cm</option>
+                                                                                                            <option value="2">1-3 cm</option>
+                                                                                                            <option value="3" >3-6 cm</option>
+                                                                                                            <option value="4">6 cm</option>
+                                                                                                            <option value="5">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_cp_me"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_me">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_me" id="obs_cp_me"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_pro">Profundidad</label>
+                                                                                                        <select name="cp_pro"
+                                                                                                        id="cp_pro"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('cp_pro','div_cp_pro','obs_cp_pro1',6);actualizarTotal()">
+                                                                                                        <option selected value="0">Seleccione</option>
+                                                                                                        <option value="1">0</option>
+                                                                                                        <option value="2">0-1 cm</option>
+                                                                                                        <option value="3">1-2 cm</option>
+                                                                                                        <option value="4">2-3 cm</option>
+                                                                                                        <option value="5"> >3 cm</option>
+                                                                                                        <option value="6">Otros</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_cp_pro"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_pro">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_pro" id="obs_cp_pro"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_ecant">Exudado-Cantidad</label>
+                                                                                                        <select name="cp_ecant"
+                                                                                                                id="cp_ecant"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_ecant','div_cp_ecant','obs_cp_ecant',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">Ausente</option>
+                                                                                                            <option value="2">Escaso</option>
+                                                                                                            <option value="3">Moderado</option>
+                                                                                                            <option value="4">Abundante</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_cp_ecant"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_ecant">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_ecant" id="obs_cp_ecant"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_ecal">Exudado-Calidad</label>
+                                                                                                        <select name="cp_ecal"
+                                                                                                                id="cp_ecal"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_ecal','div_cp_ecal','obs_cp_ecal',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">Sin exudado</option>
+                                                                                                            <option value="2">Seroso</option>
+                                                                                                            <option value="3">Turbio</option>
+                                                                                                            <option value="4">Purulento</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_cp_ecal"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_ecal">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_ecal" id="obs_cp_ecal"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_tn">Tejido
+                                                                                                        esfacelado o necrótico</label>
+                                                                                                        <select name="cp_tn"
+                                                                                                                id="cp_tn"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_tn','div_cp_tn','obs_cp_tn',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">Ausente</option>
+                                                                                                            <option value="2"><25 %</option>
+                                                                                                            <option value="3">25 - 50 %</option>
+                                                                                                            <option value="4">>50 - 75 %</option>
+                                                                                                            <option value="5">>75 %</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_cp_tn"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_tn">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_tn" id="obs_cp_tn"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_tg">Tejido
+                                                                                                        granulatorio</label>
+                                                                                                        <select name="cp_tg"
+                                                                                                                id="cp_tg"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_tg','div_cp_tg','obs_cp_tg',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">100- 75 %</option>
+                                                                                                            <option value="2"><75 - 50 %</option>
+                                                                                                            <option value="3"><50 - 25 %</option>
+                                                                                                            <option value="4"><25 %</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_cp_tg"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_tg">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_tg" id="obs_cp_tg"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_ed">Edema</label>
+                                                                                                        <select name="cp_ed"
+                                                                                                                id="cp_ed"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_ed','div_cp_ed','obs_cp_ed',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">Ausente</option>
+                                                                                                            <option value="2">+</option>
+                                                                                                            <option value="3">++</option>
+                                                                                                            <option value="4">+++</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_cp_ed"  style="display:none;">
+                                                                                                    <label  class="floating-label-activo-sm t-red"   for="obs_cp_ed">Obs.<i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_ed" id="obs_cp_ed"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="cp_dol">Dolor</label>
+                                                                                                        <select name="cp_dol"
+                                                                                                                id="cp_dol"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_dol','div_cp_dol','obs_cp_dol',6);actualizarTotal()">
+                                                                                                            <option value="0">Seleccione</option>
+                                                                                                            <option value="1">0 - 1</option>
+                                                                                                            <option value="2">2 - 3</option>
+                                                                                                            <option value="3">4 - 6</option>
+                                                                                                            <option value="4">7 - 10</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_cp_dol"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"
+                                                                                                        for="obs_cp_dol">Obs.
+                                                                                                        <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cp_dol" id="obs_cp_dol"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div  class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"  for="cp_pielc">Piel circundante</label>
+                                                                                                        <select name="cp_pielc"
+                                                                                                                id="cp_pielc"
+                                                                                                                class="form-control form-control-sm"
+                                                                                                                onchange="evaluar_para_carga_detalle('cp_pielc','div_cp_pielc','obs_cp_pielc',6);actualizarTotal()">
+                                                                                                            <option selected value="0">Seleccione</option>
+                                                                                                            <option value="1">Sana</option>
+                                                                                                            <option value="2">Descamada</option>
+                                                                                                            <option value="3">Erimatosa</option>
+                                                                                                            <option value="4">Macerada</option>
+                                                                                                            <option value="6">Observaciones</option>
+                                                                                                        </select>
+                                                                                                </div>
+                                                                                                <div class="form-group" id="div_cp_pielc" style="display:none;">
+                                                                                                    <label class="floating-label-activo-sm t-red"  for="obs_cp_pielc">Obs. <i>(Describir)</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_pielc" id="obs_cp_pielc"></textarea>
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm t-red" for="bh_dren_1">P.Total</label>
+                                                                                                    <input type="number" class="form-control form-control-sm" name="ptos_tot_ev"
+                                                                                                        {{--  id="ptos_tot_ev" value="{{ $curacion_plana ? $curacion_plana->datos_curacion_plana->ptos_tot_ev : '' }}">  --}}
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm t-red"  for="tpo_les_curgen">Valoración1223</label>
+
+                                                                                                    <input type="text"  class="form-control form-control-sm"  name="tpo_les_curgen" id="tpo_les_curgen">
+
+
+                                                                                                        {{--  id="tpo_les_curgen" value="{{ $curacion_plana ? $curacion_plana->datos_curacion_plana->tpo_les_curgen : '' }}">  --}}
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
+
+                                                                                                <div class="form-group">
+                                                                                                    <button type="button"  class="btn btn-outline-primary btn-sm  btn-block"onclick="cur_guia();"><i class="feather icon-plus"></i>Guía</button>
+
+
+
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-4 col-xxl-4">
+                                                                                                <div class="form-group">
+                                                                                                    <label  class="floating-label-activo-sm" for="obs_cp_gral">Obs. Valoración Herida</label>
+
+
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="obs_cp_gral" id="obs_cp_gral"></textarea>
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_cur_plana">Obs.
+                                                                                                        Curación Plana</label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_cur_plana" id="obs_cur_plana"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {{--  @if(!$curacion_plana)  --}}
+                                                                                            <button type="button" class="btn btn-outline-success btn-sm float-right my-2" onclick="guardar_curacion_plana_servicio()"><i class="fas fa-save"></i>Guardar</button>
+                                                                                        {{--  @else  --}}
+                                                                                            {{--  <button type="button" class="btn btn-outline-success btn-sm float-right my-2" onclick="actualizar_curacion_plana_servicio({{ $curacion_plana->id }})"><i class="fas fa-save"></i>Actualizar</button>  --}}
+                                                                                        {{--  @endif  --}}
+                                                                                    </div>
+                                                                                    <div class="tab-pane fade show" id="cur_hda"
+                                                                                        role="tabpanel" aria-labelledby="cur_hda-tab">
+                                                                                        @include('atencion_otros_prof.secciones_especialidad.includes.enfermeria.curacion_lpp')
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <label class="floating-label-activo-sm">Observaciones al procedimiento</label>
+                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen Especialidad" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="bs_ex_orl" id="obs_ex_orl"></textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> </div>
                                         <!--ADMINISTRACIÓN DE TRATAMIENTO INYECTABLE-->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
@@ -120,7 +499,7 @@
                                                                         <!--INYECTABLES-->
                                                                         <div class="tab-pane fade show active" id="inyec-gen" role="tabpanel" aria-labelledby="inyec-gen_tab">
                                                                             <div class="form-row mt-3">
-                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">                                                                                    
+                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                                                         <a class="nav-link-aten text-reset active " id="receta_gen-tab" data-toggle="tab" href="#receta_gen" role="tab" aria-controls="receta_gen" aria-selected="false">Receta Médica</a>
                                                                                         <a class="nav-link-aten text-reset" id="enf_inyect-tab" data-toggle="tab" href="#enf_inyect" role="tab" aria-controls="enf_inyect" aria-selected="false">Inyectable IM/IV</a>
@@ -136,7 +515,7 @@
                                                                                                     <span class="badge badge-sub d-inline">TRATAMIENTO INYECTABLE</span>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="form-row">                                                                                               
+                                                                                            <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                     <div class="alert alert-info py-1 mt-2" role="alert">Adjuntar receta</div>
                                                                                                     <!-- [ Main Content ] start -->
@@ -182,7 +561,7 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="tab-pane fade show" id="enf_sueros" role="tabpanel" aria-labelledby="enf_sueros-tab">
-                                                                                      
+
                                                                                                 <!--SUEROS-->
                                                                                                 <div class="row">
                                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -215,7 +594,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                      
+
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -272,7 +651,7 @@
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Tratamiento Oral</h6>
                                                                                      <button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="oral_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -318,7 +697,7 @@
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Tratamiento Suero - Via venosa</h6>
                                                                                      <button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="ven_suero_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -361,7 +740,7 @@
                                                                             <div class="form-row">
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Tratamiento Inyectable</h6><button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="inyect_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -399,7 +778,7 @@
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Nutrición parenteral</h6>
                                                                                     <button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="n_parenteral_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -430,12 +809,1984 @@
                                                                     <!--CURACIONES-->
                                                                     <div class="tab-pane fade show" id="curacion-cd" role="tabpanel"
                                                                         aria-labelledby="curacion-cd-tab">
-                                                                        <form>
+                                                                         <!--CURACION PLANA-->
+                                                    <div class="tab-pane fade show active" id="cur_plana"
+                                                        role="tabpanel" aria-labelledby="cur_plana-tab">
+                                                        <div class="form-row mx-2">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <h6 class="t-aten d-inline">Curaciones</h6>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-10"
+                                                                    id="enf_urgencia" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset active"
+                                                                            id="val_hda-tab" data-toggle="tab"
+                                                                            href="#val_hda" role="tab"
+                                                                            aria-controls="val_hda"
+                                                                            aria-selected="true">Valoración</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset"
+                                                                            id="cur_hda-tab" data-toggle="tab"
+                                                                            href="#cur_hda" role="tab"
+                                                                            aria-controls="cur_hda"
+                                                                            aria-selected="true">Curación</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-11">
+                                                                <div class="tab-content"
+                                                                    id="Curación de lesiones planas">
+                                                                    <div class="tab-pane fade show active"
+                                                                        id="val_hda" role="tabpanel"
+                                                                        aria-labelledby="val_hda-tab">
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="alert alert-warning"
+                                                                                    role="alert">
+                                                                                    Si desea ocupar el item de
+                                                                                    observaciones debe necesariamente
+                                                                                    elegir otra opción para sumar el
+                                                                                    puntaje.
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm t-red" for="cp_asp">Aspecto</label>
+                                                                                    <select name="cp_asp"
+                                                                                            id="cp_asp"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('cp_asp','div_cp_asp','obs_cp_asp',6);actualizarTotal()">
+                                                                                        <option selected value="0">Seleccione</option>
+                                                                                        <option value="1">Eritematoso </option>
+                                                                                        <option value="2">Enrojecido</option>
+                                                                                        <option value="3">Amarillo pálido</option>
+                                                                                        <option value="4">Necrótico </option>
+                                                                                        <option value="6">Observaciones</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_asp"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_asp">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_asp" id="obs_cp_asp"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                                                                                <div class="form-group">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-outline-primary btn-sm btn-block"onclick="curac_hda();">
+                                                                                        <i
+                                                                                            class="feather icon-plus"></i>
+                                                                                        Guía</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_me">Mayor
+                                                                                        Extensión</label>
+                                                                                        <select name="cp_me"
+                                                                                        id="cp_me"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('cp_me','div_cp_me','obs_cp_me',5);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">0-1 cm</option>
+                                                                                            <option value="2">1-3 cm</option>
+                                                                                            <option value="3">3-6 cm</option>
+                                                                                            <option value="4">>6 cm</option>
+                                                                                            <option value="5">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group" id="div_cp_me"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_me">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_me" id="obs_cp_me"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_pro">Profundidad</label>
+                                                                                        <select name="cp_pro"
+                                                                                        id="cp_pro"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('cp_pro','div_cp_pro','obs_cp_pro1',6);actualizarTotal()">
+                                                                                        <option selected value="0">Seleccione</option>
+                                                                                        <option value="1" >0</option>
+                                                                                        <option value="2" >0-1 cm</option>
+                                                                                        <option value="3" >1-2 cm</option>
+                                                                                        <option value="4" >2-3 cm</option>
+                                                                                        <option value="5" > >3 cm</option>
+                                                                                        <option value="6" >Otros</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_pro"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_pro">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_pro" id="obs_cp_pro"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_ecant">Exudado-Cantidad</label>
+                                                                                        <select name="cp_ecant"
+                                                                                                id="cp_ecant"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_ecant','div_cp_ecant','obs_cp_ecant',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1" >Ausente</option>
+                                                                                            <option value="2" >Escaso</option>
+                                                                                            <option value="3" >Moderado</option>
+                                                                                            <option value="4" >Abundante</option>
+                                                                                            <option value="6" >Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_ecant"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_ecant">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_ecant" id="obs_cp_ecant"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_ecal">Exudado-Calidad</label>
+                                                                                        <select name="cp_ecal"
+                                                                                                id="cp_ecal"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_ecal','div_cp_ecal','obs_cp_ecal',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">Sin exudado</option>
+                                                                                            <option value="2">Seroso</option>
+                                                                                            <option value="3">Turbio</option>
+                                                                                            <option value="4">Purulento</option>
+                                                                                            <option value="6">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_ecal"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_ecal">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_ecal" id="obs_cp_ecal"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_tn">Tejido
+                                                                                        esfacelado o necrótico</label>
+                                                                                        <select name="cp_tn"
+                                                                                                id="cp_tn"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_tn','div_cp_tn','obs_cp_tn',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">Ausente</option>
+                                                                                            <option value="2"><25 %</option>
+                                                                                            <option value="3">25 - 50 %</option>
+                                                                                            <option value="4">>50 - 75 %</option>
+                                                                                            <option value="5">>75 %</option>
+                                                                                            <option value="6">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group" id="div_cp_tn"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_tn">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_tn" id="obs_cp_tn"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_tg">Tejido
+                                                                                        granulatorio</label>
+                                                                                        <select name="cp_tg"
+                                                                                                id="cp_tg"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_tg','div_cp_tg','obs_cp_tg',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">100- 75 %</option>
+                                                                                            <option value="2"><75 - 50 %</option>
+                                                                                            <option value="3"><50 - 25 %</option>
+                                                                                            <option value="4"><25 %</option>
+                                                                                            <option value="6">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group" id="div_cp_tg"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_tg">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_tg" id="obs_cp_tg"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_ed">Edema</label>
+                                                                                        <select name="cp_ed"
+                                                                                                id="cp_ed"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_ed','div_cp_ed','obs_cp_ed',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">Ausente</option>
+                                                                                            <option value="2">+</option>
+                                                                                            <option value="3">++</option>
+                                                                                            <option value="4">+++</option>
+                                                                                            <option value="6">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group" id="div_cp_ed"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_ed">Obs.<i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_ed" id="obs_cp_ed"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_dol">Dolor</label>
+                                                                                        <select name="cp_dol"
+                                                                                                id="cp_dol"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_dol','div_cp_dol','obs_cp_dol',6);actualizarTotal()">
+                                                                                            <option value="0">Seleccione</option>
+                                                                                            <option value="1" >0 - 1</option>
+                                                                                            <option value="2" >2 - 3</option>
+                                                                                            <option value="3" >4 - 6</option>
+                                                                                            <option value="4" >7 - 10</option>
+                                                                                            <option value="6" >Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_dol"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_dol">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_dol" id="obs_cp_dol"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_pielc">Piel
+                                                                                        circundante</label>
+                                                                                        <select name="cp_pielc"
+                                                                                                id="cp_pielc"
+                                                                                                class="form-control form-control-sm"
+                                                                                                onchange="evaluar_para_carga_detalle('cp_pielc','div_cp_pielc','obs_cp_pielc',6);actualizarTotal()">
+                                                                                            <option selected value="0">Seleccione</option>
+                                                                                            <option value="1">Sana</option>
+                                                                                            <option value="2">Descamada</option>
+                                                                                            <option value="3">Erimatosa</option>
+                                                                                            <option value="4">Macerada</option>
+                                                                                            <option value="6">Observaciones</option>
+                                                                                        </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_pielc"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_pielc">Obs.
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_pielc" id="obs_cp_pielc"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="bh_dren_1">P.Total</label>
+                                                                                    <input type="number"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="ptos_tot_ev"
+                                                                                        id="ptos_tot_ev" value="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="tpo_les_curgen">Valoración</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        name="tpo_les_curgen"
+                                                                                        id="tpo_les_curgen" value="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-outline-primary btn-sm  btn-block"onclick="cur_guia();">
+                                                                                        <i
+                                                                                            class="feather icon-plus"></i>
+                                                                                        Guía</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-4 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="obs_cp_gral">Obs.
+                                                                                        Valoración Herida</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;"
+                                                                                        name="obs_cp_gral" id="obs_cp_gral"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="obs_cur_plana">Obs.
+                                                                                        Curación Plana</label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cur_plana" id="obs_cur_plana"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        {{--  @if(!$curacion_plana)  --}}
+                                                                            <button type="button" class="btn btn-outline-success btn-sm float-right my-2" onclick="guardar_curacion_plana_servicio()"><i class="fas fa-save"></i>Guardar</button>
+                                                                        {{--  @else  --}}
+                                                                            <button type="button" class="btn btn-outline-success btn-sm float-right my-2" onclick="actualizar_curacion_plana_servicio()"><i class="fas fa-save"></i>Actualizar</button>
+                                                                        {{--  @endif  --}}
+                                                                    </div>
+                                                                    <div class="tab-pane fade show" id="cur_hda"
+                                                                        role="tabpanel" aria-labelledby="cur_hda-tab">
+                                                                        @include('atencion_otros_prof.secciones_especialidad.includes.enfermeria.curacion_lpp')
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--CURACION LPP-->
+                                                    <div class="tab-pane fade " id="cur_lpp" role="tabpanel" aria-labelledby="cur_lpp-tab">
+                                                        <div class="col-sm-12 col-md-12">
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <h6 class="t-aten">Curación LPP</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="enf_urgencia" role="tablist">
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset active" id="val_lpp-tab" data-toggle="tab" href="#val_lpp" role="tab" aria-controls="val_lpp" aria-selected="true">Valoración</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="cur1_lpp-tab" data-toggle="tab" href="#cur1_lpp" role="tab" aria-controls="cur1_lpp" aria-selected="true">Curación</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset" id="curidados_lpp-tab" data-toggle="tab" href="#curidados_lpp" role="tab" aria-controls="curidados_lpp" aria-selected="true">Cuidado y Prevensión</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-11">
+                                                                    <div class="tab-content" id="Curación de lesiones planas">
+                                                                        <div class="tab-pane fade show active" id="val_lpp" role="tabpanel" aria-labelledby="val_lpp-tab">
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-2">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="upp_local_eval">Localización</label>
+                                                                                        <select name="upp_local_eval" id="upp_local_eval" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('upp_local_eval','div_upp_local_eval','obs_upp_local_eval',15);">
+                                                                                            <option selected value="0">Seleccione </option>
+                                                                                            <option value="Cabeza">Cabeza </option>
+                                                                                            <option value="Frente">Frente</option>
+                                                                                            <option value="Oreja">Oreja</option>
+                                                                                            <option value="Mejilla">Mejilla</option>
+                                                                                            <option value="Omoplato">Omoplato</option>
+                                                                                            <option value="Costillas">Costillas</option>
+                                                                                            <option value="Pecho">Pecho</option>
+                                                                                            <option value="Sacro">Sacro</option>
+                                                                                            <option value="Trocanter">Trocanter</option>
+                                                                                            <option value="Genitales">Genitales</option>
+                                                                                            <option value="Rodilla">Rodilla</option>
+                                                                                            <option value="Cóndilos">Cóndilos</option>
+                                                                                            <option value="Rodilla">Rodilla</option>
+                                                                                            <option value="Dedos">Dedos</option>
+                                                                                            <option value="Talones">Talones</option>
+                                                                                            <option value="Maleolo">Maleolo</option>
+                                                                                            <option value="Otras">Otras</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group" id="div_upp_local_eval" style="display:none;">
+                                                                                        <label class="floating-label-activo-sm" for="obs_upp_local_eval">Otras <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_upp_local_eval" id="obs_upp_local_eval"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-1">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="upp_gr_eval">Grado</label>
+                                                                                        <select name="upp_gr_eval" id="upp_gr_eval" class="form-control form-control-sm">
+                                                                                            <option value="G-0">G-0 </option>
+                                                                                            <option value="G-1">G-1</option>
+                                                                                            <option value="G-2">G-2</option>
+                                                                                            <option value="G-3">G-3</option>
+                                                                                            <option value="G-4">G-4</option>
+                                                                                            <option value="G-5">G-5</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="upp_diam_eval">Diámetro</label>
+                                                                                        <select name="upp_diam_eval" id="upp_diam_eval" class="form-control form-control-sm">
+                                                                                            <option selected value="Seleccione">Seleccione</option>
+                                                                                            <option value="Menor de 1 cm.">Menor de 1 cm.</option>
+                                                                                            <option value="Entre 1 y 2 cms.">Entre 1 y 2 cms.</option>
+                                                                                            <option value="Entre 2 y 3 cms.">Entre 2 y 3 cms.</option>
+                                                                                            <option value="Entre 3 y 4 cms.">Entre 3 y 4 cms.</option>
+                                                                                            <option value="Entre 5 y 6 cms.">Entre 5 y 6 cms.</option>
+                                                                                            <option value="Entre 7 y 8 cms.">Entre 7 y 8 cms.</option>
+                                                                                            <option value="Entre 9 y 10 cms.">Entre 9 y 10 cms.</option>
+                                                                                            <option value="Entre 11 y 12 cms.">Entre 11 y 12 cms.</option>
+                                                                                            <option value="Entre 12 y 15 cms.">Entre 12 y 15 cms.</option>
+                                                                                            <option value="Mayor de 15 cms..">Mayor de 15 cms..</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="bh_dren_1">Profundidad</label>
+                                                                                        <select name="upp_prof_eval" id="upp_prof_eval" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('upp_prof_eval','div_upp_prof_eval','obs_upp_prof_eval',11);">
+                                                                                            <option selected  value="0">Seleccione</option>
+                                                                                            <option value="Epidermis">Epidermis</option>
+                                                                                            <option value="Dermis">Dermis</option>
+                                                                                            <option value="Hipodermis">Hipodermis</option>
+                                                                                            <option value="Otros">Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group" id="div_upp_prof_eval" style="display:none;">
+                                                                                        <label class="floating-label-activo-sm" for="obs_upp_prof_eval">Otras <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_upp_prof_eval" id="obs_upp_prof_eval"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="bh_dren_1">Infección</label>
+                                                                                        <select name="upp_Infec_eval" id="upp_Infec_eval" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('upp_Infec_eval','div_upp_Infec_eval','obs_upp_Infec_eval',11);">
+                                                                                            <option selected  value="0">Seleccione</option>
+                                                                                            <option value="No">No</option>
+                                                                                            <option value="Solo presencia de pus">Solo presencia de pus</option>
+                                                                                            <option value="Presencia de pus + necrosis">Presencia de pus + necrosis</option>
+                                                                                            <option value="Absceso">Absceso</option>
+                                                                                            <option value="Absceso + área Necrótica">Absceso + área Necrótica</option>
+                                                                                            <option value="Otros">Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group" id="div_upp_Infec_eval" style="display:none;">
+                                                                                        <label class="floating-label-activo-sm" for="obs_upp_Infec_eval">Otras <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_upp_Infec_eval" id="obs_upp_Infec_eval"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <label class="floating-label-activo-sm" for="lpp_patasoc">Seleccionar Patologías de riesgo y Fac. agravantes</label>
+                                                                                    <select class="form-control form-control-sm" name="lpp_patasoc" id="lpp_patasoc" multiple="multiple">
+                                                                                        <option value="Hipertensión">Hipertensión</option>
+                                                                                        <option value="Diabetes">Diabetes</option>
+                                                                                        <option value="Hipercolesterolemia">Hipercolesterolemia</option>
+                                                                                        <option value="Hiperlipidemia">Hiperlipidemia</option>
+                                                                                        <option value="Cancer">Cancer</option>
+                                                                                        <option value="Obesidad">Obesidad</option>
+                                                                                        <option value="Hipertiroidismo">Hipertiroidismo</option>
+                                                                                        <option value="Hipotiroidismo">Hipotiroidismo</option>
+                                                                                        <option value="Cirugías reciente">Cirugías reciente</option>
+                                                                                        <option value="Infección Sistémica">Infección Sistémica</option>
+                                                                                        <option value="Infección local">Infección local</option>
+                                                                                        <option value="Fístulas">Fístulas</option>
+                                                                                        <option value="Otras(Agregar en Observaciones)">Otras(Agregar en Observaciones)</option>
+                                                                                    </select>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="obs_orin"> Observaciones Patología Asociada</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=3;" name="obs_pa_eval_upp" id="obs_pa_eval_upp"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="obs_orin">Obs. Valoración LPP</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=3;" name="obs_val_eval_upp" id="obs_val_eval_upp"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            @if(isset($enfermera)) <button type="button" class="btn btn-outline-success btn-sm my-2 float-right" onclick="guardar_curacion_lpp()"><i class="fas fa-save"></i>Guardar</button> @endif
+                                                                        </div>
+                                                                        <div class="tab-pane fade show" id="cur1_lpp" role="tabpanel" aria-labelledby="cur1_lpp-tab">
+                                                                            @include('page.general.secciones_ficha.curacion_heridas')
+                                                                        </div>
+                                                                        <div class="tab-pane fade show" id="curidados_lpp" role="tabpanel" aria-labelledby="curidados_lpp-tab">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <label class="floating-label-activo-sm" for="lpp_patasoc">Seleccionar Medidas liquidas</label>
+                                                                                    <select class="form-control form-control-sm" name="lpp_medprotliq" id="lpp_medprotliq" multiple="multiple">
+                                                                                        <option value="1">Soluciones Locales Humectantes</option>
+                                                                                        <option value="2">Soluciones Locales Hidratantes</option>
+                                                                                        <option value="3">Soluciones Locales Hidratantes</option>
+                                                                                        <option value="4">AGEHO : LINOLEICO , PALMITICO </option>
+                                                                                        <option value="5">Otras(Agregar en Observaciones)</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <label class="floating-label-activo-sm" for="lpp_patasoc">Dispositivos de descarga</label>
+                                                                                    <select class="form-control form-control-sm" name="lpp_medproddesc" id="lpp_medproddesc" multiple="multiple">
+                                                                                        <option value="1">Dispositivo de descarga local</option>
+                                                                                        <option value="2">Dispositivo de descarga General</option>
+                                                                                        <option value="3">Otras(Agregar en Observaciones)</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <label class="floating-label-activo-sm" for="lpp_patasoc">Seleccionar Medidas preventivas Externas</label>
+                                                                                    <select class="form-control form-control-sm" name="lpp_medprevext" id="lpp_medprevext" multiple="multiple">
+                                                                                        <option value="1">Colchón especial</option>
+                                                                                        <option value="2">Picarón</option>
+                                                                                        <option value="3">Movilización frecuente</option>
+                                                                                        <option value="3">Masajes</option>
+                                                                                        <option value="4">Otras(Agregar en Observaciones)</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm" for="obs_orin"> Observaciones Med de prevención y cuidado</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=3;" name="obs_pa_eval_upp" id="obs_pa_eval_upp"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--PIE DIABÉTICO-->
+                                                    <div class="tab-pane fade" id="cur_pd" role="tabpanel"
+                                                        aria-labelledby="cur_pd-tab">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-7">
+                                                                    <div class="form-group">
+                                                                        <h6 class="t-aten">Curación Pié Diabético</h6>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <ul class="nav nav-tabs-aten nav-fill mb-3"
+                                                                        id="enf_urgencia" role="tablist">
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset active"
+                                                                                id="val_pie-tab" data-toggle="tab"
+                                                                                href="#val_pie" role="tab"
+                                                                                aria-controls="val_pie"
+                                                                                aria-selected="true">Valoración</a>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset"
+                                                                                id="curac_pie-tab" data-toggle="tab"
+                                                                                href="#curac_pie" role="tab"
+                                                                                aria-controls="curac_pie"
+                                                                                aria-selected="true">Curación</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="alert alert-warning" role="alert">
+                                                                        Si desea ocupar el item de observaciones debe
+                                                                        necesariamente elegir otra opción para sumar el
+                                                                        puntaje.
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-11">
+                                                                    <div class="tab-content" id="pie_diab">
+                                                                        <div class="tab-pane fade show active"
+                                                                            id="val_pie" role="tabpanel"
+                                                                            aria-labelledby="val_pie-tab">
+                                                                            <div class="form-row">
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="aspecto_pie_diab">Aspecto</label>
+                                                                                        <select name="aspecto_pie_diab"
+                                                                                            id="aspecto_pie_diab"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('aspecto_pie_diab','div_aspecto_pie_diab','obs_aspecto_pie_diab',6); actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Erimatoso </option>
+                                                                                            <option value="2">
+                                                                                                Enrojecido</option>
+                                                                                            <option value="3">
+                                                                                                Amarillo pálido</option>
+                                                                                            <option value="4">
+                                                                                                Necrótico grisáceo
+                                                                                            </option>
+                                                                                            <option value="5">
+                                                                                                Necrótico negruzco
+                                                                                            </option>
+                                                                                            <option value="6">
+                                                                                                Observaciones</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_aspecto_pie_diab"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_aspecto_pie_diab">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_aspecto_pie_diab" id="obs_aspecto_pie_diab"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-outline-primary btn-sm  btn-block"onclick="p_diab();">
+                                                                                            <i
+                                                                                                class="feather icon-plus"></i>
+                                                                                            Guía</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="mayor_extension">Mayor
+                                                                                            Extensión</label>
+                                                                                        <select name="mayor_extension"
+                                                                                            id="mayor_extension"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('mayor_extension','div_mayor_extension','obs_mayor_extension',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">0-1
+                                                                                                cm</option>
+                                                                                            <option value="2">1-3
+                                                                                                cm</option>
+                                                                                            <option value="3">3-6
+                                                                                                cm</option>
+                                                                                            <option value="4">6-10
+                                                                                                cm</option>
+                                                                                            <option value="5">>10
+                                                                                                cm</option>
+                                                                                            <option value="6">
+                                                                                                Observaciones</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_mayor_extension"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_mayor_extension">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_mayor_extension" id="obs_mayor_extension"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="profundidad_curacion">Profundidad</label>
+                                                                                        <select name="profundidad_curacion"
+                                                                                            id="profundidad_curacion"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('profundidad_curacion','div_profundidad_curacion','obs_profundidad_curacion',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="1">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">0
+                                                                                            </option>
+                                                                                            <option value="2">0-1
+                                                                                                cm</option>
+                                                                                            <option value="3">1-2
+                                                                                                cm</option>
+                                                                                            <option value="4">2-3
+                                                                                                cm</option>
+                                                                                            <option value="5"> >3
+                                                                                                cm </option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_profundidad_curacion"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_profundidad_curacion">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_profundidad_curacion" id="obs_profundidad_curacion"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="exudado_cantidad_curacion">Exudado-Cantidad</label>
+                                                                                        <select name="exudado_cantidad_curacion"
+                                                                                            id="exudado_cantidad_curacion"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('exudado_cantidad_curacion','div_exudado_cantidad_curacion','obs_exudado_cantidad_curacion',11);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Ausente</option>
+                                                                                            <option value="2">
+                                                                                                Escaso</option>
+                                                                                            <option value="3">
+                                                                                                Moderado</option>
+                                                                                            <option value="4">
+                                                                                                Abundante</option>
+                                                                                            <option value="5">Muy
+                                                                                                abundante</option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group "
+                                                                                        id="div_exudado_cantidad_curacion"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_exudado_cantidad_curacion">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_exudado_cantidad_curacion" id="obs_exudado_cantidad_curacion"></textarea>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="exudado_calidad_curacion">Exudado-Calidad</label>
+                                                                                        <select name="exudado_calidad_curacion"
+                                                                                            id="exudado_calidad_curacion"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('exudado_calidad_curacion','div_exudado_calidad_curacion','obs_exudado_calidad_curacion',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="1">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">Sin
+                                                                                                exudado </option>
+                                                                                            <option value="2">
+                                                                                                Seroso</option>
+                                                                                            <option value="3">
+                                                                                                Turbio</option>
+                                                                                            <option value="4">
+                                                                                                Purulento </option>
+                                                                                            <option value="5">
+                                                                                                Purulento gangrenoso
+                                                                                            </option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_exudado_calidad_curacion"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_exudado_calidad_curacion">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_exudado_calidad_curacion" id="obs_exudado_calidad_curacion"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="tejido_esf">Tejido
+                                                                                            esfacelado o
+                                                                                            necrótico</label>
+                                                                                        <select name="tejido_esf"
+                                                                                            id="tejido_esf"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('tejido_esf','div_tejido_esf','obs_tejido_esf',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Ausente</option>
+                                                                                            <option value="2">
+                                                                                                <25 %</option>
+                                                                                            <option value="3">25 -
+                                                                                                50 %</option>
+                                                                                            <option value="4">>50
+                                                                                                - 75 %</option>
+                                                                                            <option value="5">>75
+                                                                                                %</option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_tejido_esf"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_tejido_esf">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_tejido_esf" id="obs_tejido_esf"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="tejido_granu">Tejido
+                                                                                            granulatorio</label>
+                                                                                        <select name="tejido_granu"
+                                                                                            id="tejido_granu"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('tejido_granu','div_tejido_granu','obs_tejido_granu',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="1">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">100
+                                                                                                % </option>
+                                                                                            <option value="2">99 -
+                                                                                                75 %</option>
+                                                                                            <option value="3">
+                                                                                                <75 - 50 %</option>
+                                                                                            <option value="4">
+                                                                                                <50 - 25 %</option>
+                                                                                            <option value="5">
+                                                                                                <25 %</option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_tejido_granu"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_tejido_granu">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_tejido_granu" id="obs_tejido_granu"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="edema_curacion">Edema</label>
+                                                                                        <select name="edema_curacion"
+                                                                                            id="edema_curacion"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('edema_curacion','div_edema_curacion','obs_edema_curacion',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Ausente </option>
+                                                                                            <option value="2">+
+                                                                                            </option>
+                                                                                            <option value="3">++
+                                                                                            </option>
+                                                                                            <option value="4">+++
+                                                                                            </option>
+                                                                                            <option value="5">++++
+                                                                                            </option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group "
+                                                                                        id="div_edema_curacion"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_edema_curacion">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_edema_curacion" id="obs_edema_curacion"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="dolor_curacion">Dolor</label>
+                                                                                        <select name="dolor_curacion"
+                                                                                            id="dolor_curacion"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('dolor_curacion','div_dolor_curacion','obs_dolor_curacion',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">0 -
+                                                                                                1</option>
+                                                                                            <option value="2">2 -
+                                                                                                3</option>
+                                                                                            <option value="3">4 -
+                                                                                                6</option>
+                                                                                            <option value="4">7 -
+                                                                                                8</option>
+                                                                                            <option value="5">9 -
+                                                                                                10</option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_dolor_curacion"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_dolor_curacion">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_dolor_curacion" id="obs_dolor_curacion"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="piel_circun">Piel
+                                                                                            circundante</label>
+                                                                                        <select name="piel_circun"
+                                                                                            id="piel_circun"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('piel_circun','div_piel_circun','obs_piel_circun',6);actualizarTotalPieDiabetico()">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Sana </option>
+                                                                                            <option value="2">
+                                                                                                Descamada</option>
+                                                                                            <option value="3">
+                                                                                                Erimatosa</option>
+                                                                                            <option value="4">
+                                                                                                Macerada</option>
+                                                                                            <option value="5">
+                                                                                                Gangrena</option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_piel_circun"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_piel_circun">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_piel_circun" id="obs_piel_circun"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-2">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="ptos_tot_ev_diab">P.Total</label>
+                                                                                        <input type="number"
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="ptos_tot_ev_diab"
+                                                                                            id="ptos_tot_ev_diab">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-1">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-outline-primary btn-sm  btn-block"onclick="g_pdiab();">
+                                                                                        <i
+                                                                                            class="feather icon-plus"></i>
+                                                                                        Guía</button>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="obs_orin">Obs.
+                                                                                            Curación Pié
+                                                                                            Diabético</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=3;"
+                                                                                            name="obs_orin" id="obs_orin"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-row">
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <!--ANTECEDENTES RELEVANTES-->
+                                                                                    <div class="form-row">
+                                                                                        <div
+                                                                                            class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <h6
+                                                                                                class="t-aten mt-2 mb-2">
+                                                                                                ANTECEDENTES RELEVANTES
+                                                                                            </h6>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="pat_prop">Enfermedad
+                                                                                                actual</label>
+                                                                                            <select
+                                                                                                class="form-control form-control-sm"
+                                                                                                name="pat_prop"
+                                                                                                id="pat_prop"
+                                                                                                multiple="multiple">
+                                                                                                <option
+                                                                                                    value="1">
+                                                                                                    Hipertensión
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="2">
+                                                                                                    Diabetes</option>
+                                                                                                <option
+                                                                                                    value="3">
+                                                                                                    Hipercolesterolemia
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="4">
+                                                                                                    Hiperlipidemia
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="5">
+                                                                                                    Cancer</option>
+                                                                                                <option
+                                                                                                    value="6">
+                                                                                                    Obesidad</option>
+                                                                                                <option
+                                                                                                    value="7">
+                                                                                                    Hipertiroidismo
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="8">
+                                                                                                    Hipotiroidismo
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="9">
+                                                                                                    Cirugías</option>
+                                                                                                <option
+                                                                                                    value="10">
+                                                                                                    Inmunodepresión
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="11">
+                                                                                                    Tabaquismo</option>
+                                                                                                <option
+                                                                                                    value="12">
+                                                                                                    Insuficiencia venosa
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="13">
+                                                                                                    Insuficiencia
+                                                                                                    arterial</option>
+                                                                                                <option
+                                                                                                    value="14">
+                                                                                                    Sustancias Ilícitas
+                                                                                                </option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="sint_act">Medicamentos
+                                                                                                / Tratamientos</label>
+                                                                                            <select
+                                                                                                class="form-control form-control-sm"
+                                                                                                name="sint_act"
+                                                                                                id="sint_act"
+                                                                                                multiple="multiple">
+                                                                                                <option
+                                                                                                    value="1">
+                                                                                                    Hipoglicemiantes
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="2">
+                                                                                                    Antibióticos
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="3">
+                                                                                                    Corticosteroides
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="4">
+                                                                                                    Tratamiento
+                                                                                                    Anticoagulante
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="5">
+                                                                                                    Otros</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-4">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="ot_pat_act">Resultado
+                                                                                                de exámenes</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="2" onfocus="this.rows=4"
+                                                                                                onblur="this.rows=1;" name="ot_pat_act" id="ot_pat_act"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="tab-pane fade show"
+                                                                            id="curac_pie" role="tabpanel"
+                                                                            aria-labelledby="curac_pie-tab">
+                                                                            <div class="form-row">
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="cp_cult">Toma de
+                                                                                            Cultivo</label>
+                                                                                        <select name="cp_cult"
+                                                                                            id="cp_cult"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('cp_cult','div_cp_cult','obs_cp_cult',6);">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione</option>
+                                                                                            <option value="1">No
+                                                                                            </option>
+                                                                                            <option value="2">Si
+                                                                                            </option>
+                                                                                            <option value="6">
+                                                                                                Observaciones</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_cp_cult"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_cp_cult">Observaciones
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_cp_cult" id="obs_cp_cult"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="cp_td">Tipos de
+                                                                                            debridamiento</label>
+                                                                                        <select name="cp_td"
+                                                                                            id="cp_td"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('cp_td','div_cp_td','obs_cp_td',8);">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione </option>
+                                                                                            <option value="1">
+                                                                                                Quirúrgico </option>
+                                                                                            <option value="2">
+                                                                                                Cortante</option>
+                                                                                            <option value="3">
+                                                                                                Enzimático</option>
+                                                                                            <option value="4">
+                                                                                                Autolítico</option>
+                                                                                            <option value="5">
+                                                                                                Osmótico</option>
+                                                                                            <option value="6">
+                                                                                                Larval</option>
+                                                                                            <option value="7">
+                                                                                                Mecánico</option>
+                                                                                            <option value="8">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_cp_td"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_cp_td">Otras
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_cp_td" id="obs_cp_td"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                    <div class="form-group">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="cp_duch">Duchoterapia</label>
+                                                                                        <select name="cp_duch"
+                                                                                            id="cp_duch"
+                                                                                            class="form-control form-control-sm"
+                                                                                            onchange="evaluar_para_carga_detalle('cp_duch','div_cp_duch','obs_cp_duch',3);">
+                                                                                            <option selected
+                                                                                                value="0">
+                                                                                                Seleccione</option>
+                                                                                            <option value="1">Si
+                                                                                            </option>
+                                                                                            <option value="2">No
+                                                                                            </option>
+                                                                                            <option value="3">
+                                                                                                Observaciones</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group"
+                                                                                        id="div_cp_duch"
+                                                                                        style="display:none;">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm t-red"
+                                                                                            for="obs_cp_duch">Observaciones
+                                                                                            <i>(Describir)</i></label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                            name="obs_cp_duch" id="obs_cp_duch"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div
+                                                                                    class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <div class="form-row mt-2">
+                                                                                        <div
+                                                                                            class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <h6 class="t-aten">Tipo de
+                                                                                                Antisépticos y
+                                                                                                materiales usados</h6>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="pie_ant">Tipo de
+                                                                                                antisepticos</label>
+                                                                                            <select
+                                                                                                class="form-control form-control-sm"
+                                                                                                name="pie_ant"
+                                                                                                id="pie_ant"
+                                                                                                multiple="multiple">
+                                                                                                <option
+                                                                                                    value="1">
+                                                                                                    Solución fisiológica
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="2">
+                                                                                                    Bialcohol</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="tpo_aposc">Tipo
+                                                                                                de apósitos y
+                                                                                                materiales</label>
+                                                                                            <select
+                                                                                                class="form-control form-control-sm"
+                                                                                                name="tpo_aposc"
+                                                                                                id="tpo_aposc"
+                                                                                                multiple="multiple">
+                                                                                                <option
+                                                                                                    value="1">
+                                                                                                    Apósitos Pasivos
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="2">
+                                                                                                    Apósito Interactivo
+                                                                                                    (Espuma Hidrofílica)
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="3">
+                                                                                                    Apósito Bioactivo
+                                                                                                    (Alginato)</option>
+                                                                                                <option
+                                                                                                    value="4">
+                                                                                                    Apósitos Mixtos
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="5">
+                                                                                                    Vasocontrictores
+                                                                                                </option>
+                                                                                                <option
+                                                                                                    value="6">
+                                                                                                    Otros</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div
+                                                                                            class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="antisep">Observaciones</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=4"
+                                                                                                onblur="this.rows=1;" name="ot_pat_act" id="ot_pat_act"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--QUEMADOS-->
+                                                    <div class="tab-pane fade" id="cur_quem" role="tabpanel"
+                                                        aria-labelledby="cur_quem-tab">
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <h6 class="t-aten">Curación Quemados</h6>
+                                                                </div>
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-2"
+                                                                    id="enf_urgencia" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset active"
+                                                                            id="val_quem-tab" data-toggle="tab"
+                                                                            href="#val_quem" role="tab"
+                                                                            aria-controls="val_quem"
+                                                                            aria-selected="true">Valoración</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link-aten text-reset"
+                                                                            id="curac_quem-tab" data-toggle="tab"
+                                                                            href="#curac_quem" role="tab"
+                                                                            aria-controls="curac_quem"
+                                                                            aria-selected="true">Curación</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="tab-content" id="quemados">
+                                                                    <div class="tab-pane fade show active"
+                                                                        id="val_quem" role="tabpanel"
+                                                                        aria-labelledby="val_quem-tab">
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="qmsupqm">Superficie
+                                                                                        quemada</label>
+                                                                                    <select name="qmsupqm"
+                                                                                        id="qmsupqm"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('qmsupqm','div_qmsupqm','obs_qmsupqm',4);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">
+                                                                                            < 9% </option>
+                                                                                        <option value="2">9-18%
+                                                                                        </option>
+                                                                                        <option value="3"> >18%
+                                                                                        </option>
+                                                                                        <option value="4">Otros
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_qmsupqm"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_qmsupqm">Otras
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_qmsupqm" id="obs_qmsupqm"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-outline-primary btn-sm btn-block"onclick="quem();">
+                                                                                        <i
+                                                                                            class="feather icon-plus"></i>
+                                                                                        Guía</button>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="qmdr">Grado
+                                                                                        quemadura</label>
+                                                                                    <select name="qmdr"
+                                                                                        id="qmdr"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('qmdr','div_qmdr','obs_qmdr',11);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">Primer
+                                                                                            grado</option>
+                                                                                        <option value="2">Segundo
+                                                                                            grado</option>
+                                                                                        <option value="3">Tercer
+                                                                                            grado</option>
+                                                                                        <option value="4">Mixta
+                                                                                        </option>
+                                                                                        <option value="11">
+                                                                                            Observaciones</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_qmdr"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_qmdr">Observaciones
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_qmdr" id="obs_qmdr"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="bh_dren_1">Infección</label>
+                                                                                    <select name="qm_presinf"
+                                                                                        id="qm_presinf"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('qm_presinf','div_qm_presinf','obs_qm_presinf',2);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">No
+                                                                                        </option>
+                                                                                        <option value="2">Si
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_qm_presinf"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_qm_presinf">Observaciones
+                                                                                        Infección
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_qm_presinf" id="obs_qm_presinfr"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="qm_tq">Tipo
+                                                                                        quemadura</label>
+                                                                                    <select name="qm_tq"
+                                                                                        id="qm_tq"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('qm_tq','div_qm_tq','obs_qm_tq',11);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">Solar
+                                                                                        </option>
+                                                                                        <option value="2">Por
+                                                                                            Liquidos</option>
+                                                                                        <option value="3">Vapores
+                                                                                            y gases</option>
+                                                                                        <option value="4">Sust.
+                                                                                            Químicas</option>
+                                                                                        <option value="5">
+                                                                                            Eléctricidad</option>
+                                                                                        <option value="6">Fuego
+                                                                                            directo</option>
+                                                                                        <option value="11">Otros
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_qm_tq"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_qm_tq">Otra causa
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_qm_tq" id="obs_qm_tq"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="qm_tc">Tipo
+                                                                                        curación</label>
+                                                                                    <select name="qm_tc"
+                                                                                        id="qm_tc"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('qm_tc','div_qm_tc','obs_qm_tc',11);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">Plana
+                                                                                            superficial</option>
+                                                                                        <option value="2">Con
+                                                                                            remoción de tejidos</option>
+                                                                                        <option value="3">Aseo
+                                                                                            quirúrgico</option>
+                                                                                        <option value="11">Otros
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_qm_tc"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="obs_bh_dren_1">Observaciones
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_qm_tc" id="obs_qm_tc"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <!--ANTECEDENTES RELEVANTES-->
+                                                                                <div class="form-row mt-2">
+                                                                                    <div
+                                                                                        class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="t-aten">
+                                                                                            Antecedentes relevantes</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div
+                                                                                        class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-6 col-xxl-4">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="pat_propq">Enfermedad
+                                                                                            actual</label>
+                                                                                        <select
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="pat_propq"
+                                                                                            id="pat_propq"
+                                                                                            multiple="multiple">
+                                                                                            <option value="1">
+                                                                                                Hipertensión</option>
+                                                                                            <option value="2">
+                                                                                                Diabetes</option>
+                                                                                            <option value="3">
+                                                                                                Hipercolesterolemia
+                                                                                            </option>
+                                                                                            <option value="4">
+                                                                                                Hiperlipidemia</option>
+                                                                                            <option value="5">
+                                                                                                Cáncer</option>
+                                                                                            <option value="6">
+                                                                                                Obesidad</option>
+                                                                                            <option value="7">
+                                                                                                Hipertiroidismo</option>
+                                                                                            <option value="8">
+                                                                                                Hipotiroidismo</option>
+                                                                                            <option value="9">
+                                                                                                Cirugías</option>
+                                                                                            <option value="10">
+                                                                                                Inmunodepresión</option>
+                                                                                            <option value="11">
+                                                                                                Tabaquismo</option>
+                                                                                            <option value="12">
+                                                                                                Insuficiencia venosa
+                                                                                            </option>
+                                                                                            <option value="13">
+                                                                                                Insuficiencia arterial
+                                                                                            </option>
+                                                                                            <option value="14">
+                                                                                                Sustancias Ilícitas
+                                                                                            </option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-4">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="med_quem">Medicamentos
+                                                                                            / Tratamientos</label>
+                                                                                        <select
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="med_quem"
+                                                                                            id="med_quem"
+                                                                                            multiple="multiple">
+                                                                                            <option value="1">
+                                                                                                Hipoglicemiantes
+                                                                                            </option>
+                                                                                            <option value="2">
+                                                                                                Antibióticos</option>
+                                                                                            <option value="3">
+                                                                                                Corticosteroides
+                                                                                            </option>
+                                                                                            <option value="4">
+                                                                                                Tratamiento
+                                                                                                Anticoagulante</option>
+                                                                                            <option value="5">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-4">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="ot_pat_act">Resultado
+                                                                                            de exámenes</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2" onfocus="this.rows=4"
+                                                                                            onblur="this.rows=1;" name="ot_pat_act" id="ot_pat_act"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade show" id="curac_quem"
+                                                                        role="tabpanel"
+                                                                        aria-labelledby="curac_quem-tab">
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="cp_cult">Toma de
+                                                                                        Cultivo</label>
+                                                                                    <select name="cp_cult"
+                                                                                        id="cp_cult"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('cp_cult','div_cp_cult','obs_cp_cult',3);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">No
+                                                                                        </option>
+                                                                                        <option value="2">Si
+                                                                                        </option>
+                                                                                        <option value="3">
+                                                                                            Observaciones</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_cult"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="obs_cp_cult">Observaciones
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_cult" id="obs_cp_cult"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm"
+                                                                                        for="cp_td">Tipos de
+                                                                                        debridamiento</label>
+                                                                                    <select name="cp_td"
+                                                                                        id="cp_td"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('cp_td','div_cp_td','obs_cp_td',8);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">
+                                                                                            Quirúrgico </option>
+                                                                                        <option value="2">
+                                                                                            Cortante</option>
+                                                                                        <option value="3">
+                                                                                            Enzimático</option>
+                                                                                        <option value="4">
+                                                                                            Autolítico</option>
+                                                                                        <option value="5">
+                                                                                            Osmótico</option>
+                                                                                        <option value="6">Larval
+                                                                                        </option>
+                                                                                        <option value="7">
+                                                                                            Mecánico</option>
+                                                                                        <option value="8">Otros
+                                                                                        </option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_td"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_td">Otras
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_td" id="obs_cp_td"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="cp_duch">Duchoterapia</label>
+                                                                                    <select name="cp_duch"
+                                                                                        id="cp_duch"
+                                                                                        class="form-control form-control-sm"
+                                                                                        onchange="evaluar_para_carga_detalle('cp_duch','div_cp_duch','obs_cp_duch',3);">
+                                                                                        <option selected
+                                                                                            value="0">Seleccione
+                                                                                        </option>
+                                                                                        <option value="1">Si
+                                                                                        </option>
+                                                                                        <option value="2">No
+                                                                                        </option>
+                                                                                        <option value="3">
+                                                                                            Observaciones</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group"
+                                                                                    id="div_cp_duch"
+                                                                                    style="display:none;">
+                                                                                    <label
+                                                                                        class="floating-label-activo-sm t-red"
+                                                                                        for="obs_cp_duch">Observaciones
+                                                                                        <i>(Describir)</i></label>
+                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                        name="obs_cp_duch" id="obs_cp_duch"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <div
+                                                                                class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="form-row mt-2">
+                                                                                    <div
+                                                                                        class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="t-aten">Tipo de
+                                                                                            Antisépticos y materiales
+                                                                                            usados</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div
+                                                                                        class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="ants_qm">Tipo de
+                                                                                            antisepticos y
+                                                                                            cremas</label>
+                                                                                        <select
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="ants_qm"
+                                                                                            id="ants_qm"
+                                                                                            multiple="multiple">
+                                                                                            <option value="1">
+                                                                                                Solución fisiológica
+                                                                                            </option>
+                                                                                            <option value="2">
+                                                                                                Bialcohol</option>
+                                                                                            <option value="3">
+                                                                                                Sulfadiazina de
+                                                                                                plata(Platsul)</option>
+                                                                                            <option value="4">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                        <div class="form-group"
+                                                                                            style="margin-top:2%">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm"
+                                                                                                for="ot_qx_ac">Anote
+                                                                                                Otro Antiséptico o
+                                                                                                crema</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=3;"
+                                                                                                name="ot_qx_ac" id="ot_qx_ac"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <label
+                                                                                            class="floating-label-activo-sm"
+                                                                                            for="tpo_aposqm">Tipo de
+                                                                                            apósitos y
+                                                                                            materiales</label>
+                                                                                        <select
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="tpo_aposqm"
+                                                                                            id="tpo_aposqm"
+                                                                                            multiple="multiple">
+                                                                                            <option value="1">
+                                                                                                Apósitos Pasivos
+                                                                                            </option>
+                                                                                            <option value="2">
+                                                                                                Apósito
+                                                                                                Interactivo(Espuma
+                                                                                                Hidrofílica)</option>
+                                                                                            <option value="3">
+                                                                                                Apósito
+                                                                                                Bioactivo(Alginato)
+                                                                                            </option>
+                                                                                            <option value="4">
+                                                                                                Apósitos Mixtos</option>
+                                                                                            <option value="5">
+                                                                                                Vasocontrictores
+                                                                                            </option>
+                                                                                            <option value="6">
+                                                                                                Otros</option>
+                                                                                        </select>
+                                                                                        <div class="form-group"
+                                                                                            style="margin-top:2%">
+                                                                                            <label
+                                                                                                class="floating-label-activo-sm mt-10"
+                                                                                                for="ot_qx_apos">Anote
+                                                                                                Otro Tipo de
+                                                                                                apósitos</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=3;"
+                                                                                                name="ot_qx_apos" id="ot_qx_apos"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <div class="form-group">
+                                                                    <label class="floating-label-activo-sm"
+                                                                        for="obs_gen_cur_qx">Observaciones Curación
+                                                                        Quemados</label>
+                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=3;"
+                                                                        name="obs_gen_cur_qx" id="obs_gen_cur_qx"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                                        {{--  <form>
                                                                             <div class="form-row">
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Curaciones</h6>
                                                                                     <button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="curac_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -461,7 +2812,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </form>
+                                                                        </form>  --}}
                                                                     </div>
                                                                     <!--OTROS PROCEDIMIENTOS-->
                                                                     <div class="tab-pane fade show" id="ot-proc-cd" role="tabpanel"
@@ -471,7 +2822,7 @@
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <h6 class="t-aten d-inline mr-2">Otros procedimientos</h6>
                                                                                      <button type="button" class="btn btn-xxs btn-info-light-c d-inline" onclick="otros_proced_cd();">
-                                                                                    + Añadir    
+                                                                                    + Añadir
                                                                                     </button>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1124,6 +3475,8 @@
 
 @section('page-script-ficha-atencion')
 <!--MODALS-->
+
+
 <script>
 /**TTO DOMICILIARIO ORAL**/
  function oral_cd (){

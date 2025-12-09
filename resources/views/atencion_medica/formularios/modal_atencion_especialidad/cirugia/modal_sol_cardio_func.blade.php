@@ -244,55 +244,66 @@
     }
 
     function eliminarExamen(id,tipo, nombre_examen = null) {
-    if (!confirm("¿Está seguro de eliminar este examen?")) return;
+        swal({
+            title: "¿Estás seguro?",
+            text: "¿Deseas eliminar este examen?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ route('profesional.examen.eliminar') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        id_ficha_atencion: $('#id_fc').val(),
+                        tipo: tipo,
+                        nombre_examen: nombre_examen,
+                        _token: CSRF_TOKEN
+                    },
+                    success: function (resp) {
+                        console.log(resp);
+                        if (resp.success) {
+                            swal({
+                                title: 'Se ha eliminado con éxito el examen',
+                                icon: 'success',
+                            });
+                            let tbody = $('#table_examen_' + tipo + ' tbody');
+                            tbody.empty(); // Limpiar tabla
 
-    $.ajax({
-        url: "{{ route('profesional.examen.eliminar') }}",
-        type: 'POST',
-        data: {
-            id: id,
-            id_ficha_atencion: $('#id_fc').val(),
-            tipo: tipo,
-            nombre_examen: nombre_examen,
-            _token: CSRF_TOKEN
-        },
-        success: function (resp) {
-            console.log(resp);
-            if (resp.success) {
-                swal({
-                        title:'Se ha eliminado con éxito el examen',
-                        icon:'success',
-                    });
-                 let tbody = $('#table_examen_'+tipo+' tbody');
-                    tbody.empty(); // Limpiar tabla
-
-                    resp.examenes.forEach(item => {
-                        item.examenes.forEach(nombre_examen => {
-                            tbody.append(`
-                                <tr>
-                                    <td class="text-center align-middle">${item.fecha}</td>
-                                    <td class="align-middle">${nombre_examen}</td>
-                                    <td class="align-middle">${item.diagnostico}</td>
-                                    <td class="align-middle">${item.observaciones || ''}</td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo}, '${nombre_examen}')">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    });
+                            resp.examenes.forEach(item => {
+                                item.examenes.forEach(nombre_examen => {
+                                    tbody.append(`
+                                        <tr>
+                                            <td class="text-center align-middle">${item.fecha}</td>
+                                            <td class="align-middle">${nombre_examen}</td>
+                                            <td class="align-middle">${item.diagnostico}</td>
+                                            <td class="align-middle">${item.observaciones || ''}</td>
+                                            <td class="text-center align-middle">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo}, '${nombre_examen}')">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                });
+                            });
+                        } else {
+                            alert(resp.message || "Error al eliminar");
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert("Ocurrió un error al eliminar.");
+                    }
+                });
             } else {
-                alert(resp.message || "Error al eliminar");
+                swal("El examen no ha sido eliminado.");
+
             }
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            alert("Ocurrió un error al eliminar.");
-        }
-    });
-}
+        });
+    }
 
 function generarPDF(id, nombre_examen = null) {
         let id_ficha_atencion = $('#id_fc').val(); // input hidden en tu HTML

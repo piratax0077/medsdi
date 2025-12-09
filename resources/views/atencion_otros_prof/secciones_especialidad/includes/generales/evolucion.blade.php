@@ -14,7 +14,7 @@
                 Motivo de la consulta
                 </button>
             </div>
-            <div id="mot-consulta-ev-c" class="collapse" aria-labelledby="mot-consulta-ev" data-parent="#mot-consulta-ev">
+            <div id="mot-consulta-ev-c" class="collapse show" aria-labelledby="mot-consulta-ev" data-parent="#mot-consulta-ev">
                 <div class="card-body-aten-a">
 
                     <div class="form-row">
@@ -35,7 +35,7 @@
                 Evaluación actual
                 </button>
             </div>
-            <div id="eval-actual-c" class="collapse" aria-labelledby="eval-actual" data-parent="#eval-actual">
+            <div id="eval-actual-c" class="collapse show" aria-labelledby="eval-actual" data-parent="#eval-actual">
                 <div class="card-body-aten-a">
 
                     <div class="form-row">
@@ -57,7 +57,7 @@
                 Plan propuesto
                 </button>
             </div>
-            <div id="plan-c" class="collapse" aria-labelledby="plan" data-parent="#plan">
+            <div id="plan-c" class="collapse show" aria-labelledby="plan" data-parent="#plan">
                 <div class="card-body-aten-a">
 
                     <div class="form-row">
@@ -79,7 +79,7 @@
                 Resultados
                 </button>
             </div>
-            <div id="mot-consulta-c" class="collapse" aria-labelledby="mot-consulta" data-parent="#mot-consulta">
+            <div id="mot-consulta-c" class="collapse show" aria-labelledby="mot-consulta" data-parent="#mot-consulta">
                 <div class="card-body-aten-a">
 
                     <div class="form-row">
@@ -105,7 +105,7 @@
                 Indicaciones y Próximo Control
                 </button>
             </div>
-            <div id="ind_prox_control-c" class="collapse" aria-labelledby="ind_prox_control" data-parent="#ind_prox_control">
+            <div id="ind_prox_control-c" class="collapse show" aria-labelledby="ind_prox_control" data-parent="#ind_prox_control">
                 <div class="card-body-aten-a">
 
                     <div class="form-row">

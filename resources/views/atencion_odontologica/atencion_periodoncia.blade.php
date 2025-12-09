@@ -1,6 +1,6 @@
 @extends('template.dental.template_period')
 @section('styles')
-<style>
+    <style>
     .imagen_rx{
         width: 200px;
         height: 200px;
@@ -9,7 +9,7 @@
         z-index: 9999999 !important;
         position: absolute;
     }
-</style>
+    </style>
 @endsection
 @section('Content')
     <!--Container Completo-->
@@ -34,11 +34,6 @@
 
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            {{--  <div class="page-header-title">
-                                <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>  --}}
-                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +48,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
 										@if(!empty(session('lic_token')) && session('lic_estado') == 1)
 										<a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
 										@else
@@ -69,16 +64,16 @@
                                             @endphp
                                             <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp,'urln' => $url_temp, 'id_tipo' => 9]) }}">FMU</a>
                                         @endif
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam_tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                    </li>  --}}
                                 </ul>
                             </div>
                         </div>
@@ -122,7 +117,7 @@
 
         <!-- SIDE BAR IMPLANTOLOGIA -->
         @include("atencion_odontologica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_odontologica.include.sidebar_derecho_od_gral"){{-- modales y data de sidebar especialidad --}}
+        @include("atencion_odontologica.include.sidebar_derecho_odonto_period"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
         <!--Modals de especialidad -->
@@ -131,8 +126,10 @@
         @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas")
         @include('atencion_odontologica.include.modales.imagenes_paciente_dental')
         @include('atencion_odontologica.include.modales.imagen_paciente_dental')
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan') 
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan') 
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
+           @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
 
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
@@ -152,6 +149,8 @@
                 }
             });
         });
+        
+
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
         let data = {
@@ -901,7 +900,7 @@
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
-                            if(odonto.presupuesto == 1){
+                            if(odonto.presupuesto == 1 && odonto.urgencia == 0){
                                     $('#contenedor_piezas_dentales_presupuesto').append(`
                                         <div class="form-group col-md-2">
                                             <label class="floating-label-activo-sm">Pieza</label>
@@ -964,7 +963,7 @@
                         $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos').empty();
                         maxilar_superior_gral_diagnosticos.forEach(diagnostico => {
-                            if(diagnostico.presupuesto == 1){
+                            if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                                 $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').append(`
                                     <div class="form-group col-md-2">
                                         <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1008,7 +1007,7 @@
                         $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos_endo').empty();
                         maxilar_superior_gral_diagnosticos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1054,7 +1053,7 @@
                         $('#tbody_tratamientos').empty();
 
                         maxilar_superior_gral_tratamientos.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_superior_gral_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1100,7 +1099,7 @@
                         $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').empty();
                         $('#tbody_tratamientos_endo').empty();
                         maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1147,7 +1146,7 @@
                         $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos_max_inf').empty();
                         maxilar_inferior_gral_diagnosticos.forEach(diagnostico => {
-                            if(diagnostico.presupuesto == 1){
+                            if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                                 $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').append(`
                                     <div class="form-group col-md-2">
                                         <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1191,7 +1190,7 @@
                         $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos_max_inf_endo').empty();
                         maxilar_inferior_gral_diagnosticos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1236,7 +1235,7 @@
                         $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').empty();
                         $('#tbody_tratamientos_max_inf').empty();
                         maxilar_inferior_gral_tratamientos.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1283,7 +1282,7 @@
                         $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').empty();
                         $('#tbody_tratamientos_max_inf_endo').empty();
                         maxilar_inferior_gral_tratamientos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1331,7 +1330,7 @@
                         $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos_boca_compl').empty();
                         boca_completa_gral_diagnosticos.forEach(diagnostico => {
-                            if(diagnostico.presupuesto == 1){
+                            if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                                 $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
                                     <div class="form-group col-md-2">
                                         <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1375,7 +1374,7 @@
                         $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
                         $('#tbody_diagnosticos_boca_compl_endo').empty();
                         boca_completa_gral_diagnosticos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1419,7 +1418,7 @@
                         $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
                         $('#tbody_tratamientos_boca_compl').empty();
                         boca_completa_gral_tratamientos.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1464,7 +1463,7 @@
                         $('#contenedor_boca_completa_endo_tratamientos_presupuesto').empty();
                         $('#tbody_tratamientos_boca_compl_endo').empty();
                         maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
-                        if(diagnostico.presupuesto == 1){
+                        if(diagnostico.presupuesto == 1 && diagnostico.urgencia == 0){
                             $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
@@ -1530,132 +1529,6 @@
         });
     }
 
-    function eliminar_odontograma(id){
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez eliminado, no podrás recuperar este odontograma!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            confirmar_eliminar_odontograma(willDelete, id);
-        })
-    }
-
-    function confirmar_eliminar_odontograma(willDelete, id){
-        if (willDelete) {
-            let url = "{{ route('dental.eliminar_odontograma') }}";
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    id: id,
-                    id_paciente: dame_id_paciente(),
-                    id_ficha_atencion: $('#id_fc').val(),
-                    id_lugar_atencion: $('#id_lugar_atencion').val(),
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response){
-                    console.log(response);
-                    if(response.status == 1){
-                        swal({
-                            title: 'Odontograma',
-                            text: response.mensaje,
-                            icon: 'success'
-                        });
-
-                        let odontograma = response.odontograma_paciente;
-                        let html = '';
-                        odontograma.forEach(function(odonto){
-                            html += '<tr>';
-                            html += '<td>'+odonto.fecha+'</td>';
-                            html += '<td>'+odonto.tratamiento+'</td>';
-                            html += '<td>'+odonto.caras+'</td>';
-                            html += '<td>'+odonto.pieza+'</td>';
-                            html += '<td>'+odonto.diagnostico+'</td>';
-                            html += '<td>'+odonto.valor+'</td>';
-                            html += '<td>';
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                            if(odonto.presupuesto == 0){
-                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                            }else{
-                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                            }
-                            html += '</td>';
-                            html += '</tr>';
-                        });
-
-                        $('#table_odontograma tbody').html(html);
-                        $('#contenedor_piezas_dentales_presupuesto').empty();
-                        $('#table_trabajos_presupuesto tbody').empty();
-                        odontograma.forEach(function(odonto){
-                            if(odonto.presupuesto == 1){
-                                $('#contenedor_piezas_dentales_presupuesto').append(`
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">Pieza</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="floating-label-activo-sm">Prestación</label>
-                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                    </div>
-                                    <div class="form-group col-md-1">
-                                        <label class="floating-label-activo-sm">Descuento</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">Total prestación</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                    </div>
-                                `);
-                                $('#table_trabajos_presupuesto tbody').append(`
-                                    <tr>
-                                        <td>${odonto.fecha}</td>
-                                        <td>${odonto.diagnostico} </td>
-                                        <td>${odonto.caras} </td>
-                                        <td>${odonto.pieza} </td>
-                                        <td>${odonto.tratamiento} </td>
-                                        <td>${odonto.valor} </td>
-                                        <td> </td>
-                                        <td>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
-                                        </td>
-                                    </tr>
-                                `);
-                            }
-                        });
-                        let valores_boca_general = response.valores[0];
-                        let valores_odontograma = response.valores[1];
-                        let total_general = valores_boca_general + valores_odontograma;
-                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
-                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
-                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
-                        $('#odon_adults').empty();
-                    $('#odon_adults').append(response.odontograma_paciente_vista);
-                    }
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            });
-        } else {
-            swal("Operación cancelada");
-        }
-
-    }
-
-    function dame_id_paciente(){
-        return $('#id_paciente').val();
-    }
-
     function eliminar_pieza_dental_pieza(id,tipo){
     swal({
         title: 'Advertencia',
@@ -1677,7 +1550,7 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
     let url = "{{ ROUTE('profesional.eliminar_pieza_dental_pieza') }}";
     let data = {
         _token: CSRF_TOKEN,
-        id_paciente: dame_id_paciente(),
+        id_paciente: $('#id_paciente').val(),
         id: id,
         id_ficha_atencion: $('#id_fc').val(),
         id_lugar_atencion: $('#id_lugar_atencion').val(),
@@ -1829,7 +1702,6 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
         }
     })
 }
-
 
 </script>
 @endsection

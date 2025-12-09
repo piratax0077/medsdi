@@ -29,10 +29,27 @@
             <td style="border: 1px solid #000; padding: 5px;"><strong>Motivo</strong></td>
             <td style="border: 1px solid #000; padding: 5px;">{{ $array_hospitalizacion['motivo_hosp_indicaciones'] ?? '' }}</td>
         </tr>
+        {{-- Medicamentos múltiples --}}
         <tr>
-            <td style="border: 1px solid #000; padding: 5px;"><strong>Indicaciones Exámenes/Preparaciones</strong></td>
-            <td style="border: 1px solid #000; padding: 5px;">{{ $array_hospitalizacion['ind_grales_hosp'] ?? '' }}</td>
+            <td colspan="2" style="border: 1px solid #000; padding: 5px;"><strong>Examenes Indicados</strong></td>
         </tr>
+        @if (!empty($array_hospitalizacion['examenes']))
+            @foreach ($array_hospitalizacion['examenes'] as $examen)
+                <tr>
+                    <td style="border: 1px solid #000; padding: 5px;">
+                        {{ $examen->examen ?? '—' }}
+                    </td>
+                    <td style="border: 1px solid #000; padding: 5px;">
+                        {{ $examen->tipo_examen ?? '' }} - {{ $examen->sub_tipo_examen ?? '' }} ({{ $examen->prioridad ?? '' }})
+                    </td>
+                </tr>
+            @endforeach
+        @else
+            <tr>
+                <td colspan="2" style="border: 1px solid #000; padding: 5px;">Sin indicaciones</td>
+            </tr>
+        @endif
+
 
         {{-- Medicamentos múltiples --}}
         <tr>

@@ -7,7 +7,7 @@
                         <a class="nav-secciones active text-uppercase" id="atencion_dent_period_tab" data-toggle="tab" href="#atencion_dent_period" role="tab" aria-controls="atencion_dent_period" aria-selected="true">Atención especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
+                        <a class="nav-secciones text-uppercase" id="odontograma_gral_tab" data-toggle="tab" href="#odontograma_gral" role="tab" aria-controls="odontograma_gral" aria-selected="false">Odontograma</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodoncica</a>
@@ -15,16 +15,23 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación General</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
-                    </li>
+                    </li>  --}}
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+           <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+					<div class="form-row mb-1">
+						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+							<div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+							<div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+						</div>
+					</div>
             </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('dental.registrar_ficha_atencion_dental') }}" method="POST">
@@ -42,11 +49,15 @@
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
+                    <input type="hidden" name="id_presupuesto" id="id_presupuesto" value="{{ isset($presupuesto) ? $presupuesto->id : '' }}">
+                    <input type="hidden" name="id_tratamiento_urgencia" id="id_tratamiento_urgencia" value="" />
+                    <input type="hidden" name="id_tratamiento" id="id_tratamiento" value="" />
+                    <input type="hidden" name="id_imagenes_dental" id="id_imagenes_dental" value="">
                     @csrf
                     <div class="tab-content" id="od_periodonto-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_dent_period" role="tabpanel" aria-labelledby="atencion_dent_period_tab">
-                           
+
                             <!--FORMULARIOS-->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-0">
                                 <!--Formulario / Menor de edad-->
@@ -55,16 +66,18 @@
                             </div>
                             <!--Motivo consulta-->
                             @include('atencion_odontologica.generales.motivo_consulta')
-
+                           <!-- URGENCIAS -->
+                            @include('atencion_odontologica.generales.control_urgencias')
                             <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                            @include('atencion_odontologica.generales.includes.odontologia_general')
+                            {{-- @include('atencion_odontologica.generales.includes.odontologia_general') --}}
+                            @include('atencion_odontologica.generales.odonto_gral')
                             {{--  @include('atencion_odontologica.generales.includes.odontologia_preimplante')  --}}
                             <!--EVALUACION PERIODONCIA -->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="eval_period">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#eval_period_1" aria-expanded="false" aria-controls="eval_period_1">
-                                           Evaluación Periodóncica 
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#eval_period_1" aria-expanded="false" aria-controls="eval_period_1" onclick="mostrar_nueva_pieza_dental_tto_period(1000);">
+                                           Evaluación Periodóncica
                                         </button>
                                     </div>
                                     <div id="eval_period_1" class="collapse" aria-labelledby="eval_period" data-parent="#eval_period">
@@ -74,20 +87,20 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="ant_med_dent_period_tab" data-toggle="tab" href="#ant_med_dent_period" role="tab" aria-controls="ant_med_dent_period" aria-selected="false">Antecedentes</a>
+                                                                <a class="nav-link-aten text-reset" id="ant_med_dent_period_tab" data-toggle="tab" href="#ant_med_dent_period" role="tab" aria-controls="ant_med_dent_period" aria-selected="false">Antecedentes</a>
                                                             </li>
 
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_periodonto_tab" data-toggle="tab" href="#eval_periodonto" role="tab" aria-controls="eval_periodonto" aria-selected="true">Examen Periodontal</a>
+                                                                <a class="nav-link-aten text-reset active" id="eval_periodonto_tab" data-toggle="tab" href="#eval_periodonto" role="tab" aria-controls="eval_periodonto" aria-selected="true" onclick="mostrar_nueva_pieza_dental_tto_period(1000);">Examen Periodontal</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="estudio_rx_period_tab" data-toggle="tab" href="#estudio_rx_period" role="tab" aria-controls="estudio_rx_period" aria-selected="true">Estudio radiológico</a>
+                                                                <a class="nav-link-aten text-reset" id="estudio_rx_period_tab" data-toggle="tab" href="#estudio_rx_period" role="tab" aria-controls="estudio_rx_period" aria-selected="true" onclick="mostrar_nuevas_imagenes_dent_estudio(1000)">Estudio radiológico</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_dg_period_tab" data-toggle="tab" href="#eval_dg_period" role="tab" aria-controls="eval_dg_period" aria-selected="true">Evaluación y Diagnóstico</a>
+                                                                <a class="nav-link-aten text-reset" id="eval_dg_period_tab" data-toggle="tab" href="#eval_dg_period" role="tab" aria-controls="eval_dg_period" aria-selected="true" onclick="cargar_evaluaciones_periodonto()">Evaluación y Diagnóstico</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="plan_tto_period_tab" data-toggle="tab" href="#plan_tto_period" role="tab" aria-controls="plan_tto_period" aria-selected="true">Planificación Tratamiento | Presupuesto</a>
+                                                                <a class="nav-link-aten text-reset" id="plan_tto_period_tab" data-toggle="tab" href="#plan_tto_period" role="tab" aria-controls="plan_tto_period" aria-selected="true" onclick="$('#paciente_piezas_dentales_ex_period').select2();cargar_evaluaciones_periodonto(); ">Planificación Tratamiento | Presupuesto</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -96,8 +109,8 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <div class="tab-content" id="impl">
                                                             <!--EVALUACION ESTADO PACIENTE-->
-                                                            <div class="tab-pane fade show active" id="ant_med_dent_period" role="tabpanel" aria-labelledby="ant_med_dent_period_tab">
-                                                                <div class="row">
+                                                            <div class="tab-pane fade show" id="ant_med_dent_period" role="tabpanel" aria-labelledby="ant_med_dent_period_tab">
+                                                                <div class="row d-none">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
                                                                             <div class="card-body">
@@ -388,504 +401,293 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-
-                                                            <!--EVALUACION PERIODONCICA-->
-                                                            <div class="tab-pane fade show " id="eval_periodonto" role="tabpanel" aria-labelledby="eval_periodonto_tab">
-                                                                @foreach ($examenes_pre_implante as $e)
-                                                                <div class="card mt-1">
-                                                                    <div class="card-body">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
-                                                                                    <li class="nav-item">
-                                                                                        <a class="nav-link-aten text-reset active" id="ex_period_general_tab" data-toggle="tab" href="#ex_period_general" role="tab" aria-controls="ex_period_general" aria-selected="false">Examen general</a>
-                                                                                    </li>
-                                                                                    <li class="nav-item">
-                                                                                        <a class="nav-link-aten text-reset " id="ex_period_por_pieza_tab" data-toggle="tab" href="#ex_period_por_pieza" role="tab" aria-controls="ex_period_por_pieza" aria-selected="false">Examen por pieza</a>
-                                                                                    </li>
-                                                                                    <li class="nav-item">
-                                                                                        <a class="nav-link-aten text-reset" id="ex_period_por_grupo_tabb" data-toggle="tab" href="#ex_period_por_grupo" role="tab" aria-controls="ex_period_por_grupo" aria-selected="true">Examen Por grupos</a>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </div>
+                                                                <div class="form-row mt-3">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-2 col-xxl-2">
+                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                            <a class="nav-link-aten text-reset active" id="antec_med_tab" data-toggle="tab" href="#antec_med" role="tab" aria-controls="antec_med" aria-selected="true">Antecedentes Médicos</a>
+                                                                            <a class="nav-link-aten text-reset" id="antec_dent_tab" data-toggle="tab" href="#antec_dent" role="tab" aria-controls="antec_dent" aria-selected="false">Antecedentes dentales</a>
                                                                         </div>
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div class="tab-content" id="v-pills-tabContent">
-                                                                                    <div class="tab-pane fade show active" id="ex_period_general" role="tabpanel" aria-labelledby="ex_period_general_tab">
-                                                                                        <head>
-                                                                                          
-                                                                                            {{--  <title>Odontograma</title>
-                                                                                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
-                                                                                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-                                                                                            <link rel="stylesheet" href="js\periodoncia\style_period.css">
-                                                                                            <script src="js\periodoncia\pincel_period.js"></script>
-                                                                                            <script src="js\periodoncia\odontograma_period.js"></script>
-                                                                                          
-                                                                                        </head>
-                                                                                        <body class="dark-mode">
-                                                                                            <div id="control" class="container">
-                                                                                                <div class="row">
-                                                                                                    <div class="col-12 mt-2">
-                                                                                                        <div class="btn-group" role="group">
-                                                                                                            <input type="radio" class="btn-check" name="ferramenta" id="mouse" autocomplete="off" checked>
-                                                                                                            <label class="btn btn-secondary" for="mouse"><i class="fas fa-mouse-pointer"></i></label>
-                                                                                        
-                                                                                                            <input class="btn-check" type="radio" name="ferramenta" id="pincel" value="option1">
-                                                                                                            <label class="btn btn-secondary" for="pincel"><i class="fas fa-pencil-alt"></i></label>
-                                                                                        
-                                                                                                            <input class="btn-check" type="radio" name="ferramenta" id="borracha" value="option2">
-                                                                                                            <label class="btn btn-secondary" for="borracha"><i class="fas fa-eraser"></i></label>
-                                                                                        
-                                                                                                        </div>
-                                                                                                        <div class="btn-group" role="group">
-                                                                                                            <button id="configBtn" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                                                                <i class="fas fa-cog"></i>
-                                                                                                            </button>
-                                                                                                            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                                                                                <li style="margin: 5px;">
-                                                                                                                    <label for="customRange2" class="form-label">Tamanho</label>
-                                                                                                                    <input type="range" class="form-range" min="1" max="5" id="tamanhoPincel">
-                                                                                                                </li>
-                                                                                                                <li style="margin: 5px;">
-                                                                                                                    <label for="customRange2" class="form-label">Cor</label>
-                                                                                                                    <input type="color" id="corPincel" class="form-control form-control-color" value="#563d7c" title="Choose your color">
-                                                                                                                </li>
-                                                                                                                <li style="margin: 5px;">
-                                                                                                                    <button id="limparDesenho" type="button" class="btn btn-secondary">
-                                                                                                                        Limpar desenhos
-                                                                                                                    </button>
-                                                                                                                </li>
-                                                                                                            </ul>
-                                                                                                        </div>
-                                                                                                        <button type="button" class="btn btn-secondary" id="saveBtn"><i class="fas fa-save"></i></button>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-10 col-xxl-10">
+                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                            <!--ANT.GENERALES-->
+                                                                            <div class="tab-pane fade show active" id="antec_med" role="tabpanel" aria-labelledby="antec_med_tab">
+                                                                                <div class="form-row mt-2">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="tit-gen">Antecedentes Generales</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    {{-- Tratamientos en curso --}}
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
+                                                                                        <div class="card shadow-none bg-light-purple border-card-purple h-100">
+                                                                                            <div class="card-body px-2 py-3">
+                                                                                                <div class="media">
+                                                                                                <img src="{{ asset('images/iconos/tto-curso.png') }}" class=" wid-50 rounded-xl mr-3" alt="CX Recientes">
+                                                                                                <div class="media-body">
+                                                                                                    <h5 class="f-14 text-purple font-weight-bold">Tratamientos en curso</h5>
+                                                                                                    <ul>
+                                                                                                            @if (isset($tratamiento_activo) && count($tratamiento_activo) > 0)
+                                                                                                                @foreach ( $tratamiento_activo as $receta)
+                                                                                                                    @foreach ( $receta['detalle'] as $detalle)
+                                                                                                                        @if ($detalle['id_tipo_control'] == 8)
+                                                                                                                            <li style="font-size: 12px">
+                                                                                                                                Receta Magistral<br/>&nbsp;&nbsp;
+                                                                                                                                <span style="font-size: 9px; font-weight: bold;">
+                                                                                                                                    @php
+                                                                                                                                        $producto_detalle_temp = json_decode($detalle['producto']);
+                                                                                                                                        // var_dump($producto_detalle_temp[0]) ;
+                                                                                                                                    @endphp
+                                                                                                                                    @foreach ( $producto_detalle_temp as $det_temp)
+                                                                                                                                        {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
+                                                                                                                                    @endforeach
+                                                                                                                                </span>
+                                                                                                                            </li>
+                                                                                                                        @else
+                                                                                                                            <li style="font-size: 12px">{{ $detalle['producto'] }}</li>
+                                                                                                                        @endif
+                                                                                                                    @endforeach
+                                                                                                                @endforeach
+                                                                                                            @else
+                                                                                                                <li>No hay registros</li>
+                                                                                                            @endif
+                                                                                                            <li></li>
+                                                                                                        </ul>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div id="canva-group">
-                                                                                                <canvas id="camada1Odontograma"></canvas>
-                                                                                                <canvas id="camada2Odontograma"></canvas>
-                                                                                                <canvas id="camada3Odontograma"></canvas>
-                                                                                                <canvas id="camada4Odontograma"></canvas>
-                                                                                        
-                                                                                                <canvas id="camadaPincel"></canvas>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    {{-- Medicamentos crónicos --}}
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
+                                                                                        <div class="card shadow-none border-card-danger bg-light-danger h-100">
+                                                                                            <div class="card-body px-2 py-3">
+                                                                                                <div class="media">
+                                                                                                <img src="{{ asset('images/iconos/meds-cronicos.png') }}" class="wid-50 rounded-xl mr-3" alt="Medicamentos Crónicos">
+                                                                                                    <div class="media-body">
+                                                                                                        <h5 class="f-14 text-danger font-weight-bold">Medicamentos crónicos</h5>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             </div>
-                                                                                            <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog">
-                                                                                                    <div class="modal-content">
-                                                                                                        <div class="modal-header">
-                                                                                                            <h5 class="modal-title" id="modalLabel">Adicionar procedimento</h5>
-                                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    {{-- Cirugías recientes --}}
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-3">
+                                                                                        <div class="card shadow-none bg-light-info border-card-info h-100">
+                                                                                            <div class="card-body px-2 py-3">
+                                                                                                <div class="media">
+                                                                                                <img src="{{ asset('images/iconos/ant-qx.png') }}" class=" wid-50 rounded-xl mr-3" alt="CX Recientes">
+                                                                                                    <div class="media-body">
+                                                                                                        <h5 class="f-14 text-info font-weight-bold">Cirugías recientes</h5>
+                                                                                                        <ul>
+                                                                                                            @if(isset($antecedentes))
+                                                                                                            @foreach ($antecedentes as $data)
+                                                                                                                @if($data->id_tipo_antecedente==3)
+                                                                                                                    {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
+                                                                                                                    <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
+                                                                                                                @else
+                                                                                                                    {{-- <li>No hay registros</li> --}}
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                            @endif
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    {{-- Medicamentos recientes --}}
+                                                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3  mb-3"> --}}
+                                                                                        {{-- <div class="card border-card-primary h-100"> --}}
+                                                                                            {{-- <div class="card-body"> --}}
+                                                                                                {{-- <ul> --}}
+                                                                                                    {{-- <li class="f-14 text-c-blue"><strong>Medicamentos recientes</strong></li> --}}
+                                                                                                    {{-- <li>No hay registros</li> --}}
+                                                                                                {{-- </ul> --}}
+                                                                                            {{-- </div> --}}
+                                                                                        {{-- </div> --}}
+                                                                                    {{-- </div> --}}
+
+                                                                                    {{-- Prótesis y ortesis --}}
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3  mb-3">
+                                                                                        <div class="card shadow-none border-card-primary bg-light-blue h-100">
+                                                                                            <div class="card-body px-2 py-3">
+                                                                                                <div class="media">
+                                                                                                <img src="{{ asset('images/iconos/prot-ort.png') }}" class=" wid-50 rounded-xl mr-3" alt="Prótesis y Ortesis">
+                                                                                                    <div class="media-body">
+                                                                                                        <h5 class="f-14 text-c-blue font-weight-bold">Prótesis y Ortesis</h5>
+                                                                                                        <ul>
+                                                                                                            <li>No hay registros</li>
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                            <!--TABLA ANT. DENTALES-->
+                                                                            <div class="tab-pane fade show" id="antec_dent" role="tabpanel" aria-labelledby="antec_dent_tab">
+                                                                                <div class="form-row mt-2">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="tit-gen">Antecedentes Dentales</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="card">
+                                                                                            <div class="card-body">
+                                                                                                <div id="contenedor_pieza_dental_endorx">
+                                                                                                    <div id="pieza_dentalrx" class="row">
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                            <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
+                                                                                                                <li class="nav-item">
+                                                                                                                    <a class="nav-link-aten text-reset active" id="anestesia-ant-tab" data-toggle="tab" href="#anestesia-ant" role="tab" aria-controls="anestesia-ant" aria-selected="false">Anestesias</a>
+                                                                                                                </li>
+                                                                                                                <li class="nav-item">
+                                                                                                                    <a class="nav-link-aten text-reset" id="hemorragia-ant-tab" data-toggle="tab" href="#hemorragia-ant" role="tab" aria-controls="hemorragia-ant" aria-selected="true">Hemorragia</a>
+                                                                                                                </li>
+                                                                                                                <li class="nav-item">
+                                                                                                                    <a class="nav-link-aten text-reset" id="fractura-ant-tab" data-toggle="tab" href="#fractura-ant" role="tab" aria-controls="fractura-ant" aria-selected="true">Fractura</a>
+                                                                                                                </li>
+                                                                                                            </ul>
                                                                                                         </div>
-                                                                                                        <div class="modal-body">
-                                                                                                            <div class="form-row">
-                                                                                                                <input type="hidden" id="procedimentosRemovidos" th:field="*{procedimentosRemovidos}">
-                                                                                                                <div id="procedimentosDiv"></div>
-                                                                                                                <div class="form-group col-md-12">
-                                                                                                                    <label for="nomeProcedimento">Nome</label>
-                                                                                                                    <i data-type="info" class="fas fa-info-circle fa-1x text-info" onclick="toast_message('.','info')" style="margin-left: 5px; cursor: pointer;"></i>
-                                                                                                                    <select class="form-control" id="nomeProcedimento">
-                                                                                                                        <option selected value="">-- Selecione uma opção --</option>
-                                                                                                                        <!-- <option th:value="${null}" th:text="${'NÃO INFORMADO'}"></option> -->
-                                                                                                                        <!-- <option th:each="model : ${modelEnums}" th:value="${model}" th:text="${model.denominacao}"></option> -->
-                                                                                                                    </select>
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                            <div class="tab-content" id="impl">
+                                                                                                                <!--ANESTESIA-->
+                                                                                                                <div class="tab-pane fade show active" id="anestesia-ant" role="tabpanel" aria-labelledby="anestesia-ant-tab">
+                                                                                                                    <div class="form-row mt-2">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <h6 class="sub-aten">Anestesias</h6>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="form-row">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <div class="table-responsive">
+                                                                                                                                <table id="table_antecedentes_unificada" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                                                                    <thead>
+                                                                                                                                        <tr>
+                                                                                                                                            <th class="align-middle">Fecha</th>
+                                                                                                                                            <th class="align-middle">Procedimiento</th>
+                                                                                                                                            <th class="align-middle">Responsable</th>
+                                                                                                                                            <th class="align-middle">Comentarios</th>
+                                                                                                                                        </tr>
+                                                                                                                                    </thead>
+
+                                                                                                                                    <!-- Sección Anestesia -->
+                                                                                                                                    <tbody id="tbody_anestesia">
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 1 && $antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                    </tbody>
+                                                                                                                                </table>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
                                                                                                                 </div>
-                                                                                                                <div class="form-group col-12" id="colOutroProcedimento">
-                                                                                                                    <label for="outroProcedimento">Outro procedimento</label>
-                                                                                                                    <i style="margin-left:5px;cursor: pointer;" class="alerta fas fa-info-circle fa-1x text-info" data-type="info" onclick="mensagens('.','info')"></i>
-                                                                                                                    <input id="outroProcedimento" class="form-control" type="text">
+                                                                                                                <!--HEMORRAGIA-->
+                                                                                                                <div class="tab-pane fade show" id="hemorragia-ant" role="tabpanel" aria-labelledby="hemorragia-ant-tab">
+                                                                                                                    <div class="form-row mt-2">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <h6 class="sub-aten">Hemorragias</h6>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="form-row">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <div class="table-responsive">
+                                                                                                                                <table id="table_antecedentes_unificada" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                                                                    <thead>
+                                                                                                                                        <tr>
+                                                                                                                                            <th class="align-middle">Fecha</th>
+                                                                                                                                            <th class="align-middle">Procedimiento</th>
+                                                                                                                                            <th class="align-middle">Responsable</th>
+                                                                                                                                            <th class="align-middle">Comentarios</th>
+                                                                                                                                        </tr>
+                                                                                                                                    </thead>
+                                                                                                                                    <!-- Sección Hemorragias -->
+                                                                                                                                    <tbody id="tbody_hemorragias">
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 4 && $antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                    </tbody>
+                                                                                                                                </table>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
                                                                                                                 </div>
-                                                                                                                <div class="form-group col-12">
-                                                                                                                    <label for="exampleColorInput" class="form-label">Cor</label>
-                                                                                                                    <i style="margin-left:5px;cursor: pointer;" class="alerta fas fa-info-circle fa-1x text-info" data-type="info" onclick="mensagens('.','info')"></i>
-                                                                                                                    <input type="color" id="cor" disabled class="form-control form-control-color" value="#563d7c" title="Choose your color">
-                                                                                                                </div>
-                                                                                                                <div class="form-group col-12">
-                                                                                                                    <label for="informacoesAdicionais">Informações adicionais</label>
-                                                                                                                    <i style="margin-left:5px;cursor: pointer;" class="alerta fas fa-info-circle fa-1x text-info" data-type="info" onclick="mensagens('.','info')"></i>
-                                                                                                                    <textarea rows="5" id="informacoesAdicionais" maxlength="5000" class="form-control"></textarea>
-                                                                                                                </div>
-                                                                                                                <div class="form-group col-md-1 d-inline mt-2" style="text-align: center; margin: auto;">
-                                                                                                                    <a id="botaoAdicionar" class="form-control btn-sigsaude btnCorNovo">
-                                                                                                                        <i class="fas fa-plus"></i>
-                                                                                                                    </a>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="form-row">
-                                                                                                                <div class="form-group col-md-12">
-                                                                                                                    <div class="panel panel-default">
-                                                                                                                        <div class="table-responsive">
-                                                                                                                            <table class="table display dataTable table-bordered table-striped" id="tabelaTestesEspecificosForm">
-                                                                                                                                <thead>
-                                                                                                                                    <tr>
-                                                                                                                                        <th>NOME</th>
-                                                                                                                                        <th>COR</th>
-                                                                                                                                        <th>INFORMAÇÕES ADICIONAIS</th>
-                                                                                                                                        <th class="text-center">AÇÕES</th>
-                                                                                                                                    </tr>
-                                                                                                                                </thead>
-                                                                                                                                <tbody id="bodyProcedimentos">
-                                                                                                                                    <tr>
-                                                                                                                                        <td></td>
-                                                                                                                                        <td></td>
-                                                                                                                                        <td></td>
-                                                                                                                                        <td></td>
-                                                                                                                                    </tr>
-                                                                                                                                </tbody>
-                                                                                                                            </table>
+                                                                                                                <!--FRACTURA-->
+                                                                                                                <div class="tab-pane fade show" id="fractura-ant" role="tabpanel" aria-labelledby="fractura-ant-tab">
+                                                                                                                    <div class="form-row mt-2">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <h6 class="sub-aten">Fracturas</h6>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="form-row">
+                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                            <div class="table-responsive">
+                                                                                                                                <table id="table_antecedentes_unificada" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                                                                    <thead>
+                                                                                                                                        <tr>
+                                                                                                                                            <th class="align-middle">Fecha</th>
+                                                                                                                                            <th class="align-middle">Procedimiento</th>
+                                                                                                                                            <th class="align-middle">Responsable</th>
+                                                                                                                                            <th class="align-middle">Comentarios</th>
+                                                                                                                                        </tr>
+                                                                                                                                    </thead>
+
+                                                                                                                                    <!-- Sección Fracturas -->
+                                                                                                                                    <tbody id="tbody_fracturas">
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 9 && $antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="align-middle text-wrap">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                </table>
+                                                                                                                            </div>
                                                                                                                         </div>
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div class="modal-footer">
-                                                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                                                                                        </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        
-                                                                                            <div class="modal fade" id="configuracoesFerramenta" tabindex="-1" aria-hidden="true">
-                                                                                                <div class="modal-dialog">
-                                                                                                    <div class="modal-content">
-                                                                                                        <div class="modal-header">
-                                                                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                                        </div>
-                                                                                                        <div class="modal-body">
-                                                                                                            ...
-                                                                                                        </div>
-                                                                                                        <div class="modal-footer">
-                                                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-                                                                                        </body>  --}}
-                                                                                         <div class="row">
-                                                                                             <div class="col-md-12">
-                                                                                                 <div id="contenedor_piezas_period"></div>
-                                                                                                 <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist()"><i class="fas fa-save"></i> Mostrar nueva Pieza</button>
-                                                                                             </div>
-                                                                                         </div>
-                                                                                     </div>
-                                                                                    <div class="tab-pane fade show " id="ex_period_por_pieza" role="tabpanel" aria-labelledby="ex_period_por_pieza_tab">
-                                                                                       <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 mt-3">
-                                                                                                <div class="form-row">
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                            <input type="number" class="form-control form-control-sm" name="period_pza" id="period_pza" value="3.2">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Sangrado</label>
-                                                                                                            <select name="perio_sang" id="perio_sang" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_sang','div_perio_sang','obs_perio_sang',3);">
-                                                                                                                <option selected="" value="1">Espontáneo</option>
-                                                                                                                <option value="2">Al cepillarse</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perio_sang" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_sang" id="obs_perio_sang"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Supuración</label>
-                                                                                                            <select name="perio_sup" id="perio_sup" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_sup','div_perio_sup','obs_perio_sup',3);">
-                                                                                                                <option selected="" value="1">Espontánea mal olor</option>
-                                                                                                                <option value="2">Espontánea sin mal olor</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perio_sup" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_sup" id="obs_perio_sup"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Higiene</label>
-                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
-                                                                                                                <option selected value="1">Aceptable</option>
-                                                                                                                <option value="2">Deficiente </option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_period_hig" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro (describir)</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_hig" id="obs_period_hig"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Alt MG</label>
-                                                                                                            <input type="number" class="form-control form-control-sm" name="period_alt_mg" id="period_alt_mg" value="">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">P-Sondaje</label>
-                                                                                                            <input type="number" class="form-control form-control-sm" name="period_prof_sond" id="period_prof_sond" value="">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Movilidad-pieza</label>
-                                                                                                            <select name="period_mov_dent" id="period_mov_dent" class="form-control form-control-sm">
-                                                                                                                <option selected="" value="1">Grado 0</option>
-                                                                                                                <option value="2">Grado 1</option>
-                                                                                                                <option value="3">Grado 2</option>
-                                                                                                                <option value="3">Grado 3</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                    </div>
-
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Furcas</label>
-                                                                                                            <select name="period_furca" id="period_furca" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_furca','div_period_furca','obs_period_furca',3);">
-                                                                                                                <option selected="" value="1">Normales</option>
-                                                                                                                <option value="2">N/correponde</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_period_furca" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro daño</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_furca" id="obs_period_furca"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Tipo sonda</label>
-                                                                                                            <select name="period_inst" id="period_inst" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_inst','div_period_inst','obs_period_inst',5);">
-                                                                                                                <option selected="" value="1">Sonda MARQUIS(MP12B)</option>
-                                                                                                                <option value="2">Sonda UNC 15(MPUNC 15RB)</option>
-                                                                                                                <option value="3">Sonda OMS 11.5(MPWHOB)</option>
-                                                                                                                <option value="4">Sonda NABERS 15(MPN2B)</option>
-                                                                                                                <option value="5">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_period_inst" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro Tipo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_inst" id="obs_period_inst"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_pza()" id="obs_period_pza()"></textarea>
-                                                                                                        </div>
-
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-3 mt-2" >
-                                                                                                <div class="form-group fill">
-
-                                                                                                    <div class="switch switch-success d-inline m-r-10">
-                                                                                                        <input type="checkbox" onchange="biopsia_check_period(1)" id="biopsia_check_period1" name="biopsia_check_period1" value="" >
-                                                                                                        <label for="biopsia_check_period1({{ $count }})" class="cr"></label>
-                                                                                                    </div>
-                                                                                                    <label>biopsia</label>
-                                                                                                    <hr>
-                                                                                                    <div class="form-group fill">
-                                                                                                        <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="peri_biop_zona1" id="peri_biop_zona1">x</textarea>
-                                                                                                    </div>
-                                                                                                    <div class="form-group fill">
-                                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="peri_obs_result_biopsia1" id="peri_obs_result_biopsia1">x</textarea>
-                                                                                                    </div>
-                                                                                                    <hr>
-                                                                                                        <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
-                                                                                                    <hr>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-12">
-                                                                                                <div id="contenedor_piezas_period"></div>
-                                                                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist()"><i class="fas fa-save"></i> Mostrar nueva Pieza</button>
-                                                                                            </div>
-                                                                                        </div>1
-                                                                                    </div>
-                                                                                    <div class="tab-pane fade show" id="ex_period_por_grupo" role="tabpanel" aria-labelledby="ex_period_por_grupo_tab">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3">
-                                                                                                <div class="form-row">
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                            <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="3.2">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Sangrado</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontáneo</option>
-                                                                                                                <option value="2">Al cepillarse</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Supuración</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea mal olor</option>
-                                                                                                                <option value="2">Espontánea sin mal olor</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Higiene</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected value="1">Aceptable</option>
-                                                                                                                <option value="2">Deficiente </option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Indice de O leary </label> <!--cantidad de superficies teñidas  x  100 dividido total de superficies presentes-->
-                                                                                                            <input type="number" class="form-control form-control-sm" name="period_alt_mg" id="period_alt_mg" value="">
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Plataforma</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea</option>
-                                                                                                                <option value="2">Extracción por Urgencia</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Alt MG</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea</option>
-                                                                                                                <option value="2">Extracción por Urgencia</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">P-Sondaje</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea</option>
-                                                                                                                <option value="2">Extracción por Urgencia</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Furcas</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea</option>
-                                                                                                                <option value="2">Extracción por Urgencia</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Instrumento</label>
-                                                                                                            <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                                <option selected="" value="1">Espontánea</option>
-                                                                                                                <option value="2">Extracción por Urgencia</option>
-                                                                                                                <option value="3">Otro describir</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                        <div class="form-group fill">
-                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                        </div>
-                                                                                                        <div class="form-group" id="div_anos_perd" style="display:none;">
-                                                                                                            <label class="floating-label-activo-sm">Años</label>
-                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anos_perd" id="obs_anos_perd"></textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-4 mt-2" >
-                                                                                                <div class="form-group fill">
-
-                                                                                                    <div class="switch switch-success d-inline m-r-10">
-                                                                                                        <input type="checkbox" onchange="biopsia_check_period_g(1)" id="biopsia_check_period_g1" name="biopsia_check_period_g1" value="" >
-                                                                                                        <label for="biopsia_check_period_g1" class="cr"></label>
-                                                                                                    </div>
-                                                                                                    <label>biopsia</label>
-                                                                                                    <hr>
-                                                                                                    <div class="form-group fill">
-                                                                                                        <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="peri_g_biop_zona1" id="peri_g_biop_zona1">x</textarea>
-                                                                                                    </div>
-                                                                                                    <div class="form-group fill">
-                                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="peri_g_obs_result_biopsia1" id="peri_g_obs_result_biopsia1">x</textarea>
-                                                                                                    </div>
-                                                                                                    <hr>
-                                                                                                        <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
-                                                                                                    <hr>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col-md-12">
-                                                                                                    <div id="contenedor_piezas_period"></div>
-                                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist()"><i class="fas fa-save"></i> Mostrar nueva Grupo</button>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -893,156 +695,322 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-
                                                                     </div>
                                                                 </div>
-                                                                @endforeach
                                                             </div>
 
-                                                            <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
-                                                            <div class="tab-pane fade show" id="estudio_rx_period" role="tabpanel" aria-labelledby="estudio_rx_period_tab">
-                                                                <div id="contenedor_imagenes_dent_period">
-                                                                    @php $count = 1; @endphp
-                                                                    @foreach ($imagenes_periodoncia as $imagen)
-                                                                    <div class="form-row">
-                                                                        <div class="col-sm-6 mt-2">
-                                                                            <div class="card">
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <div class="form-group">
-                                                                                            <label class="floating-label-activo-sm">Pieza o zona</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral">{{ $e->observaciones }}</textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="card text-center">
-                                                                                    <h6>EVALUACIÓN RADIOLÓGICA GENERAL</h6>
-                                                                                </div>
-                                                                                    <div class="card">
-                                                                                        <div class="card-body">
-                                                                                            <div class="row mb-1">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    
-                                                                                                    <div class="form-row">
-                                                                                                        @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
-                                                                                                            @foreach ($imagen->paths_imagenes as $path)
-                                                                                                                @if (isset($path['momento']) && $path['momento'] === 'Pre')
-                                                                                                                    <div>
-                                                                                                                        <!-- Botón para ampliar imagen -->
-                                                                                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                                                                                            <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                                                                                alt="Imagen del examen"
-                                                                                                                                class="img-fluid mx-2 imagen_rx">
-                                                                                                                        </a>
+                                                            <!--EVALUACION PERIODONCICA-->
+                                                            <div class="tab-pane fade show active" id="eval_periodonto" role="tabpanel" aria-labelledby="eval_periodonto_tab">
+                                                                <div id="contenedor_nueva_pieza_dental_tto_period"></div>
+                                                                <div id="contenedor_piezas_tto_period">
+                                                                    @if(isset($piezas_periodonto))
+                                                                        @foreach ($piezas_periodonto as $e)
+                                                                        <div class="form-row">
+                                                                            <div class="col-md-10 offset-md-2">
+                                                                                <div class="card-informacion">
 
-                                                                                                                        <!-- Botón para eliminar imagen -->
-                                                                                                                        <button type="button"
-                                                                                                                                class="btn btn-outline-danger btn-sm my-2"
-                                                                                                                                onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                                            <i class="fas fa-trash"></i>
-                                                                                                                        </button>
-                                                                                                                    </div>
-                                                                                                                @else
-                                                                                                                <p>No hay imágenes disponibles para este examen.</p>
-                                                                                                                @endif
-                                                                                                            @endforeach
-                                                                                                        @else
-                                                                                                            <p>No hay imágenes disponibles para este examen.</p>
-                                                                                                        @endif
-                                                                                                    </div>
+                                                                                <div class="card-body">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8 mt-3">
+                                                                                            <div class="card-informacion">
+                                                                                                <div class="card-body">
                                                                                                     <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->numero_pieza }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Sangrado</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->sangrado }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Supuración</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->supuracion }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Higiene</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->higiene }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                             <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Observaciones Radiológicas</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral">{{ $e->observaciones }}</textarea>
+                                                                                                                <label class="floating-label-activo-sm">Alt MG</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->alt_mg }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm">P-Sondaje</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->p_sondaje }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Movilidad-pieza</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->mov_dent }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Furcas</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->furca }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                            <div class="form-group fill">
+                                                                                                                <label class="floating-label-activo-sm">Tipo sonda</label>
+                                                                                                                <input type="text" class="form-control form-control-sm" value="{{ $e->tipo_sonda }}" readonly>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                                <textarea class="form-control form-control-sm" rows="2" readonly>{{ $e->obs_perio_pza }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="card-footer">
+                                                                                        <div class="col-sm-4">
+                                                                                            <div class="card-informacion">
+                                                                                                <div class="card-body">
+                                                                                                    <div class="form-group">
+                                                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                                                            <input type="checkbox" id="biopsia_check_period_view{{ $e->id }}" name="biopsia_check_period_view{{ $e->id }}"
+                                                                                                                @if($e->biopsia == 'Sí' || $e->biopsia == '1') checked @endif disabled>
+                                                                                                            <label for="biopsia_check_period_view{{ $e->id }}" class="cr"></label>
+                                                                                                        </div>
+                                                                                                        <label>Biopsia</label>
 
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 mt-2">
-
-                                                                                                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_imagenes({{ $imagen->id }})">X</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6 mt-2">
-                                                                            <div class="card">
-                                                                                <div class="card text-center">
-                                                                                    <h6>EVALUACIÓN RADIOLÓGICA POR PIEZAS</h6>
-                                                                                </div>
-                                                                                    <div class="card">
-                                                                                        <div class="card-body">
-                                                                                            <div class="row mb-1">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    {{--  <div class="form-row">
-                                                                                                        @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
-                                                                                                            @foreach ($imagen->paths_imagenes as $path)
-                                                                                                                @if (isset($path['momento']) && $path['momento'] === 'Pre')
-                                                                                                                    <div>
-                                                                                                                        <!-- Botón para ampliar imagen -->
-                                                                                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                                                                                            <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                                                                                alt="Imagen del examen"
-                                                                                                                                class="img-fluid mx-2 imagen_rx">
-                                                                                                                        </a>
-
-                                                                                                                        <!-- Botón para eliminar imagen -->
-                                                                                                                        <button type="button"
-                                                                                                                                class="btn btn-outline-danger btn-sm my-2"
-                                                                                                                                onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                                            <i class="fas fa-trash"></i>
-                                                                                                                        </button>
-                                                                                                                    </div>
-                                                                                                                @else
-                                                                                                                <p>No hay imágenes disponibles para este examen.</p>
-                                                                                                                @endif
-                                                                                                            @endforeach
-                                                                                                        @else
-                                                                                                            <p>No hay imágenes disponibles para este examen.</p>
+                                                                                                        @if($e->biopsia == 'Sí' || $e->biopsia == '1')
+                                                                                                        <div class="form-group fill">
+                                                                                                            <label class="floating-label-activo-sm">Zona y Motivo</label>
+                                                                                                            <textarea class="form-control form-control-sm" rows="2" readonly>{{ $e->zona_motivo }}</textarea>
+                                                                                                        </div>
+                                                                                                        <div class="form-group fill">
+                                                                                                            <label class="floating-label-activo-sm">Observaciones y Resultado</label>
+                                                                                                            <textarea class="form-control form-control-sm" rows="3" readonly>{{ $e->observaciones_biopsia }}</textarea>
+                                                                                                        </div>
                                                                                                         @endif
-                                                                                                    </div>  --}}
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="card-footer">
 
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 mt-2">
-
-                                                                                                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_imagenes({{ $imagen->id }})">X</button>
+                                                                                                        <hr>
+                                                                                                        <h6 style="color: #666;">Estado general del periodonto</h6>
+                                                                                                        <hr>
+                                                                                                        <div class="form-group text-center">
+                                                                                                            <small class="text-muted">
+                                                                                                                <i class="feather icon-calendar"></i>
+                                                                                                                Registrado: {{ $e->created_at ? $e->created_at->format('d/m/Y H:i') : 'Sin fecha' }}
+                                                                                                            </small>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
+                                                                                </div>
+                                                                                <div class="card-footer">
+                                                                                    <h6 class="mb-0 font-weight-bold">
+                                                                                        <i class="fas fa-tooth mr-2"></i> Evaluación Pieza {{ $e->numero_pieza }}
+                                                                                    </h6>
+                                                                                    <div class="d-flex justify-content-between align-items-start">
+                                                                                        <small class="mr-3 opacity-75">
+                                                                                            <i class="far fa-calendar-alt mr-1"></i>{{ $e->created_at->format('d/m/Y H:i') }}
+                                                                                        </small>
+                                                                                        <div class="btn-group" role="group">
 
+                                                                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_examen_period({{ $e->id }})" title="Eliminar evaluación">
+                                                                                                X
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-                                                                    @php $count++; @endphp
-                                                                    @endforeach
+
+                                                                        @endforeach
+
+                                                                        @if(count($piezas_periodonto) == 0)
+                                                                            <div class="card-informacion">
+                                                                                <div class="card-body text-center">
+                                                                                    <div class="empty-state">
+                                                                                        <i class="feather icon-search" style="font-size: 48px; color: #ccc;"></i>
+                                                                                        <h5 class="mt-3">No hay exámenes de periodoncia registrados</h5>
+                                                                                        <p class="text-muted">Los exámenes que registres aparecerán aquí con el mismo formato del formulario.</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+
+                                                                    @endif
                                                                 </div>
 
+                                                            </div>
+                                                            <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
+                                                            <div class="tab-pane fade show" id="estudio_rx_period" role="tabpanel" aria-labelledby="estudio_rx_period_tab">
                                                                 <div id="contenedor_nueva_imagen_dent_period">
 
                                                                 </div>
+                                                                <div id="contenedor_imagenes_dent_period">
+                                                                    @php $count = 1; @endphp
+                                                                    @foreach ($imagenes_periodoncia as $imagen)
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
+                                                                            <h6 class="t-aten d-inline">Estudio Radiológico - Imagen {{ $count }}</h6>
+                                                                        </div>
 
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-3 col-lg-6 col-xl-6">
-                                                                        <div class="form-group">
+                                                                        <!-- EVALUACIÓN RADIOLÓGICA GENERAL -->
+                                                                        <div class="col-sm-8 mt-2">
+                                                                            <div class="card-informacion">
+                                                                                <div class="card-body">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <h6 class="sub-aten">EVALUACIÓN RADIOLÓGICA GENERAL</h6>
+                                                                                        </div>
+                                                                                    </div>
 
-                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent_periodoncica({{ $count }})">CARGAR NUEVA IMAGEN</button>
+                                                                                    <!-- Campo Pieza o zona -->
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Pieza o zona</label>
+                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" readonly>{{ $imagen->numero_pieza ?? 'No especificada' }}</textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Observaciones Radiológicas</label>
+                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" readonly>{{ $imagen->observaciones ?? 'Sin observaciones' }}</textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <!-- Imágenes -->
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="aten-a">
+                                                                                                @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
+                                                                                                    <div class="imagen-gallery">
+                                                                                                        @foreach ($imagen->paths_imagenes as $path)
+                                                                                                            @if (isset($path['momento']) && $path['momento'] === 'Pre')
+                                                                                                                <div class="imagen-card">
+                                                                                                                    <!-- Botón para ampliar imagen -->
+                                                                                                                    <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
+                                                                                                                        <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
+                                                                                                                            alt="Imagen del examen"
+                                                                                                                            class="img-fluid imagen_rx"
+                                                                                                                            style="max-width: 150px; max-height: 150px; object-fit: cover;">
+                                                                                                                            <button type="button" class="btn btn-delete" onclick="eliminar_imagen_dental({{$imagen->id}}, '{{ $path['path'] }}')" title="Eliminar imagen">
+                                                                                                                                <i class="fas fa-times"></i>
+                                                                                                                            </button>
+                                                                                                                    </a>
+                                                                                                                </div>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </div>
+                                                                                                @else
+                                                                                                    <p class="text-muted text-center">No hay imágenes disponibles para este examen.</p>
+                                                                                                @endif
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="card-footer">
+                                                                                    <h6 class="mb-0 font-weight-bold">
+                                                                                        <i class="fas fa-tooth mr-2"></i> Evaluación Pieza {{ $imagen->numero_pieza ?? 'No especificada' }}
+                                                                                    </h6>
+                                                                                    <div class="d-flex justify-content-between align-items-start">
+                                                                                        <small class="mr-3 opacity-75">
+                                                                                            <i class="far fa-calendar-alt mr-1"></i>{{ $imagen->created_at->format('d/m/Y H:i') }}
+                                                                                        </small>
+                                                                                        <div class="btn-group" role="group">
+
+                                                                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_pieza_dental_imagenes({{ $imagen->id }})" title="Eliminar evaluación">
+                                                                                                X
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- SECCIÓN DE BIOPSIA -->
+                                                                        <div class="col-sm-4">
+                                                                            <div class="card-informacion">
+                                                                                <div class="card-body">
+                                                                                    <div class="form-group">
+                                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                                            <input type="checkbox"
+                                                                                                   id="biopsia_check_period_view{{ $imagen->id }}"
+                                                                                                   name="biopsia_check_period_view{{ $imagen->id }}"
+                                                                                                   @if($imagen->biopsia ?? false) checked @endif
+                                                                                                   disabled>
+                                                                                            <label for="biopsia_check_period_view{{ $imagen->id }}" class="cr"></label>
+                                                                                        </div>
+                                                                                        <label>Biopsia</label>
+
+                                                                                        @if($imagen->biopsia ?? false)
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Zona y Motivo</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="2" readonly>{{ $imagen->zona_motivo ?? 'Sin información' }}</textarea>
+                                                                                        </div>
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Observaciones y Resultado</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="3" readonly>{{ $imagen->observaciones_biopsia ?? 'Sin observaciones' }}</textarea>
+                                                                                        </div>
+                                                                                        @endif
+
+                                                                                        <hr>
+                                                                                        <h6 class="sub-aten">Estado general del periodonto</h6>
+                                                                                        <hr>
+                                                                                        <div class="form-group text-center">
+                                                                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="solicitar_ic_periodoncia()">
+                                                                                                <i class="feather icon-check"></i> Solicitar Interconsulta Periodoncia
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
+
+
+                                                                    @if(!$loop->last)
+                                                                    <hr class="my-4">
+                                                                    @endif
+
+                                                                    @php $count++; @endphp
+                                                                    @endforeach
+
+                                                                    @if(count($imagenes_periodoncia) == 0)
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="card-informacion">
+                                                                                <div class="card-body text-center">
+                                                                                    <div class="empty-state">
+                                                                                        <i class="feather icon-image" style="font-size: 48px; color: #ccc;"></i>
+                                                                                        <h5 class="mt-3">No hay estudios radiológicos registrados</h5>
+                                                                                        <p class="text-muted">Los estudios radiológicos que registres aparecerán aquí.</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @endif
                                                                 </div>
+
+
+
                                                             </div>
                                                             <!--EVALUACION DIAGNOSTICO-->
                                                             <div class="tab-pane fade show " id="eval_dg_period" role="tabpanel" aria-labelledby="eval_dg_period_tab">
@@ -1067,109 +1035,136 @@
                                                                                                                 <div id="contenedor_dg_periodonto_pp">
                                                                                                                     <div id="dg_periodontal" class="row">
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                            <div class="form-group">
-                                                                                                                                <div class="form-row">
-                                                                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                                                            <input type="text" class="form-control form-control-sm" name="period_pza" id="period_pza" value="3.2">
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Antecedentes</label>
-                                                                                                                                            <select name="perio_sang" id="perio_sang" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_sang','div_perio_sang','obs_perio_sang',3);">
-                                                                                                                                                <option selected="" value="1">Espontáneo</option>
-                                                                                                                                                <option value="2">Al cepillarse</option>
-                                                                                                                                                <option value="3">Otro describir</option>
-                                                                                                                                            </select>
-                                                                                                                                        </div>
-                                                                                                                                        <div class="form-group" id="div_perio_sang" style="display:none;">
-                                                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_sang" id="obs_perio_sang"></textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Eval-clínica</label>
-                                                                                                                                            <select name="perio_sup" id="perio_sup" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_sup','div_perio_sup','obs_perio_sup',3);">
-                                                                                                                                                <option selected="" value="1">Espontánea mal olor</option>
-                                                                                                                                                <option value="2">Espontánea sin mal olor</option>
-                                                                                                                                                <option value="3">Otro describir</option>
-                                                                                                                                            </select>
-                                                                                                                                        </div>
-                                                                                                                                        <div class="form-group" id="div_perio_sup" style="display:none;">
-                                                                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_sup" id="obs_perio_sup"></textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Estudio-rx.</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
-                                                                                                                                                <option selected value="1">Aceptable</option>
-                                                                                                                                                <option value="2">Deficiente </option>
-                                                                                                                                                <option value="3">Otro describir</option>
-                                                                                                                                            </select>
-                                                                                                                                        </div>
-                                                                                                                                        <div class="form-group" id="div_period_hig" style="display:none;">
-                                                                                                                                            <label class="floating-label-activo-sm">Otro (describir)</label>
-                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_hig" id="obs_period_hig"></textarea>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
+                                                                                                                            <div class="card-informacion">
+                                                                                                                                <div class="card-body">
+                                                                                                                                    <div class="form-group">
+                                                                                                                                        <div class="form-row">
+                                                                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                                                                                    <select name="period_pza" id="period_pza" class="form-control form-control-sm">
+                                                                                                                                                        <option value="0">Seleccione</option>
+                                                                                                                                                        @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
+                                                                                                                                                            <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                                                                                                                                                        @endforeach
+                                                                                                                                                    </select >
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Antec. molestias</label>
+                                                                                                                                                    <select name="perio_antsang" id="perio_antsang" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_antsang','div_perio_antsang','obs_perio_antsang',3);">
+                                                                                                                                                        <option selected="" value="Espontáneo">Espontáneo</option>
+                                                                                                                                                        <option value="Al cepillarse">Al cepillarse</option>
+                                                                                                                                                        <option value="3">Otro describir</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="form-group" id="div_perio_antsang" style="display:none;">
+                                                                                                                                                    <label class="floating-label-activo-sm">Otro motivo</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_antsang" id="obs_perio_antsang"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Eval-clínica (pus)</label>
+                                                                                                                                                    <select name="perio_evcsup" id="perio_evcsup" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perio_evcsup','div_perio_evcsup','obs_perio_evcsup',3);">
+                                                                                                                                                        <option selected="" value="Espontánea mal olor">Espontánea mal olor</option>
+                                                                                                                                                        <option value="Espontánea sin mal olor">Espontánea sin mal olor</option>
+                                                                                                                                                        <option value="3">Otro describir</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="form-group" id="div_perio_evcsup" style="display:none;">
+                                                                                                                                                    <label class="floating-label-activo-sm">Otro motivo</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perio_evcsup" id="obs_perio_evcsup"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Estudio-rx.</label>
+                                                                                                                                                    <select name="period_erx" id="period_erx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_erx','div_period_erx','obs_period_erx',3);">
+                                                                                                                                                        <option selected value="Aceptable">Aceptable</option>
+                                                                                                                                                        <option value="Deficiente">Deficiente </option>
+                                                                                                                                                        <option value="3">Otro describir</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="form-group" id="div_period_erx" style="display:none;">
+                                                                                                                                                    <label class="floating-label-activo-sm">Otro (describir)</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_erx" id="obs_period_erx"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
 
-                                                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Diagnóstico periodontal local</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
-                                                                                                                                                <option selected value="1">Sano</option>
-                                                                                                                                                <option value="2">Gingivitis Leve</option>
-                                                                                                                                                <option value="2">Gingivitis Moderada</option>
-                                                                                                                                                <option value="2">Gingivitis Avanzada</option>
-                                                                                                                                                <option value="2">Periodontitis Leve</option>
-                                                                                                                                                <option value="2">Periodontitis Moderada</option>
-                                                                                                                                                <option value="2">Periodontitis Avanzada</option>
-                                                                                                                                                <option value="3">Otro describir</option>
-                                                                                                                                            </select>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Diagnóstico por Enfermedad sistémica</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
-                                                                                                                                                <option selected value="1">No</option>
-                                                                                                                                                <option value="2">Diabetes</option>
-                                                                                                                                                <option value="2">GReflujo Gastro-esofágico</option>
-                                                                                                                                                <option value="2">Deformaciones arcadas</option>
-                                                                                                                                                <option value="2">Por fuerzas oclusales</option>
-                                                                                                                                                <option value="2">Por factores protésicos</option>
-                                                                                                                                                <option value="3">Otro describir</option>
-                                                                                                                                            </select>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                                        <div class="form-group fill">
+                                                                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Diagnóstico periodontal local</label>
+                                                                                                                                                    <select name="period_dpl" id="period_dpl" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_dpl','div_period_dpl','obs_period_dpl',8);">
+                                                                                                                                                        <option value="0">Seleccione</option>
+                                                                                                                                                        @foreach ($diagnosticos as $d)
+                                                                                                                                                        @if($d->tipo_especialidad == 21 )
+                                                                                                                                                            <option value="{{ $d->descripcion }}">{{ $d->descripcion }}</option>
+                                                                                                                                                        @endif
+                                                                                                                                                        @endforeach
+                                                                                                                                                        <option value="8">Otro</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="form-group" id="div_period_dpl" style="display:none;">
+                                                                                                                                                    <label class="floating-label-activo-sm">Otro (describir)</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_dpl" id="obs_period_dpl"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Lesión por Enfermedad sistémica</label>
+                                                                                                                                                    <select name="period_lpes" id="period_lpes" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_lpes','div_period_lpes','obs_period_lpes',7);">
+                                                                                                                                                        <option selected value="1">No</option>
+                                                                                                                                                        <option value="Diabetes">Diabetes</option>
+                                                                                                                                                        <option value="Reflujo Gastro-esofágico">Reflujo Gastro-esofágico</option>
+                                                                                                                                                        <option value="Deformaciones arcadas">Deformaciones arcadas</option>
+                                                                                                                                                        <option value="Por fuerzas oclusales">Por fuerzas oclusales</option>
+                                                                                                                                                        <option value="Por factores protésicos">Por factores protésicos</option>
+                                                                                                                                                        <option value="7">Otro describir</option>
+                                                                                                                                                    </select>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="form-group" id="div_period_lpes" style="display:none;">
+                                                                                                                                                    <label class="floating-label-activo-sm">Otro (describir)</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_lpes" id="obs_period_lpes"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                                                                <div class="form-group fill">
 
-                                                                                                                                            <div class="form-group">
-                                                                                                                                                <label class="floating-label-activo-sm">Diagnóstico Periodontal</label>
-                                                                                                                                                <input type="text" class="form-control form-control-sm">
+                                                                                                                                                    <div class="form-group">
+                                                                                                                                                        <label class="floating-label-activo-sm">Diagnóstico Periodontal</label>
+                                                                                                                                                        <input type="text" class="form-control form-control-sm" name="dg_period" id="dg_period">
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+
+                                                                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                                                <div class="form-group fill">
+                                                                                                                                                    <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_pza" id="obs_period_pza"></textarea>
+                                                                                                                                                </div>
+
                                                                                                                                             </div>
                                                                                                                                         </div>
                                                                                                                                     </div>
-
-                                                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                                        <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_pza()" id="obs_period_pza()"></textarea>
-                                                                                                                                        </div>
-
+                                                                                                                                </div>
+                                                                                                                                <div class="card-footer">
+                                                                                                                                    <div class="form-group">
+                                                                                                                                        <button type="button" class="btn btn-sm btn-outline-info" onclick="agregar_dg_periodonto_pieza()"><i class="feather icon-save"></i> Guardar</button>
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                             </div>
+
                                                                                                                         </div>
                                                                                                                     </div>
                                                                                                                 </div>
+                                                                                                                <div id="contenedor_evaluaciones_periodonto">
+                                                                                                                    <!-- Las evaluaciones existentes se cargarán aquí dinámicamente -->
+                                                                                                                </div>
+
                                                                                                             </div>
+
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -1221,45 +1216,53 @@
                                                                                                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                                         <div class="form-group fill">
                                                                                                                                             <label class="floating-label-activo-sm">Estudio-rx.</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
+                                                                                                                                            <select name="period_estrx" id="period_estrx" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_estrx','div_peiod_higa','obs_period_estrx',3);">
                                                                                                                                                 <option selected value="1">Aceptable</option>
                                                                                                                                                 <option value="2">Deficiente </option>
                                                                                                                                                 <option value="3">Otro describir</option>
                                                                                                                                             </select>
                                                                                                                                         </div>
-                                                                                                                                        <div class="form-group" id="div_period_hig" style="display:none;">
+                                                                                                                                        <div class="form-group" id="div_period_estrx" style="display:none;">
                                                                                                                                             <label class="floating-label-activo-sm">Otro (describir)</label>
-                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_hig" id="obs_period_hig"></textarea>
+                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_estrx" id="obs_period_estrx"></textarea>
                                                                                                                                         </div>
                                                                                                                                     </div>
 
                                                                                                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                                                         <div class="form-group fill">
                                                                                                                                             <label class="floating-label-activo-sm">Diagnóstico periodontal local</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
+                                                                                                                                            <select name="period_dp" id="period_dp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_dp','div_period_dp','obs_period_dp',8);">
                                                                                                                                                 <option selected value="1">Sano</option>
                                                                                                                                                 <option value="2">Gingivitis Leve</option>
-                                                                                                                                                <option value="2">Gingivitis Moderada</option>
-                                                                                                                                                <option value="2">Gingivitis Avanzada</option>
-                                                                                                                                                <option value="2">Periodontitis Leve</option>
-                                                                                                                                                <option value="2">Periodontitis Moderada</option>
-                                                                                                                                                <option value="2">Periodontitis Avanzada</option>
-                                                                                                                                                <option value="3">Otro describir</option>
+                                                                                                                                                <option value="3">Gingivitis Moderada</option>
+                                                                                                                                                <option value="4">Gingivitis Avanzada</option>
+                                                                                                                                                <option value="5">Periodontitis Leve</option>
+                                                                                                                                                <option value="6">Periodontitis Moderada</option>
+                                                                                                                                                <option value="7">Periodontitis Avanzada</option>
+                                                                                                                                                <option value="8">Otro describir</option>
                                                                                                                                             </select>
+                                                                                                                                        </div>
+                                                                                                                                        <div class="form-group" id="div_period_dp" style="display:none;">
+                                                                                                                                            <label class="floating-label-activo-sm">Otro (describir)</label>
+                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_dp" id="obs_period_dp"></textarea>
                                                                                                                                         </div>
                                                                                                                                     </div>
                                                                                                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                                                         <div class="form-group fill">
-                                                                                                                                            <label class="floating-label-activo-sm">Diagnóstico por Enfermedad sistémica</label>
-                                                                                                                                            <select name="period_hig" id="period_hig" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_hig','div_peiod_higa','obs_period_hig',3);">
+                                                                                                                                            <label class="floating-label-activo-sm">Lesión por Enfermedad sistémica</label>
+                                                                                                                                            <select name="period_lesesistemica" id="period_lesesistemica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_lesesistemica','div_peiod_lesesistemica','obs_period_lesesistemica',7);">
                                                                                                                                                 <option selected value="1">No</option>
                                                                                                                                                 <option value="2">Diabetes</option>
-                                                                                                                                                <option value="2">GReflujo Gastro-esofágico</option>
-                                                                                                                                                <option value="2">Deformaciones arcadas</option>
-                                                                                                                                                <option value="2">Por fuerzas oclusales</option>
-                                                                                                                                                <option value="2">Por factores protésicos</option>
-                                                                                                                                                <option value="3">Otro describir</option>
+                                                                                                                                                <option value="3">Reflujo Gastro-esofágico</option>
+                                                                                                                                                <option value="4">Deformaciones arcadas</option>
+                                                                                                                                                <option value="5">Por fuerzas oclusales</option>
+                                                                                                                                                <option value="6">Por factores protésicos</option>
+                                                                                                                                                <option value="7">Otro describir</option>
                                                                                                                                             </select>
+                                                                                                                                        </div>
+                                                                                                                                         <div class="form-group" id="div_period_lesesistemica" style="display:none;">
+                                                                                                                                            <label class="floating-label-activo-sm">Otro (describir)</label>
+                                                                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_period_lesesistemica" id="obs_period_lesesistemica"></textarea>
                                                                                                                                         </div>
                                                                                                                                     </div>
                                                                                                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -1299,94 +1302,283 @@
                                                             </div>
                                                             <!--PLANIFICACION TRATAMIENTO-->
                                                             <div class="tab-pane fade show" id="plan_tto_period" role="tabpanel" aria-labelledby="plan_tto_period_tab">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="card">
+                                                                <div class="form-row mt-3">
+                                                                    <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                                <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o grupos</h6>
+                                                                            </div>
                                                                             <div class="card-body">
-                                                                                <div id="contenedor_pieza_plan_implante">
-                                                                                    {{-- <div id="pieza_dental" class="row">
-                                                                                        <div class="col-sm-12 col-md-12 col-xl-12">
-                                                                                            <div class="tab-content" id="v-pills-tabContent">
-                                                                                                <div class="tab-pane fade show active" id="plan_implante" role="tabpanel" aria-labelledby="plan_implante_tab"><br>
-                                                                                                    <div class="col-sm-12 col-md-12">
-                                                                                                        <div class="form-row">
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Piezas N° | Grupo</label>
-                                                                                                                    <input type="text" class="form-control form-control-sm">
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                                                                                    <select name="tpo_tto_period" data-titulo="tpo_tto_period" data-seccion="Implante"  id="tpo_tto_period" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_tto_period','div_tpo_tto_period','obs_tpo_tto_period',5);">
-                                                                                                                        <option selected  value="1">Raspado y alisado radicular</option>
-                                                                                                                        <option value="2">antibióticos</option>
-                                                                                                                        <option value="3">enjuagues bucales</option>
-                                                                                                                        <option value="4">Cirugía</option>
-                                                                                                                        <option value="5">  Otro proc periodontoógico</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                                <div class="form-group" id="div_tpo_tto_period" style="display:none;">
-                                                                                                                    <label class="floating-label-activo-sm">Otro proc periodontológico</label>
-                                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_tto_period" id="obs_tpo_tto_period"></textarea>
-                                                                                                                    <div class="form-group mt-3">
-                                                                                                                        <label class="floating-label-activo-sm">UCO?</label>
-                                                                                                                        <input type="text"class="form-control form-control-sm">
-                                                                                                                    </div>
-                                                                                                                    <div class="form-group mt-3">
-                                                                                                                        <label class="floating-label-activo-sm">Laboratorio</label>
-                                                                                                                        <input type="text"class="form-control form-control-sm">
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Cirugía</label>
-                                                                                                                    <select name="cir_periodontal"  id="cir_periodontal" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cir_periodontal','div_cir_periodontal','obs_cir_periodontal',6);">
-                                                                                                                        <option selected  value="1">Cirugía con colgajos</option>
-                                                                                                                        <option value="2">Injertos de tejido blando</option>
-                                                                                                                        <option value="3">Injerto óseo</option>
-                                                                                                                        <option value="4">Regeneración tisular guiada</option>
-                                                                                                                        <option value="5">Proteínas estimulantes de tejidos</option>
-                                                                                                                        <option value="6">OTRO</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                                <div class="form-group" id="div_cir_periodontal" style="display:none;">
-                                                                                                                    <label class="floating-label-activo-sm">Otra cirugía</label>
-                                                                                                                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cir_periodontal" id="obs_cir_periodontal"></textarea>
-                                                                                                                </div>
-                                                                                                            </div>
-
-
-                                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Convenio</label>
-                                                                                                                    <select name="conv_odont_implante"   id="conv_odont_implante" class="form-control form-control-sm">
-                                                                                                                        <option selected  value="1">Si</option>
-                                                                                                                        <option value="2">No</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                <div class="form-group">
-                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-save"></i> Cargar a presupuesto</button>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table id="table_piezas_presupuesto_period" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th>Pieza o Grupo</th>
+                                                                                                        <th>Diagnostico</th>
+                                                                                                        <th>Tratamiento</th>
+                                                                                                        <th>Valor</th>
+                                                                                                        <th>Accion</th>
+                                                                                                        <th>Estado</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    @foreach ($odontograma as $o)
+                                                                                                    @if($o->presupuesto == 1 && $o->urgencia == 0)
+                                                                                                        <tr>
+                                                                                                            <td><i class="fas fa-tooth mr-1"></i>{{ $o->pieza }}</td>
+                                                                                                            <td>{{ $o->diagnostico }}</td>
+                                                                                                            <td>{{ $o->descripcion }}</td>
+                                                                                                            <td>${{ number_format($o->valor,0,',','.') }}</td>
+                                                                                                            <td>
+                                                                                                                <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button>
+                                                                                                                <button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza({{ $o->id }})"><i class="feather icon-repeat"></i> </button>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                @if($o->estado == 0)
+                                                                                                                    <span class="text-uppercase">Pendiente</span>
+                                                                                                                @elseif($o->estado == 1)
+                                                                                                                    <span class="text-uppercase">Realizado</span>
+                                                                                                                @elseif($o->estado == 2)
+                                                                                                                    <span class="text-uppercase">Cancelado</span>
+                                                                                                                @elseif($o->estado == 3)
+                                                                                                                    <span class="text-uppercase">Citado a Control</span>
+                                                                                                                @endif
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    @endif
+                                                                                                    @endforeach
+                                                                                                </tbody>
+                                                                                            </table>
                                                                                         </div>
-                                                                                    </div> --}}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row mt-2">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <h6 class="tit-gen">Planificación del tratamiento</h6>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="form-row">
+                                                                    <!--SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                            <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                    <div class="row my-2">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input" id="max_sup_period" onclick="seleccionar_maxilar_superior_period()">
+                                                                                            <label class="custom-control-label" for="max_sup_period">Seleccione maxilar superior</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input" id="max_inf_period" onclick="seleccionar_maxilar_inferior_period()">
+                                                                                            <label class="custom-control-label" for="max_inf_period">Seleccione maxilar inferior</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input" id="piezas_presup_period" onclick="seleccionar_piezas_presup_period()">
+                                                                                            <label class="custom-control-label" for="piezas_presup_period">Piezas presupuesto</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-3">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input" id="piezas_presup_period_eval" onclick="seleccionar_piezas_presup_period_eval();">
+                                                                                            <label class="custom-control-label" for="piezas_presup_period_eval">Piezas evaluadas</label>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-xl-12">
-                                                                                        <div class="col-sm-4 col-md-4 col-xl-4">
-                                                                                                <div class="form-row">
-                                                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza2" onclick="mostrar_nueva_pieza_dental_tto_period()"><i class="fas fa-save"></i> Cargar otra pieza</button>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
+                                                                                        @include('atencion_odontologica.generales.odontograma_adulto_grupos_periodoncia')
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                                                    <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex_period" id="paciente_piezas_dentales_ex_period" multiple="multiple">
+                                                                                                        <option value="1.1">1.1</option>
+                                                                                                        <option value="1.2">1.2</option>
+                                                                                                        <option value="1.3">1.3</option>
+                                                                                                        <option value="1.4">1.4</option>
+                                                                                                        <option value="1.5">1.5</option>
+                                                                                                        <option value="1.6">1.6</option>
+                                                                                                        <option value="1.7">1.7</option>
+                                                                                                        <option value="1.8">1.8</option>
+                                                                                                        <option value="2.1">2.1</option>
+                                                                                                        <option value="2.2">2.2</option>
+                                                                                                        <option value="2.3">2.3</option>
+                                                                                                        <option value="2.4">2.4</option>
+                                                                                                        <option value="2.5">2.5</option>
+                                                                                                        <option value="2.6">2.6</option>
+                                                                                                        <option value="2.7">2.7</option>
+                                                                                                        <option value="2.8">2.8</option>
+                                                                                                        <option value="3.1">3.1</option>
+                                                                                                        <option value="3.2">3.2</option>
+                                                                                                        <option value="3.3">3.3</option>
+                                                                                                        <option value="3.4">3.4</option>
+                                                                                                        <option value="3.5">3.5</option>
+                                                                                                        <option value="3.6">3.6</option>
+                                                                                                        <option value="3.7">3.7</option>
+                                                                                                        <option value="3.8">3.8</option>
+                                                                                                        <option value="4.1">4.1</option>
+                                                                                                        <option value="4.2">4.2</option>
+                                                                                                        <option value="4.3">4.3</option>
+                                                                                                        <option value="4.4">4.4</option>
+                                                                                                        <option value="4.5">4.5</option>
+                                                                                                        <option value="4.6">4.6</option>
+                                                                                                        <option value="4.7">4.7</option>
+                                                                                                        <option value="4.8">4.8</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Diagnostico</label>
+                                                                                                    <select class="form-control form-control-sm" id="diagnostico_combo_g_period">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        @foreach ($diagnosticos as $d)
+                                                                                                        @if($d->tipo_especialidad == 21 )
+                                                                                                            <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                                                        @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                                                    <input type="text" name="diag_presupuesto_pieza_g_period" id="diag_presupuesto_pieza_g_period" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_period_g()"><i class="feather icon-save"></i> Guardar piezas</button>
                                                                                             </div>
                                                                                         </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                                <!--<div class="form-row my-2">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                                                                                        <div class="form-group">
+                                                                                            <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                                            <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
+                                                                                                <option value="1.1">1.1</option>
+                                                                                                <option value="1.2">1.2</option>
+                                                                                                <option value="1.3">1.3</option>
+                                                                                                <option value="1.4">1.4</option>
+                                                                                                <option value="1.5">1.5</option>
+                                                                                                <option value="1.6">1.6</option>
+                                                                                                <option value="1.7">1.7</option>
+                                                                                                <option value="1.8">1.8</option>
+                                                                                                <option value="2.1">2.1</option>
+                                                                                                <option value="2.2">2.2</option>
+                                                                                                <option value="2.3">2.3</option>
+                                                                                                <option value="2.4">2.4</option>
+                                                                                                <option value="2.5">2.5</option>
+                                                                                                <option value="2.6">2.6</option>
+                                                                                                <option value="2.7">2.7</option>
+                                                                                                <option value="2.8">2.8</option>
+                                                                                                <option value="3.1">3.1</option>
+                                                                                                <option value="3.2">3.2</option>
+                                                                                                <option value="3.3">3.3</option>
+                                                                                                <option value="3.4">3.4</option>
+                                                                                                <option value="3.5">3.5</option>
+                                                                                                <option value="3.6">3.6</option>
+                                                                                                <option value="3.7">3.7</option>
+                                                                                                <option value="3.8">3.8</option>
+                                                                                                <option value="4.1">4.1</option>
+                                                                                                <option value="4.2">4.2</option>
+                                                                                                <option value="4.3">4.3</option>
+                                                                                                <option value="4.4">4.4</option>
+                                                                                                <option value="4.5">4.5</option>
+                                                                                                <option value="4.6">4.6</option>
+                                                                                                <option value="4.7">4.7</option>
+                                                                                                <option value="4.8">4.8</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                                            <input type="text" name="diag_presupuesto_pieza_g" id="diag_presupuesto_pieza_g" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-2">
+                                                                                        <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                                                    </div>
+                                                                                </div>-->
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+
+                                                                    <!--TABLA INSUMOS-->
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                                <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
+                                                                                <button type="button" class="btn btn-info btn-xxs float-md-right d-inline d-inline"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table id="table_insumos_period" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <td>Insumo</td>
+                                                                                                        <td>Observaciones</td>
+                                                                                                        <td>Cantidad</td>
+                                                                                                        <td>Valor</td>
+                                                                                                        <td>Total</td>
+                                                                                                        <td>Acciones</td>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    @foreach ($insumos_tratamientos as $t)
+                                                                                                    @if($t->urgencia == 0)
+                                                                                                        @php $total = $t->cantidad * $t->valor @endphp
+                                                                                                        <tr>
+                                                                                                            <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                                                            <td>{{ $t->observaciones }}</td>
+                                                                                                            <td>{{ $t->cantidad }}</td>
+                                                                                                            <td>{{ number_format($t->valor)  }}</td>
+                                                                                                            <td>{{ number_format($total)  }}</td>
+                                                                                                            <td>
+                                                                                                                @if($t->presupuesto == 0 || $t->presupuesto == null)
+                                                                                                                <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-shopping-cart"></i></button>
+                                                                                                                @else
+                                                                                                                <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
+                                                                                                                @endif
+                                                                                                                <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo({{ $t->id }})"><i class="feather icon-edit"></i></button>
+                                                                                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    @endif
+                                                                                                    @endforeach
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row mt-2">
+                                                                                    <div class="col-12 d-flex justify-content-end">
+                                                                                        <button type="button" class="btn btn-success btn-xxs" onclick="abrirModalCorreo()"><i class="fas fa-email"></i> Enviar por correo</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1406,7 +1598,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="tto_periodontal">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#tto_periodontal_c" aria-expanded="false" aria-controls="tto_periodontal_c">
+                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#tto_periodontal_c" aria-expanded="false" aria-controls="tto_periodontal_c" onclick="pieza_dental_tto_period(1000);cargar_tto_periodoncia();">
                                             Tratamiento Periodontal
                                         </button>
                                     </div>
@@ -1420,7 +1612,7 @@
                                                                 <a class="nav-link-aten text-reset active" id="proc_periodontal_tab" data-toggle="tab" href="#proc_periodontal" role="tab" aria-controls="proc_periodontal" aria-selected="true">Procedimientos</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="protocolo_period_tab" data-toggle="tab" href="#protocolo_period" role="tab" aria-controls="protocolo_period" aria-selected="true">Protocolo e Indicaciones</a>
+                                                                <a class="nav-link-aten text-reset" id="protocolo_period_tab" data-toggle="tab" href="#protocolo_period" role="tab" aria-controls="protocolo_period" aria-selected="true" onclick=" $('#prot_pieza_period').select2();">Protocolo e Indicaciones</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -1434,34 +1626,37 @@
                                                                     <div class="col-md-12">
                                                                         <div class="card">
                                                                             <div class="card-body">
-                                                                                <div id="contenedor_implantologia">
+<div id="contenedor_periodoncia">
                                                                                     <div id="pieza_dental_dolor" class="row">
-                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <p>Cargando ...</p>
+                                                                                        {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                                                                                                     <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="" id="">
+                                                                                                    <select name="" id="" class="form-control form-control-sm">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        @foreach($odontograma as $o)
+                                                                                                            @if($o->presupuesto == 1)
+                                                                                                                <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    </select>
                                                                                                 </div>
                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
-                                                                                                        <select name="tpo_proc_imp" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp','div_tpo_proc_imp','obs_tpo_proc_impo',10);">
-                                                                                                            <option selected  value="1">Anclaje de precisión s/implantes</option>
-                                                                                                            <option value="2">Anclaje de presición sobre Implante</option>
-                                                                                                            <option value="3">Barra para prótesis sobre Implante</option>
-                                                                                                            <option value="4">Cirugía Periimplantaria de manejo de tejidos blandos, por sitio</option>
-                                                                                                            <option value="5">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                                                                                            <option value="6">Conexión de Implante (No incluye valor aditamientos)</option>
-                                                                                                            <option value="7">Corona de cerámica s/metal sobre implante cementada</option>
-                                                                                                            <option value="8">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                                                                                            <option value="9"> Corona provisional s/implante</option>
-                                                                                                            <option value="10">  Corona Temporal Sobre Implantes</option>
-                                                                                                            <option value="10">  Otro proc Implantes</option>
+                                                                                                        <select name="tpo_proc_period" data-titulo="tpo_proc_period" data-seccion="Implante"  id="tpo_proc_period" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_period','div_tpo_proc_period','obs_tpo_proc_period',6);">
+                                                                                                            <option selected  value="1">Cirugía con colgajos</option>
+                                                                                                            <option value="2">Injertos de tejido blando</option>
+                                                                                                            <option value="3">Injerto óseo</option>
+                                                                                                            <option value="4">Regeneración tisular guiada</option>
+                                                                                                            <option value="5">Proteínas estimulantes de tejidos</option>
+                                                                                                            <option value="6">Otro Tipo</option>
                                                                                                         </select>
                                                                                                     </div>
-                                                                                                    <div class="form-group" id="div_tpo_proc_imp" style="display:none;">
+                                                                                                    <div class="form-group" id="div_tpo_proc_period" style="display:none;">
                                                                                                         <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
-                                                                                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp" id="obs_tpo_proc_imp"></textarea>
+                                                                                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_period" id="obs_tpo_proc_period"></textarea>
                                                                                                         <div class="form-group mt-3">
                                                                                                             <label class="floating-label-activo-sm">UCO?</label>
                                                                                                             <input type="text"class="form-control form-control-sm">
@@ -1553,16 +1748,14 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                        </div>
+                                                                                        </div> --}}
                                                                                     </div>
                                                                                 </div>
+                                                                                <div id="contenedor_tto_periodoncia"></div>
+
                                                                             </div>
 
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1" ><i class="fas fa-save"></i>Cargar Otra Pieza</button>
-                                                                                </div>
-                                                                            </div>
+
                                                                         </div>
 
                                                                     </div>
@@ -1571,7 +1764,7 @@
 
                                                             <!--PROTOCOLO-->
                                                             <div class="tab-pane fade show" id="protocolo_period" role="tabpanel" aria-labelledby="protocolo_period_tab">
-                                                                <div class="row">
+                                                                <div class="row d-none">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
                                                                             <div class="card-body">
@@ -1609,88 +1802,14 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
-
                                                                                                     <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Forma y material del Implante</label>
-                                                                                                                <select name="prot_forma_mat" id="prot_forma_mat"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_forma_mat','div_prot_forma_mat','det_prot_forma_mat',13)">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Cilíndricos Titanio</option>
-                                                                                                                    <option value="2">Cilíndricos Porcelana</option>
-                                                                                                                    <option value="3">Cilíndricos Zirconio</option>
-                                                                                                                    <option value="4">Laminados Titanio</option>
-                                                                                                                    <option value="5">Laminados Porcelana</option>
-                                                                                                                    <option value="6">Laminados Zirconio</option>
-                                                                                                                    <option value="7">Tornillo Titanio</option>
-                                                                                                                    <option value="8">Tornillo Porcelana</option>
-                                                                                                                    <option value="9">Tornillo Zirconio</option>
-                                                                                                                    <option value="10">Cónicos Titanio</option>
-                                                                                                                    <option value="11">Cónicos Porcelana</option>
-                                                                                                                    <option value="12">Cónicos Zirconio</option>
-                                                                                                                    <option value="13">Otro</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"   id="div_prot_forma_mat" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_forma_mat" id="det_prot_forma_mat"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-
-                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Marca Inplante</label>
-                                                                                                                <select name="prot_marc_implante"  id="prot_marc_implante" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);">
-                                                                                                                    <option selected  value="1">MARCA 1</option>
-                                                                                                                    <option value="2">MARCA 2</option>
-                                                                                                                    <option value="3">OTRO</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group" id="div_prot_marc_implante" style="display:none;">
-                                                                                                                <label class="floating-label-activo-sm">Otra Marca</label>
-                                                                                                                <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prot_marc_implante" id="obs_prot_marc_implante"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-
-                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Implantes</label>
-                                                                                                                <select name="prot_proc" id="prot_proc"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_proc','div_prot_proc','det_prot_proc',3)">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Implante único</option>
-                                                                                                                    <option value="2">Implante Múltiple</option>
-                                                                                                                    <option value="3">Otro</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"   id="div_prot_proc" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_proc" id="det_prot_proc"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Corona/Prot provisoria</label>
-                                                                                                                <select name="prot_prot_corona" id="prot_prot_corona"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_prot_corona','div_prot_prot_corona','det_prot_prot_corona',3)">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Si</option>
-                                                                                                                    <option value="2">No</option>
-                                                                                                                    <option value="3">Otro (describa)</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"   id="div_prot_prot_corona" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_prot_corona" id="det_prot_prot_corona"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
                                                                                                         <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Piezas N°</label>
                                                                                                                 <input class="form-control form-control-sm" type="text" name="prot_pieza_imp"id="prot_pieza_imp">
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                    </div>
-                                                                                                    <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Detalle Cirugía</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="aprec_periodonto" id="aprec_periodonto"></textarea>
@@ -1698,27 +1817,26 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     <div class="form-row">
+                                                                                                    </div>
+                                                                                                    <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-12 text-center">
-                                                                                                            <button type="button" class="btn btn-sm btn-primary mt-2 mb-4">Ver documento en
-                                                                                                                PDF</button>
+                                                                                                            <button type="button" class="btn btn-sm btn-primary mt-2 mb-4">Ver documento en  PDF</button>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-
                                                                                             </div>
                                                                                             <div class="tab-pane fade show" id="ind_period" role="tabpanel" aria-labelledby="ind_period_tab">
-
                                                                                                 <div class="row">
                                                                                                     <div class="col-sm-12 col-md-12">
                                                                                                         <div class="form-row">
                                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                 <div class="form-group">
-                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Indicaciones Generales Periodóncia </button>
+                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm"onclick="indic_period_gen()" ><i class="fas fa-save"></i> Indicaciones Generales Periodóncia </button>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                 <div class="form-group">
-                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Indicaciones Especiales para el paciente Periodóncia </button>
+                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="indic_period_especiales()" ><i class="fas fa-save"></i> Indicaciones Especiales para el paciente Periodóncia </button>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
@@ -1763,11 +1881,206 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="form-row mt-2">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <h6 class="t-aten">Protocolos e indicaciones</h6>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab"
+                                                                            role="tablist" aria-orientation="vertical">
+                                                                            <a class="nav-link-aten text-reset active" id="prot_impl_tab"
+                                                                                data-toggle="tab" href="#prot_impl" role="tab"
+                                                                                aria-controls="prot_impl" aria-selected="true">Protocolo</a>
+                                                                            <a class="nav-link-aten text-reset" id="ind_impl_tab"
+                                                                                data-toggle="tab" href="#ind_impl" role="tab"
+                                                                                aria-controls="ind_impl" aria-selected="false">Indicaciones</a>
+                                                                            <a class="nav-link-aten text-reset" id="cit_control_impl_tab"
+                                                                                data-toggle="tab" href="#cit_control_impl" role="tab"
+                                                                                aria-controls="cit_control_impl" aria-selected="false" onclick="proxima_atencion_paciente()">Control</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-10 col-xl-10">
+                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                            <!--PROTOCOLO-->
+                                                                            <div class="tab-pane fade show active" id="prot_impl" role="tabpanel"
+                                                                                aria-labelledby="prot_impl_tab">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="sub-aten">Protocolo<h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Equipo Cirujanos</label>
+                                                                                            <div class="d-flex">
+                                                                                                <input class="form-control form-control-sm" type="text" name="prot_cirujanos_period" id="prot_cirujanos_period">
+                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregar_cirujano_period()"><i class="fas fa-plus"></i></button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="d-none" id="div_nuevo_cirujano_period">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Nuevo
+                                                                                                    Cirujano</label>
+                                                                                                <div class="d-flex mb-3">
+                                                                                                    <input type="text" id="nuevo_cirujano_period" class="form-control form-control-sm">
+                                                                                                    <button type="button" class="btn btn-danger" onclick="ocultar_cirujano_period()"><i class="feather icon-x"></i></button>
+                                                                                                    <button type="button" class="btn btn-info"><i class="feather icon-shopping-cart"></i></button>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Anestesista</label>
+                                                                                            <input class="form-control form-control-sm" type="text" name="prot_anestesista_period" id="prot_anestesista_period">
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Tons</label>
+                                                                                            <input class="form-control form-control-sm" type="text" name="prot_tons_period" id="prot_tons_period">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Piezas N°</label>
+                                                                                            <select name="prot_pieza_period" id="prot_pieza_period" class="form-control form-control-sm" multiple>
+                                                                                                <option value="0">Seleccione</option>
+                                                                                                @foreach($odontograma as $o)
+                                                                                                    @if($o->presupuesto == 1 && $o->urgencia == 0)
+                                                                                                        <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Detalle Cirugía</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir_period" id="det_cir_period"></textarea>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 text-center">
+                                                                                        <button type="button" class="btn btn-sm btn-primary mt-2 mb-4" onclick="generar_pdf_protocolo_dental()">Ver documento en  PDF</button>
+                                                                                    </div>
+                                                                                </div>
+
+
+                                                                            </div>
+                                                                            <!--INDICACIONES-->
+                                                                            <div class="tab-pane fade show" id="ind_impl" role="tabpanel"
+                                                                                aria-labelledby="ind_impl_tab">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="sub-aten">Indicaciones<h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xl-6">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-outline-primary btn-block btn-sm my-2"
+                                                                                            onclick="recomendaciones_implante();"><i
+                                                                                                class="fas fa-plus"></i> Indicaciones Generales
+                                                                                            Post Implante </button>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xl-6">
+                                                                                        <button type="button"
+                                                                                            class="btn btn-outline-primary btn-block btn-sm my-2"
+                                                                                            onclick="recomendaciones_esp_implante();"><i
+                                                                                                class="fas fa-plus"></i> Indicaciones Especiales
+                                                                                            para el paciente post Implante </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <!--CONTROL-->
+                                                                            <div class="tab-pane fade show" id="cit_control_impl" role="tabpanel"
+                                                                                aria-labelledby="cit_control_impl_tab">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <h6 class="sub-aten">Control<h6>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div id="contenedor_pieza_dental_endorx">
+                                                                                    <div id="pieza_dentalrx" class="form-row">
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                                                                            <div class="form-group">
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-outline-primary btn-block"
+                                                                                                    onclick="hora_medica_pedir({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i
+                                                                                                        class="feather icon-calendar"></i> Agendar
+                                                                                                    hora</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-8 mx-auto">
+                                                                                            <div class="card-informacion"
+                                                                                                style="border: 1px solid #6c9bd5;">
+                                                                                                <div class="card-top text-center">
+                                                                                                    <h5 class="text-c-blue">PRÓXIMO CONTROL</h5>
+                                                                                                </div>
+                                                                                                <div class="card-body">
+                                                                                                    <div class="form-row">
+                                                                                                        <div
+                                                                                                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                                                                                            <h5 class="text-c-blue"><i
+                                                                                                                    class="fas fa-calendar"></i>
+                                                                                                                Fecha:</h5>
+                                                                                                            <h5 class="font-weight-bold">
+                                                                                                                <span id="proxima_fecha_atencion_periodoncia"></span>
+                                                                                                            </h5>
+                                                                                                        </div>
+                                                                                                        <div
+                                                                                                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                                                                                            <h5 class="text-c-blue"><i
+                                                                                                                    class="fas fa-clock"></i>
+                                                                                                                Horario:</h5>
+                                                                                                            <span id="proxima_hora_atencion_periodoncia"></span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--CONTROL ODONTOLOGICO-->
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="card-a">
+                                    <div class="card-header-a" id="control_odontologico">
+                                        <button
+                                            class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open "
+                                            type="button" data-toggle="collapse"
+                                            data-target="#control_odontologico-c" aria-expanded="false"
+                                            aria-controls="control_odontologico-c" onclick="proxima_atencion_paciente(); dame_evoluciones_od_gral();">
+                                            Evoluciones
+                                        </button>
+                                    </div>
+                                    <div id="control_odontologico-c" class="collapse"
+                                        aria-labelledby="control_odontologico" data-parent="#control_odontologico">
+                                        <div class="card-body-aten-a shadow-none">
+                                            @include('atencion_odontologica.generales.control_odontologico')
                                         </div>
                                     </div>
                                 </div>
@@ -1810,10 +2123,17 @@
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                            @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
-                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
+
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--GUARDAR O IMPRIMIR FICHA-->
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="row mb-3">
+                                    <div class="col-md-12 text-center">
+                                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                                     </div>
                                 </div>
                             </div>
@@ -1841,262 +2161,33 @@
                             </div>
                         </div>
                         <!-- ODONTOGRAMA-->
-                        <div class="tab-pane fade" id="odonto_adulto" role="tabpanel" aria-labelledby="odonto_adulto-tab">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="col-sm-12">
-                                                <h5 class="text-c-blue mt-1 mb-1 f-16">Odontograma</h5>
-                                                <hr>
-                                            </div>
-                                            <hr>
+                        <div class="tab-pane fade" id="odontograma_gral" role="tabpanel" aria-labelledby="odontograma_gral-tab">
+                            <div class="col-sm-12 col-md-12">
+                                <ul class="nav nav-tabs-secciones mb-3 mt-1" id="odonto_general" role="tablist">
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones active text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="true">Odontograma Adulto</a>
+                                    </li>
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="odonto_infan_tab" data-toggle="tab" href="#odonto_infan" role="tab" aria-controls="odonto_infan" aria-selected="false">Odontograma Infantil</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="tab-content" id="odontograma_gral">
+                                    <div class="tab-pane fade show active" id="odonto_adulto" role="tabpanel" aria-labelledby="odonto_adulto_tab">
+                                        <div class="row">
                                             <div class="col-md-12">
-                                                <div class="dt-responsive table-responsive table-borderless">
-                                                    <table id="odontograma_adulto" class="display table dt-responsive nowrap"
-                                                        style="width:100%">
-                                                        <!-- ADULTO SUPERIOR -->
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t18">
-                                                                        <img src="{{ asset('images/dental/dientes/d18.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-8);">
-                                                                    </div>
-                                                                    <label data-ndiente="18" class="nav-label-dent">1.8</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto px-0 py-0" id="t17">
-                                                                        <img src="{{ asset('images/dental/dientes/d17.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-7);">
-                                                                    </div>
-                                                                    <label data-ndiente="17" class="nav-label-dent">1.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t16">
-                                                                        <img src="{{ asset('images/dental/dientes/d16.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-5);">
-                                                                    </div>
-                                                                    <label data-ndiente="16" class="nav-label-dent">1.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t15">
-                                                                        <img src="{{ asset('images/dental/dientes/d15.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="15" class="nav-label-dent">1.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t14">
-                                                                        <img src="{{ asset('images/dental/dientes/d14.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="14" class="nav-label-dent">1.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t13">
-                                                                        <img src="{{ asset('images/dental/dientes/d13.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="13" class="nav-label-dent">1.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t12">
-                                                                        <img src="{{ asset('images/dental/dientes/d12.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="12" class="nav-label-dent">1.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t11">
-                                                                        <img src="{{ asset('images/dental/dientes/d11.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="11" class="nav-label-dent">1.1</label>
-                                                                </td>
-                                                                <!--nnnn-->
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t21">
-                                                                        <img src="{{ asset('images/dental/dientes/d21.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="21" class="nav-label-dent">2.1</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto px-1 py-1" id="t22">
-                                                                        <img src="{{ asset('images/dental/dientes/d22.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="22" class="nav-label-dent">2.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t23">
-                                                                        <img src="{{ asset('images/dental/dientes/d23.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="23" class="nav-label-dent">2.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t24">
-                                                                        <img src="{{ asset('images/dental/dientes/d24.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="24" class="nav-label-dent">2.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t25">
-                                                                        <img src="{{ asset('images/dental/dientes/d25.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="25" class="nav-label-dent">2.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t26">
-                                                                        <img src="{{ asset('images/dental/dientes/d26.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="26" class="nav-label-dent">2.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t27">
-                                                                        <img src="{{ asset('images/dental/dientes/d27.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="27" class="nav-label-dent">2.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t28">
-                                                                        <img src="{{ asset('images/dental/dientes/d28.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="28" class="nav-label-dent">2.8</label>
-                                                                </td>
-                                                            </tr>
-                                                            <!-- ADULTO INFERIOR -->
-                                                            <tr>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="#" id="t48">
-                                                                        <img src="{{ asset('images/dental/dientes/d48.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndente="48" class="nav-label-dent">4.8</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="#" id="t47">
-                                                                        <img src="{{ asset('images/dental/dientes/d47.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="47" class="nav-label-dent">4.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t46">
-                                                                        <img src="{{ asset('images/dental/dientes/d46.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="46" class="nav-label-dent">4.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t45">
-                                                                        <img src="{{ asset('images/dental/dientes/d45.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="45" class="nav-label-dent">4.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t44">
-                                                                        <img src="{{ asset('images/dental/dientes/d44.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="44" class="nav-label-dent">4.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t43">
-                                                                        <img src="{{ asset('images/dental/dientes/d43.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="43" class="nav-label-dent">4.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t42">
-                                                                        <img src="{{ asset('images/dental/dientes/d42.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="42" class="nav-label-dent">4.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t41">
-                                                                        <img src="{{ asset('images/dental/dientes/d41.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="41" class="nav-label-dent">4.1</label>
-                                                                </td>
-                                                                <!--nnnn-->
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t31">
-                                                                        <img src="{{ asset('images/dental/dientes/d31.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="31" class="nav-label-dent">3.1</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t32">
-                                                                        <img src="{{ asset('images/dental/dientes/d32.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="32" class="nav-label-dent">3.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t33">
-                                                                        <img src="{{ asset('images/dental/dientes/d33.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="33" class="nav-label-dent">3.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t34">
-                                                                        <img src="{{ asset('images/dental/dientes/d34.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="34" class="nav-label-dent">3.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t35">
-                                                                        <img src="{{ asset('images/dental/dientes/d35.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="35" class="nav-label-dent">3.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t36">
-                                                                        <img src="{{ asset('images/dental/dientes/d36.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="36" class="nav-label-dent">3.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t37">
-                                                                        <img src="{{ asset('images/dental/dientes/d37.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="37" class="nav-label-dent">3.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t38">
-                                                                        <img src="{{ asset('images/dental/dientes/d38.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="38" class="nav-label-dent">3.8</label>
-                                                                </td>
-                                                            </tr>
-                                                        <tbody>
-                                                    </table>
+                                                <div class="card">
+                                                    @include('atencion_odontologica.generales.odontograma_adulto')
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show" id="odonto_infan" role="tabpanel" aria-labelledby="odonto_infan_tab">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card">
+                                                    @include('atencion_odontologica.generales.odontograma_infantil')
                                                 </div>
                                             </div>
                                         </div>
@@ -2104,7 +2195,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CIERRE: ODONTOGRAMA--->
                         <!-- EVALUACION PERIODONCICA -->
                         <!-- PERIIMPLANTE -->
                         <div class="tab-pane fade" id="eval_periimpl" role="tabpanel" aria-labelledby="eval_periimpl_tab">
@@ -2115,162 +2205,9 @@
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <ul class="nav nav-tabs-aten nav-fill" id="gral_od_adulto" role="tablist">
-
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset active" id="eval_18_tab" data-toggle="tab" href="#eval_18" role="tab" aria-controls="eval_18" aria-selected="true">1.8</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_17_tab" data-toggle="tab" href="#eval_17" role="tab" aria-controls="eval_17" aria-selected="false">1.7</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_16_tab" data-toggle="tab" href="#eval_16" role="tab" aria-controls="eval_16" aria-selected="false">1.6</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_15_tab" data-toggle="tab" href="#eval_15" role="tab" aria-controls="eval_15" aria-selected="false">1.5</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_14_tab" data-toggle="tab" href="#eval_14" role="tab" aria-controls="eval_14" aria-selected="false">1.4</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_13_tab" data-toggle="tab" href="#eval_13" role="tab" aria-controls="eval_13" aria-selected="false">1.3</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_12_tab" data-toggle="tab" href="#eval_12" role="tab" aria-controls="eval_12" aria-selected="false">1.2</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_11_tab" data-toggle="tab" href="#eval_11" role="tab" aria-controls="eval_11" aria-selected="false">1.1</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_21_tab" data-toggle="tab" href="#eval_21" role="tab" aria-controls="eval_21" aria-selected="true">2.1</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_22_tab" data-toggle="tab" href="#eval_22" role="tab" aria-controls="eval_22" aria-selected="false">2.2</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_23_tab" data-toggle="tab" href="#eval_23" role="tab" aria-controls="eval_23" aria-selected="false">2.3</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_24_tab" data-toggle="tab" href="#eval_24" role="tab" aria-controls="eval_24" aria-selected="false">2.4</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_25_tab" data-toggle="tab" href="#eval_25" role="tab" aria-controls="eval_25" aria-selected="false">2.5</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_26_tab" data-toggle="tab" href="#eval_26" role="tab" aria-controls="eval_26" aria-selected="false">2.6</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_27_tab" data-toggle="tab" href="#eval_27" role="tab" aria-controls="eval_27" aria-selected="false">2.7</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_28_tab" data-toggle="tab" href="#eval_28" role="tab" aria-controls="eval_28" aria-selected="false">2.8</a>
-                                                                </li>
-
-
-
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_48_tab" data-toggle="tab" href="#eval_48" role="tab" aria-controls="eval_48" aria-selected="true">4.8</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_47_tab" data-toggle="tab" href="#eval_47" role="tab" aria-controls="eval_47" aria-selected="false">4.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_46_tab" data-toggle="tab" href="#eval_46" role="tab" aria-controls="eval_46" aria-selected="false">4.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_45_tab" data-toggle="tab" href="#eval_45" role="tab" aria-controls="eval_45" aria-selected="false">4.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_44_tab" data-toggle="tab" href="#eval_44" role="tab" aria-controls="eval_44" aria-selected="false">4.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_43_tab" data-toggle="tab" href="#eval_43" role="tab" aria-controls="eval_43" aria-selected="false">4.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_42_tab" data-toggle="tab" href="#eval_42" role="tab" aria-controls="eval_42" aria-selected="false">4.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_41_tab" data-toggle="tab" href="#eval_41" role="tab" aria-controls="eval_41" aria-selected="false">4.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_31_tab" data-toggle="tab" href="#eval_31" role="tab" aria-controls="eval_31" aria-selected="true">3.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_32_tab" data-toggle="tab" href="#eval_32" role="tab" aria-controls="eval_32" aria-selected="false">3.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_33_tab" data-toggle="tab" href="#eval_33" role="tab" aria-controls="eval_33" aria-selected="false">3.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_34_tab" data-toggle="tab" href="#eval_34" role="tab" aria-controls="eval_34" aria-selected="false">3.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_35_tab" data-toggle="tab" href="#eval_35" role="tab" aria-controls="eval_35" aria-selected="false">3.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_36_tab" data-toggle="tab" href="#eval_36" role="tab" aria-controls="eval_36" aria-selected="false">3.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_37_tab" data-toggle="tab" href="#eval_37" role="tab" aria-controls="eval_37" aria-selected="false">3.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_38_tab" data-toggle="tab" href="#eval_38" role="tab" aria-controls="eval_38" aria-selected="false">3.8</a>
-                                                            </li>
-                                                            </ul>
+                                                            @include('atencion_odontologica.generales.periodontograma_general')
                                                         </div>
                                                     </div>
-                                                   <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill" id="gral_od_adulto" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_48_tab" data-toggle="tab" href="#eval_48" role="tab" aria-controls="eval_48" aria-selected="true">4.8</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_47_tab" data-toggle="tab" href="#eval_47" role="tab" aria-controls="eval_47" aria-selected="false">4.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_46_tab" data-toggle="tab" href="#eval_46" role="tab" aria-controls="eval_46" aria-selected="false">4.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_45_tab" data-toggle="tab" href="#eval_45" role="tab" aria-controls="eval_45" aria-selected="false">4.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_44_tab" data-toggle="tab" href="#eval_44" role="tab" aria-controls="eval_44" aria-selected="false">4.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_43_tab" data-toggle="tab" href="#eval_43" role="tab" aria-controls="eval_43" aria-selected="false">4.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_42_tab" data-toggle="tab" href="#eval_42" role="tab" aria-controls="eval_42" aria-selected="false">4.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_41_tab" data-toggle="tab" href="#eval_41" role="tab" aria-controls="eval_41" aria-selected="false">4.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_31_tab" data-toggle="tab" href="#eval_31" role="tab" aria-controls="eval_31" aria-selected="true">3.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_32_tab" data-toggle="tab" href="#eval_32" role="tab" aria-controls="eval_32" aria-selected="false">3.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_33_tab" data-toggle="tab" href="#eval_33" role="tab" aria-controls="eval_33" aria-selected="false">3.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_34_tab" data-toggle="tab" href="#eval_34" role="tab" aria-controls="eval_34" aria-selected="false">3.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_35_tab" data-toggle="tab" href="#eval_35" role="tab" aria-controls="eval_35" aria-selected="false">3.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_36_tab" data-toggle="tab" href="#eval_36" role="tab" aria-controls="eval_36" aria-selected="false">3.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_37_tab" data-toggle="tab" href="#eval_37" role="tab" aria-controls="eval_37" aria-selected="false">3.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_38_tab" data-toggle="tab" href="#eval_38" role="tab" aria-controls="eval_38" aria-selected="false">3.8</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>-->
                                                  </div>
                                             </div>
                                         </div>
@@ -2619,1534 +2556,934 @@
                         </div>
                         <!--CIERRE: EVALUACION GENERAL --->
                         <!-- TRATAMIENTO-->
-                        <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
+                        {{--  <div class="tab-pane fade" id="tratamiento" role="tabpanel" aria-labelledby="tratamiento_tab">
                            @include('atencion_odontologica.generales.tratamiento_presup')
-                        </div>
+                        </div>  --}}
                         <!--CIERRE: TRATAMIENTO--->
+                         @include('atencion_odontologica.modals.adulto.cargar_presupuesto')
                         <!-- PRESUPUESTO -->
                         <div class="tab-pane fade" id="presupuesto" role="tabpanel" aria-labelledby="presupuesto_tab">
                             @include('atencion_odontologica.generales.presupuesto')
                         </div>
                         <!--CIERRE: PRESUPUESTO--->
-                      
+
                     </div>
                 </form>
             </div>
 
-            
-            <!--GUARDAR O IMPRIMIR FICHA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="row mb-3">
-                    <div class="col-md-12 text-center">
-                        <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                        <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                    </div>
-                </div>
-            </div>
+
+
             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
 
         </div>
     </div>
 </div>
+
 @include('atencion_odontologica.modals.odontograma.tratamiento_boca_completa')
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_inferior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_superior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_laboratorio')
 @include('atencion_odontologica.modals.odontograma.modal_odontograma')
+@include('atencion_odontologica.formularios.modal_atencion_especialidad.dental_period.recom_period_gral')
+@include('atencion_odontologica.formularios.modal_atencion_especialidad.dental_period.recom_peri_especificas')
+{{--  @section('page-script-ficha-atencion')  --}}
+<!--Modal reservar hora -->
+<div class="modal fade" id="reservar_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="reservar_hora" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h6 class="modal-title text-white f-18">Agendar nueva cita</h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#reservar_hora').modal('hide');">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
+                <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
+
+                <div id="contenedor_agendar_hora">
+                    <div class="row">
+                        <div class="col-md-6 mt-3">
+                            <div class="form-row">
+                                <div class="form-group col-md-12 mb-2 mt-0">
+                                    <label class="floating-label-activo-sm mb-0">Lugar de atención</label>
+                                    <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional();">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="mt-4">Usted atiende los dias <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
+                            {{--  <div class="form-row">
+                                <div class="form-group col-md-12 mb-2 mt-0">
+                                </div>
+                            </div>  --}}
+                        </div>
+
+                        <div class="col-md-12 mt-2">
+                            <div class="form-row">
+                                <div class="form-group col-md-12 mb-2 mt-0">
+                                    <label class="floating-label-activo-sm mb-0">Seleccione una fecha</label>
+                                    {{-- <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/> --}}
+                                    <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row pl-3" id="modal_reserva_hora_lista_horas">
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            {{--  <button type="button" class="btn btn-info"><i class="feather icon-check-circle"></i>
+                                Reservar hora</button>  --}}
+                            <h6>Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL AGREGAR HORA MEDICA -->
+<div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info pt-3 pb-2">
+                <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+
+                {{--  BUSCADOR DE RUT  --}}
+                <div class="row div_rut_buscar">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-md-8 mb-3">
+                        <form id="validacion_rut_form">
+                            <div class="form-group" id="validacion_rut_div">
+                                <input type="text" id="rut_paciente_reserva" name="rut_paciente_reserva" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-4 col-md-4 mb-3">
+                        <button class="btn btn-info" onclick="buscar_paciente();" type="button" id="button-addon2">
+                            Buscar
+                        </button>
+                    </div>
+                </div>
 
 
+
+                <form id="form_reseva_de_horas">
+                    <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="reserva_hora_id_profesional" name="reserva_hora_id_profesional" value="">
+                    <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
+                    <input type="hidden" id="reserva_hora_id_lugar_atencion" name="reserva_hora_id_lugar_atencion" value="">
+                    <input type="hidden" id="reserva_hora_fecha_consulta" name="reserva_hora_fecha_consulta" value="">
+                    <input type="hidden" id="reserva_hora_hora_consulta" name="reserva_hora_hora_consulta" value="">
+                    <input type="hidden" id="reserva_hora_origen" name="reserva_hora_origen" value="escritorio_paciente">
+                    <input type="hidden" id="reserva_hora_id_asistente" name="reserva_hora_id_asistente" value="2">
+
+                    {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
+                    <div id="reserva_datos_paciente" class="row mx-3">
+                        <table class="table table-borderless table-xs">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Rut</strong>
+                                    </th>
+                                    <td><span id="reserva_rut_paciente"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Nombre</strong>
+                                    </th>
+                                    <td><span id="reserva_hora_nombre"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Fecha Nacimiento</strong>
+                                    </th>
+                                    <td><span id="reserva_fecha_nacimiento"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Sexo</strong>
+                                    </th>
+                                    <td><span id="reserva_sexo"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Convenio</strong>
+                                    </th>
+                                    <td><span id="reserva_convenio"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Dirección</strong>
+                                    </th>
+                                    <td><span id="reserva_direccion"></span></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Correo Electrónico</strong>
+                                    </th>
+                                    <td id="reserva_hora_email"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Teléfono</strong>
+                                    </th>
+                                    <td><span id="reserva_hora_telefono"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Descripción Reserva</label>
+                                <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
+                            </div>
+                        </div>
+                       <hr>
+
+                               <div class="col-12 text-center">
+                                    <!--<button type="button" class="btn btn-danger close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>-->
+                                    <button type="button" onclick="agendar_hora();" class="btn btn-info"><i class="feather icon-check"></i> Agendar Hora</button>
+                                </div>
+
+                    </div>
+
+                    {{--  FORMULARIO DE PACIENTE NUEVO  --}}
+                    <div id="reserva_agregar_paciente_hora">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="alert alert-danger" role="alert">
+                                    Paciente no registrado, complete los datos para registrar al paciente
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Nombres</label>
+                                    <input type="text" required class="form-control form-control-sm" name="reserva_hora_nombres_paciente" id="reserva_hora_nombres_paciente">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Primer Apellido</label>
+                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">F. Nacimiento</label>
+                                    <input type="date" class="form-control form-control-sm" name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Sexo</label>
+                                    <select id="reserva_hora_sexo" name="reserva_hora_sexo" class="form-control form-control-sm">
+                                        <option value="0">Selecione una opci&oacute;n</option>
+                                        <option value="F">Femenino</option>
+                                        <option value="M">Masculino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Profesión u Oficio</label>
+                                    <select id="reserva_hora_profesion" name="reserva_hora_profesion" class="form-control form-control-sm">
+                                        <option value="0">Selecione una opci&oacute;n</option>
+                                        @if (isset($profesion_oficio))
+                                            @foreach ($profesion_oficio as $prof_ofic)
+                                                <option value="{{ $prof_ofic->id }}">{{ $prof_ofic->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Previsi&oacute;n</label>
+                                    <select id="reserva_hora_convenio" name="reserva_hora_convenio" class="form-control form-control-sm">
+                                        <option value="0">Selecione una opci&oacute;n</option>
+                                        @if (isset($prevision))
+                                            @foreach ($prevision as $p)
+                                                <option value="{{ $p->id }}">{{ $p->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-9 col-md-9">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Direcci&oacute;n</label>
+                                    <input type="address" class="form-control form-control-sm" name="reserva_hora_direccion" id="reserva_hora_direccion">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">N&uacute;mero</label>
+                                    <input type="address" class="form-control form-control-sm" name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Region</label>
+                                    <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control" required>
+                                        <option value="0">Seleccione Regi&oacute;n</option>
+                                        @if (isset($region))
+                                            @foreach ($region as $reg)
+                                                <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Ciudad</label>
+                                    <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
+                                        <option value="0">Seleccione Ciudad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                    <input type="text" class="form-control form-control-sm" onblur="validar_email_agenda()" name="reserva_hora_correo" id="reserva_hora_correo">
+                                    <span id="mensaje_email_reserva" style="display:none"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                    <input type="tel" class="form-control form-control-sm" name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Descrici&oacute;n Reserva</label>
+                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <h6 class="text-c-blue ml-2 mb-3">Enviar confirmaci&oacute;n</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="reserva_hora_confirmacion" name="reserva_hora_confirmacion">
+                                        <label class="custom-control-label" for="reserva_hora_confirmacion">Correo electr&oacute;nico</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="reserva_hora_sms" name="reserva_hora_sms">
+                                        <label class="custom-control-label" for="sms">SMS</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente"  onclick="$('#agenda_agregar_paciente').modal('hide');">Cancelar</button>
+                            <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
+                                Tomar Hora
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
-    {{--  document.addEventListener('DOMContentLoaded', () => {
 
-        const camada1 = document.querySelector('#camada1Odontograma')
-        const contexto1 = camada1.getContext('2d')
-    
-        const camada2 = document.querySelector('#camada2Odontograma')
-        const contexto2 = camada2.getContext('2d')
-    
-        const camada3 = document.querySelector('#camada3Odontograma')
-        const contexto3 = camada3.getContext('2d')
-    
-        const camada4 = document.querySelector('#camada4Odontograma')
-        const contexto4 = camada4.getContext('2d')
-    
-        const camadaPincel = document.querySelector('#camadaPincel')
-        const contextoPincel = camadaPincel.getContext('2d')
-    
-        const modal = new bootstrap.Modal(document.getElementById('modal'))
-    
-        let posicoesPadrao = {
-            posicaoYInicialDente: 2,
-            margemXEntreDentes: 1,
-            margemYEntreDentes: 2
-        }
-    
-        const tamanhoTelaReferencia = 1895
-        const alturaTelaReferencia = 872
-    
-        const itensProcedimento = [{
-            nome: 'Lesão branca ativa de cárie',
-            cor: '#008000'
-        }, {
-            nome: 'Lesão branca inativa de cárie',
-            cor: '#FFFF00'
-        }, {
-            nome: 'Lesão de cárie cavitada',
-            cor: '#FF0000'
-        }, {
-            nome: 'Cárie paralisada/ pigmentação do sulco',
-            cor: '#000000'
-        }, {
-            nome: 'Restaurações em bom estado',
-            cor: '#0000FF'
-        }, {
-            nome: 'Restauração a ser trocada',
-            cor: '#FFC0CB'
-        }, {
-            nome: 'Lesão cervical não- cariosa',
-            cor: '#8B0000'
-        }, {
-            nome: 'Faceta de desgaste',
-            cor: '#FA8072'
-        }, {
-            nome: 'Limpar seção',
-            cor: '#FFFFFF'
-        }, {
-            nome: 'Outro',
-            cor: '#008080'
-        }]
-    
-        let procedimentos = []
-        class Procedimento {
-            constructor(nome, cor, numeroDente, faceDente, informacoesAdicionais) {
-                this.nome = nome;
-                this.cor = cor;
-                this.numeroDente = numeroDente;
-                this.faceDente = faceDente;
-                this.informacoesAdicionais = informacoesAdicionais;
-            }
-            valido() {
-                const campos = ['nome', 'cor', 'numeroDente', 'faceDente']
-                if (this.nome === null || this.nome === undefined || this.nome === '') return false
-                if (this.cor === null || this.cor === undefined || this.cor === '') return false
-                if (this.numeroDente === null || this.numeroDente === undefined || this.numeroDente === '') return false
-                if (this.faceDente === null || this.faceDente === undefined || this.faceDente === '') return false
-                return true
-            }
-            criaObjeto() {
-                return {
-                    nome: this.nome,
-                    cor: this.cor,
-                    numeroDente: this.numeroDente,
-                    faceDente: this.faceDente,
-                    informacoesAdicionais: this.informacoesAdicionais
-                }
-            }
-            limpar() {
-                this.nome = null;
-                this.cor = null;
-                this.numeroDente = null;
-                this.faceDente = null;
-                this.informacoesAdicionais = null;
-            }
-            salvar() {
-                if (this.valido()) {
-                    const procedimento = procedimentos.find(prc => prc.nome === this.nome && prc.numeroDente === this.numeroDente && prc.faceDente === this.faceDente)
-                    if (procedimento === undefined) procedimentos.push(this.criaObjeto())
-                    else procedimentos[procedimentos.indexOf(procedimento)] = this.criaObjeto()
-                    storage.save(procedimentos)
-                }
-            }
-            remover() {
-                procedimentos.splice(procedimentos.indexOf(this.criaObjeto()), 1)
-                storage.save(procedimentos)
-            }
-        }
-    
-        let procedimento = new Procedimento()
-        procedimento.indice = null
-    
-        const storage = {
-            fetch() {
-                return JSON.parse(localStorage.getItem('procedimentos') || '[]')
-            },
-            save(procedimentos) {
-                localStorage.setItem('procedimentos', JSON.stringify(procedimentos))
-                procedimentos = this.fetch()
-                return procedimentos
-            }
-        };
-    
-        let tamanhoColuna = camada1.width / 16
-        let tamanhoDente = tamanhoColuna - (2 * posicoesPadrao.margemXEntreDentes)
-    
-        let dimensoesTrapezio = {
-            // Base maior será a altura e largura do dente
-            // Base menor será 3/4 da base maior
-            // Lateral será 1/4 da base maior
-    
-            baseMaior: tamanhoDente,
-            lateral: tamanhoDente / 4,
-            baseMenor: (tamanhoDente / 4) * 3
-        }
-    
-        let numeroDentes = {
-            superior: ['18', '17', '16', '15', '14', '13', '12', '11', '21', '22', '23', '24', '25', '26', '27', '28'],
-            inferior: ['48', '47', '46', '45', '44', '43', '42', '41', '31', '32', '33', '34', '35', '36', '37', '38']
-        }
-    
-        let numeroDenteXOrdemExibicaoDente = new Array()
-    
-        /**
-         *Define a posição inicial do dente no eixo x a partir de seu índice.
-         * 
-         * @example 
-         *   definePosicaoXInicialDente(5)
-         * 
-         * @param   {Number}    index      Parâmetro obrigatório
-         * @returns {Number}
-         */
-        const definePosicaoXInicialDente = (index) => {
-            if (index === 0) return (index * tamanhoDente) + (posicoesPadrao.margemXEntreDentes * index) + posicoesPadrao.margemXEntreDentes;
-            else return (index * tamanhoDente) + (2 * posicoesPadrao.margemXEntreDentes * index) + posicoesPadrao.margemXEntreDentes;
-        }
-    
-        /**
-         * Desenha os dentes com suas respectivas faces.
-         * 
-         * @example 
-         *   desenharDente(20, 20)
-         * 
-         * @param   {Number} posicaoX      Parâmetro obrigatório
-         * @param   {Number} posicaoY      Parâmetro obrigatório
-         */
-        const desenharDente = (posicaoX, posicaoY) => {
-            contexto1.fillStyle = 'black';
-            contexto1.strokeStyle = 'black';
-    
-            /* 1º trapézio */
-            contexto1.beginPath();
-            contexto1.moveTo(posicaoX, posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-            contexto1.closePath();
-            contexto1.stroke();
-    
-            /* 2º trapézio */
-            contexto1.beginPath();
-            contexto1.moveTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-            contexto1.closePath();
-            contexto1.stroke();
-    
-            /* 3º trapézio */
-            contexto1.beginPath();
-            contexto1.moveTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-            contexto1.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-            contexto1.closePath();
-            contexto1.stroke();
-    
-            /* 4º trapézio */
-            contexto1.beginPath();
-            contexto1.moveTo(posicaoX, posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-            contexto1.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-            contexto1.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-            contexto1.closePath();
-            contexto1.stroke();
-        }
-    
-        /**
-         * Faz o efeito 'hover' ao passar o mouse sobre alguma face.
-         * 
-         * @example 
-         *   marcarSecao(contexto, 2, 5)
-         * 
-         * @param   {Object} contexto                Parâmetro obrigatório
-         * @param   {Number} ordemExibicaoDente      Parâmetro obrigatório
-         * @param   {Number} face                    Parâmetro obrigatório
-         */
-        const marcarSecao = (contexto, ordemExibicaoDente, face) => {
-            contexto.lineWidth = 2
-            let cor_linha = 'orange';
-            let posicaoY = 0
-    
-            if (ordemExibicaoDente < 17) posicaoY = posicoesPadrao.posicaoYInicialDente;
-            else {
-                ordemExibicaoDente -= 16;
-                posicaoY = dimensoesTrapezio.baseMaior + posicoesPadrao.margemYEntreDentes + posicoesPadrao.posicaoYInicialDente;
-            }
-    
-            let posicaoX = definePosicaoXInicialDente(ordemExibicaoDente - 1)
-    
-            /* 1ª zona */
-            if (face === 1) {
-                if (contexto) {
-                    contexto.fillStyle = cor_linha;
-                    contexto.beginPath();
-                    contexto.moveTo(posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.closePath();
-                    contexto.strokeStyle = 'orange';
-                    contexto.stroke();
-                }
-            }
-            /* 2ª zona */
-            if (face === 2) {
-                if (contexto) {
-                    contexto.fillStyle = cor_linha;
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.closePath();
-                    //contexto.fill();
-                    contexto.strokeStyle = 'orange';
-                    contexto.stroke();
-                }
-            }
-            /* 3ª zona */
-            if (face === 3) {
-                if (contexto) {
-                    contexto.fillStyle = cor_linha;
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.closePath();
-                    contexto.strokeStyle = 'orange';
-                    contexto.stroke();
-                }
-            }
-            /* 4ª zona */
-            if (face === 4) {
-                if (contexto) {
-                    contexto.fillStyle = cor_linha;
-                    contexto.beginPath();
-                    contexto.moveTo(posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.closePath();
-                    contexto.strokeStyle = 'orange';
-                    contexto.stroke();
-                }
-            }
-            /* 5ª zona(medio) */
-            if (face === 5) {
-                if (contexto) {
-                    contexto.fillStyle = cor_linha;
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.closePath();
-                    contexto.strokeStyle = 'orange';
-                    contexto.stroke();
-                }
-            }
-        }
-    
-        camada4.onmousemove = (event) => {
-            let x = event.x
-            let y = event.y
-    
-            x -= camada1.offsetLeft
-            y -= camada1.offsetTop
-    
-            procedimento.limpar()
-            procedimento.indice = null
-    
-            procedimento = getInfoDentePosicaoatual(procedimento, x, y)
-            if (getOrdemExibicaoPorNumeroDente(procedimento.numeroDente) > 0) {
-                if (procedimento.faceDente) {
-                    color = 'orange';
-                    contexto3.clearRect(0, 0, camada3.width, camada3.height)
-                    marcarSecao(contexto3, getOrdemExibicaoPorNumeroDente(procedimento.numeroDente), procedimento.faceDente);
-                } else contexto3.clearRect(0, 0, camada3.width, camada3.height)
-            } else contexto3.clearRect(0, 0, camada3.width, camada3.height)
-        }
-    
-        camada4.touchstart = (event) => {
-            alert('touch')
-        }
-    
-        camada4.onclick = (event) => {
-            let x = event.x
-            let y = event.y
-    
-            x -= camada1.offsetLeft
-            y -= camada1.offsetTop
-    
-            procedimento.limpar()
-            procedimento.indice = null
-    
-            procedimento = getInfoDentePosicaoatual(procedimento, x, y)
-    
-            if (procedimento.faceDente) modal.show()
-            atualizaTabela()
-        }
-    
-        const atualizaTabela = () => {
-            const tbody = document.getElementById('bodyProcedimentos')
-            let trs = ''
-            procedimentos.filter(prc => prc.numeroDente === procedimento.numeroDente && prc.faceDente === procedimento.faceDente).forEach(item => {
-                const tr = `
-                    <tr>
-                        <td>
-                            ${item.nome}
-                        </td>
-                        <td>
-                            <input type="color" disabled class="form-control form-control-color" value="${item.cor}">
-                        </td>
-                        <td>
-                            ${item.informacoesAdicionais || 'NÃO INFORMADO'}
-                        </td>
-                        <td>
-                            <a onclick="apagar('${item.nome}', ${item.numeroDente}, ${item.faceDente})" class="btn btn-danger">
-                                <i class="far fa-trash-alt"></i>
-                            </a>
-                        </td>
-                    </tr>
-                `
-                trs += tr
-            })
-            tbody.innerHTML = trs
-        }
-    
-        window.apagar = (nome, numeroDente, faceDente) => {
-            const procd = procedimentos.find(prc => prc.nome === nome && prc.numeroDente === numeroDente && prc.faceDente === faceDente)
-            procedimentos.splice(procedimentos.indexOf(procd), 1)
-            storage.save(procedimentos)
-            atualizaTabela()
-            resizeCanvas()
-        }
-    
-        /**
-         * Exibe o 'esqueleto' do odontograma (os dentes e sua numeração).
-         */
-        const exibirEstrutura = () => {
-            // document.querySelector("#canva-group").style.display = 'block'
-    
-            for (let index = 0; index < 16; index++) {
-                const posicaoX = definePosicaoXInicialDente(index)
-                desenharDente(posicaoX, posicoesPadrao.posicaoYInicialDente)
-            }
-    
-            for (let index = 0; index < 16; index++) {
-                const posicaoX = definePosicaoXInicialDente(index)
-                desenharDente(posicaoX, posicoesPadrao.margemYEntreDentes + tamanhoDente + posicoesPadrao.posicaoYInicialDente)
-            }
-    
-            numeroDentes.superior.forEach((numero, index) => {
-                const posicaoX = definePosicaoXInicialQuadrado(index)
-                desenharQuadradoNumDente({
-                    position: {
-                        x: posicaoX,
-                        y: (posicoesPadrao.margemYEntreDentes / 5) + tamanhoDente + posicoesPadrao.posicaoYInicialDente
-                    },
-                    primeiroOuUltimoDente: index === 0 || index === 15,
-                    numeroDente: numero,
-                    altura: tamanhoDente / 1.8,
-                    largura: index === 0 || index === 15 ? tamanhoDente + posicoesPadrao.margemXEntreDentes : tamanhoDente + 2 * posicoesPadrao.margemXEntreDentes
-                })
-            })
-    
-            numeroDentes.inferior.forEach((numero, index) => {
-                const posicaoX = definePosicaoXInicialQuadrado(index)
-                desenharQuadradoNumDente({
-                    position: {
-                        x: posicaoX,
-                        y: (posicoesPadrao.margemYEntreDentes / 5) + (tamanhoDente / 1.8) + tamanhoDente + posicoesPadrao.posicaoYInicialDente
-                    },
-                    primeiroOuUltimoDente: index === 0 || index === 15,
-                    numeroDente: numero,
-                    altura: tamanhoDente / 1.8,
-                    largura: index === 0 || index === 15 ? tamanhoDente + posicoesPadrao.margemXEntreDentes : tamanhoDente + 2 * posicoesPadrao.margemXEntreDentes
-                })
-            })
-        }
-    
-        /**
-         * Define a posição inicial do quadrado no eixo x a partir de seu índice.
-         *
-         * @param {Number} index 
-         */
-        const definePosicaoXInicialQuadrado = (index) => {
-            if (index === 0) return (index * tamanhoDente) + posicoesPadrao.margemXEntreDentes;
-            else return (index * tamanhoDente) + (2 * index * posicoesPadrao.margemXEntreDentes);
-        }
-    
-        /**
-         * Desenha o quadrado que informa o número do dente.
-         * 
-         * @example 
-         *   desenharQuadradoNumDente(quadrado)
-         * 
-         * @param   {Object} quadrado   Parâmetro obrigatório
-         */
-        const desenharQuadradoNumDente = (quadrado) => {
-            let tamanhoFonte = (40 * (quadrado.primeiroOuUltimoDente ? quadrado.largura + posicoesPadrao.margemXEntreDentes : quadrado.largura)) / 118.4375
-            contexto1.font = `${tamanhoFonte}px arial`
-            contexto1.strokeRect(quadrado.position.x, quadrado.position.y, quadrado.largura, quadrado.altura)
-            contexto1.fillText(quadrado.numeroDente, quadrado.position.x + tamanhoDente / 2.8, quadrado.position.y + (tamanhoDente / 2.5));
-        }
-    
-        /**
-         * Pinta a face do dente de acordo com o procedimento adicionado.
-         * 
-         * @example 
-         *   pintarFace(contexto, procedimento, 'black', 'orange')
-         * 
-         * @param   {Object} contexto                Parâmetro obrigatório
-         * @param   {Object} procedimento   Parâmetro obrigatório
-         * @param   {String} cor_linha               Parâmetro obrigatório
-         * @param   {String} cor_interior            Parâmetro obrigatório
-         */
-        const pintarFace = (contexto, procedimento, cor_linha, cor_interior) => {
-            let numeroDente = getOrdemExibicaoPorNumeroDente(procedimento.numeroDente) - 1
-            contexto.fillStyle = cor_interior
-            contexto.strokeStyle = cor_linha
-    
-            let posicaoY = 0
-    
-            if (numeroDente < 16) posicaoY = posicoesPadrao.posicaoYInicialDente;
-            else {
-                numeroDente -= 16;
-                posicaoY = dimensoesTrapezio.baseMaior + posicoesPadrao.margemYEntreDentes + posicoesPadrao.posicaoYInicialDente;
-            }
-    
-            const prcdms = getProcedimentosPorDente(procedimento.numeroDente, procedimento.faceDente)
-            const numeroDivisoes = prcdms.length - 1
-            let dividir = false
-            if (numeroDivisoes > 0) dividir = true
-    
-            let posicaoX = definePosicaoXInicialDente(numeroDente)
-    
-            /* 1ª zona */
-            if (procedimento.faceDente === 1 && !dividir) {
-                if (contexto) {
-                    contexto.beginPath();
-                    contexto.moveTo(posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.closePath();
-                    contexto.fill();
-                    contexto.stroke();
-                }
-            } else if (procedimento.faceDente === 1 && dividir) {
-                if (contexto) {
-                    const larguraDivisao = dimensoesTrapezio.baseMaior / (numeroDivisoes + 1)
-                    prcdms.forEach((procedimentoItem, divisao) => {
-                        contexto.fillStyle = procedimentoItem.cor
-                        const ultimo = divisao === numeroDivisoes
-                        const primeiro = divisao === 0
-                        const dentroAreaTriangular = larguraDivisao * (divisao + 1) < dimensoesTrapezio.lateral
-                        contexto.beginPath();
-                        contexto.moveTo((larguraDivisao * divisao) + posicaoX, posicaoY);
-                        contexto.lineTo(larguraDivisao * (divisao + 1) + posicaoX, posicaoY);
-                        if (ultimo) {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                            contexto.lineTo((larguraDivisao * divisao) + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        } else if (!primeiro) {
-                            contexto.lineTo(larguraDivisao * (divisao + 1) + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                            contexto.lineTo((larguraDivisao * divisao) + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        } else {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                            contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        }
-                        contexto.closePath();
-                        contexto.fill();
-                        contexto.stroke();
-                    })
-                }
-            }
-    
-    
-            /* 2ª zona */
-            if (procedimento.faceDente === 2 && !dividir) {
-                if (contexto) {
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.closePath();
-                    contexto.fill();
-                    contexto.stroke();
-                }
-            } else if (procedimento.faceDente === 2 && dividir) {
-                if (contexto) {
-                    const larguraDivisao = dimensoesTrapezio.baseMaior / (numeroDivisoes + 1)
-                    prcdms.forEach((procedimentoItem, divisao) => {
-                        contexto.fillStyle = procedimentoItem.cor
-                        const ultimo = divisao === numeroDivisoes
-                        const primeiro = divisao === 0
-                        contexto.beginPath();
-                        contexto.moveTo(dimensoesTrapezio.baseMaior + posicaoX, (larguraDivisao * divisao) + posicaoY);
-                        contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                        if (ultimo) {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, (larguraDivisao * divisao) + posicaoY);
-                        } else if (!primeiro) {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, (larguraDivisao * divisao) + posicaoY);
-                        } else {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        }
-                        contexto.closePath();
-                        contexto.fill();
-                        contexto.stroke();
-                    })
-                }
-            }
-    
-            /* 3ª zona */
-            if (procedimento.faceDente === 3 && !dividir) {
-                if (contexto) {
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMaior + posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.closePath();
-                    contexto.fill();
-                    contexto.stroke();
-                }
-            } else if (procedimento.faceDente === 3 && dividir) {
-                if (contexto) {
-                    const larguraDivisao = dimensoesTrapezio.baseMaior / (numeroDivisoes + 1)
-                    prcdms.forEach((procedimentoItem, divisao) => {
-                        contexto.fillStyle = procedimentoItem.cor
-                        const ultimo = divisao === numeroDivisoes
-                        const primeiro = divisao === 0
-                        const dentroAreaTriangular = larguraDivisao * (divisao + 1) < dimensoesTrapezio.lateral
-                        contexto.beginPath();
-                        contexto.moveTo((larguraDivisao * divisao) + posicaoX, posicaoY + tamanhoDente);
-                        contexto.lineTo(larguraDivisao * (divisao + 1) + posicaoX, posicaoY + tamanhoDente);
-                        if (ultimo) {
-                            contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo((larguraDivisao * divisao) + posicaoX, dimensoesTrapezio.lateral + posicaoY + dimensoesTrapezio.baseMenor);
-                        } else if (!primeiro) {
-                            contexto.lineTo(larguraDivisao * (divisao + 1) + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo((larguraDivisao * divisao) + posicaoX, posicaoY + dimensoesTrapezio.baseMenor);
-                        } else {
-                            contexto.lineTo((larguraDivisao * (divisao + 1)) + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(posicaoX, dimensoesTrapezio.lateral + posicaoY + dimensoesTrapezio.baseMenor);
-                        }
-                        contexto.closePath();
-                        contexto.fill();
-                        contexto.stroke();
-                    })
-                }
-            }
-    
-            /* 4ª zona */
-            if (procedimento.faceDente === 4 && !dividir) {
-                if (contexto) {
-                    contexto.beginPath();
-                    contexto.moveTo(posicaoX, posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(posicaoX, dimensoesTrapezio.baseMaior + posicaoY);
-                    contexto.closePath();
-                    contexto.fill();
-                    contexto.stroke();
-                }
-            } else if (procedimento.faceDente === 4 && dividir) {
-                if (contexto) {
-                    const larguraDivisao = dimensoesTrapezio.baseMaior / (numeroDivisoes + 1)
-                    prcdms.forEach((procedimentoItem, divisao) => {
-                        contexto.fillStyle = procedimentoItem.cor
-                        const ultimo = divisao === numeroDivisoes
-                        const primeiro = divisao === 0
-                        contexto.beginPath();
-                        contexto.moveTo(posicaoX, (larguraDivisao * divisao) + posicaoY);
-                        contexto.lineTo(posicaoX, larguraDivisao * (divisao + 1) + posicaoY);
-                        if (ultimo) {
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, (larguraDivisao * divisao) + posicaoY);
-                        } else if (!primeiro) {
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, dimensoesTrapezio.baseMenor + posicaoY);
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, (larguraDivisao * divisao) + posicaoY);
-                        } else {
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, larguraDivisao * (divisao + 1) + posicaoY);
-                            contexto.lineTo(posicaoX + dimensoesTrapezio.lateral, dimensoesTrapezio.lateral + posicaoY);
-                        }
-                        contexto.closePath();
-                        contexto.fill();
-                        contexto.stroke();
-                    })
-                }
-            }
-    
-            /* 5ª zona(medio) */
-            if (procedimento.faceDente === 5 && !dividir) {
-                if (contexto) {
-                    contexto.beginPath();
-                    contexto.moveTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.baseMenor + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.lineTo(dimensoesTrapezio.lateral + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                    contexto.closePath();
-                    contexto.fill();
-                    contexto.stroke();
-                }
-            } else if (procedimento.faceDente === 5 && dividir) {
-                if (contexto) {
-                    const larguraDivisao = (dimensoesTrapezio.baseMenor - dimensoesTrapezio.lateral) / (numeroDivisoes + 1)
-                    prcdms.forEach((procedimentoItem, divisao) => {
-                        contexto.fillStyle = procedimentoItem.cor
-                        contexto.beginPath();
-                        contexto.moveTo(dimensoesTrapezio.lateral + (divisao * larguraDivisao) + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        contexto.lineTo(dimensoesTrapezio.lateral + ((divisao + 1) * larguraDivisao) + posicaoX, dimensoesTrapezio.lateral + posicaoY);
-                        contexto.lineTo(dimensoesTrapezio.lateral + ((divisao + 1) * larguraDivisao) + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                        contexto.lineTo(dimensoesTrapezio.lateral + (divisao * larguraDivisao) + posicaoX, dimensoesTrapezio.baseMenor + posicaoY);
-                        contexto.closePath();
-                        contexto.fill();
-                        contexto.stroke();
-                    })
-                }
-            }
-        }
-    
-        /**
-         * Redimensiona os canvas do odontograma e seu conteúdo proporcionalmente ao tamanho da janela.
-         */
-        const resizeCanvas = () => {
-            if (window.innerWidth >= 800) {
-                document.querySelector("#canva-group").style.display = 'display'
-            } else {
-                alert("TELA MUITO PEQUENA! Acesse o odontrograma através de um dispositivo com uma tela maior!")
-                document.querySelector("#canva-group").style.display = 'none'
-            }
-    
-            camada1.width = camada2.width = camada3.width = camada4.width = window.innerWidth - 25
-            const altura = (camada1.width * alturaTelaReferencia) / tamanhoTelaReferencia
-            camada1.height = camada2.height = camada3.height = camada4.height = altura
-    
-            valoresBase = {
-                x: (camada1.width * 24) / tamanhoTelaReferencia,
-                y: (camada1.width * 20) / tamanhoTelaReferencia,
-                largura: (camada1.width * 70) / tamanhoTelaReferencia,
-                altura: (camada1.width * 150) / tamanhoTelaReferencia
-            }
-    
-            base_image = new Image();
-            base_image.src = 'images/dentes/18.png';
-            base_image.onload = function() {
-                contexto1.drawImage(base_image, valoresBase.x, valoresBase.y, valoresBase.largura, valoresBase.altura);
-            }
-    
-            posicoesPadrao.margemXEntreDentes = (camada1.width * 8) / tamanhoTelaReferencia
-            posicoesPadrao.margemYEntreDentes = (camada1.width * 200) / tamanhoTelaReferencia
-            posicoesPadrao.posicaoYInicialDente = (camada1.width * 180) / tamanhoTelaReferencia
-    
-            tamanhoColuna = camada1.width / 16
-            tamanhoDente = tamanhoColuna - (2 * posicoesPadrao.margemXEntreDentes)
-    
-            dimensoesTrapezio = {
-                baseMaior: tamanhoDente,
-                lateral: tamanhoDente / 4,
-                baseMenor: (tamanhoDente / 4) * 3
-            }
-    
-            exibeMarcacoes()
-            exibirEstrutura()
-        }
-    
-        /**
-         * Retorna os dados do dente em relação a posição do mouse na tela
-         * 
-         * @example 
-         *   getInfoDentePosicaoatual(infoDentePosicaoAtual, 300, 255)
-         * 
-         * @param   {Object} infoDentePosicaoAtual   Parâmetro obrigatório
-         * @param   {Number} x                       Parâmetro obrigatório
-         * @param   {Number} y                       Parâmetro obrigatório
-         * @returns {Object}
-         */
-        const getInfoDentePosicaoatual = (procedimento, x, y) => {
-            if (y >= posicoesPadrao.posicaoYInicialDente && y <= posicoesPadrao.posicaoYInicialDente + tamanhoDente) {
-                if (x >= posicoesPadrao.margemXEntreDentes && x <= posicoesPadrao.margemXEntreDentes + tamanhoDente) procedimento.numeroDente = getNumeroDentePorOrdemExibicao(1);
-                else if (x >= (tamanhoDente + posicoesPadrao.margemXEntreDentes * 3) && x <= (30 * posicoesPadrao.margemXEntreDentes + 16 * tamanhoDente)) {
-                    procedimento.indice = parseInt(x / (tamanhoDente + 2 * posicoesPadrao.margemXEntreDentes), 10);
-                    ini = (procedimento.indice * tamanhoDente) + (2 * posicoesPadrao.margemXEntreDentes * procedimento.indice) + posicoesPadrao.margemXEntreDentes;
-                    fin = ini + tamanhoDente;
-                    if (x >= ini && x <= fin) {
-                        procedimento.numeroDente = getNumeroDentePorOrdemExibicao(procedimento.indice + 1)
-                    }
-                }
-            } else if (y >= (tamanhoDente + posicoesPadrao.margemYEntreDentes + posicoesPadrao.posicaoYInicialDente) && y <= (2 * tamanhoDente + posicoesPadrao.margemYEntreDentes + posicoesPadrao.posicaoYInicialDente)) {
-                if (x >= posicoesPadrao.margemXEntreDentes && x <= posicoesPadrao.margemXEntreDentes + tamanhoDente) {
-                    procedimento.numeroDente = getNumeroDentePorOrdemExibicao(17);
-                } else if (x >= (tamanhoDente + posicoesPadrao.margemXEntreDentes * 3) && x <= (30 * posicoesPadrao.margemXEntreDentes + 16 * tamanhoDente)) {
-                    procedimento.indice = parseInt(x / (tamanhoDente + 2 * posicoesPadrao.margemXEntreDentes), 10);
-                    ini = (procedimento.indice * tamanhoDente) + (2 * posicoesPadrao.margemXEntreDentes * procedimento.indice) + posicoesPadrao.margemXEntreDentes;
-                    fin = ini + tamanhoDente;
-                    if (x >= ini && x <= fin) procedimento.numeroDente = getNumeroDentePorOrdemExibicao(procedimento.indice + 17)
-                }
-            }
-    
-            let px = x - ((procedimento.indice * tamanhoDente) + (2 * posicoesPadrao.margemXEntreDentes * procedimento.indice) + posicoesPadrao.margemXEntreDentes)
-            let py = y - posicoesPadrao.posicaoYInicialDente
-    
-            if (getOrdemExibicaoPorNumeroDente(procedimento.numeroDente) > 16) py -= (posicoesPadrao.margemYEntreDentes + tamanhoDente)
-    
-            if (py > 0 && py < (tamanhoDente / 4) && px > py && py < tamanhoDente - px) {
-                procedimento.faceDente = 1;
-            } else if (px > (tamanhoDente / 4) * 3 && px < tamanhoDente && py < px && tamanhoDente - px < py) {
-                procedimento.faceDente = 2;
-            } else if (py > (tamanhoDente / 4) * 3 && py < tamanhoDente && px < py && px > tamanhoDente - py) {
-                procedimento.faceDente = 3;
-            } else if (px > 0 && px < (tamanhoDente / 4) && py > px && px < tamanhoDente - py) {
-                procedimento.faceDente = 4;
-            } else if (px > (tamanhoDente / 4) && px < (tamanhoDente / 4) * 3 && py > (tamanhoDente / 4) && py < (tamanhoDente / 4) * 3) {
-                procedimento.faceDente = 5;
-            }
-    
-            return procedimento
-        }
-    
-        /**
-         * Exibe todos os procedimentos adicionados nos respectivos dentes e faces
-         */
-        const exibeMarcacoes = () => {
-            procedimentos.forEach(element => {
-                pintarFace(contexto2, element, 'black', element.cor)
-            });
-        }
-    
-        /**
-         * Redimensiona o canvas do pincel e seu conteúdo proporcionalmente ao tamanho da janela.
-         */
-        const resizeCanvasPincel = () => {
-            camadaPincel.width = window.innerWidth - 25
-            const altura = (camadaPincel.width * alturaTelaReferencia) / tamanhoTelaReferencia
-            camadaPincel.height = altura
-    
-            const dataImage = localStorage.getItem('desenho')
-    
-            desenho = new Image();
-            desenho.src = dataImage;
-            desenho.onload = function() {
-                contextoPincel.clearRect(0, 0, camadaPincel.width, camadaPincel.height)
-                contextoPincel.drawImage(desenho, 0, 0, camadaPincel.width, camadaPincel.height);
-            }
-        }
-    
-        /**
-         * Dá o start no odontograma, Desenhando a estrutura, carregando os dados, etc.
-         */
-        const iniciaOdontograma = () => {
-            const options = itensProcedimento.map(problema => {
-                return `\n<option value='${problema.nome}'>${problema.nome}</option>`
-            })
-            document.querySelector("#nomeProcedimento").innerHTML += options
-    
-            document.querySelector("#nomeProcedimento").addEventListener('change', (event) => {
-                let procedimento = document.querySelector("#nomeProcedimento")
-                if (procedimento.value !== '') {
-                    procedimento = itensProcedimento.find(problemaAtual => problemaAtual.nome === procedimento.value)
-                    document.querySelector("#cor").value = procedimento.cor
-                    if (procedimento.nome === 'Outro') {
-                        document.querySelector("#cor").disabled = false
-                        document.getElementById("colOutroProcedimento").style.display = 'block'
-                    } else {
-                        document.querySelector("#cor").disabled = true
-                        document.getElementById("colOutroProcedimento").style.display = 'none'
-                    }
-                } else {
-                    document.querySelector("#cor").disabled = true
-                    document.getElementById("colOutroProcedimento").style.display = 'none'
-                }
-            })
-    
-            document.querySelector("#nomeProcedimento").dispatchEvent(new Event('change'))
-    
-            document.querySelector("#botaoAdicionar").onclick = (event) => {
-                procedimento.nome = document.querySelector("#nomeProcedimento").value
-                procedimento.cor = document.querySelector("#cor").value
-                procedimento.informacoesAdicionais = document.querySelector("#informacoesAdicionais").value
-    
-                procedimento.salvar()
-    
-                pintarFace(contexto2, procedimento, 'black', procedimento.cor)
-                atualizaTabela()
-            }
-    
-            procedimentos = storage.fetch()
-    
-            numeroDentes.superior.forEach((numero, index) => numeroDenteXOrdemExibicaoDente[numero] = index)
-            numeroDentes.inferior.forEach((numero, index) => numeroDenteXOrdemExibicaoDente[numero] = index + 16)
-    
-            resizeCanvas()
-            resizeCanvasPincel()
-        }
-    
-        /**
-         * Retorna a ordem de exibição do dente a partir de seu número.
-         * 
-         * @example 
-         *   getOrdemExibicaoPorNumeroDente(17); // 2
-         * 
-         * @param   {Number} numero   Parâmetro obrigatório
-         * @returns {Number}
-         */
-        const getOrdemExibicaoPorNumeroDente = (numero) => {
-            return numeroDenteXOrdemExibicaoDente[numero] + 1
-        }
-    
-        /**
-         * Retorna o número do dente a partir de sua ordem de exibição.
-         * 
-         * @example 
-         *   getNumeroDentePorOrdemExibicao(2); // 17
-         * 
-         * @param   {Number} ordem   Parâmetro obrigatório
-         * @returns {Number}
-         */
-        const getNumeroDentePorOrdemExibicao = (ordem) => {
-            return numeroDenteXOrdemExibicaoDente.indexOf(ordem - 1)
-        }
-    
-        /**
-         * Retorna Todos os procedimentos adicionados para o dente informado.
-         * 
-         * @example 
-         *   getProcedimentosPorDente(17); // [{...}]
-         * 
-         * @param   {Number} numero   Parâmetro obrigatório
-         * @returns {Array}
-         */
-        const getProcedimentosPorDente = (numero, face) => {
-            return procedimentos.filter(procedimento => procedimento.numeroDente === numero && procedimento.faceDente === face)
-        }
-    
-        window.addEventListener("resize", () => {
-            resizeCanvas()
-            resizeCanvasPincel()
-        })
-    
-        iniciaOdontograma()
-    })
-    document.addEventListener('DOMContentLoaded', () => {
-        const pincel = {
-            ativo: false,
-            movendo: false,
-            origem: null,
-            destino: {
-                x: 0,
-                y: 0
-            },
-            cor: '#000000',
-            espessura: '2'
-        }
-    
-        const borracha = {
-            ativo: false,
-            movendo: false,
-            coordenadas: {
-                x: 0,
-                y: 0
-            },
-            espessura: '2'
-        }
-    
-        const camadaPincel = document.querySelector('#camadaPincel')
-        const contexto = camadaPincel.getContext('2d')
-        const saveBtn = document.getElementById("saveBtn");
-    
-        const desenhaLinha = (linha) => {
-            contexto.lineWidth = pincel.espessura
-            contexto.strokeStyle = pincel.cor
-            contexto.beginPath()
-            contexto.moveTo(linha.origem.x, linha.origem.y)
-            contexto.lineTo(linha.destino.x, linha.destino.y)
-            contexto.stroke()
-        }
-    
-        const apagar = (coordenadas) => {
-            contexto.lineWidth = borracha.espessura
-            contexto.clearRect(coordenadas.x - 7, coordenadas.y - 7, 15, 15);
-        }
-    
-    
-        document.querySelector("#mouse").addEventListener('change', function() {
-            usaPincel()
-        })
-    
-        document.querySelector("#pincel").addEventListener('change', function() {
-            usaPincel()
-        })
-    
-        document.querySelector("#borracha").addEventListener('change', function() {
-            usaBorracha()
-        })
-    
-        document.querySelector("#limparDesenho").addEventListener('click', function() {
-            limparDesenhos()
-        })
-    
-        const usaBorracha = () => {
-            let ativo = false
-            const usarBorracha = document.getElementById("borracha").checked
-            if (usarBorracha) {
-                document.querySelector("#camadaPincel").style.zIndex = "5"
-                document.querySelector("#configBtn").disabled = false
-                document.querySelector("#saveBtn").disabled = false
-                ativo = true
-            } else if (!document.getElementById("pincel").checked) {
-                ativo = false
-                document.querySelector("#camadaPincel").style.zIndex = "3"
-                document.querySelector("#configBtn").disabled = true
-            }
-            return ativo
-        }
-    
-        const usaPincel = () => {
-            let ativo = false
-            const usarPincel = document.getElementById("pincel").checked
-            if (usarPincel) {
-                document.querySelector("#camadaPincel").style.zIndex = "5"
-                document.querySelector("#configBtn").disabled = false
-                document.querySelector("#saveBtn").disabled = false
-                ativo = true
-            } else if (!document.getElementById("borracha").checked) {
-                ativo = false
-                document.querySelector("#configBtn").disabled = true
-                document.querySelector("#camadaPincel").style.zIndex = "3"
-            }
-            return ativo
-        }
-    
-        camadaPincel.onmousedown = () => {
-            if (usaPincel()) {
-                pincel.ativo = true
-            } else if (usaBorracha()) {
-                borracha.ativo = true
-            }
-        }
-    
-        camadaPincel.onmouseup = () => {
-            pincel.ativo = false
-            borracha.ativo = false
-        }
-    
-        camadaPincel.onmousemove = (event) => {
-            pincel.destino.x = event.clientX - camadaPincel.offsetLeft
-            pincel.destino.y = event.clientY - camadaPincel.offsetTop
-            pincel.movendo = true
-    
-            borracha.coordenadas.x = event.clientX - camadaPincel.offsetLeft
-            borracha.coordenadas.y = event.clientY - camadaPincel.offsetTop
-            borracha.movendo = true
-        }
-    
-        saveBtn.onclick = (event) => {
-            localStorage.setItem('desenho', camadaPincel.toDataURL())
-        }
-    
-        const limparDesenhos = () => {
-            contexto.clearRect(0, 0, camadaPincel.width, camadaPincel.height);
-        }
-    
-        const ciclo = () => {
-            if (pincel.ativo && pincel.movendo && pincel.origem) {
-                desenhaLinha({
-                    destino: pincel.destino,
-                    origem: pincel.origem
-                })
-                pincel.movendo = false
-            }
-            pincel.origem = {
-                ...pincel.destino
-            }
-            if (borracha.ativo && borracha.movendo && borracha.coordenadas) {
-                apagar(borracha.coordenadas)
-                borracha.movendo = false
-            }
-            setTimeout(ciclo, 0.1)
-        }
-        ciclo()
-    
-        document.querySelector("#tamanhoPincel").addEventListener('change', function() {
-            if (usaBorracha()) borracha.espessura = document.querySelector("#tamanhoPincel").value
-            else pincel.espessura = document.querySelector("#tamanhoPincel").value
-        })
-    
-        document.querySelector("#corPincel").addEventListener('change', function() {
-            pincel.cor = document.querySelector("#corPincel").value
-        })
-    
-        document.querySelector("#tamanhoPincel").dispatchEvent(new Event('change'))
-        document.querySelector("#corPincel").dispatchEvent(new Event('change'))
-    })  --}}
-$(document).ready(function() {
-    $('#tabla_odontologico_tratamiento').DataTable({
-       responsive: true,
-   });
-   mostrar_nuevas_imagenes_dent_periodoncica();
- });
+    function indic_period_gen() {
+        $('#m_recom_gen_period').modal('show');
+    }
+    function indic_period_especiales() {
+        $('#m_recom_esp_period').modal('show');
+    }
 
- $(document).ready(function() {
-    $('#tabla_odontologicos_pieza').DataTable({
-       responsive: true,
-   });
- });
 
- $(document).ready(function () {
-     $('#tabla_aranceles').DataTable({
-         responsive: true,
-     });
- });
-</script>
-@section('page-script-ficha-atencion')
-    <script>
-        $(document).ready(function() {
 
-            /* formatear rut */
-            $("#solicitado_por_rut_rfl").rut({
-                formatOn: 'keyup',
-                minimumLength: 2,
-                validateOn: 'change',
-                useThousandsSeparator : false
+    $(document).ready(function(){
+        $('#tipo_examen_d').change(function(e) {
+                e.preventDefault();
+                tipo_examen = $('#tipo_examen_d').val();
+
+                $("#sub_tipo_examen_d").empty();
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.sub_tipo_examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            tipo_examen: tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#sub_tipo_examen_d').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+
+                        /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                        if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste_d').removeAttr('disabled');
+                        else  $('#imagenologia_con_contraste_d').attr('disabled','disabled');
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
             });
 
-            $('#descripcion_hipotesis').keyup(function(){
-                if($.trim(this.value) != ''){
-                    $('.btn_agregar_medicamento').removeAttr("disabled");
-                    $('.btn_medicamento_pdf').removeAttr("disabled");
-                    $('.btn_agregar_examen').removeAttr("disabled");
-                    $('.btn_examenes_pdf').removeAttr("disabled");
+            {{--  buscar examenes por el sub tipo de examen  --}}
+            $('#sub_tipo_examen_d').change(function(e) {
+
+                e.preventDefault();
+                sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route("listar.examen") }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            sub_tipo_examen: sub_tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#examen_d').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  mostrar ocultar mensaje de examenes de radiologia con contraste --}}
+            $('#imagenologia_con_contraste_d').change(function(){
+                if($('#imagenologia_con_contraste_d').is(':checked') )
+                {
+                    $('#mensaje_imagenologia_con_contraste_d').show();
                 }
                 else
                 {
-                    $('.btn_agregar_medicamento').attr('disabled','disabled');
-                    $('.btn_medicamento_pdf').attr('disabled','disabled');
-                    $('.btn_agregar_examen').attr('disabled','disabled');
-                    $('.btn_examenes_pdf').attr('disabled','disabled');
+                    $('#mensaje_imagenologia_con_contraste_d').hide();
                 }
+
             });
+        $('#paciente_piezas_dentales_ex').select2();
+        $('#pzas_grupo_peri').select2();
+        $('#paciente_piezas_dentales_ex_').select2();
+        $('#tpo_proc_imp').select2();
+        $('#prot_pieza_imp').select2();
+        $('#prot_pieza_imp_man').select2();
+        $('#prot_implante').select2();
+        $('#prot_implante_man').select2();
+        $('#prot_pieza_period').select2();
+        // generar numero random entre el 10 y el 20
+        var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
+        $('#random_preimpl').val(random);
+        $('#random_postimpl').val(random);
 
-            $("#descripcion_cie").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getCie10') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    // Set selection
-                    $('#descripcion_cie').val(ui.item.label); // display the selected text
-                    $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
-                    return false;
-                }
-            });
+        // Inicializar select2 en todos los select cuyo id comience con "pzas_grupo_peri"
+        $('[id^="pzas_grupo_peri"]').select2();
 
-            $("#lic_descripcion_cie").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getCie10') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    // Set selection
-                    $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
-                    $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
-                    return false;
-                }
-            });
+        // mostrar_nueva_pieza_dental_tto_impl(1000);
+        // mostrar_nueva_pieza_post_impl(1000);
+        // mostrar_nuevo_grupo_post_impl(1000);
+        // mostrar_nuevo_pieza_pfu(1000);
+        // mostrar_nuevo_pieza_pfp(1000);
 
-            /** cronico */
-            /** autocomplete de medicamentos generales */
-            $("#nombre_medicamentocron").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron').val(ui.item.label);
-                    $('#id_medicamento_cronico').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
-                    return false;
-                }
-            });
-
-            /** autocomplete de medicamentos patologia */
-            $("#nombre_medicamentocron_patologia").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getArticulo') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            console.log(data.length);
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
-                    $('#id_medicamentocron_patologia').val(ui.item.value);
-                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
-                    return false;
-                }
-            });
-
-            /** accion check confidencial */
-            $('#confidencial').change(function() {
-                if ($('#confidencial').is(':checked')) {
-                    $('#confidencial_descripcion').show();
-                } else {
-                    $('#confidencial_descripcion').hide();
-                }
-            });
-
-            /** accion check ges */
-            $('#modal_ges').change(function() {
-                if ($('#modal_ges').is(':checked')) {
-                    $('#form_ges').modal('show');
-                } else {
-                    $('#form_ges').modal('hide');
-                }
-            });
-
-            /** busqueda de diagnostico GES */
-            $("#nombre_ges").autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('ges.ver') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    // Set selection
-                    $('#nombre_ges').val(ui.item.label); // display the selected text
-                    $('#id_ges').val(ui.item.value); // save selected id to input
-                    return false;
-                }
-            });
+        $('#descripcion_hipotesis').trigger('keyup');
+    });
 
 
-        })
+    document.addEventListener("DOMContentLoaded", function () {
+        const cantidadInput = document.getElementById("cantidad");
+        const precioInput = document.getElementById("precio");
+        const totalInput = document.getElementById("total");
 
-        /** MANEJO DE IMAGENES */
-        var myDropzone ;
-        Dropzone.options.misImagenes = {
-            init:function()
-            {
-                myDropzone = this;
-            },
-            url: "{{ route('profesional.imagen.carga') }}",
-            method: 'post',
-            createImageThumbnails: true,
-            addRemoveLinks: true,
-            headers:{
-                'X-CSRF-TOKEN' : CSRF_TOKEN,
-                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-            },
-
-            acceptedFiles: "image/*",
-            maxFilesize: 4,
-            maxFiles: 12,
-            /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
-            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
-            /**
-             * El texto que se agregará antes del formulario alternativo.
-             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-             * ser ignorado.
-             */
-            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
-            /**
-             * Si el tamaño del archivo es demasiado grande.
-             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-             */
-             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
-            /** Si el archivo no coincide con el tipo de archivo. */
-            dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-            dictCancelUpload: "Cancelar carga",
-
-            /** El texto que se muestra si una carga se canceló manualmente */
-            dictUploadCanceled: "Subida cancelada.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-            dictRemoveFile: "Eliminar archivo",
-
-            /**
-             * Se muestra si `maxFiles` es st y se excede.
-             */
-            dictMaxFilesExceeded: "No puede cargar más archivos.",
-
-            // accept(file, done) {
-            //     console.log('-------------accept-----------------------');
-            //     cargar_lista_imagenes();
-            //     return done();
-            // },
-            success: function(file, response){
-                // console.log('-------------success-----------------------');
-                cargar_lista_imagenes();
-
-                if (file.previewElement) {
-                    return file.previewElement.classList.add("dz-success");
-                }
-            },
-            error(file, message) {
-                // console.log('-------------error-----------------------');
-                if (file.previewElement) {
-                    file.previewElement.classList.add("dz-error");
-                    if (typeof message !== "string" && message.error)
-                    {
-                        message = message.error;
-                    }
-                    else
-                    {
-                        message = message.message;
-                    }
-                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                        node.textContent = message;
-                    }
-                }
-            },
-            removedfile(file) {
-                // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes();
-                if (file.previewElement != null && file.previewElement.parentNode != null) {
-                    file.previewElement.parentNode.removeChild(file.previewElement);
-                }
-                return this._updateMaxFilesReachedClass();
-            },
-            canceled: function canceled(file) {
-                cargar_lista_imagenes();
-                return this.emit("error", file, this.options.dictUploadCanceled);
-            },
-        };
-
-
-
-        var lista_imagenes = [];
-        function cargar_lista_imagenes()
-        {
-            // console.log('--------------cargar_lista_imagenes----------------------');
-            lista_imagenes = [];
-            let temp  = myDropzone.getAcceptedFiles();
-            $.each(temp, function( index, value )
-            {
-                if(value.status == "success")
-                {
-                    if(value.xhr !== undefined)
-                    {
-                        var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[index] = [
-                            url=img_temp.img.url,
-                            nombre_origian= img_temp.img.original_file_name,
-                            nombre_img = img_temp.img.nombre_img,
-                            file_extension = img_temp.img.file_extension,
-                        ];
-                        $('#input_lista_imagenes').val('');
-                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
-                    }
-                }
-            });
-
-
-        }
-        $('#mensaje_ficha').html(' Para el mejor funcionamiento del sistema rogamos anotar cualquier tipo de incidente o antecedente nuevo del paciente esto aportará a usted o sus colegas mayor información  acerca del paciente a tratar ');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 8000);
-        /** MANEJO DE IMAGENES */
-
-        /** REGISTO ANTECEDENTES */
-        function carga_campos_antecedente_nuevo()
-        {
-            if($('#tipo_antecedente').val()!='')
-            {
-                $('#div_campos_antecedente_nuevo').html('');
-                var html = '';
-                if($('#tipo_antecedente').val() == 'alergia')
-                {
-                    html +='';
-
-                    html += '<div class="form-row">';
-                    html += '    <div class="form-group col-sm-6 col-md-6">';
-                    html += '        <label class="floating-label-activo-sm">Seleccione</label>';
-                    html += '        <input type="text" id="alergia_paciente" name="alergia_paciente" class="form-control form-control-sm"  value="">';
-                    html += '        <input type="hidden" name="id_alergia_paciente" id="id_alergia_paciente" value=""/>';
-                    html += '    </div>';
-                    html += '    <div class="form-group col-sm-6 col-md-6">';
-                    html += '        <label class="floating-label-activo-sm">Detalle</label>';
-                    html += '        <input type="text" name="alergia_comentario_paciente" id="alergia_comentario_paciente"  class="form-control form-control-sm"  value="">';
-                    html += '    </div>';
-                    html += '    <div class="form-group col-sm-6 col-md-6">';
-                    html += '       <button type="button" class="btn btn-success btn-sm" onclick="agregar_alergia_paciente();">Guardar</button>';
-                    html += '    </div>';
-                    html += '</div>';
-
-                    $('#div_campos_antecedente_nuevo').show();
-                    $('#div_campos_antecedente_nuevo').html(html);
-
-                     /** autocompletado de alergias */
-                    $("#alergia_paciente").autocomplete({
-                        source: function(request, response) {
-                            // Fetch data
-                            $.ajax({
-                                url: "{{ route('alergias.ver_autocomplete') }}",
-                                type: 'get',
-                                dataType: "json",
-                                data: {
-                                    search: request.term
-                                },
-                                success: function(data) {
-                                    console.log(data);
-                                    response(data);
-                                }
-                            });
-                        },
-                        select: function(event, ui) {
-                            // Set selection
-                            $('#alergia_paciente').val(ui.item.label); // display the selected text
-                            $('#id_alergia_paciente').val(ui.item.value); // save selected id to input
-
-                            return false;
-                        }
-                    });
-
-                }
-                if($('#tipo_antecedente').val() == 'enfermedades_cronicas')
-                {
-                    html +='';
-                }
-                if($('#tipo_antecedente').val() == 'anestesias')
-                {
-                    html +='';
-                }
-                if($('#tipo_antecedente').val() == 'cirugia')
-                {
-                    html +='';
-                }
-            }
-            else
-            {
-                $('#div_campos_antecedente_nuevo').hide();
-                $('#div_campos_antecedente_nuevo').html('');
-            }
+        // Calcula el total automáticamente cuando se ingresan datos
+        function calcularTotal() {
+            const cantidad = parseFloat(cantidadInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            totalInput.value = (cantidad * precio).toFixed(2);
         }
 
-        function agregar_alergia_paciente() {
+        cantidadInput.addEventListener("input", calcularTotal);
+        precioInput.addEventListener("input", calcularTotal);
 
-            let alergia = $('#alergia_paciente').val();
-            let id_alergia = $('#id_alergia_paciente').val();
-            let comentario = $('#alergia_comentario_paciente').val();
-            let paciente = $('#id_paciente_fc').val();
-            let token = CSRF_TOKEN;
-            var mensaje = '';
-            var valido = 0;
+        /* CALCULAR LO MISMO ANTERIOR PERO PARA URGENCIAS */
+        // const cantidadInputUrg = document.getElementById("cantidad_urg");
+        // const precioInputUrg = document.getElementById("precio_urg");
+        // const totalInputUrg = document.getElementById("total_urg");
 
-            if(alergia=="")
-            {
-                mensaje +='Campo requerido alergia\n';
-                valido = 1;
-            }
-            // if(id_alergia=="")
-            // {
-            //     mensaje +='Campo requerido id alergia\n';
-            //     valido = 1;
-            // }
-            if(comentario=="")
-            {
-                mensaje +='Campo requerido Detalle\n';
-                valido = 1;
-            }
-            if(paciente=="")
-            {
-                mensaje +='Campo requerido paciente\n';
-                valido = 1;
-            }
+        // // Calcula el total automáticamente cuando se ingresan datos
+        // function calcularTotalUrg() {
+        //     const cantidad = parseFloat(cantidadInputUrg.value) || 0;
+        //     const precio = parseFloat(precioInputUrg.value) || 0;
+        //     totalInputUrg.value = (cantidad * precio).toFixed(2);
+        // }
 
-            if(valido == 0)
-            {
-                swal({
-                    title: "Alergia agregada correctamente. ***PENDIDENTE POR HACER***",
-                    icon: "success",
-                    buttons: "Aceptar",
-                    DangerMode: true,
+        // cantidadInputUrg.addEventListener("input", calcularTotalUrg);
+        // precioInputUrg.addEventListener("input", calcularTotalUrg);
+
+        /* Autocompletado */
+
+        $('.tratamiento-urg-autocomplete').each(function() {
+        $(this).autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getDiagnosticoDentalUrg') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        if (data.length == 0) {
+                            $('.diagnostico_activo').hide();
+                            $('.diagnostico_inactivo').show();
+                        } else {
+                            $('.diagnostico_activo').show();
+                            $('.diagnostico_inactivo').hide();
+                        }
+                        response(data);
+                    }
                 });
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.label);
+                $(this).next('input[type="hidden"]').val(ui.item
+                .value); // Asigna el valor al input hidden correspondiente
+                return false;
             }
-            else
-            {
+        });
+    });
+
+    $('.prestacion-autocomplete').each(function() {
+        $(this).autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ route('dental.getPrestacionesLaboratorio') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.length == 0) {
+                            $('.diagnostico_activo').hide();
+                            $('.diagnostico_inactivo').show();
+                        } else {
+                            $('.diagnostico_activo').show();
+                            $('.diagnostico_inactivo').hide();
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $(this).val(ui.item.label);
+                $('#valor_trabajo_menor').val(ui.item.valor);
+                $(this).next('input[type="hidden"]').val(ui.item.value);
+                return false;
+            }
+        });
+    });
+    });
+    $(document).ready(function(){
+        $('.tratamiento-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getTratamientoImplantologia') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
+
+        $('.prestacion-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getPrestacionesLaboratorio') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    console.log(ui.item);
+                    $(this).val(ui.item.label);
+                    $('#valor_trabajo_menor').val(ui.item.valor);
+                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
+        $('#trabajo_realizar_trabajo_mayor').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getPrestacionesLaboratorio') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    console.log(ui.item);
+                    $(this).val(ui.item.label);
+                    $('#valor_prestacion_trabajo_mayor').val(ui.item.valor);
+                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
+
+
+    });
+
+    function dame_marcas_implantes(value) {
+            let id_tipo_insumo = value.value;
+            let tipo_insumo_text = value.options[value.selectedIndex].text;
+            console.log(tipo_insumo_text);
+            $('#titulo_tipo_insumo').html(tipo_insumo_text);
+            if (id_tipo_insumo == 1) {
+                // quitar la clase d-none al select de marcas
+                $('#marcas_implantes_select').removeClass('d-none');
+                $('#insumos_select').addClass('d-none');
+            } else {
+                // quitar la clase d-none al select de marcas
+                $('#marcas_implantes_select').addClass('d-none');
+                $('#insumos_select').removeClass('d-none');
+            }
+            let url = '{{ ROUTE('dental.dame_implantes_dental') }}';
+            let data = {
+                id_tipo_insumo: id_tipo_insumo,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                success: function(resp) {
+                    console.log(resp);
+                    $('#nombreInsumo').empty();
+                    let insumos = resp;
+                    insumos.forEach(e => {
+                        $('#nombreInsumo').append(`
+                    <option value="${e.id}"> ${e.descripcion} </option>
+                    `);
+                    });
+                },
+                error: function(error) {
+                    console.log(error.responseText);
+                }
+            })
+        }
+
+        function dame_insumos_tratamiento() {
+            let id_ficha_atencion = $('#id_fc').val();
+            let id_paciente = $('#id_paciente_fc').val();
+
+            let url = "{{ route('dental.dame_insumos_tratamiento') }}";
+            if (id_paciente == '' || id_paciente == null) {
+                id_paciente = $('#id_paciente').val();
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    id_ficha_atencion: id_ficha_atencion,
+                    id_paciente: id_paciente,
+                    _token: "{{ csrf_token() }}"
+                },
+                beforeSend: function() {
+                    swal({
+                        title: 'info',
+                        text: 'Cargando ...',
+                        icon: 'info'
+                    });
+                },
+                success: function(response) {
+                    swal.close();
+                    console.log(response);
+                    if (response.mensaje == 'ok') {
+                        $('#prot_implante').empty();
+                        let insumos = response.insumos;
+                        // Agrega las nuevas opciones desde la respuesta
+                        insumos.forEach(function(item) {
+                            $('#prot_implante').append(
+                                $('<option>', {
+                                    value: item.id,
+                                    text: item.insumos + ' ' + item.nombre_marca
+                                })
+                            );
+                        });
+
+                        // Refresca select2 para mostrar los nuevos datos
+                        $('#prot_implante').trigger('change');
+                    } else {
+                        swal({
+                            title: 'Error',
+                            text: response.mensaje,
+                            icon: 'error'
+                        });
+                    }
+
+                }
+            });
+        }
+
+        function guardar_insumo() {
+            let nombreInsumo = $('#nombreInsumo option:selected').text();
+            let tipoInsumo = $('#tipoInsumo').val();
+            if (tipoInsumo == 1) {
+                var marcaInsumo = $('#marcasImplantes option:selected').text();
+            } else {
+                var marcaInsumo = '';
+            }
+            var idMarcaInsumo = $('#marcasImplantes').val();
+            console.log(idMarcaInsumo);
+            let tipoInsumo_text = $('#tipoInsumo option:selected').text();
+            let cantidad = $('#cantidad').val();
+            let precio = $('#precio').val();
+            let total = $('#total').val();
+
+            console.log(tipoInsumo);
+
+            let mensaje = '';
+            let valido = 1;
+
+            if (nombreInsumo == '') {
+                valido = 0;
+                mensaje += '<li>Nombre insumo </li>';
+            }
+            if (tipoInsumo == 0) {
+                valido = 0;
+                mensaje += '<li>Tipo de Insumo </li>';
+            }
+            if (cantidad == '' || cantidad <= 0) {
+                valido = 0;
+                mensaje += '<li>Cantidad </li>';
+            }
+            if (precio == '' || cantidad <= 0) {
+                valido = 0;
+                mensaje += '<li>Precio </li>';
+            }
+
+            if (valido == 1) {
+                let data = {
+                    insumos: nombreInsumo,
+                    idTipoInsumo: tipoInsumo,
+                    tipoInsumo: tipoInsumo_text,
+                    marcaInsumo: marcaInsumo,
+                    idMarcaInsumo: idMarcaInsumo,
+                    cantidad: cantidad,
+                    valor: precio,
+                    total: total,
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    observaciones: $('#insumos_obs_tto').val(),
+                    _token: CSRF_TOKEN
+                }
+
+                console.log(data);
+                let url = '{{ ROUTE('dental.agregar_insumos_tto') }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    data: data,
+                    success: function(resp) {
+                        console.log(resp);
+                        if (resp.mensaje == 'ok') {
+                            swal({
+                                icon: 'success',
+                                text: 'Se a agregado los insumos correctamente',
+                                title: 'Exito'
+                            });
+                            let nuevo_insumo = resp.insumo;
+                            cargar_a_presupuesto_insumo(nuevo_insumo.id);
+                            $('#modal_insumos').modal('hide');
+                            //limpiar_formulario_insumo();
+                            let insumos = resp.insumos;
+                            console.log(insumos);
+                            let table = $('#table_insumos_odon_gral').DataTable();
+
+                            //Limpiar la tabla sin perder la configuración de DataTables
+                            table.clear();
+
+
+
+                            //Recorrer el array de insumos y agregarlos a la tabla
+                            insumos.forEach(insumo => {
+                                let total = insumo.cantidad * insumo.valor;
+                                // Botones de acción
+                                if (insumo.presupuesto == 0 || insumo.presupuesto == null) {
+                                    // Botones de acción
+                                    var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="feather icon-shopping-cart"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                                } else {
+                                    var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                                }
+                                table.row.add([
+                                    insumo.insumos + ' ' + insumo
+                                    .nombre_marca, // Nombre del insumo
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    formatoMoneda(insumo.valor), // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            });
+
+                            //Dibujar la tabla nuevamente con los nuevos datos
+                            table.draw();
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            } else {
                 swal({
-                    title: "Campo Requerido en registro de Alergia. ***PENDIDENTE POR HACER***",
-                    text: mensaje,
+                    title: "Campos requeridos",
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: mensaje,
+                        },
+                    },
                     icon: "error",
                     buttons: "Aceptar",
                     DangerMode: true,
@@ -4154,56 +3491,470 @@ $(document).ready(function() {
             }
 
 
-            // let url = "{{ route('profesional.agregar_alergia_paciente') }}";
-
-            // $.ajax({
-            //     url: url,
-            //     type: 'POST',
-            //     dataType: 'json',
-            //     data: {
-            //         _token: CSRF_TOKEN,
-            //         alergia: alergia,
-            //         id_alergia: id_alergia,
-            //         comentario: comentario,
-            //         paciente: paciente
-            //     },
-            // })
-            // .done(function(response) {
-
-            //     if (response.success) {
-            //         swal({
-            //             title: "Alergia agregada correctamente",
-            //             icon: "success",
-            //             buttons: "Aceptar",
-            //             DangerMode: true,
-            //         });
-
-            //         $('#alergia_paciente').val('');
-            //         $('#id_alergia_paciente').val('');
-
-            //     }
-            //     else
-            //     {
-            //         swal({
-            //             title: "Error al agregar alergia",
-            //             icon: "error",
-            //             buttons: "Aceptar",
-            //             DangerMode: true,
-            //         })
-            //     }
-
-            //     return response;
-            // })
-            // .fail(function() {
-            //     console.log("error");
-            // });
 
         }
-        /** FIN REGISTRO ANTECEDENTES  */
 
 
-        function cargarIgual(input)
-        {
+
+
+        function eliminar_insumo(id) {
+            swal({
+                    title: "¿Esta seguro que desea ELIMINAR el insumo dental?",
+                    text: "Favor confirme o cancele la solicitud",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Solicitar"],
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        confirmar_eliminar_insumo(id);
+                    }
+                });
+        }
+
+        function confirmar_eliminar_insumo(id) {
+            console.log(id);
+            let data = {
+                id: id,
+                id_paciente: $('#id_paciente').val(),
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                _token: CSRF_TOKEN
+            }
+            let url = '{{ ROUTE('dental.eliminar_insumos_tto') }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: data,
+                success: function(resp) {
+                    console.log(resp);
+                    if (resp.mensaje == 'ok') {
+                        swal({
+                            icon: 'success',
+                            text: 'Se a eliminado insumos correctamente',
+                            title: 'Exito'
+                        });
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let valores_lab = resp.valores[3];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_lab;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto_dental').val(total_general);
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
+                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
+                            total_general));
+                        $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+
+
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_odon_gral').DataTable();
+                        let table_urg = $('#table_insumos_urg').DataTable();
+                        let table_odped_urg = $('#table_insumos_odped_urg').DataTable();
+                        let table_period = $('#table_insumos_period').DataTable();
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+                        table_urg.clear();
+                        table_odped_urg.clear();
+                        table_period.clear();
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if (insumo.presupuesto == 0 || insumo.presupuesto == null) {
+                                    // Botones de acción
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'urg')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="feather icon-x"></i>
+                                            </button>
+                                        </td>`;
+                                } else {
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="dame_insumo(${insumo.id},'urg')"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="feather icon-x"></i>
+                                            </button>
+                                        </td>`;
+                                }
+                            if (insumo.urgencia == 1) {
+                                table_urg.row.add([
+                                    insumo.insumos + ' ' + insumo.nombre_marca,
+                                    insumo.observaciones,
+                                    insumo.cantidad,
+                                    formatoMoneda(insumo.valor),
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            } else {
+                                table.row.add([
+                                    insumo.insumos + ' ' + insumo.nombre_marca,
+                                    insumo.observaciones,
+                                    insumo.cantidad,
+                                    formatoMoneda(insumo.valor),
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                                table_odped_urg.row.add([
+                                    insumo.insumos + ' ' + insumo.nombre_marca,
+                                    insumo.observaciones,
+                                    insumo.cantidad,
+                                    formatoMoneda(insumo.valor),
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                                table_period.row.add([
+                                    insumo.insumos + ' ' + insumo.nombre_marca,
+                                    insumo.observaciones,
+                                    insumo.cantidad,
+                                    formatoMoneda(insumo.valor),
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                            }
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                        table_urg.draw();
+                        table_odped_urg.draw();
+                        table_period.draw();
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#contenedor_insumos').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 col-lg-4 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 col-lg-1 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1 col-lg-1 d-flex">
+
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
+                            }
+
+                        });
+
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if (insumo.presupuesto == 1) {
+                                if (insumo.estado_pago == 'ok') {
+                                    var clase = 'bg-success';
+                                } else if (insumo.estado_pago == 'intermedio') {
+                                    var clase = 'bg-warning';
+                                } else {
+                                    var clase = 'bg-danger';
+                                }
+                                let rowNode = table_insumos.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Nombre del insumo
+                                    formatoMoneda(insumo.valor), // Cantidad utilizada
+                                    0, // Unidad de medida
+                                    formatoMoneda(total),
+                                    ' <div class="circle ' + clase + '"></div>',
+                                    ''
+
+                                ]).draw(false).node();
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+
+                        });
+
+                        table_insumos.draw();
+
+                        $('#table_pagos_reasignar_insumos tbody').empty();
+                        insumos.forEach(insumo => {
+                            if (insumo.presupuesto == 1) {
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#table_pagos_reasignar_insumos tbody').append(`
+                                <tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                    <td>${insumo.cantidad}</td>
+                                    <td>${formatoMoneda(insumo.valor)}</td>
+                                    <td>${formatoMoneda(total)}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                            }
+
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function proxima_atencion_paciente(){
+            let id_ficha_atencion = $('#id_fc').val();
+            let id_paciente = $('#id_paciente').val();
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+            let id_profesional = $('#id_profesional_fc').val();
+            let id_hora_medica = $('#hora_medica').val();
+
+            let url = "{{ ROUTE('dental.proxima_atencion_paciente')}}";
+
+            let data = {
+                id_ficha_atencion: id_ficha_atencion,
+                id_paciente: id_paciente,
+                id_lugar_atencion: id_lugar_atencion,
+                id_profesional: id_profesional,
+                id_hora_medica: id_hora_medica,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                beforeSend: function() {
+                    swal({
+                        title: 'info',
+                        text: 'Cargando ...',
+                        icon: 'info'
+                    });
+                },
+                success: function(response) {
+                    swal.close();
+                    console.log(response);
+                    if(response.estado == 'ok'){
+                        let fecha = response.fecha_atencion;
+                        $('#proxima_fecha_atencion').html(fecha.fecha_consulta);
+                        $('#proxima_hora_atencion').html(fecha.hora_inicio+' a '+fecha.hora_termino);
+                        $('#proxima_fecha_atencion_od_gral').html(fecha.fecha_consulta);
+                        $('#proxima_hora_atencion_od_gral').html(fecha.hora_inicio+' a '+fecha.hora_termino);
+                        $('#proxima_fecha_atencion_periodoncia').html(fecha.fecha_consulta);
+                        $('#proxima_hora_atencion_periodoncia').html(fecha.hora_inicio+' a '+fecha.hora_termino);
+                    }else{
+                        $('#proxima_fecha_atencion').html('');
+                        $('#proxima_hora_atencion').html('');
+                        $('#proxima_fecha_atencion_od_gral').html('');
+                        $('#proxima_hora_atencion_od_gral').html('');
+                        $('#proxima_fecha_atencion_periodoncia').html('');
+                        $('#proxima_hora_atencion_periodoncia').html('');
+                    }
+
+                },
+                error: function(error) {
+                    swal.close();
+                    console.log(error);
+                }
+            });
+        }
+
+        function guardarCambiosTratamiento(){
+            let id_tratamiento = $('#id_tratamiento').val();
+
+            if(id_tratamiento == 0){
+                swal({
+                    title: "Error",
+                    text: "Debe seleccionar un tratamiento",
+                    icon: "error",
+                    button: "Aceptar",
+                });
+                return;
+            }
+
+            let estado = $('#estado_tto').val();
+            let data = {
+                id_tratamiento: id_tratamiento,
+                estado: estado,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                id_profesional: $('#id_profesional').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                observaciones: $('#observaciones_tto').val(),
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+
+            let url = "{{ route('dental.guardarCambiosTratamientoUrgencia') }}";
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: data,
+                success: function(resp) {
+                    console.log(resp);
+                    if(resp.mensaje == 'OK'){
+                        swal({
+                            title: "Pieza guardada",
+                            text: "Pieza guardada correctamente",
+                            icon: "success",
+                            button: "Aceptar",
+                        });
+                    }
+
+                    $('#modal_cambio_estado_tto').modal('hide');
+
+                    let odontograma = resp.odontograma;
+                    odontograma_global = resp.odontograma;
+
+                    let table = $('#presup_estado_pago').DataTable();
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+
+                        if (odonto.urgencia == 0) {
+                            if(odonto.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(odonto.estado_pago == 'incompleto'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+
+                            if(odonto.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else if(odonto.estado == 1){
+                                var estado = 'TERMINADO';
+                            }else if(odonto.estado == 2){
+                                var estado = 'EN PROCESO';
+                            }else{
+                                var estado = 'CITADO A CONTROL';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                '<div class="circle '+clase+'"></div>',
+                                estado, // Columna vacía
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+                    });
+
+                    let table_urg = $('#table_piezas_presupuesto_odonto').DataTable();
+                    table_urg.clear().draw();
+
+                    odontograma.forEach(function(pieza) {
+                            if(pieza.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else if(pieza.estado == 1){
+                                var estado = 'TERMINADO';
+                            }else if(pieza.estado == 2){
+                                var estado = 'EN PROCESO';
+                            }else{
+                                var estado = 'CITADO A CONTROL';
+                            }
+                            if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table_urg.row.add([
+                                    pieza.pieza,
+                                    pieza.diagnostico,
+                                    pieza.descripcion,
+                                    formatoMoneda(formatoMoneda(pieza.valor)),
+                                    '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                    pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                    '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                    pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                    estado
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+                            }
+                    });
+
+                    let table_period = $('#table_piezas_presupuesto_period').DataTable();
+                    table_period.clear().draw();
+                    odontograma.forEach(function(pieza) {
+                            if(pieza.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else if(pieza.estado == 1){
+                                var estado = 'TERMINADO';
+                            }else if(pieza.estado == 2){
+                                var estado = 'EN PROCESO';
+                            }else{
+                                var estado = 'CITADO A CONTROL';
+                            }
+                            if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table_period.row.add([
+                                    '<i class="fas fa-tooth mr-1"></i>' + pieza.pieza,
+                                    pieza.diagnostico,
+                                    pieza.descripcion,
+                                    formatoMoneda(formatoMoneda(pieza.valor)),
+                                    '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                    pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                    '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                    pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                    estado
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+                            }
+                    });
+                    //dame_evoluciones_od_gral();
+                }
+            });
+        }
+
+    function cargarIgual(input){
 
             let actual = $('#'+input);
             let equivalentes = $('#'+input).attr('data-input_igual').split(',');
@@ -4211,1283 +3962,44 @@ $(document).ready(function() {
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
+            {{--
+            let actual = $('#'+input);
+            let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
 
-            // let actual = $('#'+input);
-            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
+            equivalente.val(actual.val());
+            --}}
+        }
 
-            // equivalente.val(actual.val());
+    function evaluar_para_carga_detalle(select, div, input, valor)
+    {
+        var valor_select = $('#'+select+'').val();
+        if(valor_select == valor) $('#'+div+'').show();
+        else {
+            $('#'+div+'').hide();
+            $('#'+input+'').val('');
+        }
+    }
+    /** SECCION PERIODONTOGRAMA GENERAL */
+
+        function getSangrado(){
+            $("#suma").text(Math.round((totalSangrado/(totalDientes*6)*100)));
 
         }
 
-        function evaluar_para_carga_detalle(select, div, input, valor)
-        {
-            var valor_select = $('#'+select+'').val();
-            if(valor_select == valor) $('#'+div+'').show();
-            else {
-                $('#'+div+'').hide();
-                $('#'+input+'').val('');
-            }
+        function getPlaca(){
+            $("#suma2").text(Math.round((totalPlaca/(totalDientes*6)*100)));
         }
 
-        function abrir_modal_guardar_tipo()
-        {
-            $('#modal_registrar_ficha_tipo_orl').modal('show');
-            cargarSeccion('registro_f_t_orl_detalle');
-        }
-
-        function cargarSeccion(div_destino)
-        {
-            // var tipo = $('#'+select+'').val();
-            $('#'+div_destino).html('');
-            var seccion_actual = '';
-            var seccion_previa = '';
-            $('#form-otorrino').find('select,textarea').each(function(key, elemento){
-
-
-                html ='';
-
-                // if(seccion_previa == '' && seccion_actual == '')
-                if(key == 0)
-                {
-                    seccion_actual = $(elemento).data('seccion').trim();
-                    seccion_previa = $(elemento).data('seccion').trim();
-
-                    html +='<hr>';
-                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                    html +='<hr>';
-                }
-                else
-                {
-                    if($(elemento).data('seccion'))
-                    seccion_actual = $(elemento).data('seccion').trim();
-                }
-
-                if(seccion_actual == seccion_previa)
-                {
-                    html +='<hr>';
-                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
-                    html +='<hr>';
-                }
-
-                html +='<div class="row" style="margin-top:10px;">';
-                if($(elemento).prop('nodeName') == 'SELECT')
-                {
-                    if($(elemento).val() == 0)
-                        $(elemento).val(1)
-
-                    html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-5">';
-                    html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
-                    html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
-                    html +='</div>';
-                    html +='<div class="col-md-2"></div>';
-                }
-                else if($(elemento).prop('nodeName') == 'TEXTAREA')
-                {
-                    if($(elemento).data('tipo'))
-                        html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
-                    else
-                        html +='<div class="col-md-5">Detalle</div>';
-                    html +='<div class="col-md-5">';
-                    html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
-                    html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
-                    html +='</div>';
-                    html +='<div class="col-md-2">';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
-                    html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
-                    html +='</div>';
-
-                }
-                html +='</div>';
-                $('#'+div_destino).append(html);
-                seccion_previa = $(elemento).data('seccion');
-            });
-        }
-
-        function cambiar_div(mostrar, ocultar, label, textarea)
-        {
-            $('.'+mostrar).show();
-            $('.'+ocultar).hide();
-            $('#'+label).html( $('#'+textarea).val() );
-        }
-
-
-
-        function agregar_medicamentos_ficha() {
-
-
-            var rows1 = [];
-            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
-                if (i > 0) {
-                    rol = {};
-                    var data = $(this).find("td");
-                    rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
-                    rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
-                    rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
-                    rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
-                    rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
-                    rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
-                    rows1.push(rol);
-                }
-            });
-
-            $('#medicamentos').val(JSON.stringify(rows1));
-
+        function getSupuracion(){
+            $("#suma3").text(Math.round((totalSupuracion/(totalDientes*6)*100)));
 
         }
 
-        function agregar_examenes_ficha() {
-            var rows = [];
-            $('#tabla_examen_cirugia tr').each(function(i, n) {
-                if (i > 0) {
-                    console.log(i);
-                    rol = {};
-                    var data = $(this).find("td");
-                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
-                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
-                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
-                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
-                    rows.push(rol);
-                }
-            });
-            $('#examenes').val(JSON.stringify(rows));
-        }
-
-        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
-        {
-            rut = $(rut).val();
-
-            // console.log('------------------------------------');
-            // console.log(rut.length);
-            // console.log(rut);
-            // console.log('------------------------------------');
-
-            if(rut.length>5)
-            {
-                url = "{{ route('profesional.buscar') }}";
-                $.ajax({
-
-                    url: url,
-                    type: "GET",
-                    data: {
-                        rut : rut,
-                    },
-                })
-                .done(function(data)
-                {
-                    // console.log('-----------------------');
-                    // console.log(data);
-                    // console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-
-                        if(data.registros.length>0)
-                        {
-                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
-                            var id = data.registros[0].id;
-                            // $('#'+input_nombre).attr('readonly', true);
-                            $('#'+input_nombre).val(nombre);
-                            $('#'+input_id).val(id);
-                            $('#'+div_solicitar).hide();
-                            mensaje = '';
-                            $('#div_mensaje').hide();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_rfl').val('');
-                            $('#solicitado_por_apellido_rfl').val('');
-                            $('#solicitado_por_telefono_rfl').val('');
-                            $('#solicitado_por_email_rfl').val('');
-                        }
-                        else
-                        {
-                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
-                            $('#'+input_nombre).val('');
-                            $('#'+input_id).val('');
-                            $('#'+div_solicitar).show();
-                            $('#div_mensaje').show();
-                            $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_por_nombre_rfl').val('');
-                            $('#solicitado_por_apellido_rfl').val('');
-                            $('#solicitado_por_telefono_rfl').val('');
-                            $('#solicitado_por_email_rfl').val('');
-                            // $('#'+input_nombre).attr('readonly', true);
-                        }
-                    }
-                    else
-                    {
-                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
-                        $('#div_mensaje').show();
-                        $('#mensaje_solicitado_por').html(mensaje);
-                        // $('#'+input_nombre).attr('readonly', false);
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
-            else if(rut.length==0)
-            {
-                $('#'+input_nombre).val('');
-                // $('#'+input_nombre).attr('readonly', true);
-                $('#'+input_id).val('');
-                $('#'+div_solicitar).hide();
-                $('#div_mensaje').hide();
-                $('#mensaje_solicitado_por').html('');
-            }
-        }
-
-        function actualizar_solicitado_por(input_solitado_por, input_nombre, input_apellido)
-        {
-            var nombre = $('#'+input_nombre).val();
-            var apellido = $('#'+input_apellido).val();
-            if(nombre != '' || apellido != '')
-            {
-                // $('#'+input_solitado_por).attr('readonly', true);
-                $('#'+input_solitado_por).val($('#'+input_nombre).val()+' '+$('#'+input_apellido).val());
-            }
-            else
-            {
-                // $('#'+input_solitado_por).attr('readonly', false);
-                $('#'+input_solitado_por).val();
-            }
-        }
-
-        /** CRONICO */
-        function getDosis_cronico(id_medicamento, div_dosis) {
-
-            console.log(id_medicamento);
-
-            let url = "{{ route('dental.getDosis') }}";
-            $.ajax({
-
-                    url: url,
-                    type: "get",
-                    data: {
-
-                        id_medicamento: id_medicamento,
-
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data != null) {
-
-                        data = JSON.parse(data);
-                        console.log(data)
-                        let dosis = $('#'+div_dosis);
-
-                        dosis.find('option').remove();
-                        dosis.append('<option value="0">Seleccione</option>');
-                        $(data).each(function(i, v) { // indice, valor
-                            dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
-                                '</option>');
-                        })
-
-                    } else {
-
-
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-
-        };
-
-        function getCantCompCronica(div_dosis, div_comp) {
-
-            var cant_comp = $('#'+div_dosis+' option:selected').attr('data-cant_comp');
-            console.log(cant_comp);
-
-            let url = "{{ route('presentacion.getCantComp') }}";
-            $.ajax({
-
-                    url: url,
-                    type: "get",
-                    data: {
-
-                        cant_comp: cant_comp,
-
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data != null) {
-
-                        data = JSON.parse(data);
-                        console.log(data)
-                        let select_cant_comp = $('#'+div_comp);
-
-                        select_cant_comp.find('option').remove();
-                        select_cant_comp.append('<option value="0">Seleccione</option>');
-                        $(data).each(function(i, v) { // indice, valor
-                            select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
-                        })
-                        select_cant_comp.append('<option value="999">Otra Cantidad</option>');
-
-                    } else {
-
-
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-
-        };
-
-        function es_cronico() {
-            if ($('#enf_cronico').prop('checked')) {
-                $('#form_enfermedad_cronica').modal('show');
-                $('#hipertension_div').hide();
-                $('#control_peso_div').hide();
-                $('#diabetes_div').hide();
-
-                $('#cronicos').val('n_C');
-                ver_medicamento_cronico();
-                $('.medicamento_cronico_div').show();
-                $('#senal_med_cronico').removeClass('fa-angle-down');
-                $('#senal_med_cronico').addClass('fa-angle-up');
-
-                cambiar_enfermedad_cronica();
-
-            }
-
-        }
-
-        function cambiar_enfermedad_cronica() {
-
-            if($('#cronicos').val() != 'n_C')
-            {
-                var nombre_enfermedad = $("#cronicos option:selected").text();
-                $('#titulo_med_patologia').html( ('Medicamentos '+nombre_enfermedad).toUpperCase());
-                $('.medicamento_patologia').show();
-                $('#btn_registro_med_patologia').attr('onclick','agregar_medicamento_cronico_patologia(\''+$('#cronicos').val()+'\')');
-                ver_medicamento_cronico_patologia();
-
-                $('.medicamento_cronico_div').hide();
-                $('#senal_med_cronico').addClass('fa-angle-down');
-                $('#senal_med_cronico').removeClass('fa-angle-up');
-
-                switch ($('#cronicos').val()) {
-                    case 'cpeso':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').show();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'chipertension':
-                        $('#hipertension_div').show();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                        ver_control_hipertension();
-
-                    break;
-                    case 'cdiabet':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').show();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-
-                    case 'cinsufren':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').show();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'cmtumorales':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').show();
-                        $('#creumato').hide();
-                        $('#clitemia').hide();
-                    break;
-                    case 'creumato':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').show();
-                        $('#clitemia').hide();
-                    break;
-                    case 'clitemia':
-                        $('#hipertension_div').hide();
-                        $('#control_peso_div').hide();
-                        $('#diabetes_div').hide();
-                        $('#cinsufren').hide();
-                        $('#cmtumorales').hide();
-                        $('#creumato').hide();
-                        $('#clitemia').show();
-                    break;
-
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                $('.medicamento_patologia').hide();
-                $('#hipertension_div').hide();
-                $('#control_peso_div').hide();
-                $('#diabetes_div').hide();
-
-                $('#titulo_med_patologia').html( 'Medicamentos' );
-            }
-        }
-
-        function registrar_control_obesidad() {
-
-            let peso = $('#registro_peso').val();
-            let variacion = $('#registro_peso_variacion').val();
-            let ideal = $('#registro_peso_ideal').val();
-            let url = "{{ route('ficha_medica.registrar_control_obesidad') }}";
-            let hora_medica = $('#hora_medica').val();
-            var validar = 0;
-            var mensaje ='';
-
-            if( peso == '' )
-            {
-                $('#registro_peso').focus();
-                mensaje += 'Debe ingresar el Peso del Control Actual.\n';
-                validar = 1;
-            }
-            if( variacion == '' )
-            {
-                $('#registro_peso_variacion').focus();
-                mensaje += 'Debe ingresar la Variación.\n';
-                validar = 1;
-            }
-            if( ideal == '' )
-            {
-                $('#registro_peso_ideal').focus();
-                mensaje += 'Debe ingresar el Peso Ideal.\n';
-                validar = 1;
-            }
-
-            if(validar == 1)
-            {
-                swal({
-                    title: "Debe ingresar todos los datos requeridos." ,
-                    text: mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                })
-                return false;
-            }
-            else
-            {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        peso: peso,
-                        variacion: variacion,
-                        ideal: ideal,
-                        hora_medica: hora_medica
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregago control de obesidad correctamente');
-                        $('#mensaje').show();
-                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
-                        {{--  location.reload();  --}}
-                        $('#registro_peso').val('');
-                        $('#registro_peso_variacion').val('');
-                        $('#registro_peso_ideal').val('');
-                        ver_control_obesidad();
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-            }
-        };
-
-        function registrar_hipertension() {
-
-            let sistolica = $('#presion_sistolica_hipertension').val();
-            let diastolica = $('#presion_diastolica_hipertension').val();
-            let ideal = $('#ideal_hipertension').val();
-            let url = "{{ route('ficha_medica.registrar_hipertension') }}";
-            let hora_medica = $('#hora_medica').val();
-            let id_lugar_atencion = $('#id_lugar_atencion').val();
-
-            var validar = 0;
-            var mensaje ='';
-
-            if( sistolica == '' )
-            {
-                $('#presion_sistolica_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Sistólica.\n';
-                validar = 1;
-            }
-            if( diastolica == '' )
-            {
-                $('#presion_diastolica_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Diastólica.\n';
-                validar = 1;
-            }
-            if( ideal == '' )
-            {
-                $('#ideal_hipertension').focus();
-                mensaje += 'Debe ingresar el Presión Ideal.\n';
-                validar = 1;
-            }
-
-            if(validar == 1)
-            {
-                swal({
-                    title: "Debe ingresar todos los datos requeridos." ,
-                    text: mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                })
-                return false;
-            }
-            else
-            {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        sistolica: sistolica,
-                        diastolica: diastolica,
-                        ideal: ideal,
-                        hora_medica: hora_medica,
-                        id_lugar_atencion: id_lugar_atencion
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregado control de Presión Arterial correctamente');
-                        $('#mensaje').show();
-                        {{--  $('#form_enfermedad_cronica').modal('hide');  --}}
-                        $('#presion_sistolica_hipertension').val('');
-                        $('#presion_diastolica_hipertension').val('');
-                        $('#ideal_hipertension').val('');
-                        ver_control_hipertension();
-
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-            }
-        };
-
-        function registrar_diabetes() {
-
-            let peso = $('#peso_diabetes').val();
-            let pies = $('#pies_diabetes').val();
-            let hgac1 = $('#hga1c_diabetes').val();
-            let colesterol = $('#colesterol_diabetes').val();
-            let creatina = $('#creatina_diabetes').val();
-            let glicosilada_postprandial = $('#glicosilada_postprandial_diabetes').val();
-            let glicosinada_ayuno = $('#glicosilada_ayuno_diabetes').val();
-            let url = "{{ route('ficha_medica.registrar_diabetes') }}";
-            let hora_medica = $('#hora_medica').val();
-
-            $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        peso: peso,
-                        pies: pies,
-                        hgac1: hgac1,
-                        colesterol: colesterol,
-                        creatina: creatina,
-                        glicosilada_postprandial: glicosilada_postprandial,
-                        glicosinada_ayuno: glicosinada_ayuno,
-                        hora_medica: hora_medica
-                    },
-                })
-                .done(function(response) {
-
-                    if (response != '') {
-                        console.log(response);
-                        //$('#form_control_obesidad').trigger("reset");
-                        $('#mensaje').text('Se ha agregago control de diabetes correctamente');
-                        $('#mensaje').show();
-                        $('#form_enfermedad_cronica').modal('hide');
-                        location.reload();
-                    }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
-                })
-        };
-
-        function agregar_medicamento_cronico()
-        {
-
-            let url = "{{ route('medicamento_cronico.registrar') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var nombre_medicamento = $('#nombre_medicamentocron').val();
-            var id_medicamento = $('#id_medicamentocron').val();
-            var cantidad = $('#med_cronicomes option:selected').text()
-            var tipo_enfermedad = 'cronico';
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional:id_profesional,
-                    id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    nombre_medicamento:nombre_medicamento,
-                    id_medicamento:id_medicamento,
-                    cantidad:cantidad,
-                    tipo_enfermedad:tipo_enfermedad,
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Registrado con exito.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        $('#nombre_medicamentocron').val('');
-
-                        $('#dosis_cronicomes').html('<option value="0">Seleccione</option>');
-                        $('#med_cronicomes').html('<option value="0">Seleccione</option>');
-
-                        ver_medicamento_cronico();
-
-
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Registrar Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function ver_medicamento_cronico()
-        {
-
-            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    // id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    tipo_enfermedad:'cronico'
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
-                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
-                    html += '        <th class="text-center align-middle">Acción</th>';
-                    html += '        <th class="text-center align-middle">Check</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            html += '<tr>';
-                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <input type="checkbox" name="medicamento_cronico_general" id="medicamento_cronico_general_'+value.id+'">';
-                            html += '    </td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="3">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#tabla_medicamento_cronico').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        function eliminar_med_cronico(id)
-        {
-            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id =id;
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id:id
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Eliminado.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        ver_medicamento_cronico();
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        {{--  MEDICAMENTOS CRONICOS PATOLOGIA  --}}
-        function agregar_medicamento_cronico_patologia(tipo)
-        {
-
-            let url = "{{ route('medicamento_cronico.registrar') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var nombre_medicamento = $('#nombre_medicamentocron_patologia').val();
-            var cantidad = $('#med_cronicomes_patologia option:selected').text();
-            var tipo_enfermedad = tipo;
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id_profesional:id_profesional,
-                    id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    nombre_medicamento:nombre_medicamento,
-                    cantidad:cantidad,
-                    tipo_enfermedad:tipo_enfermedad,
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Registrado con exito.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        $('#nombre_medicamentocron_patologia').val('');
-                        $('#id_medicamentocron_patologia').val('');
-
-                        $('#dosis_medicamentocron_patologia').html('<option value="0">Seleccione</option>');
-                        $('#med_cronicomes_patologia').html('<option value="0">Seleccione</option>');
-
-                        ver_medicamento_cronico_patologia()
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Registrar Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function ver_medicamento_cronico_patologia()
-        {
-
-            let url = "{{ route('medicamento_cronico.getRegsitros') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_paciente = $('#id_paciente_fc').val();
-            var tipo_enfermedad = $('#cronicos').val();
-            $('#tabla_med_patologia').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    // id_ficha_atencion:id_ficha_atencion,
-                    id_paciente:id_paciente,
-                    tipo_enfermedad:tipo_enfermedad
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
-                    html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
-                    html += '        <th class="text-center align-middle">Acción</th>';
-                    html += '        <th class="text-center align-middle">Check</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            html += '<tr>';
-                            html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="text-center align-middle">';
-                            html += '        <input type="checkbox" name="medicamento_cronico_patologia" id="medicamento_cronico_patologia_'+value.id+'">';
-                            html += '    </td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="4">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#tabla_med_patologia').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        function eliminar_med_cronico_patologia(id)
-        {
-            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id =id;
-            var tipo_enfermedad = $('#cronicos').val();
-
-            $.ajax({
-
-                url: url,
-                type: "POST",
-                data: {
-                    _token: _token,
-                    id:id
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('-----------------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    if(data.estado == 1)
-                    {
-                        swal({
-                            title: "Medicamento Cronico.",
-                            text: "Medicamento Eliminado.",
-                            icon: "success",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        });
-                        ver_medicamento_cronico_patologia(tipo_enfermedad);
-                    }
-                    else{
-
-                        swal({
-                            title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                            icon: "warning",
-                            // buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                    }
-                }
-                else{
-
-                    swal({
-                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-
-        {{--  mostrar div   --}}
-        function mostrar_div(div)
-        {
-            if ($('.'+div).is(':visible')) {
-                $('.'+div).hide();
-                $('#senal_med_cronico').addClass('fa-angle-down');
-                $('#senal_med_cronico').removeClass('fa-angle-up');
-            } else {
-                $('.'+div).show();
-                $('#senal_med_cronico').removeClass('fa-angle-down');
-                $('#senal_med_cronico').addClass('fa-angle-up');
-            }
-        }
-
-
-        {{--  CRONICO VER CONTROL DE HIPERTENSION  --}}
-        function ver_control_hipertension()
-        {
-
-            let url = "{{ route('hipertension.getHipertension') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_paciente = $('#id_paciente_fc').val();
-            $('#control_hipertension').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    id_paciente:id_paciente
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('----------ver_control_hipertension-------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '         <th class="text-center align-middle">Nº Control</th>';
-                    html += '         <th class="text-center align-middle">Fecha</th>';
-                    html += '         <th class="text-center align-middle">Presión Sistólica</th>';
-                    html += '         <th class="text-center align-middle">Presión Diastólica</th>';
-                    html += '         <th class="text-center align-middle">Presión Ideal</th>';
-                    html += '    </tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
-                            var fecha = new Date(f_temp);
-                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
-
-                            html += '<tr>';
-                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
-                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.sistolica+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.diastolica+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#control_hipertension').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-
-        {{--  CRONICO VER CONTROL DE OBESIDAD  --}}
-        function ver_control_obesidad()
-        {
-
-            let url = "{{ route('control_obesidad.getControlObesidad') }}";
-
-
-            var _token = CSRF_TOKEN;
-            var id_paciente = $('#id_paciente_fc').val();
-            $('#control_obesidad').html('');
-
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    _token: _token,
-                    id_paciente:id_paciente
-                },
-            })
-            .done(function(data)
-            {
-
-                if (data !== 'null')
-                {
-                    //data = JSON.parse(data);
-                    console.log('----------ver_control_hipertension-------------');
-                    console.log(data);
-                    console.log('-----------------------');
-                    var html = '';
-                    html += '<thead>';
-                    html += '    <tr>';
-                    html += '    <th class="text-center align-middle">Nº Control</th>';
-                    html += '    <th class="text-center align-middle">Fecha</th>';
-                    html += '    <th class="text-center align-middle">Peso</th>';
-                    html += '    <th class="text-center align-middle">Variación</th>';
-                    html += '    <th class="text-center align-middle">Peso Ideal</th>';
-                    html += '    <!-- <th class="text-center align-middle">Acción</th>-->';
-                    html += '</tr>';
-                    html += '</thead>';
-                    html += '<tbody>';
-                    if(data.estado == 1)
-                    {
-
-                        $.each(data.registros, function(index, value)
-                        {
-                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
-                            var fecha = new Date(f_temp);
-                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear();
-
-
-                            html += '<tr>';
-                            html += '    <td class="text-center align-middle">'+value.id+'</td>';
-                            html += '    <td class="text-center align-middle">'+fecha+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.peso+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.variacion+'</td>';
-                            html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
-                            html += '    <!--<td class="text-center align-middle"><button href="#!" class="btn btn-danger btn-sm"><i class="feather icon-x"></i> Eliminar</button></td>-->';
-                            html += '</tr>';
-                        });
-
-                    }
-                    else
-                    {
-
-                        html += '<tr>';
-                        html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
-                        html += '</tr>';
-
-                    }
-                    html += '</tbody>';
-                    $('#control_obesidad').html(html);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }
-        /** FIN CRONICO */
-
-        /** PERVISUALIZACION DE EXAMEN */
-        function visualizar_pdf_examen(tipo_examen)
-        {
-            if(tipo_examen!='')
-            {
-                var array_datos = {};
-                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
-                    array_datos[element.id] = element.value;
-                });
-
-                var imagenes = $('#input_lista_imagenes').val();
-                if(imagenes != '')
-                {
-                    imagenes = JSON.stringify(imagenes);
-                }
-
-                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
-                Fancybox.show(
-                    [
-                        {
-                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
-                        type: "iframe",
-                        preload: false,
-                        },
-                    ]
-                );
-            }
-            else
-            {
-                console.log('tipo examen no especificado');
-            }
-        }
         function dame_info_pieza() {
             let pieza = $('#historia_pza').val();
             console.log(pieza);
             let url ="{{ route('dental.dame_pieza') }}";
-            let id_paciente = dame_id_paciente();
+            let id_paciente = $('#id_paciente_fc').val();
             if(id_paciente == '' || id_paciente == null){
                 id_paciente = $('#id_paciente').val();
             }
@@ -6249,31 +4761,1607 @@ $(document).ready(function() {
         var contador = 0;
         var piezas_buscadas = new Set();
 
-function mostrar_nueva_pieza_dental_tto(pieza){
-    // Verificar si la pieza ya fue buscada
-    // if (piezas_buscadas.has(pieza)) {
-    //     console.log("La pieza ya ha sido buscada.");
-    //     return; // Salir de la función si la pieza ya está en el set
+        function mostrar_nueva_pieza_dental_tto(pieza){
+            // Verificar si la pieza ya fue buscada
+            // if (piezas_buscadas.has(pieza)) {
+            //     console.log("La pieza ya ha sido buscada.");
+            //     return; // Salir de la función si la pieza ya está en el set
+            // }
+
+            // Agregar la pieza al set de piezas buscadas
+            // piezas_buscadas.add(pieza);
+
+            contador++;
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    pieza: pieza,
+                    seccion:'impl',
+                    counter: contador,
+                    id_paciente: $('#id_paciente').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    $('#contenedor_pieza_tto_implante').empty();
+                    $('#contenedor_pieza_tto_implante').append(resp.v);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
+        function mostrar_nueva_pieza_dental_tto_period(counter){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    counter: counter,
+                    seccion:'period',
+                    id_paciente: $('#id_paciente').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function(){
+                    swal({
+                        title: "Cargando...",
+                        text: "Espere un momento por favor",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    })
+                },
+                success: function(resp) {
+                    swal.close();
+                    console.log(resp);
+                    $('#contenedor_nueva_pieza_dental_tto_period').empty();
+                    $('#contenedor_nueva_pieza_dental_tto_period').append(resp.v);
+                },
+                error: function(error) {
+                        swal.close();
+                    console.log(error);
+                }
+            });
+        }
+
+        function mostrar_nuevas_imagenes_dent_estudio(counter) {
+            let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    counter: counter,
+                    tipo: 'periodoncica',
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function(){
+                    swal({
+                        title: "Cargando...",
+                        text: "Espere un momento por favor",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    })
+                },
+                success: function(resp) {
+                    swal.close();
+                    console.log(resp);
+                    $('#contenedor_nueva_imagen_dent_period').empty();
+                    $('#contenedor_nueva_imagen_dent_period').append(resp.v);
+                },
+                error: function(error) {
+                        swal.close();
+                    console.log(error);
+                }
+            });
+        }
+
+        function mostrar_nueva_pieza_dental_end(counter){
+        let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_end') }}";
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                counter: counter,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(resp) {
+                console.log(resp);
+                $('#contenedor_nuevo_examen_end').empty();
+                $('#contenedor_nuevo_examen_end').append(resp.v);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        }
+
+        function ocultarExamen(counter){
+        $('#nueva_pieza_dental_odontodolor').empty();
+        }
+
+    function ocultarExamenEnd(counter){
+    $('#contenedor_nuevo_examen_end').empty();
+    }
+
+    function cargar_tto_periodoncia(){
+        let id_ficha = $('#id_fc').val();
+
+        if (id_ficha && id_ficha !== '') {
+            $.ajax({
+                url: "{{ route('profesional.obtener_tto_periodonto') }}",
+                type: 'GET',
+                data: { id_ficha_atencion: id_ficha },
+                dataType: 'json',
+                success: function(resp) {
+                    console.log(resp);
+                    evaluaciones_periodoncia = resp.evaluaciones || [];
+                    console.log(evaluaciones_periodoncia);
+
+                    if (resp.mensaje === 'OK' && resp.v) {
+                        $('#contenedor_tto_periodoncia').html(resp.v);
+                        console.log('Evaluaciones cargadas: ' + (resp.total_evaluaciones || 0));
+                        let detalleCirugia = resp.evaluaciones.map(examen =>
+                            `La pieza ${examen.numero_pieza} se ha realizado ${examen.tipo_procedimiento} ` +
+                            `usando ${examen.anestesia} con ${examen.numero_tubos} tubos, ` +
+                            `con la técnica ${examen.tecnica_anestesia}`
+                        ).join("\n");
+
+                        $('#det_cir_period').val(detalleCirugia);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error al cargar evaluaciones:', error);
+                }
+            });
+        }
+    }
+
+    function guardar_pieza_dental_dolor(count){
+    let derivado_por = $('#ex_grl_deriv').val();
+    let zona_dolor = $('#ex_grl_zdolor').val();
+    let historia_anterior = $('#ex_grl_hp').val();
+
+    let pieza_numero = $('#numero_pieza'+count).val();
+    let tipo_dolor = $('#tipo_dolor'+count).val();
+    let intensidad = $('#intensidad'+count).val();
+    let modo_dolor = $('#modo_dolor'+count).val();
+    let loc_dolor = $('#loc_dolor'+count).val();
+    let provocacion_dolor = $('#provocacion_dolor'+count).val();
+    let cdo_duele = $('#cdo_duele'+count).val();
+    let tpo_evolucion = $('#tpo_evolucion'+count).val();
+    let obs_anal_dolor = $('#obs_anal_dolor'+count).val();
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(derivado_por == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Derivado por </li>';
+    }
+    if(zona_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Zona dolor </li>';
+    }
+    if(historia_anterior == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Historia anterior </li>';
+    }
+    if(pieza_numero == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido N° Pieza </li>';
+    }
+    if(tipo_dolor == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Tipo Dolor </li>';
+    }
+    if(intensidad == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Intensidad </li>';
+    }
+    if(obs_anal_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+        return false;
+    }
+
+    let data = {
+        _token: CSRF_TOKEN,
+        derivado_por: derivado_por,
+        zona_dolor: zona_dolor,
+        historia_anterior: historia_anterior,
+        pieza_numero: pieza_numero,
+        tipo_dolor: tipo_dolor,
+        intensidad: intensidad,
+        modo_dolor: modo_dolor,
+        loc_dolor: loc_dolor,
+        provocacion_dolor: provocacion_dolor,
+        cdo_duele: cdo_duele,
+        tpo_evolucion: tpo_evolucion,
+        obs_anal_dolor: obs_anal_dolor,
+        id_paciente: $('#id_paciente_fc').val(),
+        id_lugar_atencion : $('#id_lugar_atencion').val(),
+        id_ficha_atencion: $('#id_ficha_atencion').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        count: count
+    }
+
+        let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_dolor') }}";
+
+        $.ajax({
+            url: url,
+            type:'post',
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#contenedor_pieza_dental_odontodolor').empty();
+                $('#contenedor_pieza_dental_odontodolor').append(resp.v);
+                $('#nueva_pieza_dental_odontodolor').empty();
+                mostrar_nueva_pieza_dental(1000);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+        }
+
+        function mostrar_pieza_dental_examen(count){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+            let data = {
+                count: count,
+                id_paciente: $('#id_paciente_fc').val(),
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                type:'post',
+                url: url,
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.mensaje == 'OK'){
+                        $('#contenedor_nueva_pieza_dental').empty();
+                        $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+        function guardar_pieza_dental_end(count){
+        let derivado_por = $('#ex_end_derivado_por').val();
+        let zona_dolor = $('#ex_end_zona_dolor').val();
+        let historia_anterior = $('#ex_end_hist_ant').val();
+
+        let pieza_numero = $('#end_numero_pieza'+count).val();
+        let tipo_dolor = $('#end_tipo_dolor'+count).val();
+        let intensidad = $('#end_intensidad'+count).val();
+        let modo_dolor = $('#end_modo_dolor'+count).val();
+        let loc_dolor = $('#end_loc_dolor'+count).val();
+        let provocacion_dolor = $('#end_provocacion_dolor'+count).val();
+        let cdo_duele = $('#end_cdo_duele'+count).val();
+        let tpo_evolucion = $('#end_tpo_evolucion'+count).val();
+        let obs_anal_dolor = $('#end_obs_loc_dolor'+count).val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(derivado_por == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Derivado por </li>';
+        }
+        if(zona_dolor == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Zona dolor </li>';
+        }
+        if(historia_anterior == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Historia anterior </li>';
+        }
+        if(pieza_numero == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido N° Pieza </li>';
+        }
+        if(tipo_dolor == 0){
+            valido = 0;
+            mensaje += '<li>Campo requerido Tipo Dolor </li>';
+        }
+        if(intensidad == 0){
+            valido = 0;
+            mensaje += '<li>Campo requerido Intensidad </li>';
+        }
+        if(obs_anal_dolor == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+        let data = {
+            _token: CSRF_TOKEN,
+            derivado_por: derivado_por,
+            zona_dolor: zona_dolor,
+            historia_anterior: historia_anterior,
+            pieza_numero: pieza_numero,
+            tipo_dolor: tipo_dolor,
+            intensidad: intensidad,
+            modo_dolor: modo_dolor,
+            loc_dolor: loc_dolor,
+            provocacion_dolor: provocacion_dolor,
+            cdo_duele: cdo_duele,
+            tpo_evolucion: tpo_evolucion,
+            obs_anal_dolor: obs_anal_dolor,
+            id_paciente: $('#id_paciente_fc').val(),
+            id_lugar_atencion : $('#id_lugar_atencion').val(),
+            id_ficha_atencion: $('#id_ficha_atencion').val(),
+            id_profesional: $('#id_profesional_fc').val(),
+            count: count
+        }
+
+        let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_end_dolor') }}";
+
+        $.ajax({
+            url: url,
+            type:'post',
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#contenedor_examen_dolor_end').empty();
+                $('#contenedor_examen_dolor_end').append(resp.v);
+                $('#contenedor_nuevo_examen_end').empty();
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+        }
+
+        function eliminarExamenAgregado(id) {
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarExamenAgregado(id);
+            }
+        })
+        }
+
+        function eliminarExamenEndAgregado(id, tipo_examen) {
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarExamenEndAgregado(id, tipo_examen);
+            }
+        })
+        }
+        $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio los demás datos se cargan solos. ');
+        $('#mensaje_ficha').show();
+        setTimeout(function(){
+            $('#mensaje_ficha').hide();
+        }, 6000);
+        @if($fichas->count()>0)
+                        $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+                    @else
+                        $('#mensaje_historias').html(' Primera consulta del paciente. ');
+                    @endif
+                        $('#mensaje_historias').show();
+                        setTimeout(function(){
+                            $('#mensaje_historias').hide();
+                        }, 6000);
+        function confirmarEliminarExamenAgregado(id){
+        let url = "{{ route('profesional.eliminar_nueva_pieza_dental') }}";
+        var idPaciente = $('#id_paciente_fc').val();
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                id: id,
+                id_paciente: idPaciente,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(resp) {
+                console.log(resp);
+                let mensaje = resp.mensaje;
+                let vista = resp.vista;
+                if (mensaje == 'OK') {
+                    swal({
+                        title: 'Éxito',
+                        text: 'Evolución eliminada correctamente',
+                        icon: 'success',
+                        button: 'Aceptar'
+                    });
+                    $('#contenedor_pieza_dental_odontodolor').empty();
+                    $('#contenedor_pieza_dental_odontodolor').append(vista);
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: 'mensaje',
+                        icon: 'error',
+                        button: 'Aceptar'
+                    })
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+        }
+
+function confirmarEliminarExamenEndAgregado(id, tipo_examen){
+let url = "{{ route('profesional.eliminar_nueva_pieza_dental_end') }}";
+var idPaciente = $('#id_paciente_fc').val();
+$.ajax({
+    url: url,
+    type: 'post',
+    data: {
+        id: id,
+        id_paciente: idPaciente,
+        tipo_examen: tipo_examen,
+        _token: '{{ csrf_token() }}'
+    },
+    success: function(resp) {
+        console.log(resp);
+        let mensaje = resp.mensaje;
+        let vista = resp.vista;
+        if (mensaje == 'OK') {
+            swal({
+                title: 'Éxito',
+                text: 'Evolución eliminada correctamente',
+                icon: 'success',
+                button: 'Aceptar'
+            });
+            if(tipo_examen == 'endo'){
+                $('#contenedor_examen_dolor_end').empty();
+                $('#contenedor_examen_dolor_end').append(vista);
+            }else if(tipo_examen == 'odontop'){
+                $('#contenedor_pieza_dental_od_general').empty();
+                $('#contenedor_pieza_dental_od_general').append(vista);
+            }
+
+        } else {
+            swal({
+                title: 'Error',
+                text: 'mensaje',
+                icon: 'error',
+                button: 'Aceptar'
+            })
+        }
+    },
+    error: function(error) {
+        console.log(error);
+    }
+});
+}
+
+function mostrarFormularioReceta(id) {
+    console.log(id);
+    if (id == 1) {
+        $('#rec_1').addClass('show active');
+        $('#rec_2').removeClass('show active');
+        $('#procedimiento_div').removeClass('show active');
+        $('#curaciones_div').removeClass('show active');
+    } else if (id == 2) {
+        $('#rec_2').addClass('show active');
+        $('#rec_1').removeClass('show active');
+        $('#procedimiento_div').removeClass('show active');
+        $('#curaciones_div').removeClass('show active');
+    } else if (id == 3) {
+        $('#rec_1').removeClass('show active');
+        $('#rec_2').removeClass('show active');
+        $('#procedimiento_div').addClass('show active');
+        $('#curaciones_div').removeClass('show active');
+    }else{
+        console.log('es 4');
+        $('#rec_1').removeClass('show active');
+        $('#rec_2').removeClass('show active');
+        $('#procedimiento_div').removeClass('show active');
+        $('#curaciones_div').addClass('show active');
+    }
+}
+
+function indicar_procedimiento_sdi() {
+    var ind_med = $('#ind_med').val();
+    var ind_cur = $('#ind_cur').val();
+    var ind_proc = $('#ind_proc').val();
+    var ind_inmmed = $('#ind_inmmed').val();
+    var ind_cc = $('#ind_cv_inmmed_urg').val();
+    var ind_pp = $('#ind_pp').val();
+    var ind_vig_sig = $('#ind_vig_sig').val();
+
+    var obs_ind_med = $('#obs_ind_med_servicio').val();
+    var obs_detalle_ind_med = $('#obs_detalle_ind_med').val();
+
+    var params = new URLSearchParams(location.search);
+    var id_paciente = $('#id_paciente').val();
+
+    var valido = 0;
+    var mensaje = '';
+
+    // if ($.trim(ind_med) == '' || ind_med == 0 || $.trim(ind_med) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Vias y Cateter.\n';
     // }
 
-    // Agregar la pieza al set de piezas buscadas
-    // piezas_buscadas.add(pieza);
+    // if ($.trim(ind_cur) == '' || ind_cur == 0 || $.trim(ind_cur) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Curaciones.\n';
+    // }
 
-    contador++;
-    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
+    // if ($.trim(ind_proc) == '' || ind_proc == 0 || $.trim(ind_proc) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Sondas y procedimientos.\n';
+    // }
+
+    // if ($.trim(ind_inmmed) == '' || ind_inmmed == 0 || $.trim(ind_inmmed) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Inmovilizacion.\n';
+    // }
+
+    // if ($.trim(ind_cc) == '' || ind_cc == 0 || $.trim(ind_cc) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Control de ciclo.\n';
+    // }
+
+    // if ($.trim(ind_pp) == '' || ind_pp == 0 || $.trim(ind_pp) == 'Seleccione') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Preparar para.\n';
+    // }
+
+    // if ($.trim(ind_vig_sig) == '') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Vigilar signos de alerta.\n';
+    // }
+
+    // if ($.trim(obs_ind_med) == '') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Observaciones.\n';
+    // }
+
+    // if ($.trim(obs_detalle_ind_med) == '') {
+    //     valido = 1;
+    //     mensaje += 'Debe completar el campo Detalle de Observaciones.\n';
+    // }
+
+
+    if (valido == 0) {
+        let data = {
+            ind_med: ind_med,
+            ind_cur: ind_cur,
+            ind_proc: ind_proc,
+            ind_inmmed: ind_inmmed,
+            ind_cc: ind_cc,
+            ind_pp: ind_pp,
+            ind_vig_sig: ind_vig_sig,
+            id_paciente: id_paciente,
+            obs_ind_med: obs_ind_med,
+            obs_detalle_ind_med: obs_detalle_ind_med,
+            _token: "{{ csrf_token() }}"
+        };
+
+        console.log(data);
+        var url = "{{ route('indicar_procedimiento_sdi') }}";
+        $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+                dataType: "json",
+            })
+            .done(function(data) {
+                if (data.status == 1) {
+                    let procedimientos = data.procedimientos;
+                    let curaciones = data.curaciones;
+
+                    $('#tabla_procedimientos_servicio tbody').empty();
+                    $('#tabla_procedimientos_servicio_enfermera tbody').empty();
+                    $('#tabla_curaciones_servicio tbody').empty();
+                    $('#tabla_curaciones_procedimientos tbody').empty();
+                    $('#tabla_procedimientos_hosp tbody').empty();
+                    procedimientos.forEach(function(procedimiento) {
+                        console.log(procedimiento.id);
+                        if (procedimiento.estado == 0) {
+                            var html = '<span class="badge badge-warning">Suspendido </span>';
+                        } else {
+                            var html = '';
+                        }
+                        let datos = JSON.parse(procedimiento.datos_procedimiento);
+                        // Ahora puedes trabajar con datos como un objeto JSON
+
+                        $('#tabla_procedimientos_servicio tbody').append(`
+                            <tr>
+                                <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora}</td>
+                                <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                                <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
+                                <td class="text-center align-middle text-wrap">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                        <i class="feather icon-x"></i>Eliminar
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                        onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                        <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                        ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+
+                        $('#tabla_procedimientos_hosp tbody').append(`
+                            <tr>
+                                <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora}</td>
+                                <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                                <td class="text-center align-middle text-wrap">
+                                    <input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm">
+                                </td>
+                                <td class="text-center align-middle text-wrap">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                        <i class="feather icon-x"></i>Eliminar
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                        onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                        <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                        ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                    if (curaciones.length > 0) {
+                        curaciones.forEach(function(curacion) {
+                            let datos = curacion.datos_curacion;
+                            // Ahora puedes trabajar con datos como un objeto JSON
+                            console.log(curacion);
+                            $('#tabla_curaciones_servicio tbody').append(`
+                                <tr>
+                                    <td>${curacion.fecha} ${curacion.hora} <br> ${curacion.responsable}</td>
+                                    <td class="text-center align-middle">${datos.nombre_procedimiento}</td>
+                                    <td class="text-center align-middle">
+                                        <input type="text" class="form-control form-control-sm" id="vigilancia_curacion_servicio${curacion.id}" />
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <div class="switch switch-success d-inline">
+                                            <input type="checkbox" id="curaciones_servicio_listo${curacion.id}" checked="">
+                                            <label for="curaciones_servicio_listo${curacion.id}" class="cr"></label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos_">
+                                            Insumos
+                                        </button>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-outline-warning btn-sm" >
+                                            <i class="fas fa-edit"></i>
+
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+
+                            $('#tabla_curaciones_procedimientos tbody').append(`
+                            <tr>
+                                <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
+                                <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
+                                <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="feather icon-x"></i></button></td>
+                            </tr>
+                            `);
+                        });
+                    }
+
+                    swal({
+                        title: "Indicación de Procedimiento.",
+                        text: data.mensaje,
+                        icon: "success",
+                        buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                } else {
+                    swal({
+                        title: "Indicación de Procedimiento.",
+                        text: data.mensaje,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+    } else {
+        swal({
+            title: "Indicación de Procedimiento.",
+            text: mensaje,
+            icon: "error",
+            buttons: "Aceptar",
+            //SuccessMode: true,
+        });
+    }
+}
+
+function evaluar_para_carga_detalle(select, div, input, valor)
+{
+    var valor_select = $('#'+select+'').val();
+    if(valor_select == valor) $('#'+div+'').show();
+    else {
+        $('#'+div+'').hide();
+        $('#'+input+'').val('');
+    }
+}
+
+function eliminar_procedimiento_sdi(id) {
+    swal({
+        title: "Eliminar Procedimiento.",
+        text: 'Al "Aceptar" Elimina el procedimiento.\n',
+        icon: "warning",
+        buttons: ["Cancelar", 'Aceptar'],
+    }).then((result) => {
+        console.log(result);
+        if (result == true) {
+            eliminar_procedimiento_sdi_ajax(id);
+        } else {
+            console.log('regresar');
+        }
+    });
+}
+
+function suspender_procedimiento_sdi(id) {
+    var url = "{{ route('suspender_procedimiento_sdi') }}";
+    var id_paciente = $('#id_paciente').val();
+
+    $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id: id,
+                id_paciente: id_paciente,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: "json",
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 'success') {
+                let procedimientos = data.procedimientos;
+                let curaciones = data.curaciones;
+                console.log(procedimientos);
+                $('#tabla_procedimientos_servicio tbody').empty();
+                $('#tabla_procedimientos_hosp tbody').empty();
+                $('#tabla_curaciones_servicio tbody').empty();
+                procedimientos.forEach(function(procedimiento) {
+                    if (procedimiento.estado == 0) {
+                        var html = '<span class="badge badge-warning">Suspendido </span>';
+                    } else {
+                        var html = '';
+                    }
+                    let datos = JSON.parse(procedimiento.datos_procedimiento);
+                    // Ahora puedes trabajar con datos como un objeto JSON
+                    console.log(datos);
+                    $('#tabla_procedimientos_servicio tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora} <br> ${procedimiento.responsable}</td>
+                            <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                            <td class="text-center align-middle text-wrap">
+                                <input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm">
+                            </td>
+                            <td class="text-center align-middle text-wrap">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                    <i class="feather icon-x"></i>Eliminar
+                                </button>
+                                <button type="button"
+                                    class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                    onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                    <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                    ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+
+                    $('#tabla_procedimientos_hosp tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora} <br> ${procedimiento.responsable}</td>
+                            <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                            <td class="text-center align-middle text-wrap">
+                                <input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm">
+                            </td>
+                            <td class="text-center align-middle text-wrap">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                    <i class="feather icon-x"></i>Eliminar
+                                </button>
+                                <button type="button"
+                                    class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                    onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                    <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                    ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+
+                });
+
+                curaciones.forEach(function(curacion) {
+                    let datos = curacion.datos_curacion;
+                    // Ahora puedes trabajar con datos como un objeto JSON
+                    console.log(curacion);
+                    $('#tabla_curaciones_servicio tbody').append(`
+                        <tr>
+                            <td>${curacion.fecha} ${curacion.hora} <br> ${curacion.responsable}</td>
+                            <td class="text-center align-middle">${datos.nombre_procedimiento}</td>
+                            <td class="text-center align-middle">
+                                <input type="text" class="form-control form-control-sm" id="vigilancia_curacion_servicio${curacion.id}" />
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="switch switch-success d-inline">
+                                    <input type="checkbox" id="curaciones_servicio_listo${curacion.id}" checked="">
+                                    <label for="curaciones_servicio_listo${curacion.id}" class="cr"></label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos_">
+                                    Insumos
+                                </button>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-outline-warning btn-sm" >
+                                    <i class="fas fa-edit"></i>
+
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+                });
+
+                swal({
+                    title: "Indicación de Procedimiento.",
+                    text: data.mensaje,
+                    icon: "success",
+                    buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+            } else {
+                swal({
+                    title: "Indicación de Procedimiento.",
+                    text: data.mensaje,
+                    icon: "error",
+                    buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+}
+
+function eliminar_procedimiento_sdi_ajax(id) {
+    var url = "{{ route('eliminar_procedimiento_sdi') }}";
+    var id_paciente = $('#id_paciente').val();
+    $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id: id,
+                id_paciente: id_paciente,
+                _token: "{{ csrf_token() }}"
+            },
+            dataType: "json",
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 'success') {
+                let procedimientos = data.procedimientos;
+                let curaciones = data.curaciones;
+                console.log(curaciones);
+                $('#tabla_procedimientos_servicio tbody').empty();
+                $('#tabla_procedimientos_hosp tbody').empty();
+                $('#tabla_curaciones_servicio tbody').empty();
+                procedimientos.forEach(function(procedimiento) {
+                    if (procedimiento.estado == 0) {
+                            var html = '<span class="badge badge-warning">Suspendido </span>';
+                        } else {
+                            var html = '';
+                        }
+                    let datos = JSON.parse(procedimiento.datos_procedimiento);
+                    // Ahora puedes trabajar con datos como un objeto JSON
+                    console.log(datos);
+                    $('#tabla_procedimientos_servicio tbody').append(`
+                            <tr>
+                                <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora} <br> ${procedimiento.responsable}</td>
+                                <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                                <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
+                                <td class="text-center align-middle text-wrap">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                        <i class="feather icon-x"></i>Eliminar
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                        onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                        <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                        ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+
+                        $('#tabla_procedimientos_hosp tbody').append(`
+                            <tr>
+                                <td class="text-center align-middle text-wrap">${procedimiento.fecha} ${procedimiento.hora} <br> ${procedimiento.responsable}</td>
+                                <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento} ${html}</td>
+                                <td class="text-center align-middle text-wrap">
+                                    <input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm">
+                                </td>
+                                <td class="text-center align-middle text-wrap">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
+                                        <i class="feather icon-x"></i>Eliminar
+                                    </button>
+                                    <button type="button"
+                                        class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
+                                        onclick="${procedimiento.estado === 0 ? 'suspender_procedimiento_sdi' : 'suspender_procedimiento_sdi'}(${procedimiento.id})">
+                                        <i class="fas ${procedimiento.estado === 0 ? 'fa-check' : 'fa-ban'}"></i>
+                                        ${procedimiento.estado === 0 ? 'Reponer' : 'Suspender'}
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                });
+
+                curaciones.forEach(function(curacion) {
+                    let datos = curacion.datos_curacion;
+                    // Ahora puedes trabajar con datos como un objeto JSON
+                    console.log(curacion);
+                    $('#tabla_curaciones_servicio tbody').append(`
+                        <tr>
+                            <td>${curacion.fecha} ${curacion.hora} <br> ${curacion.responsable}</td>
+                            <td class="text-center align-middle">${datos.nombre_procedimiento}</td>
+                            <td class="text-center align-middle">
+                                <input type="text" class="form-control form-control-sm" id="vigilancia_curacion_servicio${curacion.id}" />
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="switch switch-success d-inline">
+                                    <input type="checkbox" id="curaciones_servicio_listo${curacion.id}" checked="">
+                                    <label for="curaciones_servicio_listo${curacion.id}" class="cr"></label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos_">
+                                    Insumos
+                                </button>
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-outline-warning btn-sm" >
+                                    <i class="fas fa-edit"></i>
+
+                                </button>
+                            </td>
+                        </tr>
+                    `);
+                });
+
+                swal({
+                    title: "Indicación de Procedimiento.",
+                    text: data.mensaje,
+                    icon: "success",
+                    buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+            } else {
+                swal({
+                    title: "Indicación de Procedimiento.",
+                    text: data.mensaje,
+                    icon: "error",
+                    buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+}
+
+function eliminarCuracion(id) {
+    swal({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este registro!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ route('eliminar_curacion') }}",
+                    type: "POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "id": id,
+                        "id_paciente": $('#id_paciente').val()
+                    },
+                    success: function(data) {
+
+                        // convertir json a objeto
+                        var obj = JSON.parse(data);
+                        var curaciones = obj.curaciones;
+                        $('#tabla_curaciones_servicio tbody').empty();
+                        $('#tabla_curaciones_procedimientos tbody').empty();
+                        curaciones.forEach(curacion => {
+                            let datos = curacion.datos_curacion;
+                            $('#tabla_curaciones_servicio tbody').append(`
+                            <tr>
+                                <td>${curacion.fecha} ${curacion.hora} <br> ${curacion.responsable}</td>
+                                <td class="text-center align-middle">${datos.nombre_procedimiento}</td>
+                                <td class="text-center align-middle">
+                                    <input type="text" class="form-control form-control-sm" id="vigilancia_curacion_servicio${curacion.id}" />
+                                </td>
+                                <td class="text-center align-middle">
+                                    <div class="switch switch-success d-inline">
+                                        <input type="checkbox" id="curaciones_servicio_listo${curacion.id}" checked="">
+                                        <label for="curaciones_servicio_listo${curacion.id}" class="cr"></label>
+                                    </div>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos_">
+                                        Insumos
+                                    </button>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-warning btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
+                                        <i class="feather icon-x"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                            $('#tabla_curaciones_procedimientos tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle text-wrap hidden" hidden="hidden">${curacion.id}</td>
+                            <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
+                            <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${curacion.id}" name="ind_vig_sig${curacion.id}" class="form-control form-control-sm"></td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                        });
+
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+        });
+
+}
+
+function eliminar_medicamento_sdi(id) {
+    swal({
+        title: "Eliminar Medicamento",
+        text: "¿Está seguro de eliminar el medicamento?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            let url = "{{ route('detalle_receta.eliminar') }}";
+            var _token = CSRF_TOKEN;
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id: id,
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    let mensaje = resp.status;
+                    if (mensaje == 'success') {
+                        let medicamentos = resp.data;
+                        $('#tbody_tabla_medicamento_cirugia_sdi').empty();
+                        $('#tbody_tabla_medicamento_manual').empty();
+                        $('#tabla_tratamientos_servicio tbody').empty();
+                        medicamentos.forEach(medicamento => {
+                            console.log(medicamento);
+                            if (medicamento.id_dosis == null) {
+                                medicamento.dosis = medicamento.nombre_dosis;
+                            }
+
+                            if (medicamento.id_frecuencia == null || medicamento
+                                .id_frecuencia == 0) {
+                                medicamento.indicaciones = medicamento
+                                .nombre_frecuencia;
+                            }
+
+                            let fila = `<tr id="row${medicamento.id}">
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_tipo_control}</td>
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_medicamento}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.farmaco}</td>
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_dosis_medicamento_ficha_dental}</td>
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_frecuencia_medicamento_ficha_dental}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
+                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
+                                    </tr>`;
+
+                            let fila_ = `<tr id="row${medicamento.id}">
+                                        <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+                                        <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+                                        <td><input type="text" disabled></td>
+                                        <td class="p-0">
+                                            <div class="switch switch-success d-inline">
+                                                <input type="checkbox" id="tratamiento_listo${medicamento.id}">
+                                                <label for="tratamiento_listo${medicamento.id}" class="cr"></label>
+                                            </div><br>
+                                            <label>Listo</label>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos">Insumos</button>
+                                        </td>
+                                        <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"> </i></button> </td>
+                                    </tr>`;
+                            $('#tbody_tabla_medicamento_cirugia_sdi').append(fila);
+                            $('#tbody_tabla_medicamento_manual').append(fila);
+                            $('#tabla_tratamientos_servicio tbody').append(fila_);
+                        });
+                        swal({
+                            title: "Medicamento Eliminado",
+                            icon: "success",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error.responseText);
+                }
+            })
+        }
+    });
+}
+
+function enviar_medicamento_faltante_sdi()
+{
+    var med_faltante = $.trim($('#med_faltante').val());
+    var med_droga = $.trim($('#manual_nombre_composicion_farmaco').val());
+
+    if(med_faltante != '')
+    {
+        /** registro */
+        let url = "{{ route('medicamentoFaltante.registro')}}";
+
+
+        var _token = CSRF_TOKEN;
+        var id_profesional = $('#id_profesional').val();
+
+        $.ajax({
+
+            url: url,
+            type: "POST",
+            data: {
+                _token: _token,
+                id_profesional: id_profesional,
+                nombre: med_faltante,
+                droga: med_droga,
+            },
+        })
+        .done(function(data)
+        {
+
+            if (data !== 'null')
+            {
+                //data = JSON.parse(data);
+                console.log('-----------------------');
+                console.log(data);
+                console.log('-----------------------');
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Medicamento/Dispositivo Faltante enviado.\n Proximamente se agregará el Medicamento/Dispositivo Faltante en los registros",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    $('#med_faltante').val('');
+                    $('#no_existe_switch').prop( "checked", false );
+                    $('#no_existe').hide();
+
+                }
+                else{
+
+                    swal({
+                        title: "Problema al Enviar solicitud.",
+                        icon: "warning",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                }
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+    else
+    {
+        swal({
+            title: "Debe Indicar el nombre del Medicamento/Dispositivo Faltante.",
+            icon: "error",
+            // buttons: "Aceptar",
+            //SuccessMode: true,
+        })
+    }
+
+}
+function indicar_medicamento_manual_sdi()
+{
+    let nombre_medicamento_ficha_dental = $('#manual_nombre_medicamento_ficha_dental').val();
+    let id_medicamento = $('#manual_id_medicamento_ficha_dental').val();
+    let farmaco = $('#manual_nombre_composicion_farmaco').val();
+    let tipo_control = $('#manual_tipo_control').val();
+
+    let dosis_medicamento_ficha_dental = $('#manual_dosis_medicamento_ficha_dental').val();
+    let frecuencia_medicamento_ficha_dental = $('#manual_frecuencia_medicamento_ficha_dental').val();
+
+    let cantidad_comprar = $('#manual_cantidad_comprar').val();
+    let cantidad_numero_comprar = $('#manual_cantidad_numero').val();
+
+    let id_via_administracion_ficha_dental = $('#manual_via_administracion_ficha_dental').val();
+    let via_administracion_ficha_dental = $('#manual_via_administracion_ficha_dental option:selected').text();
+
+    let observaciones_medicamento_ficha_dental = $('#manual_observaciones_via_administracion_ficha_dental').val();
+
+    let id_periodo_ficha_dental = $('#manual_periodo_ficha_dental').val();
+    let periodo_ficha_dental = $('#manual_periodo_ficha_dental option:selected').text();
+
+    let observaciones_periodo_ficha_dental = $('#manual_observaciones_periodo_ficha_dental').val();
+
+
+
+    var lista_med = [];
+    $('#tabla_medicamento_cirugia_sdi tr').each(function(i, n) {
+        if (i > 0) {
+            rol = {};
+            var data = $(this).find("td");
+            lista_med.push($.trim($(data[2]).text().split("\n").join("")));
+        }
+    });
+
+    if($.inArray(nombre_medicamento_ficha_dental,lista_med) == -1)
+    {
+
+        var medicamento_uso_cronico = 0;
+        if($('#manual_medicamento_uso_cronico').is(':checked'))
+            medicamento_uso_cronico = 1;
+
+        var valido = 0;
+        var mensaje = '';
+
+        if($.trim(nombre_medicamento_ficha_dental) == '')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Medicamento.\n';
+        }
+
+        if($.trim(tipo_control) == '0')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Tipo Control.\n';
+        }
+
+        if($.trim(farmaco) == '')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Farmaco.\n';
+        }
+
+        if($.trim(dosis_medicamento_ficha_dental) == '')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Presentación.\n';
+        }
+
+        if($.trim(frecuencia_medicamento_ficha_dental) == '')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Posología.\n';
+        }
+
+
+        if($.trim(via_administracion_ficha_dental) == '' || via_administracion_ficha_dental == 0 || $.trim(via_administracion_ficha_dental) == 'Seleccione')
+        {
+            valido = 1;
+            mensaje += 'Debe completar el campo Via de Administración.\n';
+        }
+        else if($('#via_administracion_ficha_dental').val() == 11)
+        {
+            if( $.trim(observaciones_medicamento_ficha_dental) == '')
+            {
+                valido = 1;
+                mensaje += 'Debe ingresar Otra Vía Administración\n';
+            }
+            else
+            {
+                via_administracion_ficha_dental = observaciones_medicamento_ficha_dental;
+            }
+        }
+
+        // if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
+        // {
+        //     valido = 1;
+        //     mensaje += 'Debe completar el campo Periodo.\n';
+        // }
+        // else if($('#periodo_ficha_dental').val() == 11)
+        // {
+        //     if( $.trim(observaciones_periodo_ficha_dental) == '')
+        //     {
+        //         valido = 1;
+        //         mensaje += 'Debe ingresar Otro Periodo\n';
+        //     }
+        //     else
+        //     {
+        //         periodo_ficha_dental = observaciones_periodo_ficha_dental;
+        //     }
+        // }
+
+        // if($.trim(cantidad_comprar) == '')
+        // {
+        //     valido = 1;
+        //     mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
+        // }
+        // else
+        // {
+        //     const regex = /\(\d+\) \w+ \w+/g;
+        //     if (!regex.test(cantidad_comprar))
+        //     {
+        //         console.log('no cuadra');
+        //         valido = 1;
+        //         mensaje += 'El campo de Cantidad a Comprar no tiene el formato adecuado\n Ejemplo: (1) Una Caja.\n';
+        //     }
+        //     else
+        //     {
+        //         console.log('correcto');
+        //     }
+        // }
+
+        if(valido == 0)
+        {
+            var parametros = {
+                "id_tipo_control": tipo_control,
+                "id_medicamento": id_medicamento,
+                "nombre_medicamento_ficha_dental": nombre_medicamento_ficha_dental,
+                "farmaco": farmaco,
+                "dosis_medicamento_ficha_dental": dosis_medicamento_ficha_dental,
+                "frecuencia_medicamento_ficha_dental": frecuencia_medicamento_ficha_dental,
+                "via_administracion_ficha_dental": via_administracion_ficha_dental,
+                "observaciones_medicamento_ficha_dental": observaciones_medicamento_ficha_dental,
+                "medicamento_uso_cronico": medicamento_uso_cronico,
+
+            }
+
+            console.log(parametros);
+            $('.medicamentos_sin_registros').remove();
+            agregarMedicamentoManualReceta(parametros, 1);
+
+            /** enviando a table de medicamento faltante */
+            if($('#id_medicamento_ficha_dental').val() == '')
+            {
+                $('#med_faltante').val(nombre_medicamento_ficha_dental);
+                enviar_medicamento_faltante_sdi();
+            }
+
+
+            $('#manual_nombre_medicamento_ficha_dental').val('');
+            $('#manual_id_medicamento_ficha_dental').val('');
+            $('#manual_nombre_composicion_farmaco').val('');
+            $('#manual_dosis_medicamento_ficha_dental').val('');
+            $('#manual_frecuencia_medicamento_ficha_dental').val('');
+            $('#manual_cantidad_comprar').val('');
+            $('#manual_via_administracion_ficha_dental').val(0);
+            $('#manual_observaciones_via_administracion_ficha_dental').val('');
+            $('#manual_periodo_ficha_dental').val(0);
+            $('#manual_observaciones_periodo_ficha_dental').val('');
+
+            $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
+
+        }
+        else
+        {
+            swal({
+                title: "Ingreso de medicamento(s).",
+                text: mensaje,
+                icon: "error",
+            });
+        }
+    }
+    else
+    {
+        swal({
+            title: "Ingreso de medicamento(s).",
+            text:'El medicamento está Recetado',
+            icon: "warning",
+            // buttons: "Aceptar",
+            //SuccessMode: true,
+        });
+    }
+}
+
+function validar_via_administracion_manual_sdi() {
+    if ($('#manual_via_administracion_ficha_dental').val() == 11) {
+        $('#div_manual_observaciones_via_administracion_ficha_dental').show();
+        $('#manual_observaciones_via_administracion_ficha_dental').removeAttr('disabled');
+    } else {
+        $('#div_manual_observaciones_via_administracion_ficha_dental').hide();
+        $('#manual_observaciones_via_administracion_ficha_dental').attr('disabled', 'disabled');
+        $('#manual_observaciones_via_administracion_ficha_dental').val('');
+    }
+}
+
+function agregarMedicamentoManualReceta(parametros, receta_am) {
+
+let url = "{{ route('detalle_receta.registro_manual_receta') }}";
+let id_paciente = $('#id_paciente').val();
+let selectedOption = $('#dosis_medicamento_ficha_dental option:selected');
+let dataId = selectedOption.data('id');
+var _token = CSRF_TOKEN;
+$.ajax({
+
+    url: url,
+    type: "POST",
+    data: {
+        _token: _token,
+        id_ficha: $('#id_fc').val(),
+        id_tipo_control: parametros.id_tipo_control,
+        id_medicamento: parametros.id_medicamento,
+        nombre_medicamento_ficha_dental: parametros.nombre_medicamento_ficha_dental,
+        nombre_dosis_ficha_dental: parametros.dosis_medicamento_ficha_dental,
+        nombre_frecuencia_ficha_dental: parametros.frecuencia_medicamento_ficha_dental,
+        via_administracion: parametros.via_administracion_ficha_dental,
+        farmaco: parametros.farmaco,
+        observaciones: parametros.observaciones_medicamento_ficha_dental,
+        uso_cronico: parametros.medicamento_uso_cronico,
+        id_paciente: id_paciente,
+        receta_am: receta_am,
+    },
+    success: function(resp) {
+        console.log(resp);
+        let mensaje = resp.status;
+        if (mensaje == 'success') {
+            let medicamentos = resp.data;
+            $('#tbody_tabla_medicamento_cirugia_sdi').empty();
+            $('#tbody_tabla_medicamento_manual').empty();
+            $('#tabla_tratamientos_servicio tbody').empty();
+            medicamentos.forEach(medicamento => {
+                console.log(medicamento);
+                if (medicamento.id_dosis == null) {
+                    medicamento.dosis = medicamento.nombre_dosis;
+                }
+
+                if (medicamento.id_frecuencia == null || medicamento.id_frecuencia == 0 ||
+                    medicamento.id_frecuencia == 1000) {
+                    medicamento.indicaciones = medicamento.nombre_frecuencia;
+                }
+                let fila = `<tr id="row${medicamento.id}">
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_tipo_control}</td>
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_medicamento}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.farmaco}</td>
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_dosis_medicamento_ficha_dental}</td>
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_frecuencia_medicamento_ficha_dental}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
+                                <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
+                            </tr>`;
+
+                let fila_ = `<tr id="row${medicamento.id}">
+                                <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+                                <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+                                <td><input type="text" disabled></td>
+                                <td class="p-0">
+                                    <div class="switch switch-success d-inline">
+                                        <input type="checkbox" id="tratamiento_listo${medicamento.id}" disabled>
+                                        <label for="tratamiento_listo${medicamento.id}" class="cr"></label>
+                                    </div><br>
+                                    <label>Pendiente</label>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos">Insumos</button>
+                                </td>
+                                <td> <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#modalAgregarObservaciones" onclick="dame_tratamiento(${medicamento.id})"><i class="fas fa-edit"> </i></button></td>
+                            </tr>`;
+                $('#tbody_tabla_medicamento_cirugia_sdi').append(fila);
+                $('#tbody_tabla_medicamento_manual').append(fila);
+                $('#tabla_tratamientos_servicio tbody').append(fila_);
+            });
+            swal({
+                title: "Medicamento Agregado",
+                icon: "success",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+        }
+    },
+    error: function(error) {
+        console.log(error.responseText);
+    }
+})
+}
+
+
+function mostrar_nuevas_imagenes_dent(counter = null){
+    let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
     $.ajax({
         url: url,
         type: 'post',
         data: {
-            pieza: pieza,
-            seccion:'impl',
-            counter: contador,
+            counter: counter ?? 1000,
             _token: '{{ csrf_token() }}'
         },
         success: function(resp) {
             console.log(resp);
-             $('#contenedor_pieza_tto_implante').empty();
-            $('#contenedor_pieza_tto_implante').append(resp.v);
+            $('#contenedor_nueva_imagen_dent').empty();
+            $('#contenedor_nueva_imagen_dent').append(resp.v);
         },
         error: function(error) {
             console.log(error);
@@ -6281,27 +6369,6 @@ function mostrar_nueva_pieza_dental_tto(pieza){
     });
 }
 
-
-function mostrar_nueva_pieza_dental_tto_period(counter){
-    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
-    $.ajax({
-        url: url,
-        type: 'post',
-        data: {
-            counter: counter,
-            seccion:'period',
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(resp) {
-            console.log(resp);
-            $('#contenedor_pieza_plan_implante').empty();
-            $('#contenedor_pieza_plan_implante').append(resp.v);
-        },
-        error: function(error) {
-            console.log(error);
-        }
-    });
-}
 
 function mostrar_nuevas_imagenes_dent_periodoncica(counter){
     let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
@@ -6323,5 +6390,4898 @@ function mostrar_nuevas_imagenes_dent_periodoncica(counter){
         }
     });
 }
-    </script>
-@endsection
+
+function ocultar_pieza_imagenes_rx(){
+    $('#contenedor_nueva_imagen_dent').empty();
+}
+
+function ocultar_pieza_imagenes_rx_estudio(){
+    $('#contenedor_nueva_imagen_dent_estudio').empty();
+}
+
+function mostrar_nueva_pieza_ex_radio(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_rx') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_examenes_oral_rx').empty();
+            $('#contenedor_examenes_oral_rx').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
+
+function eliminar_pieza_dental_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_rx(id);
+            }
+        })
+}
+
+function editar_pieza_dental_rx(id){
+    // abrir_modal
+    $('#modal_agregar_imagenes_dental_paciente').modal('show');
+}
+
+
+function confirmar_eliminar_pieza_dental_rx(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_rx') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+                $('#pieza_dentalrx').find('select.select2').select2();
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function amplificar_imagen(path){
+    // abrir modal
+    $('#modal_imagen_dental_rx').modal('show');
+    $('.zoom-container').on('mousemove', function (e) {
+            const $img = $(this).find('img');
+            const offsetX = e.offsetX; // Posición X del mouse dentro del contenedor
+            const offsetY = e.offsetY; // Posición Y del mouse dentro del contenedor
+            const width = $(this).width();
+            const height = $(this).height();
+            const xPercent = (offsetX / width) * 100; // Porcentaje X
+            const yPercent = (offsetY / height) * 100; // Porcentaje Y
+
+            $img.css('transform-origin', `${xPercent}% ${yPercent}%`); // Ajusta el origen de transformación
+        });
+    $('#imagen_paciente_rx').attr('src',"{{ asset('storage') }}"+"/"+path);
+}
+
+function eliminar_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta RX?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarImagenRx(id);
+            }
+        })
+}
+
+function confirmarEliminarImagenRx(id){
+    let url = "{{ ROUTE('profesional.eliminar_imagen_rx_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        id_paciente: $('#id_paciente_fc').val()
+    }
+
+    $.ajax({
+        type:'post',
+        data: data,
+        url: url,
+        success: function(resp){
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+            }else{
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_imagen_dental(id,path){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta imagen?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+
+    })
+    .then((confirm) => {
+        if (confirm) {
+            confirmar_eliminar_imagen_dental(id,path);
+        } else {
+            swal('Cancelado', 'La imagen no fue eliminada :(', 'error');
+        }
+    });
+
+}
+
+function confirmar_eliminar_imagen_dental(id,path){
+    let url = "{{ route('profesional.eliminar_imagen_dental_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        path: path,
+        id_paciente: $('#id_paciente_fc').val()
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+
+            if(resp.mensaje == 'OK'){
+                let seccion = resp.seccion;
+                if(seccion == 'gral'){
+                    $('#contenedor_imagenes_dent').empty();
+                    $('#contenedor_imagenes_dent').append(resp.v);
+                }else if(seccion == 'implantologia'){
+                    $('#contenedor_imagenes_dent_estudio').empty();
+                    $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                }else{
+                    $('#contenedor_imagenes_dent_period').empty();
+                    $('#contenedor_imagenes_dent_period').append(resp.v);
+                }
+
+            }else{
+                // $('#contenedor_imagenes_dent').empty();
+                // $('#contenedor_imagenes_dent').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        seccion:'periodoncia',
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                let seccion = resp.seccion;
+                if(seccion == 'gral'){
+                    $('#contenedor_imagenes_dent').empty();
+                    $('#contenedor_imagenes_dent').append(resp.v);
+                }else if(seccion == 'implantologia'){
+                    $('#contenedor_imagenes_dent_estudio').empty();
+                    $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                }else{
+                    $('#contenedor_imagenes_dent_period').empty();
+                    $('#contenedor_imagenes_dent_period').append(resp.v);
+                }
+
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes_estudio(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes_estudio(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes_estudio(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        seccion:'periodoncia',
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_imagenes_dent_estudio').empty();
+                $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function mostrar_pieza_dental_examen(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+    let data = {
+        count: count,
+        id_paciente: $('#id_paciente_fc').val(),
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_nueva_pieza_dental').empty();
+                $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+    function pedir_autorizacion_presupuesto_dental(){
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de solicitar la autorización del presupuesto?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_pedir_autorizacion_presupuesto_dental();
+            }
+        })
+    }
+
+    function  confirmar_pedir_autorizacion_presupuesto_dental()
+    {
+        $('#modal_autorizacion_presupuesto').modal('show');
+        $('#modal_autorizacion_imagen').html('');
+        $('#modal_autorizacion_mensaje').html('');
+        $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+    }
+
+    function  cerrar_autorizacion_presupuesto()
+    {
+        $('#modal_autorizacion_presupuesto').modal('hide');
+    }
+
+    function mostrar_nueva_pieza_dental_hist(count, tipo){
+        let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_hist') }}";
+        let data = {
+            count: count,
+            id_paciente: $('#id_paciente_fc').val(),
+            seccion: tipo,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'OK'){
+                    if(tipo == 'impl'){
+                        $('#contenedor_piezas_hist').empty();
+                        $('#contenedor_piezas_hist').append(resp.v);
+                    }else{
+                        $('#contenedor_piezas_hist_period').empty();
+                        $('#contenedor_piezas_hist_period').append(resp.v);
+                    }
+
+
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+    }
+
+    function mostrar_nueva_pieza_dental_period(count){
+        let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_period') }}";
+        let data = {
+            count: count,
+            id_paciente: $('#id_paciente_fc').val(),
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'OK'){
+                    $('#contenedor_pieza_period_period').empty();
+                    $('#contenedor_pieza_period_period').append(resp.v);
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+    }
+
+    function solicitar_ic_periodoncia(){
+        $('#modal_interconsulta_respuesta').modal('show');
+    }
+
+    function biopsia_check_implantologia(count) {
+        // Obtén el checkbox
+        var checkbox = $('#biopsia_check_implantologia' + count);
+
+        // Obtén los textareas
+        var textareaZona = $('#im_biop_zona' + count);
+        var textareaObservaciones = $('#im_obs_result_biopsia' + count);
+
+        // Verifica si el checkbox está marcado
+        if (checkbox.is(':checked')) {
+            // Si está marcado, habilita los textareas (remueve el atributo disabled)
+            textareaZona.removeAttr('disabled');
+            textareaObservaciones.removeAttr('disabled');
+        } else {
+            // Si no está marcado, deshabilita los textareas (añade el atributo disabled)
+            textareaZona.attr('disabled', 'disabled');
+            textareaObservaciones.attr('disabled', 'disabled');
+        }
+    }
+
+    function biopsia_check_period(count) {
+        console.log(count);
+        // Obtén el checkbox
+        var checkbox = $('#biopsia_check_period' + count);
+
+        // Obtén los textareas
+        var textareaZona = $('#period_biop_zona' + count);
+        var textareaObservaciones = $('#period_obs_result_biopsia' + count);
+
+        // Verifica si el checkbox está marcado
+        if (checkbox.is(':checked')) {
+            // Si está marcado, habilita los textareas (remueve el atributo disabled)
+            textareaZona.removeAttr('disabled');
+            textareaObservaciones.removeAttr('disabled');
+        } else {
+            // Si no está marcado, deshabilita los textareas (añade el atributo disabled)
+            textareaZona.attr('disabled', 'disabled');
+            textareaObservaciones.attr('disabled', 'disabled');
+            // limpiar los campos
+            textareaZona.val('');
+            textareaObservaciones.val('');
+        }
+    }
+
+   /*-Agendar hora medica-*/
+        function hora_medica_pedir(id_profesional, id_lugar_atencion, tipo_agenda = null){
+
+            $('#modal_reserva_hora_lugar_atencion').val('');
+            $('#modal_reserva_dias_atencion').val('');
+            $('#modal_reserva_fecha').val('');
+            $('#modal_reserva_hora_lista_horas').html('');
+            // asigno id profesioanl
+            $('#modal_reserva_hora_id_profesional').val(id_profesional);
+            $('#modal_reserva_hora_tipo_agenda').val(tipo_agenda);
+
+            carga_calendario_profesional_pedir();
+
+            // cargo lugares de atencion  y asigno lugar con hora mas proxima
+            lugar_atencion_profesional($('#modal_reserva_hora_id_profesional'), 'modal_reserva_hora_lugar_atencion', id_lugar_atencion)
+            $('#reservar_hora').modal('show');
+        }
+
+        function carga_calendario_profesional_pedir()
+        {
+            $('#modal_reserva_fecha').val('');
+            $('#modal_reserva_fecha').attr('disabled',true);
+            $('#modal_reserva_hora_lista_horas').html('');
+
+            let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+            let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_profesional: id_profesional,
+                    lugar_atencion: id_lugar_atencion,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+
+
+                    {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}
+
+                    if(data.registros.horario_agenda_laboral != '')
+                    {
+                        console.log(data);
+                        let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                        var dias_activos = data.registros.horario_agenda_laboral.split(',');
+                        var dias_texto = '';
+                        var cant = 0;
+
+                        $.each(dias_activos, function(index, value)
+                        {
+                            if(cant>0)
+                                dias_texto += ' - '+dias[value];
+                            else
+                                dias_texto += dias[value];
+
+                            cant++;
+                        });
+
+                        $('#modal_reserva_dias_atencion').html(dias_texto);
+
+                        /** calendario */
+                        $('#modal_reserva_fecha').attr('disabled',false);
+
+                        $("#modal_reserva_fecha").flatpickr({
+                            "disable": [
+                                function(date) {
+                                    return !dias_activos.includes(String(date.getDay()));
+                                }
+                            ],
+                            minDate: "today",
+                            maxDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 días desde hoy
+                            locale: {
+                                firstDayOfWeek: 1,
+                                weekdays: {
+                                shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                                },
+                                months: {
+                                shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                                longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                },
+                            },
+                        });
+                        /** fin calendario */
+
+                    }
+                    else
+                    {
+                        $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
+                        $('#modal_reserva_fecha').attr('disabled',true);
+                        $('#modal_reserva_fecha_seleccionada').html('');
+                    }
+
+                } else {
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+        function lugar_atencion_profesional(element, div_destino, value_init = '')
+        {
+            let id_profesional = $(element).val();
+            let url = "{{ route('profesional.lugaresAtencionProfesionalBuscador') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        id_profesional: id_profesional,
+                    },
+                })
+                .done(function(data) {
+                    if (data.estado == 1) {
+                        {{--  console.log(data);  --}}
+                        let input_lugar_atencion = $('#'+div_destino);
+
+                        input_lugar_atencion.find('option').remove();
+                        input_lugar_atencion.append('<option value="">Seleccione</option>');
+                        $(data.registros).each(function(i, v) { // indice, valor
+                            input_lugar_atencion.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                        })
+
+                        if(value_init != '')
+                        {
+                            input_lugar_atencion.val(value_init);
+                            carga_calendario_profesional_pedir();
+                        }
+
+                    } else {
+                        // alert('No se pudo Cargar las ciudades');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function cargar_horas_disponibles_calendario_profesion(dia)
+        {
+
+            let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+            let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            console.log('cargar_horas_disponibles_calendario_profesion');
+            console.log(dia);
+
+            let url = "{{ route('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
+                    dia: dia,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1) {
+                    $('#modal_reserva_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
+
+                    $('#modal_reserva_hora_lista_horas').html('');
+                    $.each(data.registros, function(index, value)
+                    {
+                        var hr1 = moment(value.hora,'HH:mm:ss').format('HH:mm');
+                        var html = '';
+                        html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
+                        html += ''+hr1;
+                        html += '</div>';
+
+                        $('#modal_reserva_hora_lista_horas').append(html);
+                    });
+
+                } else {
+                    // alert('No se pudo Cargar las ciudades');
+                    $('#modal_reserva_hora_lista_horas').html('<span style="font-weight: bold; text-align: center;">"Sin disponibilidad de Horas"</span>');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function generar_reserva_cita(hora)
+    {
+        console.log('generar_reserva_cita');
+        $('.div_rut_buscar').hide();
+        $('#form_reseva_de_horas').hide();
+        $('#reserva_datos_paciente').hide();
+        $('#reserva_agregar_paciente_hora').hide();
+
+        $('#reservar_hora').modal('hide');
+
+        let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+        let fecha_consulta = $('#modal_reserva_fecha').val();
+        $('#reserva_hora_id_profesional').val('');
+        $('#reserva_hora_id_lugar_atencion').val('');
+        $('#reserva_hora_fecha_consulta').val('');
+        $('#reserva_hora_hora_consulta').val('');
+
+        let url = "{{ route('paciente.get.informacion') }}";
+        var datos = {};
+        var id_dependiente_activo = '{{ $paciente->id }}';
+
+        if(id_dependiente_activo != '')
+            datos.id_dependiente_activo = id_dependiente_activo;
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: datos,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+
+                $('.div_rut_buscar').hide();
+                $('#form_reseva_de_horas').show();
+                $('#reserva_datos_paciente').show();
+                $('#reserva_agregar_paciente_hora').hide();
+
+                $('#agenda_agregar_paciente').modal('show');
+
+                $('#reserva_hora_id_profesional').val(id_profesional);
+                $('#reserva_hora_id_lugar_atencion').val(id_lugar_atencion);
+                $('#reserva_hora_fecha_consulta').val(fecha_consulta);
+                $('#reserva_hora_hora_consulta').val(hora);
+
+                $('#reserva_hora_id_paciente').val(data.registro.id);
+
+                $('#reserva_rut_paciente').html(data.registro.rut);
+                $('#reserva_hora_nombre').html(data.registro.nombres + ' ' + data.registro.apellido_uno + ' ' + data.registro.apellido_dos);
+                $('#reserva_fecha_nacimiento').html(data.registro.fecha_nac);
+                if (data.registro.sexo == 'M') {
+                    $('#reserva_sexo').text('Masculino');
+                } else {
+                    $('#reserva_sexo').text('Femenino');
+                }
+                $('#reserva_convenio').html(data.registro.prevision.nombre);
+                $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
+                $('#reserva_hora_email').html(data.registro.email);
+                $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+
+
+
+            }
+            else
+            {
+                swal({
+                    title: "Debe completar los datos de inscripción",
+                    text: error,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    {{--  GENERAR HORA USUARIO EXISTENTE  --}}
+    function agendar_hora() {
+
+        let url = "{{ route('paciente.solicitar.hora') }}";
+        let _token = $('#_token').val();
+        let fecha_consulta = $('#reserva_hora_fecha_consulta').val()+' '+$('#reserva_hora_hora_consulta').val();
+        let reserva_hora_id = $('#reserva_hora_id_paciente').val();
+        let id_profesional = $('#reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#reserva_hora_id_lugar_atencion').val();
+        let id_asistente = $('#reserva_hora_id_asistente').val();
+        let origen = $('#reserva_hora_origen').val();
+
+        let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
+        var tipo_agenda_text = 'C';
+
+        console.log(tipo_agenda);
+        console.log(tipo_agenda_text);
+
+        switch (tipo_agenda) {
+            case '1':
+                tipo_agenda_text = 'C';//CONSULTA
+                break;
+            case '2':
+                tipo_agenda_text = 'D';//DENTAL
+                break;
+            case '3':
+                tipo_agenda_text = 'T';//TELEMEDICINA
+                break;
+            case '4':
+                tipo_agenda_text = 'E';//EXAMEN
+                break;
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                fecha_consulta: fecha_consulta,
+                reserva_hora_id: reserva_hora_id,
+                id_lugar_atencion: id_lugar_atencion,
+                id_profesional: id_profesional,
+                id_asistente: id_asistente,
+                origen: origen,
+                tipo_hora_medica: tipo_agenda_text,
+            }
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+
+                data = JSON.parse(data);
+                if(data.estado == 'error')
+                {
+                    swal({
+                        title: "Error!",
+                        text: data.msj,
+                        icon: "error",
+                        type: "error",
+                        buttons: "Cerrar",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Hora Agendada Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                    $('#hora_agendada').val(1);
+                    let esUltimaSesion = false;
+                    if($('#finalizando_sesiones').val() == 1){
+                        esUltimaSesion = true;
+                    }
+                    console.log(esUltimaSesion);
+                }
+                $('#agenda_agregar_paciente').modal('hide');
+
+                    $('#reserva_hora_id_profesional').val('');
+                    $('#reserva_hora_id_lugar_atencion').val('');
+                    $('#reserva_hora_fecha_consulta').val('');
+                    $('#reserva_hora_hora_consulta').val('');
+                    $('#reserva_hora_id_paciente').val('');
+                    $('#reserva_rut_paciente').html('');
+                    $('#reserva_hora_nombre').html('');
+                    $('#reserva_fecha_nacimiento').html('');
+                    $('#reserva_sexo').text('');
+                    $('#reserva_convenio').html('');
+                    $('#reserva_direccion').html('');
+                    $('#reserva_hora_email').html('');
+                    $('#reserva_hora_telefono').html('');
+
+                    proxima_atencion_paciente();
+
+
+            } else {
+
+                swal({
+                    title: "Error!",
+                    text: "Problema en la solicitud de la hora",
+                    icon: "error",
+                    type: "error",
+                    buttons: "Cerrar",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+
+    function eliminar_pieza_dental_hist(id){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta pieza?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true
+    })
+    .then((aceptar) => {
+        if (aceptar) {
+            confirmar_eliminar_pieza_dental_hist(id);
+        } else {
+            swal('Cancelado', 'La pieza no fue eliminada :(', 'error');
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_hist(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_hist') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: $('#id_paciente_fc').val(),
+        id: id,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val()
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                let seccion = resp.seccion;
+                if(seccion == 'impl'){
+                    $('#hist_piezas').empty();
+                    $('#hist_piezas').append(resp.v);
+                }else{
+                    $('#hist_piezas_period').empty();
+                    $('#hist_piezas_period').append(resp.v);
+                }
+
+
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success'
+                });
+
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function ocultar_pieza_impl(counter){
+    console.log(counter);
+    $('#contenedor_pieza_tto_impl'+counter).empty();
+}
+
+        function cargar_a_presupuesto_impl_g() {
+            // preguntar si desea eliminar
+            swal({
+                    title: "Cargar Piezas",
+                    text: "¿Está seguro que desea cargar el grupo de piezas?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Aceptar"],
+                    DangerMode: true,
+                })
+                .then((willLoad) => {
+                    if (willLoad) {
+                        cargar_a_presupuesto_impl_g_confirmar();
+                    }
+                });
+        }
+
+        function cargar_a_presupuesto_impl_g_confirmar() {
+            // Obtener los valores seleccionados en el select
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val();
+            let diagnosticoPiezas = $('#diagnostico_combo_g_od_gral').val();
+            var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
+
+            let valido = 1;
+            let mensaje = '';
+
+            if(diagnosticoPiezas == 0) {
+                valido = 0;
+                mensaje += '<li>Diagnóstico </li>';
+            }
+            if (piezasSeleccionadas.length == 0) {
+                valido = 0;
+                mensaje += '<li>Piezas seleccionadas </li>'
+            }
+            if (ttoPiezas == '') {
+                valido = 0;
+                mensaje += '<li>Tratamiento </li>';
+            }
+
+            if (valido == 0) {
+                swal({
+                    title: "Campos requeridos",
+                    content: {
+                        element: "ul",
+                        attributes: {
+                            innerHTML: mensaje
+                        }
+                    },
+                    icon: "error",
+                });
+                return false;
+            }
+
+            let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
+            let data = {
+                piezas: piezasSeleccionadas,
+                diagnostico: diagnosticoPiezas,
+                tto: ttoPiezas,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                _token: "{{ csrf_token() }}"
+            }
+            console.log(data);
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                success: function(resp) {
+                    console.log(resp);
+                    if (resp.status == 1) {
+                        swal({
+                            icon: 'success',
+                            title: 'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        odontograma_global = resp.odontograma_paciente;
+                        let table_odontograma = $('#table_odontograma').DataTable();
+
+                        // Vacía la tabla
+                        table_odontograma.clear();
+
+                        // Genera los datos (array de arrays o de objetos si usas columns)
+                        let data = [];
+
+                        odontograma.forEach(function(odonto) {
+                            if(odonto.urgencia == 0){
+                            let switchPresupuesto = `
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="presupuestoCheck${odonto.id}"
+                                        value="${odonto.id}" ${odonto.presupuesto == 1 ? 'checked' : ''}
+                                        onchange="togglePresupuesto(${odonto.id}, this.checked)">
+                                    <label class="custom-control-label" for="presupuestoCheck${odonto.id}"></label>
+                                </div>
+                            `;
+
+                            let switchSeleccion = `
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input checkbox-seleccion"
+                                        id="seleccionCheck${odonto.id}" value="${odonto.id}"
+                                        onchange="toggleSeleccion(${odonto.id}, this.checked)">
+                                    <label class="custom-control-label" for="seleccionCheck${odonto.id}"></label>
+                                </div>
+                            `;
+
+                            data.push([
+                                odonto.fecha,
+                                odonto.tratamiento,
+                                odonto.caras,
+                                odonto.pieza,
+                                odonto.diagnostico,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                switchPresupuesto,
+                                switchSeleccion
+                            ]);
+                            }
+                        });
+
+                        // Agrega las nuevas filas
+                        table_odontograma.rows.add(data).draw();
+
+                        $('#contenedor_examenes_grupos_dentales').empty();
+                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        $('#n_pieza_ex_pp1000').empty();
+                        // Este array almacenará solo las piezas únicas
+                        let piezasUnicas = [];
+
+                        // Este Set sirve para verificar si ya existe una pieza (más rápido que indexOf)
+                        let piezasAgregadas = new Set();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1 fill">
+                                                        <label class="floating-label-activo-sm">Pieza</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4 fill">
+                                                        <label class="floating-label-activo-sm">Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                <tr>
+                                    <td>${odonto.fecha}</td>
+                                    <td>${odonto.diagnostico} </td>
+                                    <td>${odonto.caras} </td>
+                                    <td>${odonto.pieza} </td>
+                                    <td>${odonto.tratamiento} </td>
+                                    <td>${formatoMoneda(odonto.valor)} </td>
+                                    <td> </td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                    </td>
+                                </tr>
+                            `);
+                                // ✅ Si la pieza no se ha agregado aún, la incluimos en el array
+                                if (!piezasAgregadas.has(odonto.pieza)) {
+                                    piezasAgregadas.add(odonto.pieza);
+                                    piezasUnicas.push(odonto.pieza);
+                                }
+                            }
+                        });
+                        // 🔁 Ahora recorrer el array de piezas únicas y llenar los select
+                        piezasUnicas.forEach(function(pieza) {
+                            $('#n_pieza_ex_pp1000').append(
+                            `<option value="${pieza}">${pieza}</option>`);
+                        });
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let valores_lab = resp.valores[3];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_lab;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                        $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                        $('#total_presupuesto_dental').val(total_general);
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
+                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
+                            total_general));
+
+                        let table = $('#presup_estado_pago').DataTable();
+                        table.clear().draw();
+
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+
+                            if (odonto.presupuesto == 1) {
+                                if (odonto.estado_pago == 'ok') {
+                                    var clase = 'bg-success';
+                                } else if (odonto.estado_pago == 'incompleto') {
+                                    var clase = 'bg-warning';
+                                } else {
+                                    var clase = 'bg-danger';
+                                }
+
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(odonto.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(odonto.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '<div class="circle ' + clase + '"></div>',
+                                    estado, // Columna vacía
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+                        });
+                        //limpiar_formulario_cargar_presupuesto_g();
+                        $('#table_pagos_reasignar_odontograma tbody').empty();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1) {
+                                let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                        </tr>`;
+                                $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                            }
+                        });
+
+                        let table_od_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                        table_od_gral.clear().draw();
+
+                        odontograma.forEach(function(pieza) {
+                                if(pieza.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(pieza.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(pieza.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table_od_gral.row.add([
+                                        pieza.pieza,
+                                        pieza.diagnostico,
+                                        pieza.descripcion,
+                                        formatoMoneda(formatoMoneda(pieza.valor)),
+                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                        pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                        '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                        pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                        estado
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+                                }
+                        });
+
+                    } else {
+                        swal({
+                            icon: 'error',
+                            title: 'info',
+                            text: resp.mensaje
+                        });
+                    }
+
+
+                    $('#tratamiento_presupuesto tbody').empty();
+                    let presupuesto = resp.presupuesto;
+                    console.log(presupuesto);
+                    $('#tratamiento_presupuesto tbody').append(`
+            <tr>
+                <td class="text-center align-middle">${presupuesto.fecha}</td>
+                <td class="text-center align-middle">${presupuesto.id}</td>
+                <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                <td class="text-center align-middle">Sector I</td>
+                <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                <td class="text-center align-middle">
+                    <div class="form-group col-md-4">
+                        <div class="switch switch-success d-inline m-r-2">
+                            <input type="checkbox" id="info_finalizado" checked="">
+                            <label for="info_finalizado" class="cr"></label>
+                        </div>
+                        <label>Realizado?</label>
+                    </div>
+                </td>
+                <td class="text-center align-middle">
+                    ${presupuesto.fecha}
+                </td>
+                <td class="text-center align-middle">
+                    <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                        <i class="fa fa-plus"></i> Trabajar en pieza
+                    </button>
+                </td>
+            </tr>
+            `);
+                    $('#odon_adults').empty();
+                    $('#odon_adults').append(resp.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(resp.odontograma_paciente_vista);
+                },
+                error: function(error) {
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function cargar_a_presupuesto_period_g() {
+            // preguntar si desea eliminar
+            swal({
+                    title: "Cargar Piezas",
+                    text: "¿Está seguro que desea cargar el grupo de piezas?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Aceptar"],
+                    DangerMode: true,
+                })
+                .then((willLoad) => {
+                    if (willLoad) {
+                        cargar_a_presupuesto_period_g_confirmar();
+                    }
+                });
+        }
+
+        function cargar_a_presupuesto_period_g_confirmar() {
+            // Obtener los valores seleccionados en el select
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_period').val();
+            let diagnosticoPiezas = $('#diagnostico_combo_g_period').val();
+            var ttoPiezas = $('#diag_presupuesto_pieza_g_period').val();
+
+            let valido = 1;
+            let mensaje = '';
+
+            if(diagnosticoPiezas == 0) {
+                valido = 0;
+                mensaje += '<li>Diagnóstico </li>';
+            }
+            if (piezasSeleccionadas.length == 0) {
+                valido = 0;
+                mensaje += '<li>Piezas seleccionadas </li>'
+            }
+            if (ttoPiezas == '') {
+                valido = 0;
+                mensaje += '<li>Tratamiento </li>';
+            }
+
+            if (valido == 0) {
+                swal({
+                    title: "Campos requeridos",
+                    content: {
+                        element: "ul",
+                        attributes: {
+                            innerHTML: mensaje
+                        }
+                    },
+                    icon: "error",
+                });
+                return false;
+            }
+
+            let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
+            let data = {
+                piezas: piezasSeleccionadas,
+                diagnostico: diagnosticoPiezas,
+                tto: ttoPiezas,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                _token: "{{ csrf_token() }}"
+            }
+            console.log(data);
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: data,
+                success: function(resp) {
+                    console.log(resp);
+                    if (resp.status == 1) {
+                        swal({
+                            icon: 'success',
+                            title: 'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        odontograma_global = resp.odontograma_paciente;
+                        let table_odontograma = $('#table_odontograma').DataTable();
+
+                        // Vacía la tabla
+                        table_odontograma.clear();
+
+                        // Genera los datos (array de arrays o de objetos si usas columns)
+                        let data = [];
+                        odontograma.forEach(function(odonto) {
+                            if(odonto.urgencia == 0){
+                            let switchPresupuesto = `
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="presupuestoCheck${odonto.id}"
+                                        value="${odonto.id}" ${odonto.presupuesto == 1 ? 'checked' : ''}
+                                        onchange="togglePresupuesto(${odonto.id}, this.checked)">
+                                    <label class="custom-control-label" for="presupuestoCheck${odonto.id}"></label>
+                                </div>
+                            `;
+
+                            let switchSeleccion = `
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input checkbox-seleccion"
+                                        id="seleccionCheck${odonto.id}" value="${odonto.id}"
+                                        onchange="toggleSeleccion(${odonto.id}, this.checked)">
+                                    <label class="custom-control-label" for="seleccionCheck${odonto.id}"></label>
+                                </div>
+                            `;
+
+                            data.push([
+                                odonto.fecha,
+                                odonto.tratamiento,
+                                odonto.caras,
+                                odonto.pieza,
+                                odonto.diagnostico,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                switchPresupuesto,
+                                switchSeleccion
+                            ]);
+                            }
+                        });
+                        // Agrega las nuevas filas
+                        table_odontograma.rows.add(data).draw();
+                        $('#contenedor_examenes_grupos_dentales').empty();
+                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        $('#n_pieza_tto_period1000').empty();
+                        // Este array almacenará solo las piezas únicas
+                        let piezasUnicas = [];
+                        // Este Set sirve para verificar si ya existe una pieza (más rápido que indexOf)
+                        let piezasAgregadas = new Set();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1 fill">
+                                                        <label class="floating-label-activo-sm">Pieza</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4 fill">
+                                                        <label class="floating-label-activo-sm">Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                <tr>
+                                    <td>${odonto.fecha}</td>
+                                    <td>${odonto.diagnostico} </td>
+                                    <td>${odonto.caras} </td>
+                                    <td>${odonto.pieza} </td>
+                                    <td>${odonto.tratamiento} </td>
+                                    <td>${formatoMoneda(odonto.valor)} </td>
+                                    <td> </td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                    </td>
+                                </tr>
+                            `);
+                                // ✅ Si la pieza no se ha agregado aún, la incluimos en el array
+                                if (!piezasAgregadas.has(odonto.pieza)) {
+                                    piezasAgregadas.add(odonto.pieza);
+                                    piezasUnicas.push(odonto.pieza);
+                                }
+                            }
+                        });
+                        $('#n_pieza_tto_period1000').append('<option value="0" selected>Seleccione</option>');
+                        // 🔁 Ahora recorrer el array de piezas únicas y llenar los select
+                        piezasUnicas.forEach(function(pieza) {
+                            $('#n_pieza_tto_period1000').append(
+                            `<option value="${pieza}">${pieza}</option>`);
+                        });
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let valores_lab = resp.valores[3];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_lab;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                        $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                        $('#total_presupuesto_dental').val(total_general);
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
+                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
+                            total_general));
+                        let table = $('#presup_estado_pago').DataTable();
+                        table.clear().draw();
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                if (odonto.estado_pago == 'ok') {
+                                    var clase = 'bg-success';
+                                } else if (odonto.estado_pago == 'incompleto') {
+                                    var clase = 'bg-warning';
+                                } else {
+                                    var clase = 'bg-danger';
+                                }
+
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(odonto.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(odonto.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '<div class="circle ' + clase + '"></div>',
+                                    estado, // Columna vacía
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+                        });
+                        //limpiar_formulario_cargar_presupuesto_g();
+                        $('#table_pagos_reasignar_odontograma tbody').empty();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1) {
+                                let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                        </tr>`;
+                                $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                            }
+                        });
+                        let table_period = $('#table_piezas_presupuesto_period').DataTable();
+                        table_period.clear().draw();
+                        odontograma.forEach(function(pieza) {
+                                if(pieza.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(pieza.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(pieza.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table_period.row.add([
+                                        '<i class="fas fa-tooth mr-1"></i>' + pieza.pieza,
+                                        pieza.diagnostico,
+                                        pieza.descripcion,
+                                        formatoMoneda(formatoMoneda(pieza.valor)),
+                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                        pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                        '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                        pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                        estado
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+                                }
+                        });
+                        // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                        let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                        table_odon_gral.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            if(pieza.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(pieza.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(pieza.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                    // Agregar una nueva fila a la tabla CORRECTA (table_odon_gral)
+                                    let rowNode = table_odon_gral.row.add([
+                                        pieza.pieza,
+                                        pieza.diagnostico,
+                                        pieza.descripcion,
+                                        formatoMoneda(formatoMoneda(pieza.valor)),
+                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                        pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                        '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                        pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                        estado
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+                                }
+                        });
+                    } else {
+                        swal({
+                            icon: 'error',
+                            title: 'info',
+                            text: resp.mensaje
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+
+function limpiar_formulario_cargar_presupuesto_g(){
+    $('#diag_presupuesto_pieza_g').val('');
+    $('#paciente_piezas_dentales_ex').empty();
+    //$('#paciente_piezas_dentales_ex').selectpicker('refresh');
+}
+
+    function pieza_dental_tto_period(counter){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto_impl') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    counter: counter,
+                    tipo:"periodoncia",
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    $('#pieza_dental_dolor').empty();
+                    $('#pieza_dental_dolor').append(resp.v);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function eliminar_pieza_dental_tto_period(id){
+            swal({
+                    title: 'Advertencia',
+                    text: '¿Está seguro de eliminar este examen?',
+                    icon: 'warning',
+                    buttons: ['Cancelar', 'Aceptar'],
+                    dangerMode: true
+                }).then((aceptar) => {
+                    if (aceptar) {
+                        confirmar_eliminar_pieza_dental_tto_period(id);
+                    }
+                })
+        }
+
+
+function confirmar_eliminar_pieza_dental_tto_period(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_tto_period') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+
+                $('#contenedor_tto_periodoncia').empty();
+                $('#contenedor_tto_periodoncia').append(resp.v);
+                $('#odonto_adulto').empty();
+                $('#odonto_adulto').append(resp.odontograma_paciente_vista);
+                // Verificar si existen exámenes en la respuesta
+                if (resp.examenes && resp.examenes.length > 0) {
+
+                    let odontograma = resp.odontograma;
+                        let table = $('#presup_estado_pago').DataTable();
+                        table.clear().draw();
+
+                        // Recorrer el odontograma y agregar nuevas filas
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                if(odonto.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(odonto.estado_pago == 'incompleto'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
+
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else{
+                                    var estado = 'TERMINADO';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '<div class="circle '+clase+'"></div>',
+                                    estado, // Columna vacía
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+                        });
+                }
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success',
+                })
+                .then((value) => {
+                    cargar_tto_periodoncia();
+                });
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function agregar_cirujano_period(){
+    $('#div_nuevo_cirujano_period').removeClass('d-none');
+    $('#div_nuevo_cirujano_period').addClass('d-block');
+}
+
+function ocultar_cirujano_period(){
+    $('#div_nuevo_cirujano_period').addClass('d-none');
+    $('#div_nuevo_cirujano_period').removeClass('d-block');
+}
+
+function mostrar_nueva_pieza_post_impl(counter){
+
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_post_impl') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            count: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#pieza_post_implantada').empty();
+            $('#pieza_post_implantada').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
+function generar_pdf_protocolo_dental(){
+    let nombre_cir = $('#prot_cirujanos_period').val();
+    let nombre_anest = $('#prot_anestesista_period').val();
+    let nombre_tons = $('#prot_tons_period').val();
+    let nombre_arsenalera = $('#prot_arsenalera_period').val();
+
+    let valido = 1;
+    let mensaje = '';
+
+
+    let prot_pieza_period = $('#prot_pieza_period').val();
+
+    if(nombre_cir == ''){
+        valido = 0;
+        mensaje += '<li>Cirujano </li>';
+    }
+
+    if(nombre_anest == ''){
+        valido = 0;
+        mensaje += '<li>Anestesista </li>';
+    }
+
+    if(nombre_arsenalera == ''){
+        valido = 0;
+        mensaje += '<li>Arsenalera </li>';
+    }
+
+    if(nombre_tons == ''){
+        valido = 0;
+        mensaje += '<li>Tons </li>';
+    }
+
+    if(prot_pieza_period.length == 0){
+        valido = 0;
+        mensaje += '<li>Piezas </li>'
+    }
+    let det_cir = $('#det_cir_period').val();
+
+    if(valido == 1){
+        let data = {
+            nombre_cir: nombre_cir,
+            nombre_anest: nombre_anest,
+            nombre_tons: nombre_tons,
+            prot_pieza_period: prot_pieza_period,
+            det_cir: det_cir,
+            id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            tipo:'periodoncia',
+            _token: CSRF_TOKEN
+        }
+
+       console.log(data);
+
+       $.ajax({
+        type:'post',
+        url:'{{ route("dental.generar_pdf_protocolo_period") }}',
+        data: data,
+        success: function(data){
+            console.log(data);
+            if(data == 'error'){
+                swal({
+                    title:'Error',
+                    text:'Primero debe generar la liquidación.',
+                    icon:'error',
+                    button:"Aceptar"
+                });
+                return false;
+            }
+            if(data.ruta){
+                swal({
+                    title: "Reporte generado",
+                    text: "El reporte se ha generado correctamente",
+                    icon: "success",
+                    button: "Aceptar"
+                }).then(() => {
+                    // Abrir el PDF en una ventana emergente
+                    var width = 800;
+                    var height = 600;
+                    var left = (screen.width - width) / 2;
+                    var top = (screen.height - height) / 2;
+                    window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                });
+            }else{
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+        },
+        else: function(error){
+            console.log(error.responseText);
+        }
+       });
+    }else{
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+
+        return false;
+    }
+}
+
+function generar_pdf_protocolo_man_dental(){
+    let nombre_cir = $('#prot_cirujanos_imp_man').val();
+    let nombre_cir_nuevo = $('#prot_cirujanos_imp_man_nuevo').val();
+    let nombre_anest = $('#prot_anestesista_imp_man').val();
+    let nombre_tons = $('#prot_tons_imp_man').val();
+    let nombre_arsenalera = $('#prot_ars_imp_man').val();
+
+    let id_forma_mat_impl = $('#prot_forma_mat_man').val();
+    let forma_mat_impl = $('#prot_forma_mat_man option:selected').text();
+    let valido = 1;
+    let mensaje = '';
+    if(id_forma_mat_impl == 13){
+        forma_mat_impl = $('#det_prot_forma_mat_man').val();
+    }
+    let implantes_insumos = $('#prot_implante_man').val();
+
+    let id_implantes = $('#prot_proc_man').val();
+    let implantes = $('#prot_proc_man option:selected').text();
+    if(id_implantes == 3){
+        implantes = $('#det_prot_proc_man').val();
+    }
+
+    if(id_implantes == 0){
+        valido = 0;
+        mensaje += '<li>Implantes </li>';
+    }
+
+    let id_prot_prot_corona = $('#prot_prot_corona_man').val();
+    let prot_prot_corona = $('#prot_prot_corona_man option:selected').text();
+    if(id_prot_prot_corona == 3){
+        prot_prot_corona = $('#det_prot_prot_corona_man').val();
+    }
+
+    let prot_pieza_imp = $('#prot_pieza_imp_man').val();
+
+    if(id_forma_mat_impl == 0){
+        valido = 0;
+        mensaje += '<li>Materia Implante </li>';
+    }
+
+    if(nombre_cir == ''){
+        valido = 0;
+        mensaje += '<li>Cirujano </li>';
+    }
+
+
+    if(prot_pieza_imp.length == 0){
+        valido = 0;
+        mensaje += '<li>Piezas </li>'
+    }
+    let det_cir = $('#det_cir_man').val();
+
+    if(valido == 1){
+
+
+        let data = {
+            nombre_cir: nombre_cir,
+            nombre_cir_nuevo: nombre_cir_nuevo,
+            nombre_anest: nombre_anest,
+            nombre_tons: nombre_tons,
+            nombre_arsenalera: nombre_arsenalera,
+            id_forma_mat_impl: id_forma_mat_impl,
+            forma_mat_impl: forma_mat_impl,
+            implantes_insumos: implantes_insumos,
+            id_implantes: id_implantes,
+            implantes: implantes,
+            id_prot_prot_corona: id_prot_prot_corona,
+            prot_prot_corona: prot_prot_corona,
+            prot_pieza_imp: prot_pieza_imp,
+            det_cir: det_cir,
+            id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            tipo:'mantencion',
+            _token: CSRF_TOKEN
+        }
+
+       console.log(data);
+
+       $.ajax({
+        type:'post',
+        url:'{{ route("dental.generar_pdf_protocolo_impl") }}',
+        data: data,
+        success: function(data){
+            console.log(data);
+            if(data == 'error'){
+                swal({
+                    title:'Error',
+                    text:'Primero debe generar la liquidación.',
+                    icon:'error',
+                    button:"Aceptar"
+                });
+                return false;
+            }
+            if(data.ruta){
+                swal({
+                    title: "Reporte generado",
+                    text: "El reporte se ha generado correctamente",
+                    icon: "success",
+                    button: "Aceptar"
+                }).then(() => {
+                    // Abrir el PDF en una ventana emergente
+                    var width = 800;
+                    var height = 600;
+                    var left = (screen.width - width) / 2;
+                    var top = (screen.height - height) / 2;
+                    window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                });
+            }else{
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+            // limpiar formulario
+            $('#prot_anestesista_imp_man').val('');
+            $('#prot_forma_mat_man').val(0);
+            $('#prot_proc_man').val(0);
+            // $('#det_cir_man').val('');
+            // limpiar los select2
+            $('#prot_implante_man').val(null).trigger('change');
+            $('#prot_pieza_imp_man').val(null).trigger('change');
+        },
+        else: function(error){
+            console.log(error.responseText);
+        }
+       });
+    }else{
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+
+        return false;
+    }
+}
+
+function eliminar_pieza_dental_post_impl(id){
+    // preguntar si desea eliminar
+    swal({
+        title: "Eliminar Pieza",
+        text: "¿Está seguro que desea eliminar la pieza?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            confirmar_eliminar_pieza_post_impl(id);
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_post_impl(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_post_impl') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            id_ficha_atencion: $('#id_fc').val(),
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_pieza_post_implantada').empty();
+                $('#contenedor_pieza_post_implantada').append(resp.v);
+            }
+            if (resp.examenes && resp.examenes.length > 0) {
+                let detalleHistoria = resp.examenes.map(implante => {
+                let detalle = `La pieza ${implante.numero_pieza} presenta las siguientes observaciones:\n`;
+
+                // Móvil
+                if (implante.movil === "Sí") {
+                    detalle += `Se observa movilidad en la pieza${implante.obs_movil ? `, descrita como: ${implante.obs_movil}` : ''}. `;
+                } else {
+                    detalle += `No se observa movilidad en la pieza. `;
+                }
+
+                // Posición
+                if (implante.posicion === "Correcta") {
+                    detalle += `La posición del implante es adecuada. `;
+                } else {
+                    detalle += `La posición del implante es incorrecta, presentando las siguientes desviaciones: ` +
+                        `vestíbulo-palatino: ${implante.vp || 'N/A'}, ` +
+                        `vestíbulo-lingual: ${implante.vl || 'N/A'}, ` +
+                        `mesio-distal: ${implante.md || 'N/A'} y ` +
+                        `cráneo-caudal: ${implante.cc || 'N/A'}. `;
+                }
+
+                // Exposición de espiras
+                if (implante.exp_espiras === "Sí") {
+                    detalle += `Se evidencia exposición de espiras${implante.obs_exp_espiras ? `, descrita como: ${implante.obs_exp_espiras}` : ''}. `;
+                } else {
+                    detalle += `No se observa exposición de espiras. `;
+                }
+
+                // Supuración
+                if (implante.supuracion === "Sí") {
+                    detalle += `Se detecta presencia de supuración${implante.obs_supuracion ? `, descrita como: ${implante.obs_supuracion}` : ''}. `;
+                } else {
+                    detalle += `No se observa supuración. `;
+                }
+
+                // Estado de la encía
+                if (implante.estado_encia === "Anormal") {
+                    detalle += `El estado de la encía es anormal, descrito como: ${implante.obs_estado_encia || 'Sin observación'}. `;
+                } else {
+                    detalle += `El estado de la encía es normal. `;
+                }
+
+                // Pérdida ósea marginal
+                if (implante.perdida_osea_marginal) {
+                    detalle += `Se reporta una pérdida ósea marginal de aproximadamente ${implante.perdida_osea_marginal}. `;
+                }
+
+                // Observaciones generales
+                if (implante.observaciones) {
+                    detalle += `Observaciones adicionales: ${implante.observaciones}. `;
+                }
+
+                return detalle;
+            }).join("\n\n");
+
+            $('#det_cir_man').val(detalleHistoria);
+
+        } else {
+            $('#det_cir_man').val('No hay detalles del control de implantes disponibles.');
+        }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+}
+
+function mostrar_nuevo_grupo_post_impl(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nuevo_grupo_post_impl') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            count: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#grupo_dental_post_impl').empty();
+            $('#grupo_dental_post_impl').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function eliminar_grupo_dental_post_impl(id){
+    // preguntar si desea eliminar
+    swal({
+        title: "Eliminar Grupo",
+        text: "¿Está seguro que desea eliminar el grupo?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            confirmar_eliminar_grupo_dental_post_impl(id);
+        }
+    });
+}
+
+function confirmar_eliminar_grupo_dental_post_impl(id){
+    let url = "{{ ROUTE('profesional.eliminar_grupo_dental_post_impl') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success',
+                });
+                $('#contenedor_grupos_dental_implantada').empty();
+                $('#contenedor_grupos_dental_implantada').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+}
+
+function mostrar_nuevo_pieza_pfu(){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_pfu') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            seccion:'pfu',
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#nueva_pieza_dental').empty();
+            $('#nueva_pieza_dental').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function eliminar_pieza_dental_pfu(id){
+    // preguntar si desea eliminar
+    swal({
+        title: "Eliminar Pieza",
+        text: "¿Está seguro que desea eliminar la pieza?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            confirmar_eliminar_pieza_dental_pfu(id);
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_pfu(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_corona_protesis') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success',
+                });
+                $('#contenedor_piezas_dentales_pfu').empty();
+                $('#contenedor_piezas_dentales_pfu').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+}
+
+function mostrar_nuevo_pieza_pfp(){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_pfu') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            seccion:'pfp',
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#nueva_pieza_dental_pfp').empty();
+            $('#nueva_pieza_dental_pfp').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function eliminar_pieza_dental_pfp(id){
+    // preguntar si desea eliminar
+    swal({
+        title: "Eliminar Pieza",
+        text: "¿Está seguro que desea eliminar la pieza?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            confirmar_eliminar_pieza_dental_pfp(id);
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_pfp(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_corona_protesis') }}";
+    let id_paciente = $('#id_paciente_fc').val();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_piezas_dentales_pfp').empty();
+                $('#contenedor_piezas_dentales_pfp').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+}
+
+function solicitar_protesis(){
+    var numero_pieza = $('#n_pieza_protesis').val();
+    var tipo_protesis = $('#protesis_imp_sup').val();
+    var tipo_protesis_text = $('#protesis_imp_sup option:selected').text();
+    if(tipo_protesis == 2){
+        tipo_protesis_text = $('#obs_protesis_imp_sup').val();
+    }
+    var tipo_protesis_inf = $('#protesis_imp_inf').val();
+    var tipo_protesis_inf_text = $('#protesis_imp_inf option:selected').text();
+    if(tipo_protesis_inf == 2){
+        tipo_protesis_inf_text = $('#obs_protesis_imp_inf').val();
+    }
+    var protesis_toma_imp = $('#protesis_toma_imp').val();
+    var protesis_toma_imp_text = $('#protesis_toma_imp option:selected').text();
+    if(protesis_toma_imp == 2){
+        protesis_toma_imp_text = $('#obs_protesis_toma_imp_inf').val();
+    }
+    var prueba_ajuste = $('#prueba_ajuste_protesis').val();
+    var prueba_ajuste_text = $('#prueba_ajuste_protesis option:selected').text();
+    if(prueba_ajuste == 2){
+        prueba_ajuste_text = $('#obs_prueba_ajuste_protesis').val();
+    }
+
+    var valido = 1;
+    var mensaje = '';
+
+    if(numero_pieza == ''){
+        valido = 0;
+        mensaje += '<li>Número de pieza</li>';
+    }
+
+    if(tipo_protesis == 0){
+        valido = 0;
+        mensaje += '<li>Tipo de prótesis superior</li>';
+    }
+
+    if(tipo_protesis == 2){
+        if(tipo_protesis_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación tipo de prótesis superior</li>';
+        }
+    }
+
+    if(tipo_protesis_inf == 0){
+        valido = 0;
+        mensaje += '<li>Tipo de prótesis inferior</li>';
+    }
+
+    if(tipo_protesis_inf == 2){
+        if(tipo_protesis_inf_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación tipo de prótesis inferior</li>';
+        }
+    }
+
+    if(protesis_toma_imp == 0){
+        valido = 0;
+        mensaje += '<li>Prótesis toma impresión</li>';
+    }
+
+    if(protesis_toma_imp == 2){
+        if(protesis_toma_imp_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación prótesis toma impresión</li>';
+        }
+    }
+
+    if(prueba_ajuste == 0){
+        valido = 0;
+        mensaje += '<li>Prueba de ajuste</li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+
+        return false;
+    }
+
+    var data = {
+        numero_pieza: numero_pieza,
+        tipo_protesis: tipo_protesis,
+        tipo_protesis_text: tipo_protesis_text,
+        tipo_protesis_inf: tipo_protesis_inf,
+        tipo_protesis_inf_text: tipo_protesis_inf_text,
+        protesis_toma_imp: protesis_toma_imp,
+        protesis_toma_imp_text: protesis_toma_imp_text,
+        prueba_ajuste: prueba_ajuste,
+        prueba_ajuste_text: prueba_ajuste_text,
+        id_paciente: $('#id_paciente_fc').val(),
+        _token: CSRF_TOKEN
+    }
+
+    return console.log(data);
+}
+
+function agregar_medicamentos_ficha() {
+
+
+var rows1 = [];
+$('#tabla_medicamento_cirugia tr').each(function(i, n) {
+    if (i > 0) {
+        rol = {};
+        var data = $(this).find("td");
+        rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
+        rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
+        rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
+        rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
+        rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
+        rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
+        rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
+        rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
+        rows1.push(rol);
+    }
+});
+
+$('#medicamentos').val(JSON.stringify(rows1));
+
+
+}
+
+function agregar_examenes_ficha() {
+            var rows = [];
+            $('#tabla_examen_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    console.log(i);
+                    rol = {};
+                    var data = $(this).find("td");
+                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
+                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
+                    rows.push(rol);
+                }
+            });
+            $('#examenes').val(JSON.stringify(rows));
+        }
+
+        function cargar_a_presupuesto_impl(counter){
+            let pieza = $('#numero_pieza_tto_imp'+counter).val();
+            let tto = $('#diag_presupuesto_pieza'+counter).val();
+            let valido = 1;
+            let mensaje = '';
+
+            console.log(pieza, tto);
+            let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
+            let data = {
+                pieza: pieza,
+                tto: tto,
+                id_ficha_atencion: $('#id_fc').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                _token: "{{ csrf_token() }}"
+            }
+            console.log(data);
+            $.ajax({
+                type:'post',
+                url: url,
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
+                            html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
+                            // html += '<td>';
+                            // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            // if(odonto.presupuesto == 0){
+                            //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            // }else{
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
+                            // }
+
+                            // html += '</td>';
+                            // Checkbox para seleccionar el odontograma
+                            html += '<td>';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                            html += odonto.presupuesto == 1 ? 'checked ' : '';
+                            html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                            html += '<label class="form-check-label"></label>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '<td>';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                            html += 'id="seleccionCheck' + odonto.id + '" ';
+                            html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                            html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '</tr>';
+                        });
+                        $('#contenedor_examenes_grupos_dentales').empty();
+                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                        $('#table_odontograma tbody').html(html);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        odontograma.forEach(function(odonto){
+                            if(odonto.presupuesto == 1){
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Pieza</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-1">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-2 d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                `);
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                    <tr>
+                                        <td>${odonto.fecha}</td>
+                                        <td>${odonto.diagnostico} </td>
+                                        <td>${odonto.caras} </td>
+                                        <td>${odonto.pieza} </td>
+                                        <td>${odonto.tratamiento} </td>
+                                        <td>${formatoMoneda(odonto.valor)} </td>
+                                        <td> </td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                        </td>
+                                    </tr>
+                                `);
+                                }
+                            });
+                            let valores_boca_general = resp.valores[0];
+                            let valores_odontograma = resp.valores[1];
+                            let valores_insumos = resp.valores[2];
+                            let valores_lab = resp.valores[3];
+                            let total_general = valores_boca_general + valores_odontograma + valores_insumos + valores_lab;
+                            $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                            $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                            $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                            $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                            $('#subtotal_clinico').val(formatoMoneda(total_general));
+                            $('#total_clinico').val(formatoMoneda(total_general));
+                            // guardamos el total en un input hidden
+                            $('#total_presupuesto_dental').val(total_general);
+
+                            $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+
+                            let table = $('#presup_estado_pago').DataTable();
+                            table.clear().draw();
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            // Recorrer el odontograma y agregar nuevas filas
+                            odontograma.forEach(function(odonto) {
+
+                                if (odonto.presupuesto == 1) {
+                                    if(odonto.estado_pago == 'ok'){
+                                        var clase = 'bg-success';
+                                    }else if(odonto.estado_pago == 'incompleto'){
+                                        var clase = 'bg-warning';
+                                    }else{
+                                        var clase = 'bg-danger';
+                                    }
+
+                                    if(odonto.estado == 0){
+                                        var estado = 'PENDIENTE';
+                                    }else{
+                                        var estado = 'TERMINADO';
+                                    }
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table.row.add([
+                                        odonto.descripcion,
+                                        odonto.pieza,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        '<div class="circle '+clase+'"></div>',
+                                        estado, // Columna vacía
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+                            });
+
+                        $('#table_pagos_reasignar_odontograma tbody').empty();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1) {
+                                let fila = `<tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                    <td>${odonto.pieza}</td>
+                                    <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                                </tr>`;
+                                $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                            }
+                        });
+                        let count = $('#random_preimpl').val();
+                        let count_post_impl = $('#random_postimpl').val();
+                        $('#numero_pieza_tto_impl'+count).empty();
+                        $('#numero_pieza_post_impl'+count).empty();
+                        odontograma.forEach(o => {
+                            if(o.presupuesto == 1){
+                                $('#numero_pieza_tto_impl'+count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                                $('#numero_pieza_post_impl'+count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                            }
+
+                        });
+                        // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                        let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                        table_odon_gral.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger-light-c btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+                        });
+                        // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto implantologia
+                        let table_impl = $('#table_piezas_presupuesto_period').DataTable();
+                        table_impl.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            if(pieza.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else if(pieza.estado == 1){
+                                    var estado = 'TERMINADO';
+                                }else if(pieza.estado == 2){
+                                    var estado = 'EN PROCESO';
+                                }else{
+                                    var estado = 'CITADO A CONTROL';
+                                }
+                                if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table_impl.row.add([
+                                        '<i class="fas fa-tooth mr-1"></i>' + pieza.pieza,
+                                        pieza.diagnostico,
+                                        pieza.descripcion,
+                                        formatoMoneda(formatoMoneda(pieza.valor)),
+                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                        pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                        '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                        pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                        estado
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+                                }
+                        });
+                    }else{
+                        swal({
+                            icon:'error',
+                            title:'info',
+                            text: resp.mensaje
+                        });
+                    }
+
+
+                    $('#tratamiento_presupuesto tbody').empty();
+                    let presupuesto = resp.presupuesto;
+                    console.log(presupuesto);
+                    $('#tratamiento_presupuesto tbody').append(`
+                    <tr>
+                        <td class="text-center align-middle">${presupuesto.fecha}</td>
+                        <td class="text-center align-middle">${presupuesto.id}</td>
+                        <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                        <td class="text-center align-middle">Sector I</td>
+                        <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                        <td class="text-center align-middle">
+                            <div class="form-group col-md-4">
+                                <div class="switch switch-success d-inline m-r-2">
+                                    <input type="checkbox" id="info_finalizado" checked="">
+                                    <label for="info_finalizado" class="cr"></label>
+                                </div>
+                                <label>Realizado?</label>
+                            </div>
+                        </td>
+                        <td class="text-center align-middle">
+                            ${presupuesto.fecha}
+                        </td>
+                        <td class="text-center align-middle">
+                            <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                                <i class="fa fa-plus"></i> Trabajar en pieza
+                            </button>
+                        </td>
+                    </tr>
+                    `);
+
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function recargar_piezas_preimplante(){
+
+        }
+
+function guardar_ficha(){
+    let motivo = $('#motivo').val();
+    let antecedentes = $('#antecedentes').val();
+    let examen_fisico = $('#examen_fisico').val();
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(motivo == ''){
+        valido = 0;
+        mensaje += '<li>Motivo</li>';
+    }
+
+    if(antecedentes == ''){
+        valido = 0;
+        mensaje += '<li>Antecedentes</li>';
+    }
+
+    if(examen_fisico == ''){
+        valido = 0;
+        mensaje += '<li>Examen fisico</li>';
+    }
+
+    if(valido == 0){
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+
+            return false;
+    }
+
+    let data = {
+        motivo: motivo,
+        antecedentes: antecedentes,
+        examen_fisico: examen_fisico,
+        descripcion_hipotesis: '',
+        hipotesis_diagnostico: '',
+        id_profesional_fc: $('#id_profesional').val(),
+        id_paciente_fc: $('#id_paciente').val(),
+        hora_medica: $('#hora_medica').val(),
+        cerrarsession: 2,
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url:'{{ ROUTE("dental.registrar_ficha_atencion_dental") }}',
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.estado == 'ok'){
+                swal({
+                    title:'exito',
+                    text: resp.mensaje,
+                    icon:'success'
+                });
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+
+}
+
+
+function ocultar_pieza_impl(counter){
+    console.log(counter);
+    $('#contenedor_pieza_tto_impl'+counter).empty();
+}
+
+    function actualizar_presupuesto(){
+            // Obtener valores del formulario
+
+            const id_dcto = $('#tiene_dcto').val();
+
+            // Crear objeto JSON con los datos del formulario
+            const data = {
+                _token: '{{ csrf_token() }}', // Token CSRF
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                id_presupuesto: $('#id_presupuesto').val(),
+                id_dcto: id_dcto
+            };
+
+            $.ajax({
+                type:'post',
+                url: '{{ ROUTE("dental.actualizar_presupuesto") }}',
+                data: data,
+                success: function(response){
+                    console.log('Éxito:', response);
+                    if (response.estado == 1) {
+                        let tiene_dcto = $('#tiene_dcto').val();
+                        if(tiene_dcto != 0){
+                            confirmar_aplicar_convenio_tratamiento(tiene_dcto);
+                        }else{
+                            let pagos = response.pagos;
+                            let table = $('#table_pagos_presupuesto').DataTable();
+                            let presupuesto = response.presupuesto;
+                            $('#id_presupuesto').val(presupuesto.id);
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table.clear().draw();
+                            pagos.forEach(function(pago) {
+                                let rowNode = table.row.add([
+                                    pago.fecha_pago,
+                                    pago.metodo_pago,
+                                    formatoMoneda(pago.total),
+                                    `<td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pago_dental(${pago.id})"><i class="feather icon-x"></i></button>
+                                    </td>`
+                                ]).draw(false).node();
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            });
+                            let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table_piezas_odontograma.clear().draw();
+
+                            let odontograma = response.odontograma;
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            odontograma.forEach(function(odonto) {
+
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                    if (odonto.estado_pago == 'ok') {
+                                        var clase = 'bg-success';
+                                    } else if (odonto.estado_pago == 'incompleto') {
+                                        var clase = 'bg-warning';
+                                    } else {
+                                        var clase = 'bg-danger';
+                                    }
+
+                                    if (odonto.estado == 0) {
+                                        var estado = 'PENDIENTE';
+                                    } else {
+                                        var estado = 'TERMINADO';
+                                    }
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table_piezas_odontograma.row.add([
+                                        odonto.descripcion,
+                                        odonto.pieza,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        '<div class="circle ' + clase + '"></div>',
+                                        estado, // Columna vacía
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+                            });
+
+                            let insumos = response.insumos;
+                            console.log(insumos);
+                            let table_insumos = $('#table_insumos_preimplante').DataTable();
+
+                            //Limpiar la tabla sin perder la configuración de DataTables
+                            table_insumos.clear();
+
+                            //Recorrer el array de insumos y agregarlos a la tabla
+                            insumos.forEach(insumo => {
+                                let total = insumo.cantidad * insumo.valor;
+                                if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                            // Botones de acción
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                                <i class="feather icon-shopping-cart"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }else{
+                                    var botones = `
+                                        <td>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-icon btn-warning" onclick="editar_insumo(${insumo.id})"><i class="feather icon-edit"></i></button>
+                                            <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo(${insumo.id})">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>`;
+                                }
+
+                                table_insumos.row.add([
+                                    insumo.insumos + ' ' + insumo.nombre_marca, // Nombre del insumo
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    insumo.valor, // Unidad de medida
+                                    total,
+                                    botones
+                                ]);
+                            });
+                            let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
+                            table_insumos_pagos.clear();
+                            console.log(insumos);
+                            insumos.forEach(insumo => {
+                                let total = insumo.cantidad * insumo.valor;
+                                if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
+                                    if (insumo.estado_pago == 'ok') {
+                                        var clase = 'bg-success';
+                                    } else if (insumo.estado_pago == 'intermedio') {
+                                        var clase = 'bg-warning';
+                                    } else {
+                                        var clase = 'bg-danger';
+                                    }
+                                    let rowNode = table_insumos_pagos.row.add([
+                                        insumo.insumos + ' ' + insumo.nombre_marca,
+                                        insumo.observaciones,
+                                        insumo.cantidad, // Nombre del insumo
+                                        formatoMoneda(insumo.valor), // Cantidad utilizada
+                                        0, // Unidad de medida
+                                        formatoMoneda(total),
+                                        ' <div class="circle ' + clase + '"></div>',
+
+                                    ]).draw(false).node();
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+
+                            });
+                            table_insumos_pagos.draw();
+                            $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
+                            $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
+                            $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response
+                                .suma_pagado)));
+                            $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
+                            $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
+                            $('#valores_laboratorio').html(formatoMoneda(parseInt(response.total_lab)));
+                            $('#valores_laboratorio_conf').html(formatoMoneda(parseInt(response.total_lab)));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(parseInt(response.suma_adeudado)));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_adeudado)));
+                            $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
+                            $('#subtotal_presup').val(formatoMoneda(response.suma_adeudado));
+                            $('#subtotal_lab').val(formatoMoneda(response.total_lab));
+                            $('#descuento_lab').val(0);
+                            let total = parseInt(response.suma_presupuesto) +  parseInt(response.total_lab);
+                            $('#total_presupuesto').val(formatoMoneda(total));
+                            $('#total_presupuesto_dental').val(total);
+                            let todos = response.todos;
+
+                            let table_ = $('#presup_estado_pago_gral').DataTable();
+
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table_.clear().draw();
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            todos.forEach(function(odonto) {
+
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                    if (odonto.estado_pago == 'ok') {
+                                        var clase = 'bg-success';
+                                    } else if (odonto.estado_pago == 'incompleto') {
+                                        var clase = 'bg-warning';
+                                    } else {
+                                        var clase = 'bg-danger';
+                                    }
+                                    if (odonto.atendido == 0) {
+                                        var estado = 'PENDIENTE';
+                                    } else {
+                                        var estado = 'TERMINADO';
+                                    }
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table_.row.add([
+                                        odonto.localizacion,
+                                        odonto.diagnostico_tratamiento,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(odonto.valor),
+                                        ' <div class="circle ' + clase + '"></div>',
+                                        estado
+                                    ]).draw(false).node();
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+
+                            });
+                        }
+
+                    } else {
+                        console.log('Error:', response.mensaje);
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
+    function i_medicamento() {
+            {{--  $('#indicar_medicamentos').modal('show');  --}}
+            ver_medicamento_ficha_medica();
+            $('#indicar_medicamentos').modal({backdrop: 'static', keyboard: false});
+        }
+
+</script>
+
+    {{--  SCRIPT MEDICAMENTOS EXAMENES COMUNES  --}}
+<script>
+        var creatinina = 0;
+        $(document).ready(function() {
+            {{--  MEDICAMENTOS  --}}
+            $("#nombre_medicamento_ficha_dental").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            if( data.length == 0 )
+                            {
+                                $('.medicamento_activo').hide();
+                                $('.medicamento_inactivo').show();
+                                $('#dosis_medicamento_ficha_dental_2').val('');
+                                $('#frecuencia_medicamento_ficha_dental_2').val('');
+                                $('#id_medicamento_ficha_dental').val('');
+                            }
+                            else
+                            {
+                                $('.medicamento_activo').show();
+                                $('.medicamento_inactivo').hide();
+                                $('#dosis_medicamento_ficha_dental_2').val('');
+                                $('#frecuencia_medicamento_ficha_dental_2').val('');
+                                $('#id_medicamento_ficha_dental').val('');
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#nombre_medicamento_ficha_dental').val(ui.item.label); // display the selected text
+                    $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
+                    $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
+
+                    return false;
+                }
+            });
+
+            {{--  mostrar ocultar mensaje de medicamento de uso cronico en receta de ficha  --}}
+            $('#medicamento_uso_cronico').change(function(){
+                if($('#medicamento_uso_cronico').is(':checked') )
+                {
+                    $('#mensaje_uso_cronico').show();
+                }
+                else
+                {
+                    $('#mensaje_uso_cronico').hide();
+                }
+
+            });
+
+
+
+            {{--  EXAMENES  --}}
+            {{--  funcion para capturar el tipo de examen y buscar los subtipo que estan relacionados con el  --}}
+            $('#tipo_examen').change(function(e) {
+                e.preventDefault();
+                tipo_examen = $('#tipo_examen').val();
+
+                $("#sub_tipo_examen").empty();
+                $("#examen").empty();
+                $.ajax({
+                        url: '{{ route('listar.sub_tipo_examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            tipo_examen: tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#sub_tipo_examen').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#sub_tipo_examen').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+
+                        /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                        if($('#tipo_examen').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                        else  $('#imagenologia_con_contraste').attr('disabled','disabled');
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  buscar examenes por el sub tipo de examen  --}}
+            $('#sub_tipo_examen').change(function(e) {
+
+                e.preventDefault();
+                sub_tipo_examen = $('#sub_tipo_examen').val();
+
+                $("#examen").empty();
+                $.ajax({
+                        url: '{{ route('listar.examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            sub_tipo_examen: sub_tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#examen').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#examen').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  mostrar ocultar mensaje de examenes de radiologia con contraste --}}
+            $('#imagenologia_con_contraste').change(function(){
+                if($('#imagenologia_con_contraste').is(':checked') )
+                {
+                    $('#mensaje_imagenologia_con_contraste').show();
+                }
+                else
+                {
+                    $('#mensaje_imagenologia_con_contraste').hide();
+                }
+
+            });
+
+        });
+
+        {{--  METODOS DE RECETA  --}}
+
+
+        function cerrarModalMedicamentosFicha()
+        {
+            swal({
+                title: "Ingreso de medicamento(s).",
+                text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Receta" para guardar cambios.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
+
+                    $('#indicar_medicamentos').modal('hide');
+                }
+            })
+        }
+
+        function getDosis() {
+
+            let id_medicamento = $('#id_medicamento_ficha_dental').val();
+            console.log(id_medicamento);
+
+            let url = "{{ route('dental.getDosis') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        id_medicamento: id_medicamento,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let dosis = $('#dosis_medicamento_ficha_dental');
+
+                        dosis.find('option').remove();
+                        dosis.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            dosis.append('<option value="' + v.dosis + '" data-id="'+v.id+'" data-cant_comp="'+v.cant_comp+'">' + v.present +
+                                '</option>');
+                        })
+
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        };
+
+
+        function getFrecuencia() {
+
+            let id_dosis = $('#dosis_medicamento_ficha_dental').val();
+            //console.log(dosis);
+
+            let url = "{{ route('dental.getFrecuencia') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        id_dosis: id_dosis,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let dosis = $('#frecuencia_medicamento_ficha_dental');
+
+                        dosis.find('option').remove();
+                        dosis.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            dosis.append('<option value="' + v.id + '">' + v.indic +
+                                '</option>');
+                        })
+
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        };
+
+        function getCantComp() {
+
+            var cant_comp = $('#dosis_medicamento_ficha_dental option:selected').attr('data-cant_comp');
+            console.log(cant_comp);
+
+            let url = "{{ route('presentacion.getCantComp') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+
+                        cant_comp: cant_comp,
+
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        data = JSON.parse(data);
+                        console.log(data)
+                        let select_cant_comp = $('#cantidad_comprar');
+                        let select_cant_comp2 = $('#med_cronicomes');
+
+                        select_cant_comp.find('option').remove();
+                        select_cant_comp.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
+                        })
+                        select_cant_comp.append('<option value="999">Otra Cantidad</option>');
+                    } else {
+
+
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+        };
+
+        function validar_via_administracion()
+        {
+            if($('#via_administracion_ficha_dental').val() == 11)
+            {
+                $('#observaciones_medicamento_ficha_dental').removeAttr('disabled');
+            }
+            else
+            {
+                $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
+                $('#observaciones_medicamento_ficha_dental').val('');
+            }
+        }
+
+        function validar_periodo()
+        {
+            if($('#periodo_ficha_dental').val() == 11)
+            {
+                $('#observaciones_periodo_ficha_dental').removeAttr('disabled');
+            }
+            else
+            {
+                $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
+                $('#observaciones_periodo_ficha_dental').val('');
+            }
+        }
+
+        function validar_cantidad_comprar()
+        {
+            if($('#cantidad_comprar').val() == 999)
+            {
+                $('#otra_cantidad_a_comprar').removeAttr('disabled');
+            }
+            else
+            {
+                $('#otra_cantidad_a_comprar').attr('disabled','disabled');
+                $('#otra_cantidad_a_comprar').val('');
+            }
+        }
+
+        function indicar_medicamento_cirugia() {
+
+            let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
+            let id_medicamento = $('#id_medicamento_ficha_dental').val();
+            let dosis_medicamento_ficha_dental = $('#dosis_medicamento_ficha_dental option:selected').text();
+            let frecuencia_medicamento_ficha_dental = $('#frecuencia_medicamento_ficha_dental option:selected').text();
+            let dosis_medicamento_ficha_dental_2 = $('#dosis_medicamento_ficha_dental_2').val();
+            let frecuencia_medicamento_ficha_dental_2 = $('#frecuencia_medicamento_ficha_dental_2').val();
+            let via_administracion_ficha_dental = $('#via_administracion_ficha_dental option:selected').text();
+            let observaciones_medicamento_ficha_dental = $('#observaciones_medicamento_ficha_dental').val();
+            let periodo_ficha_dental = $('#periodo_ficha_dental option:selected').text();
+            let observaciones_periodo_ficha_dental = $('#observaciones_periodo_ficha_dental').val();
+            let cantidad_comprar = $('#cantidad_comprar option:selected').text();
+            let otra_cantidad_a_comprar = $('#otra_cantidad_a_comprar').val();
+
+            // Verificar medicamentos ya agregados
+            var lista_med = [];
+            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    var rol = {}; // Declaración correcta de variable
+                    var data = $(this).find("td");
+                    lista_med.push($.trim($(data[0]).text().split("\n").join("")));
+                }
+            });
+
+            if($.inArray(id_medicamento,lista_med) == -1)
+            {
+                var medicamento_uso_cronico = 0;
+                if($('#medicamento_uso_cronico').is(':checked'))
+                    medicamento_uso_cronico = 1;
+
+                var valido = 0;
+                var mensaje = '';
+
+                // Validación del campo medicamento
+                if($.trim(nombre_medicamento_ficha_dental) == '')
+                {
+                    valido = 1;
+                    mensaje += 'Debe completar el campo Medicamento.\n';
+                }
+
+                // Validación para medicamentos registrados
+                if($('#id_medicamento_ficha_dental').val() != '')
+                {
+                    if($.trim(dosis_medicamento_ficha_dental) == '' || dosis_medicamento_ficha_dental == 0 || dosis_medicamento_ficha_dental == 'Seleccione una opción' || dosis_medicamento_ficha_dental == 'Seleccione')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe completar el campo Presentación.\n';
+                    }
+                    if($.trim(frecuencia_medicamento_ficha_dental) == '' || frecuencia_medicamento_ficha_dental == 0 || frecuencia_medicamento_ficha_dental == 'Seleccione una opción' || frecuencia_medicamento_ficha_dental == 'Seleccione')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe completar el campo Posología.\n';
+                    }
+                }
+                else
+                {
+                    // Validación para medicamentos no registrados
+                    if( dosis_medicamento_ficha_dental_2 == '')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe completar el campo Dosis\n';
+                    }
+                    else
+                    {
+                        dosis_medicamento_ficha_dental = dosis_medicamento_ficha_dental_2;
+                    }
+                    if( frecuencia_medicamento_ficha_dental_2 == '')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe completar el campo Frecuencia\n';
+                    }
+                    else
+                    {
+                        frecuencia_medicamento_ficha_dental = frecuencia_medicamento_ficha_dental_2;
+                    }
+                }
+
+                // Validación vía de administración
+                if($.trim(via_administracion_ficha_dental) == '' || via_administracion_ficha_dental == 0 || $.trim(via_administracion_ficha_dental) == 'Seleccione')
+                {
+                    valido = 1;
+                    mensaje += 'Debe completar el campo Via de Administración.\n';
+                }
+                else if($('#via_administracion_ficha_dental').val() == 11)
+                {
+                    if( $.trim(observaciones_medicamento_ficha_dental) == '')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe ingresar Otra Vía Administración\n';
+                    }
+                    else
+                    {
+                        via_administracion_ficha_dental = observaciones_medicamento_ficha_dental;
+                    }
+                }
+
+                // Validación periodo
+                if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
+                {
+                    valido = 1;
+                    mensaje += 'Debe completar el campo Periodo.\n';
+                }
+                else if($('#periodo_ficha_dental').val() == 11)
+                {
+                    if( $.trim(observaciones_periodo_ficha_dental) == '')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe ingresar Otro Periodo\n';
+                    }
+                    else
+                    {
+                        periodo_ficha_dental = observaciones_periodo_ficha_dental;
+                    }
+                }
+
+                // Validación cantidad a comprar
+                if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
+                {
+                    valido = 1;
+                    mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
+                }
+                else if($('#cantidad_comprar').val() == '999')
+                {
+                    if( $.trim(otra_cantidad_a_comprar) == '')
+                    {
+                        valido = 1;
+                        mensaje += 'Debe ingresar Cantidad a Comprar\n';
+                    }
+                    else
+                    {
+                        cantidad_comprar = otra_cantidad_a_comprar;
+                    }
+                }
+
+                if(valido == 0)
+                {
+                    $('.medicamentos_sin_registros').remove();
+                    var i = $('#tabla_medicamento_cirugia tr').length; //contador para asignar id al boton que borrara la fila
+                    var fila = '<tr class="tabla_medicamento_cirugia" id="row' + i + '">' +
+                                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + $('<div>').text(id_medicamento).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(nombre_medicamento_ficha_dental).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(dosis_medicamento_ficha_dental).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(frecuencia_medicamento_ficha_dental).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(via_administracion_ficha_dental).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(periodo_ficha_dental).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap">' + $('<div>').text(cantidad_comprar).html() + '</td>' +
+                                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + i + '\');">Quitar</div></td>'+
+                                '</tr>'; //esto seria lo que contendria la fila
+
+                    i++;
+
+                    $('#tabla_medicamento_cirugia tr:first').after(fila);
+
+                    /** enviando a table de medicamento faltante */
+                    if($('#id_medicamento_ficha_dental').val() == '')
+                    {
+                        $('#med_faltante').val(nombre_medicamento_ficha_dental);
+                        enviar_medicamento_faltante();
+                    }
+
+                    // Limpiar formulario después de agregar
+                    $('#nombre_medicamento_ficha_dental').val('');
+                    $('#id_medicamento_ficha_dental').val(''); // Corregido selector jQuery
+
+                    $('#nombre_composicion_farmaco').html('');
+
+                    $('#dosis_medicamento_ficha_dental').val(0);
+                    $('#frecuencia_medicamento_ficha_dental').val(0);
+
+                    $('#dosis_medicamento_ficha_dental_2').val('');
+                    $('#frecuencia_medicamento_ficha_dental_2').val('');
+
+                    $('#via_administracion_ficha_dental').val(0);
+                    $('#observaciones_medicamento_ficha_dental').val('');
+                    $('#observaciones_medicamento_ficha_dental').attr('disabled','disabled');
+
+                    $('#periodo_ficha_dental').val(0);
+                    $('#observaciones_periodo_ficha_dental').val('');
+                    $('#observaciones_periodo_ficha_dental').attr('disabled','disabled');
+
+                    $('#cantidad_comprar').val(0);
+                    $('#otra_cantidad_a_comprar').val('');
+                    $('#otra_cantidad_a_comprar').attr('disabled','disabled');
+
+                    $( "#medicamento_uso_cronico" ).prop( "checked", false ).change();
+                }
+                else
+                {
+                    swal({
+                        title: "Ingreso de medicamento(s).",
+                        text:mensaje,
+                        icon: "error",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Ingreso de medicamento(s).",
+                    text:'El medicamento está Recetado',
+                    icon: "warning",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+        }
+
+        function eliminar_medicamento(id_row)
+        {
+            $('#tabla_medicamento_cirugia [id='+id_row+']').remove();
+        }
+
+        function enviar_medicamento_faltante()
+        {
+            var med_faltante = $.trim($('#med_faltante').val());
+            if(med_faltante != ''){
+                /** registro */
+                let url = "{{ route('medicamentoFaltante.registro') }}";
+
+
+                var _token = CSRF_TOKEN;
+                var id_profesional = $('#id_profesional').val();
+
+                $.ajax({
+
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: _token,
+                        id_profesional: id_profesional,
+                        nombre: med_faltante,
+                    },
+                })
+                .done(function(data)
+                {
+
+                    if (data !== 'null')
+                    {
+                        //data = JSON.parse(data);
+                        console.log('-----------------------');
+                        console.log(data);
+                        console.log('-----------------------');
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Medicamento/Dispositivo Faltante enviado.\n Proximamente se agregará el Medicamento/Dispositivo Faltante en los registros",
+                                icon: "success",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                            $('#med_faltante').val('');
+                            $('#no_existe_switch').prop( "checked", false );
+                            $('#no_existe').hide();
+
+                        }
+                        else{
+
+                            swal({
+                                title: "Problema al Enviar solicitud.",
+                                icon: "warning",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            })
+                        }
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+            }
+            else
+            {
+                swal({
+                    title: "Debe Indicar el nombre del Medicamento/Dispositivo Faltante.",
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                })
+            }
+
+        }
+
+        function ver_pdf_receta(id_ficha_atencion)
+        {
+
+            let url = "{{ route('pdf.receta_medicamentos') }}";
+            Fancybox.show(
+                [
+                    {
+                    src: '{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion='+id_ficha_atencion,
+                    type: "iframe",
+                    preload: false,
+                    },
+                ]
+            );
+        }
+        {{--  METODOS DE RECETA  FIN --}}
+
+        {{--  METODOS DE EXAMENES  --}}
+        function mostrar_modal_examen_cirguria() {
+
+            {{--  $("#indicar_examenes").modal("show");  --}}
+            ver_examenes_ficha_medica();
+            ver_examenes_ficha_medica_esp();
+            $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
+
+        }
+
+        function cerrarModalExamenesFicha()
+        {
+            swal({
+                title: "Ingreso de examen(es).",
+                text: 'Al "Aceptar" cierra la ventana sin aplicar cambios.\n Debe "Generar Orden de Examen" para guardar cambios.',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                } else {
+
+                    $('#indicar_examenes').modal('hide');
+                }
+            })
+        }
+
+
+        function indicar_examen_cirugia()
+        {
+            var tipo_examen = $("#tipo_examen option:selected").text();
+            var id_tipo_examen = $("#tipo_examen").val();
+            var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
+            var examen = $("#examen option:selected").text();
+            var prioridad = $("#prioridad option:selected").text();
+
+            // var imagenologia_con_contraste = 'N/C';
+            // if($('#imagenologia_con_contraste').is(':checked'))
+            //     imagenologia_con_contraste = 'Con Contraste';
+
+            var valido = 0;
+            var mensaje = '';
+
+            if( $.trim(tipo_examen) == '' || $.trim(tipo_examen) == 'Seleccione...' || $.trim(tipo_examen) == 'Seleccione' ){
+                valido = 1;
+                mensaje += ' Debe seleccionar Tipo Examen\n';
+            }
+            // if( $.trim(sub_tipo_examen) == '' || $.trim(sub_tipo_examen) == 'Seleccione...' || $.trim(sub_tipo_examen) == 'Seleccione' ){
+            //     valido = 1;
+            //     mensaje += ' Debe seleccionar Sub Tipo Examen\n';
+            // }
+            if( $.trim(examen) == '' || $.trim(examen) == 'Seleccione...' || $.trim(examen) == 'Seleccione' ){
+                valido = 1;
+                mensaje += ' Debe seleccionar Examen\n';
+            }
+            if( $.trim(prioridad) == '' || $.trim(prioridad) == 'Seleccione...' || $.trim(prioridad) == 'Seleccione' ){
+                valido = 1;
+                mensaje += ' Debe seleccionar Prioridad\n';
+            }
+
+
+            if(valido == 0)
+            {
+                $('.examenes_sin_registros').remove();
+                var i = $('#tabla_examen_cirugia tr').length; //contador para asignar id al boton que borrara la fila
+                var fila = '';
+                    fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + $('<div>').text(examen).html() + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + $('<div>').text(tipo_examen).html() + '</td>';
+                    //fila +=     '<td>' + sub_tipo_examen + '</td>';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + $('<div>').text(prioridad).html() + '</td>';
+                    var text_con_contraste = 'N/C';
+                    if($('#imagenologia_con_contraste').prop('checked'))
+                        text_con_contraste = 'Con Contraste';
+                    fila +=     '<td class="text-center align-middle text-wrap">' + text_con_contraste + '</td>';
+                    fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen(\'row' + i + '\');">Quitar</div></td>';
+                    fila += '</tr>';
+
+                i++;
+                $('#tabla_examen_cirugia tr:first').after(fila);
+
+                if($('#imagenologia_con_contraste').prop('checked'))
+                {
+                    $('#tabla_examen_cirugia tr').each(function(key, value)
+                    {
+                        $(value).find('td').each(function(key_td, value_td)
+                        {
+                            if(key_td == 0)
+                            {
+                                if($(value_td).text() == 'CREATININA EN SANGRE')
+                                {
+                                    creatinina = 1;
+                                }
+                            }
+                        });
+                    });
+                    if(creatinina == 0)
+                    {
+                        fila = '';
+                        fila += '<tr class="tr_examen_cirugia" id="row' + i + '">';
+                        fila +=     '<td class="text-center align-middle text-wrap">CREATININA EN SANGRE</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">SANGRE</td>';
+                        //fila +=     '<td>' + sub_tipo_examen + '</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">Media</td>';
+                        fila +=     '<td class="text-center align-middle text-wrap">N/C</td>';
+                        fila +=     '<td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_contraste(\'row' + i + '\');">Quitar</div></td>';
+                        fila += '</tr>';
+                        $('#tabla_examen_cirugia tr:first').after(fila);
+                        i++;
+                        creatinina = 1;
+                    }
+                }
+
+                // Limpiar formulario después de agregar
+                $("#tipo_examen").val('');
+                $("#sub_tipo_examen").val('');
+                $("#examen").val('');
+                $("#prioridad").val(2);
+                $('#imagenologia_con_contraste').prop('checked', false);
+                $('#mensaje_imagenologia_con_contraste').hide();
+
+                {{--  $("#adicionados1").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando  --}}
+                {{--  var nFilas = $("#tabla_examen_cirugia tr").length;  --}}
+                {{--  $("#adicionados1").append(nFilas - 1);  --}}
+                {{--  $("#sub_tipo_examen").empty();  --}}
+                {{--  $("#examen").empty();  --}}
+                //$("#frecuencia").empty();
+                //$("#periodo").empty();
+                //$("#prioridad").empty();
+            }
+            else
+            {
+                swal({
+                    title: "Ingreso de examen(es).",
+                    text:mensaje,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+
+        }
+
+
+
+        function eliminar_examen_contraste(id_row)
+        {
+            swal({
+                title: "Eliminar Examen relacionado con contraste.",
+                text: 'Al "Aceptar" Elimina el examen relacionado con contraste.\n',
+                icon: "warning",
+                buttons: ["Aceptar", 'Cancelar'],
+            }).then((result) => {
+                if (result == true)
+                {
+                    console.log('regresar');
+                }
+                else
+                {
+                    $('#tabla_examen_cirugia [id='+id_row+']').remove();
+                    creatinina = 0;
+                }
+            });
+        }
+
+
+        function registro_examen_ficha() {
+            var rows1 = [];
+            $('#tabla_examen_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    rol = {};
+                    var data = $(this).find("td");
+                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
+                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
+                    rows1.push(rol);
+                }
+            });
+
+            $('#examenes').val(JSON.stringify(rows1));
+
+            let id_ficha_atencion = $('#id_fc').val();
+            let id_paciente = $('#id_paciente_fc').val();
+            let id_profesional = $('#id_profesional_fc').val();
+            let tipo_ficha = 1;
+            var _token = CSRF_TOKEN;
+
+
+            let url = "{{ route('examenes.registro_examenes') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "post",
+                    data: {
+                        _token: _token,
+                        examenes: JSON.stringify(rows1),
+                        id_ficha_atencion: id_ficha_atencion,
+                        id_profesional: id_profesional,
+                        id_paciente: id_paciente,
+                        tipo_ficha: tipo_ficha,
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        {{--  data = JSON.parse(data);  --}}
+                        console.log(data)
+
+                        if(data.falla == '0'){
+                            swal({
+                                title: "Ingreso de examen(es).",
+                                text: 'Examenes registrados con Exito.',
+                                icon: "success",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Ingreso de examen(es).",
+                                text: 'Falla en el registro, Intente nuevamente.',
+                                icon: "warning",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                        }
+
+
+
+                    } else {
+
+                        swal({
+                            title: "Ingreso de examen(es).",
+                            text: 'Sin Retorno de Registro, Intente nuevamente.',
+                            icon: "error",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+
+        function ver_pdf_orden_examenes(id_ficha_atencion)
+        {
+
+            let url = "{{ route('pdf.orden_examenes') }}";
+            Fancybox.show(
+                [
+                    {
+                    src: url+'?id_ficha_atencion='+id_ficha_atencion,
+                    type: "iframe",
+                    preload: false,
+                    },
+                ]
+            );
+        }
+        {{--  METODOS DE EXAMENES FIN  --}}
+
+
+        {{--  CARGAR MEDICAMENTOS DE FICHA MEDICA  --}}
+        function ver_medicamento_ficha_medica()
+        {
+
+            let url = "{{ route('detalle_receta.ver_medicamentos') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_ficha = $('#id_fc').val();
+            $('#tabla_medicamento_cirugia').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_ficha:id_ficha
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_medicamento_ficha_medica-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle hidden" hidden="hidden">id_producto</th>';
+                    html += '        <th class="text-center align-middle hidden" hidden="hidden">uso_cronico</th>';
+                    html += '        <th class="text-center align-middle">Medicamento</th>';
+                    html += '        <th class="text-center align-middle">Presentación</th>';
+                    html += '        <th class="text-center align-middle">Posología</th>';
+                    html += '        <th class="text-center align-middle">Vía Adm.</th>';
+                    html += '        <th class="text-center align-middle">Periodo</th>';
+                    html += '        <th class="text-center align-middle">Comprar</th>';
+                    html += '        <th class="text-center align-middle">Eliminar</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+                    if(data.estado == 1)
+                    {
+
+                        $.each(data.registros, function(index, value)
+                        {
+                            {{--  var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fecha = new Date(f_temp);
+                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();  --}}
+
+                            html += '<tr class="tabla_medicamento_cirugia" id="row' + index + '">';
+                            html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.id_articulo+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap hidden" hidden="hidden">'+value.uso_cronico+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.producto+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.presentacion+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.posologia+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.via_administracion+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.periodo+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap">'+value.cantidad_compra+'</td>';
+                            html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento(\'row' + index + '\');">Quitar</div></td>';
+                            html += '</tr>';
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr class="medicamentos_sin_registros">';
+                        html += '    <td class="text-center align-middle " colspan="9">'+data.msj+'</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#tabla_medicamento_cirugia').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function ver_examenes_ficha_medica()
+        {
+
+            let url = "{{ route('examenes.ver_examenes') }}";
+
+
+            var _token = CSRF_TOKEN;
+            var id_ficha = $('#id_fc').val();
+            $('#tabla_examen_cirugia').html('');
+
+            $.ajax({
+
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    id_ficha_atencion:id_ficha
+                },
+            })
+            .done(function(data)
+            {
+
+                if (data !== 'null')
+                {
+                    //data = JSON.parse(data);
+                    console.log('----------ver_examenes_ficha_medica-------------');
+                    console.log(data);
+                    console.log('-----------------------');
+                    var html = '';
+
+                    html += '<thead>';
+                    html += '    <tr>';
+                    html += '        <th class="text-center align-middle">Nombre Examen</th>';
+                    html += '        <th class="text-center align-middle">Tipo</th>';
+                    {{--  html += '        <th class="text-center align-middle">Sub-Tipo</th>';  --}}
+                    html += '        <th class="text-center align-middle">Prioridad</th>';
+                    html += '        <th class="text-center align-middle">Con Contraste</th>';
+                    html += '        <th class="text-center align-middle">Acción</th>';
+                    html += '    </tr>';
+                    html += '</thead>';
+                    html += '<tbody>';
+
+                    if(data.estado == 1)
+                    {
+                        let prioridad = ['', 'Baja', 'Media','Alta','Urgente'];
+                        $.each(data.registros, function(index, value)
+                        {
+
+                            if(value.examen == 'CREATININA EN SANGRE')
+                            {
+                                html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
+                                var text_con_contraste = 'N/C';
+                                if(value.con_contraste == 1)
+                                    text_con_contraste = 'Con Contraste';
+                                html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_contraste(\'row' + index + '\');">Quitar</div></td>';
+                                html += '</tr>';
+                            }
+                            else
+                            {
+                                html += '<tr class="tr_examen_cirugia" id="row' + index + '">';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+value.tipo_examen+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap">'+prioridad[value.id_prioridad]+'</td>';
+                                var text_con_contraste = 'N/C';
+                                if(value.con_contraste == 1)
+                                    text_con_contraste = 'Con Contraste';
+                                html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen(\'row' + index + '\');">Quitar</div></td>';
+                                html += '</tr>';
+                            }
+                        });
+
+                    }
+                    else
+                    {
+
+                        html += '<tr class="examenes_sin_registros">';
+                        html += '    <td class="text-center align-middle " colspan="5">'+data.msj+'</td>';
+                        html += '</tr>';
+
+                    }
+                    html += '</tbody>';
+                    $('#tabla_examen_cirugia').html(html);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function alerta_registro_medicamento() {
+
+            swal({
+                title: "Ingreso de medicamento(s) exitoso.",
+                text: "Recuerde 'Guardar Ficha Clínica' para finalizar el proceso.",
+                icon: "success",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+            //alert("ingreso de medicamento(s) exitoso, favor terminar el registro.");
+            $('#nombre_medicamento_ficha_dental').val('');
+            $('#dosis_medicamento_ficha_dental').val('');
+            $('#frecuencia_medicamento_ficha_dental').val('');
+            $('#via_administracion_ficha_dental').val('0');
+            $('#periodo_ficha_dental').val('0');
+        }
+
+        function registrar_medicamentos_ficha()
+        {
+            var rows1 = [];
+            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    rol = {};
+                    var data = $(this).find("td");
+                    rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
+                    rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
+                    rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
+                    rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
+                    rows1.push(rol);
+                }
+            });
+
+            $('#medicamentos').val(JSON.stringify(rows1));
+
+            let id_profesional = $('#id_profesional_fc').val();
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+            let id_paciente = $('#id_paciente_fc').val();
+            let id_ficha_atencion = $('#id_fc').val();
+            var _token = CSRF_TOKEN;
+
+
+            let url = "{{ route('detalle_receta.registro_medicamentos') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "post",
+                    data: {
+                        _token: _token,
+                        medicamentos: JSON.stringify(rows1),
+                        id_ficha: id_ficha_atencion,
+                        id_ingreso_paciente: '0',
+                        id_recuperacion: '0',
+                        id_sala: '0',
+                        id_profesional: id_profesional,
+                        id_paciente: id_paciente,
+                        id_lugar_atencion: id_lugar_atencion,
+                    },
+                })
+                .done(function(data) {
+                    console.log(data)
+
+                    if (data != null) {
+
+                        {{--  data = JSON.parse(data);  --}}
+                        console.log(data)
+
+                        if(data.falla == '0'){
+                            swal({
+                                title: "Ingreso de medicamento(s).",
+                                text: 'Medicamentos registrados con Exito.',
+                                icon: "success",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Ingreso de medicamento(s).",
+                                text: 'Falla en el registro, Intente nuevamente.',
+                                icon: "warning",
+                                // buttons: "Aceptar",
+                                //SuccessMode: true,
+                            });
+                        }
+
+
+
+                    } else {
+
+                        swal({
+                            title: "Ingreso de medicamento(s).",
+                            text: 'Sin Retorno de Registro, Intente nuevamente.',
+                            icon: "error",
+                            // buttons: "Aceptar",
+                            //SuccessMode: true,
+                        });
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+        }
+
+        function seleccionar_piezas_presup_period() {
+            const checkbox = document.getElementById('piezas_presup_period');
+            // Seleccionar el <select> y actualizar sus valores
+            const piezasSelect = $('#paciente_piezas_dentales_ex_period');
+            // Si está desmarcado
+            if (!checkbox.checked) {
+                // 1. Limpiar select2
+                piezasSelect.val(null).trigger('change');
+
+                // 2. Quitar clase seleccionada a todas las piezas
+                $('.pieza_odped').removeClass('seleccionada');
+
+                return; // Salimos de la función
+            }
+            // Desmarcar los switches de maxilares
+            document.getElementById('max_sup_period').checked = false;
+            document.getElementById('max_inf_period').checked = false;
+
+            // Aquí puedes agregar lógica para seleccionar solo piezas de presupuesto si lo necesitas
+            // Supongamos que ya tienes este JSON cargado
+            const odontograma = odontograma_global;
+
+            // Filtrar solo las piezas donde urgencia es igual a 0, que el presupuesto sea igual a 1 y obtener piezas únicas
+            const piezasTto = odontograma.filter(item => item.urgencia === 0 && item.presupuesto === 1);
+            const piezasUnicas = [...new Set(piezasTto.map(item => item.pieza))];
+
+
+            piezasSelect.val(piezasUnicas).trigger('change');
+
+            // Marcar visualmente las piezas en el odontograma
+            piezasUnicas.forEach(pieza => {
+                $(`.pieza_periodoncia[data-pieza_period="${pieza}"]`).addClass('seleccionada');
+            });
+            // Escuchar cambios en el Select2 para actualizar el odontograma visual
+            piezasSelect.on('change', function () {
+                const piezasSeleccionadas = $(this).val() || [];
+
+                // Recorre todas las piezas visuales
+                $('.pieza_periodoncia').each(function () {
+                    const piezaNumero = $(this).data('pieza_period').toString();
+
+                    if (piezasSeleccionadas.includes(piezaNumero)) {
+                        $(this).addClass('seleccionada');
+                    } else {
+                        $(this).removeClass('seleccionada');
+                    }
+                });
+            });
+    }
+    function seleccionar_piezas_presup_period_eval(){
+        const checkbox = document.getElementById('piezas_presup_period_eval');
+        // Seleccionar el <select> y actualizar sus valores
+        const piezasSelect = $('#paciente_piezas_dentales_ex_period');
+        // Si está desmarcado
+        if (!checkbox.checked) {
+            // 1. Limpiar select2
+            piezasSelect.val(null).trigger('change');
+
+            // 2. Quitar clase seleccionada a todas las piezas
+            $('.pieza_odped').removeClass('seleccionada');
+
+            return; // Salimos de la función
+        }
+        // Desmarcar los switches de maxilares
+        document.getElementById('max_sup_period').checked = false;
+        document.getElementById('max_inf_period').checked = false;
+
+        // Aquí puedes agregar lógica para seleccionar solo piezas de presupuesto si lo necesitas
+        // Supongamos que ya tienes este JSON cargado
+        const odontograma = evaluaciones_periodoncia;
+
+        const piezasTto = odontograma;
+        const piezasUnicas = [...new Set(piezasTto.map(item => item.pieza))];
+        console.log(piezasUnicas);
+        piezasSelect.val(piezasUnicas).trigger('change');
+
+        // Marcar visualmente las piezas en el odontograma
+        piezasUnicas.forEach(pieza => {
+            $(`.pieza_periodoncia[data-pieza_period="${pieza}"]`).addClass('seleccionada');
+        });
+        // Escuchar cambios en el Select2 para actualizar el odontograma visual
+        piezasSelect.on('change', function () {
+            const piezasSeleccionadas = $(this).val() || [];
+            // Recorre todas las piezas visuales
+            $('.pieza_periodoncia').each(function () {
+                const piezaNumero = $(this).data('pieza_period').toString();
+                if (piezasSeleccionadas.includes(piezaNumero)) {
+                    $(this).addClass('seleccionada');
+                } else {
+                    $(this).removeClass('seleccionada');
+                }
+            });
+        });
+
+    }
+
+    function eliminar_examen_period(id){
+        swal({
+            title: "¿Está seguro?",
+            text: "¿Desea eliminar este examen de periodoncia?",
+            icon: "warning",
+            buttons: ["Cancelar", "Eliminar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                let data = {
+                    _token: CSRF_TOKEN,
+                    id: id
+                }
+
+                let url = "{{ route('profesional.eliminar_examen_period') }}";
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    success: function(resp){
+                        if(resp.mensaje == 'OK'){
+                            $('#contenedor_piezas_tto_period').html(resp.v);
+                            swal({
+                                title: "Eliminado",
+                                text: "El examen ha sido eliminado correctamente",
+                                icon: "success",
+                            });
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                        swal({
+                            title: "Error",
+                            text: "Ha ocurrido un error al eliminar el examen",
+                            icon: "error",
+                            buttons: "Aceptar"
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function editar_examen_period(id){
+        // Esta función podría abrir un modal con los datos del examen para editarlos
+        swal({
+            title: "Función en desarrollo",
+            text: "La función de editar estará disponible próximamente",
+            icon: "info",
+            buttons: "Aceptar"
+        });
+    }
+
+    function biopsia_check_period(count){
+        if($('#biopsia_check_period'+count).is(':checked')){
+            $('#period_biop_zona'+count).prop('disabled', false);
+            $('#period_obs_result_biopsia'+count).prop('disabled', false);
+        } else {
+            $('#period_biop_zona'+count).prop('disabled', true).val('');
+            $('#period_obs_result_biopsia'+count).prop('disabled', true).val('');
+        }
+    }
+
+    var evaluaciones_periodoncia = [];
+
+    function agregar_dg_periodonto_pieza(){
+        console.log('Iniciando proceso de agregar diagnóstico periodontal');
+        let pieza = $('#period_pza').val();
+        let antecedentes_molestias = $('#perio_antsang').val();
+        let evaluacion_clinica = $('#perio_evcsup').val();
+        let estudio_rx = $('#period_erx').val();
+        let diagnostico = $('#period_dpl').val();
+        let lesion_sistemica = $('#period_lpes').val();
+        let dg_period = $('#dg_period').val();
+        let observaciones = $('#obs_period_pza').val();
+        let id_ficha = $('#id_fc').val();
+        let _token = CSRF_TOKEN;
+
+        let valido = 1;
+        let mensaje = "";
+
+        if(pieza == 0 || pieza == ''){
+            valido = 0;
+            mensaje += 'Debe seleccionar una pieza dental.\n';
+        }
+
+        if(antecedentes_molestias == 3){
+            antecedentes_molestias = $('#obs_perio_antsang').val();
+            if(antecedentes_molestias == ''){
+                valido = 0;
+                mensaje += 'Debe especificar los antecedentes o molestias.\n';
+            }
+        }
+
+        if(evaluacion_clinica == 3){
+            evaluacion_clinica = $('#obs_perio_evcsup').val();
+            if(evaluacion_clinica == ''){
+                valido = 0;
+                mensaje += 'Debe especificar la evaluación clínica.\n';
+            }
+        }
+
+        if(estudio_rx == 3){
+            estudio_rx = $('#obs_period_erx').val();
+            if(estudio_rx == ''){
+                valido = 0;
+                mensaje += 'Debe especificar el estudio radiográfico.\n';
+            }
+        }
+
+        if(diagnostico == 8){
+            diagnostico = $('#obs_period_dpl').val();
+            if(diagnostico == ''){
+                valido = 0;
+                mensaje += 'Debe especificar el diagnóstico.\n';
+            }
+        }
+
+        if(lesion_sistemica == 7){
+            lesion_sistemica = $('#obs_period_lpes').val();
+            if(lesion_sistemica == ''){
+                valido = 0;
+                mensaje += 'Debe especificar lesión sistémica. \n';
+            }
+        }
+
+        if(valido == 0){
+            swal({
+                title: "Agregar Diagnóstico Periodontal por Pieza",
+                content:{
+                    element: "ul",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+                buttons: "Aceptar"
+            });
+            return;
+        }
+
+        let data = {
+            pieza: pieza,
+            antecedentes_molestias: antecedentes_molestias,
+            evaluacion_clinica: evaluacion_clinica,
+            estudio_rx: estudio_rx,
+            diagnostico: diagnostico,
+            lesion_sistemica: lesion_sistemica,
+            dg_period: dg_period,
+            observaciones: observaciones,
+            id_ficha_atencion: id_ficha,
+            id_paciente: $('#id_paciente_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: _token
+        };
+
+        console.log('Datos a enviar:', data);
+
+        let url = "{{ route('profesional.agregar_dg_periodonto_pieza') }}";
+
+
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            beforeSend: function(){
+                // Mostrar loading mientras se procesa
+                swal({
+                    title: "Procesando...",
+                    text: "Guardando diagnóstico periodontal",
+                    icon: "info",
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+            },
+            success: function(resp){
+                console.log('Respuesta del servidor:', resp);
+
+                // Cerrar loading
+                swal.close();
+
+                // Verificar que la respuesta tenga la estructura esperada
+                if(typeof resp === 'object' && resp !== null){
+
+                    if(resp.mensaje === 'OK'){
+                        // Éxito: Limpiar formulario y actualizar vista
+                        limpiarFormularioPeriodoncia();
+                        evaluaciones_periodoncia = resp.evaluaciones || [];
+                        console.log('Evaluaciones periodoncia actualizadas:', evaluaciones_periodoncia);
+
+                        // Actualizar contenedor de evaluaciones si existe la vista
+                        if(resp.v && resp.v.trim() !== ''){
+                            $('#contenedor_evaluaciones_periodonto').html(resp.v);
+                            console.log('Vista actualizada con ' + (resp.total_evaluaciones || 0) + ' evaluaciones');
+                        }
+
+                        // Actualizar contador si existe
+                        if(resp.total_evaluaciones !== undefined){
+                            $('#total_evaluaciones_periodonto').text(resp.total_evaluaciones);
+                        }
+
+                        // Mostrar mensaje de éxito
+                        swal({
+                            title: "¡Excelente!",
+                            text: "Evaluación periodontal agregada correctamente para la pieza " + pieza,
+                            icon: "success",
+                            timer: 3000
+                        });
+
+                    } else if(resp.mensaje === 'ERROR'){
+                        // Error controlado del servidor
+                        let errorMsg = resp.error || "Ha ocurrido un error al guardar la evaluación";
+
+                        // Mostrar detalles de validación si existen
+                        if(resp.detalles && typeof resp.detalles === 'object'){
+                            errorMsg += "\n\nDetalles:\n";
+                            Object.keys(resp.detalles).forEach(function(campo){
+                                errorMsg += "• " + resp.detalles[campo].join(', ') + "\n";
+                            });
+                        }
+
+                        swal({
+                            title: "Error en la validación",
+                            text: errorMsg,
+                            icon: "error",
+                            buttons: "Aceptar"
+                        });
+                    } else {
+                        // Respuesta inesperada
+                        console.warn('Respuesta inesperada del servidor:', resp);
+                        swal({
+                            title: "Respuesta inesperada",
+                            text: "El servidor respondió de manera inesperada. Verifique si los datos se guardaron correctamente.",
+                            icon: "warning",
+                            buttons: "Aceptar"
+                        });
+                    }
+                } else {
+                    // Respuesta no es un objeto válido
+                    console.error('Respuesta inválida del servidor:', resp);
+                    swal({
+                        title: "Error de comunicación",
+                        text: "La respuesta del servidor no es válida",
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                }
+            },
+            error: function(xhr, status, error){
+                console.error('Error en la petición AJAX:', {
+                    xhr: xhr,
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText
+                });
+
+                // Cerrar loading
+                swal.close();
+
+                let errorMessage = "Ha ocurrido un error al procesar la solicitud";
+                let errorDetails = "";
+
+                // Manejar diferentes tipos de errores HTTP
+                if(xhr.status === 422){
+                    // Errores de validación
+                    errorMessage = "Error de validación de datos";
+                    if(xhr.responseJSON && xhr.responseJSON.errors){
+                        errorDetails = "\n\nCampos con errores:\n";
+                        Object.keys(xhr.responseJSON.errors).forEach(function(campo){
+                            errorDetails += "• " + xhr.responseJSON.errors[campo].join(', ') + "\n";
+                        });
+                    }
+                } else if(xhr.status === 400){
+                    // Bad Request
+                    errorMessage = "Solicitud incorrecta";
+                    if(xhr.responseJSON && xhr.responseJSON.error){
+                        errorDetails = "\n\n" + xhr.responseJSON.error;
+                    }
+                } else if(xhr.status === 500){
+                    // Error interno del servidor
+                    errorMessage = "Error interno del servidor";
+                    errorDetails = "\n\nPor favor, contacte al administrador del sistema.";
+                } else if(xhr.status === 0){
+                    // Sin conexión
+                    errorMessage = "Sin conexión al servidor";
+                    errorDetails = "\n\nVerifique su conexión a internet.";
+                } else {
+                    // Otros errores
+                    errorMessage = "Error HTTP " + xhr.status;
+                }
+
+                // Intentar obtener mensaje del servidor si está disponible
+                if(xhr.responseJSON && xhr.responseJSON.message){
+                    errorDetails = "\n\n" + xhr.responseJSON.message;
+                } else if(xhr.responseJSON && xhr.responseJSON.error){
+                    errorDetails = "\n\n" + xhr.responseJSON.error;
+                }
+
+                swal({
+                    title: "Error de comunicación",
+                    text: errorMessage + errorDetails,
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        });
+    }
+
+    // Función auxiliar para limpiar el formulario
+    function limpiarFormularioPeriodoncia(){
+        // Limpiar campos principales
+        $('#period_pza').val('0').trigger('change');
+        $('#perio_antsang').val('1');
+        $('#perio_evcsup').val('1');
+        $('#period_erx').val('1');
+        $('#period_dpl').val('1');
+        $('#period_lpes').val('1');
+        $('#dg_period').val('');
+        $('#obs_period_pza').val('');
+
+        // Limpiar campos de observaciones adicionales
+        $('#obs_perio_antsang').val('');
+        $('#obs_perio_evcsup').val('');
+        $('#obs_period_erx').val('');
+        $('#obs_period_dpl').val('');
+        $('#obs_period_lpes').val('');
+
+        // Ocultar divs de observaciones adicionales
+        $('#div_perio_antsang').hide();
+        $('#div_perio_evcsup').hide();
+        $('#div_period_erx').hide();
+        $('#div_period_dpl').hide();
+        $('#div_period_lpes').hide();
+
+        console.log('Formulario de periodoncia limpiado');
+    }
+
+    // Función para editar una evaluación de periodoncia
+    function editar_evaluacion_periodonto(id){
+        console.log('Editando evaluación ID:', id);
+
+        // Aquí puedes implementar un modal para editar
+        // Por ahora mostraremos un mensaje de que está en desarrollo
+        swal({
+            title: "Función en desarrollo",
+            text: "La función de editar evaluaciones estará disponible próximamente",
+            icon: "info",
+            buttons: "Aceptar"
+        });
+
+        // Implementación futura:
+        /*
+        let url = "{{ route('profesional.editar_evaluacion_periodonto') }}";
+
+        // Obtener datos actuales y mostrar modal de edición
+        // Luego enviar AJAX con los datos modificados
+        */
+    }
+
+    // Función para eliminar una evaluación de periodoncia
+    function eliminar_evaluacion_periodonto(id){
+        console.log('Eliminando evaluación ID:', id);
+
+        swal({
+            title: "¿Está seguro?",
+            text: "¿Desea eliminar esta evaluación de periodoncia?\n\nEsta acción no se puede deshacer.",
+            icon: "warning",
+            buttons: ["Cancelar", "Eliminar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                let data = {
+                    _token: CSRF_TOKEN,
+                    id: id
+                };
+
+                let url = "{{ route('profesional.eliminar_evaluacion_periodonto') }}";
+
+                // Mostrar loading
+                swal({
+                    title: "Eliminando...",
+                    text: "Eliminando evaluación de periodoncia",
+                    icon: "info",
+                    buttons: false,
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                });
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    dataType: 'json',
+                    success: function(resp){
+                        console.log('Respuesta del servidor:', resp);
+
+                        // Cerrar loading
+                        swal.close();
+
+                        if(resp.mensaje === 'OK'){
+                            // Actualizar vista si existe
+                            if(resp.v && resp.v.trim() !== ''){
+                                $('#contenedor_evaluaciones_periodonto').html(resp.v);
+                            }
+
+                            // Actualizar contador
+                            if(resp.total_evaluaciones !== undefined){
+                                $('#total_evaluaciones_periodonto').text(resp.total_evaluaciones);
+                            }
+
+                            evaluaciones_periodoncia = resp.evaluaciones || [];
+                            console.log('Evaluaciones periodoncia actualizadas:', evaluaciones_periodoncia);
+
+                            // Mostrar mensaje de éxito
+                            swal({
+                                title: "¡Eliminado!",
+                                text: "La evaluación de periodoncia ha sido eliminada correctamente",
+                                icon: "success",
+                                timer: 2000,
+                            });
+                        } else {
+                            swal({
+                                title: "Error",
+                                text: resp.error || "Ha ocurrido un error al eliminar la evaluación",
+                                icon: "error",
+                                buttons: "Aceptar"
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        console.error('Error en la petición AJAX:', {
+                            xhr: xhr,
+                            status: status,
+                            error: error
+                        });
+
+                        // Cerrar loading
+                        swal.close();
+
+                        let errorMessage = "Ha ocurrido un error al eliminar la evaluación";
+
+                        if(xhr.responseJSON && xhr.responseJSON.error){
+                            errorMessage = xhr.responseJSON.error;
+                        } else if(xhr.status === 404){
+                            errorMessage = "La evaluación no fue encontrada";
+                        } else if(xhr.status === 500){
+                            errorMessage = "Error interno del servidor";
+                        }
+
+                        swal({
+                            title: "Error al eliminar",
+                            text: errorMessage,
+                            icon: "error",
+                            buttons: "Aceptar"
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+
+
+    // Función para cargar evaluaciones existentes al cargar la página
+    function cargar_evaluaciones_periodonto() {
+        let id_ficha = $('#id_fc').val();
+
+        if (id_ficha && id_ficha !== '') {
+            $.ajax({
+                url: "{{ route('profesional.obtener_evaluaciones_periodonto') }}",
+                type: 'GET',
+                data: { id_ficha_atencion: id_ficha },
+                dataType: 'json',
+                success: function(resp) {
+                    console.log(resp);
+                    evaluaciones_periodoncia = resp.evaluaciones || [];
+                    console.log(evaluaciones_periodoncia);
+                    if (resp.mensaje === 'OK' && resp.v) {
+                        $('#contenedor_evaluaciones_periodonto').html(resp.v);
+                        console.log('Evaluaciones cargadas: ' + (resp.total_evaluaciones || 0));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error al cargar evaluaciones:', error);
+                }
+            });
+        }
+    }
+
+    // Cargar evaluaciones al inicializar la página
+    $(document).ready(function() {
+        // Cargar evaluaciones existentes si hay una ficha
+        cargar_evaluaciones_periodonto();
+    });
+
+</script>
+
+

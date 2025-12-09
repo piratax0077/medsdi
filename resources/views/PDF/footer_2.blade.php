@@ -9,7 +9,7 @@
                         </div>
                         <div style="line-height: 10px; font-weight: bold; font-family: Poppins;">Valide este documento<br>escaneando el código</div>
                     </th>
-                    <th style="width: 33%;">
+                    <th style="width: 33%; display: none;">
                         <div class="div-qr">
                             @if ($receta->qr_id)
                                 <img src="data:image/svg+xml;base64,{{ base64_encode( $receta->qr_id ) }}" style="width: 80%;">

@@ -9,7 +9,7 @@
     <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $cuerpo['array_ficha_atencion']['token'] }}</div>
 
     @include('PDF.header')
-    @include('PDF.footer')
+    @include('PDF.footer_2')
 
     <main>
         @foreach ($cuerpo['detalle_orden'] as $key =>$detalle)

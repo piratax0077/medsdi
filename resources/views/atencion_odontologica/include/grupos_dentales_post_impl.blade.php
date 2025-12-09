@@ -134,7 +134,7 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <button type="button" class="btn btn-danger-light-c btn-sm btn-icon" onclick="ocultar_grupo_dental_post_impl()"><i class="feather icon-x"></i></button>
+
                         <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_grupo_dental_post_impl({{ $counter }})"><i class="feather icon-save"></i></button>
                     </div>
                 </div>
@@ -251,7 +251,7 @@
         }
 
         let data = {
-            id_paciente: dame_id_paciente(),
+            id_paciente: $('#id_paciente_fc').val(),
             id_ficha_atencion: $('#id_fc').val(),
             piezas: piezas,
             estabilidad: estabilidad,
@@ -287,6 +287,7 @@
                     });
                     $('#contenedor_grupos_dental_implantada').empty();
                     $('#contenedor_grupos_dental_implantada').append(data.v);
+                    mostrar_nuevo_grupo_post_impl(1000);
                 }else{
                     swal({
                         title: "Error",

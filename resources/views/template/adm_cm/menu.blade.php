@@ -11,7 +11,7 @@
 				<div id="nav-user-link">
 					<ul class="list-inline">
 						<li class="list-inline-item">
-							<a href="perfil_cm.php" data-toggle="tooltip" title="Mi perfil">
+							<a href="perfil_cm.php" data-toggle="tooltip" title="Mi Perfil Centro Médico">
 								<i class="feather icon-user"></i>
 							</a>
 						</li>

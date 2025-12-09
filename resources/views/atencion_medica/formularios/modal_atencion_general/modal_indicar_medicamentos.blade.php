@@ -20,7 +20,7 @@
                     <div class="form-row">
                         <div class="col-sm-6 mt-2">
                             <div class="form-group">
-                                <label class="floating-label">Medicamento</label>
+                                <label class="floating-label-activo-sm">Medicamento</label>
                                 <input type="text" id="nombre_medicamento_ficha_dental"
                                     name="nombre_medicamento_ficha_dental" onblur="getDosis()"
                                     class="form-control form-control-sm">

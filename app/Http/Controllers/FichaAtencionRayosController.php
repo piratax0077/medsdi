@@ -62,13 +62,7 @@ class FichaAtencionRayosController extends Controller
             $id_paciente = $request->id_paciente_fc;
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-			
-																						
-																						  
 
-													
-																   
-	   
             $paciente = Paciente::find($request->id_paciente_fc);
             // $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
 
@@ -97,7 +91,7 @@ class FichaAtencionRayosController extends Controller
 
             $ficha->motivo = $nombre_procedimiento;
             $ficha->hipotesis_diagnostico = $nombre_procedimiento;
-												
+
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
 
@@ -114,21 +108,13 @@ class FichaAtencionRayosController extends Controller
                 }
             }
 
-
             $ficha->finalizada = 1;
 
-			
-
-										
-													 
-			 
-																	 
-	   
             $registro_archivo = array();
             if(!empty($request->input_lista_archivo))
             {
 
-												
+
                 $array_archivo = json_decode($request->input_lista_archivo);
 
                 $resulto_img = array();
@@ -138,7 +124,7 @@ class FichaAtencionRayosController extends Controller
                     $nombre_real = $value[1];
                     $nombre_temp = $value[2];
                     $file_extension = $value[3];
-                    $nombre_final = $paciente->rut.'_examen_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+                    $nombre_final = $paciente->rut.'_rayo_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
 
                     $resulto_archivo[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
                     $url = $resulto_archivo[$key]['proceso']['url'];
@@ -165,21 +151,6 @@ class FichaAtencionRayosController extends Controller
 
             if ($ficha->save())
             {
-			
-										 
-											
-												 
-											
-																								 
-				 
-					
-				 
-																						 
-				 
-														
-
-																		   
-	   
 
                 /** registro en ficha atencion rayo */
                 $fichaRayo = new FichaAtencionRayo();
@@ -206,7 +177,7 @@ class FichaAtencionRayosController extends Controller
                 if(!empty($registro_archivo))
                 {
                     $fichaRayo->estado_archivo = 1;
-                    $fichaRayo->archivo = json_encode($registro_archivo);
+                    $fichaRayo->archivo = $registro_archivo;
                 }
                 else
                 {
@@ -234,7 +205,7 @@ class FichaAtencionRayosController extends Controller
                 }
 
 
-												
+
 
                 if($request->cerrarsession == 0 || $request->cerrarsession =='')
                 {
@@ -260,8 +231,8 @@ class FichaAtencionRayosController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-			
-	   
+
+
 
     public function generarPdfInformeRayos(Request $request)
     {
@@ -387,5 +358,90 @@ class FichaAtencionRayosController extends Controller
             die();
         }
     }
-												
+
+    public function resultadosRayos(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['ID'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registros = FichaAtencionRayo::find($request->id);
+            if($registros)
+            {
+
+               $lista_imagenes = array();
+
+                if($registros->estado_archivo == 1) {
+                    $archivos_temp = json_decode($registros->archivo);
+
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        // Recorrer el array de archivos
+                        foreach ($archivos_temp as $archivo)
+                        {
+                            $ruta_fisica = public_path('storage/archivo/archivo/'.$archivo->nombre);
+
+                            if(file_exists($ruta_fisica))
+                            {
+                                // Usar asset() solo para la URL pública en la lista final
+                                $lista_imagenes[] = asset('storage/archivo/archivo/'.$archivo->nombre);
+                            }
+                        }
+                    }
+                }
+
+                $idProcedimiento = $registros->id_procedimiento;
+                $nombre_procedimiento = '';
+                if (strpos($idProcedimiento, '|') !== false) {
+                    // Convertir la cadena en un array de IDs
+                    $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                    // Obtener todos los procedimientos que coincidan con los IDs
+                    $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+                } else {
+                    // Caso de un solo ID (número)
+                    $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+                }
+
+                if($procedimientoCentroTem)
+                {
+                    foreach ($procedimientoCentroTem as $key_nom_temp => $value_nom_temp) {
+                        $nombre_procedimiento .= '<li>'.$value_nom_temp->nombre.'</li>';
+                    }
+                }
+
+                // cambiamos el estado a revisado
+                $registros->revisado = 1; // 1: pendiente, 2: revisado
+                $registros->save();
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $registros;
+                $datos['lista_imagenes'] = $lista_imagenes;
+                $datos['fecha_examen'] = date('d-m-Y', strtotime($registros->created_at));
+                $datos['lista_nombre_examnes'] = $nombre_procedimiento;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

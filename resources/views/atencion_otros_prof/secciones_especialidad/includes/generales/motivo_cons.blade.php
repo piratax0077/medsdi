@@ -1,11 +1,11 @@
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a">
         <div class="card-header-a" id="mot_consulta">
-            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#mot_consulta_c" aria-expanded="false" aria-controls="mot_consulta_c">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#mot_consulta_c" aria-expanded="true" aria-controls="mot_consulta_c">
                 Motivo Consulta
             </button>
         </div>
-        <div id="mot_consulta_c" class="collapse" aria-labelledby="diagnostico" data-parent="#diagnostico">
+        <div id="mot_consulta_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
             <div class="card-body-aten-a p-10">
                 <div class="form-row">
                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">

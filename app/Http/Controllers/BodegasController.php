@@ -109,19 +109,21 @@ class BodegasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-        $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
-
-        $bodega = $this->dameBodega($id,$institucion->id);
-
-        $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
-        $bodega->tipos_productos = json_decode($bodega->tipos_productos);
-        $responsables = Responsable::all();
-
-        return ['bodega' => $bodega, 'responsables' => $responsables];
+    public function edit(Request $request, $id)
+{
+    $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
+    if(!$institucion && $request->id_institucion){
+        $institucion = Instituciones::find($request->id_institucion);
     }
+
+    $bodega = $this->dameBodega($id, $institucion->id);
+
+    $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+    $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+    $responsables = Responsable::all();
+
+    return ['bodega' => $bodega, 'responsables' => $responsables];
+}
 
     /**
      * Update the specified resource in storage.
@@ -482,14 +484,41 @@ class BodegasController extends Controller
             }
         }
 
+        if($institucion->id_tipo_institucion == 3){
+             return view('app.laboratorio.bodega.historial',[
+                'pedidos' => $productos_solicitados,
+                'ingresos' => $productos_ingresados,
+                'institucion' => $institucion,
+            ]);
+        }
+        
+
         return view('app.bodega.historial',[
             'pedidos' => $productos_solicitados,
             'ingresos' => $productos_ingresados,
+            'institucion' => $institucion,
         ]);
+    }
+
+    public function dameProductoInventario(Request $req){
+        $producto = Compras_detalle::select('compras_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','compras.estado','compras.observaciones')
+        ->join('compras','compras_detalle.id_compra','compras.id')
+        ->join('productos','compras_detalle.id_producto','productos.id')
+        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->where('compras_detalle.id',$req->id)
+        ->first();
+        return $producto;
+    }
+
+    public function traspasos(){
+        return view('app.bodega.traspasos');
     }
 
     public function editarProductoAlmacenado(Request $req){
         try {
+           
             //code...
             $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
             ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
@@ -544,6 +573,45 @@ class BodegasController extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function editarProducto(Request $req){
+        $compra_detalle = Compras_detalle::select('compras_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','compras.estado','compras.observaciones')
+        ->join('compras','compras_detalle.id_compra','compras.id')
+        ->join('productos','compras_detalle.id_producto','productos.id')
+        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->where('compras_detalle.id',$req->id) 
+        ->first();
+
+        $producto = Producto::find($compra_detalle->id_producto);
+
+         // Actualizar datos básicos
+        $producto->nombre = $req->nombre;
+        $producto->stock_actual = $req->cantidad;
+        // $producto->tipo = $req->tipo;
+        // $producto->observaciones = $req->observaciones;
+
+        // Si se envía una nueva imagen, reemplazar
+        if ($req->hasFile('nueva_imagen')) {
+            try {
+                $file = $req->file('nueva_imagen');
+                $nombreArchivo = time() . '_' . $file->getClientOriginalName();
+                $ruta = public_path('storage/images/farmacia');
+       
+                $file->move($ruta, $nombreArchivo);
+                $producto->image_path = 'storage/images/farmacia/' . $nombreArchivo;
+            } catch (\Exception $e) {
+                //throw $th;
+                return 'Error al subir la imagen: ' . $e->getMessage();
+            }
+            
+        }
+
+        $producto->save();
+
+        return response()->json(['success' => true, 'producto' => $producto]);
     }
 
     public function eliminarRegistroTemperatura(Request $req){

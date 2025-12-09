@@ -50,6 +50,16 @@
                         </a>
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="card subir">
+                         <a href="{{ ROUTE('profesional.historial_mensajes') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-70 text-center" src="{{ asset('images/iconos/examen.svg') }}">
+                                <h5 class="mt-2">Reclamos, sugerencias y felicitaciones</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

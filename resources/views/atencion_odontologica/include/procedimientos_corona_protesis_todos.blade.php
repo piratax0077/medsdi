@@ -1,4 +1,4 @@
-@php $counter = 1; @endphp
+@php $counter = 100; @endphp
 @if(isset($seccion) )
     @if($seccion == 'pfu')
         @foreach ($examenes as $examen)
@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-row">
-                                <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Pieza N°</label>
                                         <input type="text" class="form-control form-control-sm"
@@ -16,7 +16,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group fill">
                                         <label class="floating-label-activo-sm">Móvil</label>
                                         <select name="movil_pfu{{ $counter }}" id="movil_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('movil_pfu{{ $counter }}','div_movil_pfu{{ $counter }}','obs_movil_pfu{{ $counter }}',2);">
@@ -31,7 +31,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Prueba de ajuste</label>
                                         <select name="prueba_ajuste_cor_pfu{{ $counter }}"
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group fill">
                                         <label for="tornillo_cor_pfu{{ $counter }}" class="floating-label-activo-sm">Tornillo</label>
                                         <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',3);">
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Pulido</label>
                                         <select name="pulido_ajuste_pfu{{ $counter }}"

@@ -79,7 +79,7 @@
             overflow: auto;
         }
 
- 
+
 
     </style>
     @yield('css-btn-autorizacion')
@@ -356,8 +356,8 @@
                     {
                         let contacto = data.contacto;
                         $('#nombre_completo_contacto').text(contacto.nombres);
-                        $('#apellidos_contacto').text(contacto.apellido_uno + ' ' + contacto.apellido_dos)
-
+                        $('#apellidos_contacto').text(contacto.apellido_uno + ' ' + contacto.apellido_dos);
+                        $('#direccion_contacto').text(contacto.direccion);
                         $('#email_contacto_').text(contacto.email);
                         $('#telefono_contacto').text(contacto.telefono_uno);
                         $('#comuna_region_contacto').html(contacto.ciudad + '<br> ' + contacto.region);
@@ -461,7 +461,7 @@
                         $('#email_paciente_').text(paciente.email);
                         $('#telefono_paciente').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-
+                        $('#direccion_paciente_').text(data.direccion.direccion.direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);
@@ -593,20 +593,20 @@
                         data: {
                             sub_tipo_examen: sub_tipo_examen
                         },
-                    })
-                    .done(function(response) {
+                })
+                .done(function(response) {
 
-                        $('#examen_d').append(
-                            `<option value="0">Seleccione... </option>`);
-                        for (var i = 0; i < response.length; i++) {
-                            $('#examen_d').append(`<option value="${response[i].cod_examen}">
-                                        ${response[i].nombre_examen}
-                                    </option>`);
-                        }
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    })
+                    $('#examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
 
             });
 

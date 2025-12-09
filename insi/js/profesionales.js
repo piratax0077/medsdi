@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('.carousel').carousel({
         interval: 3000
     });
-    AOS.init();	
+    AOS.init();
     carga_especialidad();
 });
 
@@ -20,7 +20,7 @@ function carga_especialidad()
                 let select = $('#id_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
-                $(resp.registros).each(function(i, v) { 
+                $(resp.registros).each(function(i, v) {
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -54,7 +54,7 @@ function carga_tipo_especialidad()
                 let select = $('#id_tipo_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
-                $(resp.registros).each(function(i, v) { 
+                $(resp.registros).each(function(i, v) {
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -86,7 +86,7 @@ function carga_sub_tipo_especialidad()
                 let select = $('#id_sub_tipo_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
-                $(resp.registros).each(function(i, v) { 
+                $(resp.registros).each(function(i, v) {
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -118,12 +118,12 @@ function buscarProfesional()
 
     api.request(datos,
         function (resp) {
-            
+
             let div_lista_prof = $('#lista_profesionales');
             div_lista_prof.find('div').remove();
             if(resp.estado == 1)
             {
-                $(resp.registros).each(function(i, v) { 
+                $(resp.registros).each(function(i, v) {
                     var html = '';
                     html += '<div class="col-sm-12 col-md-6 col-lg-4">';
                     html += '    <div class="card border-0 my-2 shadow">';
@@ -161,4 +161,10 @@ function buscarProfesional()
         },
         'GET'
     );
+}
+
+function generar_reserva_cita(id_profesional)
+{
+    $('#id_profesional').val(id_profesional);
+    $('#modalReservaCita').modal('show');
 }

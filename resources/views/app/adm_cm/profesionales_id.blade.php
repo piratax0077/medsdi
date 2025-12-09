@@ -14,7 +14,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Profesionales del {{ $CM->nombre }}</h5>
+                            <h5 class="m-b-10 font-weight-bold">Profesionales del {{ $institucion->nombre }}</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
@@ -193,44 +193,57 @@
         													</tr>
         												</thead>
         												<tbody>
-        													<tr>
-        														<td class="align-middle">
-        															<span><strong>Jaime Kriman</strong></span><br>
-        															<span>4.345.466-2</span>
-        														</td>
-        														<td class="align-middle">
-        															<span>Otorrinolaringología</span><br>
-        														</td>
-        														<td class="align-middle">
-        															<span>Ist Viña del Mar</span><br>
-        															<span>Ist Quilpué</span><br>
-        															<span>Ist San Felipe</span>
-        														</td>
-        														<td class="align-middle">
-        															<!--Botón Modal-->
-        															<button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-        														</td>
-        														<td class="align-middle text-center">
-        															<!--Botón Modal-->
-        															<button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
-        															 <!--Botón Modal-->
-        															<button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
-        														</td>
-        														<td class="align-middle text-center">
-        															<!--Botón Modal-->
-        															<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
-        														</td>
-        														<td class="align-middle text-center">
-        															<!--Botón Modal-->
-        															<button type="button" class="btn btn-secondary btn-sm btn-icon" onclick="rol_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-        														</td>
-        														<td class="align-middle text-center">
-        															<button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_profesional();">
-        															<i class="feather icon-edit"></i> Editar</button>
-        															<button type="button" class="btn btn-danger btn-xxs">
-        															<i class="feather icon-x"></i> Desasociar</button>
-        														</td>
-        													</tr>
+        													@if($lista_profesionales['ODONTOLOG'])
+                                                                @foreach ($lista_profesionales['ODONTOLOG'] as $prof_medico )
+                                                                    <tr>
+                                                                        <td class="align-middle">
+                                                                            <span><strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong></span><br>
+                                                                            <span>{{ $prof_medico->rut }}</span>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span>
+                                                                            @if (!empty($prof_medico->id_sub_tipo_especialidad))
+                                                                                <br>
+                                                                                <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            @foreach($prof_medico->LugaresAtencion()->get() as $key_lugar => $value_lugar)
+                                                                                {{--  COMPLETAR CUANDO TENGAMOS SUCURSALES  --}}
+                                                                                @if($institucion->id_lugar_atencion == $value_lugar->id)
+                                                                                    <span>{{ $value_lugar->Direccion()->first()->direccion.', '.$value_lugar->Direccion()->first()->ciudad->nombre  }}</span><br>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                                <!--Botón Modal contacto -->
+                                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal deposito-->
+                                                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos({{ $prof_medico->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
+
+                                                                                <!--Botón Modal horario-->
+                                                                                <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm({{ $prof_medico->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y días de atención"><i class="feather icon-clock"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle text-center">
+                                                                                <!--Botón Modal convenios-->
+                                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal roles y permisos-->
+                                                                                <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="mensaje({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Ver" @if(!$adm_medico) disabled @endif><i class="feather icon-mail"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal roles y permisos-->
+                                                                                <button type="button" class="btn btn-secondary btn-sm btn-icon" onclick="historial({{ $prof_medico->id }});" @if(!$adm_medico) disabled @endif data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-mail"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <button type="button" class="btn btn-danger btn-xxs"><i class="feather icon-x"></i> Desasociar</button>
+                                                                            </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
         												</tbody>
         											</table>
                                                 </div>
@@ -282,44 +295,57 @@
             												</tr>
             											</thead>
             											<tbody>
-            												<tr>
-            													<td class="align-middle">
-            														<span><strong>Jaime Kriman</strong></span><br>
-            														<span>4.345.466-2</span>
-            													</td>
-            													<td class="align-middle">
-            														<span>Fonoaudiólogo</span><br><span>Fonoaudiólogo clínico</span>
-            													</td>
-            													<td class="align-middle">
-            														<span>Ist Viña del Mar</span><br>
-            														<span>Ist Quilpué</span><br>
-            														<span>Ist San Felipe</span>
-            													</td>
-            													<td class="align-middle">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
-            														 <!--Botón Modal-->
-            														<button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-secondary btn-icon" onclick="rol_permisos_profesional();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_profesional();">
-            														<i class="feather icon-edit"></i> Editar</button>
-            														<button type="button" class="btn btn-danger btn-xxs">
-            														<i class="feather icon-x"></i> Desasociar</button>
-            													</td>
-            												</tr>
+            												@if($lista_profesionales['OTROS'])
+                                                                @foreach ($lista_profesionales['OTROS'] as $prof_medico )
+                                                                    <tr>
+                                                                        <td class="align-middle">
+                                                                            <span><strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong></span><br>
+                                                                            <span>{{ $prof_medico->rut }}</span>
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span>
+                                                                            @if (!empty($prof_medico->id_sub_tipo_especialidad))
+                                                                                <br>
+                                                                                <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                            @endif
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                            @foreach($prof_medico->LugaresAtencion()->get() as $key_lugar => $value_lugar)
+                                                                                {{--  COMPLETAR CUANDO TENGAMOS SUCURSALES  --}}
+                                                                                @if($institucion->id_lugar_atencion == $value_lugar->id)
+                                                                                    <span>{{ $value_lugar->Direccion()->first()->direccion.', '.$value_lugar->Direccion()->first()->ciudad->nombre  }}</span><br>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td class="align-middle">
+                                                                                <!--Botón Modal contacto -->
+                                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal deposito-->
+                                                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos({{ $prof_medico->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
+
+                                                                                <!--Botón Modal horario-->
+                                                                                <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm({{ $prof_medico->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y días de atención"><i class="feather icon-clock"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle text-center">
+                                                                                <!--Botón Modal convenios-->
+                                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal roles y permisos-->
+                                                                                <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="mensaje({{ $prof_medico->id }});" data-toggle="tooltip" data-placement="top" title="Ver" @if(!$adm_medico) disabled @endif><i class="feather icon-mail"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <!--Botón Modal roles y permisos-->
+                                                                                <button type="button" class="btn btn-secondary btn-sm btn-icon" onclick="historial({{ $prof_medico->id }});" @if(!$adm_medico) disabled @endif data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-mail"></i></button>
+                                                                            </td>
+                                                                            <td class="align-middle">
+                                                                                <button type="button" class="btn btn-danger btn-xxs"><i class="feather icon-x"></i> Desasociar</button>
+                                                                            </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
             											</tbody>
             										</table>
                                                 </div>

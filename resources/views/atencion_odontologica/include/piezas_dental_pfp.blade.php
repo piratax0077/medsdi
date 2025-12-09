@@ -96,7 +96,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <button type="button" class="btn btn-danger-light-c btn-icon" onclick="ocultar_pieza_dental_pfp()"><i class="feather icon-x"></i></button>
+        {{-- <button type="button" class="btn btn-danger-light-c btn-icon" onclick="ocultar_pieza_dental_pfp()"><i class="feather icon-x"></i></button> --}}
         <button type="button" class="btn btn-primary-light-c btn-icon" onclick="guardar_pieza_dental_pfp({{ $counter }})"><i class="feather icon-save"></i></button>
     </div>
 </div>
@@ -212,7 +212,7 @@
         }
 
         var data = {
-            id_paciente: dame_id_paciente(),
+            id_paciente: $('#id_paciente_fc').val(),
             id_ficha_atencion: $('#id_fc').val(),
             n_pieza_pfp: n_pieza_pfp,
             tipo_anclaje_pfp: tipo_anclaje_pfp,
@@ -248,6 +248,7 @@
                     $('#contenedor_piezas_dentales_pfp').empty();
                     $('#contenedor_piezas_dentales_pfp').append(response.v);
                     $('#nueva_pieza_dental_pfp').empty();
+                    mostrar_nuevo_pieza_pfp();
                 }else{
                     alert('Error al guardar la pieza');
                 }

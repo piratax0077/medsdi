@@ -3,7 +3,7 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-danger">
 				<h5 class="modal-title text-white">Contactos de emergencia</h5>
-				<button type="button" class="close bg-light text-secondary" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<button type="button" class="btn btn-icon bg-light f-16" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			</div>
 			<div class="modal-body">
                 <div class="row">

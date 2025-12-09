@@ -21,14 +21,16 @@
                                                 style="width:100%">
                                                 <thead>
                                                     <tr>
+                                                        <th class="d-none">ID</th>
                                                         <th>Fecha</th>
                                                         <th>Diagnóstico</th>
                                                         <th>Ficha clínica</th>
-                                                        <th>Exámenes</th>
-                                                        <th>Recetas</th>
-                                                        @if($profesional->id_sub_tipo_especialidad == 11)
+                                                        @if($profesional->id_tipo_especialidad != 8 && $profesional->id_especialidad != 16 && $profesional->id_sub_tipo_especialidad != 121)
                                                         <th>Ev. Especialidad</th>
                                                         @endif
+                                                        <th>Exámenes</th>
+                                                        <th>Recetas</th>
+
                                                         @if ($profesional->id_especialidad == 2)
                                                             <th>Presupuestos</th>
                                                         @endif
@@ -38,6 +40,7 @@
                                                         @if ($profesional->id_especialidad == 2)
                                                             <th>Evoluciones </th>
                                                         @endif
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -45,7 +48,9 @@
                                                     @if (isset($fichas) && $fichas->count() > 0)
                                                         @foreach ($fichas as $f)
                                                             <tr>
-
+                                                                <td class="d-none">
+                                                                    {{ $f->id }}
+                                                                </td>
                                                                 <td>
                                                                     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
                                                                 </td>
@@ -59,6 +64,13 @@
                                                                             class="feather icon-file-text"></i>
                                                                         Ver</button>
                                                                 </td>
+                                                                @if($profesional->id_tipo_especialidad != 8 && $profesional->id_especialidad != 16 && $profesional->id_sub_tipo_especialidad != 121)
+                                                                <td><button type="button"
+                                                                            class="btn btn-xxs btn-primary-light-c"
+                                                                            @if (isset($f->id)) onclick="buscar_evaluaciones_especialidad({{ $f->id }});" @endif><i
+                                                                                class="feather icon-folder"></i>
+                                                                            Ver</button></td>
+                                                                @endif
                                                                 <td>
                                                                     <button type="button"
                                                                         class="btn btn-xxs btn-success-light-c"
@@ -73,13 +85,7 @@
                                                                             class="feather icon-file-plus"></i>
                                                                         Ver</button>
                                                                 </td>
-                                                                 @if($profesional->id_sub_tipo_especialidad == 11)
-                                                                <td><button type="button"
-                                                                            class="btn btn-xxs btn-primary-light-c"
-                                                                            @if (isset($f->id)) onclick="buscar_evaluaciones_especialidad({{ $f->id }});" @endif><i
-                                                                                class="feather icon-folder"></i>
-                                                                            Ver</button></td>
-                                                                @endif
+
                                                                 @if ($profesional->id_especialidad == 2)
                                                                     <td>
                                                                         <button type="button"
@@ -131,6 +137,7 @@
             $(document).ready(function() {
                 $('#table_atenciones_profesional').DataTable({
                     responsive: true,
+                    order: [[0, 'desc']]
                 });
             });
         </script>

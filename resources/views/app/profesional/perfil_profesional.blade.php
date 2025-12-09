@@ -36,8 +36,8 @@
                                         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="profile-dp">
                                                 <div class="position-relative d-inline-block">
-                                                    <img class="img-radius img-fluid wid-100"
-                                                        src="{{ asset('images/iconos/usuario_profesional.svg') }}"
+                                                    <img class="img-radius img-fluid wid-100" id="profile-image"
+                                                        src="{{ $profesional->foto_perfil ? asset('storage/' . $profesional->foto_perfil) : asset('images/iconos/usuario_profesional.svg') }}"
                                                         alt="User image">
                                                 </div>
                                                 <div class="overlay">
@@ -46,12 +46,16 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil</a>
-                                            <a class="dropdown-item" href="#"><i
-                                                    class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
+                                            <a class="dropdown-item" href="#" onclick="document.getElementById('foto-perfil-input').click()">
+                                                <i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="eliminar_foto_perfil()">
+                                                <i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía
+                                            </a>
                                         </div>
                                     </div>
+                                    <!-- Input file oculto para seleccionar imagen -->
+                                    <input type="file" id="foto-perfil-input" accept="image/*" style="display: none;" onchange="cambiar_foto_perfil(this)">
                                 </div>
                             </div>
                             <div class="col-md-12 mt-md-2 m-0">
@@ -141,6 +145,10 @@
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Sub Especialidad</label>
                                                     <div>{{ $txt_sub_tipo_especialidades }}</div>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                    <label class="font-weight-bolder ml-0 mb-0">Número de colegio</label>
+                                                    <div>{{ $profesional->num_colegio }}</div>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="font-weight-bolder ml-0 mb-0">Tipo de atención</label>
@@ -272,6 +280,12 @@
                                                                 @endif
                                                             @endforeach
                                                         </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo">Número de colegio</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="editar_numero_colegio" name="editar_numero_colegio"
+                                                            value="{{ $profesional->num_colegio }}">
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="floating-label-activo">Tipo de atención</label>
@@ -734,6 +748,141 @@
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Funciones para manejo de foto de perfil
+        function cambiar_foto_perfil(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // Validar tipo de archivo
+                if (!file.type.startsWith('image/')) {
+                    swal({
+                        title: "Tipo de archivo no válido",
+                        text: "Por favor, selecciona un archivo de imagen válido.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    })
+                    return;
+                }
+                
+                // Validar tamaño (ejemplo: máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    swal({
+                        title: "Archivo demasiado grande",
+                        text: "El archivo es demasiado grande. El tamaño máximo es de 5MB.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                    return;
+                }
+                
+                // Mostrar preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                
+                // Enviar al servidor
+                subir_foto_perfil(file);
+            }
+        }
+        
+        function subir_foto_perfil(file) {
+            const formData = new FormData();
+            formData.append('foto_perfil', file);
+            formData.append('_token', '{{ csrf_token() }}');
+            
+            $.ajax({
+                url: '{{ route("profesional.actualizar.foto") }}', // Necesitas crear esta ruta
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        swal({
+                            title: "Foto actualizada",
+                            text: "Tu foto de perfil se ha actualizado correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+                        
+                        // Actualizar la imagen con la nueva URL si es necesario
+                        if (response.foto_url) {
+                            document.getElementById('profile-image').src = response.foto_url;
+                        }
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: response.message || 'Error al actualizar la foto',
+                            icon: "error",
+                            buttons: "Aceptar",
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error.responseText);
+                    swal({
+                        title: "Error",
+                        text: "Error al subir la imagen. Inténtalo de nuevo.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                    
+                    // Revertir la imagen si hay error
+                    document.getElementById('profile-image').src = '{{ $profesional->foto_perfil ? asset("storage/" . $profesional->foto_perfil) : asset("images/iconos/usuario_profesional.svg") }}';
+                }
+            });
+        }
+        
+        function eliminar_foto_perfil() {
+            swal({
+                title: "¿Eliminar foto de perfil?",
+                text: "Esta acción no se puede deshacer",
+                icon: "warning",
+                buttons: ["Cancelar", "Eliminar"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: '{{ route("profesional.eliminar.foto") }}', // Necesitas crear esta ruta
+                        method: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                swal({
+                                    title: "Foto eliminada",
+                                    text: "Tu foto de perfil se ha eliminado correctamente",
+                                    icon: "success",
+                                    buttons: "Aceptar",
+                                });
+                                document.getElementById('profile-image').src = '{{ asset("images/iconos/usuario_profesional.svg") }}';
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: response.message || 'Error al eliminar la foto',
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            swal({
+                                title: "Error",
+                                text: "Error al eliminar la imagen. Inténtalo de nuevo.",
+                                icon: "error",
+                                buttons: "Aceptar",
+                            });
+                        }
+                    });
+                }
             });
         }
     </script>

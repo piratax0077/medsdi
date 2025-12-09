@@ -121,6 +121,7 @@ class UsersDevicesController extends Controller
 
     public function registrar(Request $request)
     {
+
         $datos = array();
         $error = array();
         $campos_requeridos = 0;
@@ -154,7 +155,7 @@ class UsersDevicesController extends Controller
         if($request->estado=='')
         {
             $error['estado'] = 'campo requerido';
-            $campos_requeridos = 1;
+            //$campos_requeridos = 1;
         }
         if($request->fecha_ingreso=='')
         {
@@ -166,6 +167,7 @@ class UsersDevicesController extends Controller
             $error['fecha_termino'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+
 
         /* FIN - VALIDACION CAMPOS */
 
@@ -349,6 +351,7 @@ class UsersDevicesController extends Controller
 
     public function solicitarAutorizacion(Request $request)
     {
+
         $datos = array();
         $error = array();
         $campos_requeridos = 0;
@@ -410,7 +413,7 @@ class UsersDevicesController extends Controller
                     }
 
                     $token_id = encrypt($user_divices->id);
-                    $url = env('APP_URL').'/registro/equipo?t='.$token_id;
+                    $url = url('/registro/equipo?t='.$token_id);
 
                     /** envio de correo */
                     $blade = 'registrar_app';

@@ -2,13 +2,13 @@
 <div id="pieza_dental_dolor" class="row">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="card-informacion">
-            <div class="card-body">     
+            <div class="card-body">
                 <div class="form-row align-items-center">
                     <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label class="floating-label-activo-sm">Pieza N°</label>
                         <input type="text" class="form-control form-control-sm" name="numero_pieza{{ $counter }}" id="numero_pieza{{ $counter }}">
                     </div>
-                </div>   
+                </div>
                 <div class="form-row">
                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                         <div class="form-group">
@@ -126,7 +126,8 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="button" class="btn btn-icon btn-danger" onclick="ocultarExamen({{ $counter }})"><i class="feather icon-x"></i></button>
+                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardar_pieza_dental_dolor({{ $counter }})" ><i class="fas fa-save"></i>Guardar</button>
+                {{-- <button type="button" class="btn btn-icon btn-danger" onclick="ocultarExamen({{ $counter }})"><i class="feather icon-x"></i></button> --}}
             </div>
             </div>
          </div>

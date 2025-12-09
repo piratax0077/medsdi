@@ -59,9 +59,9 @@
 
         @if($profesional->id_especialidad == 2)
             @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-                <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
+                <button class="btn btn-tons-autorizacion btn-info btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
             @else
-                <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
+                <button class="btn btn-tons-autorizacion btn-danger btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
             @endif
             {{-- no mostrar nada  --}}
         @endif

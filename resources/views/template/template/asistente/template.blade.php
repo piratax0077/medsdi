@@ -505,7 +505,8 @@
                                                     })
                                                     .done(function(data) {
                                                         if (data != null) {
-
+                                                            // limpiamos los examenes si es que hubieran cargados
+                                                            $('#m_agendar_hora_examen_lista_examenes').val('');
                                                             {{--  // console.log(info.event);  --}}
                                                             {{--  console.log(data);  --}}
                                                             // data = JSON.parse(data);
@@ -1067,6 +1068,7 @@
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
+                        id_lugar_atencion: $('#agenda_lugar_atencion_asistente').val(),
                         id_asistente: '{{ $asistente->id }}',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,

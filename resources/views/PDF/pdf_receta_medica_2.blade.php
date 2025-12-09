@@ -371,6 +371,7 @@
 
                             .tabla-receta table {
                                 font-size: 1rem;
+                                margin-top: 50px;
                             }
 
                             .tabla-receta thead {

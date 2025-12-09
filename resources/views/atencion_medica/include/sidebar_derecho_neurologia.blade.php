@@ -6,7 +6,7 @@
         <header class="bs-canvas-header p-3 bg-info overflow-auto">
             <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true"
                     class="text-white">&times;</span></button>
-            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Especialidad Gastroenterología</h5>
+            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Especialidad Neurología</h5>
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
