@@ -6,10 +6,10 @@
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
+
                 <input type="hidden" name="tipo_pago" id="tipo_pago" value="0">
                 <ul class="nav nav-pills bg-white" id="finanzas" role="tablist">
                     <li class="nav-item active">
-                        <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_general-tab" data-toggle="tab" onclick="$('#tipo_pago').val(0)" href="#pago_general" role="tab" aria-controls="pago_general" aria-selected="false">Pago General<span></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_factura-tab" data-toggle="tab" onclick="$('#tipo_pago').val(1)" href="#pago_factura" role="tab" aria-controls="pago_factura" aria-selected="false">Pago Factura<span class="ripple ripple-animate" ></span></a>
@@ -213,7 +213,7 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-row">
-                                        
+
                                         <div class="col-sm-4 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">N° Factura</label>
@@ -261,17 +261,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
+
                             </div>
 
                         </form>
                     </div>
                 </div>
-                
-            </div>
-            <div class="modal-footer">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-row">
+
+=======
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <button type="button" class="btn btn-danger-light btn-sm btn-block" data-dismiss="modal">Cancelar</button>

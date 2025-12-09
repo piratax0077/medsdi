@@ -216,10 +216,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
-                                                       
+
                                                         <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_personal();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a empleado/a</button>
                                                         <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                   
+
                                                         <div class="dropdown-menu">
                                                             <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar asistente</button>
                                                         </div>
@@ -255,15 +255,15 @@
                                                         <td class="align-middle">
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-                                                      
+
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos Bancarios"><i class="feather icon-credit-card"></i></button>
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_lab('{{ $asistente->asistente_tipo->nombre }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
-                                                     
+
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos({{ $asistente->asistente_tipo->id }}, {{ $asistente->id_usuario }}, '{{ $asistente->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                
+
                                                             <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
                                                             @if($asistente->contrato !== null)
                                                             <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
@@ -431,7 +431,7 @@
                                         <input type="checkbox" id="permiso_estadisticas_laboratorio" /> Permiso para ver estadísticas del laboratorio
                                     </label>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label>
                                         <input type="checkbox" id="permiso_anular_hora" /> Permiso para anular hora
@@ -1071,13 +1071,13 @@ $(document).ready(function(){
                             ${entry.permisos_ver_pacientes == 1 ? 'Ver Pacientes del Centro, ' : ''}
                         </td>
                         `;
-                        
+
                         html += '<td>Asignado</td>';
                         html += '<td>' + (entry.usuario ? entry.usuario : '-') + '</td>';
                         html += '</tr>';
                     });
                     $('#tabla_historial_permisos tbody').html(html);
-        
+
                     // Seleccionar los permisos del último registro (más reciente)
                     if (permisos.length > 0) {
                         let ultimo = permisos[0]; // Si el array está ordenado por fecha descendente
@@ -1103,7 +1103,7 @@ $(document).ready(function(){
             });
         }
 
-        
+
         function guardar_permisos(){
             let rut = $('#buscar_profesional_rut').val();
             let permiso_cotizar = $('#permiso_cotizar').is(':checked') ? 1 : 0;

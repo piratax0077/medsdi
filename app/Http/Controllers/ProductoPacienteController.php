@@ -83,9 +83,12 @@ class ProductoPacienteController extends Controller
         $precio_unitario = 0,
         $descuento = 0,
         $observaciones = null,
+<<<<<<< HEAD
         $tiene_garantia = 0,
         $tipo_garantia = null,
         $valor_garantia = null,
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $id_usuario = null,
         $fecha_devolucion = null,
         $id_lugar_atencion = null,
@@ -153,9 +156,12 @@ class ProductoPacienteController extends Controller
             $misProducto->id_lugar_atencion = $lugar_atencion_id;
             $misProducto->stock = $cantidad;
             $misProducto->observaciones = implode(' | ', $observaciones_completas);
+<<<<<<< HEAD
             $misProducto->tiene_garantia = $tiene_garantia;
             $misProducto->tipo_garantia = $tipo_garantia;
             $misProducto->valor_garantia = $valor_garantia;
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             if($estado === 'prestado'){
                 $misProducto->estado = 2; // Prestado
             } else {

@@ -75,9 +75,9 @@
                             </div>
                             @else
                                 <div class="pb-1">
-                                    
+
                                     <!-- Paciente Seleccionado (oculto inicialmente) -->
-                                   
+
                                     <div class="row d-none" id="card_paciente_seleccionado">
                                         <div class="col-12">
                                             <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -176,7 +176,7 @@
                                                 <div class="col-12">
                                                     <div id="resultados_busqueda_paciente"></div>
                                                     <div id="reserva_agregar_paciente_hora" style="display: none;">
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-group">
@@ -591,14 +591,14 @@
     {{-- Control de audífonos post venta --}}
     <div class="tab-pane fade show" id="cont_post_venta" role="tabpanel" aria-labelledby="cont_post_venta-tab">
         <!-- Paciente Seleccionado para POST VENTA (oculto inicialmente) -->
-       
-        
+
+
         @if($profesional->id_tipo_institucion == 3)
         <h5 class="text-c-blue f-18 mb-3">
             <i class="feather icon-inbox mr-2"></i>
             Buscar Paciente para Control Post Venta de Audífonos
         </h5>
-         
+
         <div class="row d-none" id="card_paciente_seleccionado_post_venta">
             <div class="col-12">
                 <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -692,7 +692,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div id="resultados_busqueda_paciente_post_venta"></div>
-                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">            
+                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
@@ -818,7 +818,7 @@
             </div>
         </div>
 
-        
+
           @endif
         <div class="card">
             <div class="card-body">
@@ -1300,7 +1300,7 @@
 
     {{-- Cotización de audífonos y accesorios --}}
     <div class="tab-pane fade show" id="cotizacion_audif" role="tabpanel" aria-labelledby="cotizacion_audif-tab">
-      
+
             <div class="mx-2">
                 @if(isset($paciente))
                 <input type="hidden" id="id_paciente" name="id_paciente" value="{{ $paciente->id }}">
@@ -1427,7 +1427,7 @@
                                             <div class="col-12">
                                                 <div id="resultados_busqueda_paciente_cotiz"></div>
                                                 <div id="reserva_agregar_paciente_hora_cotiz" style="display: none;">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12">
                                                             <div class="form-group">
@@ -1601,7 +1601,7 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-right">
-                                        
+
                                         <button type="button" class="btn btn-sm btn-warning" onclick="deseleccionar_paciente()" title="Cambiar paciente">
                                             <i class="feather icon-refresh-cw"></i> Cambiar
                                         </button>
@@ -1619,7 +1619,7 @@
                 </div>
                 @endif
 
-                
+
 
                 <!-- Búsqueda de Productos -->
                 <div class="row mt-3">
@@ -1828,7 +1828,7 @@
                 </div>
 
             </div>
-       
+
     </div>
 
     {{-- Prestamo de audifonos --}}
@@ -1891,7 +1891,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="mt-1" id="card_advertencia_paciente_prestamo">
-                    
+
                     <div class="mt-1">
 
                         <!-- Buscador -->
@@ -1943,7 +1943,7 @@
                                 <div class="row mt-3">
                                     <div class="col-12">
                                         <div id="resultados_busqueda_paciente_prestamo"></div>
-                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">   
+                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
@@ -2122,7 +2122,7 @@
             </div>
         </div>
         @endif
-        
+
         <!-- Contenido del préstamo de audífonos aquí -->
         <!-- Card busqueda de audifonos -->
         <div class="card px-3 pb-0 pt-2">
@@ -2252,7 +2252,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mt-1" id="card_advertencia_paciente_recepcion">
-                                    
+
                                     <div class="mt-1">
 
                                         <!-- Buscador -->
@@ -2304,8 +2304,8 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12">
                                                         <div id="resultados_busqueda_paciente_recepcion"></div>
-                                                        
-                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">   
+
+                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12">
                                                                     <div class="form-group">
@@ -2433,7 +2433,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                 </div>
             </div>
         </div>
@@ -2492,7 +2492,7 @@
                                 </div>
                                 <div class="card-body">
                                     <form id="form_campana_promocional" onsubmit="enviar_campana_promocional(); return false;" enctype="multipart/form-data">
-                                    
+
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="font-weight-bold">Título de la Campaña</label>
@@ -2558,7 +2558,7 @@
                                                 <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com">
                                             </div>
                                         </div>
-                                       
+
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label class="font-weight-bold">Vista Previa de Destinatarios</label>
@@ -2940,12 +2940,12 @@ function buscar_paciente_prestamo(){
     function buscar_paciente_recepcion(){
         const tipoBusqueda = $('#tipo_busqueda_paciente_recepcion').val();
         const termino = $('#termino_busqueda_paciente_recepcion').val().trim();
-    
+
         if (!termino || termino === '') {
             swal('Atención', 'Por favor ingrese un término de búsqueda', 'warning');
             return;
         }
-    
+
         // Mostrar loader
         $('#resultados_busqueda_paciente_recepcion').html(`
             <div class="text-center py-4">
@@ -2955,7 +2955,7 @@ function buscar_paciente_prestamo(){
                 <p class="mt-2">Buscando pacientes...</p>
             </div>
         `);
-    
+
         // Petición AJAX (ajusta la ruta según tu configuración)
         $.ajax({
             url: "{{ route('profesional.buscar_rut_paciente') }}",
@@ -2971,7 +2971,7 @@ function buscar_paciente_prestamo(){
             success: function(response) {
                 console.log('Respuesta recibida:', response);
                 console.log('Tipo de respuesta:', typeof response);
-    
+
                 // Si la respuesta es un objeto paciente directamente
                 if (response && response.id) {
                     mostrar_resultado_paciente_recepcion(response);
@@ -2990,14 +2990,14 @@ function buscar_paciente_prestamo(){
                 console.error('Error en búsqueda:', xhr);
                 console.error('Status:', status);
                 console.error('Error:', error);
-    
+
                 let mensajeError = 'Error al buscar pacientes. Por favor intente nuevamente.';
-    
+
                 // Si hay una respuesta JSON del servidor con mensaje de error
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     mensajeError = xhr.responseJSON.message;
                 }
-    
+
                 $('#resultados_busqueda_paciente_recepcion').html(`
                     <div class="alert alert-danger">
                         <i class="feather icon-alert-circle mr-2"></i>
@@ -3169,7 +3169,7 @@ function mostrar_resultado_paciente_post_venta(paciente) {
 }
 
 
-/** 
+/**
  * MOSTRAR RESULTADO DE BÚSQUEDA DE UN SOLO PACIENTE (POR RUT) PARA PRÉSTAMO DE AUDÍFONOS
  */
 
@@ -3397,7 +3397,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -3411,7 +3411,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
 
@@ -4873,7 +4873,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
     }
@@ -4884,7 +4884,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -4975,7 +4975,7 @@ function seleccionar_paciente_prestamo(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -5050,7 +5050,7 @@ function seleccionar_paciente_recepcion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -5208,7 +5208,7 @@ function cargar_datos_post_venta() {
             </div>
         `);
     }
-} 
+}
 
 /**
  * Cargar datos de préstamo cuando se activa la pestaña
@@ -5487,7 +5487,7 @@ function enter_buscar_productos_audifono(event) {
 
                 html += '</div>';
             } else {
-                html += '<div class="alert alert-warning text-center">';    
+                html += '<div class="alert alert-warning text-center">';
                 html += '    <i class="feather icon-search"></i> ';
                 html += '    <strong>No se encontraron productos</strong><br>';
                 html += '    <small>Intente con otros términos de búsqueda</small>';
@@ -5561,7 +5561,7 @@ function enter_buscar_productos_audifono(event) {
                 } else {
                     $('#productos-lista').append('<p>No se encontraron productos.</p>');
                 }
-               
+
             })
             .fail(function(jqXHR) {
                 console.error('Error al obtener productos:', jqXHR);
@@ -5621,8 +5621,8 @@ function enter_buscar_productos_audifono(event) {
                                     <i class="feather icon-clock"></i> Prestado
                                 </span>
                             `;
-                           
-                            
+
+
                         }else{
                              botones = `
                                 <!-- Botones de acción -->
@@ -5733,7 +5733,7 @@ function enter_buscar_productos_audifono(event) {
                                         </div>
 
                                         ${botones}
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -6202,7 +6202,7 @@ function enter_buscar_productos_audifono(event) {
                             // Recargar historial de productos prestados
                             dame_historial_productos_prestados();
                         });
-                        
+
                     } else {
                         swal('Error', response.mensaje || 'No se pudo devolver el producto', 'error');
                     }
@@ -6504,7 +6504,7 @@ function enter_buscar_productos_audifono(event) {
             var destinatarios_custom = $('#campana_destinatarios_custom').val().trim();
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             var id_institucion = '{{ $profesional->id }}';
-        
+
             // Validación básica
             if (!titulo || !remitente || !mensaje) {
                 swal({ icon: 'warning', title: 'Faltan datos', text: 'Completa todos los campos obligatorios.' });
@@ -6514,7 +6514,7 @@ function enter_buscar_productos_audifono(event) {
                 swal({ icon: 'warning', title: 'Faltan correos', text: 'Debes ingresar al menos un correo manual.' });
                 return;
             }
-        
+
             // Mostrar loader
             swal({
                 title: 'Enviando campaña...',
@@ -6522,7 +6522,7 @@ function enter_buscar_productos_audifono(event) {
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
-        
+
             // Preparar FormData
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
@@ -6542,7 +6542,7 @@ function enter_buscar_productos_audifono(event) {
             formData.append('filtro_tercera_edad', $("#filtro_tercera_edad").is(":checked") ? 1 : 0);
             formData.append('filtro_pacientes_audifonos', $("#filtro_pacientes_audifonos").is(":checked") ? 1 : 0);
             formData.append('campana_destinatarios_custom', $("#campana_destinatarios_custom").val());
-        
+
             // Adjuntar archivos (input tipo file, múltiple)
             var archivos = $('#archivos')[0]?.files;
             if (archivos && archivos.length > 0) {
@@ -6557,7 +6557,7 @@ function enter_buscar_productos_audifono(event) {
                     formData.append('imagenes[]', imagenes[i]);
                 }
             }
-        
+
             $.ajax({
                 url: '{{ route("laboratorio.registrar_campania_publicitaria") }}',
                 type: 'POST',
@@ -6832,7 +6832,7 @@ function enter_buscar_productos_audifono(event) {
                         });
                     });
                 }
-            }); 
+            });
         }
 
 /**

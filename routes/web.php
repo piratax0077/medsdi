@@ -315,7 +315,7 @@ Route::group([
 ], function () {
     // Búsqueda de productos
     Route::get('/productos/buscar', [App\Http\Controllers\CotizacionController::class, 'buscarProductos'])->name('laboratorio.cotizaciones.buscar_productos');
-    
+
     // Gestión de cotizaciones
     Route::post('/guardar-borrador', [App\Http\Controllers\CotizacionController::class, 'guardarBorrador'])->name('laboratorio.cotizaciones.guardar_borrador');
     Route::post('/vista-previa', [App\Http\Controllers\CotizacionController::class, 'vistaPrevia'])->name('laboratorio.cotizaciones.vista_previa');
@@ -335,7 +335,7 @@ Route::group([
     // Seguimiento de cotizaciones
     Route::get('/seguimiento/{paciente_id}', [App\Http\Controllers\CotizacionController::class, 'seguimiento'])->name('laboratorio.cotizaciones.seguimiento');
     Route::post('/enviar-seguimiento', [App\Http\Controllers\CotizacionController::class, 'enviarSeguimiento'])->name('laboratorio.profesional.enviar_seguimiento_cotizacion');
-    
+
 });
 
 
@@ -1525,7 +1525,7 @@ Route::group([
     // Liquidaciones PDF profesional laboratorio
     Route::get('/laboratorio/profesional/liquidacion/pdf', [App\Http\Controllers\LaboratorioController::class, 'lab_liquidacion_profesionales_pdf'])->name('laboratorio.profesional.liquidacion.pdf');
 
-     // Registrar campaña publicitaria 
+     // Registrar campaña publicitaria
     Route::post('/registrar-campania',[App\Http\Controllers\LaboratorioController::class, 'registrarCampaniaPublicitaria'])->name('laboratorio.registrar_campania_publicitaria');
     Route::post('/historial-campanias',[App\Http\Controllers\LaboratorioController::class, 'historialCampaniasPublicitarias'])->name('laboratorio.historial_campanias_publicitarias');
     Route::post('/detalle-campania',[App\Http\Controllers\LaboratorioController::class, 'detalleCampaniaPublicitaria'])->name('laboratorio.detalle_campania_publicitaria');
@@ -1533,7 +1533,7 @@ Route::group([
 
     // Bodega Laboratorio
     Route::post('/bodega/registrar/item',[App\Http\Controllers\ComprasController::class, 'guardarItemFacturaLaboratorio'])->name('laboratorio.bodega.guardarItemFactura');
-    
+
 
     // Asistente Laboratorio
     Route::post('/laboratorio/asistente/registrar',[App\Http\Controllers\ManejoContratoController::class, 'registrarPersonalLaboratorio'])->name('laboratorio.registrar_personal');
@@ -1547,7 +1547,7 @@ Route::group([
     Route::get('/caja/rendicion',[App\Http\Controllers\LaboratorioController::class, 'rendicionCajaLaboratorio'])->name('laboratorio.caja.rendir');
     Route::post('/caja/rendicion/solicitar',[App\Http\Controllers\LaboratorioController::class, 'solicitarRendicionCajaLaboratorio'])->name('laboratorio.caja.solicitar_rendicion');
     Route::get('/caja/rendicion/cargar',[App\Http\Controllers\LaboratorioController::class, 'cargarRendicionLaboratorio'])->name('laboratorio.flujo_caja.index');
-    
+
     Route::get('/laboratorio/profesional/liquidacion', [App\Http\Controllers\LaboratorioController::class, 'lab_liquidacion_profesionales'])->name('laboratorio.liquidacion_profesionales');
 });
 
@@ -1584,7 +1584,7 @@ Route::group([
     Route::post('/procesar-venta',[App\Http\Controllers\LaboratorioController::class, 'procesarVentaCarrito'])->name('laboratorio.carrito.procesar_venta');
     // Procesar prestamo (finalizar prestamo)
     Route::post('/procesar-prestamo',[App\Http\Controllers\LaboratorioController::class, 'procesarPrestamoCarrito'])->name('laboratorio.carrito_prestamos.procesar_prestamo');
-    
+
 
 });
 
@@ -2738,10 +2738,10 @@ Route::group([
     'middleware' => ['role:JefeTurno|Admin'],
     'prefix' => 'urgencias/jefe/turno',
 ], function () {
-    
+
     /*  Escritorio JefeTurno */
     Route::get('inicio', [App\Http\Controllers\EscritorioJefeTurnoController::class, 'index'])->name('jefe.turno.home');
-    
+
 });
 
 /** jitsi */

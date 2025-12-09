@@ -48,7 +48,6 @@
 			</div>
 		</div>
 	</div>
-
 	<!--Especialidades Médicas-->
 	<div id="esp-med">
 		<div data-aos="fade-up"
@@ -509,7 +508,6 @@
 			},
 			success: function(resp){
 				let especialidades = resp;
-
 				$('#modal_reserva_id_profesion').empty();
 				$('#modal_reserva_id_profesion').append(`<option value="0">Seleccione </option>`);
 				especialidades.forEach(e => {
@@ -542,7 +540,6 @@
 					$('#modal_reserva_id_tipo_especialidad').empty();
 					console.log(resp);
 					let especialidades = resp;
-
 					$('#modal_reserva_id_especialidad').empty();
 					$('#modal_reserva_id_especialidad').append(`<option value="0">Seleccione </option>`);
 					especialidades.forEach(e => {
@@ -573,7 +570,6 @@
 					console.log(resp);
 					if(resp.value == 'tipos_especialidades'){
 						let especialidades = resp.tipos_especialidades;
-
 						$('#modal_reserva_id_tipo_especialidad').empty();
 						$('#modal_reserva_id_tipo_especialidad').append(`<option value="0">Seleccione </option>`);
 						especialidades.forEach(e => {
@@ -599,11 +595,9 @@
 							html += '            <div class="text-center">';
 							html += '                <a href="#!" data-toggle="modal" data-target="#modal-report">';
 							html += '                    <span class="badge badge-primary mt-2">';
-
 							html += '                    </span>';
 							html += '                    <h6 class="mb-1 mt-2">'+p.nombre+' '+p.apellido_uno+' '+p.apellido_dos+'</h6>';
 							html += '                </a>';
-
 
 
 							html += '                <button type="button" class="btn btn-outline-info btn-sm" onclick="f_profesional('+p.id+');"><i class="feather icon-file-plus"></i> Ver ficha</button>';
@@ -642,7 +636,6 @@
 					id_lugar_atencion: id_lugar_atencion
 				},
 				success: function(resp){
-
 					console.log(resp);
 					let profesionales = resp.profesionales;
 					$('#div_resultado_busqueda').empty();
@@ -657,7 +650,6 @@
 						html += '    <button type="button" class="btn btn-primary btn-sm" onclick="hora_medica('+p.id+');">Aplicar</button>';
 						html += '  </div>';
 						html += '</div>';
-
 
 						$('#div_resultado_busqueda').append(html);
 					});
@@ -734,7 +726,6 @@
 					});
 				}
 			});
-
 		}
 
 		function hora_medica(id_profesional){
@@ -742,7 +733,6 @@
 			let id_lugar_atencion = 12;
 
 			$('#modal_reserva_hora_id_profesional').val(id_profesional);
-
 			let url = 'https://med-sdi.cl/api/horas_medicas_profesional_lugar_atencion';
 
 			$.ajax({
@@ -1132,4 +1122,8 @@
 });
 	</script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47

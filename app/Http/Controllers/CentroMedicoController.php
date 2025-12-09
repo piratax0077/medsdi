@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
+<<<<<<< HEAD
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\ProcedimientosCentro;
@@ -11,6 +12,8 @@ use App\Models\AcompananteDependiente;
 use App\Models\Instituciones;
 use App\Models\Sucursal;
 use App\Models\SucursalHorario;
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\TipoEspecialidad;
@@ -101,6 +104,7 @@ class CentroMedicoController extends Controller
 
         return ['profesionales' => $profesionales];
     }
+<<<<<<< HEAD
 
     public function obtenerDatosPacientePorRut(Request $request){
    
@@ -280,4 +284,6 @@ class CentroMedicoController extends Controller
 
     
     
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 }

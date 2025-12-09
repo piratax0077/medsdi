@@ -373,6 +373,7 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+<<<<<<< HEAD
     public function verHorarioEmpleadoLaboratorio(Request $request)
      {
         $datos = array();
@@ -489,6 +490,8 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     public function verHorarioEmpleadoAdmin(Request $request)
     {
         $datos = array();
@@ -1013,7 +1016,11 @@ class ManejoContratoController extends Controller
     /** REGISTRO NUEVO  */
     public function registrarPersonal(Request $request)
     {
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $datos = array();
         $error = array();
         $valido = 1;
@@ -1108,6 +1115,7 @@ class ManejoContratoController extends Controller
             }
             else if(in_array((strtoupper($request->tipo_contrato)), $lista_tipo_admi_inst_serv))
             {
+<<<<<<< HEAD
              
                 $result_registro_perfil_administrativo = static::registroPerfilAdministrativo($request);
                
@@ -1520,6 +1528,9 @@ class ManejoContratoController extends Controller
              
                 $result_registro_perfil_administrativo = static::registroPerfilAdministrativo($request);
                
+=======
+                $result_registro_perfil_administrativo = static::registroPerfilAdministrativo($request);
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $datos['result_registro_perfil'] = $result_registro_perfil_administrativo;
 
                 if($result_registro_perfil_administrativo['estado'] == 1){
@@ -2802,7 +2813,10 @@ class ManejoContratoController extends Controller
 
     static public function registroPerfil($registros)
     {
+<<<<<<< HEAD
    
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $datos = array();
         $error = array();
         $valido = 1;
@@ -2877,7 +2891,10 @@ class ManejoContratoController extends Controller
             $rol_asignar = '';
             $id_asistente = 0;
             $id_asistente_user = 0;
+<<<<<<< HEAD
           
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             switch ($registros->tipo_contrato) {
                 case 'ASISTENTE PUBLICO':
                     if($tipo == 0){
@@ -2911,8 +2928,13 @@ class ManejoContratoController extends Controller
                     }
                 case 'ASISTENTE LABORATORIO':
                     if($tipo == 0){
+<<<<<<< HEAD
                         $rol_asignar = 'AsistenteLaboratorio';
                         $tipo = 14;
+=======
+                        $rol_asignar = 'Asistente Laboratorio';
+                        $tipo = 12;
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                     }
 
                     $validar_asistente = Asistente::where('email', $registros->email)->first();
@@ -3416,7 +3438,11 @@ class ManejoContratoController extends Controller
                 $registro_administrativo->telefono_uno = $registros->telefono;
                 $registro_administrativo->telefono_dos = '';
                 $registro_administrativo->estado = 1;
+<<<<<<< HEAD
               
+=======
+
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $registro_administrativo->id_admin = (empty($id_asistente_user))?0:$id_asistente_user;
 
                 $direccion = new Direccion();
@@ -3455,12 +3481,19 @@ class ManejoContratoController extends Controller
                         {
                             $datos['user']['estado'] = 1;
                             $datos['user']['result'] = $administrativo_user;
+<<<<<<< HEAD
                             // buscamos el rol
                             $rol = Roles::where('alias','like', '%'.$registros->tipo_contrato)->first();
                             
                             /** asignando rol de adminstrador de institucion */
                             // se asigna el rol dependiendo del tipo de contrato que viene en el request
                             $administrativo_user->assignRole($rol->id);
+=======
+                            /** asignando rol de adminstrador de institucion */
+                            // se asigna el rol dependiendo del tipo de contrato que viene en el request
+                            $administrativo_user->assignRole(2);
+                            $administrativo_user->assignRole(23);
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                             $id_administrativo_user = $administrativo_user->id;
 
                             // asignamos el usuario al profesional
@@ -4087,6 +4120,7 @@ class ManejoContratoController extends Controller
         if(Auth::user()->id == 3)
         {
             $id_busqueda = 5;
+<<<<<<< HEAD
             $registro = Instituciones::where('id', $id_busqueda)->first();
         }
         else
@@ -4096,6 +4130,17 @@ class ManejoContratoController extends Controller
 
         if($registro){
             $LugarAtencion = LugarAtencion::where('id',$registro->id_lugar_atencion)->first();
+=======
+            $registro_ = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro_ = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro_){
+            $LugarAtencion = LugarAtencion::where('id',$registro_->id_lugar_atencion)->first();
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $filtro = array();
             $filtro[] = array('id_profesional',$request->id_empleado);
             $filtro[] = array('id_lugar_atencion',$LugarAtencion->id);
@@ -4651,6 +4696,7 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+<<<<<<< HEAD
     public function registrarProfesionalLaboratorio(Request $request){
          $datos = array();
         $error = array();
@@ -4755,6 +4801,8 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     static public function registrarContratoProfesional(
         $tipo_empleado,
         $profesion,

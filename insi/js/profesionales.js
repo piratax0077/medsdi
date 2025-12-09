@@ -2,7 +2,11 @@ $(document).ready(function () {
     $('.carousel').carousel({
         interval: 3000
     });
+<<<<<<< HEAD
     AOS.init();
+=======
+    AOS.init();	
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     carga_especialidad();
 });
 
@@ -20,7 +24,11 @@ function carga_especialidad()
                 let select = $('#id_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
+<<<<<<< HEAD
                 $(resp.registros).each(function(i, v) {
+=======
+                $(resp.registros).each(function(i, v) { 
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -54,7 +62,11 @@ function carga_tipo_especialidad()
                 let select = $('#id_tipo_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
+<<<<<<< HEAD
                 $(resp.registros).each(function(i, v) {
+=======
+                $(resp.registros).each(function(i, v) { 
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -86,7 +98,11 @@ function carga_sub_tipo_especialidad()
                 let select = $('#id_sub_tipo_especialidad');
                 select.find('option').remove();
                 select.append('<option value="">Seleccionar</option>');
+<<<<<<< HEAD
                 $(resp.registros).each(function(i, v) {
+=======
+                $(resp.registros).each(function(i, v) { 
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                     select.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                 });
             }
@@ -118,12 +134,20 @@ function buscarProfesional()
 
     api.request(datos,
         function (resp) {
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             let div_lista_prof = $('#lista_profesionales');
             div_lista_prof.find('div').remove();
             if(resp.estado == 1)
             {
+<<<<<<< HEAD
                 $(resp.registros).each(function(i, v) {
+=======
+                $(resp.registros).each(function(i, v) { 
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                     var html = '';
                     html += '<div class="col-sm-12 col-md-6 col-lg-4">';
                     html += '    <div class="card border-0 my-2 shadow">';
@@ -161,6 +185,7 @@ function buscarProfesional()
         },
         'GET'
     );
+<<<<<<< HEAD
 }
 
 function generar_reserva_cita(id_profesional)
@@ -168,3 +193,6 @@ function generar_reserva_cita(id_profesional)
     $('#id_profesional').val(id_profesional);
     $('#modalReservaCita').modal('show');
 }
+=======
+}
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47

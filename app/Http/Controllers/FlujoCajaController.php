@@ -26,9 +26,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Mail\RendicionAprobadaMail;
 use Illuminate\Support\Facades\Mail;
 
+<<<<<<< HEAD
 // PDF
 use Barryvdh\DomPDF\Facade\Pdf;
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 class FlujoCajaController extends Controller
 {
     public function ver_flujo_caja()
@@ -495,20 +498,31 @@ class FlujoCajaController extends Controller
         $prevision = Prevision::all();
         $paciente = Paciente::where('id_usuario',Auth::user()->id)->first();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+<<<<<<< HEAD
 
         $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
 
         // buscamos las rendiciones de los bonos para el asistente
         $rendiciones = RendicionCaja::where('id_profesional',$profesional->id)
+=======
+        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+
+        // buscamos las rendiciones de los bonos para el asistente
+        $rendiciones = RendicionCaja::where('id_asistente_receptor',$asistente->id)
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         ->where('rendicion','0')
         ->whereDate('fecha_rendicion', Carbon::now())
         ->get();
 
         // Paso 1: Obtener bonos desde las rendiciones
         $ids_bonos_rendidos = [];
+<<<<<<< HEAD
         if($rendiciones->isEmpty()) {
             return response()->json(['error' => 'No hay bonos rendidos para generar el PDF.'], 404);
         }
+=======
+
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         foreach ($rendiciones as $rendicion) {
             $ids = explode('|', $rendicion->bonos); // separar por "|"
             $ids_bonos_rendidos = array_merge($ids_bonos_rendidos, $ids); // acumular
@@ -522,7 +536,11 @@ class FlujoCajaController extends Controller
 
         $id_lugar_atencion = array();
         $es_institucion = 0;
+<<<<<<< HEAD
         $contrato = ContratoDependiente::where('id_empleado',$profesional->id)->first();
+=======
+        $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         if($contrato)
         {
             $id_lugar_atencion = array($contrato->id_lugar_atencion);
@@ -530,10 +548,17 @@ class FlujoCajaController extends Controller
         }
         else
         {
+<<<<<<< HEAD
             $profesionales_lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->pluck('id_lugar_atencion')->toArray();
             if($profesionales_lugar_atencion)
             {
                 $id_lugar_atencion = $profesionales_lugar_atencion;
+=======
+            $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->pluck('id_lugar_atencion')->toArray();
+            if($asistentes_lugar_atencion)
+            {
+                $id_lugar_atencion = $asistentes_lugar_atencion;
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             }
             else
             {
@@ -546,9 +571,15 @@ class FlujoCajaController extends Controller
         if(!empty($id_lugar_atencion))
         {
             $filtro = array();
+<<<<<<< HEAD
             $filtro[] = array('id_profesional',$profesional->id);
             $filtro[] = array('numero_sesiones','=','0');
             // $filtro[] = array('rendido','0');
+=======
+            $filtro[] = array('id_asistente',$asistente->id);
+            $filtro[] = array('numero_sesiones','=','0');
+            $filtro[] = array('rendido','0');
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             // echo json_encode($filtro);
 
             /** rendicion a cm */
@@ -558,7 +589,10 @@ class FlujoCajaController extends Controller
                             ->whereDate('fecha_atencion', Carbon::now())
                             ->get();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             // Paso 4: Unir los dos conjuntos
             $bonos = $bonos_dia->merge($bonos_rendidos);
 
@@ -566,7 +600,11 @@ class FlujoCajaController extends Controller
             $bonos = $bonos->unique('id')->values(); // 'values' para resetear índices
 
             foreach($bonos as $b){
+<<<<<<< HEAD
                 $responsable = Profesional::where('id',$b->id_profesional)->first();
+=======
+                $responsable = Asistente::where('id',$b->id_asistente)->first();
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $b->responsable = $responsable->nombres.' '.$responsable->apellido_uno;
             }
 
@@ -618,19 +656,31 @@ class FlujoCajaController extends Controller
             $lugar_atencion = LugarAtencion::find($id_lugar_atencion[0]);
 
             // generamos el pdf
+<<<<<<< HEAD
             $pdf = Pdf::loadView('app.general.asistente.flujo_caja.PDF.pdf_bonos_dia', [
+=======
+            $pdf = \PDF::loadView('app.general.asistente.flujo_caja.PDF.pdf_bonos_dia', [
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 'bonos' => $bonos,
                 'total' => $total,
                 'total_bonos' => $total_bonos,
                 'total_efectivo' => $total_efectivo,
                 'total_otros' => $total_otros,
                 'prevision' => $prevision,
+<<<<<<< HEAD
                 'asistente' => $profesional,
                 'lugar_atencion' => $lugar_atencion,
                 'fecha_rendicion' => Carbon::now()->format('d-m-Y'),
             ]);
             // Guardar el PDF en la carpeta public
             $fileName = 'rendicion_caja_' . $profesional->id . '.pdf';
+=======
+                'asistente' => $asistente,
+                'lugar_atencion' => $lugar_atencion,
+            ]);
+            // Guardar el PDF en la carpeta public
+            $fileName = 'rendicion_caja_' . $asistente->id . '.pdf';
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $filePath = public_path('reportes/' . $fileName);
             file_put_contents($filePath, $pdf->output());
 
@@ -645,7 +695,10 @@ class FlujoCajaController extends Controller
         $prevision = Prevision::all();
         $paciente = Paciente::where('id_usuario',Auth::user()->id)->first();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
 
         $id_lugar_atencion = array();
@@ -745,7 +798,10 @@ class FlujoCajaController extends Controller
                 'asistente' => $asistente,
                 'lugar_atencion' => $lugar_atencion,
                 'profesional_agenda' => $profesional_agenda,
+<<<<<<< HEAD
                 'fecha_rendicion' => Carbon::now()->format('d-m-Y'),
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             ]);
             // Guardar el PDF en la carpeta public
             $fileName = 'rendicion_caja_' . $asistente->id . '.pdf';
@@ -1424,6 +1480,7 @@ class FlujoCajaController extends Controller
         }
     }
 
+<<<<<<< HEAD
     public function rendirCajaDiariaFecha(Request $request){
         $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
         $contrato = ContratoDependiente::where('id_empleado',$asistente->id)->first();
@@ -1503,6 +1560,8 @@ class FlujoCajaController extends Controller
         }
     }
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     /** Asistentes CM Manejo de Agenda*/
     public function rendirCajaDiariaMa(Request $request)
     {
@@ -1929,6 +1988,7 @@ class FlujoCajaController extends Controller
 
     }
 
+<<<<<<< HEAD
     public function cargaBonosAsistenteFecha(Request $request)
     {
         try {
@@ -2109,6 +2169,8 @@ class FlujoCajaController extends Controller
 
     }
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     public function rendicionDetalle(Request $request)
     {
         $datos = array();
@@ -2473,7 +2535,10 @@ class FlujoCajaController extends Controller
                  }
              }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             /** PERSONAL QUE RECIBE */
             /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
             $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
@@ -2946,10 +3011,13 @@ class FlujoCajaController extends Controller
         return $datos;
     }
 
+<<<<<<< HEAD
     public function iniciar_cobro(Request $request){
         $rendiciones = $request->rendiciones;
 
         // Lógica para iniciar el proceso de cobro
         return response()->json(['mensaje' => 'Proceso de cobro iniciado para las rendiciones: ' . implode(', ', $rendiciones)]);}
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 }

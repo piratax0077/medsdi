@@ -35,6 +35,10 @@ use App\Models\ResultadoExamen;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
 use App\Models\ContactoEmergencia;
+<<<<<<< HEAD
+=======
+use App\Models\ExamenesBocaGeneral;
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use Illuminate\Http\Request;
 
 use ArrayObject;
@@ -1384,6 +1388,10 @@ class AppPacienteController extends Controller
 
     //RECETAS ONLINE
     public function getMisExamenes(Request $request) {
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $datos = array();
         $error = array();
         $campos_requeridos = 0;
@@ -1398,6 +1406,7 @@ class AppPacienteController extends Controller
         {
             $paciente = Paciente::where('id_usuario',$request->id_paciente)->first();
 
+<<<<<<< HEAD
             $registros = FichaAtencion::select('fichas_atenciones.id as id','detalles_receta.posologia as posologia','fichas_atenciones.hipotesis_diagnostico as hipotesis_diagnostico','fichas_atenciones.created_at as created_at','fichas_atenciones.id as id_ficha' )
 										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')
                                         ->where('fichas_atenciones.id_paciente',$paciente->id)
@@ -1415,12 +1424,22 @@ class AppPacienteController extends Controller
 				}
 
 			}
+=======
+            $registros = ExamenesBocaGeneral::where('id_paciente',$paciente->id)->get();
+
+            $datos['estado'] = 1;
+            $datos['registros'] = $registros;
+
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         return response($datos)->header('Content-Type', 'application/json');
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     public function getMisRecetas(Request $request) {
         $datos = array();
         $error = array();
@@ -1437,11 +1456,19 @@ class AppPacienteController extends Controller
             $paciente = Paciente::where('id_usuario',$request->id_paciente)->first();
 
             $registros = FichaAtencion::select('fichas_atenciones.id as id','detalles_receta.posologia as posologia','fichas_atenciones.hipotesis_diagnostico as hipotesis_diagnostico','fichas_atenciones.created_at as created_at','fichas_atenciones.id as id_ficha' )
+<<<<<<< HEAD
 										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')
                                         ->where('fichas_atenciones.id_paciente',$paciente->id)
 										->orderBy('fichas_atenciones.id','desc')
                                         ->get();
 
+=======
+										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')										
+                                        ->where('fichas_atenciones.id_paciente',$paciente->id)
+										->orderBy('fichas_atenciones.id','desc')										
+                                        ->get();
+										
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 			$id_fichas = array();
 			$registro_limpios = array();
             foreach($registros as $key => $value)
@@ -1451,8 +1478,13 @@ class AppPacienteController extends Controller
 					$registro_limpios[] = $value;
 					$id_fichas[] = $value->id;
 				}
+<<<<<<< HEAD
 
 			}
+=======
+				
+			}		
+>>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $recomendaciones = [];
             $id_recomendaciones = [];
             foreach($id_fichas as $i){
