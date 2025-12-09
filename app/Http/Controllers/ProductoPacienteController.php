@@ -83,12 +83,9 @@ class ProductoPacienteController extends Controller
         $precio_unitario = 0,
         $descuento = 0,
         $observaciones = null,
-<<<<<<< HEAD
         $tiene_garantia = 0,
         $tipo_garantia = null,
         $valor_garantia = null,
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $id_usuario = null,
         $fecha_devolucion = null,
         $id_lugar_atencion = null,
@@ -121,7 +118,7 @@ class ProductoPacienteController extends Controller
 
             // Construir observaciones con información de la compra
             $observaciones_completas = [];
-            
+
 
             if ($cantidad > 1) {
                 $observaciones_completas[] = "Cantidad: {$cantidad}";
@@ -141,7 +138,7 @@ class ProductoPacienteController extends Controller
             if ($observaciones) {
                 $observaciones_completas[] = $observaciones;
             }
-            
+
             if($id_lugar_atencion){
                 $lugar_atencion_id = $id_lugar_atencion;
             }
@@ -156,12 +153,9 @@ class ProductoPacienteController extends Controller
             $misProducto->id_lugar_atencion = $lugar_atencion_id;
             $misProducto->stock = $cantidad;
             $misProducto->observaciones = implode(' | ', $observaciones_completas);
-<<<<<<< HEAD
             $misProducto->tiene_garantia = $tiene_garantia;
             $misProducto->tipo_garantia = $tipo_garantia;
             $misProducto->valor_garantia = $valor_garantia;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             if($estado === 'prestado'){
                 $misProducto->estado = 2; // Prestado
             } else {
@@ -208,7 +202,7 @@ class ProductoPacienteController extends Controller
     public function evaluar(Request $request)
     {
         try {
-            
+
             $validated = $request->validate([
                 'id_producto' => 'required|exists:productos,id',
                 'satisfaccion' => 'required|integer|min:1|max:5'
@@ -221,8 +215,8 @@ class ProductoPacienteController extends Controller
             $misProducto = MisProducto::where('id_producto', $request->id_producto)
                                       ->where('id_paciente', $request->id_paciente)
                                       ->firstOrFail();
-         
-            
+
+
             // Opcional: Verificar que el paciente sea quien califica
             // if ($misProducto->id_paciente != $request->id_paciente_actual) {
             //     return response()->json([
@@ -461,16 +455,16 @@ class ProductoPacienteController extends Controller
         ]);
 
         $misProducto = MisProducto::findOrFail($request->id_mis_producto);
-   
+
         $cantidad = $misProducto->stock;
         $producto = Producto::find($misProducto->id_producto);
         $producto->stock_actual += $cantidad;
         $producto->save();
-       
+
 
         // envio de mail al paciente notificando la devolucion
         $paciente = Paciente::find($misProducto->id_paciente);
-   
+
         if($paciente && $paciente->email){
             Mail::to($paciente->email)->send(new NotificacionDevolucionProducto($paciente, $misProducto));
         }

@@ -8,10 +8,7 @@ use App\Models\AdminMed;
 use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteTipo;
-<<<<<<< HEAD
 use App\Models\AsistenteLugarAtencion;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\Audifono;
 use App\Models\Bancos;
 use App\Models\Bono;
@@ -25,10 +22,7 @@ use App\Models\CarritoCompra;
 use App\Models\CarritoPrestamo;
 use App\Models\Compras_detalle;
 use App\Models\FichaAtencion;
-<<<<<<< HEAD
 use App\Models\GastosInstitucionales;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\TipoAreasCm;
 use Illuminate\Http\Request;
 use App\Models\Region;
@@ -45,10 +39,7 @@ use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
 use App\Models\LiquidacionRecibo;
-<<<<<<< HEAD
 use App\Models\LiquidacionesProfesional;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
@@ -62,18 +53,12 @@ use App\Models\ProcedimientosCentro;
 use App\Models\Producto;
 use App\Models\ProductoSolicitado;
 use App\Models\Profesional;
-<<<<<<< HEAD
 use App\Models\ProfesionalAsistente;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\ProfesionalConvenio;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\RegistroConfirmacionHoraAgenda;
-<<<<<<< HEAD
 use App\Models\RendicionCaja;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\Remuneraciones;
 use App\Models\ReparacionAudifono;
 use App\Models\ResponsableBodega;
@@ -94,10 +79,7 @@ use App\Models\SucursalHorario;
 use App\Models\TipoBono;
 use App\Models\TipoInstitucion;
 use App\Models\User;
-<<<<<<< HEAD
 use App\Models\LogUsersDevices;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 
 use App\Mail\NotificacionPrestamoProductos;
 
@@ -2287,11 +2269,6 @@ class LaboratorioController extends Controller
 
         /** CARGA DE PROFESIONALES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 
         $lista_profesionales = array();
         $lista_profesionales['MEDICO'] = array();
@@ -2320,13 +2297,8 @@ class LaboratorioController extends Controller
                     }
                 }
             }
-<<<<<<< HEAD
 
 
-=======
-            
-        
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             if($profesionales)
             {
 
@@ -2471,12 +2443,9 @@ class LaboratorioController extends Controller
                         ->with('Direccion')
                         ->get();
 
-<<<<<<< HEAD
         $especialidades = Especialidad::all();
         $bancos = Bancos::where('estado',1)->get();
 
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         return view('app.laboratorio.profesionales')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
@@ -2493,11 +2462,8 @@ class LaboratorioController extends Controller
             'lista_administrativo' => $lista_administrativo,
             'lista_asistente' => $lista_asistente,
             'sucursales' => $sucursales,
-<<<<<<< HEAD
             'especialidades' => $especialidades,
             'bancos' => $bancos,
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         ]);
     }
 
@@ -4017,11 +3983,6 @@ class LaboratorioController extends Controller
                 return redirect()->route('laboratorio.escritorio_adm_comercial')->with('error','Institución no encontrada');
             }
         }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $profesionales = [];
         if(isset($institucion)){
@@ -4049,11 +4010,6 @@ class LaboratorioController extends Controller
         }else{
             $sucursales = [];
         }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         return view('app.laboratorio.lab_profesional.estadisticas',[
             'profesional' => $profesional,
             'institucion' => isset($institucion) ? $institucion : null,
@@ -4071,7 +4027,6 @@ class LaboratorioController extends Controller
         $id_profesional = $request->id_profesional ?? null;
         $tipo_estadistica = $request->tipo_estadistica ?? null;
 
-<<<<<<< HEAD
         if($tipo_estadistica == 'ventas'){
             $profesional = Profesional::find($id_profesional);
             if($profesional){
@@ -4133,29 +4088,6 @@ class LaboratorioController extends Controller
                 }
 
                 $mis_pacientes = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
-=======
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-
-        if($tipo_estadistica == 'ventas'){
-         
-            $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
-                            ->with('Producto')
-                            ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                            ->get();
-            $productos = [];
-            foreach ($mis_ventas as $venta) {
-                $nombre = $venta['producto']['nombre'];
-                $precio = $venta['producto']['precio_venta'];
-                if (!isset($productos[$nombre])) {
-                    $productos[$nombre] = [
-                        'total' => 0,
-                        'color' => null, // puedes asignar colores aquí si quieres
-                    ];
-                }
-                $productos[$nombre]['total'] += $precio;
-            }
-            $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 6) // solo horas realizadas
                 ->select('horas_medicas.id_profesional')
@@ -4169,7 +4101,6 @@ class LaboratorioController extends Controller
                         'cantidad_pacientes' => $item->cantidad_pacientes,
                     ];
                 });
-<<<<<<< HEAD
 
                 return view('app.laboratorio.lab_profesional.estadisticas_ventas',[
                     'productos' => $productos,
@@ -4178,23 +4109,12 @@ class LaboratorioController extends Controller
                 ]);
             }
 
-=======
-            return view('app.laboratorio.lab_profesional.estadisticas_ventas',[
-                'productos' => $productos,
-                'mis_ventas' => $mis_ventas,
-                'mis_pacientes' => $mis_pacientes,
-            ]);
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         if($tipo_estadistica == 'profesional'){
             $profesional = Profesional::find($id_profesional);
-<<<<<<< HEAD
             if($profesional){
                 $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-=======
-            $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 6) // solo horas realizadas
                 ->select('horas_medicas.id_profesional')
@@ -4223,10 +4143,6 @@ class LaboratorioController extends Controller
                         'cantidad_pacientes' => $item->cantidad_pacientes,
                     ];
                 });
-<<<<<<< HEAD
-
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $mis_pacientes_agendados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 1) // solo horas agendadas
@@ -4241,12 +4157,8 @@ class LaboratorioController extends Controller
                         'cantidad_pacientes' => $item->cantidad_pacientes,
                     ];
                 });
-<<<<<<< HEAD
 
                 $mis_pacientes_cancelados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-=======
-                $mis_pacientes_cancelados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id) 
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 3) // solo horas canceladas
                 ->select('horas_medicas.id_profesional')
@@ -4267,7 +4179,6 @@ class LaboratorioController extends Controller
                     'mis_pacientes_agendados' => $mis_pacientes_agendados,
                     'mis_pacientes_cancelados' => $mis_pacientes_cancelados,
                 ]);
-<<<<<<< HEAD
             }else{
                 $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
                 $lugares_atencion_institucion = Sucursal::where('id_institucion', $laboratorio->id)->pluck('id_lugar_atencion')->toArray();
@@ -4340,13 +4251,10 @@ class LaboratorioController extends Controller
                 ]);
             }
 
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         if($tipo_estadistica == 'tratamientos'){
             $profesional = Profesional::find($id_profesional);
-<<<<<<< HEAD
             if($profesional){
                 $mis_tratamientos = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
                     ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
@@ -4391,38 +4299,16 @@ class LaboratorioController extends Controller
                             'total_valor' => $item->total_valor,
                         ];
                     });
-=======
-        
-            // Lógica para estadísticas de tratamientos
-            $mis_tratamientos = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-                ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                ->where('horas_medicas.id_estado', 6) // solo horas realizadas
-                ->select('horas_medicas.id_procedimiento')
-                ->selectRaw('COUNT(*) as cantidad')
-                ->groupBy('horas_medicas.id_procedimiento')
-                ->with('ProcedimientoCentro')
-                ->get()
-                ->map(function($item) {
-                    return [
-                        'procedimiento' => $item->ProcedimientoCentro ? $item->ProcedimientoCentro->nombre : 'Sin procedimiento',
-                        'cantidad' => $item->cantidad,
-                    ];
-                });
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 
                 return view('app.laboratorio.lab_profesional.estadisticas_tratamientos',[
                     'mis_tratamientos' => $mis_tratamientos,
                 ]);
-<<<<<<< HEAD
             }
 
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         if($tipo_estadistica == 'productos'){
             $profesional = Profesional::find($id_profesional);
-<<<<<<< HEAD
             if($profesional){
                 // Lógica para estadísticas de productos
                 $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
@@ -4483,47 +4369,11 @@ class LaboratorioController extends Controller
             $profesional = Profesional::find($request->id_profesional);
             $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
             $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-=======
-       
-            // Lógica para estadísticas de productos
-            $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
-                            ->with('Producto')
-                            ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                            ->get();
-            $productos = [];
-            foreach ($mis_ventas as $venta) {
-                $nombre = $venta['producto']['nombre'];
-                $precio = $venta['producto']['precio_venta'];
-                if (!isset($productos[$nombre])) {
-                    $productos[$nombre] = [
-                        'total' => 0,
-                        'color' => null, // puedes asignar colores aquí si quieres
-                    ];
-                }
-                $productos[$nombre]['total'] += $precio;
-            }
-
-            return view('app.laboratorio.lab_profesional.estadisticas_productos',[
-                'productos' => $productos,
-                'mis_ventas' => $mis_ventas,
-            ]);
-        }
-
-        if($tipo_estadistica == 'comisiones'){
-   
-            $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
-                        ->with('Producto')
-                        ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                        ->get();
-            $profesional = Profesional::find($id_profesional);
-            $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $id_profesional)
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                                 ->join('procedimientos_centro', 'procedimientos_centro.id', 'horas_medicas.id_procedimiento')
                                 ->where('id_estado', 6) // realizadas
                                 ->get();
 
-<<<<<<< HEAD
             $profesional_convenio = ProfesionalInstitucionConvenio::where('id_profesional', $profesional->id)
                                     ->where('id_institucion', $laboratorio->id)
                                     ->first();
@@ -4539,12 +4389,6 @@ class LaboratorioController extends Controller
                     ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                     ->get();
 
-=======
-            $total_valor = $horas_medicas->sum('valor');
-
-         
-  
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $productos = [];
             foreach ($mis_ventas as $venta) {
                 $nombre = $venta['producto']['nombre'];
@@ -4560,7 +4404,6 @@ class LaboratorioController extends Controller
 
             $total_Valor_productos = array_sum(array_column($productos, 'total'));
 
-<<<<<<< HEAD
             $bonos = Bono::where('id_profesional', $profesional->id)
                         ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                         ->get();
@@ -4705,20 +4548,10 @@ class LaboratorioController extends Controller
                     'total_a_pagar' => $total_a_pagar,
                     'porcentaje' => $profesional_convenio->ventas ?? 10,
             ];
-=======
-            return view('app.laboratorio.lab_profesional.estadisticas_comisiones',[
-                'horas_medicas' => $horas_medicas,
-                'total_valor' => $total_valor,
-                'productos' => $productos,
-                'mis_ventas' => $mis_ventas,
-                'total_Valor_productos' => $total_Valor_productos,
-            ]);
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         if($tipo_estadistica == 'bonos'){
             $profesional = Profesional::find($id_profesional);
-<<<<<<< HEAD
             $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
             if($profesional){
 
@@ -4758,37 +4591,17 @@ class LaboratorioController extends Controller
             }
 
 
-=======
-   
-            $bonos_utilizados = Bono::where('id_profesional', $id_profesional)
-                                ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                                ->get();
-
-            $total_bonos = $bonos_utilizados->sum('monto');
-
-            return view('app.laboratorio.lab_profesional.estadisticas_bonos',[
-                'bonos_utilizados' => $bonos_utilizados,
-                'total_bonos' => $total_bonos,
-                ''
-            ]);
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         }
 
         if($tipo_estadistica == 'agenda'){
             $profesional = Profesional::find($id_profesional);
-<<<<<<< HEAD
 
             if($profesional){
                 $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $id_profesional)
-=======
-   
-            $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $id_profesional)
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                                 ->with('Estado')
                                 ->get();
 
-<<<<<<< HEAD
                 $cantidad_citas_rechazadas = $horas_medicas->where('id_estado', 4)->count();
                 $cantidad_citas_canceladas = $horas_medicas->where('id_estado', 3)->count();
                 $cantidad_citas_realizadas = $horas_medicas->where('id_estado', 6)->count();
@@ -4834,27 +4647,6 @@ class LaboratorioController extends Controller
 
             if($profesional){
                 $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-=======
-            $cantidad_citas_rechazadas = $horas_medicas->where('id_estado', 4)->count();
-            $cantidad_citas_canceladas = $horas_medicas->where('id_estado', 3)->count();
-            $cantidad_citas_realizadas = $horas_medicas->where('id_estado', 6)->count();
-            $cantidad_citas_agendadas = $horas_medicas->where('id_estado', 1)->count();
-
-            return view('app.laboratorio.lab_profesional.estadisticas_agenda',[
-                'horas_medicas' => $horas_medicas,
-                'cantidad_citas_rechazadas' => $cantidad_citas_rechazadas,
-                'cantidad_citas_canceladas' => $cantidad_citas_canceladas,
-                'cantidad_citas_realizadas' => $cantidad_citas_realizadas,
-                'cantidad_citas_agendadas' => $cantidad_citas_agendadas,
-            ]);
-        }
-
-        if($tipo_estadistica == 'pacientes'){
-            return $request->all();
-            $profesional = Profesional::find($id_profesional);
-            if($profesional){
-$mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 6) // solo horas realizadas
                 ->select('horas_medicas.id_profesional')
@@ -4869,7 +4661,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                     ];
                 });
             }
-<<<<<<< HEAD
             else{
                 $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
                 $lugares_atencion_institucion = Sucursal::where('id_institucion', $laboratorio->id)->pluck('id_lugar_atencion')->toArray();
@@ -4889,16 +4680,12 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                 });
             }
 
-=======
-            
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 
             return view('app.laboratorio.lab_profesional.estadisticas_pacientes',[
                 'mis_pacientes' => $mis_pacientes,
             ]);
         }
 
-<<<<<<< HEAD
         if($tipo_estadistica == 'gastos'){
             $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
             $lugares_atencion_institucion = Sucursal::where('id_institucion', $laboratorio->id)->pluck('id_lugar_atencion')->toArray();
@@ -4950,13 +4737,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
         $institucion = Instituciones::find($id_institucion);
 
         if(!$institucion && !$sucursal){
-=======
-        $sucursal = Sucursal::find($id_sucursal);
-
-        $institucion = Instituciones::find($id_institucion);
-   
-        if(!$institucion && !$sucursal){    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
                             ->with('Producto')
@@ -5019,11 +4799,7 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                         'cantidad_pacientes' => $item->cantidad_pacientes,
                     ];
                 });
-<<<<<<< HEAD
                 $mis_pacientes_cancelados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
-=======
-                $mis_pacientes_cancelados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id) 
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 3) // solo horas canceladas
                 ->select('horas_medicas.id_profesional')
@@ -5127,11 +4903,7 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
 
            $mis_pacientes_cancelados = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
             ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-<<<<<<< HEAD
             ->where('horas_medicas.id_estado', 3) // solo horas canceladas
-=======
-            ->where('horas_medicas.id_estado', 3) // solo horas canceladas 
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             ->where('horas_medicas.id_profesional', $id_profesional)
             ->select('horas_medicas.id_profesional')
             ->selectRaw('COUNT(DISTINCT horas_medicas.id_paciente) as cantidad_pacientes')
@@ -5202,15 +4974,9 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
             $sucursal = Sucursal::find($id_sucursal);
 
             $institucion = Instituciones::find($id_institucion);
-<<<<<<< HEAD
 
             if(!$institucion && !$sucursal){
 
-=======
-    
-            if(!$institucion && !$sucursal){ 
-              
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
                 $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
@@ -5230,11 +4996,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                     $sucursales_institucion = Sucursal::where('id_institucion', $institucion->id)->get();
                     $lugares_atencion_institucion = $sucursales_institucion->pluck('id_lugar_atencion')->toArray();
                 }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 if($sucursal){
                     $lugares_atencion_institucion = [$sucursal->id_lugar_atencion];
                 }
@@ -5246,11 +5007,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                     $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
                     $id_profesional = $profesional->id;
                 }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 $horas_medicas = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
                                 ->where('horas_medicas.id_profesional', $id_profesional)
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
@@ -5278,11 +5034,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                     }
                     $productos[$nombre]['total'] += $precio;
                 }
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 return view('app.laboratorio.lab_profesional.estadisticas_resultado_remuneraciones',[
                     'institucion' => $institucion,
                     'horas_medicas' => $horas_medicas,
@@ -5296,7 +5047,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
             //throw $th;
             return $e->getMessage();
         }
-<<<<<<< HEAD
 
     }
 
@@ -5445,9 +5195,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
             return $e->getMessage();
         }
 
-=======
-        
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     }
 
     public function guardarAudifonoExterno(Request $request){
@@ -6098,15 +5845,9 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
 
     public function traspasoProductosGuardar(Request $request){
         try {
-<<<<<<< HEAD
 
             $producto = Producto::find($request->id_bodega_origen);
 
-=======
-        
-            $producto = Producto::find($request->id_bodega_origen);
-         
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $bodega_origen = Bodega::find($producto->id_bodega);
             $bodega_destino = Bodega::find($request->id_bodega_destino);
             // validar que el producto tenga stock suficiente
@@ -6128,11 +5869,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
             $nuevo_traspaso->id_bodega_destino = $request->id_bodega_destino;
             $nuevo_traspaso->cantidad = $request->cantidad;
             $nuevo_traspaso->id_responsable = Auth::id();
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $nuevo_traspaso->save();
 
             $producto->stock_actual -= $request->cantidad;
@@ -6175,11 +5911,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                 $nuevo_producto->stock_minimo = $producto->stock_minimo;
                 $nuevo_producto->stock_actual = $request->cantidad;
                 $nuevo_producto->id_bodega = $request->id_bodega_destino;
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                 if($nuevo_producto->save()){
                     return response()->json([
                         'estado' => 1,
@@ -6191,11 +5922,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                     ]);
                 }
             }
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
@@ -6203,21 +5929,11 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                 'mensaje' => 'Error al realizar el traspaso: ' . $e->getMessage(),
             ]);
         }
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
     }
 
     public function rechazarProductosGuardar(Request $request){
         try {
             $producto = Producto::find($request->id_bodega_origen);
-<<<<<<< HEAD
-
-=======
-       
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $bodega_origen = Bodega::find($producto->id_bodega);
             $bodega_destino = Bodega::find($request->id_bodega_destino);
             // validar que el producto tenga stock suficiente
@@ -6238,11 +5954,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
             $devolucion->id_bodega_origen = $producto->id_bodega;
             $devolucion->cantidad = $request->cantidad_rechazo;
             $devolucion->id_responsable = Auth::id();
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
             $devolucion->save();
 
             $producto->stock_actual -= $request->cantidad_rechazo;
@@ -6260,11 +5971,6 @@ $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional-
                 'bodega_origen' => $bodega_origen,
                 'bodega_destino' => $bodega_destino,
             ]);
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
@@ -7375,7 +7081,6 @@ public function finalizarSesiones(Request $request){
             'data' => $campania
         ]);
     }
-<<<<<<< HEAD
 
     public function rendicionCajaLaboratorio(){
         $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
@@ -8575,6 +8280,4 @@ public function finalizarSesiones(Request $request){
             'liquidaciones' => $liquidaciones,
         ];
     }
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 }

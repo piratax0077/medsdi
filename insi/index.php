@@ -1122,8 +1122,4 @@
 });
 	</script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47

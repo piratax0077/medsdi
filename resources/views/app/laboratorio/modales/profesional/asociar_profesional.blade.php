@@ -119,15 +119,12 @@
                                 </div>
                             </div>
                             <div class="row mt-1">
-<<<<<<< HEAD
                                 <div class="col-sm-4">Porcentaje por ventas</div>
                                 <div class="col-sm-6">
                                     <input type="number" class="form-control form-control-sm" min="0" max="100" step="0.1" name="agregar_profesional_ventas" id="agregar_profesional_ventas" value="">
                                 </div>
                             </div>
                             <div class="row mt-1">
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
                                 <div class="col-sm-4">Cobro por Confirmaicon de Agenda</div>
                                 <div class="col-sm-6">
                                     <input type="number" class="form-control form-control-sm" min="0" step="1" name="agregar_profesional_confirmacion_agenda" id="agregar_profesional_confirmacion_agenda" value="">

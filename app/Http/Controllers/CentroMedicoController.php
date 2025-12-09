@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Especialidad;
-<<<<<<< HEAD
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\ProcedimientosCentro;
@@ -12,8 +11,6 @@ use App\Models\AcompananteDependiente;
 use App\Models\Instituciones;
 use App\Models\Sucursal;
 use App\Models\SucursalHorario;
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\TipoEspecialidad;
@@ -104,10 +101,9 @@ class CentroMedicoController extends Controller
 
         return ['profesionales' => $profesionales];
     }
-<<<<<<< HEAD
 
     public function obtenerDatosPacientePorRut(Request $request){
-   
+
         $datos = array();
         if(empty($request->id_dependiente_activo))
         {
@@ -219,14 +215,14 @@ class CentroMedicoController extends Controller
     }
 
     public function buscarProfesionalesExamen(Request $request){
-     
+
         $sucursal = Sucursal::where('id', $request->id_sucursal)->first();
         $institucion = Instituciones::where('id', $sucursal->id_institucion)->first();
-    
+
         $id_examen = $request->id_examen;
         $id_lugar_atencion = $institucion->id_lugar_atencion;
         $profesionalesLugarAtencion = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $id_lugar_atencion)->get();
-     
+
         $profesionales = [];
         foreach($profesionalesLugarAtencion as $p){
             $profesional = Profesional::where('id',$p->id_profesional)->first();
@@ -282,8 +278,6 @@ class CentroMedicoController extends Controller
         return $datos;
     }
 
-    
-    
-=======
->>>>>>> 30e9e0c375bff72a1fdc8b83f671beb4248c4e47
+
+
 }
