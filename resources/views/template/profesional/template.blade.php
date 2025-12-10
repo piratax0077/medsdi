@@ -1441,47 +1441,77 @@
                 });
         }
 
-        function guardar_valores_lugar_atencion() {
-
+     function guardar_valores_lugar_atencion() {
 
             let id_lugar_atencion_valor = $('#id_lugar_atencion_valor').val();
             let convenios = '';
+
             for (let i = 1; i < 13; i++) {
-
                 if ($('#convenio_' + i).prop('checked')) {
-
                     convenios = convenios + $('#text_convenio_' + i).text() + ',';
                 }
-
             }
-
-            console.log(convenios);
 
             let valor = $('#valor_convenio').val();
             let lugar_atencion_convenio = $('#lugar_atencion_convenio').val();
             let url = "{{ route('profesional.guardar_valores_lugar_atencion') }}";
 
             $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {
-                        id_lugar_atencion_valor: id_lugar_atencion_valor,
-                        convenios: convenios,
-                        valor: valor,
-                        lugar_atencion_convenio: lugar_atencion_convenio
+                url: url,
+                type: "get",
+                data: {
+                    id_lugar_atencion_valor: id_lugar_atencion_valor,
+                    convenios: convenios,
+                    valor: valor,
+                    lugar_atencion_convenio: lugar_atencion_convenio
+                }
+            })
+            .done(function (data) {
+                if (data != 'error') {
+
+                    // ✅ Refrescar la tabla de valores SIN recargar toda la página
+                    if (typeof mis_valores_lugar_atencion === 'function') {
+                        mis_valores_lugar_atencion(id_lugar_atencion_valor);
                     }
 
-                })
-                .done(function(data) {
-                    if (data != 'error') {
+                    // ✅ Limpiar formulario
+                    limpiarFormularioValoresLugarAtencion();
 
-                        location.reload();
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                    // ✅ Mensaje de éxito (opcional)
+                    swal({
+                        title: "Convenio guardado",
+                        text: "El valor fue registrado correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "No se pudo guardar el valor",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+            });
         };
+
+        function limpiarFormularioValoresLugarAtencion() {
+            // limpia select tipo atención
+            $('#lugar_atencion_convenio').val('');
+
+            // limpia valor
+            $('#valor_convenio').val('');
+
+            // desmarca todos los convenios
+            for (let i = 1; i < 13; i++) {
+                $('#convenio_' + i).prop('checked', false);
+            }
+        }
+
 
         function editar_contacto_emergencia() {
 
@@ -4229,43 +4259,50 @@
 
         };
 
-        function eliminar_valor_lugar_atencion(id) {
+ function eliminar_valor_lugar_atencion(id) {
 
-            let id_convenio = id;
-            let url = "{{ route('profesional.eliminar_valor_lugar_atencion') }}";
+    let id_convenio = id;
+    // el lugar de atención que está siendo editado en el modal
+    let id_lugar_atencion_valor = $('#id_lugar_atencion_valor').val();
+    let url = "{{ route('profesional.eliminar_valor_lugar_atencion') }}";
 
-            $.ajax({
+    $.ajax({
+        url: url,
+        type: "get",
+        data: {
+            id_convenio: id_convenio,
+        },
+    })
+    .done(function(data) {
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        id_convenio: id_convenio,
-                    },
-                })
-                .done(function(data) {
+        if (data != 'failed') {
+            swal({
+                title: "Convenio eliminado de forma correcta",
+                icon: "success",
+                buttons: "Aceptar",
+            }).then(function () {
+                // 🔄 Volver a cargar la tabla de valores SIN recargar la página
+                if (typeof mis_valores_lugar_atencion === 'function') {
+                    mis_valores_lugar_atencion(id_lugar_atencion_valor);
+                }
+            });
 
-                    if (data != 'failed') {
-                        {{--  alert('convenio eliminado de forma correcta');  --}}
-                        swal({
-                            title: "Convenio eliminado de forma correcta",
-                            icon: "success",
-                            buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                        setTimeout(function() {
-                            location.reload()
-                        }, 100);
-                        $('#modal_editar_valor_atencion').show();
-                    } else {
-                        alert('Error');
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-
+        } else {
+            swal({
+                title: "Error",
+                text: "No se pudo eliminar el convenio",
+                icon: "error",
+                buttons: "Aceptar",
+            });
         }
+
+    })
+    .fail(function(jqXHR, ajaxOptions, thrownError) {
+        console.log(jqXHR, ajaxOptions, thrownError)
+    });
+
+}
+
 
         function cerrar_convenio() {
             $('#modal_editar_horario_atencion').modal('hide');
@@ -4275,7 +4312,7 @@
 
             let id_lugar_atencion = id;
             let url = "{{ route('profesional.mis_valores_lugar_atencion') }}";
-
+              $('#tabla_valores tbody').empty();
             $.ajax({
 
                     url: url,
@@ -5207,12 +5244,13 @@
 
             $('#tabla_recetas_profesional_ro').DataTable({
                 responsive: true,
+                order: [[0, 'desc']], // 0 = columna "Fecha", orden descendente
             });
-
 
 
             $('#tabla_certificado_profesional_ro').DataTable({
                 responsive: true,
+                order: [[0, 'desc']], // 0 = columna "Fecha", orden descendente
             });
 
 

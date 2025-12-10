@@ -55,7 +55,10 @@
                                                     @endphp --}}
                                                 @foreach ($licencias as $f)
                                                     <tr>
-                                                        <td class="text-wrap text-center align-middle">{{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}</td>
+                                                        <td class="text-wrap text-center align-middle"
+    data-order="{{ \Carbon\Carbon::parse($f->created_at)->format('Y-m-d H:i:s') }}">
+    {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
+</td>
                                                         <td class="align-middle text-center">
                                                             {{ $f->paciente->nombres }} {{ $f->paciente->apellido_uno }} {{ $f->paciente->apellido_dos }}<br/>
                                                             {{ $f->paciente->rut }}
@@ -88,6 +91,7 @@
         $(document).ready(function() {
             $('#tabla_recetas_paciente_ro').DataTable({
                 responsive: true,
+                order: [[0, 'desc']], // 0 = columna "Fecha", orden descendente
             });
         });
 

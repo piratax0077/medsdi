@@ -51,9 +51,11 @@
                                                 @foreach ($fichas as $f)
                                                     @foreach ($f->Recetas()->get() as $r)
                                                         <tr>
-                                                            <td class="text-wrap text-center align-middle">
+                                                            <td class="text-wrap text-center align-middle"
+                                                                data-order="{{ \Carbon\Carbon::parse($r->created_at)->format('Y-m-d H:i:s') }}">
                                                                 {{ \Carbon\Carbon::parse($r->created_at)->format('d/m/Y') }}
                                                             </td>
+
                                                             <td class="align-middle text-center">
                                                                 {{ $f->Paciente()->first()->nombres }}
                                                                 {{ $f->Paciente()->first()->apellido_uno }}
@@ -86,6 +88,7 @@
         $(document).ready(function() {
             $('#tabla_recetas_paciente_ro').DataTable({
                 responsive: true,
+                order: [[0, 'desc']], // 0 = columna "Fecha", orden descendente
             });
         });
     </script>

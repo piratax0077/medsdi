@@ -483,9 +483,9 @@
                                                 </tr>
                                                 <tr>
                                                     <td scope="row" colspan="2">
-                                                        <button id="confirmar_datos_asistente" name="confirmar_datos_asistente" onclick="datos_confirmar_asistente($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-info-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar datos</button>
-                                                        <button id="confirmar_datos_asistente_examen" name="confirmar_datos_asistente_examen" onclick="datos_confirmar_asistente_examen($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar y dar permiso de carga de examen</button>
-                                                        <button id="limpiar_datos_asistente" name="limpiar_datos_asistente" onclick="datos_limpiar_asistente();" class="btn btn-danger-light-c btn-xxs"><i class="feather icon-x"></i> Limpiar datos</button>
+                                                        <button type="button" id="confirmar_datos_asistente" name="confirmar_datos_asistente" onclick="datos_confirmar_asistente($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-info-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar datos</button>
+                                                        <button type="button" id="confirmar_datos_asistente_examen" name="confirmar_datos_asistente_examen" onclick="datos_confirmar_asistente_examen($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar y dar permiso de carga de examen</button>
+                                                        <button type="button" id="limpiar_datos_asistente" name="limpiar_datos_asistente" onclick="datos_limpiar_asistente();" class="btn btn-danger-light-c btn-xxs"><i class="feather icon-x"></i> Limpiar datos</button>
                                                     <td>
                                                 </tr>
                                             </tbody>
@@ -587,8 +587,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Día de atención</label>
-                                    <select name="dia_horario" id="dia_horario" class=" form-control form-control-sm">
-                                        <option value="" selected>Seleccione</option>
+                                    <select name="dia_horario[]" id="dia_horario" class="form-control form-control-sm" multiple>
+               
                                         <option value="1">Lunes</option>
                                         <option value="2">Martes</option>
                                         <option value="3">Mi&eacute;rcoles</option>
@@ -795,7 +795,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 mb-3 mt-2 text-center">
-                            <button type="button" onclick="guardar_valores_lugar_atencion()" class="btn btn-info btn-sm" data-dismiss="modal"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
+                            <button type="button" onclick="guardar_valores_lugar_atencion()" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
                             <!--<button type="button" id="cerrar_convenio1" class="btn btn-danger btn-sm">Cancelar</button>-->
                         </div>
                         <div class="col-sm-12 mt-3 mb-3">
@@ -894,13 +894,17 @@
 @endsection
 
 @section('page-script')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+                                <style>
+                                    .select2-container--default .select2-selection--multiple .select2-selection__choice {padding-left: 20px !important;}
+                                </style>
     <script>
         $(document).ready(function() {
 
         });
         /** modal editar_asistentes */
         function datos_confirmar_asistente(id) {
-
             let id_lugar_atencion = id;
             let id_asistente = $('#id_asistente_lugar_atencion').val();
             let url = "{{ route('profesional.agregar_asistente_lugar_atencion') }}";
@@ -914,16 +918,20 @@
                 },
             })
             .done(function(data) {
-                if (data !== 'null')
-                {
+                if (data !== 'null') {
                     swal({
                         title: "Se ha agregado asistente al lugar de atención",
                         icon: "success",
                         buttons: "Aceptar",
+                    }).then(function () {
+                        // 🔄 Recarga la tabla de asistentes para ese lugar
+                        if (typeof mi_asistente_lugar_atencion === 'function') {
+                            mi_asistente_lugar_atencion(id_lugar_atencion);
+                        }
+                        // 🙈 Oculta la ficha y limpia datos
+                        ocultarPanelDatosAsistente();
                     });
-                }
-                else
-                {
+                } else {
                     swal({
                         title: "Error al agregar asistente",
                         icon: "error",
@@ -935,10 +943,9 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
-        };
+        }
 
         function datos_confirmar_asistente_examen(id) {
-
             let id_lugar_atencion = id;
             let id_asistente = $('#id_asistente_lugar_atencion').val();
             let url = "{{ route('profesional.agregar_asistente_lugar_atencion') }}";
@@ -949,20 +956,24 @@
                 data: {
                     id_lugar_atencion: id_lugar_atencion,
                     id_asistente: id_asistente,
-                    examen:1,
+                    examen: 1,
                 },
             })
             .done(function(data) {
-                if (data !== 'null')
-                {
+                if (data !== 'null') {
                     swal({
                         title: "Se ha agregado asistente al lugar de atención",
                         icon: "success",
                         buttons: "Aceptar",
+                    }).then(function () {
+                        // 🔄 Recarga la tabla de asistentes para ese lugar
+                        if (typeof mi_asistente_lugar_atencion === 'function') {
+                            mi_asistente_lugar_atencion(id_lugar_atencion);
+                        }
+                        // 🙈 Oculta la ficha y limpia datos
+                        ocultarPanelDatosAsistente();
                     });
-                }
-                else
-                {
+                } else {
                     swal({
                         title: "Error al agregar asistente",
                         icon: "error",
@@ -974,7 +985,8 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
-        };
+        }
+
         /** fin modal editar_asistentes */
 
         /** modal procedimientos */
@@ -1271,5 +1283,29 @@
                 });
 
         }
+        function ocultarPanelDatosAsistente() {
+    // Oculta la card
+    $('#datos_asistente').hide();
+
+    // Limpia inputs
+    $('#rut_asistente').val('');
+    $('#id_asistente_lugar_atencion').val('');
+    $('#mi_asistente_id_lugar_atencion').val('');
+
+    // Limpia textos
+    $('#datos_rut_asistente').text('');
+    $('#datos_nombre_asistente').text('');
+    $('#datos_email_asistente').text('');
+    $('#datos_telefono_asistente').text('');
+}
+ $(function () {
+    $('#dia_horario').select2({
+      placeholder: 'Seleccione días',
+      width: '100%',
+      closeOnSelect: false,
+      dropdownParent: $('#dia_horario').closest('.form-group') // 🔑
+    });
+  });
     </script>
+    
 @endsection
