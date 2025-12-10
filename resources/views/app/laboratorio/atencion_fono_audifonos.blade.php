@@ -75,9 +75,9 @@
                             </div>
                             @else
                                 <div class="pb-1">
-
+                                    
                                     <!-- Paciente Seleccionado (oculto inicialmente) -->
-
+                                   
                                     <div class="row d-none" id="card_paciente_seleccionado">
                                         <div class="col-12">
                                             <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -176,7 +176,7 @@
                                                 <div class="col-12">
                                                     <div id="resultados_busqueda_paciente"></div>
                                                     <div id="reserva_agregar_paciente_hora" style="display: none;">
-
+                                                        
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-group">
@@ -591,14 +591,14 @@
     {{-- Control de audífonos post venta --}}
     <div class="tab-pane fade show" id="cont_post_venta" role="tabpanel" aria-labelledby="cont_post_venta-tab">
         <!-- Paciente Seleccionado para POST VENTA (oculto inicialmente) -->
-
-
+       
+        
         @if($profesional->id_tipo_institucion == 3)
         <h5 class="text-c-blue f-18 mb-3">
             <i class="feather icon-inbox mr-2"></i>
             Buscar Paciente para Control Post Venta de Audífonos
         </h5>
-
+         
         <div class="row d-none" id="card_paciente_seleccionado_post_venta">
             <div class="col-12">
                 <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -692,7 +692,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div id="resultados_busqueda_paciente_post_venta"></div>
-                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">
+                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">            
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
@@ -818,489 +818,487 @@
             </div>
         </div>
 
-
+        
           @endif
-        <div class="card">
-            <div class="card-body">
+     
                 <div class="row">
-                    <div class="col-12 pl-0 mt-1">
-                        <ul class="nav nav-tabs-secciones mb-2" id="control-aud" role="tablist">
-                            <li class="nav-item-secciones">
-                                <a class="nav-secciones active text-uppercase" id="control-calibracion-tab" onclick="mis_audifonos()" data-toggle="tab" href="#control-calibracion" role="tab" aria-controls="control-calibracion" aria-selected="true">Control y calibracion de audifonos</a>
-                            </li>
-                            <li class="nav-item-secciones">
-                                <a class="nav-secciones text-uppercase" id="control-mis-productos-tab" data-toggle="tab" href="#control-mis-productos" role="tab" aria-controls="control-mis-productos" aria-selected="false">Control de productos del paciente</a>
-                            </li>
-
-                        </ul>
+                    <div class="col-12 pl-0 mt-1 px-3">
+                           <div class="card">
+                            <ul class="nav nav-tabs profile-tabs nav-fill mt-1" id="control-aud" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="control-calibracion-tab" onclick="mis_audifonos()" data-toggle="tab" href="#control-calibracion" role="tab" aria-controls="control-calibracion" aria-selected="true">Control y calibración de audifonos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="control-mis-productos-tab" data-toggle="tab" href="#control-mis-productos" role="tab" aria-controls="control-mis-productos" aria-selected="false">Control de productos del paciente</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-
                 </div>
-                <div class="tab-content" id="control-audContent">
-                    <div class="tab-pane fade show active" id="control-calibracion" role="tabpanel" aria-labelledby="control-calibracion-tab">
-                        <div class="row">
 
-
-                            <div class="col-12">
-                                <h5 class="text-c-blue f-18">Control de Audífonos</h5>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="form-group col-12">
-                                                <label class="floating-label-activo-sm">Control de Audifono</label>
-                                                <select class="form-control form-control-sm" name="tipo_control_audifono" id="tipo_control_audifono" onchange="evaluar_tipo_control()">
-                                                    <option selected>Seleccione</option>
-                                                    <option>Propio</option>
-                                                    <option>Otro proveedor</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label-activo-sm">Fecha de Control</label>
-                                                        <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="<?php echo date('Y-m-d') ?>">
-                                                    </div>
-                                                    @if(isset($profesional))
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label-activo-sm">Examinador</label>
-                                                        <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="{{ $profesional->nombre }}">
-                                                    </div>
-                                                    @endif
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label-activo-sm">Examen del Cae</label>
-                                                        <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ex_fis_control_audif" id="ex_fis_control_audif" placeholder="sintomatología, examen conducto auditivo."></textarea>
-                                                    </div>
-
+                <div class="col-12 pl-0 mt-1">
+                    <div class="tab-content" id="control-audContent">
+                        <div class="tab-pane fade show active" id="control-calibracion" role="tabpanel" aria-labelledby="control-calibracion-tab">
+                            <div class="row">
+                                <!--<div class="col-12">
+                                    <h5 class="text-c-blue f-18">Control de Audífonos</h5>
+                                </div>-->
+                                <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-12">
+                                                    <label class="floating-label-activo-sm">Control de Audifono</label>
+                                                    <select class="form-control form-control-sm" name="tipo_control_audifono" id="tipo_control_audifono" onchange="evaluar_tipo_control()">
+                                                        <option selected>Seleccione</option>
+                                                        <option>Propio</option>
+                                                        <option>Otro proveedor</option>
+                                                    </select>
                                                 </div>
-                                            </div>
-                                            @if(isset($profesional) && isset($id_lugar_atencion))
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div id="pieza_dentalrx" class="form-row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="form-group">
-                                                            <button type="button"
-                                                                class="btn btn-outline-primary btn-block"
-                                                                onclick="hora_medica({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i
-                                                                    class="feather icon-calendar"></i> Agendar
-                                                                hora</button>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <label class="floating-label-activo-sm">Fecha de Control</label>
+                                                            <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="<?php echo date('Y-m-d') ?>">
                                                         </div>
+                                                        @if(isset($profesional))
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <label class="floating-label-activo-sm">Examinador</label>
+                                                            <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="{{ $profesional->nombre }}">
+                                                        </div>
+                                                        @endif
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <label class="floating-label-activo-sm">Examen del Cae</label>
+                                                            <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ex_fis_control_audif" id="ex_fis_control_audif" placeholder="sintomatología, examen conducto auditivo."></textarea>
+                                                        </div>
+
                                                     </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mx-auto">
-                                                        <div class="card-informacion"
-                                                            style="border: 1px solid #6c9bd5;">
-                                                            <div class="card-top text-center">
-                                                                <h5 class="text-c-blue">PRÓXIMO CONTROL</h5>
+                                                </div>
+                                                @if(isset($profesional) && isset($id_lugar_atencion))
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div id="pieza_dentalrx" class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="form-group">
+                                                                <button type="button"
+                                                                    class="btn btn-outline-primary btn-block"
+                                                                    onclick="hora_medica({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i
+                                                                        class="feather icon-calendar"></i> Agendar
+                                                                    hora</button>
                                                             </div>
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div
-                                                                        class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
-                                                                        <h5 class="text-c-blue"><i
-                                                                                class="fas fa-calendar"></i>
-                                                                            Fecha:</h5>
-                                                                        <h5 class="font-weight-bold" id="proxima_fecha_atencion">
-                                                                            {{ isset($proxima_fecha_atencion) ? $proxima_fecha_atencion : '' }}
-                                                                        </h5>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
-                                                                        <h5 class="text-c-blue"><i
-                                                                                class="fas fa-clock"></i>
-                                                                            Horario:</h5>
-                                                                        <p id="proxima_hora_atencion"> <strong id="hora_inicio_atencion">{{ isset($hora_inicio_atencion) ? $hora_inicio_atencion : '--:--' }}</strong>
-                                                                            a
-                                                                            <strong id="hora_fin_atencion">{{ isset($hora_fin_atencion) ? $hora_fin_atencion : '--:--' }}</strong>
-                                                                        </p>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mx-auto">
+                                                            <div class="card-informacion"
+                                                                style="border: 1px solid #6c9bd5;">
+                                                                <div class="card-top text-center">
+                                                                    <h6 class="text-c-blue">PRÓXIMO CONTROL</h6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-row">
+                                                                        <div
+                                                                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                                                            <h6 class="text-c-blue"><i
+                                                                                    class="fas fa-calendar"></i><br>
+                                                                                Fecha:</h6>
+                                                                            <h6 class="font-weight-bold" id="proxima_fecha_atencion">
+                                                                                {{ isset($proxima_fecha_atencion) ? $proxima_fecha_atencion : '' }}
+                                                                            </h6>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                                                            <h6 class="text-c-blue"><i
+                                                                                    class="fas fa-clock"></i><br>
+                                                                                Horario:</h6>
+                                                                            <p class="font-weight-bold" id="proxima_hora_atencion"> <strong id="hora_inicio_atencion">{{ isset($hora_inicio_atencion) ? $hora_inicio_atencion : '--:--' }}</strong>
+                                                                                a
+                                                                                <strong id="hora_fin_atencion">{{ isset($hora_fin_atencion) ? $hora_fin_atencion : '--:--' }}</strong>
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
+                                                    </div>
                                                 </div>
+                                                @endif
                                             </div>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
-                                <!--Card Información audifono-->
+                                <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
+                                    <!--Card Información audifono-->
+                                        <div class="row" id="lista_audifonos_control">
+                                            <!--AUDIFONO IZQUIERDO-->
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <div class="badge badge-izq">AUDÍFONO IZQUIERDO</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">N° Serie</label>
+                                                        {{--  <div> {{ $n_serie_aud_izq" }} </div>  --}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Marca</label>
 
-                                    <div class="row" id="lista_audifonos_control">
-                                        <!--AUDIFONO IZQUIERDO-->
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <div class="badge badge-izq">AUDÍFONO IZQUIERDO</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">N° Serie</label>
-                                                    {{--  <div> {{ $n_serie_aud_izq" }} </div>  --}}
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Marca</label>
+                                                        {{--  <div> {{ $paciente->apellido_uno }}</div>  --}}
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        {{--  <label class="font-weight-bolder ml-0 mb-0">Modelo</label>  --}}
 
-                                                    {{--  <div> {{ $paciente->apellido_uno }}</div>  --}}
+                                                        {{--  <div> {{ $paciente->apellido_dos }}
+                                                        </div>  --}}
+                                                    </div>
                                                 </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    {{--  <label class="font-weight-bolder ml-0 mb-0">Modelo</label>  --}}
-
-                                                    {{--  <div> {{ $paciente->apellido_dos }}
-                                                    </div>  --}}
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Modelo</label>
+                                                        <div>
+                                                            {{--  @if ($paciente->sexo == 'F')
+                                                                Mujer
+                                                            @elseif ($paciente->sexo == 'M')
+                                                                Hombre
+                                                            @endif  --}}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Modelo</label>
-                                                    <div>
-                                                        {{--  @if ($paciente->sexo == 'F')
-                                                            Mujer
-                                                        @elseif ($paciente->sexo == 'M')
-                                                            Hombre
-                                                        @endif  --}}
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Fecha de último control</label>
+                                                        <div>
+                                                            {{--  {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d-m-Y') }}  --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Satisfacción</label>
+                                                        <div> Buena</div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Fecha de último control</label>
-                                                    <div>
-                                                        {{--  {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d-m-Y') }}  --}}
+                                            <!--AUDIFONO DERECHO-->
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <div class="badge badge-der">AUDÍFONO DERECHO</div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Satisfacción</label>
-                                                    <div> Buena</div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">N° Serie</label>
+                                                        {{--  <div> {{ $paciente->rut }} </div>  --}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Marca</label>
+
+                                                        {{--  <div> {{ $paciente->apellido_uno }}</div>  --}}
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        {{--  <label class="font-weight-bolder ml-0 mb-0">Modelo</label>  --}}
+
+                                                        {{--  <div> {{ $paciente->apellido_dos }}
+                                                        </div>  --}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Modelo</label>
+                                                        <div>
+                                                            {{--  @if ($paciente->sexo == 'F')
+                                                                Mujer
+                                                            @elseif ($paciente->sexo == 'M')
+                                                                Hombre
+                                                            @endif  --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Fecha de último control</label>
+                                                        <div>
+                                                            {{--  {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d-m-Y') }}  --}}
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Satisfacción</label>
+                                                        <div> Buena</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--AUDIFONO DERECHO-->
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <div class="badge badge-der">AUDÍFONO DERECHO</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">N° Serie</label>
-                                                    {{--  <div> {{ $paciente->rut }} </div>  --}}
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Marca</label>
 
-                                                    {{--  <div> {{ $paciente->apellido_uno }}</div>  --}}
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    {{--  <label class="font-weight-bolder ml-0 mb-0">Modelo</label>  --}}
-
-                                                    {{--  <div> {{ $paciente->apellido_dos }}
-                                                    </div>  --}}
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Modelo</label>
-                                                    <div>
-                                                        {{--  @if ($paciente->sexo == 'F')
-                                                            Mujer
-                                                        @elseif ($paciente->sexo == 'M')
-                                                            Hombre
-                                                        @endif  --}}
+                                        {{-- Formulario para audífonos de otro proveedor --}}
+                                        <div class="row d-none" id="div_otro_proveedor">
+                                            <div class="col-12">
+                                                <div class="card border-info">
+                                                    <div class="card-header bg-info">
+                                                        <h5 class="text-white mb-0">
+                                                            <i class="feather icon-package mr-2"></i>
+                                                            Registro de Audífono Externo
+                                                        </h5>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Fecha de último control</label>
-                                                    <div>
-                                                        {{--  {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d-m-Y') }}  --}}
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="font-weight-bolder ml-0 mb-0">Satisfacción</label>
-                                                    <div> Buena</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- Formulario para audífonos de otro proveedor --}}
-                                    <div class="row d-none" id="div_otro_proveedor">
-                                        <div class="col-12">
-                                            <div class="card border-info">
-                                                <div class="card-header bg-info">
-                                                    <h5 class="text-white mb-0">
-                                                        <i class="feather icon-package mr-2"></i>
-                                                        Registro de Audífono Externo
-                                                    </h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <form id="form_audifono_externo">
-                                                        @if(isset($paciente))
-                                                        <input type="hidden" id="id_paciente_externo" name="id_paciente" value="{{ $paciente->id }}">
-                                                        @endif
-                                                        <div class="row">
-                                                            <div class="col-12 mb-3">
-                                                                <h6 class="text-primary font-weight-bold">
-                                                                    <i class="feather icon-info mr-1"></i>
-                                                                    Información de Procedencia
-                                                                </h6>
-                                                                <hr class="mt-2">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Laboratorio / Proveedor <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-sm" id="procedencia_laboratorio" name="procedencia_laboratorio" placeholder="Ej: Audifono Center, Widex Chile, etc." required>
-                                                                <small class="form-text text-muted">Nombre del laboratorio o proveedor externo</small>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Fecha de Adquisición <span class="text-danger">*</span></label>
-                                                                <input type="date" class="form-control form-control-sm" id="fecha_adquisicion_ext" name="fecha_adquisicion" required>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-12 mb-3 mt-2">
-                                                                <h6 class="text-primary font-weight-bold">
-                                                                    <i class="feather icon-headphones mr-1"></i>
-                                                                    Datos del Audífono Izquierdo
-                                                                </h6>
-                                                                <hr class="mt-2">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">N° Serie Izquierdo</label>
-                                                                <input type="text" class="form-control form-control-sm" id="n_serie_izq_ext" name="n_serie_izquierdo" placeholder="N° Serie">
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Marca <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-sm" id="marca_izq_ext" name="marca_izquierdo" placeholder="Ej: Phonak, Widex" required>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Modelo <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-sm" id="modelo_izq_ext" name="modelo_izquierdo" placeholder="Modelo" required>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Tipo</label>
-                                                                <select class="form-control form-control-sm" id="tipo_izq_ext" name="tipo_izquierdo">
-                                                                    <option value="">Seleccione</option>
-                                                                    <option value="BTE">Retroauricular (BTE)</option>
-                                                                    <option value="ITE">Intraauricular (ITE)</option>
-                                                                    <option value="ITC">Intracanal (ITC)</option>
-                                                                    <option value="CIC">Completamente en el canal (CIC)</option>
-                                                                    <option value="RIC">Receptor en el canal (RIC)</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-12 mb-3 mt-2">
-                                                                <h6 class="text-primary font-weight-bold">
-                                                                    <i class="feather icon-headphones mr-1"></i>
-                                                                    Datos del Audífono Derecho
-                                                                </h6>
-                                                                <hr class="mt-2">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">N° Serie Derecho</label>
-                                                                <input type="text" class="form-control form-control-sm" id="n_serie_der_ext" name="n_serie_derecho" placeholder="N° Serie">
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Marca <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-sm" id="marca_der_ext" name="marca_derecho" placeholder="Ej: Phonak, Widex" required>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Modelo <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-sm" id="modelo_der_ext" name="modelo_derecho" placeholder="Modelo" required>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
-                                                                <label class="floating-label-activo-sm">Tipo</label>
-                                                                <select class="form-control form-control-sm" id="tipo_der_ext" name="tipo_derecho">
-                                                                    <option value="">Seleccione</option>
-                                                                    <option value="BTE">Retroauricular (BTE)</option>
-                                                                    <option value="ITE">Intraauricular (ITE)</option>
-                                                                    <option value="ITC">Intracanal (ITC)</option>
-                                                                    <option value="CIC">Completamente en el canal (CIC)</option>
-                                                                    <option value="RIC">Receptor en el canal (RIC)</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-12 mb-3 mt-2">
-                                                                <h6 class="text-primary font-weight-bold">
-                                                                    <i class="feather icon-file-text mr-1"></i>
-                                                                    Información Adicional
-                                                                </h6>
-                                                                <hr class="mt-2">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Estado del Audífono</label>
-                                                                <select class="form-control form-control-sm" id="estado_audifono_ext" name="estado_audifono">
-                                                                    <option value="Excelente">Excelente</option>
-                                                                    <option value="Bueno" selected>Bueno</option>
-                                                                    <option value="Regular">Regular</option>
-                                                                    <option value="Malo">Malo</option>
-                                                                    <option value="Requiere reparación">Requiere reparación</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                <label class="floating-label-activo-sm">Motivo del Control</label>
-                                                                <select class="form-control form-control-sm" id="motivo_control_ext" name="motivo_control">
-                                                                    <option value="">Seleccione</option>
-                                                                    <option value="Control rutinario">Control rutinario</option>
-                                                                    <option value="Calibración">Calibración</option>
-                                                                    <option value="Reparación">Reparación</option>
-                                                                    <option value="Ajuste">Ajuste de volumen/programación</option>
-                                                                    <option value="Limpieza">Limpieza profunda</option>
-                                                                    <option value="Cambio de accesorios">Cambio de accesorios</option>
-                                                                    <option value="Otro">Otro</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="form-group col-12">
-                                                                <label class="floating-label-activo-sm">Observaciones del Control</label>
-                                                                <textarea class="form-control form-control-sm" id="observaciones_control_ext" name="observaciones" rows="3" placeholder="Describa el estado del audífono, problemas encontrados, ajustes realizados, etc."></textarea>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <div class="alert alert-info mb-3" role="alert">
-                                                                    <i class="feather icon-info mr-2"></i>
-                                                                    <strong>Nota:</strong> Los campos marcados con <span class="text-danger">*</span> son obligatorios
+                                                    <div class="card-body">
+                                                        <form id="form_audifono_externo">
+                                                            @if(isset($paciente))
+                                                            <input type="hidden" id="id_paciente_externo" name="id_paciente" value="{{ $paciente->id }}">
+                                                            @endif
+                                                            <div class="row">
+                                                                <div class="col-12 mb-3">
+                                                                    <h6 class="text-primary font-weight-bold">
+                                                                        <i class="feather icon-info mr-1"></i>
+                                                                        Información de Procedencia
+                                                                    </h6>
+                                                                    <hr class="mt-2">
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="row">
-                                                            <div class="col-12 d-flex justify-content-end">
-                                                                <button type="button" class="btn btn-secondary btn-sm mr-2" onclick="cancelar_audifono_externo()">
-                                                                    <i class="feather icon-x mr-1"></i>
-                                                                    Cancelar
-                                                                </button>
-                                                                <button type="button" class="btn btn-primary btn-sm" onclick="guardar_audifono_externo()">
-                                                                    <i class="feather icon-save mr-1"></i>
-                                                                    Guardar Audífono Externo
-                                                                </button>
+                                                            <div class="row">
+                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <label class="floating-label-activo-sm">Laboratorio / Proveedor <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control form-control-sm" id="procedencia_laboratorio" name="procedencia_laboratorio" placeholder="Ej: Audifono Center, Widex Chile, etc." required>
+                                                                    <small class="form-text text-muted">Nombre del laboratorio o proveedor externo</small>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <label class="floating-label-activo-sm">Fecha de Adquisición <span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control form-control-sm" id="fecha_adquisicion_ext" name="fecha_adquisicion" required>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </form>
+
+                                                            <div class="row">
+                                                                <div class="col-12 mb-3 mt-2">
+                                                                    <h6 class="text-primary font-weight-bold">
+                                                                        <i class="feather icon-headphones mr-1"></i>
+                                                                        Datos del Audífono Izquierdo
+                                                                    </h6>
+                                                                    <hr class="mt-2">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">N° Serie Izquierdo</label>
+                                                                    <input type="text" class="form-control form-control-sm" id="n_serie_izq_ext" name="n_serie_izquierdo" placeholder="N° Serie">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Marca <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control form-control-sm" id="marca_izq_ext" name="marca_izquierdo" placeholder="Ej: Phonak, Widex" required>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Modelo <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control form-control-sm" id="modelo_izq_ext" name="modelo_izquierdo" placeholder="Modelo" required>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Tipo</label>
+                                                                    <select class="form-control form-control-sm" id="tipo_izq_ext" name="tipo_izquierdo">
+                                                                        <option value="">Seleccione</option>
+                                                                        <option value="BTE">Retroauricular (BTE)</option>
+                                                                        <option value="ITE">Intraauricular (ITE)</option>
+                                                                        <option value="ITC">Intracanal (ITC)</option>
+                                                                        <option value="CIC">Completamente en el canal (CIC)</option>
+                                                                        <option value="RIC">Receptor en el canal (RIC)</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-12 mb-3 mt-2">
+                                                                    <h6 class="text-primary font-weight-bold">
+                                                                        <i class="feather icon-headphones mr-1"></i>
+                                                                        Datos del Audífono Derecho
+                                                                    </h6>
+                                                                    <hr class="mt-2">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">N° Serie Derecho</label>
+                                                                    <input type="text" class="form-control form-control-sm" id="n_serie_der_ext" name="n_serie_derecho" placeholder="N° Serie">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Marca <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control form-control-sm" id="marca_der_ext" name="marca_derecho" placeholder="Ej: Phonak, Widex" required>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Modelo <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control form-control-sm" id="modelo_der_ext" name="modelo_derecho" placeholder="Modelo" required>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Tipo</label>
+                                                                    <select class="form-control form-control-sm" id="tipo_der_ext" name="tipo_derecho">
+                                                                        <option value="">Seleccione</option>
+                                                                        <option value="BTE">Retroauricular (BTE)</option>
+                                                                        <option value="ITE">Intraauricular (ITE)</option>
+                                                                        <option value="ITC">Intracanal (ITC)</option>
+                                                                        <option value="CIC">Completamente en el canal (CIC)</option>
+                                                                        <option value="RIC">Receptor en el canal (RIC)</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-12 mb-3 mt-2">
+                                                                    <h6 class="text-primary font-weight-bold">
+                                                                        <i class="feather icon-file-text mr-1"></i>
+                                                                        Información Adicional
+                                                                    </h6>
+                                                                    <hr class="mt-2">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <label class="floating-label-activo-sm">Estado del Audífono</label>
+                                                                    <select class="form-control form-control-sm" id="estado_audifono_ext" name="estado_audifono">
+                                                                        <option value="Excelente">Excelente</option>
+                                                                        <option value="Bueno" selected>Bueno</option>
+                                                                        <option value="Regular">Regular</option>
+                                                                        <option value="Malo">Malo</option>
+                                                                        <option value="Requiere reparación">Requiere reparación</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                    <label class="floating-label-activo-sm">Motivo del Control</label>
+                                                                    <select class="form-control form-control-sm" id="motivo_control_ext" name="motivo_control">
+                                                                        <option value="">Seleccione</option>
+                                                                        <option value="Control rutinario">Control rutinario</option>
+                                                                        <option value="Calibración">Calibración</option>
+                                                                        <option value="Reparación">Reparación</option>
+                                                                        <option value="Ajuste">Ajuste de volumen/programación</option>
+                                                                        <option value="Limpieza">Limpieza profunda</option>
+                                                                        <option value="Cambio de accesorios">Cambio de accesorios</option>
+                                                                        <option value="Otro">Otro</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="form-group col-12">
+                                                                    <label class="floating-label-activo-sm">Observaciones del Control</label>
+                                                                    <textarea class="form-control form-control-sm" id="observaciones_control_ext" name="observaciones" rows="3" placeholder="Describa el estado del audífono, problemas encontrados, ajustes realizados, etc."></textarea>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <div class="alert alert-info mb-3" role="alert">
+                                                                        <i class="feather icon-info mr-2"></i>
+                                                                        <strong>Nota:</strong> Los campos marcados con <span class="text-danger">*</span> son obligatorios
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-12 d-flex justify-content-end">
+                                                                    <button type="button" class="btn btn-secondary btn-sm mr-2" onclick="cancelar_audifono_externo()">
+                                                                        <i class="feather icon-x mr-1"></i>
+                                                                        Cancelar
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-primary btn-sm" onclick="guardar_audifono_externo()">
+                                                                        <i class="feather icon-save mr-1"></i>
+                                                                        Guardar Audífono Externo
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row" id="lista_audifonos_externos"></div>
-                                <!--Cierre: Card Datos audifono-->
-                            </div>
+                                        <div class="row" id="lista_audifonos_externos"></div>
+                                    <!--Cierre: Card Datos audifono-->
+                                </div>
 
+                            </div>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="control-mis-productos" role="tabpanel" aria-labelledby="control-mis-productos-tab">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <!-- Card Productos Paciente -->
-                                    <div class="row mt-4">
-                                        <div class="col-12">
-                                            <h6 class="tit-gen mb-2">Productos del Paciente</h6>
-                                            <div class="row">
-                                                <div class="col-md-9">
-                                                    <div id="productos-lista" class="row"></div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="card-informacion">
-                                                        <div class="card-header">
-                                                            <h5 class="card-title">Detalle del Producto</h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <input type="hidden" name="id_producto_seleccionado" id="id_producto_seleccionado" value="">
-                                                            <div class="form-group">
-                                                                <label for="" class="font-weight-bolder ml-0 mb-0">Imagen:</label> <br>
-                                                                <img src="" alt="" class="img-fluid rounded" id="detalle-imagen" style="max-height: 150px; max-width: 200px; display: none;">
+                        <div class="tab-pane fade" id="control-mis-productos" role="tabpanel" aria-labelledby="control-mis-productos-tab">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <!-- Card Productos Paciente -->
+                                        <div class="row mt-4">
+                                            <div class="col-12">
+                                                <h6 class="tit-gen mb-2">Productos del Paciente</h6>
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <div id="productos-lista" class="row"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="card-informacion">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title">Detalle del Producto</h5>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Código Interno:</label>
-                                                                <div id="detalle-codigo-interno">-</div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Nombre:</label>
-                                                                <div id="detalle-nombre">-</div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Descripción:</label>
-                                                                <div id="detalle-descripcion">-</div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Número de Serie:</label>
-                                                                <div id="detalle-numero-serie">-</div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Satisfacción:</label>
-                                                                <select name="nivel_satisfaccion" id="nivel_satisfaccion" class="form-control form-control-sm">
-                                                                    <option value="">Seleccione</option>
-                                                                    <option value="1">1 - Muy Insatisfecho</option>
-                                                                    <option value="2">2 - Insatisfecho</option>
-                                                                    <option value="3">3 - Neutral</option>
-                                                                    <option value="4">4 - Satisfecho</option>
-                                                                    <option value="5">5 - Muy Satisfecho</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="" class="font-weight-bolder ml-0 mb-0">Calificación:</label>
-                                                                <div id="detalle-calificacion" class="rating-display">
-                                                                    <span class="text-muted">Sin calificar</span>
+                                                            <div class="card-body">
+                                                                <input type="hidden" name="id_producto_seleccionado" id="id_producto_seleccionado" value="">
+                                                                <div class="form-group">
+                                                                    <label for="" class="font-weight-bolder ml-0 mb-0">Imagen:</label> <br>
+                                                                    <img src="" alt="" class="img-fluid rounded" id="detalle-imagen" style="max-height: 150px; max-width: 200px; display: none;">
                                                                 </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Código Interno:</label>
+                                                                    <div id="detalle-codigo-interno">-</div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Nombre:</label>
+                                                                    <div id="detalle-nombre">-</div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Descripción:</label>
+                                                                    <div id="detalle-descripcion">-</div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Número de Serie:</label>
+                                                                    <div id="detalle-numero-serie">-</div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Satisfacción:</label>
+                                                                    <select name="nivel_satisfaccion" id="nivel_satisfaccion" class="form-control form-control-sm">
+                                                                        <option value="">Seleccione</option>
+                                                                        <option value="1">1 - Muy Insatisfecho</option>
+                                                                        <option value="2">2 - Insatisfecho</option>
+                                                                        <option value="3">3 - Neutral</option>
+                                                                        <option value="4">4 - Satisfecho</option>
+                                                                        <option value="5">5 - Muy Satisfecho</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="" class="font-weight-bolder ml-0 mb-0">Calificación:</label>
+                                                                    <div id="detalle-calificacion" class="rating-display">
+                                                                        <span class="text-muted">Sin calificar</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-bolder ml-0 mb-0">Observaciones:</label>
+                                                                    <textarea name="observaciones_satisfaccion" id="observaciones_satisfaccion" class="form-control form-control-sm" rows="3"></textarea>
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary btn-sm w-100" id="btn-guardar-satisfaccion" onclick="guardar_evaluacion_producto()">Guardar</button>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label class="font-weight-bolder ml-0 mb-0">Observaciones:</label>
-                                                                <textarea name="observaciones_satisfaccion" id="observaciones_satisfaccion" class="form-control form-control-sm" rows="3"></textarea>
-                                                            </div>
-                                                            <button type="button" class="btn btn-primary btn-sm w-100" id="btn-guardar-satisfaccion" onclick="guardar_evaluacion_producto()">Guardar</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-            </div>
-        </div>
+            
 
     </div>
 
     {{-- Cotización de audífonos y accesorios --}}
     <div class="tab-pane fade show" id="cotizacion_audif" role="tabpanel" aria-labelledby="cotizacion_audif-tab">
-
+      
             <div class="mx-2">
                 @if(isset($paciente))
                 <input type="hidden" id="id_paciente" name="id_paciente" value="{{ $paciente->id }}">
@@ -1427,7 +1425,7 @@
                                             <div class="col-12">
                                                 <div id="resultados_busqueda_paciente_cotiz"></div>
                                                 <div id="reserva_agregar_paciente_hora_cotiz" style="display: none;">
-
+                                                    
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12">
                                                             <div class="form-group">
@@ -1601,7 +1599,7 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-right">
-
+                                        
                                         <button type="button" class="btn btn-sm btn-warning" onclick="deseleccionar_paciente()" title="Cambiar paciente">
                                             <i class="feather icon-refresh-cw"></i> Cambiar
                                         </button>
@@ -1619,7 +1617,7 @@
                 </div>
                 @endif
 
-
+                
 
                 <!-- Búsqueda de Productos -->
                 <div class="row mt-3">
@@ -1828,7 +1826,7 @@
                 </div>
 
             </div>
-
+       
     </div>
 
     {{-- Prestamo de audifonos --}}
@@ -1891,7 +1889,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="mt-1" id="card_advertencia_paciente_prestamo">
-
+                    
                     <div class="mt-1">
 
                         <!-- Buscador -->
@@ -1943,7 +1941,7 @@
                                 <div class="row mt-3">
                                     <div class="col-12">
                                         <div id="resultados_busqueda_paciente_prestamo"></div>
-                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">
+                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">   
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
@@ -2122,7 +2120,7 @@
             </div>
         </div>
         @endif
-
+        
         <!-- Contenido del préstamo de audífonos aquí -->
         <!-- Card busqueda de audifonos -->
         <div class="card px-3 pb-0 pt-2">
@@ -2252,7 +2250,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mt-1" id="card_advertencia_paciente_recepcion">
-
+                                    
                                     <div class="mt-1">
 
                                         <!-- Buscador -->
@@ -2304,8 +2302,8 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12">
                                                         <div id="resultados_busqueda_paciente_recepcion"></div>
-
-                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">
+                                                        
+                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">   
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12">
                                                                     <div class="form-group">
@@ -2433,7 +2431,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                 </div>
             </div>
         </div>
@@ -2492,7 +2490,7 @@
                                 </div>
                                 <div class="card-body">
                                     <form id="form_campana_promocional" onsubmit="enviar_campana_promocional(); return false;" enctype="multipart/form-data">
-
+                                    
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="font-weight-bold">Título de la Campaña</label>
@@ -2558,7 +2556,7 @@
                                                 <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com">
                                             </div>
                                         </div>
-
+                                       
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label class="font-weight-bold">Vista Previa de Destinatarios</label>
@@ -2637,7 +2635,7 @@
     @endif
 </div>
 
-<!-- modal modal_detalle_campana -->
+<!-- MODAL MODAL_DETALLE_CAMPANA -->
 <div class="modal fade" id="modal_detalle_campana" tabindex="-1" role="dialog" aria-labelledby="modal_detalle_campana_label" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content shadow-lg rounded">
@@ -2940,12 +2938,12 @@ function buscar_paciente_prestamo(){
     function buscar_paciente_recepcion(){
         const tipoBusqueda = $('#tipo_busqueda_paciente_recepcion').val();
         const termino = $('#termino_busqueda_paciente_recepcion').val().trim();
-
+    
         if (!termino || termino === '') {
             swal('Atención', 'Por favor ingrese un término de búsqueda', 'warning');
             return;
         }
-
+    
         // Mostrar loader
         $('#resultados_busqueda_paciente_recepcion').html(`
             <div class="text-center py-4">
@@ -2955,7 +2953,7 @@ function buscar_paciente_prestamo(){
                 <p class="mt-2">Buscando pacientes...</p>
             </div>
         `);
-
+    
         // Petición AJAX (ajusta la ruta según tu configuración)
         $.ajax({
             url: "{{ route('profesional.buscar_rut_paciente') }}",
@@ -2971,7 +2969,7 @@ function buscar_paciente_prestamo(){
             success: function(response) {
                 console.log('Respuesta recibida:', response);
                 console.log('Tipo de respuesta:', typeof response);
-
+    
                 // Si la respuesta es un objeto paciente directamente
                 if (response && response.id) {
                     mostrar_resultado_paciente_recepcion(response);
@@ -2990,14 +2988,14 @@ function buscar_paciente_prestamo(){
                 console.error('Error en búsqueda:', xhr);
                 console.error('Status:', status);
                 console.error('Error:', error);
-
+    
                 let mensajeError = 'Error al buscar pacientes. Por favor intente nuevamente.';
-
+    
                 // Si hay una respuesta JSON del servidor con mensaje de error
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     mensajeError = xhr.responseJSON.message;
                 }
-
+    
                 $('#resultados_busqueda_paciente_recepcion').html(`
                     <div class="alert alert-danger">
                         <i class="feather icon-alert-circle mr-2"></i>
@@ -3169,7 +3167,7 @@ function mostrar_resultado_paciente_post_venta(paciente) {
 }
 
 
-/**
+/** 
  * MOSTRAR RESULTADO DE BÚSQUEDA DE UN SOLO PACIENTE (POR RUT) PARA PRÉSTAMO DE AUDÍFONOS
  */
 
@@ -3397,7 +3395,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-
+        
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -3411,7 +3409,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono);
-
+        
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
 
@@ -4873,7 +4871,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono || 'No registrado');
-
+        
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
     }
@@ -4884,7 +4882,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-
+        
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -4975,7 +4973,7 @@ function seleccionar_paciente_prestamo(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-
+        
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -5050,7 +5048,7 @@ function seleccionar_paciente_recepcion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-
+        
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -5208,7 +5206,7 @@ function cargar_datos_post_venta() {
             </div>
         `);
     }
-}
+} 
 
 /**
  * Cargar datos de préstamo cuando se activa la pestaña
@@ -5352,7 +5350,7 @@ function enter_buscar_productos_audifono(event) {
                     }
 
                     // Card de producto
-                    html += '<div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-3">';
+                    html += '<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">';
                     html += '    <div class="card h-100 shadow-sm hover-shadow">';
                     html += '        <div class="card-body p-2">';
 
@@ -5487,7 +5485,7 @@ function enter_buscar_productos_audifono(event) {
 
                 html += '</div>';
             } else {
-                html += '<div class="alert alert-warning text-center">';
+                html += '<div class="alert alert-warning text-center">';    
                 html += '    <i class="feather icon-search"></i> ';
                 html += '    <strong>No se encontraron productos</strong><br>';
                 html += '    <small>Intente con otros términos de búsqueda</small>';
@@ -5561,7 +5559,7 @@ function enter_buscar_productos_audifono(event) {
                 } else {
                     $('#productos-lista').append('<p>No se encontraron productos.</p>');
                 }
-
+               
             })
             .fail(function(jqXHR) {
                 console.error('Error al obtener productos:', jqXHR);
@@ -5621,8 +5619,8 @@ function enter_buscar_productos_audifono(event) {
                                     <i class="feather icon-clock"></i> Prestado
                                 </span>
                             `;
-
-
+                           
+                            
                         }else{
                              botones = `
                                 <!-- Botones de acción -->
@@ -5733,7 +5731,7 @@ function enter_buscar_productos_audifono(event) {
                                         </div>
 
                                         ${botones}
-
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -6010,8 +6008,10 @@ function enter_buscar_productos_audifono(event) {
                             prestamo.producto.nombre + ' - ' + prestamo.producto.marca_producto,
                             prestamo.estado_prestamo_text ? prestamo.estado_prestamo_text : 'N/A',
                             prestamo.observaciones ? prestamo.observaciones : 'N/A',
-                            '<button class="btn btn-sm btn-danger" onclick="DevolverProducto(' + prestamo.id + ')">Devolver</button>'
-                        ];
+                           '<button class="btn btn-sm btn-danger" onclick="DevolverProducto('
+                                + prestamo.id + ', '
+                                + (tiene_garantia ? `'${tipo_garantia}', ${valor_garantia}` : `'Sin garantía', 0`)
+                                + ')">Devolver</button>'];
                             table_productos_prestados.row.add(fila).draw();
                     });
                 } else {
@@ -6154,10 +6154,30 @@ function enter_buscar_productos_audifono(event) {
 
     }
 
-    function DevolverProducto(id_mis_producto){
+    function DevolverProducto(id_mis_producto, tipo_garantia = null, valor_garantia = null) {
+        let texto = '¿Está seguro que desea devolver este producto?';
+        let content = null;
+        if (tipo_garantia && valor_garantia && tipo_garantia !== 'Sin garantía' && valor_garantia > 0) {
+            texto += `<br>Garantía: ${tipo_garantia} - Valor: $${parseFloat(valor_garantia).toLocaleString('es-CL')}`;
+            content = {
+                element: "input",
+                attributes: {
+                    type: "number",
+                    min: 0,
+                    max: valor_garantia,
+                    value: valor_garantia,
+                    id: "input_valor_garantia",
+                    class: "swal-content__input",
+                    style: "margin-top:10px;width:100%;"
+                }
+            };
+        } else if (tipo_garantia === 'Sin garantía' || !tipo_garantia) {
+            texto += '<br>Sin garantía asociada.';
+        }
         swal({
             title: '¿Devolver producto?',
-            text: '¿Está seguro que desea devolver este producto?',
+            text: texto,
+            content: content,
             icon: 'warning',
             buttons: {
                 cancel: {
@@ -6180,9 +6200,18 @@ function enter_buscar_productos_audifono(event) {
                 let url = "{{ route('laboratorio.paciente.producto.devolver') }}";
                 let data = {
                     id_mis_producto: id_mis_producto,
+                    valor_garantia: valor_garantia,
                     _token: CSRF_TOKEN
                 };
-
+                if (tipo_garantia) data.tipo_garantia = tipo_garantia;
+                if (valor_garantia && tipo_garantia && tipo_garantia !== 'Sin garantía') {
+                    let inputValor = document.getElementById('input_valor_garantia');
+                    if (inputValor) {
+                        data.valor_garantia = inputValor.value;
+                    } else {
+                        data.valor_garantia = valor_garantia;
+                    }
+                }
                 $.ajax({
                     url: url,
                     type: "POST",
@@ -6190,6 +6219,7 @@ function enter_buscar_productos_audifono(event) {
                 })
                 .done(function(response) {
                     console.log(response);
+                    // ...existing code...
                     if(response.estado === 1){
                         swal({
                             icon: 'success',
@@ -6199,10 +6229,8 @@ function enter_buscar_productos_audifono(event) {
                             timer: 2000
                         })
                         .then(() => {
-                            // Recargar historial de productos prestados
                             dame_historial_productos_prestados();
                         });
-
                     } else {
                         swal('Error', response.mensaje || 'No se pudo devolver el producto', 'error');
                     }
@@ -6504,7 +6532,7 @@ function enter_buscar_productos_audifono(event) {
             var destinatarios_custom = $('#campana_destinatarios_custom').val().trim();
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             var id_institucion = '{{ $profesional->id }}';
-
+        
             // Validación básica
             if (!titulo || !remitente || !mensaje) {
                 swal({ icon: 'warning', title: 'Faltan datos', text: 'Completa todos los campos obligatorios.' });
@@ -6514,7 +6542,7 @@ function enter_buscar_productos_audifono(event) {
                 swal({ icon: 'warning', title: 'Faltan correos', text: 'Debes ingresar al menos un correo manual.' });
                 return;
             }
-
+        
             // Mostrar loader
             swal({
                 title: 'Enviando campaña...',
@@ -6522,7 +6550,7 @@ function enter_buscar_productos_audifono(event) {
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
-
+        
             // Preparar FormData
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
@@ -6542,7 +6570,7 @@ function enter_buscar_productos_audifono(event) {
             formData.append('filtro_tercera_edad', $("#filtro_tercera_edad").is(":checked") ? 1 : 0);
             formData.append('filtro_pacientes_audifonos', $("#filtro_pacientes_audifonos").is(":checked") ? 1 : 0);
             formData.append('campana_destinatarios_custom', $("#campana_destinatarios_custom").val());
-
+        
             // Adjuntar archivos (input tipo file, múltiple)
             var archivos = $('#archivos')[0]?.files;
             if (archivos && archivos.length > 0) {
@@ -6557,7 +6585,7 @@ function enter_buscar_productos_audifono(event) {
                     formData.append('imagenes[]', imagenes[i]);
                 }
             }
-
+        
             $.ajax({
                 url: '{{ route("laboratorio.registrar_campania_publicitaria") }}',
                 type: 'POST',
@@ -6832,7 +6860,7 @@ function enter_buscar_productos_audifono(event) {
                         });
                     });
                 }
-            });
+            }); 
         }
 
 /**

@@ -2,7 +2,7 @@
     <div class="col-md-6 mb-3">
         <div class="card border-success">
             <div class="card-body text-success">
-                <h5 class="card-title">Remuneración total</h5>
+                <h5 class="card-title">Producción del periodo</h5>
                 <h3 class="card-text">${{ number_format($total_valor, 0, ',', '.') }}</h3>
             </div>
         </div>

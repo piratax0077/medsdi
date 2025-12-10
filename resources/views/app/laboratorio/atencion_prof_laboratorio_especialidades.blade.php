@@ -303,8 +303,8 @@
         /* Contenedor de imagen */
         #lista_audifonos_control .imagen-container {
             position: relative;
-            background: #f8f9fa;
-            padding: 20px;
+            background: #fff;
+            padding: 10px;
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -338,9 +338,9 @@
         }
 
         #lista_audifonos_control .card-audifono .badge-stock.stock-medio {
-            background: #ffc107;
-            color: #333;
-            border-color: #ffc107;
+            background: #ffa107;
+            color: #fff;
+            border-color: #ffa107;
         }
 
         #lista_audifonos_control .card-audifono .badge-stock.stock-alto {
@@ -406,14 +406,12 @@
         /* Precio */
         #lista_audifonos_control .producto-precio {
             text-align: center;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #2d3748;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #1a49a3 !important;
             padding: 10px;
-            background: #f7fafc;
-            border-radius: 8px;
             margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
+
         }
 
         /* Botones de acción */
@@ -421,7 +419,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         /* Estilos base para botones */
@@ -460,7 +458,7 @@
         }
 
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion i {
-            font-size: 1.6rem !important;
+            font-size: 1.2rem !important;
             margin-bottom: 5px !important;
             display: block !important;
         }
@@ -473,48 +471,48 @@
 
         /* Botón Calibración - Especificidad máxima */
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-calibracion {
-            background: #5a67d8 !important;
-            background-color: #5a67d8 !important;
+            background: #1a49a3 !important;
+            background-color: #1a49a3 !important;
             color: white !important;
-            border-color: #5a67d8 !important;
+            border-color: #1a49a3 !important;
         }
 
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-calibracion:hover {
-            background: #4c51bf !important;
-            background-color: #4c51bf !important;
+            background: #4e7acd !important;
+            background-color: #4e7acd !important;
             color: white !important;
-            border-color: #4c51bf !important;
+            border-color: #4e7acd !important;
         }
 
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-calibracion:focus,
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-calibracion:active {
             background: #4c51bf !important;
-            background-color: #4c51bf !important;
+            background-color: #07aeb1 !important;
             color: white !important;
-            border-color: #4c51bf !important;
+            border-color: #07aeb1 !important;
         }
 
         /* Botón Reparación - Especificidad máxima */
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-reparacion {
-            background: #ed8936 !important;
-            background-color: #ed8936 !important;
+            background: #2aada4 !important;
+            background-color: #2aada4 !important;
             color: white !important;
-            border-color: #ed8936 !important;
+            border-color: #2aada4 !important;
         }
 
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-reparacion:hover {
-            background: #dd6b20 !important;
-            background-color: #dd6b20 !important;
+            background: #24ced1 !important;
+            background-color: #24ced1 !important;
             color: white !important;
-            border-color: #dd6b20 !important;
+            border-color: #24ced1 !important;
         }
 
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-reparacion:focus,
         #lista_audifonos_control .card-audifono .botones-accion button.btn-accion.btn-reparacion:active {
-            background: #dd6b20 !important;
-            background-color: #dd6b20 !important;
+            background: #2aada4 !important;
+            background-color: #2aada4 !important;
             color: white !important;
-            border-color: #dd6b20 !important;
+            border-color: #2aada4 !important;
         }
 
         /* Animación de carga para lista de audífonos */
@@ -558,7 +556,38 @@
             right: 10px;
             z-index: 10;
         }
-    </style>
+
+        .card-lineal {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 2px solid rgba(0, 0, 0, 0.125);
+            border-radius: 0.60rem;
+            margin-bottom: 20px;
+        }
+
+        .card-header-lineal {
+            padding: 0.4rem  1rem 0.3rem;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            background-color: #f7f7f7;
+            color: #1a49a3;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.125);
+            border-top-right-radius: 0.50rem;
+            border-top-left-radius: 0.50rem;
+        }
+
+        .card-body-lineal {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1.25rem;
+        }
+            </style>
 @endsection
 
 @section('content')
@@ -728,6 +757,7 @@
                                         <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                                         <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                                         <input type="hidden" name="listado_archivos" id="listado_archivos" value="">
+                                        <input type="hidden" name="id_procedencia_paciente" id="id_procedencia_paciente" value="">
                                         <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                                         @csrf
                                         <div class="row mt-2">
@@ -819,7 +849,7 @@
                                                                         <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="vppb_obs_general" id="vppb_obs_general" placeholder="Diagnóstico, sintomatología, uso de audífonos, cirugías examen fisico relevante patologías crónicas, etc."></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <button type="button" class="btn btn-primary btn-sm has-ripple" onclick="generar_pdf_vppb()"><i class="fa fa-file-pdf"></i> Generar PDF y enviar informe</button>
+                                                                <button type="button" class="btn btn-danger-light-c btn-sm" onclick="generar_pdf_vppb()"><i class="fa fa-file-pdf"></i> Generar PDF y enviar informe</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -835,7 +865,7 @@
 
                                                                 <div class="form-row">
                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 fill">
-                                                                        <label class="floating-label-activo-sm">Examen y observación General de la Voz</label>
+                                                                        <label class="floating-label-activo-sm">Examen y observación general de la Voz</label>
                                                                         <textarea class="form-control caja-texto form-control-sm mb-9" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="vppb_obs_general" id="vppb_obs_general" placeholder="Diagnóstico, sintomatología, uso de audífonos, cirugías examen fisico relevante patologías crónicas, etc."></textarea>
                                                                     </div>
                                                                 </div>
@@ -869,48 +899,60 @@
                                                                         <textarea class="form-control caja-texto form-control-sm mb-9" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="vppb_comentario" id="vppb_comentario" placeholder="Plan de tratamiento"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <button type="button" class="btn btn-success btn-sm has-ripple" onclick="guardar_observaciones_vppb()"><i class="fas fa-save"></i> Guardar</button>
-                                                                {{-- <button type="button" class="btn btn-primary btn-sm has-ripple" onclick="generar_pdf_informe('vppb')"><i class="fa fa-file-pdf"></i> Generar PDF de informe a médico tratante</button> --}}
-                                                                <div id="informe_vppb" class="mt-4 d-block">
-                                                                    <div class="card">
-                                                                        <div class="card-header">
-                                                                            <h6>Informe para Médico Tratante</h6>
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <textarea id="editor_informe_vppb" name="informe_contenido" style="display: none;">                                                                                Escriba aquí el contenido del informe...
-                                                                            </textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="es" aria-labelledby="ck-editor__label_e1e543c92783c57415549cc7923dd44a9"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e1e543c92783c57415549cc7923dd44a9">Rich Text Editor</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Editor toolbar" tabindex="-1"><div class="ck ck-toolbar__items"><div class="ck ck-dropdown ck-heading-dropdown"><button class="ck ck-button ck-off ck-button_with-text ck-dropdown__button" type="button" tabindex="-1" aria-label="Heading" data-cke-tooltip-text="Heading" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><span class="ck ck-button__label">Paragraph</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136L.941 4.523z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e5f8ed5ff62a8deab59949178c6ca7cb0" aria-pressed="false" data-cke-tooltip-text="Bold (Ctrl+B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M10.187 17H5.773c-.637 0-1.092-.138-1.364-.415-.273-.277-.409-.718-.409-1.323V4.738c0-.617.14-1.062.419-1.332.279-.27.73-.406 1.354-.406h4.68c.69 0 1.288.041 1.793.124.506.083.96.242 1.36.478.341.197.644.447.906.75a3.262 3.262 0 0 1 .808 2.162c0 1.401-.722 2.426-2.167 3.075C15.05 10.175 16 11.315 16 13.01a3.756 3.756 0 0 1-2.296 3.504 6.1 6.1 0 0 1-1.517.377c-.571.073-1.238.11-2 .11zm-.217-6.217H7v4.087h3.069c1.977 0 2.965-.69 2.965-2.072 0-.707-.256-1.22-.768-1.537-.512-.319-1.277-.478-2.296-.478zM7 5.13v3.619h2.606c.729 0 1.292-.067 1.69-.2a1.6 1.6 0 0 0 .91-.765c.165-.267.247-.566.247-.897 0-.707-.26-1.176-.778-1.409-.519-.232-1.31-.348-2.375-.348H7z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e5f8ed5ff62a8deab59949178c6ca7cb0">Bold</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e47819c337bb2c4935379be09c18de07a" aria-pressed="false" data-cke-tooltip-text="Italic (Ctrl+I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m9.586 14.633.021.004c-.036.335.095.655.393.962.082.083.173.15.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15c.474-.07.809-.182 1.005-.334.157-.122.291-.32.404-.597l2.416-9.55a1.053 1.053 0 0 0-.281-.823 1.12 1.12 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195c-.376.056-.65.155-.823.296-.215.175-.423.439-.623.79l-2.366 9.347z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e47819c337bb2c4935379be09c18de07a">Italic</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2c76074bb063e430462be4d869fec4dc" aria-pressed="false" data-cke-tooltip-text="Numbered List" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM3.5 3v5H2V3.7H1v-1h2.5V3zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001c-.048.405-.16.734-.333.988-.175.254-.59.692-1.244 1.312H4.3v1h-4l.043-.043zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2c76074bb063e430462be4d869fec4dc">Numbered List</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e95dba6f2a87ffc0dd2964a9693796352" aria-pressed="false" data-cke-tooltip-text="Bulleted List" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zm-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75zm6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zm-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e95dba6f2a87ffc0dd2964a9693796352">Bulleted List</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2a49959c5e5ac071dde8fe8305d081f0" aria-disabled="true" data-cke-tooltip-text="Decrease indent" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zm1.618-9.55L.98 9.358a.4.4 0 0 0 .013.661l3.39 2.207A.4.4 0 0 0 5 11.892V7.275a.4.4 0 0 0-.632-.326z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2a49959c5e5ac071dde8fe8305d081f0">Decrease indent</span></button><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2f9dc2f8a0a88465aa87014894edeee7" aria-disabled="true" data-cke-tooltip-text="Increase indent" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zM1.632 6.95 5.02 9.358a.4.4 0 0 1-.013.661l-3.39 2.207A.4.4 0 0 1 1 11.892V7.275a.4.4 0 0 1 .632-.326z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2f9dc2f8a0a88465aa87014894edeee7">Increase indent</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e12563d798dc24e8e913283bf065f84b2" aria-pressed="false" data-cke-tooltip-text="Link (Ctrl+K)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m11.077 15 .991-1.416a.75.75 0 1 1 1.229.86l-1.148 1.64a.748.748 0 0 1-.217.206 5.251 5.251 0 0 1-8.503-5.955.741.741 0 0 1 .12-.274l1.147-1.639a.75.75 0 1 1 1.228.86L4.933 10.7l.006.003a3.75 3.75 0 0 0 6.132 4.294l.006.004zm5.494-5.335a.748.748 0 0 1-.12.274l-1.147 1.639a.75.75 0 1 1-1.228-.86l.86-1.23a3.75 3.75 0 0 0-6.144-4.301l-.86 1.229a.75.75 0 0 1-1.229-.86l1.148-1.64a.748.748 0 0 1 .217-.206 5.251 5.251 0 0 1 8.503 5.955zm-4.563-2.532a.75.75 0 0 1 .184 1.045l-3.155 4.505a.75.75 0 1 1-1.229-.86l3.155-4.506a.75.75 0 0 1 1.045-.184z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e12563d798dc24e8e913283bf065f84b2">Link</span></button><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e709165da4773cb744085bb0e11989772" data-cke-tooltip-text="Insert table" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M3 6v3h4V6H3zm0 4v3h4v-3H3zm0 4v3h4v-3H3zm5 3h4v-3H8v3zm5 0h4v-3h-4v3zm4-4v-3h-4v3h4zm0-4V6h-4v3h4zm1.5 8a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 17V4c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5v13zM12 13v-3H8v3h4zm0-4V6H8v3h4z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e709165da4773cb744085bb0e11989772">Insert table</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136L.941 4.523z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e118152b702cb638bfb8e9c419cfbfd04" aria-disabled="true" data-cke-tooltip-text="Undo (Ctrl+Z)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m5.042 9.367 2.189 1.837a.75.75 0 0 1-.965 1.149l-3.788-3.18a.747.747 0 0 1-.21-.284.75.75 0 0 1 .17-.945L6.23 4.762a.75.75 0 1 1 .964 1.15L4.863 7.866h8.917A.75.75 0 0 1 14 7.9a4 4 0 1 1-1.477 7.718l.344-1.489a2.5 2.5 0 1 0 1.094-4.73l.008-.032H5.042z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e118152b702cb638bfb8e9c419cfbfd04">Undo</span></button><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_eca1b056419e94928ed90cf3aea0f99e7" aria-disabled="true" data-cke-tooltip-text="Redo (Ctrl+Y)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m14.958 9.367-2.189 1.837a.75.75 0 0 0 .965 1.149l3.788-3.18a.747.747 0 0 0 .21-.284.75.75 0 0 0-.17-.945L13.77 4.762a.75.75 0 1 0-.964 1.15l2.331 1.955H6.22A.75.75 0 0 0 6 7.9a4 4 0 1 0 1.477 7.718l-.344-1.489A2.5 2.5 0 1 1 6.039 9.4l-.008-.032h8.927z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eca1b056419e94928ed90cf3aea0f99e7">Redo</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="es" dir="ltr" role="textbox" aria-label="Editor editing area: main" contenteditable="true"><p>Escriba aquí el contenido del informe...</p></div></div></div>
-                                                                            <div class="mt-3">
-                                                                                <button type="button" class="btn btn-primary btn-sm" onclick="generar_pdf_informe('vppb')">
-                                                                                    <i class="fa fa-file-pdf"></i> Generar PDF
-                                                                                </button>
+                                                                <div class="form-row mt-3">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <button type="button" class="btn btn-info-light-c btn-sm float-right" onclick="guardar_observaciones_vppb()"><i class="feather icon-save"></i> Guardar</button>
+                                                                        {{-- <button type="button" class="btn btn-danger-light-c btn-sm" onclick="generar_pdf_informe('vppb')"><i class="fa fa-file-pdf"></i> Generar PDF de informe a médico tratante</button> --}}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-12">
+                                                                        <div id="informe_vppb" class="mt-4 d-block">
+                                                                            <div class="card-lineal">
+                                                                                <div class="card-header-lineal">
+                                                                                    Informe para Médico Tratante
+                                                                                </div>
+                                                                                <div class="card-body-lineal">
+                                                                                    <textarea id="editor_informe_vppb" name="informe_contenido" style="display: none;">                                                                                Escriba aquí el contenido del informe...
+                                                                                    </textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="es" aria-labelledby="ck-editor__label_e1e543c92783c57415549cc7923dd44a9"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e1e543c92783c57415549cc7923dd44a9">Rich Text Editor</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Editor toolbar" tabindex="-1"><div class="ck ck-toolbar__items"><div class="ck ck-dropdown ck-heading-dropdown"><button class="ck ck-button ck-off ck-button_with-text ck-dropdown__button" type="button" tabindex="-1" aria-label="Heading" data-cke-tooltip-text="Heading" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><span class="ck ck-button__label">Paragraph</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136L.941 4.523z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e5f8ed5ff62a8deab59949178c6ca7cb0" aria-pressed="false" data-cke-tooltip-text="Bold (Ctrl+B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M10.187 17H5.773c-.637 0-1.092-.138-1.364-.415-.273-.277-.409-.718-.409-1.323V4.738c0-.617.14-1.062.419-1.332.279-.27.73-.406 1.354-.406h4.68c.69 0 1.288.041 1.793.124.506.083.96.242 1.36.478.341.197.644.447.906.75a3.262 3.262 0 0 1 .808 2.162c0 1.401-.722 2.426-2.167 3.075C15.05 10.175 16 11.315 16 13.01a3.756 3.756 0 0 1-2.296 3.504 6.1 6.1 0 0 1-1.517.377c-.571.073-1.238.11-2 .11zm-.217-6.217H7v4.087h3.069c1.977 0 2.965-.69 2.965-2.072 0-.707-.256-1.22-.768-1.537-.512-.319-1.277-.478-2.296-.478zM7 5.13v3.619h2.606c.729 0 1.292-.067 1.69-.2a1.6 1.6 0 0 0 .91-.765c.165-.267.247-.566.247-.897 0-.707-.26-1.176-.778-1.409-.519-.232-1.31-.348-2.375-.348H7z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e5f8ed5ff62a8deab59949178c6ca7cb0">Bold</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e47819c337bb2c4935379be09c18de07a" aria-pressed="false" data-cke-tooltip-text="Italic (Ctrl+I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m9.586 14.633.021.004c-.036.335.095.655.393.962.082.083.173.15.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15c.474-.07.809-.182 1.005-.334.157-.122.291-.32.404-.597l2.416-9.55a1.053 1.053 0 0 0-.281-.823 1.12 1.12 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195c-.376.056-.65.155-.823.296-.215.175-.423.439-.623.79l-2.366 9.347z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e47819c337bb2c4935379be09c18de07a">Italic</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2c76074bb063e430462be4d869fec4dc" aria-pressed="false" data-cke-tooltip-text="Numbered List" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM3.5 3v5H2V3.7H1v-1h2.5V3zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001c-.048.405-.16.734-.333.988-.175.254-.59.692-1.244 1.312H4.3v1h-4l.043-.043zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2c76074bb063e430462be4d869fec4dc">Numbered List</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e95dba6f2a87ffc0dd2964a9693796352" aria-pressed="false" data-cke-tooltip-text="Bulleted List" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zm-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75zm6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zm-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e95dba6f2a87ffc0dd2964a9693796352">Bulleted List</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2a49959c5e5ac071dde8fe8305d081f0" aria-disabled="true" data-cke-tooltip-text="Decrease indent" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zm1.618-9.55L.98 9.358a.4.4 0 0 0 .013.661l3.39 2.207A.4.4 0 0 0 5 11.892V7.275a.4.4 0 0 0-.632-.326z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2a49959c5e5ac071dde8fe8305d081f0">Decrease indent</span></button><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e2f9dc2f8a0a88465aa87014894edeee7" aria-disabled="true" data-cke-tooltip-text="Increase indent" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M2 3.75c0 .414.336.75.75.75h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 0 0-.75.75zm5 6c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75zM2.75 16.5h14.5a.75.75 0 1 0 0-1.5H2.75a.75.75 0 1 0 0 1.5zM1.632 6.95 5.02 9.358a.4.4 0 0 1-.013.661l-3.39 2.207A.4.4 0 0 1 1 11.892V7.275a.4.4 0 0 1 .632-.326z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e2f9dc2f8a0a88465aa87014894edeee7">Increase indent</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e12563d798dc24e8e913283bf065f84b2" aria-pressed="false" data-cke-tooltip-text="Link (Ctrl+K)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m11.077 15 .991-1.416a.75.75 0 1 1 1.229.86l-1.148 1.64a.748.748 0 0 1-.217.206 5.251 5.251 0 0 1-8.503-5.955.741.741 0 0 1 .12-.274l1.147-1.639a.75.75 0 1 1 1.228.86L4.933 10.7l.006.003a3.75 3.75 0 0 0 6.132 4.294l.006.004zm5.494-5.335a.748.748 0 0 1-.12.274l-1.147 1.639a.75.75 0 1 1-1.228-.86l.86-1.23a3.75 3.75 0 0 0-6.144-4.301l-.86 1.229a.75.75 0 0 1-1.229-.86l1.148-1.64a.748.748 0 0 1 .217-.206 5.251 5.251 0 0 1 8.503 5.955zm-4.563-2.532a.75.75 0 0 1 .184 1.045l-3.155 4.505a.75.75 0 1 1-1.229-.86l3.155-4.506a.75.75 0 0 1 1.045-.184z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e12563d798dc24e8e913283bf065f84b2">Link</span></button><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e709165da4773cb744085bb0e11989772" data-cke-tooltip-text="Insert table" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="M3 6v3h4V6H3zm0 4v3h4v-3H3zm0 4v3h4v-3H3zm5 3h4v-3H8v3zm5 0h4v-3h-4v3zm4-4v-3h-4v3h4zm0-4V6h-4v3h4zm1.5 8a1.5 1.5 0 0 1-1.5 1.5H3A1.5 1.5 0 0 1 1.5 17V4c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5v13zM12 13v-3H8v3h4zm0-4V6H8v3h4z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e709165da4773cb744085bb0e11989772">Insert table</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136L.941 4.523z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e118152b702cb638bfb8e9c419cfbfd04" aria-disabled="true" data-cke-tooltip-text="Undo (Ctrl+Z)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m5.042 9.367 2.189 1.837a.75.75 0 0 1-.965 1.149l-3.788-3.18a.747.747 0 0 1-.21-.284.75.75 0 0 1 .17-.945L6.23 4.762a.75.75 0 1 1 .964 1.15L4.863 7.866h8.917A.75.75 0 0 1 14 7.9a4 4 0 1 1-1.477 7.718l.344-1.489a2.5 2.5 0 1 0 1.094-4.73l.008-.032H5.042z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e118152b702cb638bfb8e9c419cfbfd04">Undo</span></button><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_eca1b056419e94928ed90cf3aea0f99e7" aria-disabled="true" data-cke-tooltip-text="Redo (Ctrl+Y)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20"><path d="m14.958 9.367-2.189 1.837a.75.75 0 0 0 .965 1.149l3.788-3.18a.747.747 0 0 0 .21-.284.75.75 0 0 0-.17-.945L13.77 4.762a.75.75 0 1 0-.964 1.15l2.331 1.955H6.22A.75.75 0 0 0 6 7.9a4 4 0 1 0 1.477 7.718l-.344-1.489A2.5 2.5 0 1 1 6.039 9.4l-.008-.032h8.927z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eca1b056419e94928ed90cf3aea0f99e7">Redo</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="es" dir="ltr" role="textbox" aria-label="Editor editing area: main" contenteditable="true"><p>Escriba aquí el contenido del informe...</p></div></div></div>
+                                                                                    <div class="mt-3 text-right">
+                                                                                        <button type="button" class="btn btn-danger-light-c btn-sm" onclick="generar_pdf_informe('vppb')">
+                                                                                            <i class="fa fa-file-pdf"></i> Generar PDF
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-row mt-3">
-                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="table-responsive">
-                                                                            <table class="table table-bordered table-striped" id="tabla_observaciones_vppb">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Sesión N°</th>
-                                                                                        <th>Tipo de terapia</th>
-                                                                                        <th>Comentario</th>
-                                                                                        <th>Fecha/Hora</th>
-                                                                                        <th>Profesional</th>
-                                                                                        <th>Estado</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <div class="card-lineal">
+                                                                            <div class="card-body-lineal">
+                                                                                <div class="table-responsive border-none">
+                                                                                    <table class="table table-bordered table-striped" id="tabla_observaciones_vppb">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>Sesión N°</th>
+                                                                                                <th>Tipo de terapia</th>
+                                                                                                <th>Comentario</th>
+                                                                                                <th>Fecha/Hora</th>
+                                                                                                <th>Profesional</th>
+                                                                                                <th>Estado</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
 
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <input type="hidden" name="input_lista_observaciones_vppb" id="input_lista_observaciones_vppb" value="">
-                                                                        </div>
-                                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <button type="button" class="btn btn-danger btn-sm" onclick="finalizar_sesiones('vppb')">Finalizar sesiones</button>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <input type="hidden" name="input_lista_observaciones_vppb" id="input_lista_observaciones_vppb" value="">
+                                                                                </div>
+                                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <button type="button" class="btn btn-danger-light-c btn-xs float-right" onclick="finalizar_sesiones('vppb')">Finalizar sesiones</button>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -994,21 +1036,29 @@
                                                                         <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="etv_comentario" id="etv_comentario" placeholder="Plan de tratamiento"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <button type="button" class="btn btn-success btn-sm has-ripple" onclick="guardar_observaciones_terapia_voz()"><i class="fas fa-save"></i> Guardar</button>
-                                                                {{-- <button type="button" class="btn btn-primary btn-sm has-ripple" onclick="agregar_observaciones_terapia_voz()"><i class="fa fa-file-pdf"></i> Generar PDF de informe a médico tratante</button> --}}
-                                                                <div id="informe_terapia_voz" class="mt-4 d-none">
-                                                                    <div class="card">
-                                                                        <div class="card-header">
-                                                                            <h6>Informe para Médico Tratante</h6>
-                                                                        </div>
-                                                                        <div class="card-body">
-                                                                            <textarea id="editor_informe_terapia_voz" name="informe_contenido">
-                                                                                Escriba aquí el contenido del informe...
-                                                                            </textarea>
-                                                                            <div class="mt-3">
-                                                                                <button type="button" class="btn btn-primary btn-sm" onclick="generar_pdf_informe('terapia_voz')">
-                                                                                    <i class="fa fa-file-pdf"></i> Generar PDF
-                                                                                </button>
+                                                                <div class="form-row">
+                                                                    <div class="col-12">
+                                                                        <button type="button" class="btn btn-info-light-c btn-sm float-right" onclick="guardar_observaciones_terapia_voz()"><i class="feather icon-save"></i> Guardar</button>
+                                                                        {{-- <button type="button" class="btn btn-primary btn-sm has-ripple" onclick="agregar_observaciones_terapia_voz()"><i class="fa fa-file-pdf"></i> Generar PDF de informe a médico tratante</button> --}}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-12">
+                                                                        <div id="informe_terapia_voz" class="mt-4 d-none">
+                                                                            <div class="card-lineal">
+                                                                                <div class="card-header-lineal">
+                                                                                    Informe para Médico Tratante
+                                                                                </div>
+                                                                                <div class="card-body-lineal">
+                                                                                    <textarea id="editor_informe_terapia_voz" name="informe_contenido">
+                                                                                        Escriba aquí el contenido del informe...
+                                                                                    </textarea>
+                                                                                    <div class="mt-3">
+                                                                                        <button type="button" class="btn btn-danger-light-c btn-sm" onclick="generar_pdf_informe('terapia_voz')">
+                                                                                            <i class="fa fa-file-pdf"></i> Generar PDF
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1036,7 +1086,7 @@
                                                                             <input type="hidden" name="input_lista_observaciones_terapia_voz" id="input_lista_observaciones_terapia_voz" value="">
                                                                         </div>
                                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <button type="button" class="btn btn-danger btn-sm" onclick="finalizar_sesiones('terapia_voz')">Finalizar sesiones</button>
+                                                                            <button type="button" class="btn btn-danger-light-c btn-sm float-right" onclick="finalizar_sesiones('terapia_voz')">Finalizar sesiones</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1100,33 +1150,30 @@
                                                                 <option  value="5">Emisiones Otoacústicas</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                            <div class="card-a">
-                                                                <div class="card-body">
-                                                                    <div class="row">
-                                                                        <input type="hidden" name="input_lista_archivo_ex_aud" id="input_lista_archivo_ex_aud" value="">
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <!-- [ Main Content ] start -->
-                                                                            <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
-                                                                            </div>
-                                                                            <!-- [ file-upload ] end -->
-                                                                        </div>
+                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <div class="row">
+                                                                <input type="hidden" name="input_lista_archivo_ex_aud" id="input_lista_archivo_ex_aud" value="">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <!-- [ Main Content ] start -->
+                                                                    <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
                                                                     </div>
+                                                                    <!-- [ file-upload ] end -->
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <!--GUARDAR O IMPRIMIR FICHA-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="row mb-3">
-                                                <div class="col-md-12 text-center">
-                                                    <input type="submit" class="btn btn-purple mt-1" onclick="guardar_examen_audicion()" value="Guardar Examen">
+                                                <div class="card-footer">
+                                                    <div class="row">
+                                                        <!--GUARDAR O IMPRIMIR FICHA-->
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12 text-center">
+                                                                    <input type="submit" class="btn btn-info-light-c mt-1" onclick="guardar_examen_audicion()" value="Guardar Examen">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1302,49 +1349,51 @@
         }
         */
 
-        function dame_tipos_productos(){
-            url = "{{ route('laboratorio.tipos_productos') }}";
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: {
-                },
-            })
-            .done(function(data)
+       function dame_tipos_productos(){
+        url = "{{ route('laboratorio.tipos_productos') }}";
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+            },
+        })
+        .done(function(data)
+        {
+            console.log('-----------------------');
+            console.log(data);
+            console.log('-----------------------');
+            if(data.estado == 1)
             {
-                console.log('-----------------------');
-                console.log(data);
-                console.log('-----------------------');
-                if(data.estado == 1)
+                if(data.tipos.length>0)
                 {
-                    if(data.tipos.length>0)
-                    {
-                        var html = '<option value="">Seleccione</option>';
-                        data.tipos.forEach(element => {
-                            html += '<option value="'+element.id+'">'+element.nombre+'</option>';
-                        });
-                        html += '<option value="0">Otros</option>';
-                        $('#tipo_producto_busqueda').html(html);
-                        $('#cotiz_tipo_producto').html(html);
-                    }
-                    else
-                    {
-                        $('#tipo_producto_busqueda').html('<option value="">No hay registros</option>');
-                        $('#cotiz_tipo_producto').html('<option value="">No hay registros</option>');
-                    }
+                    var html = '<option value="">Seleccione</option>';
+                    data.tipos.forEach(element => {
+                        html += '<option value="'+element.id+'">'+element.nombre+'</option>';
+                    });
+                    html += '<option value="0">Otros</option>';
+                    $('#tipo_producto_busqueda').html(html);
+                    $('#tipo_producto_busqueda_prestamo').html(html);
+                    $('#cotiz_tipo_producto').html(html);
                 }
                 else
                 {
                     $('#tipo_producto_busqueda').html('<option value="">No hay registros</option>');
+                    $('#tipo_producto_busqueda_prestamo').html('<option value="">No hay registros</option>');
                     $('#cotiz_tipo_producto').html('<option value="">No hay registros</option>');
-                    swal({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error al comunicarse con el servidor'
-                    });
                 }
-            });
-        }
+            }
+            else
+            {
+                $('#tipo_producto_busqueda').html('<option value="">No hay registros</option>');
+                $('#cotiz_tipo_producto').html('<option value="">No hay registros</option>');
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al comunicarse con el servidor'
+                });
+            }
+        });
+    }
 
         function activarTabsSegunProcedimientos() {
             // Mapeo de IDs de procedimientos a tabs
@@ -3733,7 +3782,7 @@
                         let lado = producto.lado || 'Ambos lados';
 
                         let item = `
-                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4">
+                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
                                 <div class="card card-audifono h-100">
                                      ${bandaPrestado}
                                     <!-- Imagen del producto -->
@@ -5134,6 +5183,581 @@
             }
         })
     }
+
+    function seleccionar_producto_audifono_prestamo(id_producto, precio_venta){
+        console.log('Producto seleccionado ID:', id_producto);
+
+        swal({
+            title: '¿Agregar al carrito de préstamos?',
+            content: {
+                element: "div",
+                attributes: {
+                    innerHTML: `
+                        <div class="form-group text-left">
+                            <label class="font-weight-bold">Cantidad:</label>
+                            <input type="number" id="swal-cantidad" class="form-control" value="1" min="1" max="100">
+                        </div>
+                        <div class="form-group text-left">
+                            <label class="font-weight-bold">Precio Unitario:</label>
+                            <input type="number" id="swal-precio" class="form-control" value="${precio_venta}" min="0" step="0.01">
+                        </div>
+                        <div class="form-group text-left">
+                            <label class="font-weight-bold">Descuento:</label>
+                            <input type="number" id="swal-descuento" class="form-control" value="0" min="0" step="0.01">
+                        </div>
+                        <div class="form-group text-left">
+                            <label class="font-weight-bold">Fecha de entrega esperada:</label>
+                            <input type="date" id="swal-fecha-entrega" class="form-control">
+                        </div>
+                        <div class="form-group text-left">
+                            <label class="font-weight-bold">Observaciones:</label>
+                            <textarea id="swal-observaciones" class="form-control" rows="2" placeholder="Ingrese observaciones adicionales (opcional)"></textarea>
+                        </div>
+                    `
+                }
+            },
+            buttons: {
+                cancel: {
+                    text: "Cancelar",
+                    value: null,
+                    visible: true,
+                    className: "btn btn-secondary",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "Agregar al Carrito",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-success",
+                    closeModal: false
+                }
+            }
+        }).then((willAdd) => {
+            if (willAdd) {
+                // Validar campos
+                let cantidad = parseInt(document.getElementById('swal-cantidad').value);
+                let precio = parseFloat(document.getElementById('swal-precio').value);
+                let descuento = parseFloat(document.getElementById('swal-descuento').value);
+                let fecha_esperada_entrega = document.getElementById('swal-fecha-entrega').value;
+                let observaciones = document.getElementById('swal-observaciones').value;
+
+                // Validaciones
+                if (!cantidad || cantidad <= 0) {
+                    swal("Error", "La cantidad debe ser mayor a 0", "error");
+                    return;
+                }
+
+                if (precio < 0) {
+                    swal("Error", "El precio no puede ser negativo", "error");
+                    return;
+                }
+
+                if (descuento < 0) {
+                    swal("Error", "El descuento no puede ser negativo", "error");
+                    return;
+                }
+
+                // if (!fecha_esperada_entrega) {
+                //     swal("Error", "Debe ingresar una fecha de entrega esperada", "error");
+                //     return;
+                // }
+
+                if (descuento > precio * cantidad) {
+                    swal("Error", "El descuento no puede ser mayor al subtotal", "error");
+                    return;
+                }
+
+                // Cerrar modal y agregar al carrito
+                swal.close();
+
+                let datos = {
+                    cantidad: cantidad,
+                    precio_unitario: precio,
+                    descuento: descuento,
+                    fecha_esperada_entrega: fecha_esperada_entrega,
+                    observaciones: observaciones
+                };
+
+                agregarProductoAlCarritoPrestamo(id_producto, datos);
+            }
+        });
+    }
+
+    function agregarProductoAlCarritoPrestamo(id_producto, datos_adicionales = {}) {
+        // Mostrar loading
+        swal({
+            title: 'Agregando al carrito de préstamos...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        let url = "{{ route('laboratorio.carrito_prestamos.agregar') }}";
+
+        let data = {
+            id_producto: id_producto,
+            cantidad: datos_adicionales.cantidad || 1,
+            id_paciente: datos_adicionales.id_paciente || $('#id_paciente_fc').val(),
+            id_ficha: datos_adicionales.id_ficha || $('#id_fc').val(),
+            precio_unitario: datos_adicionales.precio_unitario || 0,
+            descuento: datos_adicionales.descuento || 0,
+            fecha_devolucion_esperada: datos_adicionales.fecha_esperada_entrega || '',
+            observaciones: datos_adicionales.observaciones || '',
+            _token: CSRF_TOKEN
+        };
+
+        if(data.id_paciente == '' || data.id_ficha == ''){
+            swal({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se ha asociado un paciente o ficha clínica'
+            });
+            return;
+        }
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+        })
+        .done(function(response) {
+            console.log('Producto agregado al carrito de préstamos:', response);
+
+            if (response.estado === 1) {
+                // Actualizar datos del carrito
+                carritoData.total = response.total_carrito;
+                carritoData.cantidad_items = response.cantidad_items;
+
+                // Actualizar UI
+                actualizarBadgeCarritoPrestamo();
+
+                swal({
+                    icon: 'success',
+                    title: '¡Agregado al carrito de préstamos!',
+                    text: response.mensaje,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                // Opcional: Mostrar botón para ver carrito
+                mostrarBotonVerCarritoPrestamo();
+            } else {
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.mensaje
+                });
+            }
+        })
+        .fail(function(jqXHR) {
+            console.error('Error al agregar al carrito de préstamos:', jqXHR);
+
+            let mensaje = 'Error al agregar el producto al carrito de préstamos';
+            if (jqXHR.responseJSON && jqXHR.responseJSON.mensaje) {
+                mensaje = jqXHR.responseJSON.mensaje;
+            }
+
+            swal({
+                icon: 'error',
+                title: 'Error',
+                text: mensaje
+            });
+        });
+    }
+
+    function actualizarBadgeCarritoPrestamo() {
+            // Actualizar badge del botón flotante
+            let badge = $('#badge-carrito-prestamo');
+            if (carritoData.cantidad_items > 0) {
+                badge.text(carritoData.cantidad_items).show();
+            } else {
+                badge.hide();
+            }
+            // Actualizar badge del botón en el header
+            let badgeHeader = $('#badge-carrito-prestamo-header');
+            let totalHeader = $('#total-carrito-prestamo-header');
+
+            if (carritoData.cantidad_items > 0) {
+                // Animación de pulso al actualizar
+                badgeHeader.addClass('badge-animated');
+                setTimeout(function() {
+                    badgeHeader.removeClass('badge-animated');
+                }, 500);
+
+                badgeHeader.text(carritoData.cantidad_items).show();
+                totalHeader.text('Total: $' + parseFloat(carritoData.total || 0).toFixed(2)).show();
+
+                // Mostrar el botón del carrito si estaba oculto
+                $('#btn-abrir-carrito-prestamo').removeClass('d-none');
+            } else {
+                badgeHeader.hide();
+                totalHeader.hide();
+            }
+
+            if ($('#btn-ver-carrito-prestamo').length === 0) {
+                let boton = `
+                    <button id="btn-ver-carrito-prestamo" class="btn btn-success btn-lg"
+                            style="position:fixed; bottom:20px; right:20px; z-index:9999; border-radius:50%; width:60px; height:60px;"
+                            onclick="obtenerCarrito()" title="Ver carrito">
+                        <i class="feather icon-shopping-cart"></i>
+                        <span id="badge-carrito-prestamo" class="badge badge-danger"
+                            style="position:absolute; top:-5px; right:-5px; display:none;">0</span>
+                    </button>
+                `;
+                //$('body').append(boton);
+            }
+        }
+
+         /**
+         * Obtener y mostrar carrito de préstamos
+         */
+        function obtenerCarritoPrestamo() {
+            let url = "{{ route('laboratorio.carrito_prestamos.obtener') }}";
+            let id_paciente = $('#id_paciente_fc').val();
+            let id_ficha = $('#id_fc').val();
+
+            if(id_paciente == ''){
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se ha asociado un paciente'
+                });
+                return;
+            }
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data:{
+                    id_paciente: id_paciente,
+                    id_ficha: id_ficha,
+                }
+            })
+            .done(function(response) {
+                console.log('Carrito de préstamos obtenido:', response);
+                if (response.estado === 1) {
+                    carritoData = {
+                        items: response.items,
+                        total: response.total,
+                        cantidad_items: response.cantidad_items
+                    };
+                    if(response.items.length > 0) {
+                        var nombre_paciente = response.items[0].paciente?.nombres + ' ' + response.items[0].paciente?.apellido_uno;
+                    }else{
+                        var nombre_paciente = response.nombre_paciente || '';
+                    }
+                    
+
+                    mostrarModalCarritoPrestamo(nombre_paciente);
+                    actualizarBadgeCarritoPrestamo();
+                }
+            })
+            .fail(function(jqXHR) {
+                console.error('Error al obtener carrito de préstamos:', jqXHR);
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar el carrito de préstamos'
+                });
+            });
+        }
+
+        /**
+         * Mostar modal con contenido del carrito de préstamos
+         */
+        function mostrarModalCarritoPrestamo(nombrePaciente = '') {
+            let html = '<div class="table-responsive">';
+            html += '<div class="mb-2 text-left">';
+            html += '<strong>Paciente:</strong> ' + (nombrePaciente || 'No seleccionado');
+            html += '</div>';
+        
+            if (carritoData.items.length === 0) {
+                html += '<p class="text-center py-4">El carrito de préstamos está vacío</p>';
+            } else {
+                html += '<table class="table table-hover">';
+                html += '<thead><tr>';
+                html += '<th>Producto</th>';
+                html += '<th>Cantidad</th>';
+                html += '<th>Fecha devolución</th>';
+                html += '<th>Observaciones</th>';
+                html += '<th>Acciones</th>';
+                html += '</tr></thead><tbody>';
+        
+                carritoData.items.forEach(function(item) {
+                    html += '<tr>';
+                    html += '<td>';
+                    if (item.image_path) {
+                        html += '<img src="/' + item.image_path + '" alt="' + item.nombre_producto + '" class="img-thumbnail mr-2" style="width:50px;">';
+                    }
+                    html += '<div>';
+                    html += '<strong>' + item.nombre_producto + '</strong><br>';
+                    html += '<small class="text-muted">' + (item.marca_producto || '') + '</small>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '<td>' + item.cantidad + '</td>';
+                    html += '<td>' + (item.fecha_devolucion_esperada ? new Date(item.fecha_devolucion_esperada).toLocaleDateString() : '-') + '</td>';
+                    html += '<td>' + (item.observaciones || '-') + '</td>';
+                    html += '<td>';
+                    html += '<button class="btn btn-sm btn-danger" onclick="eliminarItemCarritoPrestamo(' + item.id + ')" title="Eliminar">';
+                    html += '<i class="feather icon-trash-2"></i>';
+                    html += '</button>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+        
+                html += '</tbody>';
+                html += '<tfoot>';
+                html += '<tr class="bg-light">';
+                html += '<td colspan="2" class="text-right"><strong>TOTAL:</strong></td>';
+                html += '<td colspan="3"><strong class="text-success">$' + parseFloat(carritoData.total).toFixed(2) + '</strong></td>';
+                html += '</tr>';
+                html += '</tfoot>';
+                html += '</table>';
+                html += '<div class="text-right mt-3">';
+                html += '<button class="btn btn-secondary mr-2" onclick="swal.close()">Cerrar</button>';
+                html += '<button class="btn btn-danger mr-2" onclick="vaciarCarritoPrestamoCompleto()"><i class="feather icon-trash"></i> Vaciar Carrito</button>';
+                html += '<button class="btn btn-success" onclick="procesarPrestamo()"><i class="feather icon-check"></i> Procesar Préstamo</button>';
+                html += '</div>';
+            }
+            html += '</div>';
+            swal({
+                title: 'Préstamo de Productos',
+                icon: 'info',
+                content:{
+                    element: "div",
+                    attributes: {
+                        innerHTML: '<div class="text-center mb-3"><i class="feather icon-shopping-cart" style="font-size: 2rem; color: #28a745;"></i><h4 class="mt-2">Productos a prestar</h4></div>' + html
+                    }
+                },
+                buttons: false,
+                closeOnClickOutside: true,
+                className: 'swal-wide'
+            });
+        }
+
+        /**
+         * Actualizar cantidad de un item
+         */
+        function actualizarCantidadItem(id_item, cantidad) {
+            let url = "{{ route('laboratorio.carrito.actualizar_cantidad') }}";
+
+            $.ajax({
+                url: url,
+                type: "PUT",
+                data: {
+                    id_item: id_item,
+                    cantidad: cantidad,
+                    _token: CSRF_TOKEN
+                },
+            })
+            .done(function(response) {
+                if (response.estado === 1) {
+                    // Actualizar carrito
+                    obtenerCarrito();
+                } else {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.mensaje
+                    });
+                }
+            })
+            .fail(function(jqXHR) {
+                console.error('Error al actualizar cantidad:', jqXHR);
+            });
+        }
+
+        /**
+         * Eliminar item del carrito de préstamos
+         */
+        function eliminarItemCarritoPrestamo(id_item) {
+            swal({
+                title: '¿Eliminar producto del préstamo?',
+                text: 'Se eliminará este producto del carrito de préstamos',
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Sí, eliminar",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-danger",
+                        closeModal: true
+                    }
+                },
+                dangerMode: true
+            }).then((willDelete) => {
+                if (willDelete) {
+                    let url = "{{ route('laboratorio.carrito_prestamos.eliminar') }}";
+                    let id_paciente = $('#id_paciente_fc').val();
+
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        data: {
+                            id_item: id_item,
+                            id_paciente: id_paciente,
+                            _token: CSRF_TOKEN
+                        },
+                    })
+                    .done(function(response) {
+                        console.log('Respuesta al eliminar del carrito de préstamos:', response);
+                        if (response.estado === 1) {
+                            // Actualizar carrito
+                            obtenerCarritoPrestamo();
+
+                            swal({
+                                icon: 'success',
+                                title: 'Eliminado',
+                                text: response.mensaje || 'Producto eliminado del carrito de préstamos',
+                                buttons: false,
+                                timer: 1500
+                            });
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.mensaje || 'No se pudo eliminar el producto'
+                            });
+                        }
+                    })
+                    .fail(function(jqXHR) {
+                        console.error('Error al eliminar del carrito de préstamos:', jqXHR);
+                        swal({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al comunicarse con el servidor'
+                        });
+                    });
+                }
+            });
+        }
+
+        /**
+         * Procesar préstamo 
+         */
+
+        function procesarPrestamo() {
+            // Aquí puedes implementar lógica adicional para procesar el préstamo
+            swal({
+                title: 'Procesar Préstamo',
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: `
+                            <div class="form-group text-left">
+                                <label class="font-weight-bold">Observaciones:</label>
+                                <textarea id="swal-obs-prestamo" class="form-control" rows="3" placeholder="Ingrese observaciones adicionales (opcional)"></textarea>
+                            </div>
+                        `
+                    }
+                },
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "btn btn-secondary",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Confirmar Préstamo",
+                        value: true,
+                        visible: true,
+                        className: "btn btn-success",
+                        closeModal: false
+                    }
+                }
+            }).then((willProcess) => {
+                if (willProcess) {
+                    let observaciones = document.getElementById('swal-obs-prestamo').value;
+
+                    // Validar observaciones
+                    if (!observaciones) {
+                        swal("Error", "Debe ingresar observaciones", "error");
+                        return;
+                    }
+
+                    // Cerrar modal y procesar
+                    swal.close();
+
+                    let datos = {
+                        observaciones: observaciones
+                    };
+
+                    finalizarPrestamo(datos);
+                }
+            });
+        }
+
+        function finalizarPrestamo(datos) {
+            let url = "{{ route('laboratorio.carrito_prestamos.procesar_prestamo') }}";
+
+            swal({
+                title: 'Procesando préstamo...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_ficha: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    observaciones: datos.observaciones,
+                    _token: CSRF_TOKEN
+                },
+            })
+            .done(function(response) {
+                console.log(response);
+                if (response.estado === 1) {
+                    carritoData = {
+                        items: [],
+                        total: 0,
+                        cantidad_items: 0
+                    };
+
+                    actualizarBadgeCarritoPrestamo();
+
+                    swal({
+                        icon: 'success',
+                        title: '¡Préstamo Exitoso!',
+                        html: `
+                            <p>${response.mensaje}</p>
+                            <p><strong>Items procesados:</strong> ${response.items_procesados}</p>
+                            <p><strong>Total:</strong> $${parseFloat(response.total).toFixed(2)}</p>
+                        `,
+                        confirmButtonText: 'Aceptar'
+                    });
+                } else {
+                    swal({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.mensaje
+                    });
+                }
+            })
+            .fail(function(jqXHR) {
+                console.error('Error al procesar préstamo:', jqXHR);
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo procesar el préstamo'
+                });
+            });
+        }
+
     </script>
 
      <script src="{{ asset('js/cotizacion_audifonos.js') }}?v={{ time() }}"></script>

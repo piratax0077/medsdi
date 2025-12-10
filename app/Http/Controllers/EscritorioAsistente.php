@@ -2661,19 +2661,19 @@ class EscritorioAsistente extends Controller
             if ($asistente->foto_perfil) {
                 Storage::disk('public')->delete($asistente->foto_perfil);
             }
-            
+
             // Guardar la nueva foto
             $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
-            
+
             // Actualizar en la base de datos
             $asistente->update(['foto_perfil' => $path]);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Foto actualizada correctamente',
                 'foto_url' => asset('storage/' . $path)
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -2694,12 +2694,12 @@ class EscritorioAsistente extends Controller
                 // Actualizar en la base de datos
                 $asistente->update(['foto_perfil' => null]);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Foto eliminada correctamente'
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

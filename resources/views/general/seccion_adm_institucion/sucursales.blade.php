@@ -1,15 +1,36 @@
+
+<style>
+    .icono-orl {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-orl::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/oido.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-header pt-3 pb-2 bg-light">
+            <div class="card-header pt-3 pb-2 bg-info">
                 <div class="row">
                     <div class="col-md-12">
-                        <h6 class="f-18 d-inline mt-3 text-info">Sucursales</h6>
+                        <h6 class="f-18 d-inline mt-3 text-white">Sucursales</h6>
                         <div class="btn-group mb-2 mr-2 float-right">
-                            <button type="button" class="btn btn-info btn-sm" onclick="ag_sucursal();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir nueva</button>
+                            <button type="button" class="btn btn-light btn-sm" onclick="ag_sucursal();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir nueva</button>
                             {{-- <button type="button" class="btn btn-outline-info  btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
                             <div class="dropdown-menu">
-                                <button class="dropdown-item" type="button" class="btn  btn-primary" data-toggle="modal" data-target="#modal_agregar_lugar_existente">Desasociar o agregar<br> lugar de atención <br>existente</button>
+                                <button class="dropdown-item" type="button" class="btn  btn-light" data-toggle="modal" data-target="#modal_agregar_lugar_existente">Desasociar o agregar<br> lugar de atención <br>existente</button>
                             </div> --}}
                         </div>
                     </div>
@@ -23,25 +44,25 @@
                 <table id="sucursales_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                     <thead>
                         <tr>
-                            <th class="text-center align-middle">Identificación</th>
-                            <th class="text-center align-middle">Dirección</th>
-                            <th class="text-center align-middle">Contacto</th>
-                            <th class="text-center align-middle">Acción</th>
+                            <th class="align-middle">Identificación</th>
+                            <th class="align-middle">Dirección</th>
+                            <th class="align-middle">Contacto</th>
+                            <th class="align-middle">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if ($sucursales)
                             @foreach ($sucursales as $suc)
                                 <tr>
-                                    <td class="align-middle text-center">
+                                    <td class="align-middle">
                                         <strong>{{ $suc->nombre }}</strong><br>
                                         {{ $suc->rut }}
                                     </td>
-                                    <td class="align-middle text-center">
+                                    <td class="align-middle">
                                         {{ $suc->direccion->direccion }} {{ $suc->direccion->numero_dir }}<br>
                                         {{ $suc->ciudadObj->nombre }}
                                     </td>
-                                    <td class="align-middle text-center">
+                                    <td class="align-middle">
                                         <span>{{ $suc->email }}</span><br>
                                         <span>{{ $suc->telefono }}</span>
                                         @if(!empty($suc->telefono_2))
@@ -54,9 +75,9 @@
                                         <!--Botón Modal-->
                                         {{-- <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="asis_sucursal({{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Asistentes"><i class="feather icon-user"></i></button> --}}
                                         <!--Botón Modal-->
-                                        <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="hor_sucursal({{ $suc->id_institucion }}, {{ $suc->id_lugar_atencion }}, {{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Horario de sucursal"><i class="feather icon-watch"></i></button>
-                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="adm_boxes({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Administrar boxes"><i class="feather icon-box"></i></button>
-                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="adm_bodegas({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }},{{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Administrar bodegas"><i class="feather icon-archive"></i></button>
+                                        <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="hor_sucursal({{ $suc->id_institucion }}, {{ $suc->id_lugar_atencion }}, {{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Horario de sucursal"><img class="wid-20" src="{{ asset('images/icons/reloj.png') }}"></button>
+                                        <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="adm_boxes({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Administrar boxes"><img class="wid-20" src="{{ asset('images/icons/boxes.png') }}"></button>
+                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="adm_bodegas({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }},{{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Administrar bodegas"><i class="feather icon-box"></i></button>
                                     </td>
                                 </tr>
 
@@ -119,11 +140,20 @@
                             </thead>
                             <tbody>
                                 @foreach ($bodegas as $bodega)
-                                    <tr>
-                                        <td class="align-middle">{{ $bodega->nombre }}</td>
+                                    <tr @if(isset($bodega_asignada_id) && $bodega->id == $bodega_asignada_id) style="background-color: #e0f7fa;" @endif>
+                                        <td class="align-middle">
+                                            {{ $bodega->nombre }}
+                                            @if(isset($bodega_asignada_id) && $bodega->id == $bodega_asignada_id)
+                                                <span class="badge badge-success ml-2">Asignada</span>
+                                            @endif
+                                        </td>
                                         <td class="align-middle">{{ $bodega->descripcion }}</td>
                                         <td class="align-middle">
-                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="asignar_bodega({{ $bodega->id }});" data-toggle="tooltip" data-placement="top" title="Asignar"><i class="feather icon-plus"></i></button>
+                                            @if(isset($bodega_asignada_id) && $bodega->id == $bodega_asignada_id)
+                                                <button type="button" class="btn btn-secondary btn-sm btn-icon" disabled><i class="feather icon-check"></i></button>
+                                            @else
+                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="asignar_bodega({{ $bodega->id }});" data-toggle="tooltip" data-placement="top" title="Asignar"><i class="feather icon-plus"></i></button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -551,6 +581,7 @@
             <div class="modal-body">
                 <input type="hidden" name="bodegas_sucursal_id_institucion" id="bodegas_sucursal_id_institucion" value="{{ $institucion->id }}">
                 <input type="hidden" name="bodegas_sucursal_id_lugar_atencion" id="bodegas_sucursal_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                <input type="hidden" name="bodegas_sucursal_id_sucursal" id="bodegas_sucursal_id_sucursal" value="">
                 <div class="row">
                     <div class="col-sm-12">
                         <!--TABLA RESPONSIVA HACIA ABAJO-->
@@ -903,13 +934,51 @@
                     title: "Asignar Bodega",
                     text: "Bodega asignada con éxito",
                     icon: "success"
-                })
+                });
+                adm_bodegas($('#bodegas_sucursal_id_institucion').val(), $('#bodegas_sucursal_id_lugar_atencion').val(), $('#bodegas_sucursal_id_sucursal').val());
             }
             else
             {
                 swal({
                     title: "Error",
-                    text: "Error al asignar bodega",
+                    text: data.mensaje,
+                    icon: "error"
+                })
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function eliminar_bodega_sucursal(id){
+        let url = "{{ route('sucursal.bodega.remover') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id: id,
+                id_sucursal: $('#bodegas_sucursal_id_sucursal').val(),
+                _token: CSRF_TOKEN,
+            },
+        })
+        .done(function(data)
+        {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                swal({
+                    title: "Eliminar Bodega",
+                    text: "Bodega eliminada con éxito",
+                    icon: "success"
+                })
+                adm_bodegas($('#bodegas_sucursal_id_institucion').val(), $('#bodegas_sucursal_id_lugar_atencion').val(), $('#bodegas_sucursal_id_sucursal').val());
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: data.mensaje,
                     icon: "error"
                 })
             }
@@ -1127,7 +1196,7 @@
                     hora_inicio:horario_inicio,
                     hora_termino:horario_termino,
                     dia:dia,
-                    duracion_consulta:15, //15 min
+                    duracion_consulta:"00:15:00", //15 min
                     tipo_agenda: 4,//examenes
                     otro:'',
                     estado:1,
@@ -1135,6 +1204,7 @@
             })
             .done(function(data)
             {
+                console.log(data);
                 if( data.estado == 1 )
                 {
                     swal({
@@ -1486,11 +1556,65 @@
             });
     }
 
-    function adm_bodegas(id_institucion, id_lugar_atencion)
+    function adm_bodegas(id_institucion, id_lugar_atencion, id_sucursal)
     {
         $('#bodegas_sucursal').modal('show');
         $('#bodegas_sucursal_id_institucion').val(id_institucion);
         $('#bodegas_sucursal_id_lugar_atencion').val(id_lugar_atencion);
+        $('#bodegas_sucursal_id_sucursal').val(id_sucursal);
+        dame_bodega_sucursal(id_institucion, id_lugar_atencion, id_sucursal);
+    }
+
+    function dame_bodega_sucursal(id_institucion, id_lugar_atencion, id_sucursal)
+    {
+        let url = "{{ route('sucursal.bodega.ver') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_institucion: id_institucion,
+                id_lugar_atencion: id_lugar_atencion,
+                id_sucursal: id_sucursal,
+            },
+        })
+        .done(function(data)
+        {
+            console.log(data);
+            if (data != null)
+            {
+                let bodegas_asignadas = data.bodega_asignadas;
+                let bodegas_sucursal = data.bodegas;
+                let table = $('#bodegas_sucursal_tabla').DataTable();
+                table.clear().draw();
+                bodegas_sucursal.forEach(function(bodega) {
+                    let esAsignada = bodegas_asignadas && bodegas_asignadas.some(function(bodega_asignada) {
+                        return bodega.id == bodega_asignada.id_bodega;
+                    });
+                    console.log(esAsignada);
+                    let mensajeAsignada = esAsignada ? '<span class="badge badge-success">Asignada</span>' : '';
+                    let boton_asignar = esAsignada ? '<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_bodega_sucursal('+bodega.id+');" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button>' : '<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="asignar_bodega('+bodega.id+');" data-toggle="tooltip" data-placement="top" title="Asignar"><i class="feather icon-check"></i></button>';
+                    table.row.add([
+                        bodega.nombre,
+                        bodega.descripcion+' '+mensajeAsignada,
+                        boton_asignar // si tienes el botón de asignar aquí
+                    ]).draw(false);
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las bodegas",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     }
 
     function mostrar_formulario_nuevo_box()

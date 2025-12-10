@@ -84,7 +84,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12 mt-3">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Laboratorio Radiología</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio Laboratorio xRadiología</h5>
                             </div>
                             <!--<ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -162,6 +162,55 @@
                     </div>
                 </div>
             </div>
+            {{--<div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card  pb-0">
+                        <div class="card-header text-center bg-c-info">
+                            <div class="row">
+                                <div class="col-sm-4 d-inline text-left">
+                                    <h5 class="text-white my-2" style="font-size: 1.1rem;">Mi agenda del día</h5>
+                                </div>
+                                <div class="col-md-4 d-inline text-right mt-1">
+                                    <select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm" onchange="">
+                                        <option value="">Seleccione Lugar</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 d-inline text-right mt-1">
+                                    <input type="date"  class="form-control form-control-sm" id="buscar_horas" name="buscar_horas">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body pb-0 pt-4">
+                            <div class="dt-responsive table-responsive align-middle pb-0">
+                                <table id="simpletable" class="table table-striped table-bordered nowrap table-sm"
+                                    style="height: 100px">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center align-left">Hora</th>
+                                            <th class="text-center align-left">Paciente</th>
+                                            <th class="text-center align-left">Lugar Atención</th>
+                                            <!--<th class="text-center align-middle">Acción</th>-->
+                                        </tr>
+                                    </thead>
+                                   <tbody>
+                                        <tr>
+                                            <td class="text-center align-left">{{ $hd->hora_inicio }}</td>
+                                            <td class="text-center align-left bg-estado-light-amarillo">
+                                                <strong>
+                                                    <span>{{ $hd->paciente->nombres . ' ' . $hd->paciente->apellido_uno . ' ' . $hd->paciente->apellido_dos }}</span>
+                                                <strong>
+                                                <!--<br style="line-height: 1%;"><span>{{ $hd->paciente->rut }}</span>-->
+                                            </td>
+                                            <td class="text-center align-left">{{ $hd->lugar_atencion->nombre }}</td>
+                                         
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>--}}
         </div>
     </div>
     <!--Cierre: Container Completo-->

@@ -656,7 +656,7 @@
 
                     let datos = {
                         metodo_pago: metodo_pago,
-                        observaciones: observaciones
+                        observaciones: observaciones,
                     };
 
                     finalizarVenta(datos);
@@ -668,6 +668,7 @@
          * Procesar préstamo 
          */
 
+         
         function procesarPrestamo() {
             // Aquí puedes implementar lógica adicional para procesar el préstamo
             swal({
@@ -679,6 +680,22 @@
                             <div class="form-group text-left">
                                 <label class="font-weight-bold">Observaciones:</label>
                                 <textarea id="swal-obs-prestamo" class="form-control" rows="3" placeholder="Ingrese observaciones adicionales (opcional)"></textarea>
+                            </div>
+                            <div class="form-group mb-3 text-left">
+                            <input type="checkbox" id="garantiaPrestamo" name="garantiaPrestamo" onchange="toggleGarantiaDiv()">
+                            <label for="garantiaPrestamo" class="ml-2">¿Se deja garantía?</label>
+                            </div>
+                            <div id="divGarantia" style="display:none; margin-bottom:15px;">
+                            <label for="tipoGarantia">Tipo de garantía:</label>
+                            <select id="tipoGarantia" class="form-control mb-2">
+                            <option value="">Seleccione tipo</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="documento">Documento</option>
+                            <option value="otro">Otro</option>
+                            </select>
+                            <label for="valorGarantia">Valor de la garantía:</label>
+                            <input type="text" id="valorGarantia" class="form-control" placeholder="Ingrese valor">
                             </div>
                         `
                     }
@@ -702,18 +719,46 @@
             }).then((willProcess) => {
                 if (willProcess) {
                     let observaciones = document.getElementById('swal-obs-prestamo').value;
-
+                    let tiene_garantia = $('#garantiaPrestamo').is(':checked') ? 1 : 0;
+                    console.log('tiene_garantia 2', tiene_garantia);
+                    if(tiene_garantia){
+                        var tipo_garantia = $('#tipoGarantia').val();
+                        if(tipo_garantia == '' || tipo_garantia == 0){
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Debe seleccionar un tipo de garantía'
+                            });
+                            return;
+                        }
+                        var valor_garantia = parseFloat($('#valorGarantia').val());
+                    }
                     // Validar observaciones
                     if (!observaciones) {
                         swal("Error", "Debe ingresar observaciones", "error");
                         return;
                     }
 
+                    // validar garantía
+                    if(tiene_garantia){
+                        if(!tipo_garantia || tipo_garantia == 0){
+                            swal("Error", "Debe seleccionar un tipo de garantía", "error");
+                            return;
+                        }
+                        if(!valor_garantia || isNaN(valor_garantia) || valor_garantia <= 0){
+                            swal("Error", "Debe ingresar un valor válido para la garantía", "error");
+                            return;
+                        }
+                    }
+
                     // Cerrar modal y procesar
                     swal.close();
 
                     let datos = {
-                        observaciones: observaciones
+                        observaciones: observaciones,
+                        tiene_garantia: tiene_garantia,
+                        tipo_garantia: tipo_garantia || '',
+                        valor_garantia: valor_garantia || 0
                     };
 
                     finalizarPrestamo(datos);
@@ -739,6 +784,9 @@
                     id_paciente: $('#id_paciente_fc').val(),
                     id_ficha: $('#id_fc').val(),
                     observaciones: datos.observaciones,
+                    tiene_garantia: datos.tiene_garantia,
+                    tipo_garantia: datos.tipo_garantia || '',
+                    valor_garantia: datos.valor_garantia || 0,
                     _token: CSRF_TOKEN
                 },
             })
@@ -801,6 +849,7 @@
                 data: {
                     id_paciente: $('#id_paciente_fc').val(),
                     id_ficha: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
                     metodo_pago: datos.metodo_pago,
                     observaciones: datos.observaciones,
                     _token: CSRF_TOKEN
@@ -1017,6 +1066,8 @@
             html += '<div class="mb-2 text-left">';
             html += '<strong>Paciente:</strong> ' + (nombrePaciente || 'No seleccionado');
             html += '</div>';
+
+           
         
             if (carritoData.items.length === 0) {
                 html += '<p class="text-center py-4">El carrito de préstamos está vacío</p>';
@@ -1413,6 +1464,12 @@
                     console.error('Error al cargar los datos del producto');
                 }
             });
+        }
+
+        function toggleGarantiaDiv() {
+            var checked = document.getElementById('garantiaPrestamo').checked;
+            document.getElementById('divGarantia').style.display = checked ? 'block' : 'none';
+            $('#id_garantia').val(checked ? 1 : 0);
         }
 
         // Ver detalle del producto

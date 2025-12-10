@@ -120,7 +120,6 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tab-content" id="myTabContent">
-
                         <!--PERFIL CENTRO MEDICO-->
                         <div class="tab-pane fade show active" id="p-cm" role="tabpanel" aria-labelledby="p-cm-tab">
                             <div class="row mb-3 mt-0">
@@ -279,7 +278,7 @@
                                     <!--Ubicación-->
                                     <div class="card">
                                         <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Ubicación (casa matriz)</h5>
+                                            <h5 class="mb-0 text-white">Ubicación (Casa matriz)</h5>
                                             <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
@@ -322,7 +321,6 @@
                                         <!--(Editar) Ubicación-->
                                         <div class="card-body info_residencial collapse " id="info_residencial_2">
                                             <form>
-
                                                 <div class="form-group row">
                                                     <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
                                                     <div class="col-sm-6">
@@ -422,9 +420,9 @@
                                 <div class="col-md-6">
                                     <!--Card Información Básica-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Datos Personales</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -534,7 +532,7 @@
                                     <div class="card">
                                         <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -587,9 +585,9 @@
                                 <div class="col-md-6">
                                     <!--Card Contacto-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Contacto</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -647,9 +645,9 @@
                                     <!--Cierre: Card Contacto-->
                                     <!--Card Residencia-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Residencia</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -744,8 +742,8 @@
                                 <div class="col-sm-12 col-md-12">
                                     <div class="card mb-1">
                                         <div class="card-body">
-                                            <h4 class="f-18 mb-0 text-info">Perfil administradores medicos de la Institución</h4>
-                                            <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                            <h4 class="f-18 mb-0 text-info d-inline">Perfil administradores médicos de la Institución</h4>
+                                            <div class="btn-group mr-2 float-md-right  ml-4 d-inline">
                                                 <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Administrar</button>
                                             </div>
                                             @if(isset($director_cm) && $director_cm != null)<input type="hidden" name="id_responsable" id="id_director_cm" value="{{$director_cm->id }}"> @endif
@@ -759,10 +757,10 @@
                                     <div class="col-md-4">
                                         <!--Card Información Básica-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                                <h5 class="mb-0 text-white">Datos Personales Director Medico</h5>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(1,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_director_cm" aria-expanded="false" aria-controls="info_basica-1_ info_basica-2">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                                <h5 class="mb-0 text-white">Datos Personales Director Médico</h5>
+                                                <button type="button" class="btn btn-light text-danger btn-icon" onclick="eliminar_admin_cm(1,{{ $institucion->id }})"><i class="feather icon-x"></i></button>
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_basica_director_cm" aria-expanded="false" aria-controls="info_basica-1_ info_basica-2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -872,7 +870,7 @@
                                         <div class="card">
                                             <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_director_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_director_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -923,9 +921,9 @@
                                         <!--Cierre:Contraseña-->
                                         <!--Card Contacto-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Contacto</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto_" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto_" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -983,9 +981,9 @@
                                         <!--Cierre: Card Contacto-->
                                         <!--Card Residencia-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Residencia</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_director_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_director_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1077,7 +1075,7 @@
                                     <div class="col-md-4">
                                         <!--Card Información Básica-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Datos Personales SubDirector Medico</h5>
                                                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                                                 <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
@@ -1190,7 +1188,7 @@
                                         <div class="card">
                                             <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_subdirector_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_subdirector_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1241,9 +1239,9 @@
                                         <!--Cierre:Contraseña-->
                                         <!--Card Contacto-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Contacto</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto_subdirector_cm" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto_subdirector_cm" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1302,9 +1300,9 @@
                                         <!--Card Residencia-->
                                         @if(isset($subdirector_cm))
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Residencia</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_subdirector_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_subdirector_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1397,7 +1395,7 @@
                                     <div class="col-md-4">
                                         <!--Card Información Básica-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Datos Personales SubDirector Gestion Cuidado</h5>
                                                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                                                 <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
@@ -1510,7 +1508,7 @@
                                         <div class="card">
                                             <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1561,9 +1559,9 @@
                                         <!--Cierre:Contraseña-->
                                         <!--Card Contacto-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Contacto</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1621,9 +1619,9 @@
                                         <!--Cierre: Card Contacto-->
                                         <!--Card Residencia-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Residencia</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1715,10 +1713,10 @@
                                     <div class="col-md-4">
                                         <!--Card Información Básica-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Datos Personales Director Técnico</h5>
-                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(8,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                <button type="button" class="btn btn-light text-danger btn-icon" onclick="eliminar_admin_cm(8,{{ $institucion->id }})"><i class="feather icon-x"></i></button>
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1828,7 +1826,7 @@
                                         <div class="card">
                                             <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1879,9 +1877,9 @@
                                         <!--Cierre:Contraseña-->
                                         <!--Card Contacto-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Contacto</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -1939,9 +1937,9 @@
                                         <!--Cierre: Card Contacto-->
                                         <!--Card Residencia-->
                                         <div class="card">
-                                            <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                                 <h5 class="mb-0 text-white">Residencia</h5>
-                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                     <i class="feather icon-edit"></i>
                                                 </button>
                                             </div>
@@ -2103,51 +2101,53 @@
                                 <!--Especialidades-->
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="card-header pt-2 pb-1 bg-info">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h6 class="f-18 d-inline mt-3 text-info">Especialidades Médicas</h6>
+                                                    <h6 class="f-18 d-inline mt-3 text-white">Especialidades Médicas</h6>
                                                     <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-sm-6 col-md-12">
-                                                    <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-wrap text-center align-middle">Tipo Especialidad</th>
-                                                                <th class="text-wrap text-center align-middle">SubTipo Especialidad</th>
-                                                                <th class="text-wrap text-center align-middle">N° Profesionales</th>
-                                                                <th class="text-wrap text-center align-middle">Acción</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if(isset($especialidades_cm))
-                                                            @foreach($especialidades_cm as $especialidad)
-                                                            <tr>
-                                                                <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
-                                                                <td class="align-middle text-center">{{ $especialidad->sub_tipo }}</td>
-                                                                <td class="align-middle text-center">{{ $especialidad->num_profesionales }}</td>
-                                                                <td class="align-middle text-center">
-                                                                    <div class="custom-control custom-switch">
-                                                                        <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}" onchange="cambiarEstadoEspecialidad({{ $especialidad->id }})" @if($especialidad->estado == 1) checked @endif>
-                                                                        <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle text-center">
-                                                                    <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_especialidad_cm({{ $especialidad->id }})"><i class="fas fa-edit"></i></button>
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-wrap align-middle">Tipo Especialidad</th>
+                                                                    <th class="text-wrap align-middle">SubTipo Especialidad</th>
+                                                                    <th class="text-wrap align-middle">N° Profesionales</th>
+                                                                    <th class="text-wrap align-middle">Acción</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if(isset($especialidades_cm))
+                                                                @foreach($especialidades_cm as $especialidad)
+                                                                <tr>
+                                                                    <td class="align-middle">{{ $especialidad->nombre }}</td>
+                                                                    <td class="align-middle">{{ $especialidad->sub_tipo }}</td>
+                                                                    <td class="align-middle">{{ $especialidad->num_profesionales }}</td>
+                                                                    <td class="align-middle">
+                                                                        <div class="custom-control custom-switch">
+                                                                            <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}" onchange="cambiarEstadoEspecialidad({{ $especialidad->id }})" @if($especialidad->estado == 1) checked @endif>
+                                                                            <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_especialidad_cm({{ $especialidad->id }})"><i class="fas fa-edit"></i></button>
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
+                                                                    </td>
+                                                                </tr>
+                                                                @endforeach
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2157,12 +2157,12 @@
                                 <!--Área-->
                                 <div class="col-md-6">
                                     <div class="card">
-                                        <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="card-header pt-2 pb-1 bg-info">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h6 class="f-18 d-inline mt-3 text-info">Áreas</h6>
+                                                    <h6 class="f-18 d-inline mt-3 text-white">Áreas</h6>
                                                     <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2196,17 +2196,15 @@
                                     </div>
                                 </div>
 
-                              
-
                                 <!-- Procedimientos -->
                                 <div class="col-md-12">
                                     <div class="card">
-                                        <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="card-header pt-2 pb-1 bg-info">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h6 class="f-18 d-inline mt-3 text-info">Examenes</h6>
-                                                    <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_procedimiento();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                    <h6 class="f-18 d-inline mt-3 text-white">Exámenes</h6>
+                                                    <div class="btn-group mr-2 d-inline float-md-right ml-4">
+                                                        <button type="button" class="btn btn-sm btn-light" onclick="ag_procedimiento();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2214,11 +2212,11 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12">
-                                                    <table id="procedimiento_cm" class="table table-striped" style="width:100%">
+                                                    <table id="procedimiento_cm" class="table table-striped table-xs" style="width:100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-wrap text-left align-middle">Nombre</th>
-                                                                <th class="text-wrap text-left align-middle">Descripcion</th>
+                                                                <th class="text-wrap text-left align-middle">Descripción</th>
                                                                 {{-- <th class="text-wrap text-left align-middle">minutos_bloque</th> --}}
                                                                 <th class="text-wrap text-left align-middle">Cantidad Bloques</th>
                                                                 <th class="text-wrap text-left align-middle">Valor</th>
@@ -2235,7 +2233,7 @@
                                                                         <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
                                                                         <td class="align-middle text-left">$ {{ empty($proced->valor)?0:number_format($proced->valor, 0, ",", ".") }}</td>
                                                                         <td class="align-middle text-left">
-                                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-trash"></i></button>
+                                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-x"></i></button>
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -2250,10 +2248,10 @@
                                   <!--Servicios-->
                                 <div class="col-md-12">
                                     <div class="card">
-                                        <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="card-header pt-2 pb-1 bg-info">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
+                                                    <h6 class="f-18 d-inline mt-3 text-white">Servicios</h6>
                                                     <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
                                                         <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                     </div>
@@ -2291,7 +2289,7 @@
                                 </div>
                             </div>
                         </div>
-<!--BODEGAS-->
+                        <!--BODEGAS-->
                         <div class="tab-pane fade" id="bodegas_serv" role="tabpanel"
                             aria-labelledby="bodegas_serv-tab">
                             <div class="row">

@@ -1,5 +1,26 @@
 @extends('template.laboratorio.laboratorio_profesional.template')
-
+@section('page-style')
+<style>
+    .card-permiso-denegado {
+        background: #f8d7da;
+        border: 1px solid #f5c2c7;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+    .card-permiso-denegado .card-body {
+        color: #a94442;
+    }
+    .card-permiso-denegado img {
+        filter: grayscale(1) opacity(0.5);
+    }
+    .permiso-texto-denegado {
+        font-size: 0.95rem;
+        line-height: 1.3;
+        color: #a94442;
+        margin-bottom: 0;
+    }
+</style>
+@endsection
 @section('page-script')
     <script>
         function seleccionar_lugar_atencion() {
@@ -122,19 +143,32 @@
                         </div>
 
                         <div class="card subir">
-                            <a href="{{ route('laboratorio.pacientes.profesional.asistente') }}">
-                                <div class="card-body text-center px-2" style="cursor:pointer">
-                                    <img class="wid-40 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                    <h6 class="mt-1">Mis <br>pacientes</h6>
-                                </div>
-                            </a>
-                        </div>
+                                <a href="{{ route('laboratorio.pacientes.profesional.asistente') }}">
+                                    <div class="card-body text-center px-2" style="cursor:pointer">
+                                        <img class="wid-40 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                        <h6 class="mt-1">Mis <br>pacientes</h6>
+                                    </div>
+                                </a>
+                            </div>
+
+                       
+
 
                         <div class="card subir">
                             <a href="{{ route('laboratorio.cargar.resultados') }}">
                                 <div class="card-body text-center px-2" style="cursor:pointer">
                                     <img class="wid-40 text-center" src="{{ asset('images/iconos/examenes-ro.svg') }}">
                                     <h6 class="mt-1 f-13">Subir <br>exámenes</h6>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="card subir">
+                            <a href="{{ route('laboratorio.caja.rendir') }}">
+                                <div class="card-body text-center px-2" style="cursor:pointer">
+                                    <img class="wid-40 text-center"
+                                        src="{{ asset('images/iconos/caja.png') }}">
+                                    <h6 class="mt-1"> Entrega de <br>caja</h6>
                                 </div>
                             </a>
                         </div>
@@ -149,6 +183,7 @@
                             </a>
                         </div>
 
+                        
                     </div>
                 </div>
             </div>
@@ -166,18 +201,32 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                    <div class="card mb-3 subir">
-                        <a href="{{ ROUTE('laboratorio.pacientes.profesional.asistente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
+                 @if(isset($permisos_profesional) && $permisos_profesional->permisos_ver_pacientes == 1)
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="card mb-3 subir">
+                            <a href="{{ ROUTE('laboratorio.pacientes.profesional.asistente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-60 text-center"
+                                        src="{{ asset('images/iconos/pacientes-lab.png') }}">
+                                    <h6 class="mt-1">Pacientes del Lab.</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                @else
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="card mb-3 subir card-permiso-denegado">
+                            <div class="card-body text-center">
                                 <img class="wid-60 text-center"
                                     src="{{ asset('images/iconos/pacientes-lab.png') }}">
-                                <h6 class="mt-1">Pacientes del Lab.</h6>
+                                <h6 class="mt-1 mb-1">Pacientes del Lab.</h6>
+                                <p class="mt-2 permiso-texto-denegado">No tienes permiso para acceder a este módulo.<br>Contacta al administrador.</p>
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
-
+                @endif
+                
+                @if(isset($permisos_profesional) && $permisos_profesional->permiso_vender_audifonos == 1)
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="card mb-3 subir">
                         <a href="{{ ROUTE('laboratorio.profesional.audifono.venta') }}">
@@ -189,7 +238,21 @@
                         </a>
                     </div>
                 </div>
-                
+                @else
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir card-permiso-denegado">
+                        <div class="card-body text-center">
+                            <img class="wid-60 text-center"
+                                src="{{ asset('images/iconos/audifono-discapacidad.png') }}">
+                            <h6 class="mt-1 mb-1">Venta audífonos y repuestos</h6>
+                            <p class="mt-2 permiso-texto-denegado">No tienes permiso para acceder a este módulo.<br>Contacta al administrador.</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+
+                @if(isset($permisos_profesional) && $permisos_profesional->permiso_control_audifonos == 1)
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="card mb-3 subir">
                         <a href="{{ ROUTE('laboratorio.profesional.audifono.control') }}">
@@ -201,6 +264,20 @@
                         </a>
                     </div>
                 </div>
+                @else
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir card-permiso-denegado">
+                        <div class="card-body text-center">
+                            <img class="wid-60 text-center"
+                                src="{{ asset('images/iconos/paciente-audifono.png') }}">
+                            <h6 class="mt-1 mb-1">Control audífonos</h6>
+                            <p class="mt-2 permiso-texto-denegado">No tienes permiso para acceder a este módulo.<br>Contacta al administrador.</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if(isset($permisos_profesional) && $permisos_profesional->permiso_estadisticas_laboratorio == 1)
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="card mb-3 subir">
                         <a href="{{ ROUTE('laboratorio.estadisticas') }}">
@@ -212,6 +289,18 @@
                         </a>
                     </div>
                 </div>
+                @else
+                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="card mb-3 subir card-permiso-denegado">
+                        <div class="card-body text-center">
+                            <img class="wid-60 text-center"
+                                src="{{ asset('images/iconos/estadisticas.png') }}">
+                            <h6 class="mt-1 mb-1">Estadísticas</h6>
+                            <p class="mt-2 permiso-texto-denegado">No tienes permiso para acceder a este módulo.<br>Contacta al administrador.</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
 
 
@@ -243,4 +332,5 @@
 
     </div>
     <!--Cierre: Container Completo-->
+    @include('app.profesional.modales.seleccionar_lugar_atencion')
 @endsection
