@@ -132,7 +132,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                             <div class="card subir py-3">
-                                <a href="{{ ROUTE('profesional.mis_procedimientos') }}">
+                                <a href="{{ ROUTE('profesional.mis_propios_convenios') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-70 text-center mb-3"
                                         src="{{ asset('images/iconos/convenios.png') }}"
