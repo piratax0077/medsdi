@@ -1315,6 +1315,12 @@
       dropdownParent: $('#dia_horario').closest('.form-group') // 🔑
     });
   });
+
+    //LIMPIAR
+    function datos_limpiar_asistente() {
+        $('#rut_asistente').val('');
+        $('#datos_asistente').hide();
+    }
     </script>
     
 @endsection
