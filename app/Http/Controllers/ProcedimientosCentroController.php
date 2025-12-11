@@ -190,62 +190,160 @@ class ProcedimientosCentroController extends Controller
         return (object)$datos;
     }
 
+    // public function verRegistros_r(Request $request)
+    // {
+    //     return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado, $request->tipo_ficha_atencion);
+
+    // }
+    // static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado, $tipo_ficha_atencion)
+    // {
+    //     $datos = array();
+    //     $error = array();
+    //     $valido = 1;
+
+    //     if($valido)
+    //     {
+    //         $filtro = array();
+    //         if(!empty($id))
+    //             $filtro[] = array('id', $id);
+    //         if(!empty($id_lugar_atencion))
+    //             $filtro[] = array('id_lugar_atencion', $id_lugar_atencion);
+    //         if(!empty($nombre))
+    //             $filtro[] = array('nombre', $nombre);
+    //         if(!empty($descripcion))
+    //             $filtro[] = array('descripcion', $descripcion);
+    //         if(!empty($tipo_ficha_atencion))
+    //             $filtro[] = array('tipo_ficha_atencion', $tipo_ficha_atencion);
+    //         if(!empty($minutos_bloque))
+    //             $filtro[] = array('minutos_bloque', $minutos_bloque);
+    //         if(!empty($cantidad_bloques))
+    //             $filtro[] = array('cantidad_bloques', $cantidad_bloques);
+    //         if(!empty($valor))
+    //             $filtro[] = array('valor', $valor);
+    //         if(!empty($otros))
+    //             $filtro[] = array('otros', $otros);
+    //         if(!empty($estado))
+    //             $filtro[] = array('estado', $estado);
+
+    //         $registro = ProcedimientosCentro::where($filtro)->get();
+    //         if($registro)
+    //         {
+    //             $datos['estado'] = 1;
+    //             $datos['msj'] = 'registro';
+    //             $datos['registro'] = $registro;
+    //         }
+    //         else
+    //         {
+    //             $datos['estado'] = 0;
+    //             $datos['msj'] = 'sin registro';
+    //         }
+    //     }
+    //     else
+    //     {
+    //         $datos['estado'] = 0;
+    //         $datos['msj'] = 'campo requerido';
+    //         $datos['error'] = $error;
+    //     }
+
+    //     return (object)$datos;
+    // }
     public function verRegistros_r(Request $request)
-    {
-        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado, $request->tipo_ficha_atencion);
+{
+    // puedes filtrar sólo por lugar de atención y estado activo
+    $resp = static::verRegistros(
+        $request->id,
+        $request->id_lugar_atencion,
+        $request->nombre,
+        $request->descripcion,
+        $request->minutos_bloque,
+        $request->cantidad_bloques,
+        $request->valor,
+        $request->otros,
+        $request->estado,
+        $request->tipo_ficha_atencion
+    );
 
-    }
-    static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado, $tipo_ficha_atencion)
-    {
-        $datos = array();
-        $error = array();
-        $valido = 1;
+    // devolver JSON “bonito” para tu $.ajax
+    return response()->json($resp);
+}
 
-        if($valido)
-        {
-            $filtro = array();
-            if(!empty($id))
-                $filtro[] = array('id', $id);
-            if(!empty($id_lugar_atencion))
-                $filtro[] = array('id_lugar_atencion', $id_lugar_atencion);
-            if(!empty($nombre))
-                $filtro[] = array('nombre', $nombre);
-            if(!empty($descripcion))
-                $filtro[] = array('descripcion', $descripcion);
-            if(!empty($tipo_ficha_atencion))
-                $filtro[] = array('tipo_ficha_atencion', $tipo_ficha_atencion);
-            if(!empty($minutos_bloque))
-                $filtro[] = array('minutos_bloque', $minutos_bloque);
-            if(!empty($cantidad_bloques))
-                $filtro[] = array('cantidad_bloques', $cantidad_bloques);
-            if(!empty($valor))
-                $filtro[] = array('valor', $valor);
-            if(!empty($otros))
-                $filtro[] = array('otros', $otros);
-            if(!empty($estado))
-                $filtro[] = array('estado', $estado);
+static public function verRegistros(
+    $id,
+    $id_lugar_atencion,
+    $nombre,
+    $descripcion,
+    $minutos_bloque,
+    $cantidad_bloques,
+    $valor,
+    $otros,
+    $estado,
+    $tipo_ficha_atencion
+) {
+    $datos  = [];
+    $error  = [];
+    $valido = 1;
 
-            $registro = ProcedimientosCentro::where($filtro)->get();
-            if($registro)
-            {
-                $datos['estado'] = 1;
-                $datos['msj'] = 'registro';
-                $datos['registro'] = $registro;
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'sin registro';
-            }
+    if ($valido) {
+        $filtro = [];
+
+        if (!empty($id))
+            $filtro[] = ['id', $id];
+        if (!empty($id_lugar_atencion))
+            $filtro[] = ['id_lugar_atencion', $id_lugar_atencion];
+        if (!empty($nombre))
+            $filtro[] = ['nombre', $nombre];
+        if (!empty($descripcion))
+            $filtro[] = ['descripcion', $descripcion];
+        if (!empty($tipo_ficha_atencion))
+            $filtro[] = ['tipo_ficha_atencion', $tipo_ficha_atencion];
+        if (!empty($minutos_bloque))
+            $filtro[] = ['minutos_bloque', $minutos_bloque];
+        if (!empty($cantidad_bloques))
+            $filtro[] = ['cantidad_bloques', $cantidad_bloques];
+        if (!empty($valor))
+            $filtro[] = ['valor', $valor];
+        if (!empty($otros))
+            $filtro[] = ['otros', $otros];
+        if (!empty($estado))
+            $filtro[] = ['estado', $estado];
+
+        $registro = ProcedimientosCentro::where($filtro)->get();
+
+        if ($registro->isNotEmpty()) {
+            // ✅ Hay registros reales
+            $datos['estado']   = 1;
+            $datos['msj']      = 'registro';
+            $datos['registro'] = $registro;
+        } else {
+            // ❌ No hay registros → devolvemos MOCK
+            $mock = [
+                (object)[
+                    'id'                 => 1,
+                    'id_lugar_atencion'  => $id_lugar_atencion,
+                    'nombre'             => 'Procedimiento de ejemplo',
+                    'descripcion'        => 'Procedimiento de prueba (mock)',
+                    'minutos_bloque'     => $minutos_bloque ?: 15,
+                    'cantidad_bloques'   => $cantidad_bloques ?: 1,
+                    'valor'              => $valor ?: 1,
+                    'otros'              => $otros ?: null,
+                    'tipo_ficha_atencion'=> $tipo_ficha_atencion ?: 1,
+                    'estado'             => 1,
+                    'es_mock'            => true,
+                ],
+            ];
+
+            $datos['estado']   = 1;              // lo dejamos en 1 para que tu front entre al if (data.estado == 1)
+            $datos['msj']      = 'registro_mock';
+            $datos['registro'] = $mock;
         }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'campo requerido';
-            $datos['error'] = $error;
-        }
-
-        return (object)$datos;
+    } else {
+        $datos['estado'] = 0;
+        $datos['msj']    = 'campo requerido';
+        $datos['error']  = $error;
     }
+
+    return (object)$datos;
+}
+
 
 }

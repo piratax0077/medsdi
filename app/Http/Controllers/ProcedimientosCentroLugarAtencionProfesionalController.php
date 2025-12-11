@@ -216,6 +216,7 @@ class ProcedimientosCentroLugarAtencionProfesionalController extends Controller
                                 $request->otros,
                                 $request->estado );
     }
+    
     static public function verRegistros( $id, $id_procedimiento_centro, $id_lugar_atencion, $id_profesional, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $estado )
     {
         $datos = array();
@@ -268,5 +269,6 @@ class ProcedimientosCentroLugarAtencionProfesionalController extends Controller
 
         return (object)$datos;
     }
+    
 
 }

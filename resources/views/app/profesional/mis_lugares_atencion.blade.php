@@ -1104,6 +1104,15 @@
             let minutos_bloque = $('#agrear_editar_procedimientos_minutos_bloque').val();
             let cantidad_bloques = $('#agrear_editar_procedimientos_cantidad_bloques').val();
             let url = "{{ route('profesional.mis_procedimientos_lugar_atencion.registrar') }}";
+            if (!id_procedimiento || id_procedimiento === "0") {
+                swal({
+                    title: "Procedimiento",
+                    text: "Debes seleccionar un procedimiento.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                return;
+            }
 
             $.ajax({
                     url: url,

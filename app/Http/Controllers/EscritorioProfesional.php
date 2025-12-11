@@ -10184,44 +10184,71 @@ public function eliminarPiezaCoronaProtesis(Request $req){
     public function mi_horario_lugar_atencion_agregar(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $hora_inicio = \Carbon\Carbon::parse($request->hora_inicio . ':01')->format('H:i:s');
+
+        // Normalizar días: siempre array de strings
+        $diasSeleccionados = $request->input('dia', []);
+        if (!is_array($diasSeleccionados)) {
+            $diasSeleccionados = [$diasSeleccionados];
+        }
+
+        // Opcional: limpiar / dejar únicos / ordenar
+        $diasSeleccionados = array_unique($diasSeleccionados);
+        sort($diasSeleccionados);
+
+        $hora_inicio  = \Carbon\Carbon::parse($request->hora_inicio . ':01')->format('H:i:s');
         $hora_termino = \Carbon\Carbon::parse($request->hora_termino . ':00')->format('H:i:s');
 
+        // 🔎 Validar si ya existe un horario que se cruce en alguno de esos días
         $validate = ProfesionalHorario::where('id_profesional', $profesional->id)
-            ->where('dia', 'like', "%$request->dia%")
-            ->whereRaw("('$hora_inicio' BETWEEN hora_inicio AND hora_termino OR '$hora_termino' BETWEEN hora_inicio AND hora_termino)", [0])
+            ->where(function ($q) use ($diasSeleccionados) {
+                foreach ($diasSeleccionados as $dia) {
+                    $q->orWhere('dia', 'like', "%{$dia}%");
+                }
+            })
+            ->whereRaw(
+                "(
+                    ? BETWEEN hora_inicio AND hora_termino
+                    OR ? BETWEEN hora_inicio AND hora_termino
+                )",
+                [$hora_inicio, $hora_termino]
+            )
             ->get();
 
-        if (count($validate) > 0) {
+        if ($validate->count() > 0) {
             return 'Failed';
         }
 
+        // Buscar si ya existe un horario con misma hora/duración para ese profesional
         $horario = ProfesionalHorario::where('hora_inicio', $hora_inicio)
             ->where('hora_termino', $hora_termino)
             ->where('duracion_consulta', $request->duracion)
             ->where('id_profesional', $profesional->id)
             ->first();
 
-
-
         if (isset($horario->id)) {
-            $horario->dia = $horario->dia . ',' . $request->dia;
-        } else {
+            // Ya existe: mezclamos días antiguos + nuevos
+            $diasActuales = $horario->dia ? explode(',', $horario->dia) : [];
+            $diasTotales  = array_unique(array_merge($diasActuales, $diasSeleccionados));
+            sort($diasTotales);
 
+            $horario->dia = implode(',', $diasTotales); // ej: "1,2,4,5"
+        } else {
+            // No existe: creamos nuevo
             $horario = new ProfesionalHorario();
-            $horario->hora_inicio = $hora_inicio;
-            $horario->hora_termino = $hora_termino;
-            $horario->dia = $request->dia;
-            $horario->duracion_consulta = $request->duracion;
-            $horario->id_profesional = $profesional->id;
-            $horario->id_lugar_atencion = $request->id_lugar_atencion;
-            $horario->tipo_Agenda = (int) $request->tipo_agenda_medica;
+            $horario->hora_inicio        = $hora_inicio;
+            $horario->hora_termino       = $hora_termino;
+            $horario->dia                = implode(',', $diasSeleccionados); // "2,3"
+            $horario->duracion_consulta  = $request->duracion;
+            $horario->id_profesional     = $profesional->id;
+            $horario->id_lugar_atencion  = $request->id_lugar_atencion;
+            $horario->tipo_Agenda        = (int) $request->tipo_agenda_medica;
         }
+
         if (!$horario->save()) {
             return 'error';
         }
 
-        return json_encode($horario);
+        return response()->json($horario);
     }
 
     // modulo editar perfil paciente
