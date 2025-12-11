@@ -2567,6 +2567,9 @@ Route::get('/profesional/mensaje/{id}', [App\Http\Controllers\EscritorioGeneral:
 Route::get('/profesional/mensaje/{id}/json', [App\Http\Controllers\EscritorioGeneral::class, 'mensajeJson'])->name('profesional.mensaje.json');
 Route::post('/profesional/convenio/nuevo',[App\Http\Controllers\ConveniosController::class, 'nuevoConvenio'])->name('profesional.convenio_nuevo');
 Route::get('/profesional/mis_convenios',[App\Http\Controllers\ConveniosController::class, 'misPropiosConvenios'])->name('profesional.mis_propios_convenios');
+Route::get('/profesional/mis_procedimientos',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'index'])->name('profesional.mis_procedimientos');
+Route::post('/profesional/mis_procedimientos',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'store'])->name('profesional.mis_procedimientos.store');
+Route::delete('/profesional/mis_procedimientos/{procedimiento}',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'destroy'])->name('profesional.mis_procedimientos.destroy');
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');
