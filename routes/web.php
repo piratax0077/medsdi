@@ -315,7 +315,7 @@ Route::group([
 ], function () {
     // Búsqueda de productos
     Route::get('/productos/buscar', [App\Http\Controllers\CotizacionController::class, 'buscarProductos'])->name('laboratorio.cotizaciones.buscar_productos');
-
+    
     // Gestión de cotizaciones
     Route::post('/guardar-borrador', [App\Http\Controllers\CotizacionController::class, 'guardarBorrador'])->name('laboratorio.cotizaciones.guardar_borrador');
     Route::post('/vista-previa', [App\Http\Controllers\CotizacionController::class, 'vistaPrevia'])->name('laboratorio.cotizaciones.vista_previa');
@@ -335,7 +335,7 @@ Route::group([
     // Seguimiento de cotizaciones
     Route::get('/seguimiento/{paciente_id}', [App\Http\Controllers\CotizacionController::class, 'seguimiento'])->name('laboratorio.cotizaciones.seguimiento');
     Route::post('/enviar-seguimiento', [App\Http\Controllers\CotizacionController::class, 'enviarSeguimiento'])->name('laboratorio.profesional.enviar_seguimiento_cotizacion');
-
+    
 });
 
 
@@ -1476,7 +1476,9 @@ Route::group([
 
     Route::get('box/buscar', [App\Http\Controllers\LaboratorioController::class, 'cargarBox'])->name('laboratorio.box');
     Route::get('agenda/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargarAgendaSucursalBox'])->name('laboratorio.sucursal.horario.agenda');
+    Route::post('sucursal/cambiar/estado', [App\Http\Controllers\LaboratorioController::class, 'cambiarEstadoSucursal'])->name('laboratorio.sucursal.cambiar.estado');
     Route::get('agenda/hora', [App\Http\Controllers\LaboratorioController::class, 'agendar_horas'])->name('laboratorio.agendar_hora');
+    Route::post('sucursal/eliminar', [App\Http\Controllers\LaboratorioController::class, 'eliminarSucursal'])->name('laboratorio.sucursal.eliminar');
 
 
     Route::get('resultado/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargarResultado'])->name('laboratorio.cargar.resultados');
@@ -1525,7 +1527,7 @@ Route::group([
     // Liquidaciones PDF profesional laboratorio
     Route::get('/laboratorio/profesional/liquidacion/pdf', [App\Http\Controllers\LaboratorioController::class, 'lab_liquidacion_profesionales_pdf'])->name('laboratorio.profesional.liquidacion.pdf');
 
-     // Registrar campaña publicitaria
+     // Registrar campaña publicitaria 
     Route::post('/registrar-campania',[App\Http\Controllers\LaboratorioController::class, 'registrarCampaniaPublicitaria'])->name('laboratorio.registrar_campania_publicitaria');
     Route::post('/historial-campanias',[App\Http\Controllers\LaboratorioController::class, 'historialCampaniasPublicitarias'])->name('laboratorio.historial_campanias_publicitarias');
     Route::post('/detalle-campania',[App\Http\Controllers\LaboratorioController::class, 'detalleCampaniaPublicitaria'])->name('laboratorio.detalle_campania_publicitaria');
@@ -1533,7 +1535,9 @@ Route::group([
 
     // Bodega Laboratorio
     Route::post('/bodega/registrar/item',[App\Http\Controllers\ComprasController::class, 'guardarItemFacturaLaboratorio'])->name('laboratorio.bodega.guardarItemFactura');
-
+    
+    // Pago de bono laboratorio
+    Route::post('/laboratorio/bono/pagar',[App\Http\Controllers\EscritorioProfesional::class, 'recibir_bono_lab'])->name('laboratorio.recibir_bono_lab');
 
     // Asistente Laboratorio
     Route::post('/laboratorio/asistente/registrar',[App\Http\Controllers\ManejoContratoController::class, 'registrarPersonalLaboratorio'])->name('laboratorio.registrar_personal');
@@ -1547,8 +1551,11 @@ Route::group([
     Route::get('/caja/rendicion',[App\Http\Controllers\LaboratorioController::class, 'rendicionCajaLaboratorio'])->name('laboratorio.caja.rendir');
     Route::post('/caja/rendicion/solicitar',[App\Http\Controllers\LaboratorioController::class, 'solicitarRendicionCajaLaboratorio'])->name('laboratorio.caja.solicitar_rendicion');
     Route::get('/caja/rendicion/cargar',[App\Http\Controllers\LaboratorioController::class, 'cargarRendicionLaboratorio'])->name('laboratorio.flujo_caja.index');
-
+    Route::post('caja/rendir/bonos', [App\Http\Controllers\LaboratorioController::class, 'cajaRendirBonos'])->name('laboratorio.caja.rendir.bonos');
+    
     Route::get('/laboratorio/profesional/liquidacion', [App\Http\Controllers\LaboratorioController::class, 'lab_liquidacion_profesionales'])->name('laboratorio.liquidacion_profesionales');
+    Route::get('/laboratorio/historial-liquidaciones-profesional', [App\Http\Controllers\LaboratorioController::class, 'historialLiquidacionesProfesional'])->name('laboratorio.historial_liquidaciones_profesional');
+
 });
 
 // Grupo de rutas para carrito de compras (requiere autenticación)
@@ -1584,7 +1591,7 @@ Route::group([
     Route::post('/procesar-venta',[App\Http\Controllers\LaboratorioController::class, 'procesarVentaCarrito'])->name('laboratorio.carrito.procesar_venta');
     // Procesar prestamo (finalizar prestamo)
     Route::post('/procesar-prestamo',[App\Http\Controllers\LaboratorioController::class, 'procesarPrestamoCarrito'])->name('laboratorio.carrito_prestamos.procesar_prestamo');
-
+    
 
 });
 
@@ -1898,6 +1905,7 @@ Route::group([
     Route::post('eliminar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'eliminar_cuenta_bancaria_institucion'])->name('adm_cm.eliminar_cuenta_bancaria_institucion');
 
     Route::post('registrar_profesional', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesional'])->name('adm_cm.registrar_profesional');
+    Route::post('registrar_profesional_laboratorio', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesionalLaboratorio'])->name('laboratorio.registrar_profesional');
     Route::post('registrar_profesional_convenio', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesionalConvenio'])->name('adm_cm.liquidar_profesional');
     Route::post('registrar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'registrar_asistente'])->name('adm_cm.registrar_asistente');
     Route::post('eliminar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_asistente'])->name('adm_cm.eliminar_asistente');
@@ -2438,6 +2446,7 @@ Route::group([
     Route::post('dame_bonos_diarios',[App\Http\Controllers\FlujoCajaController::class, 'dameBonosDiarios'])->name('flujo_caja.data_flujo_caja_diario');
 
 	Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
+   
     Route::get('caja/pdf/bonos/cm/dia',[App\Http\Controllers\FlujoCajaController::class, 'pdfBonosDia'])->name('asistentecm.pdf_bonos_cm_dia');
     Route::get('caja/pdf/bonos/prof/dia/{id}',[App\Http\Controllers\FlujoCajaController::class, 'pdfBonosDiaProf'])->name('asistentecm.pdf_bonos_profesional_dia');
 });
@@ -2738,10 +2747,10 @@ Route::group([
     'middleware' => ['role:JefeTurno|Admin'],
     'prefix' => 'urgencias/jefe/turno',
 ], function () {
-
+    
     /*  Escritorio JefeTurno */
     Route::get('inicio', [App\Http\Controllers\EscritorioJefeTurnoController::class, 'index'])->name('jefe.turno.home');
-
+    
 });
 
 /** jitsi */
