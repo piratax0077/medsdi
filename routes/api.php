@@ -103,7 +103,13 @@ Route::post('/buscar_profesionales_cm',[App\Http\Controllers\CentroMedicoControl
 Route::post('/buscar_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarEspecialidades'])->name('api.buscar_especialidades_cm');
 Route::post('/buscar_sub_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarSubEspecialidades'])->name('api.buscar_sub_especialidades_cm');
 Route::post('/buscar_profesionales_cm_todos',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesionales'])->name('api.buscar_profesionales_cm_todos');
-
+Route::get('/obtener_datos_paciente_por_rut_agenda',[App\Http\Controllers\CentroMedicoController::class, 'obtenerDatosPacientePorRut'])->name('api.obtener_datos_paciente_por_rut_agenda');
+Route::post('/confirmar_reserva', [App\Http\Controllers\CentroMedicoController::class, 'confirmarReserva'])->name('api.confirmar_reserva');
+Route::post('/buscar_examenes_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarExamenes'])->name('api.buscar_examenes_cm');
+Route::post('/buscar_sucursales_laboratorio',[App\Http\Controllers\CentroMedicoController::class, 'buscarSucursalesLaboratorio'])->name('api.buscar_sucursales_laboratorio');
+Route::post('/buscar_profesionales_examen',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesionalesExamen'])->name('api.buscar_profesionales_examen');
+Route::get('/horas_examen_profesional_lugar_atencion', [App\Http\Controllers\CentroMedicoController::class, 'horasExamenProfesionalLugarAtencion'])->name('api.horas_examen_profesional_lugar_atencion');
+Route::post('/confirmar_reserva_examen', [App\Http\Controllers\CentroMedicoController::class, 'confirmarReservaExamen'])->name('api.confirmar_reserva_examen');
 /**jwt test */
 Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
 Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);

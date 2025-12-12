@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'api.paciente' => \App\Http\Middleware\ApiPacienteAuth::class,
+        'verify.reserva.token' => \App\Http\Middleware\VerifyReservaToken::class,
     ];
 }

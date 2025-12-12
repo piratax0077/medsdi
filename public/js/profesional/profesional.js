@@ -103,7 +103,7 @@ function buscar_asistente() {
 function ver_lugar_atencion(id) {
 
     let lugar_atencion = id;
-    let url = '{{ route('profesional.ver_lugar_atencion') }}';
+    let url = '{{ route("profesional.ver_lugar_atencion") }}';
 
     $.ajax({
 
@@ -143,7 +143,7 @@ function ver_lugar_atencion(id) {
 
 function buscar_examen_ficha(id) {
 
-    let url = '{{ route('profesional.buscar_examenes') }}';
+    let url = '{{ route("profesional.buscar_examenes") }}';
     $('#table_examenes tbody').empty();
 
     $.ajax({
@@ -250,7 +250,7 @@ function buscar_paciente() {
 
 function buscar_receta_ficha(id) {
 
-    let url = '{{ route('profesional.buscar_recetas') }}';
+    let url = '{{ route("profesional.buscar_recetas") }}';
     $('#atenciones_previas_2 tbody').empty();
 
     $.ajax({
