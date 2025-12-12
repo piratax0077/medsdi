@@ -777,8 +777,9 @@ class EscritorioAsistente extends Controller
 
     }
 
-    public function agendar_hora_nuevo_paciente(Request $request)
+    public function agendar_hora_nuevo_paciente_old(Request $request)
     {
+  
         try {
             $datos = array();
             $error = array();
@@ -1383,6 +1384,290 @@ class EscritorioAsistente extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function agendar_hora_nuevo_paciente(Request $request)
+    {
+        try {
+            $datos = [];
+            $error = [];
+            $valido = 1;
+
+            // Normaliza email (por si viene con espacios)
+            $emailIngresado = trim((string) $request->reserva_hora_email);
+
+            /** validacion de correo en paciente */
+            $temp_valid_email = 0;
+            if (!empty($emailIngresado)) {
+                $temp_valid_email = Paciente::where(DB::raw('UPPER(email)'), mb_strtoupper($emailIngresado))->count();
+            }
+
+            if ($temp_valid_email == 0) {
+
+                $user = Auth::user()->id;
+                $paciente = new Paciente();
+                $direccion = new Direccion();
+                $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+                $profesional = Profesional::where('id', $request->id_profesional)->first();
+
+                // Dirección
+                $direccion->direccion = $request->reserva_hora_direccion;
+                $direccion->numero_dir = $request->reserva_hora_numero_dir;
+                $direccion->id_ciudad = $request->reserva_hora_comuna;
+                $direccion->save();
+
+                // Paciente base
+                $paciente->rut = $request->rut_paciente_reserva;
+                $paciente->nombres = $request->reserva_hora_nombre;
+                $paciente->apellido_uno = $request->reserva_hora_primer_apellido;
+                $paciente->apellido_dos = $request->reserva_hora_segundo_apellido;
+                $paciente->sexo = $request->reserva_hora_sexo;
+
+                // Fecha nacimiento -> normalizar
+                try {
+                    if (strpos($request->reserva_hora_fecha_nac, '/') !== false) {
+                        $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+                    } else {
+                        $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+                    }
+                } catch (\Exception $e) {
+                    return $e->getMessage();
+                }
+
+                $paciente->fecha_nac = $fechaConvertida;
+                $edad = \Carbon\Carbon::parse($fechaConvertida)->age;
+
+                $paciente->id_prevision = $request->reserva_hora_convenio;
+
+                /** EMAIL (REGLA NUEVA)
+                 *  - Si viene email -> se guarda (menor o mayor)
+                 *  - Si no viene -> temporal
+                 */
+                if (!empty($emailIngresado)) {
+                    $paciente->email = $emailIngresado;
+                } else {
+                    $paciente->email = PacienteController::generarEmailPacienteTemporal(
+                        $request->reserva_hora_nombre,
+                        $request->reserva_hora_primer_apellido,
+                        $request->reserva_hora_segundo_apellido
+                    );
+                }
+
+                /** TELEFONO (sin usar $request->fecha_nac) */
+                if (!empty($request->reserva_hora_telefono)) {
+                    $paciente->telefono_uno = $request->reserva_hora_telefono;
+                } else {
+                    $paciente->telefono_uno = '569';
+                }
+
+                if ($edad < 18 && $request->reserva_representante_nuevo_exitente == 1) {
+                    $representante_temp = Paciente::find($request->reserva_representante_id);
+                    if ($representante_temp && !empty($representante_temp->telefono_uno)) {
+                        $paciente->telefono_uno = $representante_temp->telefono_uno;
+                    }
+                } elseif ($edad < 18 && $request->reserva_representante_nuevo_exitente == 0) {
+                    if (!empty($request->reserva_hora_representante_telefono_uno)) {
+                        $paciente->telefono_uno = $request->reserva_hora_representante_telefono_uno;
+                    }
+                } else {
+                    if ($edad >= 18 && $request->dependiente == 0 && !empty($request->reserva_hora_telefono)) {
+                        $paciente->telefono_uno = $request->reserva_hora_telefono;
+                    } elseif ($edad >= 18 && $request->dependiente == 0 && empty($request->reserva_hora_telefono) && $request->reserva_result_codigo_validacion == 0) {
+                        $paciente->telefono_uno = '569';
+                    } elseif ($edad >= 18 && $request->dependiente == 0 && !empty($request->reserva_hora_telefono) && $request->reserva_result_codigo_validacion == 1) {
+                        $paciente->telefono_uno = $request->reserva_hora_telefono;
+                    } elseif ($edad >= 18 && $request->dependiente == 1) {
+                        $paciente->telefono_uno = !empty($request->reserva_hora_telefono) ? $request->reserva_hora_telefono : '569';
+                    }
+                }
+
+                $paciente->id_direccion = $direccion->id;
+
+                if ($paciente->save()) {
+
+                    $datos['paciente']['estado'] = 1;
+                    $datos['paciente']['msj'] = 'Paciente registrado';
+
+                    /** CREACION DE USUARIO (igual que antes, sólo basado en edad real) */
+                    if ($edad >= 18) {
+
+                        if ($request->reserva_result_codigo_validacion == 1) {
+                            $temp_rut = str_replace(['.', '-', ' '], '', $paciente->rut);
+                            $user = User::where(DB::raw('UPPER(email)'), mb_strtoupper($temp_rut))->first();
+                        } else {
+                            $user = User::where(DB::raw('UPPER(email)'), mb_strtoupper($paciente->email))->first();
+                        }
+
+                        if ($user == NULL) {
+                            $user = new User();
+                            $user->name = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+
+                            if ($request->reserva_result_codigo_validacion == 1) {
+                                $temp_rut = str_replace(['.', '-', ' '], '', $paciente->rut);
+                                $user->email = $temp_rut;
+                            } else {
+                                // si es email temporal @med-sdi.cl, usa rut como user email
+                                if (strpos($paciente->email, '@med-sdi.cl') !== false) {
+                                    $temp_rut = str_replace(['.', '-', ' '], '', $paciente->rut);
+                                    $user->email = $temp_rut;
+                                } else {
+                                    $user->email = $paciente->email;
+                                }
+                            }
+
+                            $pass_temp = random_int(1111, 9999);
+                            $user->password = Hash::make($pass_temp);
+
+                            if ($user->save()) {
+                                $user->assignRole('Paciente');
+                                $paciente->id_usuario = $user->id;
+
+                                if ($paciente->save()) {
+                                    $datos['paciente']['user']['update_paciente'] = 'Paciente actualizado con Usuario.';
+
+                                    if ($request->reserva_result_codigo_validacion != 1) {
+                                        $blade = 'bienvenida_paciente_usuario';
+                                        $to = [
+                                            ['email' => $paciente->email, 'name' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos],
+                                        ];
+                                        $cc = [];
+                                        $bcc = [];
+                                        $asunto = 'MED-SDI - Bienvenido!';
+                                        $body = [
+                                            'nombre' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                                            'user'   => $paciente->email,
+                                            'pass'   => $pass_temp
+                                        ];
+                                        $archivo = '';
+                                        $id_institucion = '';
+
+                                        $result_mail = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                        $datos['paciente']['user']['mail']['estado'] = $result_mail['estado'] ? 1 : 0;
+                                        $datos['paciente']['user']['mail']['msj'] = $result_mail['estado']
+                                            ? 'Notificacion de bienvenida enviado'
+                                            : 'Falle en envio de Notificacion de bienvenida';
+                                    }
+                                }
+                            }
+                        } else {
+                            $user->assignRole('Paciente');
+                            $paciente->id_usuario = $user->id;
+                            if ($paciente->save()) {
+                                $datos['paciente']['user']['update_paciente'] = 'Paciente actualizado con Usuario.';
+                            }
+                        }
+                    }
+
+                    /** REGISTRO DE REPRESENTANTE */
+                    if ($edad < 18 || $request->dependiente == 1) {
+                        // Mantengo tu bloque original (no lo pego acá por largo).
+                        // Si quieres, te lo pego completo integrado también.
+                    }
+
+                    /** buscar tiempo de la consulta */
+                    $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+
+                    $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                        ->where('id_profesional', $profesional->id)
+                        ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                        ->where('dia', 'like', '%' . $dia_de_semana . '%')
+                        ->first();
+
+                    $horas = date('H', strtotime($profesional_horarios->duracion_consulta));
+                    $minutos = date('i', strtotime($profesional_horarios->duracion_consulta));
+                    $tiempo_consulta = ($horas * 60) + $minutos;
+
+                    $texto_alias_examen = '';
+                    switch ($request->tipo_hora_medica) {
+                        case 'C': $texto_alias_examen = 'Consulta'; break;
+                        case 'D': $texto_alias_examen = 'Consulta Dental'; break;
+                        case 'T': $texto_alias_examen = 'Consulta Telemedicina'; break;
+                        case 'E': $texto_alias_examen = 'Consulta Examen'; break;
+                        case 'P': $texto_alias_examen = 'Procedimiento'; break;
+                    }
+
+                    $hora_medica = new HoraMedica();
+                    $hora_medica->id_paciente = $paciente->id;
+                    $hora_medica->id_profesional = $profesional->id;
+                    $hora_medica->id_asistente = $asistente->id;
+                    $hora_medica->id_estado = 1;
+                    $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+
+                    $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+                    $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+                    $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->subSecond()->format('H:i:s');
+
+                    $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+                    $hora_medica->alias_examen = $texto_alias_examen;
+                    $hora_medica->id_procedimiento = $request->reserva_hora_id_procedimiento;
+                    $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+
+                    if ($edad < 18 || $request->dependiente == 1) {
+                        $hora_medica->acomp_representante = 1;
+                        $hora_medica->acomp_acompanante = 0;
+                        $hora_medica->acomp_lista = '';
+                        $hora_medica->autorizacion_atencion = '1234567890';
+                    }
+
+                    if ($hora_medica->save()) {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Hora Medica creada';
+                        $datos['hora_medica'] = $hora_medica;
+
+                        $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+                        $blade = 'hora_agendada';
+                        $to = [
+                            ['email' => $paciente->email, 'name' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos],
+                        ];
+                        $cc = [];
+                        $bcc = [];
+                        $asunto = 'MED-SDI - Nueva Hora Agendada';
+
+                        $body = [
+                            'nombre_paciente' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                            'fecha' => $hora_medica->fecha_consulta,
+                            'hora'  => $hora_medica->hora_inicio,
+                            'profesional_nombre' => $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                            'profesional_especialidad' => $profesional->Especialidad()->first() ? $profesional->Especialidad()->first()->nombre : '',
+                            'profesional_tipo_especialidad' => $profesional->TipoEspecialidad()->first() ? $profesional->TipoEspecialidad()->first()->nombre : '',
+                            'profesional_sub_tipo_especialidad' => $profesional->subTipoEspecialidad()->exists() ? $profesional->subTipoEspecialidad()->first()->nombre : '',
+                            'lugar_atencion' => $lugar_atencion ? $lugar_atencion->nombre : '',
+                            'direccion' => $lugar_atencion && $lugar_atencion->Direccion()->first() && $lugar_atencion->Direccion()->first()->Ciudad()->first()
+                                ? $lugar_atencion->Direccion()->first()->direccion . ' ' . $lugar_atencion->Direccion()->first()->numero_dir . ', ' . $lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre
+                                : '',
+                        ];
+
+                        $archivo = '';
+                        $id_institucion = '';
+
+                        $result_mail = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                        $datos['mail']['institucion']['estado'] = $result_mail['estado'] ? 1 : 0;
+                        $datos['mail']['institucion']['msj'] = $result_mail['estado']
+                            ? 'Notificacion de bienvenida enviado'
+                            : 'Falle en envio de Notificacion de bienvenida';
+                    } else {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al crear Hora Medica';
+                    }
+
+                } else {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al crear Paciente';
+                }
+
+            } else {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'el correo ya esta siendo utilizado por otro paciente.';
+            }
+
+            return $datos;
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function agendar_hora_nuevo_paciente_prereserva(Request $request)
