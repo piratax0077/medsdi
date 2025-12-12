@@ -3320,7 +3320,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
@@ -3328,7 +3328,7 @@
                                         <td>${permiso_}</td>
                                     </tr>
                                 `;
-                                html_patologias += `<li>${e.antecedente_data.nombre}</li>`;
+                                html_patologias += `<li data-antecedente-id="${e.id}">${e.antecedente_data.nombre}</li>`;
                             break;
                             case '2':
                                 head_ =`
@@ -3341,7 +3341,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
@@ -3364,7 +3364,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.fecha}</td>
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
@@ -3386,7 +3386,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.rut_responsable}</td>
@@ -3406,7 +3406,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.institucion}</td>
                                         <td>${e.antecedente_data.fecha}</td>
@@ -3424,7 +3424,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.fecha_regitro}</td>
@@ -3442,7 +3442,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
                                         <td>${e.antecedente_data.dosis}</td>
                                         <td>${e.antecedente_data.fecha_regitro}</td>
@@ -3461,7 +3461,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr>
+                                    <tr data-antecedente-id="${e.id}">
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.discapacidad_grado}</td>
                                         <td>${e.antecedente_data.discapacidad_permanente}</td>
@@ -3651,7 +3651,11 @@
             success: (resp)=>{
                 if(resp.estado==1)
                 {
+                    const antecedenteId = $('#id-antecedente-m-desactivar').val();
                     cargarRegistrosAntecedentes(tipo);
+                    // Remueve inmediatamente el antecedente de la tabla y del listado de patologías visibles.
+                    $(`#tabla_antecedentes tbody tr[data-antecedente-id=\"${antecedenteId}\"]`).remove();
+                    $(`#listado_patologias_paciente li[data-antecedente-id=\"${antecedenteId}\"]`).remove();
                     msg('Antecedente','Registro Desactivado.','success');
                     $('#modal-confirmar').modal('hide');
 

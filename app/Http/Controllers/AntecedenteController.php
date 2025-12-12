@@ -457,7 +457,7 @@ class AntecedenteController extends Controller
             $error['id'] = 'Campo requerido';
             $campos_requeridos = 1;
         }
-        if($request->estado==null){
+        if($request->estado === null){
             $error['estado'] = 'Campo requerido';
             $campos_requeridos = 1;
         }
@@ -467,7 +467,7 @@ class AntecedenteController extends Controller
 
             $registro = Antecedente::find($request->id);
 
-            if($registro->count()>0)
+            if($registro)
             {
 
                     $registro->estado = $request->estado;
