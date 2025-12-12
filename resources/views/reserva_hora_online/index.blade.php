@@ -334,7 +334,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">RUT <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="rut_paciente" placeholder="12.345.678-9" required>
+                            <input type="text" class="form-control" id="rut_paciente" oninput="formatoRut(this)" onblur="buscarPacienteExamen(event)" placeholder="12.345.678-9" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nombres <span class="text-danger">*</span></label>
@@ -368,11 +368,26 @@
                             <label class="form-label">Email <span class="text-danger">*</span></label>
                             <input type="email" class="form-control" id="email_paciente" placeholder="correo@ejemplo.com" required>
                         </div>
-                        <div class="col-12 mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Región</label>
+                            <select class="form-select" id="region_paciente">
+                                <option value="">Seleccione región</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ciudad</label>
+                            <select class="form-select" id="ciudad_paciente">
+                                <option value="">Seleccione ciudad</option>
+                            </select>
+                        </div>
+                        <div class="col-9 mb-3">
                             <label class="form-label">Dirección</label>
                             <input type="text" class="form-control" id="direccion_paciente" placeholder="Calle, número, departamento">
                         </div>
-                    </div>
+                        <div class="col-3 mb-3">
+                            <label class="form-label">N° </label>
+                            <input type="text" class="form-control" id="numero_direccion" placeholder="Número">
+                        </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <button type="button" class="btn btn-outline-secondary" onclick="irPaso(1)">
@@ -398,6 +413,14 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Fecha <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="fecha_examen" placeholder="Seleccione fecha" required>
+                        </div>
+                    </div>
+
+                    <!-- Profesionales disponibles -->
+                    <div id="div_profesionales_container" class="mb-4" style="display: none;">
+                        <h5 class="mb-3"><i class="fas fa-user-md me-2"></i>Profesionales disponibles</h5>
+                        <div id="div_resultado_busqueda_examen" class="row">
+                            <!-- Aquí se cargarán los profesionales -->
                         </div>
                     </div>
 
@@ -510,6 +533,7 @@
             inicializarComponentes();
             cargarExamenes();
             cargarSucursales();
+            cargarRegiones();
         });
 
         function inicializarComponentes() {
@@ -542,8 +566,20 @@
 
             // Evento cambio de sucursal
             $('#sucursal').on('change', function() {
-                if ($(this).val() && $('#fecha_examen').val()) {
-                    cargarHorasDisponibles();
+                let sucursal_seleccionada = $(this).val();
+
+                if(sucursal_seleccionada) {
+                    // Buscar profesionales disponibles
+                    buscar_profesionales_examen();
+
+                    // Si también hay fecha, cargar horas
+                    if($('#fecha_examen').val()) {
+                        cargarHorasDisponibles();
+                    }
+                } else {
+                    // Ocultar profesionales si no hay sucursal
+                    $('#div_profesionales_container').hide();
+                    $('#div_resultado_busqueda_examen').empty();
                 }
             });
 
@@ -563,14 +599,86 @@
                     $(this).val(formatearRUT(rut));
                 }
             });
+
+            // Evento cambio de región
+            $('#region_paciente').on('change', function() {
+                var id_region = $(this).val();
+                if(id_region) {
+                    cargarCiudades(id_region);
+                } else {
+                    $('#ciudad_paciente').html('<option value="">Seleccione ciudad</option>');
+                }
+            });
+        }
+
+        function cargarRegiones() {
+            $.ajax({
+                url: 'https://med-sdi.cl/api/dame_regiones',
+                type: 'GET',
+                success: function(response) {
+                    console.log('Regiones:', response);
+                    var options = '<option value="">Seleccione región</option>';
+
+                    // Verificar si la respuesta es un array o un objeto con regiones
+                    var regiones = response.regiones || JSON.parse(response);
+
+                    if(Array.isArray(regiones)) {
+                        regiones.forEach(function(region) {
+                            options += `<option value="${region.id}">${region.nombre}</option>`;
+                        });
+                    }
+
+                    $('#region_paciente').html(options);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error al cargar regiones:', error);
+                }
+            });
+        }
+
+        function cargarCiudades(id_region) {
+            console.log('Cargando ciudades para región ID:', id_region);
+            // Mostrar loader en el select de ciudades
+            $('#ciudad_paciente').html('<option value="">Cargando ciudades...</option>');
+
+            return $.ajax({
+                url: 'https://med-sdi.cl/api/buscar_ciudad_region',
+                type: 'GET',
+                data: {
+                    region: id_region
+                },
+                success: function(response) {
+                    console.log('Ciudades:', JSON.parse(response));
+                    var options = '<option value="">Seleccione ciudad</option>';
+
+                    // Verificar si la respuesta es un array o un objeto con ciudades
+                    var ciudades = JSON.parse(response) || response;
+
+                    if(Array.isArray(ciudades)) {
+                        ciudades.forEach(function(ciudad) {
+                            options += `<option value="${ciudad.id}">${ciudad.nombre}</option>`;
+                        });
+                    }
+
+                    $('#ciudad_paciente').html(options);
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error al cargar ciudades:', error);
+                    $('#ciudad_paciente').html('<option value="">Error al cargar ciudades</option>');
+                }
+            });
         }
 
         function cargarExamenes() {
             $.ajax({
-                url: '/api/examenes/listar', // Ajusta esta ruta
-                type: 'GET',
+                url: 'https://med-sdi.cl/api/buscar_examenes_cm', // Ajusta esta ruta
+                type: 'post',
+                data:{
+                    id_centro_medico: 83
+                },
                 success: function(response) {
-                    renderizarExamenes(response.examenes);
+                    console.log(response);
+                    renderizarExamenes(response);
                 },
                 error: function() {
                     $('#lista_examenes').html(
@@ -587,7 +695,7 @@
                     <div class="examen-card" data-id="${examen.id}">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="${examen.id}"
-                                   id="examen_${examen.id}" onchange="toggleExamen(${examen.id}, '${examen.nombre}', ${examen.bloques})">
+                                   id="examen_${examen.id}" onchange="toggleExamen(${examen.id}, '${examen.nombre}', ${examen.cantidad_bloques})">
                             <label class="form-check-label w-100" for="examen_${examen.id}">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
@@ -595,7 +703,7 @@
                                         <p class="mb-0 text-muted small">${examen.descripcion || 'Examen médico'}</p>
                                     </div>
                                     <div class="text-end">
-                                        <span class="badge bg-info">${examen.bloques} bloques</span>
+                                        <span class="badge bg-info">${examen.cantidad_bloques} bloques</span>
                                     </div>
                                 </div>
                             </label>
@@ -635,11 +743,15 @@
 
         function cargarSucursales() {
             $.ajax({
-                url: '/api/sucursales/listar', // Ajusta esta ruta
-                type: 'GET',
+                url: 'https://med-sdi.cl/api/buscar_sucursales_laboratorio', // Ajusta esta ruta
+                type:'post',
+                data:{
+                    id_laboratorio: 83 // Ajusta este ID según tu laboratorio
+                },
                 success: function(response) {
+                    console.log(response);
                     var options = '<option value="">Seleccione una sucursal</option>';
-                    response.sucursales.forEach(function(sucursal) {
+                    response.forEach(function(sucursal) {
                         options += `<option value="${sucursal.id}">${sucursal.nombre} - ${sucursal.direccion}</option>`;
                     });
                     $('#sucursal').html(options);
@@ -647,53 +759,309 @@
             });
         }
 
+        // Buscar profesionales que realizan los exámenes seleccionados
+		function buscar_profesionales_examen(){
+			// Obtener los IDs de los exámenes seleccionados
+			let examenes_ids = examenesSeleccionados.map(e => e.id);
+			let id_sucursal = $('#sucursal').val();
+
+			if(!examenes_ids || examenes_ids.length == 0){
+				$('#div_profesionales_container').hide();
+				$('#div_resultado_busqueda_examen').empty();
+				return;
+			}
+
+			if(!id_sucursal || id_sucursal == ''){
+				$('#div_profesionales_container').hide();
+				$('#div_resultado_busqueda_examen').empty();
+				return;
+			}
+
+			// Mostrar loader
+			$('#div_profesionales_container').show();
+			$('#div_resultado_busqueda_examen').html('<div class="col-12 text-center py-4"><div class="loader"></div><p class="mt-3 text-muted">Buscando profesionales disponibles...</p></div>');
+
+			console.log('Buscando profesionales para exámenes:', examenes_ids);
+			console.log('En sucursal:', id_sucursal);
+
+			let url = "https://med-sdi.cl/api/buscar_profesionales_examen";
+			$.ajax({
+				url: url,
+				type:'post',
+				data:{
+					examenes: examenes_ids,
+					id_sucursal: id_sucursal
+				},
+				success: function(resp){
+					console.log('Respuesta profesionales:', resp);
+					let profesionales = resp.profesionales || resp;
+					$('#div_resultado_busqueda_examen').empty();
+
+					if(profesionales && profesionales.length > 0){
+						profesionales.forEach(p => {
+							var html = '';
+							html += '<div class="col-sm-12 col-md-4 mb-3">';
+							html += '  <div class="card shadow-sm border-0 rounded-3 p-3 text-center h-100 profesional-card" data-profesional-id="'+p.id+'" style="cursor: pointer; transition: all 0.3s;">';
+							html += '    <img src="https://www.med-sdi.cl/images/iconos/usuario_profesional.svg" alt="'+p.nombre+' '+p.apellido_uno+'" class="rounded-circle mx-auto d-block mb-3" style="width: 80px; height: 80px;">';
+							html += '    <h6 class="fw-bold">'+p.nombre+' '+p.apellido_uno+(p.apellido_dos ? ' '+p.apellido_dos : '')+'</h6>';
+							html += '    <p class="text-muted mb-3 small">Disponible para realizar examen</p>';
+							html += '    <button type="button" class="btn btn-primary btn-sm" onclick="seleccionar_profesional_examen('+p.id+', \''+p.nombre+' '+p.apellido_uno+(p.apellido_dos ? ' '+p.apellido_dos : '')+'\')">Seleccionar</button>';
+							html += '  </div>';
+							html += '</div>';
+							$('#div_resultado_busqueda_examen').append(html);
+						});
+
+						// Agregar efecto hover a las tarjetas
+						$('.profesional-card').hover(
+							function() {
+								$(this).css('transform', 'translateY(-5px)');
+								$(this).css('box-shadow', '0 5px 20px rgba(0,0,0,0.15)');
+							},
+							function() {
+								$(this).css('transform', 'translateY(0)');
+								$(this).css('box-shadow', '');
+							}
+						);
+					} else {
+						$('#div_resultado_busqueda_examen').html('<div class="col-12"><div class="alert alert-info text-center"><i class="fas fa-info-circle me-2"></i>No hay profesionales disponibles para estos exámenes en esta sucursal.</div></div>');
+					}
+				},
+				error: function(error){
+					console.log('Error al buscar profesionales:', error.responseText);
+					$('#div_resultado_busqueda_examen').html('<div class="col-12"><div class="alert alert-danger text-center"><i class="fas fa-exclamation-triangle me-2"></i>Error al buscar profesionales. Por favor, intente nuevamente.</div></div>');
+				}
+			});
+		}
+
+		// Variable para almacenar el profesional seleccionado
+		var profesionalSeleccionado = null;
+		var flatpickrInstance = null;
+
+		// Seleccionar profesional para realizar el examen
+		function seleccionar_profesional_examen(id_profesional, nombre_profesional){
+			// Validar que exista un paciente
+			let id_paciente = $('#id_paciente').val();
+			if(!id_paciente || id_paciente == '0' || id_paciente == ''){
+				Swal.fire({
+					icon: 'warning',
+					title: 'Atención',
+					text: 'Debe completar los datos del paciente primero (Paso 2)',
+				});
+				return;
+			}
+
+			// Remover selección anterior
+			$('.profesional-card').removeClass('border-primary').css('border-width', '');
+			$('.profesional-card .btn').removeClass('btn-success').addClass('btn-primary').text('Seleccionar');
+
+			// Marcar como seleccionado
+			$('.profesional-card[data-profesional-id="'+id_profesional+'"]')
+				.addClass('border-primary')
+				.css('border-width', '3px');
+
+			$('.profesional-card[data-profesional-id="'+id_profesional+'"] .btn')
+				.removeClass('btn-primary')
+				.addClass('btn-success')
+				.html('<i class="fas fa-check me-2"></i>Seleccionado');
+
+			// Guardar profesional seleccionado
+			profesionalSeleccionado = {
+				id: id_profesional,
+				nombre: nombre_profesional
+			};
+
+			console.log('Profesional seleccionado:', profesionalSeleccionado);
+
+			// Cargar horarios disponibles del profesional
+			cargarHorariosProfesional(id_profesional, nombre_profesional);
+		}
+
+		// Cargar horarios disponibles del profesional
+		function cargarHorariosProfesional(id_profesional, nombre_profesional){
+			let id_paciente = $('#id_paciente').val();
+			let id_sucursal = $('#sucursal').val();
+			let id_lugar_atencion = 83;
+
+			// Mostrar loader
+			Swal.fire({
+				title: 'Cargando horarios...',
+				text: 'Obteniendo disponibilidad de ' + nombre_profesional,
+				allowOutsideClick: false,
+				didOpen: () => {
+					Swal.showLoading();
+				}
+			});
+
+			let url = 'https://med-sdi.cl/api/horas_examen_profesional_lugar_atencion';
+
+			$.ajax({
+				url: url,
+				type: "get",
+				data: {
+					id_profesional: id_profesional,
+					id_sucursal: id_sucursal,
+					id_paciente: id_paciente,
+					id_lugar_atencion: id_lugar_atencion
+				},
+				success: function(data) {
+					console.log('Horarios disponibles:', data);
+					Swal.close();
+
+					if (data.estado == 1 && data.registros.horario_agenda_laboral != '') {
+						let dias = ['', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+						var dias_activos = data.registros.horario_agenda_laboral.split(',');
+						var dias_texto = '';
+						var cant = 0;
+
+						$.each(dias_activos, function(index, value) {
+							if(cant > 0)
+								dias_texto += ' - ' + dias[value];
+							else
+								dias_texto += dias[value];
+							cant++;
+						});
+
+						console.log('Días disponibles:', dias_texto);
+
+						// Destruir instancia anterior de flatpickr si existe
+						if(flatpickrInstance) {
+							flatpickrInstance.destroy();
+						}
+
+						// Reinicializar flatpickr con días específicos habilitados
+						flatpickrInstance = flatpickr("#fecha_examen", {
+							locale: "es",
+							dateFormat: "d-m-Y",
+							minDate: "today",
+							maxDate: new Date().fp_incr(60),
+							disable: [
+								function(date) {
+									// Deshabilitar días que NO están en dias_activos
+									return !dias_activos.includes(String(date.getDay()));
+								}
+							],
+							onChange: function(selectedDates, dateStr, instance) {
+								if (dateStr && $('#sucursal').val()) {
+									cargarHorasDisponibles();
+								}
+							}
+						});
+
+						// Habilitar el campo de fecha
+						$('#fecha_examen').prop('disabled', false);
+
+						// Mostrar mensaje de éxito
+						Swal.fire({
+							icon: 'success',
+							title: 'Horarios cargados',
+							html: '<strong>' + nombre_profesional + '</strong> atiende los días:<br><strong>' + dias_texto + '</strong>',
+							timer: 2500,
+							showConfirmButton: false
+						});
+
+					} else {
+						// No hay horarios disponibles
+						Swal.fire({
+							icon: 'warning',
+							title: 'Sin horarios',
+							text: 'Este profesional no tiene horarios disponibles configurados',
+						});
+
+						// Deshabilitar fecha
+						$('#fecha_examen').prop('disabled', true).val('');
+					}
+				},
+				error: function(jqXHR, ajaxOptions, thrownError) {
+					console.log('Error al cargar horarios:', jqXHR, ajaxOptions, thrownError);
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Error al cargar la disponibilidad del profesional',
+					});
+				}
+			});
+		}
+
         function cargarHorasDisponibles() {
             var fecha = $('#fecha_examen').val();
             var sucursal = $('#sucursal').val();
-            var bloques_totales = examenesSeleccionados.reduce((sum, e) => sum + e.bloques, 0);
 
-            $('#horas_disponibles').html('<div class="text-center py-4"><div class="loader"></div></div>');
+            // Validar que haya un profesional seleccionado
+            if(!profesionalSeleccionado || !profesionalSeleccionado.id) {
+                $('#horas_disponibles').html(
+                    '<div class="alert alert-warning text-center"><i class="fas fa-exclamation-triangle me-2"></i>Debe seleccionar un profesional primero</div>'
+                );
+                return;
+            }
 
+            if(!fecha) {
+                $('#horas_disponibles').html(
+                    '<div class="text-center text-muted py-4"><i class="fas fa-clock fa-3x mb-3"></i><p>Seleccione una fecha para ver horas disponibles</p></div>'
+                );
+                return;
+            }
+
+            let id_profesional = profesionalSeleccionado.id;
+            let id_lugar_atencion = 83;
+
+            console.log('Cargando horas disponibles para:', {
+                fecha: fecha,
+                profesional: id_profesional,
+                sucursal: sucursal
+            });
+
+            $('#horas_disponibles').html('<div class="text-center py-4"><div class="loader"></div><p class="mt-3 text-muted">Cargando horas disponibles...</p></div>');
+
+            let url = 'https://med-sdi.cl/api/horas_disponibles_profesional_lugar_atencion';
             $.ajax({
-                url: '/api/horas/disponibles', // Ajusta esta ruta
+                url: url,
                 type: 'GET',
                 data: {
-                    fecha: fecha,
-                    id_sucursal: sucursal,
-                    bloques_requeridos: bloques_totales
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
+                    dia: fecha
                 },
-                success: function(response) {
-                    renderizarHorasDisponibles(response.horas);
+                success: function(data) {
+                    console.log('Horas disponibles:', data);
+
+                    if (data.estado == 1 && data.registros && data.registros.length > 0) {
+                        let htmlTitle = '<h5 class="mb-3">Horas disponibles para el día: ' + data.text_fecha + '</h5>';
+                        let htmlHoras = '<div class="row">';
+
+                        $.each(data.registros, function(index, value) {
+                            // Formatear hora (eliminar segundos si vienen)
+                            let hora = value.hora;
+                            if(hora.length > 5) {
+                                hora = hora.substring(0, 5);
+                            }
+
+                            htmlHoras += `
+                                <div class="col-md-3 col-6 mb-2">
+                                    <div class="hora-slot" data-hora="${value.hora}" onclick="seleccionarHora('${value.hora}')">
+                                        <i class="fas fa-clock me-2"></i>${hora}
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        htmlHoras += '</div>';
+                        $('#horas_disponibles').html(htmlTitle + htmlHoras);
+
+                    } else {
+                        $('#horas_disponibles').html(
+                            '<div class="alert alert-info text-center"><i class="fas fa-info-circle me-2"></i><strong>Sin disponibilidad de horas</strong><br>No hay horas disponibles para la fecha seleccionada.</div>'
+                        );
+                    }
                 },
-                error: function() {
+                error: function(jqXHR, ajaxOptions, thrownError) {
+                    console.log('Error al cargar horas:', jqXHR, ajaxOptions, thrownError);
                     $('#horas_disponibles').html(
-                        '<div class="alert alert-danger">Error al cargar horas disponibles.</div>'
+                        '<div class="alert alert-danger text-center"><i class="fas fa-exclamation-triangle me-2"></i>Error al cargar horas disponibles. Por favor, intente nuevamente.</div>'
                     );
                 }
             });
         }
 
-        function renderizarHorasDisponibles(horas) {
-            if (horas.length === 0) {
-                $('#horas_disponibles').html(
-                    '<div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>No hay horas disponibles para la fecha seleccionada.</div>'
-                );
-                return;
-            }
-
-            var html = '<h5 class="mb-3">Horas disponibles</h5><div class="row">';
-            horas.forEach(function(hora) {
-                html += `
-                    <div class="col-md-3 col-6">
-                        <div class="hora-slot" onclick="seleccionarHora('${hora.hora}')">
-                            <i class="fas fa-clock me-2"></i>${hora.hora}
-                        </div>
-                    </div>
-                `;
-            });
-            html += '</div>';
-            $('#horas_disponibles').html(html);
-        }
 
         function seleccionarHora(hora) {
             $('.hora-slot').removeClass('selected');
@@ -735,6 +1103,15 @@
                     });
                     return;
                 }
+
+                // Verificar si el paciente ya existe (fue encontrado por RUT)
+                let id_paciente = $('#id_paciente').val();
+
+                if(!id_paciente || id_paciente == '0' || id_paciente == '') {
+                    // Paciente no existe, registrarlo primero
+                    registrarPacienteNuevo();
+                    return; // La función registrarPacienteNuevo() continuará al siguiente paso
+                }
             }
 
             if (pasoActual === 3) {
@@ -749,6 +1126,112 @@
             }
 
             irPaso(pasoActual + 1);
+        }
+
+        function registrarPacienteNuevo() {
+            // Mostrar loader
+            Swal.fire({
+                title: 'Registrando paciente...',
+                text: 'Por favor espere',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Preparar datos del paciente
+            let datosNuevoPaciente = {
+                rut: $('#rut_paciente').val(),
+                nombres: $('#nombres_paciente').val(),
+                apellido_uno: $('#apellido_paterno').val(),
+                apellido_dos: $('#apellido_materno').val(),
+                fecha_nacimiento: $('#fecha_nacimiento').val(),
+                sexo: $('#sexo_paciente').val(),
+                telefono: $('#telefono_paciente').val(),
+                email: $('#email_paciente').val(),
+                region: $('#region_paciente').val(),
+                comuna: $('#ciudad_paciente').val(),
+                direccion: $('#direccion_paciente').val(),
+                numero: $('#numero_direccion').val(),
+                id_lugar_atencion: 83
+            };
+
+            console.log('Registrando nuevo paciente:', datosNuevoPaciente);
+
+            let url = 'https://med-sdi.cl/api/insertPaciente';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: datosNuevoPaciente,
+                success: function(response) {
+                    console.log('Respuesta registro paciente:', response);
+
+                    if(response.estado == 1 || response.estado == 'ok' || response.success) {
+                        // Obtener ID del paciente creado
+                        let id_paciente = response.id_paciente || response.id || response.paciente?.id;
+
+                        if(id_paciente) {
+                            // Guardar ID del paciente
+                            if(!$('#id_paciente').length){
+                                $('<input>').attr({
+                                    type: 'hidden',
+                                    id: 'id_paciente',
+                                    name: 'id_paciente',
+                                    value: id_paciente
+                                }).appendTo('#step2');
+                            } else {
+                                $('#id_paciente').val(id_paciente);
+                            }
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Paciente registrado!',
+                                text: 'Sus datos han sido registrados exitosamente.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                // Continuar al siguiente paso
+                                irPaso(3);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pudo obtener el ID del paciente registrado.'
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al registrar',
+                            text: response.msj || response.mensaje || 'No se pudo registrar el paciente. Por favor, intente nuevamente.'
+                        });
+                    }
+                },
+                error: function(jqXHR, ajaxOptions, thrownError) {
+                    console.log('Error al registrar paciente:', jqXHR, ajaxOptions, thrownError);
+
+                    let errorMsg = 'Error al registrar el paciente.';
+
+                    if(jqXHR.responseJSON) {
+                        errorMsg = jqXHR.responseJSON.msj || jqXHR.responseJSON.mensaje || jqXHR.responseJSON.message || errorMsg;
+                    } else if(jqXHR.responseText) {
+                        try {
+                            let response = JSON.parse(jqXHR.responseText);
+                            errorMsg = response.msj || response.mensaje || response.message || errorMsg;
+                        } catch(e) {
+                            // No se pudo parsear
+                        }
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: errorMsg
+                    });
+                }
+            });
         }
 
         function validarDatosPaciente() {
@@ -766,6 +1249,7 @@
         function generarResumen() {
             // Resumen exámenes
             var htmlExamenes = '';
+            console.log('Exámenes seleccionados para resumen:', examenesSeleccionados);
             examenesSeleccionados.forEach(function(examen) {
                 htmlExamenes += `
                     <div class="resumen-item">
@@ -808,6 +1292,19 @@
                     <span class="resumen-label">Sucursal:</span>
                     <span class="resumen-value">${sucursalNombre}</span>
                 </div>
+            `;
+
+            // Agregar profesional si fue seleccionado
+            if(profesionalSeleccionado) {
+                htmlFechaHora += `
+                    <div class="resumen-item">
+                        <span class="resumen-label">Profesional:</span>
+                        <span class="resumen-value">${profesionalSeleccionado.nombre}</span>
+                    </div>
+                `;
+            }
+
+            htmlFechaHora += `
                 <div class="resumen-item">
                     <span class="resumen-label">Fecha:</span>
                     <span class="resumen-value">${$('#fecha_examen').val()}</span>
@@ -830,44 +1327,133 @@
                 return;
             }
 
+            // Deshabilitar botón y mostrar loader
             $('#btn_confirmar').prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Procesando...');
 
-            var datosReserva = {
-                examenes: examenesSeleccionados.map(e => e.id),
-                rut: $('#rut_paciente').val(),
-                nombres: $('#nombres_paciente').val(),
-                apellido_paterno: $('#apellido_paterno').val(),
-                apellido_materno: $('#apellido_materno').val(),
-                fecha_nacimiento: $('#fecha_nacimiento').val(),
-                sexo: $('#sexo_paciente').val(),
-                telefono: $('#telefono_paciente').val(),
-                email: $('#email_paciente').val(),
-                direccion: $('#direccion_paciente').val(),
-                id_sucursal: $('#sucursal').val(),
-                fecha: $('#fecha_examen').val(),
-                hora: horaSeleccionada
-            };
+            // Preparar datos para la reserva
+            let id_paciente = $('#id_paciente').val();
+            let id_profesional = profesionalSeleccionado ? profesionalSeleccionado.id : null;
+            let id_sucursal = $('#sucursal').val();
+            let fecha_examen = $('#fecha_examen').val();
+            let hora = horaSeleccionada;
+            let examenes_seleccionados = examenesSeleccionados.map(e => e.id);
+
+            // Validar datos requeridos
+            if(!id_paciente || !id_profesional || !id_sucursal || !fecha_examen || !hora || examenes_seleccionados.length === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Datos incompletos',
+                    text: 'Por favor, complete todos los datos requeridos'
+                });
+                $('#btn_confirmar').prop('disabled', false).html('<i class="fas fa-check me-2"></i> Confirmar Reserva');
+                return;
+            }
+
+            console.log('Datos de reserva:', {
+                id_paciente: id_paciente,
+                id_profesional: id_profesional,
+                id_sucursal: id_sucursal,
+                fecha: fecha_examen,
+                hora: hora,
+                examenes: examenes_seleccionados
+            });
+
+            // Llamar API para crear la reserva
+            let url = 'https://med-sdi.cl/api/confirmar_reserva_examen';
 
             $.ajax({
-                url: '/api/reservas/crear', // Ajusta esta ruta
+                url: url,
                 type: 'POST',
-                data: JSON.stringify(datosReserva),
-                contentType: 'application/json',
-                headers: {
-                    'X-CSRF-TOKEN': CSRF_TOKEN
-                },
-                success: function(response) {
-                    $('#numero_reserva').text(response.numero_reserva);
-                    $('#modalExito').modal('show');
-                },
-                error: function(xhr) {
+                data: {
+                    id_paciente: id_paciente,
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: 83,
+                    id_sucursal: id_sucursal,
+                    fecha_examen: fecha_examen,
+                    hora_examen: hora,
+                    examenes: examenes_seleccionados,
+                    rut: $('#rut_paciente').val(),
+                    nombres: $('#nombres_paciente').val(),
+                    apellido_paterno: $('#apellido_paterno').val(),
+                    apellido_materno: $('#apellido_materno').val(),
+                    fecha_nacimiento: $('#fecha_nacimiento').val(),
+                    sexo: $('#sexo_paciente').val(),
+                    telefono: $('#telefono_paciente').val(),
+                    email: $('#email_paciente').val(),
+                    direccion: $('#direccion_paciente').val(),
+                    numero: $('#numero_direccion').val(),
+                    total_bloques: examenesSeleccionados.reduce((sum, e) => sum + e.bloques, 0)
+                }
+            })
+            .done(function(data) {
+                console.log('Respuesta reserva:', data);
+
+                // Cerrar el modal de confirmación si existe (Bootstrap 5)
+                let modalExito = bootstrap.Modal.getInstance(document.getElementById('modalExito'));
+
+                // Esperar 300ms antes de mostrar mensaje
+                setTimeout(function() {
+                    // Limpiar estilos del body por si acaso
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css({'padding-right': '', 'overflow': ''});
+
+                    if (data.estado == 1) {
+                        // Obtener número de reserva
+                        let numero_reserva = data.numero_reserva || data.id_reserva || data.id || 'Confirmada';
+                        $('#numero_reserva').text(numero_reserva);
+
+                        // Mostrar modal de éxito
+                        $('#modalExito').modal('show');
+
+                        // Limpiar formulario después de cerrar el modal
+                        $('#modalExito').on('hidden.bs.modal', function() {
+                            location.reload();
+                        });
+
+                    } else {
+                        // Error en la respuesta
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.msj || data.mensaje || 'No se pudo confirmar la reserva del examen. Intente nuevamente.',
+                            confirmButtonColor: '#007bff'
+                        });
+                        $('#btn_confirmar').prop('disabled', false).html('<i class="fas fa-check me-2"></i> Confirmar Reserva');
+                    }
+                }, 300);
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log('Error al crear reserva:', jqXHR, ajaxOptions, thrownError);
+
+                // Esperar 300ms antes de mostrar mensaje
+                setTimeout(function() {
+                    // Limpiar estilos del body por si acaso
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css({'padding-right': '', 'overflow': ''});
+
+                    let errorMsg = 'Ocurrió un error al procesar su solicitud. Intente nuevamente.';
+
+                    // Intentar obtener mensaje de error del servidor
+                    if(jqXHR.responseJSON) {
+                        errorMsg = jqXHR.responseJSON.msj || jqXHR.responseJSON.mensaje || jqXHR.responseJSON.message || errorMsg;
+                    } else if(jqXHR.responseText) {
+                        try {
+                            let response = JSON.parse(jqXHR.responseText);
+                            errorMsg = response.msj || response.mensaje || response.message || errorMsg;
+                        } catch(e) {
+                            // No se pudo parsear, usar mensaje por defecto
+                        }
+                    }
+
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: xhr.responseJSON?.message || 'Error al procesar la reserva'
+                        text: errorMsg,
+                        confirmButtonColor: '#007bff'
                     });
+
                     $('#btn_confirmar').prop('disabled', false).html('<i class="fas fa-check me-2"></i> Confirmar Reserva');
-                }
+                }, 300);
             });
         }
 
@@ -881,6 +1467,185 @@
             }
             return rut;
         }
+
+        function buscarPacienteExamen(event){
+			var rut = $('#rut_paciente').val();
+			if(rut == ''){
+				return false;
+			}
+
+			// Mostrar indicador de carga
+			$('#rut_paciente').prop('disabled', true);
+
+			let url = 'https://med-sdi.cl/api/buscar_paciente';
+			$.ajax({
+				url: url,
+				type: 'GET',
+				data: {
+					rut: rut
+				},
+				success: function(response){
+                    console.log(response);
+					if(response.estado == 'ok'){
+						let paciente = response.paciente;
+						console.log(paciente);
+
+						// Rellenar formulario con datos del paciente
+						$('#nombres_paciente').val(paciente.nombres || '');
+						$('#apellido_paterno').val(paciente.apellido_uno || paciente.apellido_paterno || '');
+						$('#apellido_materno').val(paciente.apellido_dos || paciente.apellido_materno || '');
+						$('#email_paciente').val(paciente.email || '');
+						$('#telefono_paciente').val(paciente.telefono_uno || paciente.telefono || '');
+                        $('#region_paciente').val(paciente.ciudad.id_region || '');
+                        //cargarCiudades(paciente.ciudad.id_region);
+                        // setTimeout(() => {
+                        //     $('#ciudad_paciente').val(paciente.ciudad.id || '');
+                        // }, 500);
+
+						// Fecha de nacimiento (convertir formato si es necesario)
+						if(paciente.fecha_nac || paciente.fecha_nacimiento){
+							let fecha = paciente.fecha_nac || paciente.fecha_nacimiento;
+							// Convertir formato yyyy-mm-dd a dd-mm-yyyy si es necesario
+							if(fecha.includes('-')){
+								let partes = fecha.split('-');
+								if(partes[0].length === 4){
+									// Formato yyyy-mm-dd, convertir a dd-mm-yyyy
+									fecha = partes[2] + '-' + partes[1] + '-' + partes[0];
+								}
+							}
+							$('#fecha_nacimiento').val(fecha);
+						}
+
+						// Sexo
+						if(paciente.sexo){
+							$('#sexo_paciente').val(paciente.sexo.toUpperCase());
+						}
+
+						// Región y ciudad
+						if(paciente.ciudad.id_region){
+							$('#region_paciente').val(paciente.ciudad.id_region);
+							// Cargar ciudades de la región seleccionada
+							if(paciente.ciudad.id){
+								cargarCiudades(paciente.ciudad.id_region).then(() => {
+									$('#ciudad_paciente').val(paciente.ciudad.id || '');
+								});
+							} else {
+								cargarCiudades(paciente.id_region);
+							}
+						}
+
+						// Dirección
+						if(paciente.direccion){
+							let direccion = '';
+							if(typeof paciente.direccion === 'object'){
+								direccion = paciente.direccion.direccion + ' Nº ' + paciente.direccion.numero_dir;
+							} else {
+								direccion = paciente.direccion;
+							}
+							$('#direccion_paciente').val(direccion);
+						}
+
+						// Guardar ID del paciente
+						if(!$('#id_paciente').length){
+							$('<input>').attr({
+								type: 'hidden',
+								id: 'id_paciente',
+								name: 'id_paciente',
+								value: paciente.id
+							}).appendTo('#step2');
+						} else {
+							$('#id_paciente').val(paciente.id);
+						}
+
+						// Mostrar mensaje de éxito
+						Swal.fire({
+							icon: 'success',
+							title: '¡Paciente encontrado!',
+							text: `Hola ${paciente.nombres}! Tus datos se han cargado correctamente.`,
+							timer: 2000,
+							showConfirmButton: false
+						});
+
+					}else{
+						// Paciente no encontrado - LIMPIAR FORMULARIO
+						limpiarFormularioPaciente();
+
+						// Permitir registro manual
+						Swal.fire({
+							icon: 'info',
+							title: 'Paciente no encontrado',
+							text: 'Por favor, complete sus datos para registrarse',
+							confirmButtonText: 'Aceptar'
+						});
+					}
+				},
+				error: function(error){
+					// En caso de error también limpiar
+					limpiarFormularioPaciente();
+
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: 'Error al buscar paciente. Por favor, intente nuevamente.',
+					});
+				},
+				complete: function(){
+					// Rehabilitar campo RUT
+					$('#rut_paciente').prop('disabled', false);
+				}
+			});
+		}
+
+		function limpiarFormularioPaciente() {
+			// Limpiar todos los campos excepto el RUT
+			$('#nombres_paciente').val('');
+			$('#apellido_paterno').val('');
+			$('#apellido_materno').val('');
+			$('#fecha_nacimiento').val('');
+			$('#sexo_paciente').val('');
+			$('#telefono_paciente').val('');
+			$('#email_paciente').val('');
+			$('#region_paciente').val('');
+			$('#ciudad_paciente').html('<option value="">Seleccione ciudad</option>');
+			$('#direccion_paciente').val('');
+
+			// Eliminar o vaciar el ID del paciente
+			if($('#id_paciente').length){
+				$('#id_paciente').val('');
+			}
+
+			console.log('Formulario de paciente limpiado');
+		}
+
+        function formatoRut(rut)
+		{
+			var valor = rut.value.replace('.','');
+			valor = valor.replace(/\-/g,'');
+
+			cuerpo = valor.slice(0,-1);
+			dv = valor.slice(-1).toUpperCase();
+			rut.value = cuerpo + '-'+ dv
+
+			if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+
+			suma = 0;
+			multiplo = 2;
+
+			for(i=1;i<=cuerpo.length;i++)
+			{
+				index = multiplo * valor.charAt(cuerpo.length - i);
+				suma = suma + index;
+				if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+			}
+
+			dvEsperado = 11 - (suma % 11);
+			dv = (dv == 'K')?10:dv;
+			dv = (dv == 0)?11:dv;
+
+			if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+
+			rut.setCustomValidity('');
+		}
     </script>
 </body>
 </html>

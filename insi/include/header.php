@@ -172,17 +172,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- <div class="col-md-6">
-					<div class="form-row">
-						<div class="form-group col-md-12 mb-2 mt-0">
-							<label class="floating-label-active-sm mb-0">Profesionales</label>
-							<select class="form-control form-control-sm" id="modal_reserva_id_profesional" name="modal_reserva_id_profesional" onchange="carga_agenda_profesional();">
-								<option value="">Seleccione</option>
-							</select>
-						</div>
-					</div>
-				</div> -->
 				<div class="col-md-12">
 					<div class="row" id="div_resultado_busqueda">
 
@@ -307,19 +296,186 @@
 <div class="modal fade" id="modalAgendarHoraExamen" tabindex="-1" role="dialog" aria-labelledby="modalAgendarHoraExamenLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
     <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="modalAgendarHoraExamenLabel">Agendar Examen</h5>
-            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+		<div class="modal-header bg-primary text-white">
+			<h5 class="modal-title" id="modalAgendarHoraExamenLabel">Agendar Examen</h5>
+			<button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
       	<div class="modal-body">
-            <!-- Contenido del modal Agendar Examen -->
-            <p>Contenido para agendar examen va aquí.</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </div>
+			<!-- Contenido original del modal (selección de examen) -->
+			<div id="modal_contenido_seleccion_examen">
+			<input type="hidden" name="modal_examen_id_profesional" id="modal_examen_id_profesional" value="">
+			<input type="hidden" name="modal_examen_fecha_examen" id="modal_examen_fecha_examen" value="">
+			<input type="hidden" name="modal_examen_id_examen" id="modal_examen_id_examen" value="">
+			
+			<div class="row border p-2">
+				<div class="form-group col-md-12 mb-2 mt-0">
+					<label for="rut_paciente_examen" class="floating-label-activo-sm">Rut Paciente</label>
+					<div class="d-flex">
+						<input type="text" name="rut_paciente_examen" id="rut_paciente_examen"
+							class="form-control form-control-sm flex-grow-1 me-2"
+							oninput="formatoRut(this)" onblur="buscarPacienteExamen(this)">
+						<button type="button" class="btn btn-outline-success btn-sm" onclick="buscarPacienteExamen()">B</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt-3">
+				<div class="col-12">
+					<div id="paciente_saludo_examen" class="alert alert-success d-none"></div>
+					<div class="card" id="info_paciente_detalle_examen" style="display: none;">
+						<div class="card-header bg-primary text-white">
+							Información del Paciente
+						</div>
+						<div class="card-body">
+							<p><strong>Nombre:</strong> <span id="paciente_nombre_examen"></span></p>
+							<p><strong>Apellido Paterno:</strong> <span id="paciente_apellido_uno_examen"></span></p>
+							<p><strong>Apellido Materno:</strong> <span id="paciente_apellido_dos_examen"></span></p>
+							<p><strong>RUT:</strong> <span id="paciente_rut_examen"></span></p>
+							<p><strong>Correo:</strong> <span id="paciente_email_examen"></span></p>
+							<p><strong>Teléfono:</strong> <span id="paciente_telefono_examen"></span></p>
+							<p><strong>Fecha Nacimiento:</strong> <span id="paciente_nacimiento_examen"></span></p>
+							<p><strong>Ciudad:</strong> <span id="paciente_ciudad_examen"></span></p>
+							<p><strong>Dirección:</strong> <span id="paciente_direccion_examen"></span></p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" id="div_filtros_busqueda_examen">
+				<!-- Select de Exámenes -->
+				<div class="col-md-12 mb-3">
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-2 mt-0">
+							<label class="floating-label-active-sm mb-0">Seleccione Examen(es)</label>
+							<select class="form-control form-control-sm" id="modal_examen_id_tipo_examen" name="modal_examen_id_tipo_examen[]" multiple="multiple">
+								<option value="">Seleccione uno o más exámenes</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<!-- Select de Sucursales (Oculto inicialmente) -->
+				<div class="col-md-12 mb-3 d-none" id="div_sucursales_examen">
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-2 mt-0">
+							<label class="floating-label-active-sm mb-0">Seleccione Sucursal del Laboratorio</label>
+							<select class="form-control form-control-sm" id="modal_examen_id_sucursal" name="modal_examen_id_sucursal">
+								<option value="">Seleccione una sucursal</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-12">
+					<div class="row" id="div_resultado_busqueda_examen">
+					</div>
+				</div>
+
+				<div class="col-md-12 d-none" id="div_resultado_busqueda_hora_examen">
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-2 mt-0">
+							<label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
+							<input class="form-control form-control-sm" type="date" name="modal_examen_fecha" onchange="cargar_horas_disponibles_examen(this.value);" id="modal_examen_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-12 mt-4 d-none" id="div_resultado_busqueda_hora_examen_">
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<h6 class="text-primary" id="modal_examen_fecha_seleccionada"></h6>
+						</div>
+						<div class="col-md-12 mx-auto">
+							<div class="row ml-3" id="modal_examen_lista_horas">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<label class="mt-4">El Examen está disponible los días <span id="modal_examen_dias_atencion" class="hljs-strong"></span></label>
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-2 mt-0">
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+			</div>
+			<!-- Fin contenido selección examen -->
+
+			<!-- Div Confirmar Reserva Examen (Oculto inicialmente) -->
+			<div id="divConfirmarReservaExamen" class="d-none">
+				<!-- Datos del Paciente -->
+				<div class="card border-0 shadow-sm mb-3">
+					<div class="card-header bg-light">
+						<h6 class="mb-0 text-primary"><i class="fa-solid fa-user"></i> Datos del Paciente</h6>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-2"><strong>RUT:</strong> <span id="confirmar_rut_examen"></span></p>
+								<p class="mb-2"><strong>Nombre:</strong> <span id="confirmar_nombre_examen"></span></p>
+								<p class="mb-2"><strong>Fecha Nacimiento:</strong> <span id="confirmar_fecha_nac_examen"></span></p>
+								<p class="mb-2"><strong>Edad:</strong> <span id="confirmar_edad_examen"></span></p>
+								<p class="mb-2"><strong>Sexo:</strong> <span id="confirmar_sexo_examen"></span></p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Previsión:</strong> <span id="confirmar_prevision_examen"></span></p>
+								<p class="mb-2"><strong>Email:</strong> <span id="confirmar_email_examen"></span></p>
+								<p class="mb-2"><strong>Teléfono:</strong> <span id="confirmar_telefono_examen"></span></p>
+								<p class="mb-2"><strong>Dirección:</strong> <span id="confirmar_direccion_examen"></span></p>
+								<p class="mb-2"><strong>Ciudad:</strong> <span id="confirmar_ciudad_examen"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Datos del Examen -->
+				<div class="card border-0 shadow-sm mb-3">
+					<div class="card-header bg-light">
+						<h6 class="mb-0 text-primary"><i class="fa-solid fa-flask"></i> Datos del Examen</h6>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Examen:</strong> <span id="confirmar_nombre_examen_"></span></p>
+								<p class="mb-2"><strong>Fecha:</strong> <span id="confirmar_fecha_examen"></span></p>
+								<p class="mb-2"><strong>Hora:</strong> <span id="confirmar_hora_examen"></span></p>
+							</div>
+							<div class="col-md-6">
+								<p class="mb-2"><strong>Profesional:</strong> <span id="confirmar_profesional_examen"></span></p>
+								<p class="mb-2"><strong>Lugar:</strong> <span id="confirmar_lugar_examen"></span></p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Inputs ocultos para enviar datos -->
+				<input type="hidden" id="reserva_examen_id_paciente">
+				<input type="hidden" id="reserva_examen_id_profesional">
+				<input type="hidden" id="reserva_examen_id_lugar_atencion">
+				<input type="hidden" id="reserva_examen_fecha">
+				<input type="hidden" id="reserva_examen_hora">
+				<input type="hidden" id="reserva_examen_id_tipo_examen">
+
+				<!-- Botones de acción -->
+				<div class="text-center mt-4">
+					<button type="button" class="btn btn-secondary mx-2" onclick="ocultarConfirmacionExamen();">
+						<i class="fa-solid fa-arrow-left"></i> Volver
+					</button>
+					<button type="button" class="btn btn-primary mx-2" onclick="confirmarReservaExamen();">
+						<i class="fa-solid fa-check"></i> Solicitar Reserva de Hora
+					</button>
+				</div>
+			</div>
+			<!-- Fin div confirmación examen -->
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		</div>
     </div>
   </div>
 </div>
