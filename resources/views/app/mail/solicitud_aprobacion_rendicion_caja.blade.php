@@ -197,9 +197,28 @@
                     <span class="info-label">Solicitante:</span>
                     <span class="info-value">{{ $nombre_asistente ?? 'N/A' }}</span>
                 </div>
-            </div>            <!-- Total -->
+            </div>
+
+            <!-- Detalles de Montos -->
+            <div class="info-card">
+                <h3>💰 Detalle de Montos</h3>
+                <div class="info-row">
+                    <span class="info-label">Total Documentos:</span>
+                    <span class="info-value">{{ $total_documentos ?? 0 }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Bonos:</span>
+                    <span class="info-value">{{ $total_bonos ?? 0 }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Total Efectivo:</span>
+                    <span class="info-value">${{ number_format($total_efectivo ?? 0, 0, ',', '.') }}</span>
+                </div>
+            </div>
+
+            <!-- Total -->
             <div class="total-row">
-                <h2>${{ number_format($total_rendicion ?? 0, 0, ',', '.') }}</h2>
+                <h2>${{ number_format($total_efectivo ?? 0, 0, ',', '.') }}</h2>
                 <p>Monto Total de la Rendición</p>
             </div>
 
@@ -214,12 +233,14 @@
 
             <!-- Botones de Acción -->
             <div class="action-buttons">
-                <a href="#"
-                   class="btn btn-approve">
+                <a href="{{ $url_aprobar ?? '#' }}"
+                   class="btn btn-approve"
+                   style="background-color: #28a745; color: #ffffff; text-decoration: none;">
                     ✓ Aprobar Rendición
                 </a>
-                <a href="#"
-                   class="btn btn-reject">
+                <a href="{{ $url_rechazar ?? '#' }}"
+                   class="btn btn-reject"
+                   style="background-color: #dc3545; color: #ffffff; text-decoration: none;">
                     ✗ Rechazar Rendición
                 </a>
             </div>

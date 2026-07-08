@@ -1,5 +1,5 @@
 <!-- modal indicar_recetario sdi ddd -->
-<div id="indicar_recetario" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_recetario"aria-hidden="true">
+<div id="indicar_recetario" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_recetario" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -526,19 +526,18 @@
                                                     <tr>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_tipo_control</td>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_producto</td>
-                                                        <td class="text-center align-middle text-wrap">Medicamentos</td>
+                                                        <td class="text-center align-middle text-wrap">Presentación</td>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">farmaco</td>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_presentacion</td>
-                                                        <td class="text-center align-middle text-wrap">Presentación</td>
-                                                        <td class="text-center align-middle text-wrap" hidden="hidden">id_receta_dosis</td>
-                                                        <td class="text-center align-middle text-wrap hidden">Posología</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_via_administracion</td>
+                                                        <td class="text-center align-middle text-wrap">Posología</td>
+                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_receta_dosis</td>
                                                         <td class="text-center align-middle text-wrap">Vía Adm.</td>
-                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_periodo</td>
+                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_frecuencia_medicamento_ficha_dental</td>
                                                         <td class="text-center align-middle text-wrap">Periodo</td>
+                                                        <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_periodo</td>
+                                                        <td class="text-center align-middle text-wrap">Comprar</td>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">uso_cronico</td>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">cantidad_compra</td>
-                                                        <td class="text-center align-middle text-wrap">Comprar</td>
                                                         <th class="text-center align-middle">Eliminar</th>
                                                     </tr>
                                                 </thead>
@@ -640,7 +639,7 @@
                         search: request.term
                     },
                     success: function(data) {
-                        console.log(data.length);
+                        console.log(data);
                         if( data.length == 0 )
                         {
                             $('.medicamento_activo').hide();
@@ -671,10 +670,32 @@
                 $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
                 $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
                 $('#id_medicamento_tipo_control').val(ui.item.control); // save selected id to input
-                if(ui.item.control == 1 || ui.item.control == 1 || ui.item.control == 2 || ui.item.control == 3 || ui.item.control == 4 || ui.item.control == 5 )
-                    $('#mensaje_med_control').html('Este Paciente ha tenido 3 Recetas retenidas este año<br>Consulte en "Ranking de recetas controladas del paciente"');
-                else
+
+                var control = parseInt(ui.item.control);
+                if(control >= 1 && control <= 5) {
+                    var id_paciente = $('#id_paciente_fc').val();
+                    var id_profesional = $('#id_profesional_fc').val();
+                    $.ajax({
+                        url: "{{ route('profesional.receta.paciente.cantidad') }}",
+                        type: "get",
+                        data: {
+                            id_paciente: id_paciente,
+                            id_profesional: id_profesional,
+                            control: ui.item.control,
+                            anio: new Date().getFullYear()
+                        },
+                    }).done(function(data) {
+                        if(data.estado == 1) {
+                            $('#mensaje_med_control').html('Este paciente ha tenido <strong>' + data.cantidad + '</strong> receta(s) retenida(s) este año.<br>Consulte en "Ranking de recetas controladas del paciente"');
+                        } else {
+                            $('#mensaje_med_control').html('Medicamento de control. Consulte el ranking de recetas del paciente.');
+                        }
+                    }).fail(function() {
+                        $('#mensaje_med_control').html('Medicamento de control. Consulte el ranking de recetas del paciente.');
+                    });
+                } else {
                     $('#mensaje_med_control').html('');
+                }
 
                 return false;
             }
@@ -1187,32 +1208,28 @@
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
 
+                // Forzar valores por defecto si están vacíos
+                var periodo_val = periodo_ficha_dental && periodo_ficha_dental.trim() !== '' ? periodo_ficha_dental : '-';
+                var cantidad_val = cantidad_comprar && cantidad_comprar.trim() !== '' ? cantidad_comprar : '-';
+
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_tipo_control + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_dosis_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_frecuencia_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_cantidad_comprar + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>';
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_tipo_control + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_dosis_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_frecuencia_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + periodo_val + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_cantidad_comprar + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + cantidad_val + '</td>' +
+                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i + '" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
+                '</tr>';
 
                 i++;
 
@@ -1289,7 +1306,94 @@
 
     function eliminar_medicamento_sdi(id_row)
     {
-        $('#tabla_medicamento_cirugia_sdi [id='+id_row+']').remove();
+        // Confirmar eliminación
+        swal({
+            title: "Eliminar medicamento",
+            text: "¿Está seguro que desea eliminar este medicamento de la receta?",
+            icon: "warning",
+            buttons: ["Cancelar", "Eliminar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                // Obtener información del medicamento antes de eliminarlo
+                var fila = $('#tabla_medicamento_cirugia_sdi [id=' + id_row + ']');
+                var celdas = fila.find('td');
+
+                if (celdas.length > 0) {
+                    var id_tipo_control = $.trim($(celdas[0]).text());
+                    var id_producto = $.trim($(celdas[1]).text());
+                    var nombre_medicamento = $.trim($(celdas[2]).text());
+
+                    // Eliminar visualmente
+                    fila.remove();
+
+                    // Eliminar de la base de datos inmediatamente
+                    eliminarMedicamentoDB(id_producto, nombre_medicamento, id_tipo_control);
+
+                    console.log('Medicamento eliminado: ' + nombre_medicamento);
+
+                    // Mostrar mensaje de éxito
+                    swal({
+                        title: "Medicamento eliminado",
+                        text: "El medicamento ha sido eliminado de la receta",
+                        icon: "success",
+                        timer: 2000,
+                        buttons: false
+                    });
+                }
+            }
+        });
+    }
+
+    function eliminarMedicamentoDB(id_producto, nombre_medicamento, id_tipo_control)
+    {
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let id_paciente = $('#id_paciente_fc').val();
+        var _token = CSRF_TOKEN;
+
+        // Crear URL para eliminar medicamento específico
+        // Necesitaremos crear una nueva ruta en el backend para esto
+        let url = "{{ route('profesional.receta.eliminar_medicamento') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                id_ficha: id_ficha_atencion,
+                id_profesional: id_profesional,
+                id_paciente: id_paciente,
+                id_producto: id_producto,
+                nombre_medicamento: nombre_medicamento,
+                id_tipo_control: id_tipo_control
+            },
+        })
+        .done(function(data) {
+            console.log('Respuesta eliminación BD:', data);
+
+            if (data && data.estado == 1) {
+                console.log('Medicamento eliminado correctamente de la BD');
+            } else {
+                console.log('Error al eliminar de BD:', data);
+                // Recargar la tabla para sincronizar con BD en caso de error
+                setTimeout(function() {
+                    ver_medicamento_ficha_medica_sdi();
+                }, 1000);
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log('Error AJAX eliminando medicamento:', jqXHR, ajaxOptions, thrownError);
+
+            // En caso de error, recargar tabla para mantener sincronización
+            swal({
+                title: "Error de conexión",
+                text: "No se pudo eliminar el medicamento del servidor. Se recargará la lista.",
+                icon: "error"
+            }).then(() => {
+                ver_medicamento_ficha_medica_sdi();
+            });
+        });
     }
 
     function enviar_medicamento_faltante_sdi()
@@ -1386,31 +1490,37 @@
     {{--  CARGAR MEDICAMENTOS DE FICHA MEDICA  --}}
     function ver_medicamento_ficha_medica_sdi()
     {
-
         let url = "{{ route('profesional.receta.ver') }}";
 
         var _token = CSRF_TOKEN;
         var id_ficha = $('#id_fc').val();
-        $('#tabla_medicamento_cirugia_sdi').html('');
 
         $.ajax({
-
             url: url,
             type: "GET",
             data: {
                 _token: _token,
-                id_ficha:id_ficha
+                id_ficha: id_ficha,
+                tipo_receta: 'normal' // Especificar que queremos solo medicamentos normales
             },
         })
         .done(function(data)
         {
-
             if (data !== 'null')
             {
-                //data = JSON.parse(data);
                 console.log('----------ver_medicamento_ficha_medica_sdi-------------');
                 console.log(data);
                 console.log('-----------------------');
+
+                // Solo reconstruir tabla si no hay cambios locales pendientes
+                var filas_actuales = $('#tabla_medicamento_cirugia_sdi tbody tr').length;
+                var hay_cambios_locales = filas_actuales > 0 && !$('#tabla_medicamento_cirugia_sdi tbody tr').hasClass('medicamentos_sin_registros');
+
+                if (hay_cambios_locales) {
+                    console.log('Carga cancelada para preservar cambios locales');
+                    return;
+                }
+
                 var html = '';
                 html += '<thead>';
                 html += '    <tr>';
@@ -1444,6 +1554,11 @@
                         {
                             $.each(value.detalle, function(index_2, value_2)
                             {
+                                // Filtrar medicamentos homeopáticos (que tienen "HOMEOPATÍA" en comentarios)
+                                var es_homeopatia = value_2.comentario && value_2.comentario.includes('HOMEOPATÍA');
+                                if (es_homeopatia) {
+                                    return; // Skip este medicamento
+                                }
 
                                 html += '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">';
                                 html +=     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + value_2.id_tipo_control + '</td>';
@@ -1509,7 +1624,6 @@
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
-
     }
 
     function alerta_registro_medicamento_sdi()
@@ -1535,37 +1649,80 @@
         var rows1 = [];
         $('#tabla_medicamento_cirugia_sdi tr').each(function(i, n) {
             if (i > 0) {
-                rol = {};
                 var data = $(this).find("td");
 
-                rol['id_tipo_control'] = $.trim($(data[0]).text().split("\n").join(""));//id_tipo_control
+                // Validar que la fila tenga datos antes de procesarla
+                if (data.length < 15) {
+                    console.log('Fila ' + i + ' omitida: no tiene suficientes columnas');
+                    return; // Skip esta fila
+                }
 
+                var rol = {};
+                rol['id_tipo_control'] = $.trim($(data[0]).text().split("\n").join(""));//id_tipo_control
                 rol['id_producto'] = $.trim($(data[1]).text().split("\n").join(""));//id_medicamento
                 rol['producto'] = $.trim($(data[2]).text().split("\n").join(""));//nombre_medicamento_ficha_dental
                 rol['componente'] = $.trim($(data[3]).text().split("\n").join(""));//nombre_medicamento_ficha_dental
-
                 rol['id_dosis'] = $.trim($(data[4]).text().split("\n").join(""));//id_dosis_medicamento_ficha_dental
                 rol['dosis'] = $.trim($(data[5]).text().split("\n").join(""));//dosis_medicamento_ficha_dental
-
                 rol['id_posologia'] = $.trim($(data[6]).text().split("\n").join(""));//id_frecuencia_medicamento_ficha_dental
                 rol['posologia'] = $.trim($(data[7]).text().split("\n").join(""));//frecuencia_medicamento_ficha_dental
-
                 rol['id_via_administracion'] = $.trim($(data[8]).text().split("\n").join(""));//id_via_administracion_ficha_dental
                 rol['via_administracion'] = $.trim($(data[9]).text().split("\n").join(""));//via_administracion_ficha_dental
-
                 rol['id_periodo'] = $.trim($(data[10]).text().split("\n").join(""));//id_periodo_ficha_dental
                 rol['periodo'] = $.trim($(data[11]).text().split("\n").join(""));//periodo_ficha_dental
-
                 rol['uso_cronico'] = $.trim($(data[12]).text().split("\n").join(""));//medicamento_uso_cronico
-
                 rol['cantidad'] = $.trim($(data[13]).text().split("\n").join(""));//id_cantidad_comprar
                 rol['cantidad_comprar'] = $.trim($(data[14]).text().split("\n").join(""));//cantidad_comprar
 
-                rows1.push(rol);
+                // Validar campos críticos antes de agregar a la lista
+                var esValido = true;
+                var razonInvalida = '';
+
+                if (!rol['producto'] || rol['producto'].trim() === '') {
+                    esValido = false;
+                    razonInvalida = 'Producto vacío';
+                } else if (!rol['dosis'] || rol['dosis'].trim() === '') {
+                    esValido = false;
+                    razonInvalida = 'Dosis vacía';
+                } else if (!rol['posologia'] || rol['posologia'].trim() === '') {
+                    esValido = false;
+                    razonInvalida = 'Posología vacía';
+                } else if (!rol['via_administracion'] || rol['via_administracion'].trim() === '') {
+                    esValido = false;
+                    razonInvalida = 'Vía administración vacía';
+                } else if (!rol['periodo'] || rol['periodo'].trim() === '') {
+                    esValido = false;
+                    razonInvalida = 'Período vacío';
+                } else if (!rol['cantidad_comprar'] || rol['cantidad_comprar'].trim() === '' || rol['cantidad_comprar'].trim() === '-') {
+                    esValido = false;
+                    razonInvalida = 'Cantidad comprar vacía';
+                }
+
+                if (esValido) {
+                    // Asegurar valores por defecto para campos opcionales
+                    rol['uso_cronico'] = rol['uso_cronico'] || '0';
+                    rol['cantidad'] = rol['cantidad'] || '1';
+                    rol['componente'] = rol['componente'] || '';
+
+                    rows1.push(rol);
+                    console.log('Medicamento agregado a envío:', rol['producto']);
+                } else {
+                    console.log('Fila ' + i + ' omitida: ' + razonInvalida, rol);
+                }
             }
         });
 
-        console.log(rows1);
+        console.log('Total medicamentos a registrar:', rows1.length);
+        console.log('Datos a enviar:', rows1);
+
+        if (rows1.length === 0) {
+            swal({
+                title: "Error en registro",
+                text: "No hay medicamentos válidos para registrar. Verfique que todos los medicamentos tengan datos completos.",
+                icon: "error",
+            });
+            return;
+        }
 
         $('#medicamentos').val(JSON.stringify(rows1));
 
@@ -2170,6 +2327,7 @@
                     id_profesional: id_profesional,
                     id_paciente: id_paciente,
                     control: id_tipo_control,
+                    anio: new Date().getFullYear()
                 },
             })
             .done(function(data) {
@@ -2207,6 +2365,7 @@
                 data: {
                     id_paciente: id_paciente,
                     control: id_tipo_control,
+                    anio: new Date().getFullYear()
                 },
             })
             .done(function(data) {

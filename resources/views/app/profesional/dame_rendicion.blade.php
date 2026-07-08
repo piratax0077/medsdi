@@ -5,6 +5,10 @@
             <td class="alin-center">{{ $rendicion->fecha_rendicion }}</td>
         </tr>
         <tr>
+            <td class="alin-center">Lugar de atencion</td>
+            <td class="alin-center">{{ $rendicion->lugar_atencion }} <span class="text-muted">{{ $rendicion->direccion }}</span></td>
+        </tr>
+        <tr>
             <td class="alin-center">Nombre Completo</td>
             <td class="alin-center">{{ $rendicion->nombres }} {{ $rendicion->apellido_uno }}</td>
         </tr>

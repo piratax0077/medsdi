@@ -46,25 +46,25 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="ss_ant">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_ant" id="ss_ant"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ss_ant" id="ss_ant">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="ss_poster">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_poster" id="ss_poster"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ss_poster" id="ss_poster">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="ss_lat">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_lat" id="ss_lat"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ss_lat" id="ss_lat">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="ss_conc">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="ss_conc" id="ss_conc"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ss_conc" id="ss_conc">
                                         </div>
                                     </div>
                                 </div>
@@ -84,25 +84,25 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="sm_ant">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_ant" id="sm_ant"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="sm_ant" id="sm_ant">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="sm_post">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_post" id="sm_post"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="sm_post" id="sm_post">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="sm_lat">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_lat" id="sm_lat"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="sm_lat" id="sm_lat">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="sm_conc">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="sm_conc" id="sm_conc"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="sm_conc" id="sm_conc">
                                         </div>
                                     </div>
                                 </div>
@@ -122,25 +122,25 @@
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="inf_ant">Anterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_ant" id="inf_ant"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="inf_ant" id="inf_ant">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="inf_post">Posterior</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_post" id="inf_post"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="inf_post" id="inf_post">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="inf_lat">Lateral</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_lat" id="inf_lat"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="inf_lat" id="inf_lat">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="inf_conc">Conclusiones</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="inf_conc" id="inf_conc"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="inf_conc" id="inf_conc">
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
                                            <label class="floating-label-activo-sm" for="post_eval">Evaluación</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="post_eval" id="post_eval"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="post_eval" id="post_eval">
                                         </div>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                        <label class="floating-label-activo-sm" for="eval_gral_marcha">Evaluación</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="eval_gral_marcha" id="eval_gral_marcha"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="eval_gral_marcha" id="eval_gral_marcha">
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_postura_neuro()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -197,5 +197,10 @@
 <script>
     function postural() {
         $('#postura_mot_neuro').modal('show');
+    }
+
+    function guardar_postura_neuro() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('postura_neuro');
     }
 </script>

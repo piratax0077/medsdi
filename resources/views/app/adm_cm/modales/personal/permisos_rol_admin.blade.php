@@ -2,18 +2,23 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white">Permisos para Asistentes <br>(Agregar / Modificar / Eliminar) </h5>
+                <h5 class="modal-title text-white">Permisos</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 <input type="hidden" name="permisos_rol_id" id="permisos_rol_id" value="">
             </div>
             <div class="modal-body">
                 <div class="row" >
+                    <div class="col-12">
+                        <div class="alert alert-primary" role="alert">
+                        Selecciona los permisos del usuario y gestiona su acceso habilitando o deshabilitando cada opción mediante el botón
+                        </div>
+                    </div>
                     @if(isset($lista_tipo_administrativo))
                         @foreach ($lista_tipo_administrativo as $tipo_asistente)
                             <div class="col-md-12">
                                 <div class="custom-control custom-switch">
                                     {{-- <input type="checkbox" class="custom-control-input" data-rol="{{ str_replace([' ', 'Publico', 'Consulta','Administrativo', 'ManejodeAgenda'], ['', 'Caja','','Adm', 'ManejoAgenda'], $tipo_asistente->nombre) }}" id="rol_permiso_{{ $tipo_asistente->id }}" onchange="modificar_rol({{ $tipo_asistente->id }}, 'Asistente', 'rol_permiso_{{ $tipo_asistente->id }}' )"> --}}
-                                    <input type="checkbox" class="custom-control-input" data-id="{{ $tipo_asistente->id }}" data-nombre="{{ $tipo_asistente->nombres }}" id="rol_permiso_{{ $tipo_asistente->id }}" onchange="cambiarRol(this, {{ $tipo_asistente->id }}, '{{ $tipo_asistente->nombres }}')">
+                                    <input type="checkbox" class="custom-control-input" data-id="{{ $tipo_asistente->id }}" data-nombre="{{ $tipo_asistente->nombres }}" id="rol_permiso_{{ $tipo_asistente->id }}" onchange="cambiarRol(this, {{ $tipo_asistente->id_rol }}, '{{ $tipo_asistente->nombres }}')">
                                     <label class="custom-control-label" for="rol_permiso_{{ $tipo_asistente->id }}">{{ $tipo_asistente->nombres }}</label>
                                 </div>
 
@@ -21,9 +26,6 @@
                         @endforeach
                     @endif
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -80,7 +82,7 @@ function cambiarRol(checkbox, idTipo, nombreTipo) {
     }
     
     // Desmarcar otros checkboxes (solo un rol a la vez)
-    $('#permisos_rol_admin input[type="checkbox"]').not(checkbox).prop('checked', false);
+    // $('#permisos_rol_admin input[type="checkbox"]').not(checkbox).prop('checked', false);
     
     // Confirmar cambio
     swal({

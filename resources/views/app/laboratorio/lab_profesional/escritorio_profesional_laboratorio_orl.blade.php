@@ -229,7 +229,7 @@
                 @if(isset($permisos_profesional) && $permisos_profesional->permiso_vender_audifonos == 1)
                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <div class="card mb-3 subir">
-                        <a href="{{ ROUTE('laboratorio.profesional.audifono.venta') }}">
+                        <a href="{{ route('laboratorio.profesional.audifono.venta', $institucion->id_lugar_atencion) }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center"
                                     src="{{ asset('images/iconos/audifono-discapacidad.png') }}">
@@ -304,25 +304,25 @@
             </div>
 
 
-                    <div class="row mt-3">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <a href="http://cronicos.cl/registro.php" target="_blank">
-                            <img class="img-fluid w-100 rounded-xl shadow" src="{{ asset('images/banners/banner-cronicos.svg') }}">
-                        </a>
-                            <!--<div class="card mb-3" style="max-width: 100%;">
-                                <img class="card-img-top" src="{{ asset('images/iconos/inscripciones_2.png') }}">
-                                <div class="card-body p-0">
-                                    <a href="http://cronicos.cl/registro.php" target="_blank" class="btn" type="button">
-                                        <h5 style="font-size: 1.1rem;" class="text-left pt-2 text-c-blue">Inscripción en
-                                            CRÓNICOS</h5>
-                                        <h6 class="text-justify">Inscriba a sus Pacientes en www.cronicos.cl y obtenga
-                                            importantes novedades en el manejo de su patología y en el uso de sus
-                                            medicamentos.</h6>
-                                    </a>
-                                </div>
-                            </div>-->
+            <div class="row mt-3">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <a href="http://cronicos.cl/registro.php" target="_blank">
+                    <img class="img-fluid w-100 rounded-xl shadow" src="{{ asset('images/banners/banner-cronicos.svg') }}">
+                </a>
+                    <!--<div class="card mb-3" style="max-width: 100%;">
+                        <img class="card-img-top" src="{{ asset('images/iconos/inscripciones_2.png') }}">
+                        <div class="card-body p-0">
+                            <a href="http://cronicos.cl/registro.php" target="_blank" class="btn" type="button">
+                                <h5 style="font-size: 1.1rem;" class="text-left pt-2 text-c-blue">Inscripción en
+                                    CRÓNICOS</h5>
+                                <h6 class="text-justify">Inscriba a sus Pacientes en www.cronicos.cl y obtenga
+                                    importantes novedades en el manejo de su patología y en el uso de sus
+                                    medicamentos.</h6>
+                            </a>
                         </div>
-                    </div>
+                    </div>-->
+                </div>
+            </div>
 
 
         

@@ -12,7 +12,7 @@
                         </div>
                         <ul class="breadcrumb mb-4">
                             <li class="breadcrumb-item">
-                                <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                <a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                     <i class="feather icon-home"></i>
                                 </a>
                             </li>
@@ -39,7 +39,7 @@
                                     <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="profile-dp">
                                             <div class="position-relative d-inline-block">
-                                                <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}"> alt="User image">
+                                                <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/ico.png') }}"> alt="User image">
                                             </div>
                                             <div class="overlay">
                                                 <span>Actualizar</span>
@@ -70,11 +70,11 @@
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administrador medico</a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    {{--  <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Asignación de roles y permisos</a>
-                                                    </li>
+                                                    </li>  --}}
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
+                                                        <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Áreas</a>
                                                     </li>
                                                     @if($institucion->sucursales == 1)
                                                         <li class="nav-item">
@@ -835,7 +835,7 @@
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
                                                         <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_medico_datos_personales({{ $director_cm->id }});" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1694,7 +1694,7 @@
                     <!--CIERRE: PERFIL ADMINISTRADOR-->
 
                     <!--ADMINISTRADOR DE ROLES Y PERMISOS-->
-                    <div class="tab-pane fade" id="rol-permiso" role="tabpanel" aria-labelledby="rol-permiso-tab">
+                    {{--  <div class="tab-pane fade" id="rol-permiso" role="tabpanel" aria-labelledby="rol-permiso-tab">
                         <div class="row">
                             <div class="col-md-12">
                                 <!--Contraseña-->
@@ -1752,19 +1752,19 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>  --}}
                     <!--CIERRE: ADMINISTRADOR DE ROLES Y PERMISOS-->
 
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
                         <div class="row">
-                            <div class="col-md-4">
-                                <!--Especialidades-->
+                            <!--Apoyo administrativo-->
+                            <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Especialidades Médicas</h6>
+                                                <h6 class="f-18 d-inline mt-3 text-info">Apoyo administrativo</h6>
                                                 <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
                                                     <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                 </div>
@@ -1777,9 +1777,9 @@
                                                 <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-wrap text-center align-middle">Tipo Especialidad</th>
-                                                            <th class="text-wrap text-center align-middle">SubTipo Especialidad</th>
-                                                            <th class="text-wrap text-center align-middle">N° Profesionales</th>
+                                                            <th class="text-wrap text-center align-middle">ID</th>
+                                                            <th class="text-wrap text-center align-middle">Nombre Cargo</th>
+                                                            <th class="text-wrap text-center align-middle">Cantidad</th>
                                                             <th class="text-wrap text-center align-middle">Acción</th>
                                                             <th></th>
                                                         </tr>
@@ -1811,54 +1811,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                             <!--Fin Apoyo administrativo-->
+                            <!--Area informatica-->
+                             <div class="col-md-6">
                                 <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Áreas</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
-                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-left align-middle">Área</th>
-                                                            <th class="text-wrap text-left align-middle">Responsable</th>
-                                                            <th class="text-wrap text-left align-middle">Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($areas_cm as $area)
-                                                        <tr>
-                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
-                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
-                                                            <td class="align-middle text-left">
-                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="fas fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
-                                                            </td>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <!--Área-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
+                                                <h6 class="f-18 d-inline mt-3 text-info">Área Informática</h6>
                                                 <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
                                                     <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
                                                 </div>
@@ -1871,7 +1832,7 @@
                                                 <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-wrap text-left align-middle">Servicio</th>
+                                                            <th class="text-wrap text-left align-middle">Área</th>
                                                             <th class="text-wrap text-left align-middle">Responsable</th>
                                                             <th class="text-wrap text-left align-middle">Acción</th>
                                                         </tr>
@@ -1894,6 +1855,52 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--Fin Area informatica-->
+                            <!--Area Comercial-->
+                            <div class="col-md-12">
+                                <!--Área-->
+                                <div class="card">
+                                    <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="f-18 d-inline mt-3 text-info">Área ventas</h6>
+                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-12">
+                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-wrap text-left align-middle">Área</th>
+                                                            <th class="text-wrap text-left align-middle">Cargo</th>
+                                                            <th class="text-wrap text-left align-middle">N°</th>
+                                                            <th class="text-wrap text-left align-middle">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($areas_cm as $area)
+                                                        <tr>
+                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
+                                                             <td class="align-middle text-left"></td>
+                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
+                                                            <td class="align-middle text-left">
+                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="fas fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
+                                                            </td>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            |<!--Fin Area Comercial-->
                         </div>
                     </div>
 
@@ -2400,7 +2407,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir especialidad</h5>
+                    <h5 class="modal-title text-white text-center">Añadir personal de Apoyo</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -2409,30 +2416,28 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <!--Cargar especialidades-->
-                                    <label class="floating-label-activo-sm">Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm" onchange="buscar_sub_tipo_especialidad(this);">
+                                    <label class="floating-label-activo-sm">Tipo de cargo</label>
+                                    <select class="form-control form-control-sm" id="tpo_cargo" name="tpo_cargo">
                                         <option>Seleccione</option>
-                                        @if(isset($especialidades))
-                                            @foreach ($especialidades as $especialidad)
-                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                            @endforeach
-                                        @endif
+                                        <option>Secretaria</option>
+                                        <option>Contador</option>
+                                        <option>otro</option>
+                                     
                                     </select>
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" name="sub_tipo_especialidad_cm" id="sub_tipo_especialidad_cm">
-                                    </select>
+                                    <label class="floating-label-activo-sm">Departamento</label>
+                                     <input type="text" name="dpto_apoyo" id="dpto_apoyo" class="form-control form-control-sm">
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            {{--  <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">N° Profesionales</label>
                                     <input type="number" name="num_profesionales" id="num_profesionales" class="form-control form-control-sm">
                                 </div>
-                            </div>
+                            </div>  --}}
                         </div>
                     </form>
                 </div>
@@ -2524,40 +2529,40 @@
             </div>
         </div>
     </div>
-{{--  MODAL ESPECIALIDADES  --}}
-<div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Añadir otra especialidad</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <!--Cargar especialidades-->
-                                <label class="floating-label">Especialidad</label>
-                                <select class="form-control form-control-sm" id="especialidad_cm_otra" name="especialidad_cm_otra">
-                                    <option>Seleccione</option>
-                                    @if(isset($especialidades))
-                                        @foreach ($especialidades as $especialidad)
-                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+    {{--  MODAL ESPECIALIDADES  --}}
+    <div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Añadir otra especialidad</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar especialidades-->
+                                    <label class="floating-label">Especialidad</label>
+                                    <select class="form-control form-control-sm" id="especialidad_cm_otra" name="especialidad_cm_otra">
+                                        <option>Seleccione</option>
+                                        @if(isset($especialidades))
+                                            @foreach ($especialidades as $especialidad)
+                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_otra_especialidad_cm()">Añadir</button>
+                </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_otra_especialidad_cm()">Añadir</button>
-            </div>
-            </form>
         </div>
     </div>
-</div>
 <input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
 <input type="hidden" id="id_institucion" name="id_institucion" value="">
 <input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">

@@ -21,8 +21,14 @@
                     </div>
                     <!--MENSAJE ALERTA-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
-                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show" role="alert" id="mensaje_historias"></div>
+                        <div class="form-row mb-1">
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                                <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

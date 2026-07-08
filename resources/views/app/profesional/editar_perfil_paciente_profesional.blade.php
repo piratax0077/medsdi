@@ -1,6 +1,16 @@
 @extends('template.profesional.template')
 @section('content')
-
+<style>
+    .ui-autocomplete {
+        z-index: 9999999 !important;
+        position: absolute;
+        background: #fff;
+        border: 1px solid #545454;
+        padding: 6px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    </style>
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -9,7 +19,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="font-weight-bolder">Editar Perfil Paciente</h5>
                             </div>
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
@@ -18,16 +27,20 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('profesional.pacientes') }}">Mis Pacientes</a>
+                                    <a href="{{ route('profesional.pacientes') }}">Mis pacientes</a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="#">Editar Perfil Paciente</a>
+                                    <a href="#">Editar perfil paciente</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
+            <input type="hidden" name="id_direccion" id="id_direccion" value="{{ $direccion->id }}">
+
             <div class="user-profile user-card mb-4">
                 <div class="card-body py-0">
                     <div class="user-about-block m-0">
@@ -80,68 +93,165 @@
                                 <div class="col-md-6">
                                     <!--Card Información Básica-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Datos Personales</h5>
-
+                                        <div class="card-header bg-white d-flex align-items-center justify-content-between">
+                                        <h6 class="text-dark f-18"><i class="feather icon-user f-18 text-white bg-primary mr-2 rounded-xl p-1"></i> Datos personales</h6>                                            <button type="button" class="btn btn-primary-light btn-icon m-0 float-right"
+                                                data-toggle="collapse" data-target=".info_basica" aria-expanded="false"
+                                                aria-controls="info_basica-1 info_basica-2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
                                         </div>
                                         <!--Datos Personales-->
-                                        <div class="card-body border-top info_basica collapse show" id="info_basica-1">
+                                        <div class="card-body  info_basica collapse show" id="info_basica-1">
                                             <form>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{ $paciente->rut }} </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $paciente->nombres }} </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
-                                                        Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $paciente->apellido_uno }}
+                                                <div class="form-row">
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Rut</label>
+                                                        <div>{{ $paciente->rut }} </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">
-                                                        Segundo Apellido </label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $paciente->apellido_dos }}
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Nombre</label>
+                                                        <div> {{ $paciente->nombres }} </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Primer
+                                                            Apellido</label>
+                                                        <div> {{ $paciente->apellido_uno }}
+                                                        </div>
+                                                    </div>
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">
+                                                            Segundo Apellido </label>
+                                                        <div> {{ $paciente->apellido_dos }}
+                                                        </div>
+                                                    </div>
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Sexo</label>
+                                                        <div>
 
-                                                        @if ($paciente->sexo == 'M')
-                                                            Mujer
-                                                        @else
-                                                            Hombre
-                                                        @endif
-
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
-                                                        {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d/m/Y') }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-sm-5 col-form-label font-weight-bolder">Previsión</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
-
-                                                        @foreach ($prevision as $pre)
-                                                            @if ($pre->id == $paciente->id_prevision)
-                                                                {{ $pre->nombre }}
+                                                            @if ($paciente->sexo == 'M')
+                                                                Mujer
+                                                            @else
+                                                                Hombre
                                                             @endif
-                                                        @endforeach
 
+                                                        </div>
+                                                    </div>
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                       <label class="font-weight-bolder ml-0 mb-0">Nacimiento</label>
+                                                        <div>
+                                                            {{ \Carbon\Carbon::parse($paciente->fecha_nac)->format('d/m/Y') }}
+                                                        </div>
+                                                    </div>
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Previsión</label>
+                                                        <div>
+
+                                                            @foreach ($prevision as $pre)
+                                                                @if ($pre->id == $paciente->id_prevision)
+                                                                    {{ $pre->nombre }}
+                                                                @endif
+                                                            @endforeach
+
+                                                        </div>
+                                                    </div>
+                                                      <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Estado</label>
+                                                        <div>
+                                                            @if($paciente->estado == 0)
+                                                                <span class="badge badge-primary">Paciente Normal</span>
+                                                            @elseif($paciente->estado == 1)
+                                                                <span class="badge badge-warning">Paciente Conflictivo</span>
+                                                            @elseif($paciente->estado == 2)
+                                                                <span class="badge badge-success">Paciente VIP</span>
+                                                            @elseif($paciente->estado == 3)
+                                                                <span class="badge badge-danger">Paciente con Restricciones</span>
+                                                            @elseif($paciente->estado == 4)
+                                                                <span class="badge badge-danger">Paciente con Deuda</span>
+                                                            @elseif($paciente->estado == 5)
+                                                                <span class="badge badge-dark">Paciente Moroso</span>
+                                                            @elseif($paciente->estado == 6)
+                                                                <span class="badge badge-info">Paciente Prioritario</span>
+                                                            @elseif($paciente->estado == 7)
+                                                                <span class="badge badge-secondary">Otro</span>
+                                                            @else
+                                                                <span class="badge badge-light">Sin estado</span>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Datos Personales-->
+
+                                        <!--(Editar) Datos Personales-->
+                                        <div class="card-body info_basica collapse" id="info_basica-2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Rut</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_rut" value="{{ $paciente->rut }}" readonly>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Nombre</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_nombres" value="{{ $paciente->nombres }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Primer Apellido</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_apellido_uno" value="{{ $paciente->apellido_uno }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_apellido_dos" value="{{ $paciente->apellido_dos }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Sexo</label>
+                                                        <select class="form-control form-control-sm" id="editar_sexo">
+                                                            <option value="M" @if($paciente->sexo == 'M') selected @endif>Mujer</option>
+                                                            <option value="H" @if($paciente->sexo == 'H') selected @endif>Hombre</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Nacimiento</label>
+                                                        <input type="date" class="form-control form-control-sm" id="editar_fecha_nac" value="{{ $paciente->fecha_nac }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                                                        <label class="floating-label-activo-sm">Previsión</label>
+                                                        <select class="form-control form-control-sm" id="editar_prevision">
+                                                            @foreach ($prevision as $pre)
+                                                                <option value="{{ $pre->id }}" @if($pre->id == $paciente->id_prevision) selected @endif>{{ $pre->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-6">
+                                                        <label class="floating-label-activo-sm">Estado</label>
+                                                        <select class="form-control form-control-sm" id="editar_estado">
+                                                            <option value="">Seleccione un estado</option>
+                                                            <option value="0" @if($paciente->estado == 0) selected @endif>Paciente Normal</option>
+                                                            <option value="1" @if($paciente->estado == 1) selected @endif>Paciente Conflictivo</option>
+                                                            <option value="2" @if($paciente->estado == 2) selected @endif>Paciente VIP</option>
+                                                            <option value="3" @if($paciente->estado == 3) selected @endif>Paciente con Restricciones</option>
+                                                            <option value="4" @if($paciente->estado == 4) selected @endif>Paciente con Deuda</option>
+                                                            <option value="5" @if($paciente->estado == 5) selected @endif>Paciente Moroso</option>
+                                                            <option value="6" @if($paciente->estado == 6) selected @endif>Paciente Prioritario</option>
+                                                            <option value="7" @if($paciente->estado == 7) selected @endif>Otro</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-sm btn-danger mr-2"
+                                                                data-toggle="collapse" data-target=".info_basica"
+                                                                aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                                <i class="feather icon-x"></i> Cancelar
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-info" onclick="editar_datos_personales();">
+                                                                <i class="feather icon-save"></i> Guardar cambios
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar) Datos Personales-->
 
                                     </div>
                                     <!--Cierre: Card Datos Personales-->
@@ -149,54 +259,141 @@
                                 <div class="col-md-6">
                                     <!--Card Contacto-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Contacto</h5>
-
+                                        <div class="card-header text-dark d-flex align-items-center justify-content-between bg-white">
+                                            <h6 class="text-dark f-18"><i class="feather f-18 icon-phone text-white bg-primary mr-2 rounded-xl p-1"></i> Contacto</h6>
+                                            <button type="button" class="btn btn-primary-light btn-sm btn-icon m-0 float-right"
+                                                data-toggle="collapse" data-target=".info_contacto" aria-expanded="false"
+                                                aria-controls="info_contacto_1 info_contacto_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
                                         </div>
                                         <!--Contacto-->
-                                        <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
+                                        <div class="card-body info_contacto collapse show" id="info_contacto_1">
                                             <form>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
-                                                        Electrónico</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $paciente->email }} </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $paciente->telefono_uno }}
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Correo
+                                                            Electrónico</label>
+                                                        <div> {{ $paciente->email }} </div>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label
+                                                            class="font-weight-bolder ml-0 mb-0">Teléfono</label>
+                                                        <div> {{ $paciente->telefono_uno }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Contacto-->
 
+                                        <!--(Editar) Contacto-->
+                                        <div class="card-body  info_contacto collapse" id="info_contacto_2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-12">
+                                                        <label class="floating-label-activo-sm">Correo Electrónico</label>
+                                                        <input type="email" class="form-control form-control-sm" id="editar_email" value="{{ $paciente->email }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12">
+                                                        <label class="floating-label-activo-sm">Teléfono</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_telefono" value="{{ $paciente->telefono_uno }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-sm btn-danger mr-2"
+                                                                data-toggle="collapse" data-target=".info_contacto"
+                                                                aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                                <i class="feather icon-x"></i> Cancelar
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-info" onclick="editar_contacto_paciente();">
+                                                                <i class="feather icon-save"></i> Guardar cambios
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar) Contacto-->
+
                                     </div>
                                     <!--Cierre: Card Contacto-->
                                     <!--Card Residencia-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Residencia</h5>
-
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-white">
+                                            <h6 class="text-dark f-18"><i class="feather icon-home f-18 text-white bg-primary  mr-2 rounded-xl p-1"></i> Residencia</h6>
+                                            <button type="button" class="btn btn-info-light btn-sm btn-icon m-0 float-right"
+                                                data-toggle="collapse" data-target=".info_residencial" aria-expanded="false"
+                                                aria-controls="info_residencial_1 info_residencial_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
                                         </div>
                                         <!--Residencia-->
-                                        <div class="card-body border-top info_residencial collapse show"
+                                        <div class="card-body  info_residencial collapse show"
                                             id="info_residencial_1">
                                             <form>
-                                                <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{ $ciudad->nombre }}</div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label
-                                                        class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
-                                                        {{ $direccion->direccion . ' #' . $direccion->numero_dir }}
+                                                <div class="form-row">
+                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Comuna</label>
+                                                        <div> {{ $ciudad->nombre }}</div>
+                                                    </div>
+                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                       
+                                                     <label class="font-weight-bolder ml-0 mb-0">Dirección</label>
+                                                        <div>
+                                                            {{ $direccion->direccion . ' #' . $direccion->numero_dir }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Residencia-->
+
+                                        <!--(Editar) Residencia-->
+                                        <div class="card-body border-top info_residencial collapse" id="info_residencial_2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Región</label>
+                                                        <select class="form-control form-control-sm" id="editar_region" onchange="buscar_ciudad_paciente();">
+                                                            <option value="">Seleccione región</option>
+                                                            @if(isset($region))
+                                                                @foreach($region as $reg)
+                                                                    <option value="{{ $reg->id }}" @if($ciudad->id_region == $reg->id) selected @endif>{{ $reg->nombre }}</option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6">
+                                                        <label class="floating-label-activo-sm">Comuna</label>
+                                                        <select class="form-control form-control-sm" id="editar_ciudad">
+                                                            <option value="{{ $ciudad->id }}" selected>{{ $ciudad->nombre }}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-8">
+                                                        <label class="floating-label-activo-sm">Dirección</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_direccion" value="{{ $direccion->direccion }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4">
+                                                        <label class="floating-label-activo-sm">Número</label>
+                                                        <input type="text" class="form-control form-control-sm" id="editar_numero" value="{{ $direccion->numero_dir }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button type="button" class="btn btn-sm btn-danger mr-2"
+                                                                data-toggle="collapse" data-target=".info_residencial"
+                                                                aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                                <i class="feather icon-x"></i> Cancelar
+                                                            </button>
+                                                            <button type="button" class="btn btn-sm btn-info" onclick="editar_residencia_paciente();">
+                                                                <i class="feather icon-save"></i> Guardar cambios
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar) Residencia-->
                                     </div>
                                     <!--Cierre: Card Residencia-->
                                 </div>
@@ -209,8 +406,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
-                                        <div class="card-header bg-danger">
-                                            <h5 class="text-white d-inline float-left mt-1">Contactos de emergencia</h5>
+                                        <div class="card-header bg-white d-flex py-2"><i class="feather icon-phone f-18 p-1 bg-danger mr-2 text-white rounded-xl"></i>
+                                            <h6 class="text-dark f-18 pt-1">Contactos de emergencia</h6>
                                             <!--
 											<button type="button" onclick="modal_agregar_contacto_emergencia();" class="btn btn-outline-light btn-sm d-inline float-right mr-4">
                                                 <i class="feather icon-plus"></i> Agregar contacto
@@ -226,9 +423,9 @@
                                                             @if ($contacto != null)
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="align-middle text-center">Prioridad</th>
-                                                                        <th class="align-middle text-center">Nombre</th>
-                                                                        <th class="align-middle text-center">Parentesco</th>
+                                                                        <th class="align-middle">Prioridad</th>
+                                                                        <th class="align-middle">Nombre</th>
+                                                                        <th class="align-middle">Parentesco</th>
                                                                         <th class="align-middle text-center">Acción</th>
                                                                     </tr>
                                                                 </thead>
@@ -236,21 +433,21 @@
                                                                 @foreach ($contacto as $c)
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td class="align-middle text-center">
+                                                                            <td class="align-middle">
                                                                                 {{ $c->prioridad }}
                                                                             </td>
-                                                                            <td class="align-middle text-center">
+                                                                            <td class="align-middle">
                                                                                 {{ $c->nombre }}
                                                                                 <br>{{ $c->apellido_uno . ' ' . $c->apellido_dos }}
                                                                             </td>
-                                                                            <td class="align-middle text-center">
+                                                                            <td class="align-middle">
                                                                                 {{ $c->parentezco }}
                                                                             </td>
                                                                             <td class="align-middle text-center">
 
                                                                                 <button id="btn_info_contacto"
                                                                                     onclick="cargar_datos_contacto({{ $c->id }})"
-                                                                                    class="btn btn-info btn-sm rounded-circle"
+                                                                                    class="btn btn-info btn-icon"
                                                                                     data-toggle="modal"
                                                                                     data-target="#info_contacto_emergencia"
                                                                                     title="Información de contacto"
@@ -282,8 +479,7 @@
                                                             @else
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td><span>NO EXISTEN REGISTROS</span></td>
-
+                                                                        <td><span>No existen registros</span></td>
                                                                     </tr>
                                                                 </tbody>
                                                             @endif
@@ -305,11 +501,11 @@
                                 <div class="col-md-12">
                                     <!--Card Datos profesional-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                                            <h5 class="mb-0 text-white">Datos del médico responsable del llenado y/o Actualización de datos </h5>
+                                        <div class="card-header bg-white d-flex align-items-center justify-content-between py-2">
+                                            <h6 class="mb-0 text-dark f-18"><i class="feather icon-user f-18 text-white bg-primary  mr-2 rounded-xl p-1"></i> Datos del médico responsable del llenado y/o Actualización de datos </h6>
                                         </div>
                                         <!--Datos profesional-->
-                                        <div class="card-body border-top info_basica_sos collapse show"
+                                        <div class="card-body  info_basica_sos collapse show"
                                             id="info_basica_sos_1">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -328,7 +524,7 @@
                                                     <form>
                                                         <div class="form-group row">
                                                             <label class="col-sm-4 col-form-label font-weight-bolder">Fecha de Actualización</label>
-                                                            <div class="col-sm-7 my-auto ml-2"> 12/01/2021 * </div>
+                                                            <div class="col-sm-7 my-auto ml-2"> {{ $paciente->updated_at }} * </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-sm-4 col-form-label font-weight-bolder">Especialidad</label>
@@ -341,7 +537,7 @@
                                         <!--Cierre: Datos profesional-->
 
                                         <!--(Editar)Datos profesional-->
-                                        <div class="card-body border-top info_basica_sos collapse" id="info_basica_sos_2">
+                                        <div class="card-body  info_basica_sos collapse" id="info_basica_sos_2">
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
@@ -393,13 +589,13 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-12 col-form-label"></label>
                                                         <div class="col-sm-12 d-flex justify-content-end">
-                                                            <button type="submit" class="btn btn-dark mr-2">Verificar
+                                                            <button type="submit" class="btn btn-dark mr-2"> Verificar
                                                                 Profesional</button>
                                                             <!--Acá se verifican con la API Datos profesional si pasa se habilitan los otros formularios-->
                                                             <button type="submit"
-                                                                class="btn btn-danger mr-2">Cancelar</button>
+                                                                class="btn btn-danger mr-2"> Cancelar</button>
                                                             <!--OJO Guardar fecha y nombre del que actualiza  formularios-->
-                                                            <button type="submit" class="btn btn-info">Guardar
+                                                            <button type="submit" class="btn btn-info"> Guardar
                                                                 Cambios</button>
                                                         </div>
                                                     </div>
@@ -418,14 +614,14 @@
                                 <div class="col-md-12">
                                     <!--Card Datos Sangre Donación de Organos-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
-                                            <h5 class="mb-0 text-white">Antecedentes I (Transfusiones y Donación de Órganos)</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
+                                        <div class="card-header bg-white d-flex align-items-center justify-content-between py-2">
+                                            <h6 class="mb-0 text-dark f-18"><i class="feather icon-file-plus f-18 text-white bg-primary mr-2 rounded-xl p-1"></i>Antecedentes I (Transfusiones y Donación de Órganos)</h6>
+                                            <button type="button" class="btn btn-primary-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Sangre Donación de Organo-->
-                                        <div class="card-body border-top info_residencial_sos collapse show" id="info_residencial_sos_1">
+                                        <div class="card-body  info_residencial_sos collapse show" id="info_residencial_sos_1">
 
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -457,7 +653,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-4 col-form-label font-weight-bolder">Grupo Sanguíneo</label>
-                                                        <div class="col-sm-7 col-form-label text-danger">
+                                                        <div class="col-sm-7 col-form-label text-danger font-weight-bold">
                                                             @if ($paciente->Antecedentes()->first() != null)
                                                                 @if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
                                                                     {{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->nombre_gs }}
@@ -488,7 +684,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
                                                         <label class="col-sm-4 col-form-label font-weight-bolder">Vacuna o Hepatitis</label>
-                                                        <div class="col-sm-7 col-form-label text-danger">
+                                                        <div class="col-sm-7 col-form-label text-danger font-weight-bold">
                                                             @if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->hepatitis == 1)
                                                                 SI
                                                             @else
@@ -927,4 +1123,187 @@
     @include('app.profesional.modales.agregar_contacto_emergencia')
     @include('app.profesional.modales.informacion_contacto_emergencia')
     @include('app.profesional.modales.editar_contacto_emergencia')
+@endsection
+
+@section('page-script')
+<script>
+    // const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    // Función para editar datos personales
+    function editar_datos_personales() {
+        let id_paciente = $('#id_paciente').val();
+        let nombres = $('#editar_nombres').val();
+        let apellido_uno = $('#editar_apellido_uno').val();
+        let apellido_dos = $('#editar_apellido_dos').val();
+        let sexo = $('#editar_sexo').val();
+        let fecha_nac = $('#editar_fecha_nac').val();
+        let id_prevision = $('#editar_prevision').val();
+        let estado = $('#editar_estado').val();
+
+        $.ajax({
+            url: '{{ route("profesional.actualizar_datos_paciente") }}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                id_paciente: id_paciente,
+                nombres: nombres,
+                apellido_uno: apellido_uno,
+                apellido_dos: apellido_dos,
+                sexo: sexo,
+                fecha_nac: fecha_nac,
+                id_prevision: id_prevision,
+                estado: estado
+            }
+        })
+        .done(function(response) {
+            console.log(response);
+            if (response.estado == 1) {
+                swal({
+                    title: "Datos actualizados correctamente",
+                    icon: "success",
+                    buttons: "Aceptar"
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            } else {
+                swal({
+                    title: "Error al actualizar",
+                    text: response.mensaje,
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            swal({
+                title: "Error",
+                text: "Ocurrió un error al procesar la solicitud",
+                icon: "error",
+                buttons: "Aceptar"
+            });
+        });
+    }
+
+    // Función para editar contacto
+    function editar_contacto_paciente() {
+        let id_paciente = $('#id_paciente').val();
+        let email = $('#editar_email').val();
+        let telefono = $('#editar_telefono').val();
+
+        $.ajax({
+            url: '{{ route("profesional.actualizar_contacto_paciente") }}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                id_paciente: id_paciente,
+                email: email,
+                telefono_uno: telefono
+            }
+        })
+        .done(function(response) {
+            console.log(response);
+            if (response.estado == 1) {
+                swal({
+                    title: "Contacto actualizado correctamente",
+                    icon: "success",
+                    buttons: "Aceptar"
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            } else {
+                swal({
+                    title: "Error al actualizar",
+                    text: response.mensaje,
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        })
+        .fail(function() {
+            swal({
+                title: "Error",
+                text: "Ocurrió un error al procesar la solicitud",
+                icon: "error",
+                buttons: "Aceptar"
+            });
+        });
+    }
+
+    // Función para editar residencia
+    function editar_residencia_paciente() {
+        let id_paciente = $('#id_paciente').val();
+        let id_direccion = $('#id_direccion').val();
+        let id_ciudad = $('#editar_ciudad').val();
+        let direccion = $('#editar_direccion').val();
+        let numero = $('#editar_numero').val();
+
+        $.ajax({
+            url: '{{ route("profesional.actualizar_residencia_paciente") }}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                id_paciente: id_paciente,
+                id_direccion: id_direccion,
+                id_ciudad: id_ciudad,
+                direccion: direccion,
+                numero_dir: numero
+            }
+        })
+        .done(function(response) {
+            console.log(response);
+            if (response.estado == 1) {
+                swal({
+                    title: "Residencia actualizada correctamente",
+                    icon: "success",
+                    buttons: "Aceptar"
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            } else {
+                swal({
+                    title: "Error al actualizar",
+                    text: response.mensaje,
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            }
+        })
+        .fail(function() {
+            swal({
+                title: "Error",
+                text: "Ocurrió un error al procesar la solicitud",
+                icon: "error",
+                buttons: "Aceptar"
+            });
+        });
+    }
+
+    // Función para buscar ciudades según región seleccionada
+    function buscar_ciudad_paciente() {
+        let id_region = $('#editar_region').val();
+
+        $.ajax({
+            url: '{{ route("profesional.buscar_ciudad_region") }}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                region: id_region
+            }
+        })
+        .done(function(response) {
+            $('#editar_ciudad').empty();
+            $('#editar_ciudad').append('<option value="">Seleccione comuna</option>');
+            $.each(response, function(index, ciudad) {
+                $('#editar_ciudad').append('<option value="' + ciudad.id + '">' + ciudad.nombre + '</option>');
+            });
+        });
+    }
+</script>
 @endsection

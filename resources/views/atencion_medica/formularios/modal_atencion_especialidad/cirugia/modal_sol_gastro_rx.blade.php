@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Solicitud Estudio Radiológico</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"  aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#m_rx_gastro').modal('hide')"  aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -130,25 +130,25 @@
                 type: 'GET',
                 dataType: 'json',
                 data: {
-                    sub_tipo_examen: 356
+                    sub_tipo_examen: 960
                 },
         })
         .done(function(response) {
             $('#examen_rx').val(null).trigger('change');
-        
+
             // Limpiar las opciones existentes
             $('#examen_rx').empty();
-            
+
             // Agregar opción por defecto
             $('#examen_rx').append('<option value="">Seleccione...</option>');
-            
+
             // Cargar los exámenes en el select2
             for (var i = 0; i < response.length; i++) {
                 $('#examen_rx').append(`<option value="${response[i].cod_examen}">
                     ${response[i].nombre_examen}
                 </option>`);
             }
-            
+
             // Reinicializar el select2 si es necesario
             $('#examen_rx').trigger('change');
         })
@@ -188,13 +188,7 @@
             let auto = 1; // o el valor real que quieras enviar
             let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
 
-            Fancybox.show(
-                [{
-                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
-                    type: "iframe",
-                    preload: false,
-                }, ]
-            );
+            ver_pdf_orden_examenes(id_ficha_atencion);
     }
 </script>
 {{--  <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">

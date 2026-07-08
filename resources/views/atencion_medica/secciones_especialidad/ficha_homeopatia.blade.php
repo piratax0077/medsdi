@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
+                <form action="{{ route('fichaAtencion.registrar_ficha_homeopatia') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -35,13 +35,13 @@
 
                     @csrf
                     <div class="tab-content" id="orl-contenido">
-                        <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                        <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
+                        <!--ATENCIÓN ESPECIALIDAD HOMEOPATÍA-->
+                        <div class="tab-pane fade show active" id="atencion_homeopatia" role="tabpanel" aria-labelledby="atencion_homeopatia-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-                                                                                
+
                                         <!--Formulario / Menor de edad-->
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
@@ -68,11 +68,9 @@
                                             </div>
                                         </div>
 
-                                     
 
-                                        <!-- control post qx -->
-                                        @include('general.secciones_ficha.control_cirugia_gen')
-                                        <!-- cierre control post qx -->
+
+
 
                                         <!-- ges -->
                                         @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
@@ -94,9 +92,12 @@
                         <div class="card-body">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_homeo')
+
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                         </div>
                     </div>
+
 
                     <!--GUARDAR O IMPRIMIR FICHA-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -115,6 +116,9 @@
     </div>
 </div>
 
+@include('general.secciones_ficha.receta_examen.modal_recetario_sdi_homeo')
+@include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @section('page-script-ficha-atencion')
     <script>
          /** MENSAJE*/
@@ -262,7 +266,12 @@
             $('#examenes').val(JSON.stringify(rows));
         }
 
+
     </script>
+
+    {{-- Modal para medicamentos homeopáticos --}}
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi_homeo')
+
 @endsection
 
 

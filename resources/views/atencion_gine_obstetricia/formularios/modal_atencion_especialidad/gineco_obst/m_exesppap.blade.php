@@ -171,32 +171,78 @@
 
         if(valido == 1)
         {
-            $('.examenes_sin_registros').remove();
-            var i = $('#m_exesppap_table tr').length; //contador para asignar id al boton que borrara la fila
-            var fila = '';
+            // Guardar en el backend vía AJAX
+            let id_ficha_atencion = $('#id_fc').val();
+            let id_paciente = $('#id_paciente_fc').val();
+            let id_profesional = $('#id_profesional_fc').val();
+            var _token = CSRF_TOKEN;
 
-            var id_reg = '';
-            id_reg = id_examenes;
-            fila += '<tr class="tr_examen_pap" id="row' + i + '">';
-            fila += '    <td class="text-center align-middle" style="display:none;">'+id_reg+'</td>';
-            fila += '    <td class="text-center align-middle" style="display:none;">'+real_examenes+'</td>';
-            fila += '    <td class="text-center align-middle" style="display:none;">Examen de PAP</td>';
-            fila += '    <td class="text-center align-middle" style="text-wrap: pretty;">'+real_examenes+'</td>';
-            fila += '    <td class="text-center align-middle"style="display:none;">N/A</td>';
-            fila += '    <td class="text-center align-middle">Ginecobstetra</td>';
-            fila += '    <td class="text-center align-middle">'+txt_prioridad+'</td>';
-            fila += '    <td class="text-center align-middle" style="display:none;">N/A</td>';
-            fila += '    <td class="text-center align-middle">'+txt_sospecha+'</td>';
-            fila += '    <td class="text-center align-middle">'+observacion+'</td>';
-            fila += '    <td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_pap(\'row' + i + '\');">Quitar</div></td>';
-            fila += '</tr>';
+            let url = '{{ route("gine.obste.pap.exam.clini.agregar") }}';
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    id_ficha_gineco_obstetrica: id_ficha_atencion,
+                    id_paciente: id_paciente,
+                    id_profesional: id_profesional,
+                    sospecha: txt_sospecha,
+                    prioridad: prioridad,
+                    observacion: observacion,
+                    _token: _token,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null && data.estado == 1) {
+                    swal({
+                        title: "Ingreso de examen PAP.",
+                        text: 'Examen registrado con éxito.',
+                        icon: "success",
+                    });
 
-            $('#m_exesppap_table tbody').append(fila);
+                    // Agregar fila a la tabla local
+                    $('.examenes_sin_registros').remove();
+                    var i = $('#m_exesppap_table tr').length;
+                    var fila = '';
 
-            $('#m_exesppap_sosp_clinica').val('');
-            $('#m_exesppap_obs_sosp_clinica').val('');
-            $('#m_exesppap_urgencia').val(2);
-            $('#m_exesppap_obs_pap').val('');
+                    var id_reg = '';
+                    id_reg = id_examenes;
+                    fila += '<tr class="tr_examen_pap" id="row' + i + '">';
+                    fila += '    <td class="text-center align-middle" style="display:none;">'+id_reg+'</td>';
+                    fila += '    <td class="text-center align-middle" style="display:none;">'+real_examenes+'</td>';
+                    fila += '    <td class="text-center align-middle" style="display:none;">Examen de PAP</td>';
+                    fila += '    <td class="text-center align-middle" style="text-wrap: pretty;">'+real_examenes+'</td>';
+                    fila += '    <td class="text-center align-middle"style="display:none;">N/A</td>';
+                    fila += '    <td class="text-center align-middle">Ginecobstetra</td>';
+                    fila += '    <td class="text-center align-middle">'+txt_prioridad+'</td>';
+                    fila += '    <td class="text-center align-middle" style="display:none;">N/A</td>';
+                    fila += '    <td class="text-center align-middle">'+txt_sospecha+'</td>';
+                    fila += '    <td class="text-center align-middle">'+observacion+'</td>';
+                    fila += '    <td class="text-center align-middle"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_pap(\'row' + i + '\');">Quitar</div></td>';
+                    fila += '</tr>';
+
+                    $('#m_exesppap_table tbody').append(fila);
+
+                    $('#m_exesppap_sosp_clinica').val('');
+                    $('#m_exesppap_obs_sosp_clinica').val('');
+                    $('#m_exesppap_urgencia').val(2);
+                    $('#m_exesppap_obs_pap').val('');
+                } else {
+                    swal({
+                        title: "Ingreso de examen PAP.",
+                        text: 'Error al guardar el examen.',
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(error) {
+                console.error(error);
+                swal({
+                    title: "Ingreso de examen PAP.",
+                    text: 'Error en la conexión.',
+                    icon: "error",
+                });
+            });
         }
         else
         {

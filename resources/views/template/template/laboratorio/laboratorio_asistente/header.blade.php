@@ -14,7 +14,7 @@
 			<li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="feather icon-user "></i>
+                        <i class="feather icon-user " style="font-size: 1.2rem!important;"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">

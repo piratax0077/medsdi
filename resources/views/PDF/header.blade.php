@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="contenido-encabezado-dos">
-        <h2 class="text-blue centrar mb-1">Examen</h2>
+        <h2 class="text-blue centrar mb-1" style="text-transform: uppercase;">{{ isset($titulo) ? $titulo : 'Exámen' }}</h2>
         <table>
             <tbody>
                 <tr>

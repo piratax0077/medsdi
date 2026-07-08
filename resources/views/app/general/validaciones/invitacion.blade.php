@@ -37,10 +37,13 @@
             <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 mx-auto">
                 <div class="card" >
                     <div class="card-body text-center">
-                        <img class="wid-90 mb-3" src="{{ asset('images/iconos/verificado.png') }}" alt="">
+                        <img class="wid-80 mb-4" src="{{ asset('images/iconos/verificado.png') }}" alt="">
                         <h4>{!!$mensaje !!}</h4>
                     </div>
                 </div>
+            </div>
+            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 mx-auto text-center mt-3">
+                <a href="https://www.med-sdi.cl/" class="btn btn-primary text-white" style="color: #fff!important;">Ingresar al sistema SDI</a>
             </div>
         </div>
     </div>

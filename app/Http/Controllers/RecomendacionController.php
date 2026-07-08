@@ -12,6 +12,7 @@ use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
 use ArrayObject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 // Auth
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class RecomendacionController extends Controller
         return $this->registrarRecomendacion($request->atencion, $request->salida, $request->herir, $request->cuadro, $request->activo, $request->aficionado, $request->control, $request->cod_doc, $request->cod_auto, $request->info);
     }
 
-    static public function registrarRecomendacion($atencion, $salida, $herir, $cuadro, $activo, $aficionado, $control, $cod_doc, $cod_auto, $info)
+    static public function registrarRecomendacion($atencion, $salida, $herir, $cuadro, $activo, $aficionado, $control, $cod_doc, $cod_auto, $info, $tipo_receta = null)
     {
         $datos = array();
         $error = array();
@@ -148,10 +149,10 @@ class RecomendacionController extends Controller
     /** RECOMENDACION DETALLE */
     public function registrarDetalle_r(Request $request)
     {
-        return $this->registrarDetalle($request->id_recomendacion, $request->control, $request->id_articulo, $request->articulo, $request->componente, $request->id_apariencia, $request->apariencia, $request->id_cuota, $request->cuota, $request->id_regimen, $request->regimen, $request->id_lapso, $request->lapso, $request->uso_frecuente, $request->volumen_compra, $request->volumen, $request->volumen_entregado, $request->comentario, $request->cod_doc);
+        return $this->registrarDetalle($request->id_recomendacion, $request->control, $request->id_articulo, $request->articulo, $request->componente, $request->id_apariencia, $request->apariencia, $request->id_cuota, $request->cuota, $request->id_regimen, $request->regimen, $request->id_lapso, $request->lapso, $request->uso_frecuente, $request->volumen_compra, $request->volumen, $request->volumen_entregado, $request->comentario, $request->cod_doc, $request->tipo_receta);
     }
 
-    static public function registrarDetalle($id_recomendacion, $control, $id_articulo, $articulo, $componente, $id_apariencia, $apariencia, $id_cuota, $cuota, $id_regimen, $regimen, $id_lapso, $lapso, $uso_frecuente, $volumen_compra, $volumen, $volumen_entregado, $comentario, $cod_doc)
+    static public function registrarDetalle($id_recomendacion, $control, $id_articulo, $articulo, $componente, $id_apariencia, $apariencia, $id_cuota, $cuota, $id_regimen, $regimen, $id_lapso, $lapso, $uso_frecuente, $volumen_compra, $volumen, $volumen_entregado, $comentario, $cod_doc, $tipo_receta = null)
     {
         $datos = array();
         $error = array();
@@ -163,7 +164,7 @@ class RecomendacionController extends Controller
             $valido = 0;
         }
 
-        if(empty($control)) //id_tipo_control
+        if(!isset($control) || $control === '' || $control === null) //id_tipo_control
         {
             $error['TIPO CONTROL'] = 'campo requerido';
             $valido = 0;
@@ -289,22 +290,45 @@ class RecomendacionController extends Controller
 
         if($valido)
         {
+            // Debug log para homeopatía
+            if($tipo_receta === 'homeopatia') {
+                \Log::info('Registrando medicamento homeopático:', [
+                    'id_articulo' => $id_articulo,
+                    'articulo' => $articulo,
+                    'componente' => $componente,
+                    'tipo_receta' => $tipo_receta
+                ]);
+            }
 
             $registro_recomendacion = Recomendacion::find($id_recomendacion);
 
             $registro = new RecomendacionDetalle();
             $registro->id_recomendacion = $id_recomendacion; //id_receta
             $registro->control = encrypt($control); //id_tipo_control
-            if($control == 8)
-            {
+
+            // Lógica específica para homeopatía
+            if($tipo_receta === 'homeopatia') {
+                // Para homeopatía, los IDs vienen de las tablas específicas de homeopatía
+                $registro->id_articulo = encrypt($id_articulo); //id_producto de articulos_homeopatia
+                $registro->articulo = encrypt($articulo); //producto de homeopatía
+
+                // Agregar identificador en comentario para diferenciar
+                $comentario_final = ($comentario ? $comentario . ' | ' : '') . 'HOMEOPATÍA';
+                $registro->comentario = encrypt($comentario_final); //comentario con identificador
+            }
+            else if($control == 8) {
+                // Lógica existente para magistral
                 $registro->id_articulo = encrypt('0'); //id_producto
                 $registro->articulo = encrypt($id_articulo); //producto
+                $registro->comentario = encrypt($comentario); //comentario
             }
-            else
-            {
+            else {
+                // Lógica normal para medicamentos regulares
                 $registro->id_articulo = encrypt($id_articulo); //id_producto
                 $registro->articulo = encrypt($articulo); //producto
+                $registro->comentario = encrypt($comentario); //comentario
             }
+
             $registro->componente = encrypt($componente); //farmaco
             $registro->id_apariencia = encrypt($id_apariencia); //id_presentacion
             $registro->apariencia = encrypt($apariencia); //presentacion
@@ -318,7 +342,6 @@ class RecomendacionController extends Controller
             $registro->volumen_compra = encrypt($volumen_compra); //cantidad_compra
             $registro->volumen = encrypt($volumen); //cantidad
             $registro->volumen_entregado = encrypt($volumen_entregado); //cantidad_vendida
-            $registro->comentario = encrypt($comentario); //comentario
             $registro->cod_doc = $registro_recomendacion->cod_doc; //token_doc
 
             if($registro->save())
@@ -374,13 +397,6 @@ class RecomendacionController extends Controller
             $valido = 0;
         }
 
-        // if(empty($request->id_tipo_control))
-        // {
-        //     $error['TIPO RECETA'] = 'campo requerido';
-        //     $valido = 0;
-        // }
-
-
         if($valido)
         {
             $id_receta = $request->id_receta;
@@ -391,6 +407,8 @@ class RecomendacionController extends Controller
             $id_paciente = $request->id_paciente;
             $id_profesional = $request->id_profesional;
             $id_lugar_atencion = $request->id_lugar_atencion;
+            $tipo_atencion = $request->tipo_atencion; // Capturar tipo de atención
+            $tipo_receta = $request->tipo_receta; // Capturar tipo de receta (homeopatia, normal, etc.)
             // $id_tipo_control = $request->id_tipo_control;
             $pdf = '';
             $token_doc_temp = (object)CertificadoController::certificadoDocumento((int)$id_ficha_atencion, (int)$id_profesional, (int)$id_paciente, 1);
@@ -400,7 +418,9 @@ class RecomendacionController extends Controller
             /** BUSCAR CABECERA */
             $registros_recomendacion = Recomendacion::where( 'atencion', $id_ficha_atencion )->get();
 
-            if($registros_recomendacion)
+            // SOLO borrar registros previos si NO es enfermería (para enfermería se agregan, no se reemplazan)
+            // Para homeopatía, también agregar en lugar de reemplazar para mantener separadas las recetas
+            if($registros_recomendacion && $tipo_atencion !== 'enfermeria_control_domiciliario' && $tipo_receta !== 'homeopatia')
             {
                 foreach ($registros_recomendacion as $key => $value)
                 {
@@ -424,6 +444,7 @@ class RecomendacionController extends Controller
                 {
                     switch (intval($value->id_tipo_control))
                     {
+                        case 0: //Sin tipo control (Enfermería)
                         case 4: //Receta retenida
                         case 6: //Receta Simple
                         case 7: //Venta Directa
@@ -468,6 +489,7 @@ class RecomendacionController extends Controller
                                                                 $token_doc, // $cod_doc
                                                                 session('lic_token'),// $token_auto, // $cod_auto
                                                                 $pdf, // $info
+                                                                $tipo_receta // $tipo_receta
                                                             );
                     if($registro->estado)
                     {
@@ -509,6 +531,7 @@ class RecomendacionController extends Controller
                                                                                     0, // $volumen_entregado
                                                                                     '', // $comentario
                                                                                     $token_doc, // $cod_doc
+                                                                                    $tipo_receta // $tipo_receta
                                                                         );
                             if($detalle_registro->estado == 1)
                             {
@@ -965,6 +988,7 @@ class RecomendacionController extends Controller
 
     public function verRecetaPacienteCantidad(Request $request)
     {
+
         $datos = array();
         $error = array();
         $filtro = array();
@@ -978,16 +1002,20 @@ class RecomendacionController extends Controller
 
         if($valido)
         {
-            if(empty($request->id_profesional))
+            if(!empty($request->id_profesional))
                 $filtro[] = array('aficionado', $request->id_profesional);
 
-            if(empty($request->id_paciente))
+            if(!empty($request->id_paciente))
                 $filtro[] = array('activo', $request->id_paciente);
 
-            if(empty($request->tipo_control))
-                $filtro[] = array('control', $request->tipo_control);
+            if(!empty($request->control))
+                $filtro[] = array('control', $request->control);
 
-            $registros = Recomendacion::where($filtro)->get();
+            $query = Recomendacion::where($filtro);
+            if(!empty($request->anio))
+                $query->whereYear('created_at', intval($request->anio));
+
+            $registros = $query->get();
             $cantidad = $registros->count();
 
             $datos['estado'] = 1;
@@ -1003,6 +1031,120 @@ class RecomendacionController extends Controller
         }
 
         return $datos;
+    }
+
+    /** ELIMINAR MEDICAMENTO INDIVIDUAL */
+    public function eliminarMedicamento(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha))
+        {
+            $error['ID_FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_profesional))
+        {
+            $error['ID_PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if(empty($request->id_paciente))
+        {
+            $error['ID_PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $id_ficha = $request->id_ficha;
+            $id_profesional = $request->id_profesional;
+            $id_paciente = $request->id_paciente;
+            $id_producto = $request->id_producto;
+            $nombre_medicamento = $request->nombre_medicamento;
+            $id_tipo_control = $request->id_tipo_control;
+
+            try {
+                // Buscar todas las recomendaciones para esta ficha
+                $recomendaciones = Recomendacion::where('atencion', $id_ficha)->get();
+
+                $eliminados = 0;
+                $encontrados = 0;
+
+                foreach ($recomendaciones as $recomendacion) {
+                    // Buscar detalles que coincidan con el medicamento a eliminar
+                    $detalles = RecomendacionDetalle::where('id_recomendacion', $recomendacion->id)->get();
+
+                    foreach ($detalles as $detalle) {
+                        $producto_bd = decrypt($detalle->articulo);
+                        $id_producto_bd = decrypt($detalle->id_articulo);
+
+                        // Verificar coincidencia por ID o por nombre
+                        $coincide = false;
+                        if (!empty($id_producto) && $id_producto_bd == $id_producto) {
+                            $coincide = true;
+                        } elseif (!empty($nombre_medicamento) && trim($producto_bd) == trim($nombre_medicamento)) {
+                            $coincide = true;
+                        }
+
+                        if ($coincide) {
+                            $encontrados++;
+
+                            // Eliminar el detalle
+                            if ($detalle->delete()) {
+                                $eliminados++;
+                                Log::info('Medicamento eliminado', [
+                                    'id_producto' => $id_producto_bd,
+                                    'nombre' => $producto_bd,
+                                    'detalle_id' => $detalle->id
+                                ]);
+                            }
+                        }
+                    }
+
+                    // Si la recomendación quedó sin detalles, eliminarla también
+                    $detalles_restantes = RecomendacionDetalle::where('id_recomendacion', $recomendacion->id)->count();
+                    if ($detalles_restantes == 0) {
+                        $recomendacion->delete();
+                        Log::info('Recomendación eliminada por quedar vacía', ['recomendacion_id' => $recomendacion->id]);
+                    }
+                }
+
+                if ($eliminados > 0) {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = "Medicamento eliminado correctamente";
+                    $datos['eliminados'] = $eliminados;
+                    $datos['encontrados'] = $encontrados;
+                } else {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = $encontrados > 0 ? "No se pudo eliminar el medicamento" : "Medicamento no encontrado en la receta";
+                    $datos['eliminados'] = 0;
+                    $datos['encontrados'] = $encontrados;
+                }
+
+            } catch (\Exception $e) {
+                Log::error('Error eliminando medicamento:', [
+                    'error' => $e->getMessage(),
+                    'id_ficha' => $id_ficha,
+                    'medicamento' => $nombre_medicamento
+                ]);
+
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Error interno del servidor al eliminar medicamento';
+                $datos['error'] = $e->getMessage();
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return response()->json($datos);
     }
 
 }

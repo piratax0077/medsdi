@@ -24,7 +24,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_presion();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/presion.png') }}">
+                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/presion.png') }}">
                                 <h5 class="mt-1 mb-0">Presión arterial</h5>
                             </div>
                         </a>
@@ -34,7 +34,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_glicemia();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/glicemia.png') }}">
+                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/glicemia.png') }}">
                                 <h5 class="mt-1 mb-0">Glicemia</h5>
                             </div>
                         </a>
@@ -44,7 +44,7 @@
                     <div class="card subir py-auto">
                         <a href="#" onclick="ctrl_peso();">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/peso.png') }}">
+                                <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/peso.png') }}">
                                 <h5 class="mt-1 mb-0">Peso</h5>
                             </div>
                         </a>
@@ -54,7 +54,7 @@
                 <div class="card subir py-auto">
                     <a href="#" onclick="ctrl_oxig();">
                         <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/oxigeno.png') }}">
+                            <img class="wid-50 text-center mb-1" src="{{ asset('images/iconos/oxigeno.png') }}">
                             <h5 class="mt-1 mb-0">Control Oxigeno</h5>
                         </div>
                     </a>

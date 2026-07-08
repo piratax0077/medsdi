@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistente;
 use App\Models\AsistenteTipo;
+use App\Models\BoxesCm;
 use App\Models\ContratoDependiente;
 use App\Models\HoraMedica;
+use App\Events\HoraMedicaUpdated;
+use App\Models\Instituciones;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Prevision;
@@ -40,8 +43,10 @@ class EscritorioAsistenteCmMnAg extends Controller
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
-
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
+            $id_institucion = $contrato->id_institucion;
+            $institucion = Instituciones::where('id', $id_institucion)->first();
             $profesionales = $lugares_atencion->profesionales()->get();
 
             foreach ($profesionales as $key_tipo_agenda => $value_tipo_agenda)
@@ -62,16 +67,25 @@ class EscritorioAsistenteCmMnAg extends Controller
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
 
+			// box de institucion
+            $filtro_box = array();
+            $filtro_box[] = array('estado',1);
+            $filtro_box[] = array('id_lugar_atencion',$id_lugar_atencion);
+            $boxes = BoxesCm::where($filtro_box)->get();
+
             $url = 'app.asistente_cm_manejo_agenda.escritorio_asistente_manejo_agenda'; // Asistente Centro Medico Manejo de Agenda
             $array_data = array(
                 'asistente' => $asistente,
                 'prevision' => $prevision,
                 'profesionales' => $profesionales,
                 'lugares_atencion' => $lugares_atencion,
+                'lugares_atencion' => $lugares_atencion,
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
                 'region' => $region,
                 'profesion_oficio' => $profesion_oficio,
                 'tipo_bonos' => $tipo_bonos,
+                'boxes' => $boxes,
+                'institucion' => $institucion,
             );
 
 
@@ -246,6 +260,9 @@ class EscritorioAsistenteCmMnAg extends Controller
                                 ->get();
 
             // echo json_encode($horas);
+
+            // emision de evento de hora confirmada
+            // event(new HoraMedicaUpdated($hora_medica, 'confirmada'));
 
             return view('app.asistente_cm_manejo_agenda.confirmar_hora', [
                 'horas' => $horas,

@@ -2,18 +2,18 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1">Lista de Espera profesional....</h5>
+                <h5 class="modal-title text-white mt-1">Lista de Espera profesional</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrarModal();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
-                        <ul class="nav nav-pills mb-3" id="clasificacion" role="tablist">
+                    <div class="col-12">
+                        <ul class="nav nav-tabs-aten nav-fill mb-4" id="clasificacion" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link-modal active" id="lista_espera_tab" data-toggle="pill" href="#lista_espera" role="tab" aria-controls="lista_espera" aria-selected="true">Lista de Espera</a>
+                                <a class="nav-link-aten text-reset  active" id="lista_espera_tab" data-toggle="pill" href="#lista_espera" role="tab" aria-controls="lista_espera" aria-selected="true">Lista de Espera</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-modal" id="inscribir_lista_espera_tab" data-toggle="pill" href="#inscribir_lista_espera" role="tab" aria-controls="inscribir_lista_espera" aria-selected="false">Inscribir</a>
+                                <a class="nav-link-aten text-reset" id="inscribir_lista_espera_tab" data-toggle="pill" href="#inscribir_lista_espera" role="tab" aria-controls="inscribir_lista_espera" aria-selected="false">Inscribir</a>
                             </li>
                         </ul>
                     </div>
@@ -23,76 +23,80 @@
                         <div class="tab-content">
                             <!--TABLA DE LISTA DE ESPERA-->
                             <div class="tab-pane fade show active" id="lista_espera" role="tabpanel" aria-labelledby="lista_espera_tab">
-                                <div class="row mt-2">
-                                    <div class="col-sm-12 col-md-12 text-center">
-                                        <h5 class="text-info">Lista de Espera</h5>
-                                        <hr class="mt-0">
-                                    </div>
-                                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
-                                    <div class="col-sm-12 col-md-12 mb-3">
-                                        <div class="table-responsive">
-                                            <table id="tabla_lista_espera" class="display table-bordered table table-striped dt-responsive nowrap table-xs text-wrap" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="align-left">RUT</th>
-                                                        <th class="align-left">NOMBRE</th>
-                                                        <th class="align-left">APELLIDOS</th>
-                                                        <th class="align-left">EMAIL</th>
-                                                        <th class="align-left">TELÉFONO</th>
-                                                        <th class="align-left">ACCIÓN</th>
-                                                    </tr>
-                                                </thead>
+                                    <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="card-lineal">
+                                                <div class="card-header-lineal">
+                                                    Lista de espera
+                                                </div>
+                                                <div class="card-body-lineal">
+                                                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 mb-3">
+                                                            <div class="table-responsive">
+                                                                <table id="tabla_lista_espera" class="display table-bordered table table-striped dt-responsive nowrap table-xs text-wrap" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="align-left">RUT</th>
+                                                                            <th class="align-left">NOMBRE</th>
+                                                                            <th class="align-left">APELLIDOS</th>
+                                                                            <th class="align-left">EMAIL</th>
+                                                                            <th class="align-left">TELÉFONO</th>
+                                                                            <th class="align-left">ACCIÓN</th>
+                                                                        </tr>
+                                                                    </thead>
 
-                                                <tbody>
-                                                    {{--
-                                                    <tr>
-                                                        <td class="align-left">6187674-K</td>
-                                                        <td class="align-left">JAIME</td>
-                                                        <td class="align-left">KRIMAN</td>
-                                                        <td class="align-left">JKRIMAN@GMAIL.COM</td>
-                                                        <td class="align-left">+56995474660</td>
-                                                        <td class="align-left">
-                                                            <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora('','Telefonica');">C</div>
-                                                            <div class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="Cancelar" onclick="cancelar_hora('','Telefonica');">CN</div>
-                                                            <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta('', '', 'Telefonica');">NoC</div>
-                                                        </td>
-                                                    </tr>
-                                                    --}}
-                                                </tbody>
-                                            </table>
+                                                                    <tbody>
+                                                                        {{--
+                                                                        <tr>
+                                                                            <td class="align-left">6187674-K</td>
+                                                                            <td class="align-left">JAIME</td>
+                                                                            <td class="align-left">KRIMAN</td>
+                                                                            <td class="align-left">JKRIMAN@GMAIL.COM</td>
+                                                                            <td class="align-left">+56995474660</td>
+                                                                            <td class="align-left">
+                                                                                <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora('','Telefonica');">C</div>
+                                                                                <div class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="Cancelar" onclick="cancelar_hora('','Telefonica');">CN</div>
+                                                                                <div class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="No contesta" onclick="no_contesta('', '', 'Telefonica');">NoC</div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        --}}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
 
                             <!-- FORMULARIO  -->
                             <div class="tab-pane fade" id="inscribir_lista_espera" role="tabpanel" aria-labelledby="inscribir_lista_espera_tab">
 
                                 <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                                <div class="row mt-2">
                                     <div class="m_lista_espera_busqueda">
-                                        <div class="row">
+                                        <div class="form-row">
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-group">
-                                                    <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
-                                                </div>
+                                                <h5 class="text-c-blue ml-0 mb-3">Ingrese el rut del paciente</h5>
                                             </div>
                                         </div>
-                                        <div class="row div_rut_buscar">
+                                        <div class="form-row div_rut_buscar">
                                             <div class="col-sm-8 col-md-8 mb-3">
                                                 <div class="form-group">
-                                                    <input type="text" id="m_lista_espera_rut" name="m_lista_espera_rut" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                                    <input type="text" id="m_lista_espera_rut" name="m_lista_espera_rut" class="form-control form-control-sm" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4 col-md-4 mb-3">
-                                                <button class="btn btn-info" onclick="buscar_paciente_lista_espera();" type="button"id="button-addon2">Buscar</button>
+                                                <button class="btn btn-info btn-block btn-sm" onclick="buscar_paciente_lista_espera();" type="button"id="button-addon2"><i class="feather icon-search"></i> Buscar</button>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="m_lista_espera_paciente_existente" style="display: none">
-                                        <div class="row mx-3">
+                                        <div class="form-row mx-3">
                                             <input type="hidden" name="m_lista_espera_ex_id_paciente" id="m_lista_espera_ex_id_paciente" value="">
                                             <table class="table table-borderless table-xs">
                                                 <tbody>
@@ -155,23 +159,29 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-12">
                                             <div class="modal-footer">
-                                                <button type="button" onclick="cancelar_busqueda();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" onclick="registrar_le_ex();" class="btn btn-info">Registrar</button>
+
+                                                <button type="button" onclick="cancelar_busqueda();"class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                                <button type="button" onclick="registrar_le_ex();" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Registrar</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="m_lista_espera_paciente_nuevo" style="display: none">
-                                        <div>
-                                            <div class="row">
+
+                                            <div class="form-row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="alert alert-danger" role="alert">
                                                         Paciente no registrado, complete los datos para registrar al paciente
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="form-row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">RUT</label>
@@ -242,9 +252,9 @@
 
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Region</label>
-                                                        <select class="form-control" name="m_lista_espera_nv_region" id="m_lista_espera_nv_region" onchange="buscar_ciudad_le('m_lista_espera_nv_region', 'm_lista_espera_nv_ciudad', '0');" required>
-                                                            <option value="0">Seleccione Regio&oacute;n</option>
+                                                        <label class="floating-label-activo-sm">Región</label>
+                                                        <select class="form-control form-control-sm" name="m_lista_espera_nv_region" id="m_lista_espera_nv_region" onchange="buscar_ciudad_le('m_lista_espera_nv_region', 'm_lista_espera_nv_ciudad', '0');" required>
+                                                            <option value="0">Seleccione</option>
                                                             @if (isset($region))
                                                                 @foreach ($region as $reg)
                                                                     <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
@@ -257,8 +267,8 @@
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
                                                         <label class="floating-label-activo-sm">Ciudad</label>
-                                                        <select class="form-control" id="m_lista_espera_nv_ciudad" name="m_lista_espera_nv_ciudad" required>
-                                                            <option value="0">Seleccione Ciudad</option>
+                                                        <select class="form-control form-control" id="m_lista_espera_nv_ciudad" name="m_lista_espera_nv_ciudad" required>
+                                                            <option value="0">Seleccione</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -282,21 +292,21 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                               <div class="form-row">
+                                            <div class="col-12">
                                             <div class="modal-footer">
-                                                <button type="button" onclick="cancelar_busqueda();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" onclick="registrar_le_np();" class="btn btn-info">Registrar</button>
+
+                                                <button type="button" onclick="cancelar_busqueda();"class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                                <button type="button" onclick="registrar_le_np();" class="btn btn-info btn-sm"> <i class="feather icon-check"></i>Registrar</button>
                                             </div>
                                         </div>
                                     </div>
 
-                                </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger align-middle" onclick="cerrarModal()"; data-dismiss="modal">Cerrar Modal</button>
             </div>
         </div>
     </div>
@@ -342,18 +352,22 @@
     function cargarListaEsperaPorProfesional()
     {
         var body = $('#tabla_lista_espera tbody');
-            $('#tabla_lista_espera').dataTable().fnClearTable();
+
+        // Destruir DataTables solo si existe
+        if ($.fn.DataTable.isDataTable('#tabla_lista_espera')) {
             $('#tabla_lista_espera').dataTable().fnDestroy();
-            body.empty();
+        }
 
-            url = "{{ route('lista.espera.buscar.por.profesional') }}";
-            let id_profesional = $('#agenda_profesional_asistente').val();
-            let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+        body.empty();
 
-            var data = {
-                id_profesional:id_profesional,
-                id_lugar_atencion:id_lugar_atencion,
-            }
+        url = "{{ route('lista.espera.buscar.por.profesional') }}";
+        let id_profesional = $('#agenda_profesional_asistente').val();
+        let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+
+        var data = {
+            id_profesional:id_profesional,
+            id_lugar_atencion:id_lugar_atencion,
+        }
 
             $.ajax({
                 url: url,
@@ -361,28 +375,54 @@
                 data: data
             })
             .done(function(data) {
+                console.log('Respuesta completa:', data);
 
                 if (data.estado == 1)
                 {
-                    console.log(data.registros);
+                    console.log('data.registros:', data.registros);
 
-                    for (i = 0; i < data.registros.length; i++)
+                    // Verificar que existan registros y sea un array
+                    if (data.registros && Array.isArray(data.registros) && data.registros.length > 0)
                     {
+                        for (i = 0; i < data.registros.length; i++)
+                        {
+                            console.log('Registro ' + i + ':', data.registros[i]);
 
-                        var fila = '';
-                        fila += '<tr>';
-                        fila += '    <td class="align-left">'+data.registros[i].paciente.rut+'</td>';
-                        fila += '    <td class="align-left">'+data.registros[i].paciente.nombres+'</td>';
-                        fila += '    <td class="align-left">'+data.registros[i].paciente.apellido_uno+' '+data.registros[i].paciente.apellido_dos+'</td>';
-                        fila += '    <td class="align-left">'+data.registros[i].paciente.email+'</td>';
-                        fila += '    <td class="align-left">'+data.registros[i].paciente.telefono_uno+'</td>';
-                        fila += '    <td class="align-left">';
-                        fila += '        <div class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Agendar" onclick="abrir_agendar_lista_epera(\''+data.registros[i].id+'\', \''+data.registros[i].id_paciente+'\');">Agendar</div>';
-                        fila += '        <div class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="abrir_elimina_lista_epera(\''+data.registros[i].id+'\');">Eliminar</div>';
-                        fila += '    </td>';
-                        fila += '</tr>';
+                            // Verificar que el registro existe y tiene ID
+                            if (data.registros[i] && data.registros[i].id)
+                            {
+                                // Verificar si el paciente existe
+                                if (data.registros[i].paciente)
+                                {
+                                    var fila = '';
+                                    fila += '<tr>';
+                                    fila += '    <td class="align-left">'+(data.registros[i].paciente.rut || '')+'</td>';
+                                    fila += '    <td class="align-left">'+(data.registros[i].paciente.nombres || '')+'</td>';
+                                    fila += '    <td class="align-left">'+((data.registros[i].paciente.apellido_uno || '') + ' ' + (data.registros[i].paciente.apellido_dos || ''))+'</td>';
+                                    fila += '    <td class="align-left">'+(data.registros[i].paciente.email || '')+'</td>';
+                                    fila += '    <td class="align-left">'+(data.registros[i].paciente.telefono_uno || '')+'</td>';
+                                    fila += '    <td class="align-left">';
+                                    fila += '        <div class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Agendar" onclick="abrir_agendar_lista_epera(\''+(data.registros[i].id || '')+'\', \''+(data.registros[i].id_paciente || '')+'\');">Agendar</div>';
+                                    fila += '        <div class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" onclick="abrir_elimina_lista_epera(\''+(data.registros[i].id || '')+'\');">Eliminar</div>';
+                                    fila += '    </td>';
+                                    fila += '</tr>';
 
-                        body.append(fila);
+                                    body.append(fila);
+                                }
+                                else
+                                {
+                                    console.warn('Registro sin paciente:', data.registros[i]);
+                                }
+                            }
+                            else
+                            {
+                                console.warn('Registro sin ID o registro nulo:', data.registros[i]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        console.log('No hay registros o no es un array válido');
                     }
 
                     $('#tabla_lista_espera').DataTable({
@@ -392,14 +432,10 @@
                 }
                 else
                 {
+                    console.log('Estado no válido, mostrando mensaje sin registros');
                     body.empty();
-                    $('#tabla_lista_espera').dataTable().fnClearTable();
-                    $('#tabla_lista_espera').dataTable().fnDestroy();
-                    var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
+                    var fila = '<tr><td colspan="6"><span><h5>No existen registros</h5></span></td></tr>'
                     body.append(fila);
-                    $('#tabla_lista_espera').DataTable({
-                        responsive: true,
-                    });
                 }
                 $('#m_lista_espera').modal('show');
             })

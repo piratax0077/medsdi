@@ -6,7 +6,7 @@
 
     @include('atencion_medica.include.head_homeopatia')
 
-    
+
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
@@ -91,8 +91,8 @@
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
-    @yield('Modals-med-exa-esp')
+    @yield('modals-med-exa')
+    @yield('modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
     @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
@@ -308,7 +308,7 @@
             $('#info_paciente-edit').css('display', 'none');
         }
 
-        function guardarInformacionPaciente(){
+       function guardarInformacionPaciente(){
             let id_paciente = $('#id_paciente').val();
             let nombres = $('#paciente_nombre_edit').val();
             let apellido_uno = $('#paciente_apellido_uno_edit').val();
@@ -320,6 +320,7 @@
             let comuna = $('#paciente_comuna_edit').val();
             let email = $('#paciente_email_edit').val();
             let telefono = $('#paciente_telefono_edit').val();
+            let convenio = $('#paciente_convenio_edit').val();
 
             let data = {
                 id: id_paciente,
@@ -333,6 +334,7 @@
                 ciudad: comuna,
                 email: email,
                 telefono: telefono,
+                convenio: convenio,
                 _token: CSRF_TOKEN
             }
 
@@ -352,6 +354,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
+                        let direccion = data.direccion ? data.direccion.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {
@@ -360,9 +363,10 @@
                             $('#sexo_paciente').text('Femenino');
                         }
                         $('#email_paciente_').text(paciente.email);
-                        $('#telefono_paciente').text(paciente.telefono_uno);
+                        $('#telefono_paciente_').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
- $('#direccion_paciente_').text(data.direccion.direccion.direccion);
+                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
+                        $('#direccion_paciente_').text(direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);

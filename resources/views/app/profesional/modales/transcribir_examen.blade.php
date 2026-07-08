@@ -1,4 +1,24 @@
 {{-- modal trascribir examen --}}
+{{-- Quill editor CSS --}}
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<style>
+    #modal_editor_informe {
+        min-height: 150px;
+        font-size: .95rem;
+        line-height: 1.7;
+        background: #fff;
+    }
+    .ql-toolbar.ql-snow {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        flex-wrap: wrap;
+    }
+    .ql-container.ql-snow { border: none; }
+</style>
 <div class="modal fade" id="m_transcripcion_examen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_transcripcion_examen" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
@@ -20,6 +40,61 @@
                 <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                 <div id="m_transcripcion_examen_contenido">
                 </div>
+
+                {{-- ===== PANEL DE DICTADO POR VOZ (dentro del modal) ===== --}}
+                <div class="mt-3">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-c-info d-flex align-items-center justify-content-between py-2">
+                            <h5 class="text-white mb-0" style="font-size:.95rem;">
+                                <i class="feather icon-mic mr-1"></i> Informe por dictado de voz
+                            </h5>
+                            <div class="d-flex align-items-center" style="gap:8px;">
+                                <span id="dictado_estado_badge"
+                                    class="badge badge-light"
+                                    style="font-size:.78rem; font-weight:500; min-width:110px; text-align:center;">
+                                    ⏸ Detenido
+                                </span>
+                                <button id="btn_dict_iniciar" type="button"
+                                    class="btn btn-light btn-sm"
+                                    onclick="dictado_iniciar()">
+                                    🎤 Iniciar
+                                </button>
+                                <button id="btn_dict_detener" type="button"
+                                    class="btn btn-secondary btn-sm"
+                                    onclick="dictado_detener()" disabled>
+                                    ⏹ Detener
+                                </button>
+                                <button type="button"
+                                    class="btn btn-outline-light btn-sm"
+                                    onclick="dictado_limpiar()"
+                                    title="Limpiar texto">
+                                    <i class="feather icon-trash-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div id="dictado_interim_preview"
+                                style="background:#e8f7fa; padding:.35rem 1rem;
+                                       font-style:italic; color:#117a8b; font-size:.83rem;
+                                       min-height:22px; border-bottom:1px solid #b8e8f0; display:none;">
+                            </div>
+                            <div id="modal_editor_informe"></div>
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between py-2"
+                             style="background:#f8f9fa;">
+                            <small class="text-muted">
+                                <i class="feather icon-info mr-1"></i>
+                                Pulsa <strong>🎤 Iniciar</strong> y dicta. El texto aparecerá en el editor.
+                            </small>
+                            <div style="gap:6px; display:flex;">
+                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                    onclick="dictado_generar_pdf()" title="Generar PDF del informe">
+                                    <i class="feather icon-file-text"></i> Generar PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger align-middle" onclick="cerrar_m_transcripcion_examen()"; data-dismiss="modal">Cerrar</button>
@@ -37,6 +112,11 @@
     /** CERRAR MODAL */
     function cerrar_m_transcripcion_examen()
     {
+        dictado_detener();
+        if (typeof quill_informe !== 'undefined') {
+            quill_informe.setContents([]);
+        }
+        $('#dictado_interim_preview').hide().text('');
         $('#m_transcripcion_examen').modal('hide');
         $('#m_transcripcion_examen_id_hora_medica').val('');
         $('#m_transcripcion_examen_id_paciente').val('');
@@ -224,6 +304,12 @@
         var alias = $('#m_transcripcion_examen_alias').val();
         var input_lista_imagenes = $('#input_lista_imagenes').val();
 
+        // Contenido del informe dictado (Quill)
+        var contenido_dictado_html  = (quill_informe) ? quill_informe.root.innerHTML : '';
+        var contenido_dictado_texto = (quill_informe) ? quill_informe.getText().trim() : '';
+        // Normalizar el HTML vacío de Quill (<p><br></p>) como vacío real
+        var tiene_dictado = contenido_dictado_texto.length > 0;
+
         var data = {};
         data._token = _token;
         data.examen_especialidad_id = examen_especialidad_id;
@@ -235,6 +321,8 @@
         data.id_tipo = id_tipo;
         data.alias = alias;
         data.input_lista_imagenes = input_lista_imagenes;
+        data.contenido_dictado_html  = tiene_dictado ? contenido_dictado_html : '';
+        data.contenido_dictado_texto = contenido_dictado_texto;
 
         $('#m_transcripcion_examen_contenido').find('input,textarea').each(function(key, element){
             console.log(key);
@@ -255,13 +343,26 @@
             console.log(data);
             if (data.estado == 1)
             {
-                $('#m_transcripcion_examen').modal('hide');
-                swal({
-                    title: "Transcripción de Examen",
-                    text: "Registro Exitoso",
-                    icon: "success",
-                    buttons: "Aceptar",
-                });
+                // Si hay contenido dictado, generar el PDF del informe antes de cerrar
+                if (tiene_dictado) {
+                    $('#m_transcripcion_examen').modal('hide');
+                    swal({
+                        title: "Transcripción de Examen",
+                        text: "Registro Exitoso. Generando PDF del informe dictado...",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    }).then(function() {
+                        dictado_generar_pdf();
+                    });
+                } else {
+                    $('#m_transcripcion_examen').modal('hide');
+                    swal({
+                        title: "Transcripción de Examen",
+                        text: "Registro Exitoso",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                }
             }
             else
             {
@@ -885,5 +986,162 @@
         $('#m_clasificacion').modal('show');
     }
 
+    // =====================================================================
+    // QUILL — inicialización del editor de dictado (dentro del modal)
+    // =====================================================================
+    var quill_informe = null;
 
+    $(document).ready(function() {
+        quill_informe = new Quill('#modal_editor_informe', {
+            theme: 'snow',
+            placeholder: 'El texto dictado aparecerá aquí. También puedes escribir y dar formato manualmente...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['blockquote'],
+                    ['clean']
+                ]
+            }
+        });
+    });
+
+    // =====================================================================
+    // DICTADO POR VOZ
+    // =====================================================================
+    var _reconocimiento = null;
+    var _dictando       = false;
+
+    function dictado_iniciar() {
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            $('#dictado_estado_badge').removeClass('badge-light badge-success badge-danger')
+                .addClass('badge-danger').text('❌ No compatible');
+            alert('Tu navegador no soporta dictado por voz. Usa Chrome o Edge.');
+            return;
+        }
+
+        _reconocimiento = new SpeechRecognition();
+        _reconocimiento.lang           = 'es-CL';
+        _reconocimiento.continuous     = true;
+        _reconocimiento.interimResults = true;
+
+        _reconocimiento.onstart = function () {
+            _dictando = true;
+            $('#btn_dict_iniciar').prop('disabled', true);
+            $('#btn_dict_detener').prop('disabled', false);
+            $('#dictado_estado_badge').removeClass('badge-light badge-danger')
+                .addClass('badge-success').html('🎙️ Escuchando…');
+            $('#dictado_interim_preview').show();
+        };
+
+        _reconocimiento.onresult = function (event) {
+            var textoFinal   = '';
+            var textoInterim = '';
+            for (var i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    textoFinal += event.results[i][0].transcript;
+                } else {
+                    textoInterim += event.results[i][0].transcript;
+                }
+            }
+            $('#dictado_interim_preview').text(textoInterim ? '💬 ' + textoInterim : '');
+            if (textoFinal && quill_informe) {
+                var pos = quill_informe.getLength() - 1;
+                if (pos > 0) {
+                    var ultimoChar = quill_informe.getText(pos - 1, 1);
+                    if (ultimoChar !== ' ' && ultimoChar !== '\n') {
+                        quill_informe.insertText(pos, ' ');
+                        pos++;
+                    }
+                }
+                quill_informe.insertText(pos, textoFinal);
+                quill_informe.setSelection(quill_informe.getLength());
+                $('#dictado_interim_preview').text('');
+            }
+        };
+
+        _reconocimiento.onend = function () {
+            if (_dictando) {
+                try { _reconocimiento.start(); } catch(e) {}
+            } else {
+                $('#dictado_estado_badge').removeClass('badge-success badge-danger')
+                    .addClass('badge-light').text('⏸ Detenido');
+                $('#dictado_interim_preview').hide().text('');
+                $('#btn_dict_iniciar').prop('disabled', false);
+                $('#btn_dict_detener').prop('disabled', true);
+            }
+        };
+
+        _reconocimiento.onerror = function (event) {
+            if (event.error === 'no-speech') return;
+            $('#dictado_estado_badge').removeClass('badge-success badge-light')
+                .addClass('badge-danger').text('❌ Error: ' + event.error);
+            _dictando = false;
+            $('#btn_dict_iniciar').prop('disabled', false);
+            $('#btn_dict_detener').prop('disabled', true);
+        };
+
+        _reconocimiento.start();
+    }
+
+    function dictado_detener() {
+        _dictando = false;
+        if (_reconocimiento) {
+            try { _reconocimiento.stop(); } catch(e) {}
+        }
+    }
+
+    function dictado_limpiar() {
+        if (!quill_informe || quill_informe.getText().trim() === '') return;
+        if (!confirm('¿Deseas limpiar el contenido del informe?')) return;
+        quill_informe.setContents([]);
+        $('#dictado_interim_preview').text('');
+    }
+
+    // Generar PDF usando id_ficha_atencion del modal para incluir firmas y validez
+    function dictado_generar_pdf() {
+        if (!quill_informe) return;
+        var texto = quill_informe.getText().trim();
+        var id_ficha_atencion = $('#m_transcripcion_examen_id_ficha_atencion').val();
+
+        if (!texto) {
+            toastr ? toastr.warning('El informe está vacío.') : alert('El informe está vacío.');
+            return;
+        }
+        if (!id_ficha_atencion) {
+            toastr ? toastr.warning('No se ha cargado el examen correctamente (sin id_ficha_atencion).') : alert('Falta el id de la ficha de atención.');
+            return;
+        }
+
+        var html = quill_informe.root.innerHTML;
+        var btn  = document.querySelector('[onclick="dictado_generar_pdf()"]');
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="feather icon-loader"></i> Generando...'; }
+
+        $.ajax({
+            url: '{{ route("laboratorio.informe.dictado.pdf") }}',
+            type: 'POST',
+            data: {
+                contenido_html:   html,
+                id_ficha_atencion: id_ficha_atencion,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function (data) {
+                console.log(data);
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="feather icon-file-text"></i> Generar PDF'; }
+                if (data.estado == 1) {
+                    window.open(data.url, '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+                } else {
+                    swal({ title: 'Error', text: data.msj, icon: 'error', confirmButtonText: 'Aceptar' });
+                }
+            },
+            error: function () {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="feather icon-file-text"></i> Generar PDF'; }
+                swal({ title: 'Error', text: 'Error al generar el PDF.', icon: 'error', confirmButtonText: 'Aceptar' });
+            }
+        });
+    }
 </script>

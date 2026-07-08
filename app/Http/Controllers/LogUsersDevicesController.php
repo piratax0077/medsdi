@@ -52,6 +52,7 @@ class LogUsersDevicesController extends Controller
                 {
                     case 1: // rendicion
                         $data = json_decode($value['msg'],false);
+
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
@@ -558,29 +559,29 @@ class LogUsersDevicesController extends Controller
 
                     break;
 
-                    case 12: //  autorizacion licencia profesional
+                    case 12: //  autorizacion licencia profesional autorizacion abrir documentos del profesional
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
                         $profesional = $data->profesional;
                         /** peticion */
-                        $value['msg_estado'] = "Profesional esta por Iniciar Licencia";
+                       $value['msg_estado'] = "Licencia desde <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
 
                         /** resultado */
                         switch($value['estado'])
                         {
                             case 1:
-                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha} </span>con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
                             break;
                             case 2:
-                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
                             break;
                             case 3:
-                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
                             break;
                             case 4:
-                                $value['msg_body'] = "Profesional por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
                             break;
                         }
 
@@ -588,16 +589,16 @@ class LogUsersDevicesController extends Controller
                         switch($value['estado'])
                         {
                            case 1:
-                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
                            break;
                            case 2:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
                            break;
                            case 3:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha}</p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
                            break;
                            case 4:
-                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia <span class='color-rojo txt_bold'>Expirada</span> con fecha {$fecha}</span></p><br>";
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia <span class='color-rojo txt_bold'>Expirada</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></span></p><br>";
                            break;
                         }
 
@@ -828,6 +829,68 @@ class LogUsersDevicesController extends Controller
 
                 }
 
+
+                if ((int)$value['estado'] === 0) {
+
+                    $msg_estado = $value['msg_estado'] ?? 'Solicitud pendiente';
+
+                    $msg_html_estructura = "
+                        <div class='sdi-log-row sdi-log-pendiente' data-id-log='{$value['id']}'>
+
+                            <div class='sdi-log-title'>
+                                SOLICITUD PENDIENTE
+                            </div>
+
+                            <div class='sdi-log-msg msg_estado_log'>
+                                {$msg_estado}
+                            </div>
+
+                            <div class='sdi-log-actions'>
+                                <button type='button'
+                                    class='sdi-btn sdi-btn-autorizar'
+                                    onclick='abrir_autorizacion_log({$value['id']}, 1, this)'>
+                                    AUTORIZAR
+                                </button>
+
+                                <button type='button'
+                                    class='sdi-btn sdi-btn-rechazar'
+                                    onclick='abrir_autorizacion_log({$value['id']}, 2, this)'>
+                                    RECHAZAR
+                                </button>
+                            </div>
+
+                        </div>
+                    ";
+
+                    $value['msg_body'] = $msg_estado;
+
+                } else {
+
+                    $estadoClase = 'sdi-log-finalizado';
+
+                    if ((int)$value['estado'] === 1) {
+                        $estadoClase = 'sdi-log-autorizado';
+                    }
+
+                    if ((int)$value['estado'] === 2) {
+                        $estadoClase = 'sdi-log-rechazado';
+                    }
+
+                    if ((int)$value['estado'] === 3) {
+                        $estadoClase = 'sdi-log-cancelado';
+                    }
+
+                    if ((int)$value['estado'] === 4) {
+                        $estadoClase = 'sdi-log-expirado';
+                    }
+
+                    $msg_html_estructura = "
+                        <div class='sdi-log-row {$estadoClase}' data-id-log='{$value['id']}'>
+                            <div class='sdi-log-title'>REGISTRO</div>
+                            <div class='sdi-log-msg'>{$msg_html_estructura}</div>
+                        </div>
+                    ";
+                }
 
                 $value['msg_html'] = $msg_html_estructura;
              }

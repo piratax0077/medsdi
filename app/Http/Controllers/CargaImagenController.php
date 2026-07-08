@@ -16,31 +16,7 @@ class CargaImagenController extends Controller
     /** IMAGEN */
     public function cargaImagenTemp(Request $request)
     {
-        $datos = array();
-
-        $request->validate([
-            'file' => 'required|image|max:4096'
-        ]);
-
-        $file_extension = $request->file->extension();
-        $file_mime_type = $request->file->getClientMimeType();
-        $original_file_name = $request->file->getClientOriginalName();
-
-        // $imagenes = $request->file->store('public/imagenes/temp'); /** ok */
-        $imagenes = $request->file('file')->store('public/imagenes/temp');  /** ok */
-
-        /** guardar con nombre */
-        // $imagenes = $request->file->storeAs('public/imagenes/temp', $original_file_name);
-
-        $url = Storage::url($imagenes);
-        $nombre_img = str_replace('/storage/imagenes/temp/','',$url);
-        $datos['estado'] = 1;
-        $datos['img']['url'] = $url;
-        $datos['img']['original_file_name'] = $original_file_name;
-        $datos['img']['nombre_img'] = $nombre_img;
-        $datos['img']['file_extension'] = $file_extension;
-        $datos['img']['file_mime_type'] = $file_mime_type;
-
+        \Log::info('⚠️ cargaImagenTemp EJECUTADO (debería ser cargaArchivoTemp)');
 
         $datos = array();
 
@@ -52,25 +28,51 @@ class CargaImagenController extends Controller
         $file_mime_type = $request->file->getClientMimeType();
         $original_file_name = $request->file->getClientOriginalName();
 
-        // $imagenes = $request->file->store('public/imagenes/temp'); /** ok */
-        $imagenes = $request->file('file')->store('public/imagenes/temp');  /** ok */
-
-        /** guardar con nombre */
-        // $imagenes = $request->file->storeAs('public/imagenes/temp', $original_file_name);
+        // Guardar en la ubicación correcta para archivos de receta
+        $imagenes = $request->file('file')->store('public/archivo/temp');
 
         $url = Storage::url($imagenes);
-        $nombre_img = str_replace('/storage/imagenes/temp/','',$url);
+        $nombre_img = basename($imagenes);
+
         $datos['estado'] = 1;
         $datos['img']['url'] = $url;
         $datos['img']['original_file_name'] = $original_file_name;
         $datos['img']['nombre_img'] = $nombre_img;
         $datos['img']['file_extension'] = $file_extension;
         $datos['img']['file_mime_type'] = $file_mime_type;
+
+        // También devolver como 'archivo' para compatibilidad
+        $datos['archivo']['url'] = $url;
+        $datos['archivo']['original_file_name'] = $original_file_name;
+        $datos['archivo']['nombre_archivo'] = $nombre_img;
+        $datos['archivo']['file_extension'] = $file_extension;
+        $datos['archivo']['file_mime_type'] = $file_mime_type;
+
+        \Log::info('Archivo guardado en cargaImagenTemp (redirigido)', [
+            'path' => $imagenes,
+            'url' => $url,
+            'nombre' => $nombre_img
+        ]);
 
         return $datos;
     }
 
-    public function guardarImagenesRxDental(Request $request){
+    public function eliminarArchivoTemp(Request $request){
+         $request->validate([
+            'ruta' => 'required|string',
+        ]);
+
+        $ruta = str_replace('/storage/', 'public/', $request->ruta); // convierte a ruta de almacenamiento
+
+        if (Storage::exists($ruta)) {
+            Storage::delete($ruta);
+            return response()->json(['mensaje' => 'Archivo eliminado']);
+        }
+
+        return response()->json(['mensaje' => 'Archivo no encontrado'], 404);
+    }
+
+     public function guardarImagenesRxDental(Request $request){
 
         // Log para debugging
         \Log::info('guardarImagenesRxDental iniciado', [
@@ -368,25 +370,25 @@ class CargaImagenController extends Controller
      * @param [string] $nombreNuevo
      * @return array
      */
-    static public function moverImagen($nombreArchivo, $dirDestino, $nombreNuevo)
+    static public function moverImagen($nombreArchivo, $dirDestino, $nombreNuevo, $discoOrigen = 'img_temp')
     {
         $datos = array();
 
         // img_temp
         // img_examen
-        $exists = Storage::disk('img_temp')->exists($nombreArchivo);
+        $exists = Storage::disk($discoOrigen)->exists($nombreArchivo);
         $datos['proceso']['exists'] = $exists;
 
         if($exists)
         {
-            $contents = Storage::disk('img_temp')->get($nombreArchivo);
+            $contents = Storage::disk($discoOrigen)->get($nombreArchivo);
             $copy = Storage::disk($dirDestino)->put($nombreNuevo, $contents);
             $datos['proceso']['copy'] = $copy;
 
             if($copy)
             {
                 $url = Storage::disk($dirDestino)->url($nombreNuevo);
-                Storage::disk('img_temp')->delete($nombreArchivo);
+                Storage::disk($discoOrigen)->delete($nombreArchivo);
                 $datos['estado'] = 1;
                 $datos['msj'] = 'exito';
                 $datos['proceso']['url'] = $url;
@@ -409,8 +411,69 @@ class CargaImagenController extends Controller
     }
 
     /** ARCHIVO */
+    // public function cargaArchivoTemp(Request $request)
+    // {
+    //     $datos = array();
+
+    //     // $request->validate([
+    //     //     // 'file' => 'required|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/x-msexcel,application/x-excel|max:4096'
+    //     //     'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png,gif,bmp,webp,svg|max:4096',
+    //     //     // 'file' => 'required|in:doc,csv,xlsx,xls,docx,pdf|max:4096'
+    //     // ]);
+    //     // verificar si existe un archivo
+    //     if (!$request->hasFile('file')) {
+    //         return response()->json([
+    //             'message' => 'ARCHIVO: No se ha seleccionado un archivo.'
+    //         ], 422);
+    //     }
+
+    //     $rules = [
+    //         // 'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv, jpg, jpeg, png, gif, bmp, webp, svg|max:10240', // 10MB
+    //     ];
+	// 	// Mensajes de error personalizados
+    //     $messages = [
+    //         'file.required' => 'El archivo es obligatorio.',
+    //         'file.file' => 'El campo debe ser un archivo.',
+    //         'file.mimes' => 'El archivo debe ser de tipo: pdf,doc,docx,xls,xlsx,csv, jpg, jpeg, png, gif, bmp, webp, svg',
+    //         'file.max' => 'El archivo no debe ser mayor a 10MB.',
+    //     ];
+
+    //     // Validar la solicitud
+    //     $validator = Validator::make($request->all(), $rules, $messages);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'message' => 'ARCHIVO: Error de validación',
+    //             'errors' => $validator->errors()
+    //         ], 422);
+    //     }
+
+    //     $file_extension = $request->file->extension();
+    //     $file_mime_type = $request->file->getClientMimeType();
+    //     $original_file_name = $request->file->getClientOriginalName();
+
+    //     // $imagenes = $request->file->store('public/archivo/temp'); /** ok */
+    //     $imagenes = $request->file('file')->store('public/archivo/temp');  /** ok */
+
+    //     /** guardar con nombre */
+    //     // $imagenes = $request->file->storeAs('public/archivo/temp', $original_file_name);
+
+    //     $url = Storage::url($imagenes);
+    //     $nombre_archivo = str_replace('/storage/archivo/temp/','',$url);
+    //     $datos['estado'] = 1;
+    //     $datos['archivo']['url'] = $url;
+    //     $datos['archivo']['original_file_name'] = $original_file_name;
+    //     $datos['archivo']['nombre_archivo'] = $nombre_archivo;
+    //     $datos['archivo']['file_extension'] = $file_extension;
+    //     $datos['archivo']['file_mime_type'] = $file_mime_type;
+
+    //     return $datos;
+    // }
+
     public function cargaArchivoTemp(Request $request)
     {
+        \Log::info('🔴 INICIO cargaArchivoTemp - ESTA FUNCION SE ESTA EJECUTANDO');
+
         $datos = array();
 
         $request->validate([
@@ -450,27 +513,24 @@ class CargaImagenController extends Controller
         $file_mime_type = $request->file->getClientMimeType();
         $original_file_name = $request->file->getClientOriginalName();
 
-        // Generar nombre único para el archivo temporal
-        $nombre_unico = time() . '_' . uniqid() . '.' . $file_extension;
-
-        // Log para debugging
-        \Log::info('Guardando archivo temporal', [
-            'original_name' => $original_file_name,
-            'nombre_unico' => $nombre_unico,
-            'extension' => $file_extension,
-            'disco_path' => Storage::disk('archivo_temp')->path(''),
-            'archivo_path_completo' => Storage::disk('archivo_temp')->path($nombre_unico)
+        // Log inicio
+        \Log::info('cargaArchivoTemp: INICIO', [
+            'nombreOriginal' => $original_file_name,
+            'tamano' => $request->file('file')->getSize(),
+            'mimeType' => $file_mime_type
         ]);
 
-        // Guardar directamente en el disco archivo_temp con nombre específico
-        $archivo_guardado = Storage::disk('archivo_temp')->putFileAs('', $request->file('file'), $nombre_unico);
+        // Usar el método directo que sabemos funciona
+        $imagenes = $request->file('file')->store('public/archivo/temp');
 
-        // Log del resultado
-        \Log::info('Resultado guardar archivo temporal', [
-            'nombre_unico' => $nombre_unico,
-            'archivo_guardado' => $archivo_guardado,
-            'archivo_existe_despues' => Storage::disk('archivo_temp')->exists($nombre_unico)
-        ]);        if (!$archivo_guardado) {
+        // Log para debugging
+        \Log::info('Archivo guardado en store()', [
+            'path_almacenado' => $imagenes,
+            'extension' => $file_extension,
+            'archivo_existe' => file_exists(storage_path('app/' . $imagenes))
+        ]);
+
+        if (!$imagenes) {
             return response()->json([
                 'estado' => 0,
                 'message' => 'Error al guardar el archivo temporal'
@@ -478,17 +538,57 @@ class CargaImagenController extends Controller
         }
 
         // Obtener URL del archivo
-        $url = Storage::disk('archivo_temp')->url($nombre_unico);
+        $url = Storage::url($imagenes);
+
+        // Extraer el nombre del archivo de la ruta almacenada
+        // La ruta viene como: public/archivo/temp/nombre123.jpg
+        $nombre_archivo_guardado = basename($imagenes);
+
+        \Log::info('URL y nombre generados', [
+            'url_generada' => $url,
+            'nombre_archivo' => $nombre_archivo_guardado,
+            'path_completo_almacenado' => $imagenes,
+            'path_fisico' => storage_path('app/' . $imagenes),
+            'existe_en_disco' => file_exists(storage_path('app/' . $imagenes))
+        ]);
 
         $datos['estado'] = 1;
         $datos['archivo']['url'] = $url;
         $datos['archivo']['original_file_name'] = $original_file_name;
-        $datos['archivo']['nombre_archivo'] = $nombre_unico; // Este es el nombre que buscará moverArchivo()
+        $datos['archivo']['nombre_archivo'] = $nombre_archivo_guardado;
         $datos['archivo']['file_extension'] = $file_extension;
         $datos['archivo']['file_mime_type'] = $file_mime_type;
 
+        \Log::info('Respuesta FINAL enviada al cliente', [
+            'estado' => $datos['estado'],
+            'url_retornada' => $datos['archivo']['url'],
+            'nombre_retornado' => $datos['archivo']['nombre_archivo']
+        ]);
+
         return $datos;
     }
+
+    public function cargarArchivoCampania(Request $request){
+        return $request;
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png,gif,bmp,webp,svg|max:10240', // 10MB
+        ]);
+
+        $path = $request->file('file')->store('campanias', 'public');
+
+        // Ahora copiamos el archivo de 'storage/app/public/campanias' a 'public/storage/campanias'
+        $publicPath = public_path('storage/campanias/' . basename($path));
+        File::copy(storage_path('app/public/' . $path), $publicPath);
+
+        $url = Storage::url($path); // Obtén la URL pública del archivo
+
+        return response()->json([
+            'success' => true,
+            'path' => $path,
+            'url' => $url,
+        ]);
+    }
+
     /**
      * mover y renombrar archivo
      *
@@ -515,38 +615,114 @@ class CargaImagenController extends Controller
     {
         $datos = array();
 
-        // img_temp
-        // img_examen
-        $exists = Storage::disk('archivo_temp')->exists($nombreArchivo);
-        $datos['proceso']['exists'] = $exists;
+        \Log::info('moverArchivo: Intentando mover archivo', [
+            'nombreArchivo' => $nombreArchivo,
+            'dirDestino' => $dirDestino,
+            'nombreNuevo' => $nombreNuevo
+        ]);
 
-        if($exists)
-        {
+        // Intentar en archivo_temp primero (para archivos de profesional.archivo.carga)
+        $exists = Storage::disk('archivo_temp')->exists($nombreArchivo);
+
+        \Log::info('archivo_temp: ¿Existe el archivo?', [
+            'nombreArchivo' => $nombreArchivo,
+            'existe' => $exists
+        ]);
+
+        if($exists) {
+            // El archivo existe en archivo_temp, proceder normalmente
             $contents = Storage::disk('archivo_temp')->get($nombreArchivo);
             $copy = Storage::disk($dirDestino)->put($nombreNuevo, $contents);
             $datos['proceso']['copy'] = $copy;
 
-            if($copy)
-            {
+            if($copy) {
                 $url = Storage::disk($dirDestino)->url($nombreNuevo);
                 Storage::disk('archivo_temp')->delete($nombreArchivo);
                 $datos['estado'] = 1;
                 $datos['msj'] = 'exito';
                 $datos['proceso']['url'] = $url;
-            }
-            else
-            {
+
+                \Log::info('Archivo movido desde archivo_temp', [
+                    'url' => $url,
+                    'nombreNuevo' => $nombreNuevo
+                ]);
+            } else {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'fallo';
+                $datos['msj'] = 'fallo al copiar';
+            }
+        } else {
+            // Si no está en archivo_temp, intentar en el disco 'public' (para archivos de profesional.archivo.carga con store())
+            $rutaEnPublic = 'archivo/temp/' . $nombreArchivo;
+            $exists = Storage::disk('public')->exists($rutaEnPublic);
+
+            \Log::info('public disco (archivo/temp/): ¿Existe el archivo?', [
+                'ruta' => $rutaEnPublic,
+                'existe' => $exists
+            ]);
+
+            if($exists) {
+                $contents = Storage::disk('public')->get($rutaEnPublic);
+                $copy = Storage::disk($dirDestino)->put($nombreNuevo, $contents);
+
+                if($copy) {
+                    $url = Storage::disk($dirDestino)->url($nombreNuevo);
+                    Storage::disk('public')->delete($rutaEnPublic);
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'exito';
+                    $datos['proceso']['url'] = $url;
+
+                    \Log::info('Archivo movido desde public (archivo/temp)', [
+                        'url' => $url,
+                        'nombreNuevo' => $nombreNuevo
+                    ]);
+                } else {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'fallo al copiar';
+                }
+            } else {
+                // Última opción: buscar en imagenes/temp (donde cargaImagenTemp guarda)
+                $rutaEnImagenes = 'imagenes/temp/' . $nombreArchivo;
+                $exists = Storage::disk('public')->exists($rutaEnImagenes);
+
+                \Log::info('public disco (imagenes/temp/): ¿Existe el archivo?', [
+                    'ruta' => $rutaEnImagenes,
+                    'existe' => $exists
+                ]);
+
+                if($exists) {
+                    $contents = Storage::disk('public')->get($rutaEnImagenes);
+                    $copy = Storage::disk($dirDestino)->put($nombreNuevo, $contents);
+
+                    if($copy) {
+                        $url = Storage::disk($dirDestino)->url($nombreNuevo);
+                        Storage::disk('public')->delete($rutaEnImagenes);
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'exito';
+                        $datos['proceso']['url'] = $url;
+
+                        \Log::info('Archivo movido desde public (imagenes/temp)', [
+                            'url' => $url,
+                            'nombreNuevo' => $nombreNuevo
+                        ]);
+                    } else {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'fallo al copiar de imagenes/temp';
+                    }
+                } else {
+                    // No encontrado en ninguna ubicación
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'no encontrado en ninguna ubicación';
+                }
             }
         }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'no encontrado';
-        }
 
+        $datos['proceso']['exists'] = $exists;
 
+        \Log::info('Resultado final de moverArchivo', [
+            'estado' => $datos['estado'],
+            'msj' => $datos['msj'],
+            'existe' => $exists
+        ]);
 
         return $datos;
     }

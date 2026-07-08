@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <table id="table_atecion_previa_tabla_examen_paciente" class="display table table-striped  dt-responsive nowrap table-sm" style="width:100%">
+                    <table id="table_atecion_previa_tabla_examen_paciente" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Fecha</th>
@@ -18,7 +18,7 @@
                                 <th>Prioridad</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-left ">
 
                         </tbody>
                     </table>

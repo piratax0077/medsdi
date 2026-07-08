@@ -77,7 +77,7 @@
                                                                 <a class="nav-link-aten text-reset"
                                                                     id="radiologia_endo_tab" data-toggle="tab"
                                                                     href="#radiologia_endo_end"
-                                                                    onclick="mostrar_nueva_pieza_ex_radio_end(1000)"
+                                                                    onclick="mostrar_nueva_pieza_ex_radio_end(1000);recargar_imagenes_rx('endodoncia');"
                                                                     role="tab" aria-controls="radiologia_endo_end"
                                                                     aria-selected="false">Ex. Radiológico</a>
                                                             </div>
@@ -364,258 +364,7 @@
                                                                     aria-labelledby="radiologia_endo_end_tab">
                                                                     <div class="row">
                                                                         <div class="col-md-12">
-                                                                                    <div
-                                                                                        id="contenedor_pieza_dental_endorx_endo">
-
-                                                                                        @php $counter = 1; @endphp
-                                                                                        @foreach ($examenes_rx_oral_end as $e)
-                                                                                            <div class="card">
-                                                                                                <div class="card-body">
-                                                                                                    <div id="pieza_dentalrx{{ $counter }}"
-                                                                                                        class="row">
-                                                                                                        <div
-                                                                                                            class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                            <div
-                                                                                                                class="row">
-                                                                                                                <div
-                                                                                                                    class="col-md-6">
-                                                                                                                    <div class="form-row"
-                                                                                                                        id="contenedor_piezas_ex_oral_end">
-                                                                                                                        <div
-                                                                                                                            class="col-sm-12 col-md-12">
-                                                                                                                            {{-- <div class="card">
-                                                                                                                    <div class="form-row">
-                                                                                                                        <div class="col-sm-12 col-md-12">
-                                                                                                                            <h6 style="text-align: center;color:blue;bold">Subir imagen radiológica</h6>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                    <div class="card-body-aten-a">
-                                                                                                                        <div class="dropzone" id="mis-imagenes-imagenes-rx-dental_end_{{ $counter }}" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                                                    </div>
-                                                                                                                </div> --}}
-
-                                                                                                                            <!-- Vista previa de imágenes existentes -->
-                                                                                                                            <div
-                                                                                                                                class="form-row mt-2">
-                                                                                                                                @if (!empty($e->decoded_imagenes))
-                                                                                                                                    @foreach ($e->decoded_imagenes as $imagen)
-                                                                                                                                        @foreach ($imagen['paths_imagenes'] ?? [] as $path)
-                                                                                                                                            <div>
-                                                                                                                                                <a href="javascript:void(0)"
-                                                                                                                                                    onclick="amplificar_imagen('{{ $path }}')">
-                                                                                                                                                    <img src="{{ asset('storage/' . str_replace('\\', '', $path)) }}"
-                                                                                                                                                        alt="Imagen del examen"
-                                                                                                                                                        class="img-fluid mx-2 imagen_rx">
-                                                                                                                                                </a>
-                                                                                                                                                <button
-                                                                                                                                                    type="button"
-                                                                                                                                                    class="btn btn-danger btn-sm my-2"
-                                                                                                                                                    onclick="eliminar_rx_end({{ $imagen['id'] }})"><i
-                                                                                                                                                        class="feather icon-x"></i></button>
-                                                                                                                                            </div>
-                                                                                                                                        @endforeach
-                                                                                                                                    @endforeach
-                                                                                                                                @else
-                                                                                                                                    <p>No
-                                                                                                                                        hay
-                                                                                                                                        imágenes
-                                                                                                                                        disponibles
-                                                                                                                                        para
-                                                                                                                                        este
-                                                                                                                                        examen.
-                                                                                                                                    </p>
-                                                                                                                                @endif
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-
-                                                                                                                <div
-                                                                                                                    class="col-md-6">
-                                                                                                                    <div
-                                                                                                                        class="form-row">
-                                                                                                                        <div
-                                                                                                                            class="col-12">
-                                                                                                                            <div
-                                                                                                                                class="form-group">
-                                                                                                                                <label
-                                                                                                                                    class="floating-label-activo-sm">Piezas
-                                                                                                                                    N°</label>
-                                                                                                                                <select
-                                                                                                                                    class="form-control form-control-sm select2_rx_end"
-                                                                                                                                    name="end_numero_pieza_{{ $counter }}[]"
-                                                                                                                                    id="end_numero_pieza_{{ $counter }}"
-                                                                                                                                    multiple>
-                                                                                                                                    @foreach ([11, 12, 13, 14, 15, 16, 17, 18, 21, 22, 23, 24, 25, 26, 27, 28] as $pieza)
-                                                                                                                                        <option
-                                                                                                                                            value="{{ $pieza }}"
-                                                                                                                                            {{ isset($e->numero_piezas) && in_array($pieza, (array) $e->numero_piezas) ? 'selected' : '' }}>
-                                                                                                                                            {{ $pieza }}
-                                                                                                                                        </option>
-                                                                                                                                    @endforeach
-                                                                                                                                </select>
-                                                                                                                            </div>
-                                                                                                                        </div>
-
-                                                                                                                        <div
-                                                                                                                            class="col-12">
-                                                                                                                            <div
-                                                                                                                                class="form-group">
-                                                                                                                                <label
-                                                                                                                                    class="floating-label-activo-sm">Espacio
-                                                                                                                                    Periodontal
-                                                                                                                                    Apical</label>
-                                                                                                                                <select
-                                                                                                                                    name="end_rx_esp_peri_apical{{ $counter }}"
-                                                                                                                                    id="end_rx_esp_peri_apical{{ $counter }}"
-                                                                                                                                    class="form-control form-control-sm"
-                                                                                                                                    onchange="evaluar_para_carga_detalle('end_rx_esp_peri_apical','end_div_detalle_rx_esp_peri_apical_{{ $counter }}','end_det_rx_esp_peri_apical_{{ $counter }}',4)">
-                                                                                                                                    <option
-                                                                                                                                        value="0"
-                                                                                                                                        @if ($e->espacio_periodontal == 0) selected @endif>
-                                                                                                                                        Seleccione
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="1"
-                                                                                                                                        @if ($e->espacio_periodontal == 1) selected @endif>
-                                                                                                                                        Normal
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="2"
-                                                                                                                                        @if ($e->espacio_periodontal == 2) selected @endif>
-                                                                                                                                        Engrosado
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="3"
-                                                                                                                                        @if ($e->espacio_periodontal == 3) selected @endif>
-                                                                                                                                        Ausente
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="4"
-                                                                                                                                        @if ($e->espacio_periodontal == 4) selected @endif>
-                                                                                                                                        Otro
-                                                                                                                                    </option>
-                                                                                                                                </select>
-                                                                                                                            </div>
-                                                                                                                            <div class="form-group"
-                                                                                                                                id="end_div_detalle_rx_esp_peri_apical_{{ $counter }}"
-                                                                                                                                style="display:none">
-                                                                                                                                <label
-                                                                                                                                    class="floating-label-activo-sm">Espacio
-                                                                                                                                    Periodontal
-                                                                                                                                    Apical
-                                                                                                                                    <i>(describir)</i></label>
-                                                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
-                                                                                                                                    name="end_det_rx_esp_peri_apical_{{ $counter }}" id="end_det_rx_esp_peri_apical_{{ $counter }}">{{ $e->detalle_espacio ?? '' }}</textarea>
-                                                                                                                            </div>
-                                                                                                                        </div>
-
-                                                                                                                        <div
-                                                                                                                            class="col-12">
-                                                                                                                            <div
-                                                                                                                                class="form-group">
-                                                                                                                                <label
-                                                                                                                                    class="floating-label-activo-sm">Hueso
-                                                                                                                                    Alveolar
-                                                                                                                                    Apical</label>
-                                                                                                                                <select
-                                                                                                                                    name="end_h_apical{{ $counter }}"
-                                                                                                                                    id="end_h_apical{{ $counter }}"
-                                                                                                                                    class="form-control form-control-sm"
-                                                                                                                                    onchange="evaluar_para_carga_detalle('end_h_apical','end_div_detalle_h_apical_{{ $counter }}','aprec_h_apical_{{ $counter }}',5)">
-                                                                                                                                    <option
-                                                                                                                                        value="0"
-                                                                                                                                        @if ($e->hueso_alveolal == 0) selected @endif>
-                                                                                                                                        Seleccione
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="1"
-                                                                                                                                        @if ($e->hueso_alveolal == 1) selected @endif>
-                                                                                                                                        Normal
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="2"
-                                                                                                                                        @if ($e->hueso_alveolal == 2) selected @endif>
-                                                                                                                                        Zona
-                                                                                                                                        apical
-                                                                                                                                        Difusa
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="3"
-                                                                                                                                        @if ($e->hueso_alveolal == 3) selected @endif>
-                                                                                                                                        Zona
-                                                                                                                                        apical
-                                                                                                                                        Corticalizada
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="4"
-                                                                                                                                        @if ($e->hueso_alveolal == 4) selected @endif>
-                                                                                                                                        Osteítis
-                                                                                                                                        Condensante
-                                                                                                                                    </option>
-                                                                                                                                    <option
-                                                                                                                                        value="5"
-                                                                                                                                        @if ($e->hueso_alveolal == 5) selected @endif>
-                                                                                                                                        Otro
-                                                                                                                                    </option>
-                                                                                                                                </select>
-                                                                                                                            </div>
-                                                                                                                            <div class="form-group"
-                                                                                                                                id="end_div_detalle_h_apical_{{ $counter }}"
-                                                                                                                                style="display:none">
-                                                                                                                                <label
-                                                                                                                                    class="floating-label-activo-sm">Hueso
-                                                                                                                                    Alveolar
-                                                                                                                                    Apical
-                                                                                                                                    <i>(describir)</i></label>
-                                                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
-                                                                                                                                    name="aprec_h_apical_{{ $counter }}" id="aprec_h_apical_{{ $counter }}">{{ $e->detalle_hueso ?? '' }}</textarea>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-
-                                                                                                            <div
-                                                                                                                class="form-row mt-2">
-                                                                                                                <div
-                                                                                                                    class="col-md-6">
-                                                                                                                    <div
-                                                                                                                        class="form-group">
-                                                                                                                        <label
-                                                                                                                            class="floating-label-activo-sm">Informe
-                                                                                                                            del
-                                                                                                                            radiólogo</label>
-                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;"
-                                                                                                                            name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}">{{ $e->informe_radiologo ?? '' }}</textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                                <div
-                                                                                                                    class="col-md-6">
-                                                                                                                    <div
-                                                                                                                        class="form-group">
-                                                                                                                        <label
-                                                                                                                            class="floating-label-activo-sm">Observaciones
-                                                                                                                            Examen
-                                                                                                                            Pieza</label>
-                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;"
-                                                                                                                            name="end_obs_ex_oral{{ $counter }}" id="end_obs_ex_oral{{ $counter }}">{{ $e->observaciones ?? '' }}</textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-
-                                                                                                        <button
-                                                                                                            type="button"
-                                                                                                            class="btn btn-icon btn-danger-light-c"
-                                                                                                            onclick="eliminar_pieza_dental_rx_end({{ $e->id }})"><i
-                                                                                                                class="feather icon-x"></i></button>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-
-                                                                                            @php $counter++; @endphp
-                                                                                        @endforeach
+                                                                                    <div id="contenedor_pieza_dental_endorx_endo">
 
 
                                                                                     </div>
@@ -1368,6 +1117,7 @@
                                                                             <td>Tratamiento</td>
                                                                             <td>Valor</td>
                                                                             <td>Accion</td>
+                                                                            <td>Estado</td>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -1383,6 +1133,18 @@
                                                                                             class="btn btn-danger btn-icon"
                                                                                             onclick="eliminar_odontograma({{ $o->id }})"><i
                                                                                                 class="feather icon-x"></i></button>
+                                                                                                <button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza({{ $o->id }})"><i class="feather icon-repeat"></i> </button>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($o->estado == 0)
+                                                                                        <span class="text-uppercase">Pendiente</span>
+                                                                                        @elseif($o->estado == 1)
+                                                                                            <span class="text-uppercase">Realizado</span>
+                                                                                        @elseif($o->estado == 2)
+                                                                                            <span class="text-uppercase">Cancelado</span>
+                                                                                        @elseif($o->estado == 3)
+                                                                                            <span class="text-uppercase">Citado a Control</span>
+                                                                                        @endif
                                                                                     </td>
                                                                                 </tr>
                                                                             @endif
@@ -1489,7 +1251,7 @@
                                                                         <label
                                                                             class="floating-label-activo-sm">Diagnostico</label>
                                                                         <select class="form-control form-control-sm"
-                                                                            id="diagnostico_combo_g">
+                                                                            id="diagnostico_combo_g_endo">
                                                                             <option value="0">Seleccione</option>
                                                                             @foreach ($diagnosticos as $d)
                                                                                 <option value="{{ $d->id }}">
@@ -1739,9 +1501,9 @@
                                         aria-controls="cont_endo_tto" aria-selected="true">Control y Tratamiento</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="protocolo_implantes_tab"
-                                        data-toggle="tab" href="#protocolo_implantes" role="tab"
-                                        aria-controls="protocolo_implantes" aria-selected="true">Protocolo e
+                                    <a class="nav-link-aten text-reset" id="protocolo_endodoncia_tab"
+                                        data-toggle="tab" href="#protocolo_endodoncia" role="tab"
+                                        aria-controls="protocolo_endodoncia" aria-selected="true" onclick="dame_evoluciones_endodoncia()">Protocolo e
                                         Indicaciones</a>
                                 </li>
                             </ul>
@@ -1772,7 +1534,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link-aten text-reset" id="evol_endo_tab"
                                                         data-toggle="tab" href="#evol_endo" role="tab"
-                                                        aria-controls="evol_endo" aria-selected="true">Control y Evolución</a>
+                                                        aria-controls="evol_endo" aria-selected="true" onclick="dame_evoluciones_endodoncia()">Control y Evolución</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -1824,14 +1586,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-footer">
-                                                                    <div class="float-right">
+                                                                    {{-- <div class="float-right">
 
                                                                         <button type="button"
                                                                             class="btn btn-xxs btn-warning-light-c"
                                                                             onclick="guardar_pieza_dental_tto_impl(1000)">
                                                                             <i class="fas fa-check"></i> Presione para
                                                                             finalizar prestación en curso</button>
-                                                                    </div>
+                                                                    </div> --}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1839,7 +1601,7 @@
                                                 </div>
                                                 <!--GRUPO DENTAL-->
                                                 <div class="tab-pane fade" id="evol_endo" role="tabpanel"
-                                                    aria-labelledby="evol_endo_tab">
+                                                    aria-labelledby="evol_endo_tab" >
                                                          @include('atencion_odontologica.generales.control_odontologico')
                                                 </div>
                                             </div>
@@ -1848,8 +1610,8 @@
                                 </div>
 
                                 <!--PROTOCOLO-->
-                                <div class="tab-pane fade show" id="protocolo_implantes" role="tabpanel"
-                                    aria-labelledby="protocolo_implantes_tab">
+                                <div class="tab-pane fade show" id="protocolo_endodoncia" role="tabpanel"
+                                    aria-labelledby="protocolo_endodoncia_tab">
                                     <div class="form-row mt-2">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <h6 class="t-aten">Protocolos e indicaciones</h6>
@@ -1971,8 +1733,16 @@
                                                                     relleno</label>
                                                                 <select name="mat_relleno_end" id="mat_relleno_end"
                                                                     class="form-control form-control-sm"
-                                                                    onchange="evaluar_para_carga_detalle('prot_proc','div_prot_proc','det_prot_proc',3)">
+                                                                    onchange="evaluar_para_carga_detalle('prot_proc','div_prot_proc','det_prot_proc',6)">
                                                                     <option value="0">Seleccione</option>
+                                                                    <option value="1">Gutapercha</option>
+                                                                    <optgroup label="Cementos selladores">
+                                                                        <option value="2">óxido de zinc-eugenol (ZOE)</option>
+                                                                        <option value="3">Sin eugenol</option>
+                                                                        <option value="4">De resina</option>
+                                                                        <option value="5">Viopaste</option>
+                                                                        <option value="6">Con nanotecnología</option>
+                                                                    </optgroup>
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_prot_proc"
@@ -2016,8 +1786,8 @@
                                                                     name="prot_pieza_imp"id="prot_pieza_imp"
                                                                     multiple="multiple">
                                                                     @foreach ($odontograma as $o)
-                                                                        @if ($o->presupuesto == 1)
-                                                                            <option value="{{ $o->id }}">
+                                                                        @if ($o->presupuesto == 1 && $o->urgencia == 0)
+                                                                            <option value="{{ $o->pieza }}">
                                                                                 {{ $o->pieza }}</option>
                                                                         @endif
                                                                     @endforeach
@@ -2346,7 +2116,7 @@
     function seleccionar_piezas_presup() {
         const checkbox = document.getElementById('piezas_presup_impl');
         // Seleccionar el <select> y actualizar sus valores
-        const piezasSelect = $('#paciente_piezas_dentales_ex_impl');
+        const piezasSelect = $('#paciente_piezas_dentales_end_ex_');
         // Si está desmarcado
         if (!checkbox.checked) {
             // 1. Limpiar select2
@@ -2367,8 +2137,8 @@
         // Supongamos que ya tienes este JSON cargado
         const odontograma = odontograma_global;
 
-        // Obtener piezas únicas
-        const piezasUnicas = [...new Set(odontograma.map(item => item.pieza))];
+        // Obtener piezas únicas donde urgencia == 0
+        const piezasUnicas = [...new Set(odontograma.filter(item => item.urgencia == 0).map(item => item.pieza))];
 
 
         piezasSelect.val(piezasUnicas).trigger('change');
@@ -2732,6 +2502,184 @@
                     console.log(error.responseText);
                 }
             });
+        }
+    }
+
+    function dame_evoluciones_endodoncia(){
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let id_hora_medica = $('#hora_medica').val();
+
+        let url = "{{ route('dental.dame_evoluciones_od_gral') }}";
+
+        let data = {
+            id_ficha_atencion: id_ficha_atencion,
+            id_paciente: id_paciente,
+            id_lugar_atencion: id_lugar_atencion,
+            id_profesional: id_profesional,
+            id_hora_medica: id_hora_medica,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            beforeSend: function(){
+                swal({
+                    title: 'Cargando...',
+                    text: 'Por favor, espere.',
+                    icon: 'info',
+                    button: false
+                });
+            },
+            success: function(response) {
+                swal.close();
+                console.log(response);
+                if(response.estado == 'ok'){
+                    // Guardar las evoluciones en la variable global
+                    evoluciones = response.evoluciones || [];
+                    $('#det_cir').val(response.historia_clinica || '');
+                    
+                    // También guardar datos adicionales si los necesitas
+                    if(response.evoluciones_raw) {
+                        window.evoluciones_od_gral_raw = response.evoluciones_raw;
+                    }
+                    if(response.total_evoluciones !== undefined) {
+                        window.total_evoluciones_od_gral = response.total_evoluciones;
+                    }
+                    
+                    // Seleccionar las piezas tratadas en el select2
+                    if(response.piezas_tratadas && response.piezas_tratadas.length > 0) {
+                        // Primero limpiar la selección actual
+                        $('#prot_pieza_imp').val(null).trigger('change');
+                        
+                        // Obtener los IDs de las opciones que corresponden a las piezas tratadas
+                        let piezasParaSeleccionar = [];
+                        
+                        response.piezas_tratadas.forEach(function(pieza) {
+                            // Buscar en el select2 la opción que tenga el texto igual a la pieza
+                            $('#prot_pieza_imp option').each(function() {
+                                let textoOpcion = $(this).text().trim();
+                                if(textoOpcion === pieza) {
+                                    piezasParaSeleccionar.push($(this).val());
+                                }
+                            });
+                        });
+                        
+                        // Seleccionar las piezas encontradas
+                        if(piezasParaSeleccionar.length > 0) {
+                            $('#prot_pieza_imp').val(piezasParaSeleccionar).trigger('change');
+                            console.log('Piezas seleccionadas en el select2:', piezasParaSeleccionar);
+                        }
+                    }
+                    
+                    // Cargar las evoluciones en la tabla correspondiente
+                    cargarTablaEvolucionesEndodoncia(response.evoluciones);
+                    
+                    console.log('Evoluciones guardadas globalmente:', evoluciones);
+                }else{
+                    // Limpiar las variables globales si no hay evoluciones
+                    evoluciones = [];
+                    window.evoluciones_od_gral_raw = [];
+                    window.total_evoluciones_od_gral = 0;
+                    
+                    // Limpiar también el select2
+                    $('#prot_pieza_imp').val(null).trigger('change');
+                    
+                    // Limpiar la tabla si no hay evoluciones
+                    limpiarTablaEvolucionesEndodoncia();
+                }
+
+            },
+            error: function(error) {
+                swal.close();
+                console.log(error);
+                
+                // Limpiar las variables globales en caso de error
+                evoluciones = [];
+                window.evoluciones_od_gral_raw = [];
+                window.total_evoluciones_od_gral = 0;
+            }
+        });
+    }
+
+    function limpiarTablaEvolucionesEndodoncia(){
+        const div_evolucion = $('#contenedor_evoluciones_endodoncia');
+        div_evolucion.empty();
+    }
+
+    function cargarTablaEvolucionesEndodoncia(evoluciones){
+        const div_evolucion = $('#contenedor_evoluciones_od_gral');
+        div_evolucion.empty();
+
+        if (evoluciones && evoluciones.length > 0) {
+            evoluciones.forEach(function(evolucion, index) {
+                let estado = "";
+                let clase = "";
+                if(evolucion.procedimiento.estado == 0){
+                    estado = "Pendiente";
+                    clase = "badge badge-warning"
+                }else if(evolucion.procedimiento.estado == 1){
+                    estado = "Finalizado";
+                    clase = "badge badge-success";
+                }else if(evolucion.procedimiento.estado == 2){
+                    estado = "Cancelado";
+                    clase = "badge badge-danger";
+                }else if(evolucion.procedimiento.estado == 3){
+                    estado = "Citado a control";
+                    clase = "badge badge-info";
+                }
+                const fila = `
+                    <div class="tab-pane fade active show" id="evolucion-${evolucion.id}" role="tabpanel" aria-labelledby="evolucion-${evolucion.id}-tab">
+                        <div class="card-informacion">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Evolución registrada el ${evolucion.fecha}</h6>
+                                <small class="text-muted">Por: ${evolucion.profesional_nombre_completo}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Pieza N°</label>
+                                            <input type="text" class="form-control form-control-sm" value="${evolucion.pieza}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Procedimiento</label>
+                                            <input type="text" class="form-control form-control-sm" value="${evolucion.procedimiento?.tratamiento}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Evolución</label>
+                                            <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" readonly>${evolucion.evolucion}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <span class="${clase}" style="font-size: 15px;">${estado}</span>
+                                <button type="button" class="btn btn-sm btn-outline-warning" onclick="modificarEvolucionOdGral(${evolucion.id})" title="Eliminar evolución">
+                                    <i class="feather icon-edit"></i> Modificar
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                `;
+                div_evolucion.append(fila);
+            });
+        } else {
+            div_evolucion.append(`
+                <div class="alert alert-info text-center">
+                    <i class="feather icon-info"></i>
+                    No hay evoluciones registradas para esta ficha de atención.
+                </div>
+            `);
         }
     }
 </script>

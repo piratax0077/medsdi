@@ -34,8 +34,7 @@
                                     <i class="feather icon-edit"></i>
                                 </button>
                                 <!--BOTÓN ELIMINAR PROGRAMAR - BORRAR COMENTARIO CUANDO SE PROGRAME-->
-                                @if ($value_liqu->principal == 1)
-                                    {{-- si es cuenta principal no se puede eliminar --}}
+                                {{-- @if ($value_liqu->principal == 1)
                                     <button type="button" class="btn btn-light btn-icon" onclick="" disabled="disabled">
                                         <i class="feather icon-x"></i>
                                     </button>
@@ -43,7 +42,10 @@
                                     <button type="button" class="btn btn-light btn-icon" onclick="eliminar_registro_liquidacion({{ $value_liqu->id }})">
                                         <i class="feather icon-x"></i>
                                     </button>
-                                @endif
+                                @endif --}}
+                                <button type="button" class="btn btn-light btn-icon" onclick="eliminar_registro_liquidacion({{ $value_liqu->id }})">
+                                        <i class="feather icon-x"></i>
+                                    </button>
                             </div>
                         </div>
                         <!--LIQUIDACION-->

@@ -162,12 +162,12 @@
                             <input class="form-control form-control-sm" name="numero" id="numero" type="text" >
                         </div>
                     </div>
-                    
+
 					<div class="col-sm-6 col-md-6">
 						<div class="form-group">
 							<label class="floating-label-activo-sm">Regi&oacute;n</label>
 							<select id="regiones"  name="regiones" class="form-control form-control-sm">
-								
+
 							</select>
 						</div>
 					</div>
@@ -176,7 +176,7 @@
 						<div class="form-group">
 							<label class="floating-label-activo-sm">Ciudad</label>
 							<select id="comunas" name="comunas" class="form-control form-control-sm" required>
-								
+
 
 							</select>
 						</div>
@@ -266,3 +266,4 @@
 </div>
 
 @endsection
+

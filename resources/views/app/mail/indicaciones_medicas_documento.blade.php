@@ -34,7 +34,7 @@
                                         Si usted esta registrado como Paciente, tambien podrá visualizarlo en su escritorio en la sección Receta Online (Mis Documentos Médicos)
                                     </p>
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 17px; line-height: 20px; color: #424242; text-align: center;">
-                                        Si no esta registrado lo invitamos a ser parte de esta red de salud <a href="https://www.med-sdi.cl/">https://www.med-sdi.cl/</a>
+                                        Si no esta registrado lo invitamos a ser parte de esta red de salud <a href="https://www.med-sdi.cl/"> https://www.med-sdi.cl/ </a>
                                     </p>
                                 </td>
                             </tr>
@@ -43,6 +43,14 @@
                                 <td height="10" style="background-color: #f2f2f2;" align="center">
                                     <p style="padding-bottom:10px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;">
                                         <a style="color: #424242;" href="#"></a>
+                                    </p>
+                                </td>
+                            </tr>
+                             <tr>
+                                <td height="10" style="background-color: #f2f2f2;" align="center">
+                                    <p style="padding-bottom:10px; font-family: Helvetica, Arial, sans-serif; font-size: 14px;">
+                                        @if(isset($detalle['observaciones'])) {{ $detalle['observaciones'] }} @endif
+
                                     </p>
                                 </td>
                             </tr>
@@ -65,7 +73,7 @@
                                                     style="text-align: center; color: #999999; font-size: 12px; font-weight: normal; line-height: 20px;">
                                                     Este correo electrónico fue enviado por <a style="color: #000;"
                                                         href="https://www.med-sdi.cl">Salud Digital Integrada</a> <br>
-                                                    Salud Digital Integrada <b>Todos los Derechos Reservados. ©2023</b>
+                                                    Salud Digital Integrada <b>Todos los Derechos Reservados. ©2025</b>
                                                 </p>
                                             </td>
                                             <td width="30"> </td>

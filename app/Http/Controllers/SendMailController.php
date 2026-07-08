@@ -58,16 +58,22 @@ class SendMailController extends Controller
                 'observaciones' => $observacion,
                 'id_institucion' => $id_institucion,
             );
-       
+
             $correo = new CorreoGenerico($data);
-     
+
             $listaBlade = array(
                 // PACIENTE
-                // 'bienvenida_paciente_usuario', 'hora_agendada', 'confirmar_hora', 'hora_confirmada_paciente', 'hora_cancelada_paciente', 'hora_anulada_profesional',
-                // 'notificacion_video_llamada',
+                // 'bienvenida_paciente_usuario', 'hora_confirmada_paciente', 'hora_cancelada_paciente', 'hora_anulada_profesional',
+                'notificacion_video_llamada',
+                'hora_agendada',
+                'confirmar_hora',
+                'confirmacion_accion_paciente',
                 // 'resultado_examen',
                 // 'indicaciones_medicas_documento',
                 // 'compra_bono',
+                'confirmacion_hora_telemedicina',
+'hora_confirmada_telemedicina',
+'recordatorio_telemedicina',
 
                 // PROFESIONAL
                 'profesional_usuario_creado', 'invitacion_profesional', 'invitacion_profesional_convenio',
@@ -76,6 +82,7 @@ class SendMailController extends Controller
                 // ASISTENTE
                 'bienvenida_asistente', 'bienvenida_asistente_usuario',
 
+                'entrega_medicamentos_cronicos',
                 // INSTITUCION
                 // 'bienvenida_institucion',
 
@@ -85,9 +92,18 @@ class SendMailController extends Controller
                 // TODOS
                 'recuperacion_contrasena', 'registrar_app',
 
+                // LEADS / USUARIOS POTENCIALES
+                'bienvenida_usuario_potencial',
+
                  // LABORATORIO
                 'informe_terapia_voz',
                 'campania_promocional',
+                'solicitud_aprobacion_rendicion_caja',
+                'notificacion_aprobacion_rendicion',
+                'notificacion_rechazo_rendicion',
+
+                // SNSS
+                'plantilla-correo-electronico',
 
                 // ?
                 // 'resultado_examen_lab',

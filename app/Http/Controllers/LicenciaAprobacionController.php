@@ -6,6 +6,7 @@ use App\Helpers\Funciones;
 use App\Models\Licencia;
 use App\Models\LogUsersDevices;
 use App\Models\LugarAtencion;
+use App\Models\FichaAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\User;
@@ -93,6 +94,7 @@ class LicenciaAprobacionController extends Controller
 
     public function solicitarAutorizacion(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -107,6 +109,8 @@ class LicenciaAprobacionController extends Controller
         {
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+            $ficha = FichaAtencion::find($request->id_ficha_atencion);
+            $paciente = Paciente::find($ficha->id_paciente);
 
             if($profesional)
             {
@@ -164,6 +168,7 @@ class LicenciaAprobacionController extends Controller
 
     public function validarAutorizacion(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -263,6 +268,8 @@ class LicenciaAprobacionController extends Controller
             $valido = 0;
         }
 
+
+
         if($valido)
         {
             $funcion = new Funciones();
@@ -295,35 +302,85 @@ class LicenciaAprobacionController extends Controller
     public function pdfLicenciaPaciente(Request $request)
     {
 
-
         $filtros = array();
         $filtros[] = array('id', $request->id_licencia);
         $licencia = Licencia::where($filtros)->first();
+        $ficha_atencion = $licencia->FichaAtencion()->first();
 
         $paciente = Paciente::where('id', $licencia->id_paciente)->first();
         $profesional = Profesional::where('id', $licencia->id_profesional)->first();
         $lugar_atencion = LugarAtencion::find($licencia->id_lugar_atencion);
 
-        $array_paciente = array(
-            'id' => $paciente->id,
-            'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
-            'fecha_nac' => $paciente->fecha_nac,
-            'rut' => $paciente->rut,
-            'sexo' => $paciente->sexo,
-            'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+        $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
+
+        $token_receta = '';
+        $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, $profesional->id, $paciente->id, 13, $licencia->id);
+
+        if($temp_token['estado'] == 1)
+        {
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoDocumento($request->id_ficha_atencion, rand(111,999), $paciente->id, 13, $licencia->id);
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+        }
+
+        $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 1, $ficha_atencion->id);
+        if($temp_token['estado'] == 1)
+        {
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+        else
+        {
+            $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), 1, 1, $ficha_atencion->id);
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_documento);
+        }
+
+        $array_ficha_atencion = array(
+            'id' => $ficha_atencion->id,
+            'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+            'token' => $token_receta,
+            'url' => $url_documento,
+            'qr' => $qr_documento,
         );
+
+        $array_paciente = array(
+                'id' => $paciente->id,
+                'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                'fecha_nac' => $paciente->fecha_nac,
+                'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
+                'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+            );
 
         $array_profesional = array(
-            'id' => $profesional->id,
-            'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
-            'rut' => $profesional->rut,
-            'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
-        );
+                'id' => $profesional->id,
+                'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                'rut' => $profesional->rut,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'id_especialidad' => $profesional->id_especialidad,
+                'num_colegio' => $profesional->num_colegio,
+                'token' =>  $token_profesional,
+                'url' =>  $url_profesional,
+                'qr' =>  $qr_profesional,
+            );
 
         $array_lugar_atencion = array(
-            'id' => $lugar_atencion->id,
-            'nombre' => $lugar_atencion->nombre
-        );
+                'id' => $lugar_atencion->id,
+                'nombre' => $lugar_atencion->nombre,
+                'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
+            );
 
         $array_licencia = array(
             // 'id' => $licencia->id,
@@ -363,7 +420,7 @@ class LicenciaAprobacionController extends Controller
         $rut = str_replace('-', '', $rut);
         $nombre_archivo = strtolower('licencia_'.$licencia->id.'_'.$rut.'_');
 
-        return  PdfController::generarPDF('', compact( 'array_paciente', 'array_profesional', 'array_lugar_atencion', 'array_licencia'), $nombre_archivo, 'pdf_licencia');
+        return  PdfController::generarPDF('Licencia Médica', compact( 'array_paciente', 'array_profesional', 'array_lugar_atencion', 'array_licencia','array_ficha_atencion'), $nombre_archivo, 'pdf_licencia');
     }
 
     public function solicitarPacienteAutorizacion(Request $request)
@@ -548,6 +605,7 @@ class LicenciaAprobacionController extends Controller
 
     public function validarPacienteAutorizacion(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;

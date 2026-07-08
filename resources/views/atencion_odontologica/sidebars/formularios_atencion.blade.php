@@ -1,4 +1,4 @@
-<div id="formularios_atencion" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg"
+<div id="formularios_atencion_od" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg"
     data-width="300px" data-offset="true">
     <header class="bs-canvas-header p-3 bg-info overflow-auto">
         <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true"

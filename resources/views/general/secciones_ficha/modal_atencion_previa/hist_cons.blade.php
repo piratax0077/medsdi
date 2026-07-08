@@ -7,38 +7,73 @@
                      <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body bg-light">
                 <!--ANAMNESIS-->
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                   <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Anamnesis</h6>
-                    </div>
+                    </div>-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="row">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Motivo de consulta</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_motivo"></p>
-                                    </div>
+                        <div class="card mb-2">
+                            <div class="card-body px-2 py-1">
+                                 <div class="media">
+                                <img src="{{ asset('images/iconos/anamnesis-ha.jpg') }}" class="wid-35 rounded-xl mr-3 align-self-start mr-3" alt="Anamnesis">
+                                  <div class="media-body pl-0">
+                                    <h5 class="mt-0 mb-1 pt-1 text-c-blue">Anamnesis (Motivo de Consulta)</h5>
+                                    <p id="texto_motivo" class="text-uppercase"></p>
+                                  </div>
                                 </div>
                             </div>
                         </div>
+                        <!--<div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                            <p id="texto_motivo" class="text-uppercase"></p>
+                        </div>-->
                     </div>
                 </div>
 
                 <!--EX.FISICO-->
                 <div class="row mt-2">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <!--<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Exámen físico</h6>
-                    </div>
+                    </div>-->
+
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
+                        <div class="card mb-2">
+                            <div class="card-body px-2 py-1">
+                                 <div class="media">
+                                <img src="{{ asset('images/iconos/ex-fisico-ha.jpg') }}" class="wid-35 rounded-xl mr-3 align-self-start mr-3" alt="Anamnesis">
+                                  <div class="media-body">
+                                    <h5 class="mt-0 mb-1 pt-1 text-c-blue">Examen Físico</h5>
+                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify mb-3 pl-0">
+                                        <p id="texto_ficha" ></p>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify mb-3 pl-0">
+                                        <h6 class="mt-0 mb-1 pt-1 text-c-blue">Imágenes: </h6>
+                                        <p id="ficha_imagenes"></p>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify pl-0">
+                                        <h6 class="mt-0 mb-1 pt-1 text-c-blue">Ficha exámenes: </h6>
+                                        <p id="ficha_examenes_espec"></p>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                            <p id="texto_motivo" class="text-uppercase"></p>
+                        </div>-->
+                    </div>
+
+
+                    <!--<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card bg-light shadow-none">
                             <div class="card-body">
                                 <div class="row">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Examen físico</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify mb-2">
-                                        <p id="texto_ficha"></p>
+                                        <p id="texto_ficha" class="text-uppercase"></p>
                                     </div>
 
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify mb-2">
@@ -46,72 +81,139 @@
                                     </div>
 
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="ficha_examenes_espec"></p>
+                                        <p id="ficha_examenes_espec" class="text-uppercase"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
-
-
 
 
                 <!--DIAGNÓSTICO-->
                 <div class="row mt-2">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card mb-2">
+                            <div class="card-body px-2 py-1">
+                                 <div class="media">
+                                <img src="{{ asset('images/iconos/diagnostico-ha.jpg') }}" class="wid-35 rounded-xl mr-3  align-self-start mr-3" alt="Anamnesis">
+                                  <div class="media-body pl-0">
+                                    <h5 class="mt-0 mb-1 pt-1 text-c-blue">Diagnóstico</h5>
+                                     <p id="texto_diagnostico" class="text-uppercase"></p>
+                                     <h5 class="mt-0 mb-1 pt-1 text-c-blue mt-3">Diagnóstico CIE-10 </h5>
+                                     <p id="texto_cie_10" class="text-uppercase"></p>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                            <p id="texto_motivo" class="text-uppercase"></p>
+                        </div>-->
+                    </div>
+
+                   <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Diagnóstico</h6>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
+                        <div class="card bg-light shadow-none">
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_diagnostico"></p>
+                                        <p id="texto_diagnostico" class="text-uppercase"></p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico CIE-10</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_cie_10"></p>
+                                        <p id="texto_cie_10" class="text-uppercase"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <!--INDICACIONES-->
                 <div class="row mt-2">
+                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card mb-2">
+                            <div class="card-body px-2 py-1">
+                                 <div class="media">
+                                <img src="{{ asset('images/iconos/indicacion-ha.jpg') }}" class="wid-35 rounded-xl mr-3 align-self-start mr-3" alt="Anamnesis">
+                                  <div class="media-body pl-0">
+                                    <h5 class="mt-0 mb-1 pt-1 text-c-blue">Indicaciones</h5>
+                                     <!--<p id="texto_diagnostico mb-3"></p>-->
+                                    <p id="texto_indicaciones" class="text-uppercase mb-3"></p>
+                                    <div class="d-flex">
+                                     <h6 class="mt-0 mb-1 pt-1 text-c-blue mr-3">Recetas</h6>
+                                        <p id="texto_receta" class="text-uppercase"></p>
+                                     </div>
+                                    <div class="d-flex">
+                                      <h6 class="mt-0 mb-1 pt-1 text-c-blue mr-3">Exámenes</h6>
+                                         <p id="texto_examen" class="text-uppercase"></p>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                            <p id="texto_motivo" class="text-uppercase"></p>
+                        </div>-->
+                    </div>
+
+                   <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <h6 class="t-aten">Diagnóstico</h6>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card bg-light shadow-none">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                                        <p id="texto_diagnostico" class="text-uppercase"></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico CIE-10</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
+                                        <p id="texto_cie_10" class="text-uppercase"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+
+                <!--<div class="row mt-2">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Indicaciones</h6>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
+                        <div class="card bg-light shadow-none">
                             <div class="card-body">
                                 <div class="row mb-2">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Indicaciones</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_indicaciones"></p>
+                                        <p id="texto_indicaciones" class="text-uppercase"></p>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Recetas</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_receta"></p>
+                                        <p id="texto_receta" class="text-uppercase"></p>
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Exámenes</h6>
                                     <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_examen"></p>
+                                        <p id="texto_examen" class="text-uppercase"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
 
                 <!--<div class="row">
@@ -227,7 +329,7 @@
             },
         })
         .done(function(data) {
-
+            console.log(data);
             if (data != '') {
 
                 if (data['estado'] == '1')
@@ -314,41 +416,41 @@
 
         var receta = 'NO';
         if(data.cant_recetas>0)
-            $('#texto_receta').html('SI');
+            $('#texto_receta').html('Si');
         else
-            $('#texto_receta').html('NO');
+            $('#texto_receta').html('No');
 
 
         var examen = 'NO';
         if(data.cant_examen_ppf>0)
-            $('#texto_examen').html('SI');
+            $('#texto_examen').html('Si');
         else
-            $('#texto_examen').html('NO');
+            $('#texto_examen').html('No');
 
 
         var ficha_antecedentes = data.registros.antecedentes;
         if(ficha_antecedentes != '' && ficha_antecedentes != '0' && ficha_antecedentes != 'null' && ficha_antecedentes != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Antecedentes:</span> '+ficha_antecedentes+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Antecedentes:<span class="ml-2 font-weight-bold">'+ficha_antecedentes+'</span></span>   ')
         }
 
         var ficha_examen_fisico = data.registros.examen_fisico;
         if(ficha_examen_fisico != '' && ficha_examen_fisico != '0' && ficha_examen_fisico != 'null' && ficha_examen_fisico != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Examen Fisico:</span> '+ficha_examen_fisico+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Examen Físico:<span class="ml-2 font-weight-bold">'+ficha_examen_fisico+'</span></span>')
         }
 
 
         var ficha_cronico = data.registros.cronico;
         if(ficha_cronico != '' && ficha_cronico != '0' && ficha_cronico != 'null' && ficha_cronico != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Cronico:</span> '+ficha_cronico+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Paciente Crónico:<span class="ml-2 font-weight-bold">'+ficha_cronico+'</span></span>')
         }
 
         var ficha_ges = data.registros.ges;
         if(ficha_ges != '' && ficha_ges != '0' && ficha_ges != 'null' && ficha_ges != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">GES:</span> '+ficha_ges+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Paciente Crónico:<span class="ml-2 font-weight-bold">'+ficha_ges+'</span></span>')
         }
 
         // var ficha_confidencial = data.registros.confidencial;
@@ -366,85 +468,85 @@
         var ficha_temperatura = data.registros.temperatura;
         if(ficha_temperatura != '' && ficha_temperatura != '0' && ficha_temperatura != 'null' && ficha_temperatura != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Temperatura:</span> '+ficha_temperatura+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Temperatura:<span class="ml-2 font-weight-bold">'+ficha_temperatura+'</span></span>')
         }
 
         var ficha_pulso = data.registros.pulso;
         if(ficha_pulso != '' && ficha_pulso != '0' && ficha_pulso != 'null' && ficha_pulso != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Pulso:</span> '+ficha_pulso+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Pulso:<span class="ml-2 font-weight-bold">'+ficha_pulso+'</span></span>')
         }
 
         var ficha_frecuencia_reposo = data.registros.frecuencia_reposo;
         if(ficha_frecuencia_reposo != '' && ficha_frecuencia_reposo != '0' && ficha_frecuencia_reposo != 'null' && ficha_frecuencia_reposo != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Frecuencia Reposo:</span> '+ficha_frecuencia_reposo+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Frecuencia Reposo:<span class="ml-2 font-weight-bold">'+ficha_frecuencia_reposo+'</span></span>')
         }
 
         var ficha_peso = data.registros.peso;
         if(ficha_peso != '' && ficha_peso != '0' && ficha_peso != 'null' && ficha_peso != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Peso:</span> '+ficha_peso+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Peso:<span class="ml-2 font-weight-bold">'+ficha_peso+'</span></span>')
         }
 
         var ficha_talla = data.registros.talla;
         if(ficha_talla != '' && ficha_talla != '0' && ficha_talla != 'null' && ficha_talla != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Talla:</span> '+ficha_talla+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Talla:<span class="ml-2 font-weight-bold">'+ficha_talla+'</span></span>')
         }
 
         var ficha_imc = data.registros.imc;
         if(ficha_imc != '' && ficha_imc != '0' && ficha_imc != 'null' && ficha_imc != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">IMC:</span> '+ficha_imc+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">IMC:<span class="ml-2 font-weight-bold">'+ficha_imc+'</span></span>')
         }
 
         var ficha_estado_nutricional = data.registros.estado_nutricional;
         if(ficha_estado_nutricional != '' && ficha_estado_nutricional != '0' && ficha_estado_nutricional != 'null' && ficha_estado_nutricional != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Estado Nutricional:</span> '+ficha_estado_nutricional+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Estado Nutricional:<span class="ml-2 font-weight-bold">'+ficha_estado_nutricional+'</span></span>')
         }
 
         var ficha_presion_bi = data.registros.presion_bi;
         if(ficha_presion_bi != '' && ficha_presion_bi != '0' && ficha_presion_bi != 'null' && ficha_presion_bi != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Presion BI:</span> '+ficha_presion_bi+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Presión BI:<span class="ml-2 font-weight-bold">'+ficha_presion_bi+'</span></span>')
         }
 
         var ficha_presion_bd = data.registros.presion_bd;
         if(ficha_presion_bd != '' && ficha_presion_bd != '0' && ficha_presion_bd != 'null' && ficha_presion_bd != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Presion BD:</span> '+ficha_presion_bd+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Presion BD:<span class="ml-2 font-weight-bold">'+ficha_presion_bd+'</span></span>')
         }
 
         var ficha_presion_de_pie = data.registros.presion_de_pie;
         if(ficha_presion_de_pie != '' && ficha_presion_de_pie != '0' && ficha_presion_de_pie != 'null' && ficha_presion_de_pie != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Presion de pie:</span> '+ficha_presion_de_pie+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Presión de pie:<span class="ml-2 font-weight-bold">'+ficha_presion_de_pie+'</span></span>')
         }
 
         var ficha_presion_sentado = data.registros.presion_sentado;
         if(ficha_presion_sentado != '' && ficha_presion_sentado != '0' && ficha_presion_sentado != 'null' && ficha_presion_sentado != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Presion sentado:</span> '+ficha_presion_sentado+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Presión sentado:<span class="ml-2 font-weight-bold">'+ficha_presion_sentado+'</span></span>')
         }
 
         var ficha_ct_estado_conciencia = data.registros.ct_estado_conciencia;
         if(ficha_ct_estado_conciencia != '' && ficha_ct_estado_conciencia != '0' && ficha_ct_estado_conciencia != 'null' && ficha_ct_estado_conciencia != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Estado Conciencia:</span> '+ficha_ct_estado_conciencia+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Estado Conciencia:<span class="ml-2 font-weight-bold">'+ficha_ct_estado_conciencia+'</span></span>')
         }
 
         var ficha_ct_lenguaje = data.registros.ct_lenguaje;
         if(ficha_ct_lenguaje != '' && ficha_ct_lenguaje != '0' && ficha_ct_lenguaje != 'null' && ficha_ct_lenguaje != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Lenguaje:</span> '+ficha_ct_lenguaje+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Lenguaje:<span class="ml-2 font-weight-bold">'+ficha_ct_lenguaje+'</span></span>')
         }
 
         var ficha_ct_traslado = data.registros.ct_traslado;
         if(ficha_ct_traslado != '' && ficha_ct_traslado != '0' && ficha_ct_traslado != 'null' && ficha_ct_traslado != null)
         {
-            $('#texto_ficha').append('<span style="color: #4984f1;">Traslado:</span> '+ficha_ct_traslado+',  ')
+            $('#texto_ficha').append('<span class="informacion-purple">Traslado:<span class="ml-2 font-weight-bold">'+ficha_ct_traslado+'</span></span>')
         }
 
 
@@ -483,7 +585,7 @@
                             // $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+toTitleCase(temp_key)+':</span> '+value_q+',  ');
                             var titulo = $('label[for="' + $('#'+keyq).attr('id') + '"]').text();
                             if(titulo != '' && value_q != '')
-                                $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+titulo+':</span> '+value_q+',  ');
+                                $('#texto_ficha_esp').append('<span style="color: #7e5ec7; font-weight:bold;">'+titulo+':</span> '+value_q+',  ');
                         }
                     }
                 });
@@ -508,9 +610,9 @@
                             if($('#'+key2).prop('type') == 'checkbox')
                             {
                                 if(value == 1)
-                                    value = 'SI';
+                                    value = 'Si';
                                 else
-                                    value = 'NO';
+                                    value = 'No';
                             }
 
                             // validar si es select
@@ -523,7 +625,7 @@
                             // $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+toTitleCase(temp_key)+':</span> '+value+',  ');
                             var titulo = $('label[for="' + $('#'+key2).attr('id') + '"]').text();
                             if(titulo != '')
-                                $('#texto_ficha_esp').append('<span style="color: #4984f1;">'+titulo+':</span> '+value+',  ');
+                                $('#texto_ficha_esp').append('<span style="color: #7e5ec7; font-weight:bold;">'+titulo+':</span> '+value+',  ');
                         }
                     }
 
@@ -534,7 +636,7 @@
                         $('#ficha_imagenes').append(`
                             <div class="row">
                                 <div class="col-12 text-center">
-                                    <h6 class="t-aten">IMAGENES</h6>
+                                    <h6 class="text-c-blue">Imágnes</h6>
                                 </div>
                             </div>
                         `);
@@ -569,7 +671,7 @@
                             console.log(value_exa);
                             var html = '';
                             /** TITULO */
-                            $('#ficha_examenes_espec').append('<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><span class="t-aten">'+value_exa.nombre+'</span> SI</div><div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify">');
+                            $('#ficha_examenes_espec').append('<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><span class="t-aten">'+value_exa.nombre+'</span> Si</div><div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-justify">');
                             // var info = $.parseJSON(value_exa.cuerpo);
                             // $.each(info, function (key_ex_det, value_ex_det) {
                             //     console.log(key_ex_det);

@@ -55,19 +55,25 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                         <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link text-reset active" id="recibo-caja-prof-tab" data-toggle="tab" href="#recibo-caja-prof" role="tab" aria-controls="recibo-caja-prof" aria-selected="true">Rendiciones de caja</a>
+                                                <a class="nav-link text-reset active" id="resumen-prof-tab" data-toggle="tab" href="#resumen-prof" role="tab" aria-controls="resumen-prof" aria-selected="true">Resumen</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link text-reset" id="recepcion-programa-prof-tab" data-toggle="tab" href="#recepcion-programa-prof" role="tab" aria-controls="recepcion-programa-prof" aria-selected="true">Recepción de programas</a>
+                                                <a class="nav-link text-reset" id="recibo-caja-prof-tab" data-toggle="tab" href="#recibo-caja-prof" role="tab" aria-controls="recibo-caja-prof" aria-selected="true">Rendiciones</a>
                                             </li>
+                                            {{-- <li class="nav-item">
+                                                <a class="nav-link text-reset" id="recepcion-programa-prof-tab" data-toggle="tab" href="#recepcion-programa-prof" role="tab" aria-controls="recepcion-programa-prof" aria-selected="true">Recepción de programas</a>
+                                            </li>--}}
                                             <li class="nav-item">
                                                 <a class="nav-link text-reset" id="gestion-bonos-prof-tab" data-toggle="tab" href="#gestion-bonos-prof" role="tab" aria-controls="gestion-bonos-prof" aria-selected="true">Gestión de bonos</a>
                                             </li>
-                                            <li class="nav-item">
+                                           {{-- <li class="nav-item">
                                                 <a class="nav-link text-reset" id="gestion-programas-prof-tab" data-toggle="tab" href="#gestion-programas-prof" role="tab" aria-controls="gestion-programas-prof" aria-selected="true">Gestión de bonos programas</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link text-reset" id="gestion-bonos-diarios-prof-tab" data-toggle="tab" href="#gestion-bonos-diarios-prof" role="tab" aria-controls="gestion-bonos-diarios-prof" aria-selected="true">Gestión de bonos diarios</a>
+                                            </li>--}}
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset" id="garantia-prof-tab" data-toggle="tab" href="#garantia-prof" role="tab" aria-controls="garantia-prof" aria-selected="true">Registro de Garantías</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -81,11 +87,328 @@
             <div class="row bg-gris">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                     <div class="tab-content" id="pills-tabContent">
-                        {{-- PESTAÑA RENDICION DE CAJA --}}
-                        <div class="tab-pane fade show active" id="recibo-caja-prof" role="tabpanel" aria-labelledby="recibo-caja-prof-tab">
+                        {{-- RESUMEN --}}
+                        <div class="tab-pane fade show active" id="resumen-prof" role="tabpanel" aria-labelledby="resumen-prof-tab">
+                            <div class="row mt-3 px-2">
+                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <h6 class="f-22 text-c-blue mb-3">Resumen financiero</h6>
+                                </div>
+                                 <!-- DIA -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+                                            <div class="metric-icon bg-soft-green">
+                                                💰
+                                            </div>
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Total recaudado en el día
+                                        </div>
+                                        <div class="metric-value">
+                                            ${{ number_format($total_dia ?? 0, 0, ',', '.') }}
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            {{ \Carbon\Carbon::now()->format('d \d\e F Y') }}
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- MES -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-green">
+                                                📅
+                                            </div>
+
+                                            <select class="metric-month" onchange="cargar_flujo_caja_mes(this.value);">
+                                                <option>Mayo 2026</option>
+                                                <option>Abril 2026</option>
+                                                <option>Marzo 2026</option>
+                                                <option>Febrero 2026</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Total recaudado en el mes
+                                        </div>
+                                        <div class="metric-value">
+                                            ${{ number_format($total_mes ?? 0, 0, ',', '.') }}
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            Recaudación mensual
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- AÑO -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-green">
+                                                🗓️
+                                            </div>
+
+                                            <select class="metric-month" onchange="cargar_flujo_caja_anio(this.value);">
+                                                <option>2026</option>
+                                                <option>2025</option>
+                                                <option>2024</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Total recaudado en el año
+                                        </div>
+                                        <div class="metric-value">
+                                            ${{ number_format($total_anio ?? 0, 0, ',', '.') }}
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            Enero - Diciembre
+                                        </div>
+
+                                    <!-- DESGLOSE MENSUAL DEL AÑO -->
+                                    {{-- <div class="row mt-2">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6 class="f-18 text-c-blue mb-3">Desglose mensual del año actual</h6>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-sm mb-0" style="max-width: 500px;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Mes</th>
+                                                                    <th>Total recaudado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php
+                                                                    $nombres_meses = [1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'];
+                                                                @endphp
+                                                                @foreach($nombres_meses as $num => $nombre)
+                                                                    <tr>
+                                                                        <td>{{ $nombre }}</td>
+                                                                        <td>$ {{ number_format($desglose_meses[$num] ?? 0, 0, ',', '.') }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                    <!-- FIN DESGLOSE MENSUAL -->
+
+                                    </div>
+                                </div>
+
+                                <!-- COMPARACION -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-green">
+                                                📈
+                                            </div>
+
+                                            <select class="metric-month">
+                                                <option>Mayo 2026</option>
+                                                <option>Abril 2026</option>
+                                                <option>Marzo 2026</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Comparación mes actual vs anterior
+                                        </div>
+
+                                        <div class="metric-value metric-positive">
+                                            +12,4%
+                                        </div>
+
+                                        <div class="metric-subtitle">
+                                            Respecto al mes anterior
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- BONOS -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-blue">
+                                                🎟️
+                                            </div>
+
+                                            <select class="metric-month" onchange="cargar_cant_bonos(this.value);">
+                                                <option>Mayo 2026</option>
+                                                <option>Abril 2026</option>
+                                                <option>Marzo 2026</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Cantidad de bonos emitidos
+                                        </div>
+                                        <div class="metric-value">
+                                            {{ $cant_bonos ?? 0 }}
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            Bonos emitidos en el período
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- RENDIDO -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-purple">
+                                                👨‍⚕️
+                                            </div>
+
+                                            <select class="metric-month" onchange="cargar_total_rendido(this.value);setTimeout(function(){ cargar_flujo_caja_mes(document.querySelector('.metric-month').value); }, 500);">
+                                                <option>Mayo 2026</option>
+                                                <option>Abril 2026</option>
+                                                <option>Marzo 2026</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Total rendido al médico
+                                        </div>
+                                        <div class="metric-value">
+                                            @php
+                                                $maxValue = 999999999;
+                                                $valor_mes = min($total_rendido_mes ?? 0, $maxValue);
+                                            @endphp
+                                            ${{ number_format($valor_mes, 0, ',', '.') }}
+                                            @if(($total_rendido_mes ?? 0) > $maxValue)
+                                                <span class="text-danger" title="Valor truncado por ser demasiado grande">*</span>
+                                            @endif
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            Rendición del mes seleccionado
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- PENDIENTE -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="metric-card">
+
+                                        <div class="metric-top">
+
+                                            <div class="metric-icon bg-soft-orange">
+                                                ⏳
+                                            </div>
+
+                                            <select class="metric-month" onchange="cargar_total_pendiente(this.value)">
+                                                <option>Mayo 2026</option>
+                                                <option>Abril 2026</option>
+                                                <option>Marzo 2026</option>
+                                            </select>
+
+                                        </div>
+
+                                        <div class="metric-title">
+                                            Pendiente por rendir
+                                        </div>
+                                        <div class="metric-value metric-warning">
+                                            ${{ number_format($total_pendiente ?? 0, 0, ',', '.') }}
+                                        </div>
+                                        <div class="metric-subtitle">
+                                            Pendiente de liquidación
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- GARANTIAS -->
+                                <div class="col-12 mb-4">
+
+                                    <div class="metric-card">
+
+                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+                                            <div class="d-flex align-items-center">
+
+                                                <div class="metric-icon bg-soft-red mr-3">
+                                                    🛡️
+                                                </div>
+
+                                                <div>
+                                                    <div class="metric-title mb-1">
+                                                        Garantías
+                                                    </div>
+
+                                                    <div class="metric-subtitle mt-0">
+                                                        Control de garantías emitidas y vencidas
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="d-flex align-items-center flex-wrap">
+
+                                                <div class="text-center mr-5">
+
+                                                    <div class="metric-title">
+                                                        Garantías emitidas
+                                                    </div>
+                                                    <div class="metric-value">
+                                                        {{ $garantias_emitidas ?? 0 }}
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="text-center">
+
+                                                    <div class="metric-title">
+                                                        Garantías vencidas
+                                                    </div>
+                                                    <div class="metric-value metric-danger">
+                                                        {{ $garantias_vencidas ?? 0 }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        {{-- PESTAÑA RENDICIONES--}}
+                        <div class="tab-pane fade" id="recibo-caja-prof" role="tabpanel" aria-labelledby="recibo-caja-prof-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-1">
-                                    <h5 class="text-c-blue d-inline float-left pt-1 f-20">Rendiciones de caja</h5>
+                                    <h5 class="text-c-blue d-inline float-left pt-1 f-20">Rendiciones</h5>
                                     @if(Auth::user()->hasRole('Profesional'))
 										{{--<button id="iniciar_procesocobro_rendicion" type="button" class="btn btn-outline-primary btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="">Iniciar Proceso de Cobro</button>--}}
                                         <button id="busqueda_avanzada_1" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_prof_1').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
@@ -195,247 +518,259 @@
                                 </div>
                             </div>
                             <!-- en este ejemplo esta seleccionado todos los medios de pago-->
-                            <div class="row">
-                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="dt-responsive table-responsive">
-                                                <table id="tabla_rendir_caja" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="align-middle">Id Recepción</th>
-                                                            <th class="align-middle">Fecha</th>
-                                                            <th class="align-middle">Enviado por</th>
-                                                            <th class="align-middle">Tipo autorizacion</th>
-                                                            <th class="align-middle">Estado</th>
-                                                            <th class="align-middle">Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if( isset($rendiciones) )
-                                                            @foreach($rendiciones as $key_b => $value_b)
-                                                                @php
-                                                                    if($value_b->estado == 1){
-                                                                        $value_b->estado = 'EN ESPERA';
-                                                                    }elseif($value_b->estado == 2){
-                                                                        $value_b->estado = 'OTRO';
-                                                                    }elseif($value_b->estado == 3){
-                                                                        $value_b->estado = 'APROBADA';
-                                                                    }else if($value_b->estado == 4){
-                                                                        $value_b->estado = 'RECHAZADA';
-                                                                    }
-                                                                @endphp
-                                                                <tr>
-                                                                    <td class="align-middle">{{ $value_b->id }}</td>
-                                                                    <td class="align-middle">{{ $value_b->fecha_rendicion }}</td>
-                                                                    <td class="align-middle">{{ $value_b->Asistente()->first()->nombres }} {{ $value_b->Asistente()->first()->apellido_uno }} {{ $value_b->Asistente()->first()->apellido_dos }}</td>
-                                                                    <td class="align-middle">2</td>
-                                                                    <td class="align-middle">{{ $value_b->estado == 1 ? 'EN ESPERA' : $value_b->estado }}</td>
-                                                                    <td class="align-middle">
-                                                                        <button class="btn btn-primary-light-c btn-xxs" onclick="ver_rendicion({{ $value_b->id }})">Ver</button>
-                                                                        <button class="btn btn-secondary btn-xxs" onclick="ver_pdf_rendicion({{ $value_b->id }},{{ $value_b->Asistente()->first()->id }})">Ver PDF</button>
 
-                                                                        <div class="switch switch-success d-inline m-l-5">
-                                                                            <input type="checkbox"
-                                                                                   id="switch_rendicion_{{ $value_b->id }}"
-                                                                                   onchange="cambiarEstadoRendicion(this)"
-                                                                                   data-id="{{ $value_b->id }}"
-                                                                                   data-email="{{ $value_b->Asistente()->first()->email }}"
-                                                                                   {{ $value_b->estado == 'APROBADA' ? 'checked' : '' }}>
-                                                                            <label for="switch_rendicion_{{ $value_b->id }}" class="cr"></label>
-                                                                        </div>
-                                                                        <label style="font-size: 11px;">Aprobar</label>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
+                                <!--BOTONES DE PESTAÑAS-->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                        <div class="card py-0">
+                                            <div class="card-body pb-2 pt-2">
+                                                <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset active" id="bono-rendicion-prof-tab" data-toggle="pill" href="#bono-rendicion-prof" role="tab" aria-controls="bono-rendicion-prof" aria-selected="true">
+                                                            Rendición de bonos
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="programa-rendicion-prof-tab" data-toggle="pill" href="#programa-rendicion-prof" role="tab" aria-controls="programa-rendicion-prof" aria-selected="true">
+                                                            Rendición de programas
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                    <div class="card">
-                                        <div class="card-body py-1">
-                                             <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <div class="switch switch-success d-inline m-r-10">
-                                                            <input type="checkbox" id="enviar_todos" onchange="seleccionar_bonos_rendicion();">
-                                                            <label for="enviar_todos"class="cr"></label>
+
+                                 <!--PESTAÑAS-->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                        <div class="tab-content">
+                                            <!---RENDICION DE BONOS-->
+                                            <div class="tab-pane show active" id="bono-rendicion-prof" role="tabpanel" aria-labelledby="bono-rendicion-prof-tab">
+
+                                                    <div class="row">
+                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-header-new-md">
+                                                                    <h5>Rendición de bonos</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="dt-responsive table-responsive">
+                                                                        <table id="tabla_rendir_caja" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="align-middle">Id Recepción</th>
+                                                                                    <th class="align-middle">Fecha</th>
+                                                                                    <th class="align-middle">Rendido por</th>
+                                                                                    <th class="align-middle">Tipo autorizacion</th>
+                                                                                    <th class="align-middle">Estado</th>
+                                                                                    <th class="align-middle">Acciones</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @if( isset($rendiciones) )
+                                                                                    @foreach($rendiciones as $key_b => $value_b)
+                                                                                        @php
+                                                                                            if($value_b->estado == 1){
+                                                                                                $value_b->estado = 'EN ESPERA';
+                                                                                            }elseif($value_b->estado == 2){
+                                                                                                $value_b->estado = 'OTRO';
+                                                                                            }elseif($value_b->estado == 3){
+                                                                                                $value_b->estado = 'APROBADA';
+                                                                                            }else if($value_b->estado == 4){
+                                                                                                $value_b->estado = 'RECHAZADA';
+                                                                                            }
+                                                                                        @endphp
+                                                                                        <tr>
+                                                                                            <td class="align-middle">{{ $value_b->id }}</td>
+                                                                                            <td class="align-middle">{{ $value_b->fecha_rendicion }}</td>
+                                                                                            <td class="align-middle">{{ $value_b->Asistente()->first()->nombres }} {{ $value_b->Asistente()->first()->apellido_uno }} {{ $value_b->Asistente()->first()->apellido_dos }}</td>
+                                                                                            <td class="align-middle">App</td>
+                                                                                            <td class="align-middle">{{ $value_b->estado == 1 ? 'EN ESPERA' : $value_b->estado }}</td>
+                                                                                            <td class="align-middle">
+                                                                                                <button class="btn btn-info btn-xxs" onclick="ver_rendicion({{ $value_b->id }})"><i class="feather icon-search"></i> Ver rendición</button>
+                                                                                                <button class="btn btn-secondary btn-xxs" onclick="ver_pdf_rendicion({{ $value_b->id }},{{ $value_b->Asistente()->first()->id }})">Ver PDF</button>
+
+                                                                                                <div class="switch switch-success d-inline m-l-5">
+                                                                                                    <input type="checkbox"
+                                                                                                           id="switch_rendicion_{{ $value_b->id }}"
+                                                                                                           onchange="cambiarEstadoRendicion(this)"
+                                                                                                           data-id="{{ $value_b->id }}"
+                                                                                                           data-email="{{ $value_b->Asistente()->first()->email }}"
+                                                                                                           {{ $value_b->estado == 'APROBADA' ? 'checked' : '' }}>
+                                                                                                    <label for="switch_rendicion_{{ $value_b->id }}" class="cr"></label>
+                                                                                                </div>
+                                                                                                <label style="font-size: 11px;">Aprobar</label>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <label>Recepción total</label>
-                                                        {{--  (Este switch selecciona todas las recepciones del profesional y envia mensaje (correo electrónico) de validación (código) al profesional de recepción conforme)  --}}
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6 pt-2">
-                                                    <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-info btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="iniciarProcesoCobro()" style="display: none;"><i class="feather icon-check"></i> Iniciar proceso de cobro</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        {{-- PESTAÑA GESTION RECEPCION DE PROGRAMAS --}}
-                        <div class="tab-pane" id="recepcion-programa-prof" role="tabpanel" aria-labelledby="recepcion-programa-prof-tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mt-3 mb-2">
-                                    <h5 class="text-c-blue d-inline float-left pt-1 f-20">Rendición de programas</h5>
-
-                                    @if(Auth::user()->hasRole('Profesional'))
-                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_prof_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
-                                    @elseif(Auth::user()->hasRole('Asistente'))
-                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_asis_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
-                                    @elseif(Auth::user()->hasRole('Institucion'))
-                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_inst_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
-                                    @elseif(Auth::user()->hasRole('ProfesionalRecibe'))
-                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_prof_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
-                                    @elseif(Auth::user()->hasRole('Servicio'))
-                                        <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_serv_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
-                                    {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>  --}}
-                                    @endif
-                                    {{--  <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>  --}}
-                                </div>
-                            </div>
-
-                            @if(Auth::user()->hasRole('Profesional'))
-                                <div id="busqueda_avanzada_aparecer_prof_2" style="display:none">
-                            @elseif(Auth::user()->hasRole('Asistente'))
-                                <div id="busqueda_avanzada_aparecer_asis_2" style="display:none">
-                            @elseif(Auth::user()->hasRole('Institucion'))
-                                <div id="busqueda_avanzada_aparecer_inst_2" style="display:none">
-                            @elseif(Auth::user()->hasRole('ProfesionalRecibe'))
-                                <div id="busqueda_avanzada_aparecer_prof_2" style="display:none">
-                            @elseif(Auth::user()->hasRole('Servicio'))
-                                <div id="busqueda_avanzada_aparecer_serv_2" style="display:none">
-                            {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                    <i class="feather icon-home"></i>
-                                </a>  --}}
-                            @endif
-                        {{--<div id="busqueda_avanzada_aparecer_2" style="display:none">  --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Fecha de atención</label>
-                                                    <input type="date" class="form-control form-control-sm" name="rinde_progr_fecha" id="rinde_progr_fecha">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-3">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Asistente</label>
-                                                    <select id="rinde_progr_asistente" name="rinde_progr_asistente" class="form-control form-control-sm">
-                                                        <option value="">Seleccione</option>
-                                                        @if($lista_asistente)
-                                                            @foreach($lista_asistente as $key_asistente => $value_asistente)
-                                                                <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Convenio</label>
-                                                    <select id="rinde_progr_convenio" name="rinde_progr_convenio" class="form-control form-control-sm">
-                                                        <option value="">Seleccione</option>
-                                                        @if($lista_prevision)
-                                                            @foreach($lista_prevision as $key_prevision => $value_prevision)
-                                                                <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
-                                                            @endforeach
-                                                        @endif
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Estado consulta</label>
-                                                    <select id="rinde_progr_estado_consulta" name="rinde_progr_estado_consulta" class="form-control form-control-sm">
-                                                        <option value="">Seleccione</option>
-                                                        @if($lista_estado_consulta)
-                                                            @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
-                                                                <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
-                                                            @endforeach
-                                                        @endif
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                                <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_programa();"><i class="feather icon-search"></i> Buscar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="dt-responsive table-responsive">
-                                                <table id="tabla_programas" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="align-middle">Convenio</th>
-                                                            <th class="align-middle">Nº de programa</th>
-                                                            <th class="align-middle">Código</th>
-                                                            <th class="align-middle">Tipo</th>
-                                                            <th class="align-middle">Fecha de atención</th>
-                                                            <th class="align-middle">Paciente</th>
-                                                            <th class="align-middle">Valor </th>
-                                                            <th class="align-middle">Estado consulta</th>
-                                                            <th class="align-middle">Recepción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if( isset($bonos_programa) )
-                                                            @foreach($bonos_programa as $key_bp => $value_bp)
-                                                                <tr >
-                                                                    <td class="align-middle">{{ $value_bp->Convenio()->first()->nombre }}</td>
-                                                                    <td class="align-middle">{{ $value_bp->numero_sesiones }}</td>
-                                                                    <td class="align-middle">{{ $value_bp->numero_bono }}</td>
-                                                                    <td class="align-middle">{{ $value_bp->TipoBono()->first()->nombre }}</td>
-                                                                    <td class="align-middle">{{ $value_bp->fecha_atencion }}</td>
-                                                                    <td class="align-middle">
-                                                                        <span>{{ $value_bp->Paciente()->first()->nombres }} {{ $value_bp->Paciente()->first()->apellido_uno }} {{ $value_bp->Paciente()->first()->apellido_dos }}</span><br>
-                                                                        <span>{{ $value_bp->Paciente()->first()->rut }}</span>
-                                                                    </td>
-                                                                    <td class="align-middle">${{ number_format($value_bp->valor_atencion, 2, ",", ".") }}</td>
-                                                                    <td class="align-middle">{{ $value_bp->estado_consulta }}</td>
-                                                                    <td class="align-middle">
-                                                                        <div class="form-group">
-                                                                            <div class="switch switch-success d-inline m-r-10">
-                                                                                <input type="checkbox" id="rendir_caja_programa_{{ $value_bp->id }}">
-                                                                                <label for="rendir_caja_{{ $value_bp->id }}"
-                                                                                    class="cr"></label>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-body py-1">
+                                                                     <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <div class="form-group">
+                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                    <input type="checkbox" id="enviar_todos" onchange="seleccionar_bonos_rendicion();">
+                                                                                    <label for="enviar_todos"class="cr"></label>
+                                                                                </div>
+                                                                                <label>Recepción total</label>
+                                                                                {{--  (Este switch selecciona todas las recepciones del profesional y envia mensaje (correo electrónico) de validación (código) al profesional de recepción conforme)  --}}
                                                                             </div>
                                                                         </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
+                                                                        <div class="col-md-6 pt-2">
+                                                                            <button id="iniciar_procesocobro_rendicion_2" type="button" class="btn btn-info btn-sm float-right d-inline iniciar_procesocobro_rendicion" onclick="iniciarProcesoCobro()" style="display: none;"><i class="feather icon-check"></i> Iniciar proceso de cobro</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
+                                            <!--RENDICION PROGRAMAS-->
+                                               <div class="tab-pane fade" id="programa-rendicion-prof" role="tabpanel" aria-labelledby="programa-rendicion-prof-tab">
+                                                  {{--<div id="busqueda_avanzada_aparecer_2" style="display:none">
+                                                    <div class="row">
+                                                        <div class="card">
+                                                            <div class="card-header-new-md">
+                                                                    <h5>Rendición de programas</h5>
+                                                                </div>
+                                                            <div class="card-body">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                        <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Fecha de atención</label>
+                                                                            <input type="date" class="form-control form-control-sm" name="rinde_progr_fecha" id="rinde_progr_fecha">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 col-xxl-3">
+                                                                        <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Asistente</label>
+                                                                            <select id="rinde_progr_asistente" name="rinde_progr_asistente" class="form-control form-control-sm">
+                                                                                <option value="">Seleccione</option>
+                                                                                @if($lista_asistente)
+                                                                                    @foreach($lista_asistente as $key_asistente => $value_asistente)
+                                                                                        <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                        <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Convenio</label>
+                                                                            <select id="rinde_progr_convenio" name="rinde_progr_convenio" class="form-control form-control-sm">
+                                                                                <option value="">Seleccione</option>
+                                                                                @if($lista_prevision)
+                                                                                    @foreach($lista_prevision as $key_prevision => $value_prevision)
+                                                                                        <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
+                                                                                    @endforeach
+                                                                                @endif
+
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                                                        <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Estado consulta</label>
+                                                                            <select id="rinde_progr_estado_consulta" name="rinde_progr_estado_consulta" class="form-control form-control-sm">
+                                                                                <option value="">Seleccione</option>
+                                                                                @if($lista_estado_consulta)
+                                                                                    @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
+                                                                                        <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
+                                                                                    @endforeach
+                                                                                @endif
+
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                                                                        <button class="btn btn-block btn-sm btn-info" onclick="cargar_flujo_caja_programa();"><i class="feather icon-search"></i> Buscar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>--}}
+
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="card">
+                                                                 <div class="card-header-new-md">
+                                                                    <h5>Rendición de programas</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="dt-responsive table-responsive">
+                                                                        <table id="tabla_programas" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th class="align-middle">Rendido por</th>
+                                                                                    <th class="align-middle">Convenio</th>
+                                                                                    <th class="align-middle">Nº programa</th>
+                                                                                    <th class="align-middle">Tipo</th>
+                                                                                    <th class="align-middle">Fecha de atención</th>
+                                                                                    <th class="align-middle">Paciente</th>
+                                                                                    <th class="align-middle">Valor </th>
+                                                                                    <th class="align-middle">Estado consulta</th>
+                                                                                    <th class="align-middle">Recepción</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @if( isset($bonos_programa) )
+                                                                                    @foreach($bonos_programa as $key_bp => $value_bp)
+                                                                                        <tr >
+                                                                                            <td class="align-middle">Nombre Asistente<br>
+                                                                                                RUT
+                                                                                            </td>
+                                                                                            <td class="align-middle">{{ $value_bp->Convenio()->first()->nombre }}<br><small>CÓD:{{ $value_bp->numero_bono }}</small></td>
+                                                                                            <td class="align-middle">{{ $value_bp->numero_sesiones }}</td>
+
+                                                                                            <td class="align-middle">{{ $value_bp->TipoBono()->first()->nombre }}</td>
+                                                                                            <td class="align-middle">{{ $value_bp->fecha_atencion }}</td>
+                                                                                            <td class="align-middle">
+                                                                                                <span>{{ $value_bp->Paciente()->first()->nombres }} {{ $value_bp->Paciente()->first()->apellido_uno }} {{ $value_bp->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                                <span>{{ $value_bp->Paciente()->first()->rut }}</span>
+                                                                                            </td>
+                                                                                            <td class="align-middle">${{ number_format($value_bp->valor_atencion, 2, ",", ".") }}</td>
+                                                                                            <td class="align-middle">{{ $value_bp->estado_consulta }}</td>
+                                                                                            <td class="align-middle">
+                                                                                                <div class="form-group">
+                                                                                                    <div class="switch switch-success d-inline m-r-10">
+                                                                                                        <input type="checkbox" id="rendir_caja_programa_{{ $value_bp->id }}">
+                                                                                                        <label for="rendir_caja_{{ $value_bp->id }}"
+                                                                                                            class="cr"></label>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    @endforeach
+                                                                                @endif
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                         </div>
+
+
+
 
                         {{-- PESTAÑA DE GESTION DE BONOS --}}
                         <div class="tab-pane" id="gestion-bonos-prof" role="tabpanel" aria-labelledby="gestion-bonos-prof-tab">
@@ -549,11 +884,6 @@
                                                             Bonos enviados a cobro (archivo CSV)
                                                         </a>
                                                     </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link-aten text-reset" id="pills-bonos_totales-tab" data-toggle="pill" href="#pills-bonos_totales" role="tab" aria-controls="pills-bonos_totales" aria-selected="true">
-                                                            Bonos totales
-                                                        </a>
-                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -564,26 +894,26 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                         <div class="tab-content">
+                                            <!---BONOS POR COBRAR-->
                                             <div class="tab-pane show active" id="pills-bonos_por_cobrar" role="tabpanel" aria-labelledby="pills-bonos_por_cobrar-tab">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                        <h5 class="text-c-blue d-inline float-left f-18">Bonos por cobrar</h5>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                                         <div class="card">
+                                                            <div class="card-header-new-md">
+                                                                <h5>Bonos por cobrar</h5>
+                                                            </div>
                                                             <div class="card-body">
                                                                 <div class="dt-responsive table-responsive">
                                                                     <table id="tabla_gestion_bonos" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th class="align-middle">Convenio</th>
-                                                                                <th class="align-middle">Código</th>
-                                                                                <th class="align-middle">Tipo</th>
-                                                                                <th class="align-middle">Clase</th>
-                                                                                <th class="align-middle">Fecha de atención</th>
                                                                                 <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                <th class="align-middle">Tipo</th>
+                                                                                <th class="align-middle">Fecha de atención</th>
                                                                                 <th class="align-middle">Valor total</th>
                                                                                 <th class="align-middle">Estado consulta</th>
+                                                                                <th class="align-middle">Habilitado <br>para cobro</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -591,34 +921,46 @@
 
                                                                                 @foreach($bonos_rendidos as $key_br => $value_br)
                                                                                     <tr >
-                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                                        <td class="align-middle">{{ $value_br->numero_bono }}</td>
-                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                                        <td class="align-middle">
-                                                                                            @if($value_br->id_clase_bono == 1)
-                                                                                                        Bono Emitido por Institucion
-                                                                                                    @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
-                                                                                                        Boucher
-                                                                                                    @elseif($value_br->id_clase_bono == 4)
-                                                                                                        Bono Web
-                                                                                                    @elseif($value_br->id_clase_bono == 5)
-                                                                                                        Bono Web Pre-Pago
-                                                                                                    @elseif($value_br->id_clase_bono == 6)
-                                                                                                        Particular
-                                                                                                    @elseif($value_br->id_clase_bono == 7)
-                                                                                                        Copago
-                                                                                                    @else
-                                                                                                        Otro
-                                                                                                    @endif
-                                                                                        </td>
-                                                                                        <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
                                                                                         <td class="align-middle">
                                                                                             <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
                                                                                             <span>{{ $value_br->Paciente()->first()->rut }}</span>
                                                                                         </td>
+                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}<br>
+                                                                                        <small>CÓD:{{ $value_br->numero_bono }}
+                                                                                           </small></td>
+                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}
+                                                                                            <br><small>
+                                                                                            @if($value_br->id_clase_bono == 1)
+                                                                                                Bono Emitido por Institucion
+                                                                                            @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
+                                                                                                Boucher
+                                                                                            @elseif($value_br->id_clase_bono == 4)
+                                                                                                Bono Web
+                                                                                            @elseif($value_br->id_clase_bono == 5)
+                                                                                                Bono Web Pre-Pago
+                                                                                            @elseif($value_br->id_clase_bono == 6)
+                                                                                                Particular
+                                                                                            @elseif($value_br->id_clase_bono == 7)
+                                                                                                Copago
+                                                                                            @else
+                                                                                                Otro
+                                                                                            @endif</small>
+                                                                                        </td>
+
+                                                                                        <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
+
                                                                                         <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
                                                                                         <td class="align-middle">{{ $value_br->estado_consulta == 1 ? 'EN ESPERA' : 'OTRO' }}</td>
-
+                                                                                        <!-- switch verde -->
+                                                                                        <td class="align-middle">
+                                                                                            <div class="form-group">
+                                                                                                <div class="switch switch-success d-inline m-r-10">
+                                                                                                    <input type="checkbox" id="habilitar_cobro_{{ $value_br->id }}" @if($value_br->estado_consulta == 1) checked @endif>
+                                                                                                    <label for="habilitar_cobro_{{ $value_br->id }}"
+                                                                                                        class="cr"></label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </td>
                                                                                     </tr>
                                                                                 @endforeach
                                                                             @endif
@@ -634,23 +976,21 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <!---BONOS ENVIADOS A COBRO -->
                                             <div class="tab-pane" id="pills-bonos_enviados" role="tabpanel" aria-labelledby="pills-bonos_enviados-tab">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                        <h5 class="text-c-blue d-inline float-left f-18">Bonos enviados a cobro (archivo CSV)</h5>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                                                         <div class="card">
+                                                            <div class="card-header-new-md">
+                                                                <h5>Bonos enviados a cobro (archivo CSV)</h5>
+                                                            </div>
                                                             <div class="card-body">
                                                                 <div class="dt-responsive table-responsive">
                                                                     <table id="tabla_gestion_bonos_generados" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                                         <thead>
                                                                             <tr>
                                                                                 <th class="align-middle">Convenio</th>
-                                                                                <th class="align-middle">Código</th>
                                                                                 <th class="align-middle">Tipo</th>
-                                                                                <th class="align-middle">Clase</th>
                                                                                 <th class="align-middle">Fecha de atención</th>
                                                                                 <th class="align-middle">Paciente</th>
                                                                                 <th class="align-middle">Valor total</th>
@@ -662,11 +1002,11 @@
 
                                                                                 @foreach($bonos_rendidos_generados as $key_br => $value_br)
                                                                                     <tr>
-                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
-                                                                                        <td class="align-middle">{{ $value_br->numero_bono }}</td>
-                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
-                                                                                        <td class="align-middle">
-                                                                                            @if($value_br->id_clase_bono == 1)
+                                                                                        <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}<br>
+                                                                                            <small>CÓD:{{ $value_br->numero_bono }}</small>
+                                                                                        </td>
+                                                                                        <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}<br>
+                                                                                        <small>@if($value_br->id_clase_bono == 1)
                                                                                                 Bono Emitido por Institucion
                                                                                             @elseif($value_br->id_clase_bono == 2 || $value_br->id_clase_bono == 3)
                                                                                                 Boucher
@@ -680,15 +1020,20 @@
                                                                                                 Copago
                                                                                             @else
                                                                                                 Otro
-                                                                                            @endif
-                                                                                        </td>
+                                                                                            @endif</small></td>
                                                                                         <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
                                                                                         <td class="align-middle">
                                                                                             <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
                                                                                             <span>{{ $value_br->Paciente()->first()->rut }}</span>
                                                                                         </td>
                                                                                         <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                                        <td class="align-middle">{{ $value_br->estado_consulta }}</td>
+                                                                                        <td class="align-middle">
+                                                                                            @if($value_br->estado_consulta == 8)
+                                                                                                Enviado a cobro
+                                                                                            @else
+                                                                                                {{ $value_br->estado_consulta }}
+                                                                                            @endif
+                                                                                        </td>
                                                                                     </tr>
                                                                                 @endforeach
                                                                             @endif
@@ -813,7 +1158,7 @@
                                                                             <td class="align-middle">{{ $value_br->estado_consulta }}</td>
                                                                             <td class="align-middle">
                                                                                 <div class="form-group">
-                                                                                    <div class="switch switch-success d-inline m-r-10">
+                                                                                    <div class="switch switch-success d-inline m-r-
                                                                                         <input type="checkbox" id="rendir_caja_programa_{{ $value_br->id }}">
                                                                                         <label for="rendir_caja_{{ $value_br->id }}"
                                                                                             class="cr"></label>
@@ -1064,6 +1409,302 @@
                                 </div>
                             </div>
                         </div>
+
+                        {{--  PESTAÑA DE REGISTRO GARANTIA --}}
+                        <div class="tab-pane" id="garantia-prof" role="tabpanel" aria-labelledby="garantia-prof-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mt-3 mb-2">
+                                    <h5 class="text-c-blue d-inline float-left f-20 pt-1">Registro de garantía</h5>
+                                </div>
+                            </div>
+                             <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                        <div class="card py-0">
+                                            <div class="card-body pb-2 pt-2">
+                                                <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset active" id="garantia-pendiente-tab" data-toggle="pill" href="#garantia-pendiente" role="tab" aria-controls="garantia-pendiente" aria-selected="true">
+                                                            Garantías pendientes de pago
+                                                        </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="garantia-pagada-tab" data-toggle="pill" href="#garantia-pagada" role="tab" aria-controls="garantia-pagada" aria-selected="false">
+                                                            Garantías pagadas
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                           {{-- <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12" id="busqueda_avanzada_aparecer_5" style="display:none">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-3 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Fecha de atención</label>
+                                                        <input type="date" class="form-control form-control-sm" name="gestion_diario_fecha" id="gestion_diario_fecha">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-9 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Asistente</label>
+                                                        <select id="gestion_diario_asistente" name="gestion_diario_asistente" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_asistente)
+                                                                @foreach($lista_asistente as $key_asistente => $value_asistente)
+                                                                    <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Convenio</label>
+                                                        <select id="gestion_diario_convenio" name="gestion_diario_convenio" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_prevision)
+                                                                @foreach($lista_prevision as $key_prevision => $value_prevision)
+                                                                    <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
+                                                                @endforeach
+                                                            @endif
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Estado consulta</label>
+                                                        <select id="gestion_diario_estado_consulta" name="gestion_diario_estado_consulta" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_estado_consulta)
+                                                                @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
+                                                                    <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
+                                                                @endforeach
+                                                            @endif
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-3 col-lg-2 text-center">
+                                                    <button class="btn btn-block btn-sm btn-block btn-info" onclick="cargar_flujo_caja_rendicion_diario();"><i class="feather icon-search"></i> Buscar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="tab-content">
+                                        <!--GARANTIAS PENDIENTE DE PAGO-->
+                                        <div class="tab-pane show active" id="garantia-pendiente" role="tabpanel" aria-labelledby="garantia-pendiente-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-header-new-md">
+                                                                    <h5>Garantías pendiente de pago</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Paciente</th>
+                                                                                        <th>Monto Garantía</th>
+                                                                                         <th>Convenio</th>
+                                                                                        <th>Tipo atención</th>
+                                                                                        <th>Emisión</th>
+                                                                                        <th>Vencimiento</th>
+                                                                                        <th>institución</th>
+                                                                                        <th>Estado</th>
+                                                                                        <th>Atenciones</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <strong>Juan Perez</strong><br>
+                                                                                            18.233.434-1
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $30.000
+                                                                                        </td>
+                                                                                         <td>
+                                                                                            PONER CONVENIO<br>
+                                                                                            <small>CÓD: PONER CODIGO</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            Consulta
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            0/0/2026
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            5/6/2026<br>
+                                                                                           <small>Vence en 12 días</small>
+                                                                                        </td>
+                                                                                         <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <h6><span class="badge badge-warning">Por vencer</span></h6>
+                                                                                        </td>
+                                                                                        <td><button type="button" class="btn btn-info btn-xxs"><i class="feather icon-search"></i> Ver atenciones</button></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <strong>Pepito Perez</strong><br>
+                                                                                            7.343.434-9
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $18.500
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            PONER CONVENIO<br>
+                                                                                            <small>CÓD: PONER CODIGO</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            Programa<br>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            0/0/2026
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            5/6/2026<br>
+                                                                                           <small>Vence en 12 días</small>
+                                                                                        </td>
+                                                                                         <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <h6><span class="badge badge-danger">Vencido</span></h6>
+                                                                                        </td>
+                                                                                         <td><button type="button" class="btn btn-info btn-xxs"><i class="feather icon-search"></i> Ver atenciones</button></td>
+                                                                                    </tr>
+                                                                                     <tr>
+                                                                                        <td>
+                                                                                            <strong>Alejandra Perez</strong><br>
+                                                                                            9.643.434-k
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $50.500
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            PONER CONVENIO<br>
+                                                                                            <small>CÓD: PONER CODIGO</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            Consulta<br>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            0/0/2026
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            5/6/2026<br>
+                                                                                           <small>Vence en 12 días</small>
+                                                                                        </td>
+                                                                                         <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <h6><span class="badge badge-success">Vigente</span></h6>
+                                                                                        </td>
+                                                                                         <td><button type="button" class="btn btn-info btn-xxs"><i class="feather icon-search"></i> Ver atenciones</button></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--GARANTIAS PAGADAS-->
+                                        <div class="tab-pane" id="garantia-pagada" role="tabpanel" aria-labelledby="garantia-pagada-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-header-new-md">
+                                                                    <h5>Garantías pagadas</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Paciente</th>
+                                                                                        <th>Monto Garantía</th>
+                                                                                        <th>Convenio</th>
+                                                                                        <th>Tipo atención</th>
+                                                                                        <th>Emisión</th>
+                                                                                        <th>Fecha de pago</th>
+                                                                                        <th>Medio de pago</th>
+                                                                                        <th>Institución</th>
+                                                                                        <th>Estado</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <strong>Juan Perez</strong><br>
+                                                                                            18.233.434-1
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $30.000
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            PONER CONVENIO<br>
+                                                                                            <small>CÓD: PONER CODIGO</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            Consulta
+                                                                                        </td>
+                                                                                         <td>
+                                                                                            26/9/2026
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            5/6/2026<br>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            Efectivo
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <h6><span class="badge badge-success">Pagado</span></h6>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1119,6 +1760,50 @@
                 responsive: true,
             });
         });
+
+        // --- FUNCION PARA TOTAL RENDIDO AL MÉDICO ---
+        function cargar_total_rendido(valor) {
+            // valor puede ser "Mayo 2026", "Abril 2026", etc.
+            let partes = valor.split(' ');
+            let meses = {
+                'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5, 'Junio': 6,
+                'Julio': 7, 'Agosto': 8, 'Septiembre': 9, 'Octubre': 10, 'Noviembre': 11, 'Diciembre': 12
+            };
+            let mes = meses[partes[0]];
+            let anio = partes[1];
+
+            $.ajax({
+                url: '{{ route('flujo_caja.total_rendido') }}',
+                type: 'POST',
+                data: {
+                    mes: mes,
+                    anio: anio,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    swal({
+                        title: "Cargando total rendido...",
+                        text: "Por favor, espere mientras se carga el total rendido al médico.",
+                        icon: "info",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    // Busca la tarjeta de "Total rendido al médico" y actualiza el valor
+                    $(".metric-title:contains('Total rendido al médico')")
+                        .closest('.metric-card')
+                        .find('.metric-value')
+                        .first()
+                        .text('$' + data.total_rendido);
+                },
+                error: function() {
+                    swal("Error", "No se pudo cargar el total rendido.", "error");
+                }
+            });
+        }
 
         function ver_rendicion(id){
             let url = "{{ route('flujo_caja.profesional.rendicion.show', ':id') }}";
@@ -1453,18 +2138,18 @@
                             var j = 1; //contador para asignar id al boton que borrara la fila
                             var fila = '';
                             fila += '<tr>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].convenio.nombre+'</td>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].numero_sesiones+'</td>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].numero_bono+'</td>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].tipo_bono.nombre+'</td>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].fecha_atencion+'</td>';
-                            fila += '    <td class="align-middle text-center">';
+                            fila += '    <td class="align-middle">'+data.registros[i].convenio.nombre+'</td>';
+                            fila += '    <td class="align-middle">'+data.registros[i].numero_sesiones+'</td>';
+                            fila += '    <td class="align-middle">'+data.registros[i].numero_bono+'</td>';
+                            fila += '    <td class="align-middle">'+data.registros[i].tipo_bono.nombre+'</td>';
+                            fila += '    <td class="align-middle">'+data.registros[i].fecha_atencion+'</td>';
+                            fila += '    <td class="align-middle">';
                             fila += '        <span>'+data.registros[i].paciente.nombres+' '+data.registros[i].paciente.apellido_uno+' '+data.registros[i].paciente.apellido_dos+'</span><br>';
                             fila += '        <span>'+data.registros[i].paciente.rut+'</span>';
                             fila += '    </td>';
-                            fila += '    <td class="align-middle text-center">$'+data.registros[i].valor_atencion+'</td>';
-                            fila += '    <td class="align-middle text-center">'+data.registros[i].estado_consulta+'</td>';
-                            fila += '    <td class="align-middle text-center">';
+                            fila += '    <td class="align-middle">$'+data.registros[i].valor_atencion+'</td>';
+                            fila += '    <td class="align-middle">'+data.registros[i].estado_consulta+'</td>';
+                            fila += '    <td class="align-middle">';
                             fila += '        <div class="form-group">';
                             fila += '            <div class="switch switch-success d-inline m-r-10">';
                             fila += '                <input type="checkbox" id="rendir_caja_programa_'+data.registros[i].id+'">';
@@ -1523,10 +2208,10 @@
                     {
                         var fila = '';
                         fila += '<tr >';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos[i].convenio.nombre+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos[i].numero_bono+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos[i].tipo_bono.nombre+'</td>';
-                        fila += '    <td class="align-middle text-center">';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos[i].convenio.nombre+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos[i].numero_bono+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos[i].tipo_bono.nombre+'</td>';
+                        fila += '    <td class="align-middle">';
                         if(data.registros.bonos_rendidos[i].id_clase_bono == 1)
                             fila += 'Bono Emitido por Institucion';
                         else if(data.registros.bonos_rendidos[i].id_clase_bono == 2 || data.registros.bonos_rendidos[i].id_clase_bono == 3)
@@ -1542,13 +2227,13 @@
                         else
                             fila += 'Otro';
                         fila += '    </td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos[i].fecha_atencion+'</td>';
-                        fila += '    <td class="align-middle text-center">';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos[i].fecha_atencion+'</td>';
+                        fila += '    <td class="align-middle">';
                         fila += '        <span>'+data.registros.bonos_rendidos[i].paciente.nombres+' '+data.registros.bonos_rendidos[i].paciente.apellido_uno+' '+data.registros.bonos_rendidos[i].paciente.apellido_dos+'</span><br>';
                         fila += '        <span>'+data.registros.bonos_rendidos[i].paciente.rut+'</span>';
                         fila += '    </td>';
-                        fila += '    <td class="align-middle text-center">$'+data.registros.bonos_rendidos[i].valor_atencion+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos[i].estado_consulta+'</td>';
+                        fila += '    <td class="align-middle">$'+data.registros.bonos_rendidos[i].valor_atencion+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos[i].estado_consulta+'</td>';
                         fila += '</tr>';
                         $('#tabla_gestion_bonos tbody').append(fila);
 
@@ -1559,10 +2244,10 @@
                     {
                         var fila = '';
                         fila += '<tr >';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos_generados[i].convenio.nombre+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos_generados[i].numero_bono+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos_generados[i].tipo_bono.nombre+'</td>';
-                        fila += '    <td class="align-middle text-center">';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos_generados[i].convenio.nombre+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos_generados[i].numero_bono+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos_generados[i].tipo_bono.nombre+'</td>';
+                        fila += '    <td class="align-middle">';
                         if(data.registros.bonos_rendidos_generados[i].id_clase_bono == 1)
                             fila += 'Bono Emitido por Institucion';
                         else if(data.registros.bonos_rendidos_generados[i].id_clase_bono == 2 || data.registros.bonos_rendidos_generados[i].id_clase_bono == 3)
@@ -1578,8 +2263,8 @@
                         else
                             fila += 'Otro';
                         fila += '    </td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros.bonos_rendidos_generados[i].fecha_atencion+'</td>';
-                        fila += '    <td class="align-middle text-center">';
+                        fila += '    <td class="align-middle">'+data.registros.bonos_rendidos_generados[i].fecha_atencion+'</td>';
+                        fila += '    <td class="align-middle">';
                         fila += '        <span>'+data.registros.bonos_rendidos_generados[i].paciente.nombres+' '+data.registros.bonos_rendidos_generados[i].paciente.apellido_uno+' '+data.registros.bonos_rendidos_generados[i].paciente.apellido_dos+'</span><br>';
                         fila += '        <span>'+data.registros.bonos_rendidos_generados[i].paciente.rut+'</span>';
                         fila += '    </td>';
@@ -1720,7 +2405,8 @@
             enviarTodos.checked = todasSeleccionadas && checkboxes.length > 0;
 
             return seleccionados;
-        }        function iniciarProcesoCobro() {
+        }
+        function iniciarProcesoCobro() {
             // Obtener las rendiciones seleccionadas
             var rendicionesSeleccionadas = seleccionar_bonos_rendicion();
 
@@ -1745,7 +2431,7 @@
                     console.log("Iniciando proceso de cobro para rendiciones:", rendicionesSeleccionadas);
 
                     // Ejemplo de llamada AJAX al backend
-                    /*
+
                     $.ajax({
                         url: '{{ route("flujo_caja.profesional.iniciar_cobro") }}',
                         type: 'POST',
@@ -1754,14 +2440,14 @@
                             rendiciones: rendicionesSeleccionadas
                         },
                         success: function(response) {
-                            swal("¡Éxito!", "Proceso de cobro iniciado correctamente.", "success");
+                            console.log(response);
+                            swal("¡Éxito!", response.mensaje, "success");
                             // Recargar tabla o actualizar vista
                         },
                         error: function(error) {
                             swal("Error", "Hubo un problema al iniciar el proceso de cobro.", "error");
                         }
                     });
-                    */
 
                     // Por ahora, solo mostrar mensaje de éxito
                     swal("¡Proceso iniciado!", "El proceso de cobro ha sido iniciado para las rendiciones seleccionadas.", "success");
@@ -1769,6 +2455,155 @@
             });
         }
 
+        function cargar_flujo_caja_mes(valor) {
+            // valor puede ser "Mayo 2026", "Abril 2026", etc.
+            let partes = valor.split(' ');
+            let meses = {
+                'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5, 'Junio': 6,
+                'Julio': 7, 'Agosto': 8, 'Septiembre': 9, 'Octubre': 10, 'Noviembre': 11, 'Diciembre': 12
+            };
+            let mes = meses[partes[0]];
+            let anio = partes[1];
+
+            $.ajax({
+                url: '{{ route('flujo_caja.mes') }}',
+                type: 'POST',
+                data: {
+                    mes: mes,
+                    anio: anio,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    // Aquí puedes mostrar un spinner o mensaje de carga si lo deseas
+                    swal({
+                        title: "Cargando datos...",
+                        text: "Por favor, espere mientras se cargan los datos del mes seleccionado.",
+                        icon: "info",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+                },
+                success: function(data) {
+                    swal.close(); // Cerrar el mensaje de carga
+                    // Actualiza el DOM con los nuevos valores
+                    $('.metric-value').eq(1).text('$' + data.total_mes); // Total recaudado en el mes
+                    $('.metric-value').eq(4).text(data.cant_bonos); // Cantidad de bonos emitidos
+                    // ...actualiza otros campos si lo necesitas
+                }
+            });
+        }
+
+        function cargar_flujo_caja_anio(valor) {
+
+            // valor puede ser "2026", "2025", etc.
+            let anio = valor;
+
+            $.ajax({
+                url: '{{ route('flujo_caja.anio') }}',
+                type: 'POST',
+                data: {
+                    anio: anio,
+                    _token: '{{ csrf_token() }}'
+                },
+                beforeSend: function() {
+                    swal({
+                        title: "Cargando datos...",
+                        text: "Por favor, espere mientras se cargan los datos del año seleccionado.",
+                        icon: "info",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+                },
+                success: function(data) {
+                    swal.close();
+                    $('.metric-value').eq(2).text('$' + data.total_anio);
+                    // Actualizar tabla de desglose mensual si existe
+                    if (data.desglose_meses) {
+                        let meses = [
+                            'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
+                            'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
+                        ];
+                        let tbody = '';
+                        for (let i = 1; i <= 12; i++) {
+                            let valor = data.desglose_meses[i] ? data.desglose_meses[i] : 0;
+                            tbody += `<tr><td>${meses[i-1]}</td><td>$ ${Number(valor).toLocaleString('es-CL')}</td></tr>`;
+                        }
+                        $('#tabla_desglose_meses tbody').html(tbody);
+                    }
+                }
+            });
+        }
+
+        function cargar_cant_bonos(valor) {
+                        // valor puede ser "Mayo 2026", "Abril 2026", etc.
+                        let partes = valor.split(' ');
+                        let meses = {
+                            'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5, 'Junio': 6,
+                            'Julio': 7, 'Agosto': 8, 'Septiembre': 9, 'Octubre': 10, 'Noviembre': 11, 'Diciembre': 12
+                        };
+                        let mes = meses[partes[0]];
+                        let anio = partes[1];
+
+                        $.ajax({
+                            url: '{{ route('flujo_caja.mes') }}',
+                            type: 'POST',
+                            data: {
+                                mes: mes,
+                                anio: anio,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            beforeSend: function() {
+                                swal({
+                                    title: "Cargando cantidad de bonos...",
+                                    text: "Por favor, espere mientras se carga la cantidad de bonos emitidos.",
+                                    icon: "info",
+                                    buttons: false,
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                });
+                            },
+                            success: function(data) {
+                                swal.close(); // Cerrar el mensaje de carga
+                                // Actualiza solo el campo de cantidad de bonos emitidos
+                                $('.metric-value').eq(4).text(data.cant_bonos);
+                            }
+                        });
+                    }
+
+                function cargar_total_pendiente(valor) {
+                        // valor es tipo "Mayo 2026"
+                        if (!valor) return;
+
+                        // Mapeo de meses en español a número
+                        const meses = {
+                            'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5, 'Junio': 6,
+                            'Julio': 7, 'Agosto': 8, 'Septiembre': 9, 'Octubre': 10, 'Noviembre': 11, 'Diciembre': 12
+                        };
+
+                        // Separar el texto
+                        let partes = valor.split(' ');
+                        let mes = meses[partes[0]];
+                        let anio = partes[1];
+
+                        $.ajax({
+                            url: '{{ route("flujo_caja.cargar_total_pendiente") }}',
+                            type: 'POST',
+                            data: {
+                                mes: mes,
+                                anio: anio,
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                // Actualiza el valor en la tarjeta
+                                $('.metric-value.metric-warning').text('$' + response.total_pendiente);
+                            },
+                            error: function() {
+                                $('.metric-value.metric-warning').text('$0');
+                            }
+                        });
+                    }
     </script>
 @endsection
 

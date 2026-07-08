@@ -39,6 +39,5 @@
 <script>
     function info_odontograma() {
         $('#modal_odontograma').modal('show');
-        console.log('hola');
     }
 </script>

@@ -36,7 +36,7 @@
 </header>
 <!-- Modal -->
 <div class="modal fade" id="modalAgendarHora" tabindex="-1" role="dialog" aria-labelledby="modalAgendarHoraLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
 		<div class="modal-header bg-naranja text-white">
 			<h5 class="modal-title" id="modalAgendarHoraLabel">Agendar Hora</h5>
@@ -50,6 +50,7 @@
 			<input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
 			<input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
 			<input type="hidden" name="modal_reserva_hora_fecha_consulta" id="modal_reserva_hora_fecha_consulta" value="">
+		<input type="hidden" id="modal_reserva_nombre_profesional" value="">
 			<div class="row border p-2">
 				<div class="form-group col-md-12 mb-2 mt-0">
 					<label for="rut_paciente" class="floating-label-activo-sm">Rut Paciente</label>
@@ -96,16 +97,34 @@
 						<div class="card-body">
 							<div class="row g-3">
 								<div class="col-md-6">
-									<label for="nuevo_nombre" class="form-label">Nombres</label>
+									<label for="nuevo_nombre" class="form-label">Nombres <span class="text-danger">*</span></label>
 									<input type="text" class="form-control" id="nuevo_nombre" name="nuevo_nombre">
 								</div>
 								<div class="col-md-6">
-									<label for="nuevo_apellido_uno" class="form-label">Apellido Paterno</label>
+									<label for="nuevo_apellido_uno" class="form-label">Apellido Paterno <span class="text-danger">*</span></label>
 									<input type="text" class="form-control" id="nuevo_apellido_uno" name="nuevo_apellido_uno">
 								</div>
 								<div class="col-md-6">
 									<label for="nuevo_apellido_dos" class="form-label">Apellido Materno</label>
 									<input type="text" class="form-control" id="nuevo_apellido_dos" name="nuevo_apellido_dos">
+								</div>
+								<div class="col-md-6">
+									<label for="nuevo_fecha_nac" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+									<input type="date" class="form-control" id="nuevo_fecha_nac" name="nuevo_fecha_nac">
+								</div>
+								<div class="col-md-6">
+									<label for="nuevo_sexo" class="form-label">Sexo <span class="text-danger">*</span></label>
+									<select class="form-control" id="nuevo_sexo" name="nuevo_sexo">
+										<option value="0">Seleccione</option>
+										<option value="M">Masculino</option>
+										<option value="F">Femenino</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="nuevo_id_convenio" class="form-label">Previsión <span class="text-danger">*</span></label>
+									<select class="form-control" id="nuevo_id_convenio" name="nuevo_id_convenio">
+										<option value="0">Seleccione</option>
+									</select>
 								</div>
 								<div class="col-md-6">
 									<label for="nuevo_email" class="form-label">Correo Electrónico</label>
@@ -115,24 +134,34 @@
 									<label for="nuevo_telefono" class="form-label">Teléfono</label>
 									<input type="text" class="form-control" id="nuevo_telefono" name="nuevo_telefono">
 								</div>
-								<div class="col-md-6">
-									<label for="nuevo_fecha_nac" class="form-label">Fecha de Nacimiento</label>
-									<input type="date" class="form-control" id="nuevo_fecha_nac" name="nuevo_fecha_nac">
-								</div>
-								<div class="col-md-12">
-									<label for="nuevo_direccion" class="form-label">Dirección</label>
+								<div class="col-md-8">
+									<label for="nuevo_direccion" class="form-label">Dirección <span class="text-danger">*</span></label>
 									<input type="text" class="form-control" id="nuevo_direccion" name="nuevo_direccion">
 								</div>
-								<div class="col-md-6">
-									<label for="nuevo_ciudad" class="form-label">Ciudad</label>
-									<input type="text" class="form-control" id="nuevo_ciudad" name="nuevo_ciudad">
+								<div class="col-md-4">
+									<label for="nuevo_numero_dir" class="form-label">Número</label>
+									<input type="text" class="form-control" id="nuevo_numero_dir" name="nuevo_numero_dir" placeholder="S/N">
 								</div>
 								<div class="col-md-6">
-									<label for="nuevo_rut" class="form-label">RUT</label>
-									<input type="text" class="form-control" id="nuevo_rut" name="nuevo_rut">
+									<label for="nuevo_id_region" class="form-label">Región <span class="text-danger">*</span></label>
+									<select class="form-control" id="nuevo_id_region" name="nuevo_id_region" onchange="cargarCiudadesRegistro(this.value);">
+										<option value="0">Seleccione región</option>
+									</select>
 								</div>
-                    <div class="col-md-12 text-end">
-                        <button type="button" class="btn btn-success" onclick="registrarNuevoPaciente()">Registrar Paciente</button>
+								<div class="col-md-6">
+									<label for="nuevo_id_ciudad" class="form-label">Ciudad <span class="text-danger">*</span></label>
+									<select class="form-control" id="nuevo_id_ciudad" name="nuevo_id_ciudad">
+										<option value="0">Seleccione ciudad</option>
+									</select>
+								</div>
+								<div class="col-md-6">
+									<label for="nuevo_rut" class="form-label">RUT <span class="text-danger">*</span></label>
+									<input type="text" class="form-control" id="nuevo_rut" name="nuevo_rut" placeholder="12345678-9">
+								</div>
+                    <div class="col-md-12 text-end mt-2">
+                        <button type="button" class="btn btn-success" onclick="registrarNuevoPaciente()">
+							<i class="fa-solid fa-arrow-right"></i> Continuar con Reserva
+						</button>
                     </div>
                 </div>
             </div>
@@ -156,7 +185,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-12 mb-2 mt-0">
 							<label class="floating-label-active-sm mb-0">Especialidad</label>
-							<select class="form-control form-control-sm" id="modal_reserva_id_especialidad" name="modal_reserva_id_especialidad" onchange="buscar_subtipo_especialidad(this)" >
+							<select class="form-control form-control-sm" id="modal_reserva_id_especialidad" name="modal_reserva_id_especialidad" onchange="$('#div_resultado_busqueda').empty(); buscar_subtipo_especialidad(this); limpiar_horas_medicas();" >
 								<option value="">Seleccione</option>
 							</select>
 						</div>
@@ -166,7 +195,7 @@
 					<div class="form-row">
 						<div class="form-group col-md-12 mb-2 mt-0">
 							<label class="floating-label-active-sm mb-0">Tipo especialidad</label>
-							<select class="form-control form-control-sm" id="modal_reserva_id_tipo_especialidad" name="modal_reserva_id_tipo_especialidad" onchange="buscar_profesionales()" >
+							<select class="form-control form-control-sm" id="modal_reserva_id_tipo_especialidad" name="modal_reserva_id_tipo_especialidad" onchange="limpiar_busqueda_profesionales(); buscar_profesionales();" >
 								<option value="">Seleccione</option>
 							</select>
 						</div>
@@ -193,7 +222,7 @@
 							<h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
 						</div>
 						<div class="col-md-12 mx-auto" >
-							<div class="row ml-3" id="modal_reserva_hora_lista_horas">
+							<div class="row ml-3" id="modal_reserva_hora_lista_horas_">
 								 <!-- <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
 									8:00
 								</div>  -->
@@ -294,7 +323,7 @@
 <!-- Fin Modal Agendar Hora -->
 <!-- Modal Agendar Examen -->
 <div class="modal fade" id="modalAgendarHoraExamen" tabindex="-1" role="dialog" aria-labelledby="modalAgendarHoraExamenLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
 		<div class="modal-header bg-primary text-white">
 			<h5 class="modal-title" id="modalAgendarHoraExamenLabel">Agendar Examen</h5>
@@ -308,7 +337,7 @@
 			<input type="hidden" name="modal_examen_id_profesional" id="modal_examen_id_profesional" value="">
 			<input type="hidden" name="modal_examen_fecha_examen" id="modal_examen_fecha_examen" value="">
 			<input type="hidden" name="modal_examen_id_examen" id="modal_examen_id_examen" value="">
-			
+
 			<div class="row border p-2">
 				<div class="form-group col-md-12 mb-2 mt-0">
 					<label for="rut_paciente_examen" class="floating-label-activo-sm">Rut Paciente</label>

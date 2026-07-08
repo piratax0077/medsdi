@@ -1,101 +1,109 @@
 {{-- modal horas extras --}}
 <div class="modal fade" id="m_hora_extras" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_hora_extras" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1">Agregar Horas Extras</h5>
+                <h5 class="modal-title text-white mt-1">Agenda de horas extras</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_m_hora_extras();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="form-row">
                     <div class="col-md-12">
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-
-                        <div class="row mt-2">
+                    
                             <div class="m_hora_extras_busqueda">
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
-                                            <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
+                                            <h6 class="text-c-blue ml-2 mb-3">Ingrese el RUT del paciente</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row div_rut_buscar">
+                                <div class="form-row div_rut_buscar">
                                     <div class="col-sm-8 col-md-8 mb-3">
                                         <div class="form-group">
-                                            <input type="text" id="m_hora_extras_rut" name="m_hora_extras_rut" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                            <input type="text" id="m_hora_extras_rut" name="m_hora_extras_rut" class="form-control form-control-sm" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                         </div>
                                     </div>
                                     <div class="col-sm-4 col-md-4 mb-3">
                                         <div id="m_hora_extra_div_cargando" style="display: none;">
-                                            <img src="{{ asset('images/spinner.svg') }}" alt="cargando">
+                                            <button class="btn btn-info btn-sm btn-block" type="button" id="button-addon2">  <div class="spinner-border text-white" style=" width: 1rem!important; height: 1rem!important;" role="status">
+                                              <span class="sr-only"></span>
+                                            </div> Buscando</button>
                                         </div>
+
+                                      
                                         <div id="m_hora_extra_div_boton_buscar_paciente" style="display: ">
-                                            <button class="btn btn-info" onclick="buscar_paciente_hora_extra();" type="button"id="button-addon2">Buscar</button>
+                                            <button class="btn btn-info btn-sm btn-block" onclick="buscar_paciente_hora_extra();" type="button"id="button-addon2"><i class="feather icon-search"></i> Buscar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="m_hora_extras_paciente_existente" style="display: none">
-                                <div class="row mx-3">
-                                    <input type="hidden" name="m_hora_extras_ex_id_paciente" id="m_hora_extras_ex_id_paciente" value="">
-                                    <table class="table table-borderless table-xs">
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Rut</strong>
-                                                    <td><span id="m_hora_extras_ex_rut_paciente"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Nombre</strong>
-                                                    <td><span id="m_hora_extras_ex_nombre"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Fecha Nacimiento</strong>
-                                                    <td><span id="m_hora_extras_ex_fecha_nacimiento"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Sexo</strong>
-                                                    <td><span id="m_hora_extras_ex_sexo"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Convenio</strong>
-                                                    <td><span id="m_hora_extras_ex_convenio"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Dirección</strong>
-                                                    <td><span id="m_hora_extras_ex_direccion"></span></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Correo Electrónico</strong>
-                                                    <td id="m_hora_extras_ex_email"></td>
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Teléfono</strong>
-                                                    <td><span id="m_hora_extras_ex_telefono"></span></td>
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="modal-footer">
-                                        <button type="button" onclick="cancelar_busqueda_horas_extras();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" onclick="agendar_he_ex();" class="btn btn-info">Agendar Hora Extra</button>
+                                <div class="form-row mx-3">
+                                    <div class="col-12">
+                                        <input type="hidden" name="m_hora_extras_ex_id_paciente" id="m_hora_extras_ex_id_paciente" value="">
+                                        <table class="table table-borderless table-xs">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Rut</strong>
+                                                        <td><span id="m_hora_extras_ex_rut_paciente"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Nombre</strong>
+                                                        <td><span id="m_hora_extras_ex_nombre"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Fecha Nacimiento</strong>
+                                                        <td><span id="m_hora_extras_ex_fecha_nacimiento"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Sexo</strong>
+                                                        <td><span id="m_hora_extras_ex_sexo"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Convenio</strong>
+                                                        <td><span id="m_hora_extras_ex_convenio"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Dirección</strong>
+                                                        <td><span id="m_hora_extras_ex_direccion"></span></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Correo Electrónico</strong>
+                                                        <td id="m_hora_extras_ex_email"></td>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <strong>Teléfono</strong>
+                                                        <td><span id="m_hora_extras_ex_telefono"></span></td>
+                                                    </th>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-12">
+                                        <div class="modal-footer">
+                                        <button type="button" onclick="cancelar_busqueda_horas_extras();"class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                        <button type="button" onclick="agendar_he_ex();" class="btn btn-info btn-sm"><i class="feather icon-calendar"></i> Agendar hora extra</button>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -123,14 +131,14 @@
                                         {{-- contenedor de reserva --}}
                                         <div class="tab-pane fade show active" id="m_hora_extra_reserva_hora" role="tabpanel" aria-labelledby="m_hora_extra_reserva_hora-tab">
                                             <div>
-                                                <div class="row">
+                                                <div class="form-row">
                                                     <div class="col-sm-12 col-md-12">
                                                         <div class="alert alert-danger" role="alert">
                                                             Paciente no registrado, complete los datos para registrar al paciente
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="form-row">
                                                     <div class="col-sm-12 col-md-12">
                                                         <div class="form-group">
                                                             <label class="floating-label-activo-sm">RUT</label>
@@ -201,8 +209,8 @@
 
                                                     <div class="col-sm-12 col-md-12">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Region</label>
-                                                            <select class="form-control" name="m_hora_extras_nv_region" id="m_hora_extras_nv_region" onchange="buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', '0');" required>
+                                                            <label class="floating-label-activo-sm">Región</label>
+                                                            <select class="form-control form-control-sm" name="m_hora_extras_nv_region" id="m_hora_extras_nv_region" onchange="buscar_ciudad_le('m_hora_extras_nv_region', 'm_hora_extras_nv_ciudad', '0');" required>
                                                                 <option value="0">Seleccione Regio&oacute;n</option>
                                                                 @if (isset($region))
                                                                     @foreach ($region as $reg)
@@ -216,7 +224,7 @@
                                                     <div class="col-sm-12 col-md-12">
                                                         <div class="form-group">
                                                             <label class="floating-label-activo-sm">Ciudad</label>
-                                                            <select class="form-control" id="m_hora_extras_nv_ciudad" name="m_hora_extras_nv_ciudad" required>
+                                                            <select class="form-control form-control-sm" id="m_hora_extras_nv_ciudad" name="m_hora_extras_nv_ciudad" required>
                                                                 <option value="0">Seleccione Ciudad</option>
                                                             </select>
                                                         </div>
@@ -237,8 +245,8 @@
 
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" onclick="cancelar_busqueda_horas_extras();" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                                    <button type="button" onclick="agendar_he_np();" class="btn btn-info">Registrar Paciente</button>
+                                                    <button type="button" onclick="cancelar_busqueda_horas_extras();" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="agendar_he_np();" class="btn  btn-sm btn-info"><i class="feather icon-check"></i> Registrar Paciente</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -295,10 +303,10 @@
                                             </div>
 
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger" onclick="cancelar_busqueda_horas_extras();" id="m_hora_extra_cerrar_registro_paciente_hora" data-dismiss="modal">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick="cancelar_busqueda_horas_extras();" id="m_hora_extra_cerrar_registro_paciente_hora" data-dismiss="modal">
                                                     <i class="feather icon-x"></i> Cancelar
                                                 </button>
-                                                <button type="button" id="m_hora_extra_guardar_prereserva_paciente" onclick="agendar_he_np_prereserva();" class="btn btn-info">
+                                                <button type="button" id="m_hora_extra_guardar_prereserva_paciente" onclick="agendar_he_np_prereserva();" class="btn btn-info btn-sm">
                                                     <i class="feather icon-check"></i> Tomar Hora
                                                 </button>
                                             </div>
@@ -308,17 +316,18 @@
 
                             </div>
 
-                        </div>
+                 
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <!--<div class="modal-footer">
                 <button type="button" class="btn btn-danger align-middle" onclick="cerrar_m_hora_extras()"; data-dismiss="modal">Cerrar</button>
                 {{-- <button type="button" class="btn btn-success align-middle" onclick="registrar_horas_extras()"; data-dismiss="modal">Registras</button> --}}
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
+
 
 <script>
 

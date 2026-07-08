@@ -26,7 +26,7 @@
                                     <a class="nav-link-aten text-reset" id="endo_boca_gral-tab" data-toggle="tab" href="#endo_boca_gral" role="tab" aria-controls="endo_boca_gral" aria-selected="true">Examen Boca General</a>
                                 </li> --}}
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="plan_endo-tab" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
+                                    <a class="nav-link-aten text-reset" id="plan_endo-tab" onclick="$('#paciente_piezas_dentales_ex').select2();" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
                                 </li>
                             </ul>
                         </div>

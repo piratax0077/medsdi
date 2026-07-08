@@ -73,6 +73,7 @@ class ProfesionalMiEquipoController extends Controller
      */
     public function verDetalleEquipoProfesional(Request $request)
     {
+
         $datos = array();
         $error = array();
         $filtro = array();

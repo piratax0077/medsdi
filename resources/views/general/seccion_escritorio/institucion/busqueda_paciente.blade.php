@@ -8,10 +8,9 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Buscar pacientes</h5>
                             </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <ul class="breadcrumb mt-3">
+                                <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
                                 <li class="breadcrumb-item">
                                     <a href="#">Buscar pacientes</a>
                                 </li>
@@ -70,6 +69,8 @@
                                                 <th class="align-middle">Contacto</th>
                                                 <th class="align-middle">Convenio</th>
                                                 <th class="align-middle">Tipo de usuario</th>
+                                                <th class="align-middle">Estado Paciente</th>
+                                                <th class="align-middle">Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -102,7 +103,7 @@
                                                             @if (isset($pa->Premium()->first()->id))
                                                                 Premiun
                                                             @else
-                                                                Basico
+                                                                Básico
                                                             @endif
                                                         </span>
                                                     </td>
@@ -120,6 +121,95 @@
         </div>
     </div>
     <!--Cierre: Container Completo-->
+@endsection
+
+@section('modales')
+    <!-- Modal para marcar estado del paciente -->
+    <div class="modal fade" id="modal_estado_paciente" tabindex="-1" role="dialog" aria-labelledby="modalEstadoPaciente" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" id="modalEstadoPaciente">
+                        <i class="feather icon-alert-triangle"></i> Marcar Estado del Paciente
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id_paciente_estado" name="id_paciente_estado">
+                    <input type="hidden" id="id_lugar_atencion_estado" name="id_lugar_atencion_estado">
+
+                    <div class="form-group">
+                        <label class="floating-label-activo" for="nombre_paciente_estado">Paciente</label>
+                        <input type="text" class="form-control form-control-sm" id="nombre_paciente_estado" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="floating-label-activo" for="tipo_estado_paciente">Tipo de Estado <span class="text-danger">*</span></label>
+                        <select class="form-control form-control-sm" id="tipo_estado_paciente" name="tipo_estado_paciente">
+                            <option value="">Seleccione un estado</option>
+                            <option value="1">Paciente Conflictivo</option>
+                            <option value="2">Paciente VIP</option>
+                            <option value="3">Paciente con Restricciones</option>
+                            <option value="4">Paciente con Deuda</option>
+                            <option value="5">Paciente Moroso</option>
+                            <option value="6">Paciente Prioritario</option>
+                            <option value="7">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="floating-label-activo" for="id_profesional_estado floating-label-activo">Profesional que marca <span class="text-danger">*</span></label>
+                        <select class="form-control form-control-sm" id="id_profesional_estado" name="id_profesional_estado">
+                            <option value="">Seleccione un profesional</option>
+                            @if(isset($profesionales))
+                                @foreach($profesionales as $prof)
+                                    <option value="{{ $prof->id }}">{{ $prof->nombre }} {{ $prof->apellido_uno }} {{ $prof->apellido_dos }} - {{ $prof->especialidad }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="floating-label-activo" for="observaciones_estado floating-label-activo">Observaciones <span class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-sm" id="observaciones_estado" name="observaciones_estado" rows="4" placeholder="Ingrese las observaciones sobre el estado del paciente..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                        <i class="feather icon-x"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="guardar_estado_paciente();">
+                        <i class="feather icon-save"></i> Guardar Estado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cierre Modal para marcar estado del paciente -->
+    <!-- Modal para ver detalle del paciente -->
+    <div class="modal fade" id="modal_detalle_paciente" tabindex="-1" role="dialog" aria-labelledby="modalDetallePaciente" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" id="modalDetallePaciente">
+                        <i class="feather icon-eye"></i> Detalle del Paciente
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Aquí se cargará el detalle del paciente mediante AJAX -->
+                    <div id="detalle_paciente_contenido">
+                        Cargando...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cierre Modal para ver detalle del paciente -->
 @endsection
 
 @section('page-script')
@@ -149,11 +239,15 @@
                 },
             });  --}}
 
+            // datatable
+            $('#tabla_pacientes_asistente').DataTable();
+
         });
 
         function buscar_paciente()
         {
-            $('#tabla_pacientes_asistente tbody').html('');
+            var table = $('#tabla_pacientes_asistente').DataTable();
+            table.clear().draw();
             var rut = $('#busqueda_rut').val();
             var nombre = $('#busqueda_nombre').val();
             var apellido = $('#busqueda_apellido').val();
@@ -162,22 +256,28 @@
                     title: "Busqueda de Paciente.",
                     text:"Debe Ingresar al menos un datos de busqueda.",
                     icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
                 });
                 $('#busqueda_rut').focus();
                 return false;
             }
 
-            let url = "{{ route('asistente_adm.buscar_paciente_rut') }}";
+            // Mostrar mensaje de cargando
+            swal({
+                title: 'Buscando...',
+                text: 'Por favor espere mientras se realiza la búsqueda.',
+                icon: 'info',
+                buttons: false,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+            });
+
+            let url = "{{ route('laboratorio.buscar_paciente_rut') }}";
             let id_lugar_atencion = $('#id_lugar_atencion').val();
 
             $.ajax({
-
                 url: url,
                 type: "get",
                 data: {
-                    //_token: _token,
                     id_lugar_atencion: id_lugar_atencion,
                     rut: rut,
                     nombre: nombre,
@@ -186,57 +286,264 @@
             })
             .done(function(data) {
                 console.log(data);
-                if (data.estado == 1)
+                swal.close();
+                if (data.estado == 1 && Array.isArray(data.registros) && data.registros.length > 0)
                 {
+                    var rows = [];
                     $.each(data.registros, function(key, value){
-                        var html = '';
-                        html += '<tr>';
-                        html += '    <td class="align-middle">';
-                        html += '        '+value.nombres+'';
-                        html += '        '+value.apellido_uno+'';
-                        html += '        '+value.apellido_dos+'';
-                        html += '        <br>';
-                        html += '        '+value.rut+'';
-                        html += '    </td>';
-                        html += '    <td class="align-middle">';
-                        html += '        '+value.fecha_nac+'';
-                        html += '    </td>';
-                        html += '    <td class="align-middle">';
-                        html += '        '+value.direccion.direccion+'';
-                        html += '        #'+value.direccion.numero_dir+',';
-                        html += '        '+value.direccion.ciudad.nombre+'';
-                        html += '        <br>';
-                        html += '        '+value.email+'';
-                        html += '        <br>';
-                        html += '        '+value.telefono_uno+'';
-                        html += '        </td>';
-                        html += '    <td class="align-middle">';
-                        html += '        '+value.prevision.nombre+'';
-                        html += '    </td>';
-                        html += '    <td class="align-middle">';
-                        html += '        <span class="badge badge-primary">';
-                        if(value.premiun == 1)
-                            html += '                Premiun';
-                        else
-                            html += '                Basico';
-                        html += '        </span>';
-                        html += '    </td>';
-                        html += '</tr>';
-                        $('#tabla_pacientes_asistente tbody').append(html);
+                        var direccion = value.direccion ? value.direccion.direccion : '';
+                        var numero_dir = value.direccion ? value.direccion.numero_dir : '';
+                        var ciudad = (value.direccion && value.direccion.ciudad && value.direccion.ciudad.nombre) ? value.direccion.ciudad.nombre : '';
+                        var contacto = direccion + ' #' + numero_dir + ', ' + ciudad + '<br>' + value.email + '<br>' + value.telefono_uno;
+                        var tipo_usuario = '<span class="badge badge-primary">' + (value.premiun == 1 ? 'Premiun' : 'Basico') + '</span>';
+                        var estado_paciente = value.estado;
+                        var estado_html = '';
+                        if(estado_paciente == 1){
+                            estado_html = '<span class="badge badge-danger" data-toggle="tooltip">Conflictivo</span>';
+                        }else if(estado_paciente == 2){
+                            estado_html = '<span class="badge badge-success" data-toggle="tooltip">VIP</span>';
+                        }else if(estado_paciente == 3){
+                            estado_html = '<span class="badge badge-warning" data-toggle="tooltip">Con Restricciones</span>';
+                        }else if(estado_paciente == 4){
+                            estado_html = '<span class="badge badge-dark" data-toggle="tooltip">Con Deuda</span>';
+                        }else if(estado_paciente == 5){
+                            estado_html = '<span class="badge badge-secondary" data-toggle="tooltip">Moroso</span>';
+                        }else if(estado_paciente == 6){
+                            estado_html = '<span class="badge badge-info" data-toggle="tooltip">Prioritario</span>';
+                        }else if(estado_paciente == 7){
+                            estado_html = '<span class="badge badge-primary" data-toggle="tooltip">Otro</span>';
+                        }else{
+                            estado_html = '<span class="badge badge-purple">Normal</span>';
+                        }
+                        var acciones = '<button class="btn btn-warning btn-icon mr-1" onclick="abrir_modal_estado('+value.id+', \''+value.nombres+' '+value.apellido_uno+' '+value.apellido_dos+'\')" data-toggle="tooltip" data-placement="top" title="Marcar estado del paciente"><i class="feather icon-alert-triangle"></i></button>';
+                        acciones += '<button class="btn btn-info btn-icon" data-toggle="tooltip" data-placement="top" title="Ver detalle del paciente" onclick="ver_detalle_paciente('+value.id+')"><i class="feather icon-eye"></i></button>';
+                        rows.push([
+                            value.nombres + ' ' + value.apellido_uno + ' ' + value.apellido_dos + '<br>' + value.rut,
+                            value.fecha_nac,
+                            contacto,
+                            value.prevision && value.prevision.nombre ? value.prevision.nombre : '',
+                            tipo_usuario,
+                            estado_html,
+                            acciones
+                        ]);
                     });
-
-
+                    table.rows.add(rows).draw();
                 }
                 else
                 {
-                    $('#tabla_pacientes_asistente tbody').html('<tr><td colspan="5">Paciente no encotnrado</td></tr>');
+                    table.clear().draw();
+                    swal({
+                        title: "Sin resultados",
+                        text: "Paciente no encontrado",
+                        icon: "warning",
+                        timer: 2000,
+                        buttons: false
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                swal.close();
+                swal({
+                    title: "Error",
+                    text: "Ocurrió un error al buscar pacientes.",
+                    icon: "error",
+                    timer: 2000,
+                    buttons: false
+                });
+            });
+        }
+
+        function ver_detalle_paciente(id_paciente){
+            let url = "{{ route('asistente_adm.detalle_paciente') }}";
+            let id_lugar_atencion = $('#id_lugar_atencion').val();
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion,
+                    id_paciente: id_paciente,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    // Construir HTML con los datos del paciente
+                    let html = '';
+                    let paciente = data.paciente;
+                    let info_estado = data.info_estado;
+
+                    html += '<div class="row">';
+                    html += '    <div class="col-md-6">';
+                    html += '        <div class="card mb-3">';
+                    html += '            <div class="card-header bg-info text-white">';
+                    html += '                <h6 class="mb-0 text-white"><i class="feather icon-user"></i> Información Personal</h6>';
+                    html += '            </div>';
+                    html += '            <div class="card-body">';
+                    html += '                <p><strong>Nombre:</strong> ' + paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos + '</p>';
+                    html += '                <p><strong>RUT:</strong> ' + paciente.rut + '</p>';
+                    html += '                <p><strong>Fecha de Nacimiento:</strong> ' + paciente.fecha_nac + '</p>';
+                    html += '                <p><strong>Sexo:</strong> ' + (paciente.sexo == 'M' ? 'Masculino' : 'Femenino') + '</p>';
+                    html += '                <p><strong>Email:</strong> ' + (paciente.email || 'No registrado') + '</p>';
+                    html += '                <p><strong>Teléfono:</strong> ' + (paciente.telefono_uno || 'No registrado') + '</p>';
+                    html += '            </div>';
+                    html += '        </div>';
+                    html += '    </div>';
+
+                    html += '    <div class="col-md-6">';
+
+                    // Información del Estado del Paciente
+                    if (info_estado) {
+                        let badge_class = '';
+                        switch(data.estado_paciente.estado) {
+                            case 1: badge_class = 'danger'; break;
+                            case 2: badge_class = 'success'; break;
+                            case 3: badge_class = 'warning'; break;
+                            case 4: badge_class = 'dark'; break;
+                            case 5: badge_class = 'secondary'; break;
+                            case 6: badge_class = 'info'; break;
+                            case 7: badge_class = 'primary'; break;
+                            default: badge_class = 'light';
+                        }
+
+                        html += '        <div class="card mb-3">';
+                        html += '            <div class="card-header bg-warning text-white">';
+                        html += '                <h6 class="mb-0"><i class="feather icon-alert-triangle"></i> Estado del Paciente</h6>';
+                        html += '            </div>';
+                        html += '            <div class="card-body">';
+                        html += '                <p><strong>Estado:</strong> <span class="badge badge-' + badge_class + '">' + info_estado.tipo_estado + '</span></p>';
+                        html += '                <p><strong>Fecha Registro:</strong> ' + new Date(info_estado.fecha_registro).toLocaleDateString('es-CL') + '</p>';
+                        html += '                <p><strong>Lugar Atención:</strong> ' + (info_estado.lugar_atencion || 'No especificado') + '</p>';
+                        html += '                <p><strong>Responsable:</strong> ' + (info_estado.responsable || 'No especificado') + '</p>';
+                        html += '                <p><strong>Observaciones:</strong></p>';
+                        html += '                <p class="text-muted">' + (info_estado.observaciones || 'Sin observaciones') + '</p>';
+                        html += '            </div>';
+                        html += '        </div>';
+                    } else {
+                        html += '        <div class="card mb-3">';
+                        html += '            <div class="card-header bg-light">';
+                        html += '                <h6 class="mb-0"><i class="feather icon-info"></i> Estado del Paciente</h6>';
+                        html += '            </div>';
+                        html += '            <div class="card-body">';
+                        html += '                <p class="text-muted">Este paciente no tiene estados registrados.</p>';
+                        html += '            </div>';
+                        html += '        </div>';
+                    }
+
+                    html += '    </div>';
+                    html += '</div>';
+
+                    $('#detalle_paciente_contenido').html(html);
+                }
+                else
+                {
+                    $('#detalle_paciente_contenido').html('<div class="alert alert-danger" role="alert">No se pudo cargar el detalle del paciente.</div>');
                 }
 
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                {{--  console.log(jqXHR, ajaxOptions, thrownError)  --}}
+                console.log(jqXHR, ajaxOptions, thrownError);
+                $('#detalle_paciente_contenido').html('<div class="alert alert-danger" role="alert">Ocurrió un error al cargar el detalle del paciente.</div>');
             });
+            // abrir modal con detalle del paciente
+            $('#modal_detalle_paciente').modal('show');
+        }
 
+        function abrir_modal_estado(id_paciente, nombre_paciente){
+            $('#id_paciente_estado').val(id_paciente);
+            $('#id_lugar_atencion_estado').val($('#id_lugar_atencion').val());
+            $('#nombre_paciente_estado').val(nombre_paciente);
+            $('#tipo_estado_paciente').val('');
+            $('#id_profesional_estado').val('');
+            $('#observaciones_estado').val('');
+            $('#modal_estado_paciente').modal('show');
+        }
+
+        function guardar_estado_paciente(){
+            var id_paciente = $('#id_paciente_estado').val();
+            var id_lugar_atencion = $('#id_lugar_atencion_estado').val();
+            var tipo_estado = $('#tipo_estado_paciente').val();
+            var id_profesional = $('#id_profesional_estado').val();
+            var observaciones = $('#observaciones_estado').val();
+
+            // Validaciones
+            if(tipo_estado == ''){
+                swal({
+                    title: "Error",
+                    text: "Debe seleccionar un tipo de estado",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+                return false;
+            }
+
+            if(id_profesional == ''){
+                swal({
+                    title: "Error",
+                    text: "Debe seleccionar el profesional que marca el estado",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+                return false;
+            }
+
+            if(observaciones.trim() == ''){
+                swal({
+                    title: "Error",
+                    text: "Debe ingresar observaciones sobre el estado del paciente",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+                return false;
+            }
+
+            let url = "{{ route('asistente_adm.guardar_estado_paciente') }}";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id_paciente: id_paciente,
+                    id_lugar_atencion: id_lugar_atencion,
+                    tipo_estado: tipo_estado,
+                    id_profesional: id_profesional,
+                    observaciones: observaciones,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    $('#modal_estado_paciente').modal('hide');
+                    swal({
+                        title: "Estado guardado",
+                        text: "El estado del paciente se ha guardado correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                    // Recargar la búsqueda
+                    buscar_paciente();
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: data.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+                swal({
+                    title: "Error",
+                    text: "Ocurrió un error al guardar el estado del paciente",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+            });
         }
     </script>
 @endsection

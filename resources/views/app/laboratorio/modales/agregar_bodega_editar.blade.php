@@ -78,6 +78,26 @@
                         </div>
                     </div>
                     <div class="form-row">
+                        <!-- BLOQUE RESPONSABLE MOVIDO ARRIBA -->
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Buscar Rut</label>
+                                <input type="text" class="form-control form-control-sm" name="prof_resp_editar" id="prof_resp_editar" onkeypress="buscarResponsable(event,'editar')">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Responsable</label>
+                                <select class="form-control form-control-sm" id="responsable_editar" name="responsable_editar"></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="numero_turno_editar">N° / T</label>
+                                <input type="number" class="form-control form-control-sm" id="numero_turno_editar" >
+                            </div>
+                        </div>
+                        <!-- CAMPOS DE BODEGA -->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Nombre</label>
@@ -378,6 +398,8 @@
 
         $('#tpo_prod_bodega_editar').select2();
         $('#cont_ca_bodega_editar').select2();
+
+        $('#responsable_editar').select2();
     });
 
     $('#select_responsable').change(function() {
@@ -430,6 +452,11 @@
                 $('#tpo_prod_bodega_editar').val(tipos_productos_array).trigger('change');
                 $('#cont_ca_bodega_editar').val(tipos_productos_autorizados_array).trigger('change');
                 $('#prof_resp_editar').val(bodega.rut_responsable);
+                $('#responsable_editar').empty();
+                responsables.forEach(function(responsable) {
+                    $('#responsable_editar').append('<option value="' + responsable.id + '">' + responsable.nombre + ' ' + responsable.apellido_uno + '</option>');
+                });
+                $('#responsable_editar').val(bodega.id_responsable).trigger('change');
             },
             error: function(data) {
                 console.log(data);

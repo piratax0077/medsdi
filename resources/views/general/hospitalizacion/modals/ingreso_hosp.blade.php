@@ -492,8 +492,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#ingreso_m_modal').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="button" class="btn btn-info" onclick="guardar_hospitalizacion()"><i class="feather icon-save"></i> Guardar y enviar</button>
-                <button type="button" class="btn btn-primary" onclick="generar_pdf_hospitalizacion()"><i class="feather icon-file"></i> Ver formulario (PDF)</button>
+                <button type="button" class="btn btn-info" onclick="guardar_y_generar_pdf_hospitalizacion()"><i class="feather icon-save"></i> Guardar y generar PDF</button>
             </div>
         </div>
     </div>
@@ -1417,7 +1416,10 @@ $(document).ready(function() {
 
     }
 
-    function generar_pdf_hospitalizacion() {
+    // ✅ FUNCIÓN ÚNICA: GUARDAR Y GENERAR PDF EN UN MISMO PROCESO
+    function guardar_y_generar_pdf_hospitalizacion() {
+        console.log('Iniciando guardado y generación de PDF...');
+
         let id_paciente = $('#id_paciente').val();
         let id_ficha_atencion = $('#id_fc').val();
         let hospen = $('#hospen').val();
@@ -1431,7 +1433,6 @@ $(document).ready(function() {
         let ingreso_sol_pab_modal_otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes').val();
         let ingreso_sol_pab_modal_otros_antecedentes_text = $('#ingreso_sol_pab_modal_otros_antecedentes option:selected').text();
 
-        // Nuevos campos
         let hosp_origen = $('#hosp_en').val();
         let diagn_ingreso = $('#dg_ingreso').val();
         let serv_hosp = $('#serv_hosp').val();
@@ -1451,14 +1452,15 @@ $(document).ready(function() {
         // Validación
         let valido = 1;
         let mensaje = '';
-        if (motivo_hosp == 0) {
-            valido = 0;
-            mensaje += '<li>Motivo de hospitalización</li>';
-        }
 
         if (nom_inst == '') {
             valido = 0;
             mensaje += '<li>Nombre de la institución</li>';
+        }
+
+        if (motivo_hosp == '') {
+            valido = 0;
+            mensaje += '<li>Motivo de hospitalización</li>';
         }
 
         if(ind_grales_hosp == ''){
@@ -1469,17 +1471,10 @@ $(document).ready(function() {
         if(control_enfermeria_hosp == 0){
             valido = 0;
             mensaje += '<li>Control de enfermería</li>';
-
         }
-
-        // if (ingreso_sol_pab_modal_otros_antecedentes == '') {
-        //     valido = 0;
-        //     mensaje += '<li>Observaciones antecedentes médicos</li>';
-        // }
 
         if (valido == 0) {
-            $('#ingreso_m_modal').modal('hide');
-            return swal({
+            swal({
                 title: "Campos requeridos",
                 content: {
                     element: "div",
@@ -1490,191 +1485,107 @@ $(document).ready(function() {
                 icon: "error",
                 buttons: "Aceptar",
                 dangerMode: true,
-            }).then(() => {
-                $('#ingreso_m_modal').modal('show');
             });
-        }
-
-            let data = {
-                id_ficha_atencion: id_ficha_atencion,
-                id_paciente: id_paciente,
-                hospen: hospen,
-                hospen_text: hospen_text,
-                nom_inst: nom_inst,
-                hosp_enserv: hosp_enserv,
-                hosp_enserv_text: hos_enserv_text,
-                motivo_hosp: motivo_hosp,
-                motivo_hosp_text: motivo_hosp_text,
-                obs_hospitalizar: obs_hospitalizar,
-                ingreso_sol_pab_modal_otros_antecedentes: ingreso_sol_pab_modal_otros_antecedentes,
-                ingreso_sol_pab_modal_otros_antecedentes_text: ingreso_sol_pab_modal_otros_antecedentes_text,
-                hosp_origen: hosp_origen,
-                diagn_ingreso: diagn_ingreso,
-                serv_hosp: serv_hosp,
-                preparar_cirugia: prepararCirugia,
-                otras_ind: otras_ind,
-                motivo_hosp_indicaciones: motivo_hosp_indicaciones,
-                ind_grales_hosp: ind_grales_hosp,
-                nombre_medicamento: nombre_medicamento_indicaciones,
-                dosis_medicamento: dosis_medicamento_indicaciones,
-                frecuencia_medicamento: frecuencia_medicamento_indicaciones,
-                control_enfermeria: control_enfermeria_hosp,
-                control_enfermeria_text: control_enfermeria_hosp_text,
-                otras_indicaciones: otras_ind,
-                medicamentos: JSON.stringify(
-                    (typeof medicamentos_hospitalizacion !== 'undefined' && Array.isArray(medicamentos_hospitalizacion))
-                        ? medicamentos_hospitalizacion
-                        : []
-                ),
-                _token: CSRF_TOKEN
-            };
-
-            let url = '{{ route("profesional.paciente.orden_hospitalizacion") }}';
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: data,
-                success: function (resp) {
-                    console.log(resp);
-                    if (resp.success) {
-                        let width = 800;
-                        let height = 600;
-                        let left = (screen.width - width) / 2;
-                        let top = (screen.height - height) / 2;
-                        window.open(resp.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
-                        swal({
-                            title: "PDF generado",
-                            text: "El PDF ha sido generado correctamente.",
-                            icon: "success",
-                            buttons: "Aceptar",
-                        });
-                    } else {
-                        swal({
-                            title: "Error",
-                            text: resp.mensaje,
-                            icon: "error",
-                            buttons: "Aceptar",
-                        });
-                    }
-                },
-                error: function (error) {
-                    console.log(error.responseText);
-                }
-            });
-    }
-
-    function guardar_hospitalizacion() {
-        let id_paciente = $('#id_paciente').val();
-        let id_ficha_atencion = $('#id_fc').val();
-        let hospen = $('#hospen').val();
-        let hospen_text = $('#hospen option:selected').text();
-        let nom_inst = $('#nom_inst').val();
-        let hosp_enserv = $('#hosp_enserv').val();
-        let hos_enserv_text = $('#hosp_enserv option:selected').text();
-        let motivo_hosp = $('#motivo_hosp').val();
-        let motivo_hosp_text = $('#motivo_hosp option:selected').text();
-        let obs_hospitalizar = $('#obs_hospitalizar').val();
-        let ingreso_sol_pab_modal_otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes').val();
-        let ingreso_sol_pab_modal_otros_antecedentes_text = $('#ingreso_sol_pab_modal_otros_antecedentes option:selected').text();
-
-        // Nuevos campos
-        let hosp_origen = $('#hosp_en').val();
-        let diagn_ingreso = $('#dg_ingreso').val();
-        let serv_hosp = $('#serv_hosp').val();
-        let prepararCirugia = $('#esp-3').is(':checked') ? 1 : 0;
-        let otras_ind = $('#otras_ind').val();
-
-        let motivo_hosp_indicaciones = $('#motivo_hosp_indicaciones').val();
-        let ind_grales_hosp = $('#ind_grales_hosp').val();
-        let nombre_medicamento_indicaciones = $('#nombre_medicamento_indicaciones').val();
-        let dosis_medicamento_indicaciones = $('#dosis_medicamento_indicaciones').val();
-        let frecuencia_medicamento_indicaciones = $('#frecuencia_medicamento_indicaciones').val();
-        let control_enfermeria_hosp = $('#control_enfermeria_hosp').val();
-        let control_enfermeria_hosp_text = $('#control_enfermeria_hosp option:selected').text();
-
-        let otras_ind_hosp = $('#otras_ind_hosp').val();
-
-
-        let valido = 1;
-        let mensaje = '';
-
-
-        if (nom_inst == '') {
-            valido = 0;
-            mensaje += "<li>Debe ingresar el nombre de la institución.</li>";
-        }
-
-        if (motivo_hosp == '') {
-            valido = 0;
-            mensaje += "<li>Debe seleccionar un motivo de hospitalización.</li>";
-        }
-
-
-         if (valido == 0) {
-            $('#ingreso_m_modal').modal('hide');
-            return swal({
-                title: "Campos requeridos",
-                content: {
-                    element: "div",
-                    attributes: {
-                        innerHTML: mensaje,
-                    },
-                },
-                icon: "error",
-                buttons: "Aceptar",
-                dangerMode: true,
-            }).then(() => {
-                $('#ingreso_m_modal').modal('show');
-            });
+            return;
         }
 
         let data = {
-                id_ficha_atencion: id_ficha_atencion,
-                id_paciente: id_paciente,
-                hospen: hospen,
-                hospen_text: hospen_text,
-                nom_inst: nom_inst,
-                hosp_enserv: hosp_enserv,
-                hosp_enserv_text: hos_enserv_text,
-                motivo_hosp: motivo_hosp,
-                motivo_hosp_text: motivo_hosp_text,
-                obs_hospitalizar: obs_hospitalizar,
-                ingreso_sol_pab_modal_otros_antecedentes: ingreso_sol_pab_modal_otros_antecedentes,
-                ingreso_sol_pab_modal_otros_antecedentes_text: ingreso_sol_pab_modal_otros_antecedentes_text,
-                hosp_origen: hosp_origen,
-                diagn_ingreso: diagn_ingreso,
-                serv_hosp: serv_hosp,
-                preparar_cirugia: prepararCirugia,
-                otras_ind: otras_ind,
-                motivo_hosp_indicaciones: motivo_hosp_indicaciones,
-                ind_grales_hosp: ind_grales_hosp,
-                nombre_medicamento: nombre_medicamento_indicaciones,
-                dosis_medicamento: dosis_medicamento_indicaciones,
-                frecuencia_medicamento: frecuencia_medicamento_indicaciones,
-                control_enfermeria: control_enfermeria_hosp,
-                otras_indicaciones: otras_ind,
-                medicamentos: JSON.stringify(
-                    (typeof medicamentos_hospitalizacion !== 'undefined' && Array.isArray(medicamentos_hospitalizacion))
-                        ? medicamentos_hospitalizacion
-                        : []
-                ),
-                _token: CSRF_TOKEN
+            id_ficha_atencion: id_ficha_atencion,
+            id_paciente: id_paciente,
+            hospen: hospen,
+            hospen_text: hospen_text,
+            nom_inst: nom_inst,
+            hosp_enserv: hosp_enserv,
+            hosp_enserv_text: hos_enserv_text,
+            motivo_hosp: motivo_hosp,
+            motivo_hosp_text: motivo_hosp_text,
+            obs_hospitalizar: obs_hospitalizar,
+            ingreso_sol_pab_modal_otros_antecedentes: ingreso_sol_pab_modal_otros_antecedentes,
+            ingreso_sol_pab_modal_otros_antecedentes_text: ingreso_sol_pab_modal_otros_antecedentes_text,
+            hosp_origen: hosp_origen,
+            diagn_ingreso: diagn_ingreso,
+            serv_hosp: serv_hosp,
+            preparar_cirugia: prepararCirugia,
+            otras_ind: otras_ind,
+            motivo_hosp_indicaciones: motivo_hosp_indicaciones,
+            ind_grales_hosp: ind_grales_hosp,
+            nombre_medicamento: nombre_medicamento_indicaciones,
+            dosis_medicamento: dosis_medicamento_indicaciones,
+            frecuencia_medicamento: frecuencia_medicamento_indicaciones,
+            control_enfermeria: control_enfermeria_hosp,
+            otras_indicaciones: otras_ind,
+            medicamentos: JSON.stringify(
+                (typeof medicamentos_hospitalizacion !== 'undefined' && Array.isArray(medicamentos_hospitalizacion))
+                    ? medicamentos_hospitalizacion
+                    : []
+            ),
+            _token: CSRF_TOKEN
         };
 
-        console.log(data);
-
+        // PASO 1: Guardar en BD
+        console.log('PASO 1: Guardando en BD...');
         $.ajax({
             url: '{{ route("profesional.paciente.guardar_hospitalizacion") }}',
             type: 'POST',
             data: data,
             success: function (resp) {
-                console.log(resp);
+                console.log('Respuesta del guardado:', resp);
                 if (resp.success) {
-                    swal({
-                        title: "Guardado",
-                        text: "La solicitud de hospitalización se guardó correctamente.",
-                        icon: "success",
-                        buttons: "Aceptar"
+                    console.log('✅ Guardado exitoso, procediendo a generar PDF...');
+
+                    // PASO 2: Generar PDF
+                    let url_pdf = '{{ route("profesional.paciente.orden_hospitalizacion") }}';
+                    $.ajax({
+                        type: 'POST',
+                        url: url_pdf,
+                        data: data,
+                        success: function (resp_pdf) {
+                            console.log('Respuesta del PDF:', resp_pdf);
+                            if (resp_pdf.success) {
+                                console.log('✅ PDF generado correctamente');
+
+                                // PASO 3: Mostrar en Fancybox
+                                let ruta_pdf = resp_pdf.ruta;
+                                Fancybox.show([
+                                    {
+                                        src: ruta_pdf,
+                                        type: "iframe",
+                                        preload: false,
+                                    }
+                                ]);
+
+                                // PASO 4: Agregar a adjuntos
+                                let nombre_archivo = 'Solicitud de Hospitalización - ' + new Date().toLocaleDateString('es-ES');
+                                agregarAdjuntoAlDiv(nombre_archivo, ruta_pdf);
+
+                                // PASO 5: Cerrar modal
+                                $('#ingreso_m_modal').modal('hide');
+
+                                // PASO 6: Mostrar éxito
+                                swal({
+                                    title: "Completado",
+                                    text: "La solicitud ha sido guardada y el PDF ha sido generado correctamente.",
+                                    icon: "success",
+                                    buttons: "Aceptar"
+                                });
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: resp_pdf.mensaje || "Error al generar el PDF.",
+                                    icon: "error",
+                                    buttons: "Aceptar"
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            console.log('Error en PDF:', error.responseText);
+                            swal({
+                                title: "Error",
+                                text: "Error al generar el PDF.",
+                                icon: "error",
+                                buttons: "Aceptar"
+                            });
+                        }
                     });
                 } else {
                     swal({
@@ -1686,7 +1597,7 @@ $(document).ready(function() {
                 }
             },
             error: function (xhr) {
-                console.log(xhr.responseText);
+                console.log('Error en guardado:', xhr.responseText);
                 swal({
                     title: "Error",
                     text: "Ocurrió un error inesperado.",
@@ -1696,6 +1607,8 @@ $(document).ready(function() {
             }
         });
     }
+
+
 
     function mostrar_nuevo_medicamento(counter){
         let url = "{{ ROUTE('profesional.mostrar_nuevo_medicamento_hosp') }}";

@@ -10,6 +10,7 @@ class HoraMedicaController extends Controller
 {
     function verHorasMedicas(Request $request)
     {
+
         $datos = array();
         $filtro= array();
 
@@ -89,7 +90,6 @@ class HoraMedicaController extends Controller
 
     function verRegistrosDia(Request $request)
     {
-
         $datos = array();
         $filtro= array();
 
@@ -101,10 +101,18 @@ class HoraMedicaController extends Controller
         {
             $filtro[] = array('id_ficha_atencion',$request->id_ficha_atencion);
         }
-        if(!empty($request->id_profesional))
+
+        // Para laboratorio: filtrar por id_box si viene en el request
+        if(!empty($request->id_box))
+        {
+            $filtro[] = array('id_box',$request->id_box);
+        }
+        // Para agendas normales: filtrar por id_profesional
+        else if(!empty($request->id_profesional))
         {
             $filtro[] = array('id_profesional',$request->id_profesional);
         }
+
         if(!empty($request->id_lugar_atencion))
         {
             $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);

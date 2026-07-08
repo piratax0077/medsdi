@@ -292,6 +292,43 @@
                 });
         }
 
+        function cargar_flujo_caja_rendicion_diario() {
+            var fecha = $('#rinde_fecha').val();
+            var asistente = $('#rinde_asistente').val();
+            var convenio = $('#rinde_convenio').val();
+            var estado_consulta = $('#rinde_estado_consulta').val();
+
+            let url = "{{ route('flujo_caja.data_flujo_caja_rendidos_programa') }}";
+            let data = {
+                        fecha : fecha,
+                        asistente : asistente,
+                        convenio : convenio,
+                        estado_consulta : estado_consulta,
+                    }
+
+            return console.log(data);
+
+            $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data:data,
+                })
+                .done(function(data) {
+
+                    if (data.estado == 1) {
+
+                    }
+                    else
+                    {
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
 
         function seleccionar_bonos_rendicion(){
             var estado  = $('#enviar_todos').is(':checked')

@@ -100,13 +100,11 @@
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <!--Otros pares craneanos-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Otros pares craneanos</h6>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Otros pares craneanos
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-12">
                                                                         <label class="floating-label-activo-sm">Describa</label>
@@ -116,13 +114,11 @@
                                                             </div>
                                                         </div>
                                                         <!--Equilibrio estático-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Equilibrio estático</h6>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Equilibrio estático
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-6">
                                                                         <label class="floating-label-activo-sm">Prueba de Romberg</label>
@@ -136,13 +132,11 @@
                                                             </div>
                                                         </div>
                                                         <!--Equilibrio cinético-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Equilibrio Cinético</h6>
-                                                                    </div>
-                                                                </div>
+                                                          <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Equilibrio cinético
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Marcha con ojos abiertos</label>
@@ -164,13 +158,11 @@
                                                             </div>
                                                         </div>
                                                         <!--Equilibrio segmentario-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Equilibrio Segmentário</h6>
-                                                                    </div>
-                                                                </div>
+                                                          <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Equilibrio Segmentário
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row">
                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                         <label class="floating-label-activo-sm">Prueba de la Indicación</label>
@@ -180,13 +172,11 @@
                                                             </div>
                                                         </div>
                                                         <!--Equilibrio cerebelo-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Cerebelo</h6>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Cerebelo
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-4">
                                                                         <label class="floating-label-activo-sm">Temblor intencional</label>
@@ -224,13 +214,11 @@
                                                             </div>
                                                         </div>
                                                         <!--Nistagmo espontáneo-->
-                                                        <div class="card-informacion">
-                                                            <div class="card-body">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                                                        <h6 class="t-aten">Nistagmo espontáneo</h6>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="card-lineal">
+                                                            <div class="card-header-lineal">
+                                                                Nistagmo espontáneo
+                                                            </div>
+                                                            <div class="card-body-lineal">
                                                                 <div class="form-row mb-2">
                                                                     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-3 mb-3">
                                                                         <table class="rounded" style="border: 1px solid #ced4da; width:100%; padding-bottom: 10px;">
@@ -1457,7 +1445,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-row d-flex justify-content-end">
-                                                    <button class="btn btn-primary btn-sm" onclick="generar_pdf()"><i class="fa fa-file-pdf"></i> Generar PDF</button>
+                                                    <button class="btn btn-danger-light-c btn-sm" onclick="generar_pdf()"><i class="fa fa-file-pdf"></i> Generar PDF</button>
 
                                                 </div>
                                             </div>
@@ -1499,7 +1487,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row mb-3">
                         <div class="col-md-12 text-center">
-                            <input type="button" class="btn btn-secondary mt-1" onclick="guardar_examen_octavopar()" value="Guardar Examen">
+                            <input type="button" class="btn btn-info mt-1" onclick="guardar_examen_octavopar()" value="Guardar Examen">
                         </div>
                     </div>
                 </div>

@@ -19,8 +19,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-10 mx-auto py-2 px-5 text-center">
-					<h4 class="text-c-blue">SDI, te da la bienvenida</h4>
-					<h6>Ahora podrás trabajar con profesionales e instituciones sin importar dónde te encuentres <br>Para ingresar a tu escritorio deberás completar la configuración básica
+					<div class="col-sm-12 col-md-12 col-lg-10 mx-auto py-2 px-5 mb-3 text-center">
+						<h3 class="text-dark mb-3">Bienvenido/a a SDI</h3>
+						<h6>Estamos preparando tu escritorio de asistente, completa los 2 pasos de configuración para acceder a tu escritorio profesional.</h6>
+					</div>
 				</div>
 				<div class="col-sm-12 col-md-12 col-lg-12 mx-auto py-2 px-4">
 					<div class="card-deck">
@@ -29,8 +31,9 @@
 							<div class="card">
 								<div class="card-body text-center">
 									<img src="{{ asset('images/iconos/pass.png') }}" class="img-fluid wid-50 mb-2" alt="...">
-									<h5>Cambiar contraseña</h5>
+									<h4 class="f-20 mt-0 text-dark">Cambiar contraseña</h4>
 									<p class="card-text">Te recomendamos modificar la contraseña por motivos de seguridad</p>
+									<button type="button" class="btn btn-primary btn-sm">Cambiar contraseña <i class="feather icon-arrow-right"></i></button>
 								</div>
 							</div>
 							</a>
@@ -40,8 +43,9 @@
 							<div class="card">
 								<div class="card-body text-center">
 									<img src="{{ asset('images/iconos/mis_asistentes.svg') }}" class="img-fluid wid-50 mb-2" alt="...">
-									<h5>Modalidad de trabajo</h5>
+									<h4 class="f-20 mt-0 text-dark">Modalidad de trabajo</h4>
 									<p class="card-text">Configura la modalidad en que deseas trabajar</p>
+									<button type="button" class="btn btn-primary btn-sm">Configurar <i class="feather icon-arrow-right"></i></button>
 								</div>
 							</div>
 							</a>
@@ -49,7 +53,7 @@
 					</div>
 				</div>
 				<div class="col-sm-12 col-md-12 col-lg-12 text-center">
-					<button type="button" class="btn btn-primary">Acceder al escritorio</button>
+					<button type="button" class="btn btn-primary" disabled>Acceder al escritorio <i class="feather icon-monitor"></i></button>
 				</div>
 			</div>
 		</div>

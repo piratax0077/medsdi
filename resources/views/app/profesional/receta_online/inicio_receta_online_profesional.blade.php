@@ -95,7 +95,7 @@
                         <a href="{{ ROUTE('profesional.mis_licencias') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-3"
-                                    src="{{ asset('images/iconos/licencia.svg') }}" alt="Mis Licencias">
+                                    src="{{ asset('images/iconos/licencia-ro.svg') }}" alt="Mis Licencias">
                                 <h5>
                                     Mis Licencias
                                 </h5>

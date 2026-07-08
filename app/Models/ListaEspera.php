@@ -8,30 +8,43 @@ use Illuminate\Database\Eloquent\Model;
 class ListaEspera extends Model
 {
     use HasFactory;
+
     protected $table = 'lista_espera';
 
-    public function Institucion()
+    // Asegurar que se incluyan siempre estos campos en las consultas
+    protected $fillable = [
+        'id_institucion',
+        'id_lugar_atencion',
+        'id_asistente',
+        'id_profesional',
+        'id_paciente',
+        'observacion',
+        'estado'
+    ];
+
+    public function institucion()
     {
-        return $this->hasOne(Instituciones::class, 'id', 'id_institucion');
+        return $this->belongsTo(Instituciones::class, 'id_institucion', 'id');
     }
 
-    public function LugarAtencion()
+    public function lugarAtencion()
     {
-        return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
+        return $this->belongsTo(LugarAtencion::class, 'id_lugar_atencion', 'id');
     }
 
-    public function Asistente()
+    public function asistente()
     {
-        return $this->hasOne(Asistente::class, 'id', 'id_asistente');
+        return $this->belongsTo(Asistente::class, 'id_asistente', 'id');
     }
 
-    public function Profesional()
+    public function profesional()
     {
-        return $this->hasOne(Profesional::class, 'id', 'id_profesional');
+        return $this->belongsTo(Profesional::class, 'id_profesional', 'id');
     }
 
-    public function Paciente()
+    public function paciente()
     {
-        return $this->hasOne(Paciente::class, 'id', 'id_paciente');
+        return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
     }
+
 }

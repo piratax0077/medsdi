@@ -240,6 +240,7 @@
                         $('#agregar_bodega').modal('hide');
                         $('#contenedor_bodegas').empty();
                         $('#contenedor_bodegas').append(data.v);
+                        limpiar_formulario_bodega();
                     } else {
                         alert('Error al guardar el registro');
                     }
@@ -251,6 +252,18 @@
             });
         }
 
+    }
+
+    function limpiar_formulario_bodega(){
+        $('#nombre_bodega_agregar').val('');
+        $('#direccion_bodega_agregar').val('');
+        $('#descripcion_bodega_agregar').val('');
+        $('#email_bodega_agregar').val('');
+        $('#telefono_bodega_agregar').val('');
+        $('#tpo_prod_bodega_agregar').val([]);
+        $('#cont_ca_bodega_agregar').val([]);
+        // focus
+        $('#nombre_bodega_agregar').focus();
     }
 
     function buscarResponsable(event,opcion) {

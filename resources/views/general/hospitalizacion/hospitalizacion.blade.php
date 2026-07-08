@@ -25,9 +25,7 @@
                     <!--Ingreso de paciente-->
                     <div class="tab-pane fade show active" id="ingreso" role="tabpanel"
                         aria-labelledby="ingreso-tab">
-
                         @include('general.hospitalizacion.seccion_ficha_hospitalizacion.ingreso_hosp')
-
                     </div>
 
                     <!--Protocolo de cirugia-->

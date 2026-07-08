@@ -1,8 +1,7 @@
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="card-a">
+<div class="card-a">
         <div class="card-header-a" id="enf_urgencia">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#enf_urgencia_c" aria-expanded="false" aria-controls="enf_urgencia_c">
-                Atención Enfermería 
+                Atención Enfermería
             </button>
         </div>
         <div id="enf_urgencia_c" class="collapse" aria-labelledby="enf_urgencia" data-parent="#enf_urgencia">
@@ -1378,7 +1377,7 @@
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                                                  
+
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm" for="bh_dren_1">Exudado-Calidad</label>
@@ -1945,7 +1944,8 @@
             </div>
         </div>
     </div>
-</div>
+
+@if(isset($enfermera) && $enfermera)
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a">
         <div class="card-header-a" id="hosp_enf">
@@ -1968,6 +1968,7 @@
         </div>
     </div>
 </div>
+@endif
 @include('urgencia.modal_enfermeria.barthel')
 @include('urgencia.modal_enfermeria.cudyr')
 @include('urgencia.modal_enfermeria.glasgow')

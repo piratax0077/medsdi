@@ -8,9 +8,8 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Información de profesionales del CM</h5>
                             </div>
-                            <ul class="breadcrumb">
+                            <ul class="breadcrumb mt-3">
                                  <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="#">Info. de profesionales del CM</a></li>
                             </ul>

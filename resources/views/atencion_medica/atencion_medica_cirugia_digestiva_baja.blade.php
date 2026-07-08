@@ -49,9 +49,9 @@
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>  --}}
-                                    {{--  <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                    </li>  --}}
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam_tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
@@ -109,6 +109,7 @@
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
     @include('general.hospitalizacion.modals.in_solic_pabellon')
+     @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
 
     @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')

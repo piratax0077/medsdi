@@ -3295,6 +3295,8 @@
     function abrir_modal_insumos(){
         $('#modal_insumos').modal('show');
     }
+
+   
     function enviar_email_presupuesto_insumos(){
         let destinatarios = $('#selectDestinatarios').val();
         let correoLibre = $('#correoLibre').val();
@@ -3356,7 +3358,40 @@
         $('#tabla_odontologico_tratamiento').DataTable({
             responsive: true,
         });
-
+ $('#trabajo_realizar_trabajo_mayor').each(function() {
+        $(this).autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getPrestacionesLaboratorio') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.length == 0) {
+                            $('.diagnostico_activo').hide();
+                            $('.diagnostico_inactivo').show();
+                        } else {
+                            $('.diagnostico_activo').show();
+                            $('.diagnostico_inactivo').hide();
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                console.log(ui.item);
+                $(this).val(ui.item.label);
+                $('#valor_prestacion_trabajo_mayor').val(ui.item.valor);
+                $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                return false;
+            }
+        });
+    });
     });
 
 
@@ -6131,13 +6166,13 @@
                     }
                 });
             });
-    }
+        }
 
     function abrirModalCorreo() {
         $('#modalEnviarPresupuesto').modal('show');
     }
 
-        function dame_insumos_tratamiento() {
+    function dame_insumos_tratamiento() {
             let id_ficha_atencion = $('#id_fc').val();
             let id_paciente = $('#id_paciente_fc').val();
 
@@ -9907,6 +9942,7 @@ function confirmarEliminarImagenRx(id){
         let data = {
             _token: CSRF_TOKEN,
             id_paciente: id_paciente,
+            id_ficha_atencion: $('#id_fc').val(),
             seccion: seccion
         }
 

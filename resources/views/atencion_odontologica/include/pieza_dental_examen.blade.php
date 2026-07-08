@@ -29,7 +29,7 @@
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Intensidad</label>
-                    <select name="intensidad" id="intensidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intensidad','div_intensidad','obs_intensidad',4);">
+                    <select name="intensidad{{ $counter }}" id="intensidad{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intensidad{{ $counter }}','div_intensidad{{ $counter }}','obs_intensidad{{ $counter }}',4);">
                         <option selected value="1">Leve</option>
                         <option value="2">Moderada</option>
                         <option value="3">Severa</option>
@@ -37,43 +37,43 @@
                         <option value="5">Otro (Describir)</option>
                     </select>
                 </div>
-                <div class="form-group" id="div_intensidad" style="display:none;">
+                <div class="form-group" id="div_intensidad{{ $counter }}" style="display:none;">
                     <label class="floating-label-activo-sm">Intensidad</label>
-                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_intensidad" id="obs_intensidad"></textarea>
+                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_intensidad{{ $counter }}" id="obs_intensidad{{ $counter }}"></textarea>
                 </div>
             </div>
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Modo dolor</label>
-                    <select name="modo_dolor"  id="modo_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('modo_dolor','div_modo_dolor','obs_modo_dolor',3);">
+                    <select name="modo_dolor{{ $counter }}"  id="modo_dolor{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('modo_dolor{{ $counter }}','div_modo_dolor{{ $counter }}','obs_modo_dolor{{ $counter }}',3);">
                         <option selected value="1">Pulsátil</option>
                         <option value="2">Permanente</option>
                         <option value="3">Otro (Describir)</option>
                     </select>
                 </div>
-                <div class="form-group" id="div_modo_dolor" style="display:none;">
+                <div class="form-group" id="div_modo_dolor{{ $counter }}" style="display:none;">
                     <label class="floating-label-activo-sm">Modo dolor</label>
-                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_modo_dolor" id="obs_modo_dolor"></textarea>
+                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_modo_dolor{{ $counter }}" id="obs_modo_dolor{{ $counter }}"></textarea>
                 </div>
             </div>
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Localización</label>
-                    <select name="loc_dolor" id="loc_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('loc_dolor','div_loc_dolor','obs_loc_dolor',3);">
+                    <select name="loc_dolor{{ $counter }}" id="loc_dolor{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('loc_dolor{{ $counter }}','div_loc_dolor{{ $counter }}','obs_loc_dolor{{ $counter }}',3);">
                         <option selected  value="1">Localizado</option>
                         <option value="2">Referido</option>
                         <option value="3">Otro (Describir)</option>
                     </select>
                 </div>
-                <div class="form-group" id="div_loc_dolor" style="display:none;">
+                <div class="form-group" id="div_loc_dolor{{ $counter }}" style="display:none;">
                     <label class="floating-label-activo-sm">Localización</label>
-                    <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor" id="obs_loc_dolor"></textarea>
+                    <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor{{ $counter }}" id="obs_loc_dolor{{ $counter }}"></textarea>
                 </div>
             </div>
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                    <select name="provocacion_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="provocacion_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('provocacion_dolor','div_provocacion_dolor','obs_provocacion_dolor',5);">
+                    <select name="provocacion_dolor{{ $counter }}" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="provocacion_dolor{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('provocacion_dolor{{ $counter }}','div_provocacion_dolor{{ $counter }}','obs_provocacion_dolor{{ $counter }}',5);">
                         <option selected  value="1">Frío</option>
                         <option value="2">Calor</option>
                         <option value="3">Actividad</option>
@@ -81,9 +81,9 @@
                         <option value="5">Otro (Describir)</option>
                     </select>
                 </div>
-                <div class="form-group" id="div_provocacion_dolor" style="display:none;">
+                <div class="form-group" id="div_provocacion_dolor{{ $counter }}" style="display:none;">
                     <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_provocacion_dolor" id="obs_provocacion_dolor"></textarea>
+                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_provocacion_dolor{{ $counter }}" id="obs_provocacion_dolor{{ $counter }}"></textarea>
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -190,10 +190,14 @@
         $('#contenedor_nueva_pieza_dental').empty();
     }
 
-    function guardar_pieza_examen_pieza(counter){
+     function guardar_pieza_examen_pieza(counter){
         let numero_pieza = $('#n_pieza_ex_pp_od_gral'+counter).val();
         let zona_dolor = $('#ex_grl_zdolor_od_gral'+counter).val();
         let historia_anterior = $('#ex_grl_hp_od_gral'+counter).val();
+        let intensidad = $('#intensidad'+counter).val();
+        let modo_dolor = $('#modo_dolor'+counter).val();
+        let localizacion = $('#loc_dolor'+counter).val();
+        let provocacion_dolor = $('#provocacion_dolor'+counter).val();
         let resp_calor = $('#sel_endo_resp_calor'+counter).val();
         let resp_frio = $('#sel_endo_resp_frio'+counter).val();
         let resp_elect = $('#sel_endo_resp_elect'+counter).val();
@@ -213,6 +217,10 @@
             numero_pieza : numero_pieza,
             zona_dolor : zona_dolor,
             historia_anterior : historia_anterior,
+            intensidad : intensidad,
+            modo_dolor : modo_dolor,
+            localizacion : localizacion,
+            provocacion_dolor : provocacion_dolor,
             resp_calor : resp_calor,
             resp_frio : resp_frio,
             resp_elect : resp_elect,
@@ -241,7 +249,7 @@
             mensaje += 'La zona de dolor es obligatoria.</br>';
         }
 
-        if(ex_grl_hp == ''){
+        if(historia_anterior == ''){
             valido = 0;
             mensaje += 'La historia de la pieza es obligatoria.</br>';
         }

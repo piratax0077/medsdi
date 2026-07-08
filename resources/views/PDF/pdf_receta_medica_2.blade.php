@@ -123,7 +123,7 @@
                         hr {
                             border: 1px solid #3C63AD;
                             margin-bottom: 0.5rem !important;
-                            margin-top: 0.5rem !important;
+                            margin-top: 2.5rem !important;
                         }
 
                         /*Margin*/
@@ -288,6 +288,7 @@
                     <main>
                         <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $receta->qr->token }}</div>
                         <div class="contenido-body" style="page-break-after: auto;">
+                            <p>Rp.</p>
                             {{-- <h1>* - {{ $receta->id }} - {{ $receta->control }}</h1> --}}
                             <table class="tabla-receta">
                                 <thead>
@@ -371,7 +372,6 @@
 
                             .tabla-receta table {
                                 font-size: 1rem;
-                                margin-top: 50px;
                             }
 
                             .tabla-receta thead {
@@ -1197,27 +1197,27 @@
                             </thead> -->
                             <tbody>
                                 <tr>
-                                    <td style="text-align: left; width: 20%;"><strong>{{ $receta->detalle['tipo'] }}</strong></td>
-                                    <td style="text-align: left; width: 80%;"></td>
+                                    <td style="text-align: left; width: 40%;"><strong>{{ $receta->detalle['tipo'] }}</strong></td>
+                                    <td style="text-align: left; width: 60%;"></td>
                                 </tr>
                                 @if($receta->detalle['od'])
                                 <tr>
-                                    <td style="text-align: left; width: 20%;"><strong>Oído Derecho</strong></td>
-                                    <td style="text-align: left; width: 80%;">{{ $receta->detalle['especificacion_od'] }}</td>
+                                    <td style="text-align: left; width: 40%;"><strong>Oído Derecho</strong></td>
+                                    <td style="text-align: left; width: 60%;">{{ $receta->detalle['especificacion_od'] }}</td>
                                 </tr>
                                 @endif
 
                                 @if($receta->detalle['oi'])
                                 <tr>
-                                    <td style="text-align: left; width: 20%;"><strong>Oído izquierdo</strong></td>
-                                    <td style="text-align: left; width: 80%;">{{ $receta->detalle['especificacion_oi'] }}</td>
+                                    <td style="text-align: left; width: 40%;"><strong>Oído izquierdo</strong></td>
+                                    <td style="text-align: left; width: 60%;">{{ $receta->detalle['especificacion_oi'] }}</td>
                                 </tr>
                                 @endif
 
                                 @if($receta->detalle['bi'])
                                 <tr>
-                                    <td style="text-align: left; width: 20%;"><strong>Bilateral</strong></td>
-                                    <td style="text-align: left; width: 80%;">{{ $receta->detalle['especificacion_bi'] }}</td>
+                                    <td style="text-align: left; width: 40%;"><strong>Bilateral</strong></td>
+                                    <td style="text-align: left; width: 60%;">{{ $receta->detalle['especificacion_bi'] }}</td>
                                 </tr>
                                 @endif
 

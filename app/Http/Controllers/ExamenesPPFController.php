@@ -14,6 +14,9 @@ use App\Models\Profesional;
 use FichaGinObstetrica;
 use Illuminate\Http\Request;
 
+// Auth
+use Illuminate\Support\Facades\Auth;
+
 class ExamenesPPFController extends Controller
 {
 
@@ -57,6 +60,7 @@ class ExamenesPPFController extends Controller
      */
     public function registroExamenes_r(Request $request)
     {
+
         $datos = array();
         if ($request->examenes == '[]' ) {
             $datos['estado'] = 1;
@@ -83,10 +87,49 @@ class ExamenesPPFController extends Controller
 
             $datos['result_eliminar'] = $result_eliminar;
 
-            $examenes = json_decode($request->examenes);
+            // $examenes = json_decode($request->examenes);
+            // // eliminamos los que no tengan id_examen y los repetidos
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+            $ficha = FichaAtencion::find($request->id_ficha_atencion);
+            if($profesional->id_tipo_especialidad == 3)
+                $ficha = FichaGinecoObstetrica::find($request->id_ficha_gineco_obstetrica);
+
+            $examenControlador = new ExamenMedicoController();
+            $examenes = $examenControlador->dame_examenes_solicitados($ficha->id_paciente, $ficha->id);
+
+            $nuevo_array = [];
+
+            foreach ($examenes as $examen) {
+                // Convierte datos_examen a array si es objeto
+                $datos_ = is_array($examen->datos_examen) ? $examen->datos_examen : (array)$examen->datos_examen;
+
+                $merged = array_merge(
+                    [
+                        'id_examen' => $examen->id, // o el campo correcto si existe
+                        'id_ficha_atencion' => $examen->id_ficha_atencion,
+                        'id_paciente' => $examen->id_paciente,
+                        'id_responsable' => $examen->id_responsable,
+                        'fecha' => $examen->fecha,
+                        'hora' => $examen->hora,
+                        'prioridad' => $examen->datos_examen->prioridad ?? '',
+                        'nombre_examen' => $examen->datos_examen->examen ?? '',
+                        'nombre_examen_especialidad' => $examen->datos_examen->examen ?? '',
+                        'tipo' => $examen->datos_examen->tipo_examen ?? '',
+                        'lado' => $examen->datos_examen->lado ?? '',
+                        // agrega aquí los campos raíz que necesites
+                    ],
+                    $datos_ // aquí se agregan los campos internos de datos_examen
+                );
+                $nuevo_array[] = (object)$merged; // <-- aquí lo conviertes en objeto
+            }
+
+
             $dia = date('Y-m-d');
             $exito = 0;
             $falla = 0;
+
+            $examenes = $nuevo_array;
             for ($i = 0; $i < count($examenes); ++$i)
             {
                 $prioridad = 0;
@@ -132,11 +175,19 @@ class ExamenesPPFController extends Controller
                 else
                     $falla++; //
                 $datos['registros'][] = $retorno;
+
+                /** REGISTRAR FIRMA PROFESIONAL */
+                $papeleria_token = session('lic_token');
+                $papeleria_log_id = session('lic_log_id');
+                $prof_firma_registro = (object)CertificadoController::registroProfesionalFirma((int)$request->id_profesional, $papeleria_token, $papeleria_log_id, "3", $retorno['registro']['id']);
             }
+
+
             $datos['estado'] = 1;
             $datos['exito'] = $exito;
             $datos['falla'] = $falla;
             $datos['msj'] =  ' Examenes registrados';
+            // $datos['prof_firma_registro'] =  $prof_firma_registro;
         }
 
         return $datos;
@@ -270,7 +321,7 @@ class ExamenesPPFController extends Controller
 
             $codigo = 0;
             if($examen_medico)
-                $codigo = $examen_medico->codigo;
+                $codigo = intval($examen_medico->codigo);
             else
                 $codigo = 0;
 
@@ -321,6 +372,7 @@ class ExamenesPPFController extends Controller
         $datos = array();
         $filtros = array();
 
+
         if(!empty($request->id_prioridad))
             $filtros[] = array('id_prioridad', $request->id_prioridad);
         if(!empty($request->id_paciente))
@@ -346,60 +398,59 @@ class ExamenesPPFController extends Controller
         if(!empty($request->con_contraste))
             $filtros[] = array('con_contraste', $request->con_contraste);
 
-        $registros = ExamenPPF::where($filtros)->get();
-
         $nombre_paciente = '';
         $id_paciente = '';
 
-        if(isset($request->id_hora_medica))
-        {
-            $registro_ficha = HoraMedica::with(['Paciente' => function($query){
-                            $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
-                        }])
-                        ->where('id',$request->id_hora_medica)->first();
-
-            $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
-            $id_paciente = $registro_ficha->Paciente->id;
-
-            // if( !empty($registro_ficha->id_ficha_atencion) )
-            // {
-
-            // }
-            // if( !empty($registro_ficha->id_ficha_otros_prof) )
-            // {
-
-            // }
-        }
-
-        else if(isset($request->id_ficha_atencion))
-        {
-            $registro_ficha = FichaAtencion::with(['Paciente' => function($query){
-                                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
-                                                }])
-                                                ->where('id',$request->id_ficha_atencion)->first();
-
-            $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
-            $id_paciente = $registro_ficha->Paciente->id;
-        }
-        else if(isset($request->id_ficha_otros_prof))
-        {
-            // $registro_ficha = FichaOtrosProfesionales::with(['Paciente' => function($query){
-            //                                         $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
-            //                                     }])
-            //                                     ->where('id',$request->id_ficha_atencion)->first();
-
-            // $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
-            // $id_paciente = $registro_ficha->Paciente->id;
-        }
-        else if(isset($request->id_ficha_gineco_obstetrica))
+        // Para gineco, usar dame_examenes_solicitados en lugar de ExamenPPF
+        if(isset($request->id_ficha_gineco_obstetrica))
         {
             $registro_ficha = FichaGinecoObstetrica::with(['Paciente' => function($query){
-                                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
+                                                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos');
                                                 }])
                                                 ->where('id',$request->id_ficha_gineco_obstetrica)->first();
 
             $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
             $id_paciente = $registro_ficha->Paciente->id;
+
+            // Usar dame_examenes_solicitados para gineco
+            $examen_controller = new ExamenMedicoController();
+            $registros = $examen_controller->dame_examenes_solicitados($id_paciente, $request->id_ficha_gineco_obstetrica);
+        }
+        else
+        {
+            $registros = ExamenPPF::where($filtros)->get();
+
+            if(isset($request->id_hora_medica))
+            {
+                $registro_ficha = HoraMedica::with(['Paciente' => function($query){
+                    $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos');
+                }])
+                ->where('id',$request->id_hora_medica)->first();
+
+
+                $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+                $id_paciente = $registro_ficha->Paciente->id;
+            }
+            else if(isset($request->id_ficha_atencion))
+            {
+                $registro_ficha = FichaAtencion::with(['Paciente' => function($query){
+                                                        $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos');
+                                                    }])
+                                                    ->where('id',$request->id_ficha_atencion)->first();
+
+                $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+                $id_paciente = $registro_ficha->Paciente->id;
+            }
+            else if(isset($request->id_ficha_otros_prof))
+            {
+                // $registro_ficha = FichaOtrosProfesionales::with(['Paciente' => function($query){
+                //                                         $query->select('id', 'nombres', 'apellido_uno', 'apellido_dos')->get();
+                //                                     }])
+                //                                     ->where('id',$request->id_ficha_atencion)->first();
+
+                // $nombre_paciente = $registro_ficha->Paciente->nombres.' '.$registro_ficha->Paciente->apellido_uno . ' '. $registro_ficha->Paciente->apellido_dos;
+                // $id_paciente = $registro_ficha->Paciente->id;
+            }
         }
 
 

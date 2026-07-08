@@ -403,17 +403,41 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-group" id="obs_pieza3.6">
-                        <label class="floating-label-activo-sm">Obs. Pieza 3.6</label>
-                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 3.6" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_36" id="obs_36" placeholder="Describa observaciones">{{ $cuerpo36["observaciones"] ?? '' }}</textarea>
+        
+    </div>
+    <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    @if($profesional->id_tipo_especialidad == 21)
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Tipo de sonda</label>
+                            <select name="tipo_sonda3.6" id="tipo_sonda3.6" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('period_inst','div_period_inst','obs_period_inst',5);">
+                                <option value="0">Seleccione</option>
+                                <option value="Sonda MARQUIS(MP12B)">Sonda MARQUIS(MP12B)</option>
+                                <option value="Sonda UNC 15(MPUNC 15RB)">Sonda UNC 15(MPUNC 15RB)</option>
+                                <option value="Sonda OMS 11.5(MPWHOB)">Sonda OMS 11.5(MPWHOB)</option>
+                                <option value="Sonda NABERS 15(MPN2B)">Sonda NABERS 15(MPN2B)</option>
+                                <option value="5">Otro describir</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Observaciones de sonda</label>
+                            <input type="text" class="form-control form-control-sm" name="obs_tipo_sonda3.6" id="obs_tipo_sonda3.6" value="{{ $pieza18->cuerpo['obs_tipo_sonda'] ?? '' }}" />
+                        </div>
+                    </div>
+                    @endif
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group" id="obs_pieza3.6">
+                            <label class="floating-label-activo-sm">Obs. Pieza 3.6</label>
+                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 3.6" data-seccion="Eval_periimplantar"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_36" id="obs_36" placeholder="Describa observaciones">{{ $pieza36->cuerpo['observaciones'] ?? '' }}</textarea>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
     <div id="obs_pieza3.6">

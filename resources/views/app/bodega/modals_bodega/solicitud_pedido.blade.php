@@ -1,5 +1,5 @@
-@if(isset($solicitud))
-<div id="modalSolicitudDetalle" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSolicitudDetalle" aria-hidden="true">
+<!-- Modal para ver detalle de solicitud -->
+<div id="modalSolicitudDetalle" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSolicitudDetalleLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -11,12 +11,12 @@
             </div>
             <div class="modal-footer">
                 <div>
-                    <button class="btn btn-success" onclick="aprobar_solicitud({{ $solicitud->id }})">Solicitar autorizacion</button>
-                    <button class="btn btn-danger" onclick="rechazar_solicitud({{ $solicitud->id }})">Rechazar</button>
+                    <button class="btn btn-success" id="btn_aprobar_solicitud">Solicitar autorización</button>
+                    <button class="btn btn-danger" id="btn_rechazar_solicitud">Rechazar</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endif
 

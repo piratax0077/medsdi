@@ -665,10 +665,10 @@
         }
 
         /**
-         * Procesar préstamo 
+         * Procesar préstamo
          */
 
-         
+
         function procesarPrestamo() {
             // Aquí puedes implementar lógica adicional para procesar el préstamo
             swal({
@@ -899,10 +899,14 @@
          */
         function obtenerCarrito() {
             let url = "{{ route('laboratorio.carrito.obtener') }}";
+            let id_paciente = $('#id_paciente_fc').val();
 
             $.ajax({
                 url: url,
                 type: "GET",
+                data:{
+                    id_paciente: id_paciente,
+                }
             })
             .done(function(response) {
                 console.log('Carrito obtenido:', response);
@@ -965,7 +969,7 @@
                     }else{
                         var nombre_paciente = response.nombre_paciente || '';
                     }
-                    
+
 
                     mostrarModalCarritoPrestamo(nombre_paciente);
                     actualizarBadgeCarritoPrestamo();
@@ -1067,8 +1071,8 @@
             html += '<strong>Paciente:</strong> ' + (nombrePaciente || 'No seleccionado');
             html += '</div>';
 
-           
-        
+
+
             if (carritoData.items.length === 0) {
                 html += '<p class="text-center py-4">El carrito de préstamos está vacío</p>';
             } else {
@@ -1080,7 +1084,7 @@
                 html += '<th>Observaciones</th>';
                 html += '<th>Acciones</th>';
                 html += '</tr></thead><tbody>';
-        
+
                 carritoData.items.forEach(function(item) {
                     html += '<tr>';
                     html += '<td>';
@@ -1102,7 +1106,7 @@
                     html += '</td>';
                     html += '</tr>';
                 });
-        
+
                 html += '</tbody>';
                 html += '<tfoot>';
                 html += '<tr class="bg-light">';
@@ -1165,7 +1169,7 @@
             });
         }
 
-        
+
         // Ver detalle del producto
         function ver_detalle_producto_audifono(id_producto) {
             console.log('Ver detalle del producto ID:', id_producto);
@@ -1604,13 +1608,13 @@
                         <div class="col-md-12">
                             <div class="page-header-title">
                             </div>
-                            <ul class="breadcrumb mb-2">
+                            <ul class="breadcrumb mb-2 pt-2">
                                 @if($profesional->id_tipo_institucion == 3)
                                     <li class="breadcrumb-item"><a href="{{ route('laboratorio.adm_general.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 @else
                                     <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 @endif
-                                
+
                                 <li class="breadcrumb-item"><a href="#">Ventas de audífonos</a></li>
                             </ul>
                         </div>
@@ -1619,13 +1623,7 @@
             </div>
             <!--Cuerpo-->
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="card">
-                        <div class="card-body">
-                           @include('app.laboratorio.atencion_fono_audifonos')
-                        </div>
-                    </div>
-                </div>
+                @include('app.laboratorio.atencion_fono_audifonos')
             </div>
         </div>
     </div>

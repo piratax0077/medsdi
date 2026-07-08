@@ -10,11 +10,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">GES</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('ministerio.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('ministerio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">GES</a>
                                 </li>
                             </ul>
                         </div>
@@ -26,16 +28,19 @@
             <div class="row m-b-10" >
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-top bg-info" id="tabla-registros">
-                            <h5 class="font-weight-bold">GES</h5>
+                        <div class="card-header bg-white py-3" id="tabla-registros">
+                            <h6 class="font-weight-bold text-dark f-20">GES</h6>
                         </div>
                         <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
-                            <div class="card-body-aten-a shadow-none">
+                            <div class="card-body">
                                 <div class="row">
                                     {{-- filtros --}}
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
+                                        <div class="card-lineal">
+                                            <div class="card-body-lineal">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-5">
+                                                <label class="floating-label-activo-sm">Año</label>
                                                 <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio">
 
                                                     @for ($i = 2023; $i <= intval(date('Y')); $i++)
@@ -48,7 +53,8 @@
                                                     @endfor
                                                 </select>
                                             </div>
-                                            <div class="col-md-4">
+                                            <div class="form-group col-md-5">
+                                                <label class="floating-label-activo-sm">Mes</label>
                                                 <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes">
                                                     <option value="">Seleccione</option>
                                                     @php
@@ -59,9 +65,11 @@
                                                     @endfor
                                                 </select>
                                             </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-info-light-c btn-sm" onclick="filtrar_ges();">Buscar</button>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="filtrar_ges();"><i class="feather icon-search"></i> Buscar</button>
                                             </div>
+                                        </div>
+                                        </div>
                                         </div>
 
 

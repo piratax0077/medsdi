@@ -10,44 +10,52 @@ class CodigoFonasaController extends Controller
 {
     public function buscarPorCodigo(Request $request)
     {
-        $datos = array();
-        $error = array();
+        $datos = [];
+        $error = [];
         $valido = 1;
 
-        if(empty($request->valor))
-        {
+        if (empty($request->valor)) {
             $error['valor'] = 'campo requerido';
             $valido = 0;
         }
 
-        if($valido)
-        {
-            $filtro = array();
-            $filtro[] = array('codigo', 'like', '%'.$request->valor.'%');
-            $registros_a = CodigoFonasa::select('id', 'nombre as nombre', 'codigo as codigo')->where($filtro);
-            $registros_b = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo as codigo')->where($filtro);
-            $registros = $registros_a->union($registros_b)->get();
-            if($registros)
-            {
-                $datos['estado'] = 1;
-                $datos['registros'] = $registros;
-                $datos['cantidad'] = $registros->count();
-                $datos['msj'] = 'Registro';
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'Registro no encontrado';
-            }
-        }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['error'] = $error;
-            $datos['msj'] = 'Campo requerido';
+        if ($valido == 0) {
+            return response()->json([
+                'estado' => 0,
+                'error' => $error,
+                'msj' => 'Campo requerido'
+            ]);
         }
 
-        return $datos;
+        $valor = trim($request->valor);
+
+        $registrosFonasa = CodigoFonasa::select(
+                'id',
+                'nombre',
+                'codigo'
+            )
+            ->where('codigo', 'like', '%' . $valor . '%')
+            ->addSelect(\DB::raw("'codigo_fonasa' as origen"));
+
+        $registrosExamenes = ExamenMedico::select(
+                'id',
+                'nombre_examen as nombre',
+                'codigo'
+            )
+            ->where('codigo', 'like', '%' . $valor . '%')
+            ->addSelect(\DB::raw("'examen_medico' as origen"));
+
+        $registros = $registrosFonasa
+            ->union($registrosExamenes)
+            ->limit(30)
+            ->get();
+
+        return response()->json([
+            'estado' => 1,
+            'registros' => $registros,
+            'cantidad' => $registros->count(),
+            'msj' => $registros->count() > 0 ? 'Registros encontrados' : 'Registro no encontrado'
+        ]);
     }
 
     public function buscarPorNombre(Request $request)

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar Datos de Contrato Adm</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar datos de Contrato</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body" style="min-height: 360px;">
@@ -36,31 +36,36 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="tab-content" id="info-ingreso">
-                            <!---->
+                            <!--CONTRATO-->
                             <div class="tab-pane fade show active" id="edit_info-tipo_contrato" role="tabpanel" aria-labelledby="edit_info-tipo_contrato-tab">
-                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                    <select class="form-control form-control-sm" name="edit_empleado_tipo_contrato" id="edit_empleado_tipo_contrato">
-                                        <option value="">Seleccione</option>
-                                        @if ($lista_tipo_contrato)
-                                            @foreach ($lista_tipo_contrato as $item)
-                                                <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
-                                            @endforeach
-                                        @endif
-                                        {{--  asistente tipo  --}}
-                                        {{--  tipo institucion  --}}
-                                        {{--  tipo administrador  --}}
-                                    </select>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <h6 class="t-modal">Tipo de contrato</h6>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <select class="form-control form-control-sm" name="edit_empleado_tipo_contrato" id="edit_empleado_tipo_contrato">
+                                            <option value="">Seleccione</option>
+                                            @if ($lista_tipo_contrato)
+                                                @foreach ($lista_tipo_contrato as $item)
+                                                    <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
+                                                @endforeach
+                                            @endif
+                                            {{--  asistente tipo  --}}
+                                            {{--  tipo institucion  --}}
+                                            {{--  tipo administrador  --}}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                                <!--INFO PERSONAL-->
+                            <!--INFO PERSONAL-->
                             <div class="tab-pane fade show" id="edit_info_personal_cont" role="tabpanel" aria-labelledby="edit_info_personal_cont-tab">
                                 <form>
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-12 mb-2">
-                                            <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                            <h6 class="t-modal">Información y datos de contacto</h6>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                            <label class="floating-label-activo-sm">RUT:</label>
+                                            <label class="floating-label-activo-sm">RUT</label>
                                             <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
                                         </div>
                                         <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -131,7 +136,7 @@
                                 <form>
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-12 mb-2">
-                                            <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                            <h6 class="t-modal">Información y datos del contrato</h6>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                             <label class="floating-label-activo-sm">Fecha Inicio</label>
@@ -212,7 +217,7 @@
                                 <form>
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-12 mb-2">
-                                            <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                            <h6 class="t-modal">Horario de trabajo</h6>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                             <label class="floating-label-activo-sm">Días de Trabajo</label>
@@ -226,20 +231,20 @@
                                                 <option value="7">Domingo</option>
                                             </select>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                             <label class="floating-label-activo-sm">Hora entrada</label>
                                             <input type="time" class="form-control form-control-sm" id="edit_empleado_hora_entrada" name="edit_empleado_hora_entrada" value="08:00">
                                         </div>
 
-                                        <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                             <label class="floating-label-activo-sm">Hora salida</label>
                                             <input type="time" class="form-control form-control-sm" id="edit_empleado_hora_salida" name="edit_empleado_hora_salida" value="19:00">
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                             <label class="floating-label-activo-sm">Hora Inicio Colación</label>
                                             <input type="time" class="form-control form-control-sm" id="edit_empleado_hora_entrada_colacion" name="edit_empleado_hora_entrada_colacion" value="12:00">
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                             <label class="floating-label-activo-sm">Hora término colación</label>
                                             <input type="time" class="form-control form-control-sm" id="edit_empleado_hora_salida_colacion" name="edit_empleado_hora_salida_colacion" value="13:00">
                                         </div>
@@ -251,9 +256,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info" onclick="modificar_registros();">Guardar </button>
-                {{-- <button type="button" class="btn btn-primary">Ver formulario (PDF)</button> --}}
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="modificar_registros();"><i class="feather icon-save"></i> Guardar cambios </button>
+                {{-- <button type="button" class="btn btn-primary btn-sm">Ver formulario (PDF)</button> --}}
             </div>
         </div>
     </div>

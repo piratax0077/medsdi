@@ -1,6 +1,6 @@
 <div id="m_cons_receta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_recetaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content bg-light">
+        <div class="modal-content bg-gris">
             <div class="modal-header">
                 <h5 class="modal-title" id="id_ficha_receta"> Recetas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_cons_receta').modal('hide'); ">
@@ -10,12 +10,12 @@
             <div class="modal-body">
                 <div class="row row-cols-1 row-cols-md-2" id="seccion_medicamentos">
                     <div class="col-sm-12 col-md-12 col-xl-12">
-                            {{-- <div class="col mb-4">
-                                <div class="card-previas social-card">
+                            {{-- <div class="col">
+                                <div class="card-informacion">
                                     <div class="card-body p-2">
                                         <div class="row d-flex justify-content-start">
                                             <div class="col-1">
-                                                <img class="wid-35" src="{{ asset('images/iconos/otros/medicamento-light.svg') }}">
+                                                <img class="wid-35 rounded" src="{{ asset('images/iconos/otros/pildora.jpg') }}">
                                             </div>
                                             <div class="col pl-4">
                                                 <small class="text-secondary pl-1">Medicamento</small><br>
@@ -113,15 +113,15 @@
                                     uso_cronico = 'NORMAL';
 
                                 var fila =  '';
-                                fila += '<div class="col mb-4">';
-                                fila += '    <div class="card-previas social-card">';
+                                fila += '<div class="col">';
+                                fila += '    <div class="card">';
                                 fila += '        <div class="card-body p-2">';
                                 fila += '            <div class="row d-flex justify-content-start">';
                                 fila += '                <div class="col-1">';
-                                fila += '                    <img class="wid-35" src="{{ asset('images/iconos/otros/medicamento-light.svg') }}"> ';
+                                fila += '                    <img class="wid-35 rounded-xl" src="{{ asset('images/iconos/otros/pildora.jpg') }}"> ';
                                 fila += '                </div>';
                                 fila += '                <div class="col pl-4">';
-                                fila += '                    <small class="text-secondary pl-1">Medicamento</small><br>';
+                                fila += '                    <small class="text-secondary pl-0">Medicamento</small><br>';
                                 fila += '                    <h5 class="text-c-blue">';
                                 fila += medicamento;
                                 fila += '                    </h5>';
@@ -131,19 +131,19 @@
                                 fila += '            <div class="row">';
                                 fila += '                <div class="col">';
                                 fila += '                    <p class="m-b-0"><strong>Presentación</strong></p>';
-                                fila += '                    <p class="mb-2">'+presentacion+'</p>';
+                                fila += '                    <p class="mb-2 text-c-blue font-weight-bold">'+presentacion+'</p>';
                                 fila += '                    <p class="m-b-0"><strong>Vía</strong></p>';
-                                fila += '                    <p class="mb-2">'+via_administracion+'</p> ';
+                                fila += '                    <p class="mb-2 text-c-blue font-weight-bold">'+via_administracion+'</p> ';
                                 fila += '                    <p class="m-b-0"><strong>'+uso_cronico+'</strong></p>';
-                                fila += '                    <p>Normal</p>                                     ';
+                                fila += '                    <p class="text-c-blue font-weight-bold">Normal</p>                                     ';
                                 fila += '                </div>';
                                 fila += '                <div class="col">';
                                 fila += '                    <p class="m-b-0"><strong>Posología</strong></p>';
-                                fila += '                    <p class="mb-2">'+posologia+'</p> ';
+                                fila += '                    <p class="mb-2 text-c-blue font-weight-bold">'+posologia+'</p> ';
                                 fila += '                    <p class="m-b-0"><strong>Periodo</strong></p>';
-                                fila += '                    <p class="mb-2">'+periodo+'</p> ';
+                                fila += '                    <p class="mb-2 text-c-blue font-weight-bold">'+periodo+'</p> ';
                                 fila += '                    <p class="m-b-0"><strong>Cantidad</strong></p>';
-                                fila += '                    <p>'+cantidad_compr+'</p>';
+                                fila += '                    <p class="text-c-blue font-weight-bold">'+cantidad_compr+'</p>';
                                 fila += '                </div>';
                                 fila += '            </div>';
                                 fila += '        </div>';
@@ -157,20 +157,29 @@
                     else
                     {
                         $('#seccion_medicamentos').empty();
-                        var fila = '<h5>No existen registros</h5>';
+                        var fila =  '';
+                            fila += '<div class="col-12">';
+                            fila += '<h5>No existen registros</h5>';
+                            fila += '</div>';
                         $('#seccion_medicamentos').append(fila);
                     }
                 }
                 else
                 {
                     $('#seccion_medicamentos').empty();
-                    var fila = '<h5>No existen registros</h5>';
+                            var fila =  '';
+                            fila += '<div class="col-12">';
+                            fila += '<h5>No existen registros</h5>';
+                            fila += '</div>';
                     $('#seccion_medicamentos').append(fila);
                 }
 
             } else {
                 $('#seccion_medicamentos').empty();
-                var fila = '<h5>no existen registros</h5>';
+                            var fila =  '';
+                            fila += '<div class="col-12">';
+                            fila += '<h5>No existen registros</h5>';
+                            fila += '</div>';
                 $('#seccion_medicamentos').append(fila);
             }
             $('#m_cons_receta').modal('show');

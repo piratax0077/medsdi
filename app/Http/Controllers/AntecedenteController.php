@@ -16,6 +16,7 @@ class AntecedenteController extends Controller
 {
     public function verRegistros(Request $request)
     {
+
         $datos = array();
         $cant_x_pagina = 10;
         $filtros = array();
@@ -37,20 +38,95 @@ class AntecedenteController extends Controller
         /* CANTIDAD REGISTROS X PAG */
         $cant_reg = Antecedente::where($filtros)->count();
 
-        if($cant_reg >0){
+        // Inicializar colecciones para registros
+        $registros = collect();
+        $registros_adicionales = collect();
 
+        // Buscar registros de antecedentes si existen
+        if($cant_reg >0){
             $registros = Antecedente::where($filtros)->with('users','paciente','tipo_antecendente')->orderBy('id', 'DESC')->get();
 
             foreach ($registros as $valor) {
                 $valor['antecedente_data'] = json_decode($valor['data'],true);
             }
+        }
 
+        // Si se está filtrando por antecedentes de medicamentos crónicos (tipo 7), incluir registros de MedicamentoUsoCronicoGeneral
+        if((string)$request->id_tipo_antecedente === "7") {
+
+            // Usar exactamente los mismos filtros que las vistas que funcionan
+            $filtros_medicamentos = [];
+
+            if(!empty($request->id_paciente)) {
+                $filtros_medicamentos[] = ['id_paciente', $request->id_paciente];
+            }
+
+            // Usar 'cronico' (sin "a") como en las vistas que funcionan
+            // $filtros_medicamentos[] = ['tipo_enfermedad', 'cronico'];
+
+            // Solo aplicar filtro de estado si viene específicamente en el request
+            if($request->estado !== '' && $request->estado !== null) {
+                $filtros_medicamentos[] = ['estado', $request->estado];
+            }
+
+            // Consulta exacta como el controlador MedicamentoUsoCronicoGeneralController
+            $medicamentos_cronicos = MedicamentoUsoCronicoGeneral::where($filtros_medicamentos)->get();
+
+            // Convertir registros de medicamentos a formato antecedente
+            foreach($medicamentos_cronicos as $med) {
+                $registro_convertido = new \stdClass();
+                $registro_convertido->id = 'med_' . $med->id;
+                $registro_convertido->id_paciente = $med->id_paciente;
+                $registro_convertido->id_tipo_antecedente = 7;
+                $registro_convertido->id_users = $med->id_profesional;
+                $registro_convertido->comentario = 'Medicamento crónico general';
+                $registro_convertido->estado = $med->estado;
+                $registro_convertido->created_at = $med->created_at;
+                $registro_convertido->updated_at = $med->updated_at;
+
+                // Datos del medicamento basados en los campos reales del modelo
+                $data_medicamento = [
+                    'nombre_medicamento_cronico' => $med->nombre_medicamento,
+                    'cantidad' => $med->cantidad,
+                    'presentacion' => $med->presentacion ?? '',
+                    'posologia' => $med->posologia ?? '',
+                    'via_administracion' => $med->via_administracion ?? '',
+                    'periodo' => $med->periodo ?? '',
+                    'tipo_enfermedad' => $med->tipo_enfermedad,
+                    'id_articulo' => $med->id_articulo ?? '',
+                    'fecha_registro' => $med->created_at ? $med->created_at->format('d-m-Y') : date('d-m-Y')
+                ];
+
+                $registro_convertido->data = json_encode($data_medicamento);
+                $registro_convertido->antecedente_data = $data_medicamento;
+
+                // Relaciones sencillas
+                $registro_convertido->paciente = $med->Paciente;
+                $registro_convertido->users = null;
+                $registro_convertido->tipo_antecendente = (object)[
+                    'id' => 7,
+                    'nombre' => 'Antecedentes de Medicamento Crónico'
+                ];
+
+                $registro_convertido->origen = 'medicamento_cronico_general';
+                $registros_adicionales->push($registro_convertido);
+            }
+        }
+
+        // Combinar registros y verificar si hay algún resultado
+        // Convertir la Eloquent Collection a Collection normal antes del merge para mantener objetos intactos
+        $registros_normales = collect($registros->all());
+        $registros_combinados = $registros_normales->merge($registros_adicionales)->sortByDesc('created_at')->values();
+        $total_registros = $registros_combinados->count();
+
+        if($total_registros > 0) {
             $datos['estado'] = 1;
-            $datos['cantidad_registros'] = $cant_reg;
+            $datos['cantidad_registros'] = $total_registros;
+            $datos['cantidad_antecedentes'] = $registros->count();
+            $datos['cantidad_medicamentos_cronicos'] = $registros_adicionales->count();
             $datos['request'] = $request->all();
-            $datos['registros'] = $registros;
-
-        }else{
+            $datos['registros'] = $registros_combinados;
+        } else {
             $datos['estado'] = 0;
             $datos['msg'] = 'Sin registros';
             $datos['request'] = $request->all();
@@ -131,11 +207,12 @@ class AntecedenteController extends Controller
 
     public function registrar(Request $request)
     {
+
         $datos = array();
         $error = array();
         $campos_requeridos = 0;
 
-        $request->nombre = $request->nombre ?? $request->procedimiento;
+        $request->nombre = $request->nombre ?? $request->procedimiento ?? $request->nombre_enfermedad_cronica ?? $request->nombre_medicamento_cronico ?? $request->discapacidad_tipo ?? '';
 
         $registro = new Antecedente();
 

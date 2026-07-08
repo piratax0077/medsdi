@@ -86,38 +86,108 @@ function agregar_gasto() {
 
 
 /*-Proveedores-*/
-function agregar_proveedor() {
-    $('#agregar_proveedor_cm').modal('show');
+function agregar_proveedor_lab_dist() {
+    $('#agregar_proveedor_lab_dist').modal('show');
 }
 
-function editar_proveedor(id) {
-    let url = "/getProveedor/" + id;
+function editar_proveedor_lab_dist(id) {
+    let url = "/Administracion/getProveedor/" + id;
     $.get(url, function (data) {
         let proveedor = data;
         // json_decode(data);
         proveedor = JSON.parse(proveedor);
         console.log(proveedor);
         $('#id_proveedor').val(proveedor.id)
+
+        let detalleLegacy = {};
+        if (proveedor.otro2) {
+            try {
+                detalleLegacy = JSON.parse(proveedor.otro2);
+            } catch (e) {
+                detalleLegacy = {};
+            }
+        }
+
+        const esInternacional = Number(proveedor.tipo_procedencia) === 2
+            || !!proveedor.pais_internacional
+            || !!detalleLegacy.pais_internacional;
+
+        const paisInternacional = proveedor.pais_internacional || detalleLegacy.pais_internacional || '0';
+        const ciudadInternacional = proveedor.ciudad_internacional || detalleLegacy.ciudad_internacional || '';
+        const referenciasInternacionales = proveedor.referencias_internacionales || detalleLegacy.referencias_internacionales || '';
+        const contactoInternacional = proveedor.contacto_internacional || detalleLegacy.contacto_internacional || '';
+        const sitioWebInternacional = proveedor.sitio_web_internacional || proveedor.otro || '';
+
         // agregar el atributo action al formulario de editar proveedor con la ruta post para editar proveedor
-        $('#editar_proveedor_cm form').attr('action', '/editarProveedor');
+        $('#editar_proveedor_lab_dist form').attr('action', '/Administracion/editarProveedor');
         // agregar method post
-        $('#editar_proveedor_cm form').attr('method', 'post');
-        
-        $('#editar_proveedor_cm').modal('show');
-        $('#editar_proveedor_cm #nombre').val(proveedor.nombre);
-        $('#editar_proveedor_cm #prov_prod_').val(proveedor.id_tipo_producto);
-        $('#editar_proveedor_cm #rut').val(proveedor.rut);
-        $('#editar_proveedor_cm #rol_').val(proveedor.rol_tributario);
-        $('#editar_proveedor_cm #direccion').val(proveedor.direccion);
-        $('#editar_proveedor_cm #numero').val(proveedor.numero);
-        $('#editar_proveedor_cm #telefono').val(proveedor.telefono);
-        $('#editar_proveedor_cm #email').val(proveedor.email);
-        $('#editar_proveedor_cm #region_editar').val(proveedor.id_region);
+        $('#editar_proveedor_lab_dist form').attr('method', 'post');
+
+        $('#editar_proveedor_lab_dist').modal('show');
+        $('#editar_proveedor_lab_dist #tipo_proveedor_editar').val(esInternacional ? '2' : '1');
+        $('#editar_proveedor_lab_dist #nombre_editar').val(proveedor.nombre);
+
+        // Usar el array de IDs de productos del modelo (ya viene parseado)
+        $('#editar_proveedor_lab_dist #prov_prod_editar').val(proveedor.productos_ids).trigger('change');
+
+        $('#editar_proveedor_lab_dist #rut_editar').val(proveedor.rut);
+        $('#editar_proveedor_lab_dist #rol_editar').val(proveedor.rol_tributario);
+        $('#editar_proveedor_lab_dist #direccion_editar').val(proveedor.direccion);
+        $('#editar_proveedor_lab_dist #telefono_editar').val(proveedor.telefono);
+        $('#editar_proveedor_lab_dist #email_editar').val(proveedor.email);
+
+        $('#editar_proveedor_lab_dist #pais_internacional_editar').val(paisInternacional);
+        $('#editar_proveedor_lab_dist #ciudad_internacional_editar').val(ciudadInternacional);
+        $('#editar_proveedor_lab_dist #sitio_web_internacional_editar').val(sitioWebInternacional);
+        $('#editar_proveedor_lab_dist #referencias_internacionales_editar').val(referenciasInternacionales);
+        $('#editar_proveedor_lab_dist #contacto_internacional_editar').val(contactoInternacional);
+
+        $('#editar_proveedor_lab_dist #region_editar').val(proveedor.id_region);
         // lo que se cumpla la funcion buscar_ciudad_editar asignar el valor de id_comuna a comunas_editar
         buscar_ciudad_editar().then(()=>{
             $('#comunas_editar').val(proveedor.id_comuna);
+            if (typeof evaluarTipoProveedorEditar === 'function') {
+                evaluarTipoProveedorEditar();
+            }
         }).catch((error)=>{
             console.error(error);
         });
+    });
+}
+
+function eliminar_proveedor_lab_dist(id) {
+    swal({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: 'Cancelar',
+                value: null,
+                visible: true
+            },
+            confirm: {
+                text: 'Sí, eliminar',
+                value: true
+            }
+        }
+    }).then(function(value) {
+        if (value) {
+            $.ajax({
+                url: '/Administracion/eliminarProveedor/' + id,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    swal('¡Eliminado!', 'El proveedor ha sido eliminado.', 'success').then(function() {
+                        location.reload();
+                    });
+                },
+                error: function(error) {
+                    swal('Error', 'No se pudo eliminar el proveedor.', 'error');
+                }
+            });
+        }
     });
 }

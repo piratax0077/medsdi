@@ -2115,6 +2115,19 @@ class AdministradorHospitalController  extends Controller
             $traslado->observaciones = $request->observaciones;
             $traslado->id_servicio_interno = $request->id_servicio_interno;
             $traslado->resultado = $request->resultado;
+            $otros = [];
+            if ($request->id_ficha_atencion) {
+                $otros['id_ficha_atencion'] = $request->id_ficha_atencion;
+            }
+            if ($request->id_lugar_atencion) {
+                $otros['id_lugar_atencion'] = $request->id_lugar_atencion;
+            }
+            if ($request->detalle_observaciones) {
+                $otros['detalle_observaciones'] = $request->detalle_observaciones;
+            }
+            if (!empty($otros)) {
+                $traslado->otros = json_encode($otros);
+            }
             if($traslado->save()){
                 return ['mensaje' => 'OK', 'resp' => $traslado];
             }
@@ -2143,23 +2156,24 @@ class AdministradorHospitalController  extends Controller
     }
 
     public function dameCuracionesPlanasPaciente($id_paciente){
-        $curacion = CuracionesPlanasServicio::select('curaciones_planas_servicio.*','users.name as responsable')
+        $curaciones = CuracionesPlanasServicio::select('curaciones_planas_servicio.*','users.name as responsable')
                                         ->join('users','users.id','=','curaciones_planas_servicio.id_responsable')
                                         ->where('id_paciente', $id_paciente)
                                         ->where('activa', 1)
-                                        ->first();
+                                        ->get();
 
-            if($curacion)
+            foreach($curaciones as $curacion)
             {
                 // convertir el atributo datos_procedimiento de longtext a array
                 $curacion->datos_curacion_plana = json_decode($curacion->datos_curacion_plana);
+                $curacion->datos_valoracion_plana = json_decode($curacion->datos_valoracion_plana);
                 // sacar la fecha y hora del campo created_at
                 $curacion->fecha = date('d-m-Y', strtotime($curacion->created_at));
                 $curacion->hora = date('H:i', strtotime($curacion->created_at));
             }
 
 
-        return $curacion;
+        return $curaciones;
     }
 
     public function dameEvolucionesPaciente($idpaciente){

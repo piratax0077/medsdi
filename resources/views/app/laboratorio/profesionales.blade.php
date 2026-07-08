@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <ul class="nav nav-pills bg-white" id="personal_cm" role="tablist">
                             <li class="nav-item active">
-                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="prof_salud-tab" data-toggle="tab" href="#prof-salud" role="tab" aria-controls="prof_-alud" aria-selected="false">Profesionales</a>
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="prof_salud-tab" data-toggle="tab" href="#prof-salud" role="tab" aria-controls="prof_-alud" aria-selected="false">Profesionales</a>
                             </li>
 
                             <li class="nav-item">
@@ -41,7 +41,10 @@
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="empresas_apoyo-tab" data-toggle="tab" href="#empresas_apoyo" role="tab" aria-controls="empresas_apoyo" aria-selected="false">Empresas de apoyo</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="permisos-tab" data-toggle="tab" href="#permisos" role="tab" aria-controls="permisos" aria-selected="false">Permisos</a>
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="permisos-tab" data-toggle="tab" href="#permisos" role="tab" aria-controls="permisos" aria-selected="false">Autorizar uso del sistema</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="vacaciones-tab" data-toggle="tab" href="#vacaciones" role="tab" aria-controls="vacaciones" aria-selected="false">Vacaciones</a>
                             </li>
                         </ul>
                     </div>
@@ -63,8 +66,9 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
+                                                        <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">Asociar contrato profesional</button>
                                                         <button type="button" class="btn btn-sm btn-outline-light mr-3" onclick="enviar_mensaje_difusion()" @if(!$adm_medico) disabled @endif><i class="feather icon-mail"></i> Difusión</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="asociar_profesional();" @if(!$adm_medico) disabled @endif><i class="fa fa-plus" aria-hidden="true"></i> Asociar profesional</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="asociar_profesional(event);" @if(!$adm_medico) disabled @endif><i class="fa fa-plus" aria-hidden="true"></i> Asociar profesional</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -77,9 +81,9 @@
                                                     <table id="profesionales_personal" class="display table table-striped dt-responsive nowrap" style="width:100%">
                                                         <thead>
                                                             <tr>
-                                                                <th class="align-middle">Nombre / Rut</th>
-                                                                <th class="align-middle">Especialidad</th>
+                                                                <th class="align-middle">Nombre / Rut / Especialidad</th>
                                                                 <th class="align-middle">Sucursales</th>
+                                                                <th class="align-middle">Estado</th>
                                                                 <th class="align-middle">Contacto</th>
             													<th class="align-middle">Info</th>
             													<th class="align-middle">Convenio</th>
@@ -93,14 +97,11 @@
                                                                 @foreach ($lista_profesionales['MEDICO'] as $prof_medico )
                                                                     <tr>
                                                                         <td class="align-middle">
-                                                                            <span><strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong></span><br>
-                                                                            <span>{{ $prof_medico->rut }}</span>
-                                                                        </td>
-                                                                        <td class="align-middle">
-                                                                            <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span>
+                                                                            <strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong><br>
+                                                                            <small class="text-muted">{{ $prof_medico->rut }}</small><br>
+                                                                            <small class="text-info">{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</small>
                                                                             @if (!empty($prof_medico->id_sub_tipo_especialidad))
-                                                                                <br>
-                                                                                <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                                <br><small class="text-info">{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</small>
                                                                             @endif
                                                                         </td>
                                                                         <td class="align-middle">
@@ -110,6 +111,13 @@
                                                                                     <span>{{ $value_lugar->Direccion()->first()->direccion.', '.$value_lugar->Direccion()->first()->ciudad->nombre  }}</span><br>
                                                                                 @endif
                                                                             @endforeach
+                                                                        </td>
+                                                                        <td class="align-middle text-center">
+                                                                            @if($prof_medico->pivot->estado == 1)
+                                                                                <span class="badge badge-success">Activo</span>
+                                                                            @else
+                                                                                <span class="badge badge-warning">Vacaciones</span>
+                                                                            @endif
                                                                         </td>
                                                                         <td class="align-middle">
                                                                                 <!--Botón Modal contacto -->
@@ -136,6 +144,7 @@
                                                                             </td>
                                                                             <td class="align-middle">
                                                                                 <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_profesional({{ $prof_medico->id }},0,'{{ $prof_medico->nombre }} {{ $prof_medico->apellido_uno }}',{{ $institucion->id_lugar_atencion }})"><i class="feather icon-x"></i> Desasociar</button>
+                                                                                <button type="button" class="btn btn-info btn-xxs ml-1" onclick="verHistorialVacaciones({{ $prof_medico->id }})" data-toggle="tooltip" data-placement="top" title="Ver historial de vacaciones"><i class="feather icon-calendar"></i> Vacaciones</button>
                                                                             </td>
                                                                     </tr>
                                                                 @endforeach
@@ -144,14 +153,11 @@
                                                             @foreach ($lista_profesionales['OTROS'] as $prof_medico )
                                                                 <tr>
                                                                     <td class="align-middle">
-                                                                        <span><strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong></span><br>
-                                                                        <span>{{ $prof_medico->rut }}</span>
-                                                                    </td>
-                                                                    <td class="align-middle">
-                                                                        <span>{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</span>
+                                                                        <strong>{{ $prof_medico->nombre.' '.$prof_medico->apellido_uno.' '.$prof_medico->apellido_dos }}</strong><br>
+                                                                        <small class="text-muted">{{ $prof_medico->rut }}</small><br>
+                                                                        <small class="text-info">{{ $prof_medico->TipoEspecialidad()->first()->nombre }}</small>
                                                                         @if (!empty($prof_medico->id_sub_tipo_especialidad))
-                                                                            <br>
-                                                                            <span>{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</span>
+                                                                            <br><small class="text-info">{{ $prof_medico->SubTipoEspecialidad()->first()->nombre }}</small>
                                                                         @endif
                                                                     </td>
                                                                     <td class="align-middle">
@@ -161,6 +167,13 @@
                                                                                 <span>{{ $value_lugar->Direccion()->first()->direccion.', '.$value_lugar->Direccion()->first()->ciudad->nombre  }}</span><br>
                                                                             @endif
                                                                         @endforeach
+                                                                    </td>
+                                                                    <td class="align-middle text-center">
+                                                                        @if($prof_medico->pivot->estado == 1)
+                                                                            <span class="badge badge-success">Activo</span>
+                                                                        @else
+                                                                            <span class="badge badge-warning">Vacaciones</span>
+                                                                        @endif
                                                                     </td>
                                                                     <td class="align-middle">
                                                                             <!--Botón Modal contacto -->
@@ -187,6 +200,7 @@
                                                                         </td>
                                                                         <td class="align-middle">
                                                                             <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_profesional({{ $prof_medico->id }},0,'{{ $prof_medico->nombre }} {{ $prof_medico->apellido_uno }}',{{ $institucion->id_lugar_atencion }})"><i class="feather icon-x"></i> Desasociar</button>
+                                                                            <button type="button" class="btn btn-info btn-xxs ml-1" onclick="verHistorialVacaciones({{ $prof_medico->id }})" data-toggle="tooltip" data-placement="top" title="Ver historial de vacaciones"><i class="feather icon-calendar"></i> Vacaciones</button>
                                                                         </td>
                                                                 </tr>
                                                             @endforeach
@@ -212,12 +226,12 @@
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Asistentes</h4>
+                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Personal Administrativo</h4>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
 
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_personal();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a empleado/a</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_personal_lab();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a empleado/a</button>
                                                         <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
 
                                                         <div class="dropdown-menu">
@@ -232,22 +246,19 @@
                                         <table id="asistentes_personal" class="display table table-striped dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th class="align-middle">Nombre / Rut</th>
-                                                    <th class="align-middle">Tipo</th>
+                                                    <th class="align-middle">Nombre / Rut / Profesión</th>
                                                     <th class="align-middle">Sucursales</th>
                                                     <th class="align-middle">Acción</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if(isset($lista_asistente))
-                                                    @foreach ( $lista_asistente as $asistente)
+                                                @if(isset($lista_administrativo))
+                                                    @foreach ( $lista_administrativo as $asistente)
                                                     <tr>
                                                         <td class="align-middle">
-                                                            <span><strong>{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}</strong></span><br>
-                                                            <span>{{ $asistente->rut }}</span>
-                                                        </td>
-                                                        <td class="align-middle">
-                                                            <span><strong>{{ $asistente->asistente_tipo->nombre }}</strong></span>
+                                                            <strong>{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}</strong><br>
+                                                            <small class="text-muted">{{ $asistente->rut }}</small><br>
+                                                            <small class="text-info">{{ $asistente->asistente_tipo ? $asistente->asistente_tipo->nombre : '-' }}</small>
                                                         </td>
                                                         <td class="align-middle">
                                                             {{ $asistente->direccion()->first()->direccion }} #{{ $asistente->direccion()->first()->numero_dir }}, {{ $asistente->direccion()->first()->ciudad()->first()->nombre }}
@@ -259,14 +270,14 @@
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos Bancarios"><i class="feather icon-credit-card"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_lab('{{ $asistente->asistente_tipo->nombre }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
+                                                            <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_lab('{{ $asistente->asistente_tipo ? $asistente->asistente_tipo->nombre : '' }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
 
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos({{ $asistente->asistente_tipo->id }}, {{ $asistente->id_usuario }}, '{{ $asistente->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos({{ $asistente->asistente_tipo ? $asistente->asistente_tipo->id : 0 }}, {{ $asistente->id_usuario ?? 0 }}, '{{ $asistente->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
 
-                                                            <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                            <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_administrativo({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
                                                             @if($asistente->contrato !== null)
-                                                            <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
+                                                            <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_administrativo({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -294,10 +305,10 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="btn-group mr-2 float-right mt- mb-">
-                                                    <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_administrativo();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo profesional</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_limpieza_mantencion();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo profesional</button>
                                                     <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
                                                     <div class="dropdown-menu">
-                                                        <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="asociar_profesional();">Asociar Otros profesionales</button>
+                                                        <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="asociar_profesional(event);">Asociar Otros profesionales</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -310,55 +321,48 @@
             										<table id="profesionales_otros" class="display table table-striped dt-responsive nowrap" style="width:100%">
             											<thead>
             												<tr>
-            													<th class="align-middle">Nombre / Rut</th>
-            													<th class="align-middle">Profesión/Especialidad</th>
+            													<th class="align-middle">Nombre / Rut / Especialidad</th>
+            													<th class="align-middle">Tipo</th>
             													<th class="align-middle">Sucursales</th>
             													<th class="align-middle">Contacto</th>
             													<th class="align-middle">Info</th>
-            													<th class="align-middle">Convenio</th>
-            													<th class="align-middle">Rol y permisos</th>
             													<th class="align-middle">Acción</th>
             												</tr>
             											</thead>
             											<tbody>
-            												<tr>
-            													<td class="align-middle">
-            														<span><strong>Jaime Kriman</strong></span><br>
-            														<span>4.345.466-2</span>
-            													</td>
-            													<td class="align-middle">
-            														<span>Fonoaudiólogo</span><br><span>Fonoaudiólogo clínico</span>
-            													</td>
-            													<td class="align-middle">
-            														<span>Ist Viña del Mar</span><br>
-            														<span>Ist Quilpué</span><br>
-            														<span>Ist San Felipe</span>
-            													</td>
-            													<td class="align-middle">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto(1);" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
-            														 <!--Botón Modal-->
-            														<button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<!--Botón Modal-->
-            														<button type="button" class="btn btn-secondary btn-icon" onclick="rol_permisos_profesional();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-            													</td>
-            													<td class="align-middle text-center">
-            														<button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_profesional();">
-            														<i class="feather icon-edit"></i> Editar</button>
-            														<button type="button" class="btn btn-danger btn-xxs">
-            														<i class="feather icon-x"></i> Desasociar</button>
-            													</td>
-            												</tr>
+            												@if(isset($lista_mantencion))
+                                                            @foreach ( $lista_mantencion as $administrativo)
+                                                            <tr>
+                                                                <td class="align-middle">
+                                                                    <strong>{{ $administrativo->nombre.' '.$administrativo->apellido_paterno.' '.$administrativo->apellido_materno }}</strong><br>
+                                                                    <small class="text-muted">{{ $administrativo->rut }}</small><br>
+                                                                    <small class="text-info">{{ $administrativo->contrato->tipo_empleado }}</small>
+                                                                </td>
+                                                                <td class="align-middle">@if($administrativo->empresa) Empresa @else Persona @endif</td>
+                                                                <td class="align-middle">
+                                                                    {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <!--Botón Modal contacto -->
+                                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_mantenedor('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <!--Botón Modal deposito-->
+                                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
+
+                                                                    <!--Botón Modal horario-->
+                                                                    <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_mantencion_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y días de atención"><i class="feather icon-clock"></i></button>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <!--Botón Modal roles y permisos-->
+                                                                    <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+
+                                                                    <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                                    <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_otros_profesionales('mantencion',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        @endif
             											</tbody>
             										</table>
                                                 </div>
@@ -392,73 +396,194 @@
                                     </div>
                                     <div class="col-sm-12 d-none" id="info_profesional_permisos" >
                                         <hr>
-                                        <h6 class="text-c-blue">Profesional encontrado:</h6>
-                                        <p><strong>Nombre:</strong> <span id="nombre_profesional_permisos"></span></p>
-                                        <p><strong>Rut:</strong> <span id="rut_profesional_permisos"></span></p>
-                                        <p><strong>Especialidad:</strong> <span id="especialidad_profesional_permisos"></span></p>
-                                        <p><strong>Sub Tipo Especialidad:</strong> <span id="subtipo_especialidad_profesional_permisos"></span></p>
+                                        <div class="card shadow-sm border-0">
+                                            <div class="card-body bg-light">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-8">
+                                                        <h6 class="mb-3 text-info"><i class="feather icon-user-check"></i> Profesional encontrado</h6>
+                                                        <div class="row">
+                                                            <div class="col-md-6 mb-2">
+                                                                <small class="text-muted d-block">Nombre completo</small>
+                                                                <strong id="nombre_profesional_permisos" class="text-dark"></strong>
+                                                            </div>
+                                                            <div class="col-md-6 mb-2">
+                                                                <small class="text-muted d-block">RUT</small>
+                                                                <strong id="rut_profesional_permisos" class="text-dark"></strong>
+                                                            </div>
+                                                            <div class="col-md-6 mb-2">
+                                                                <small class="text-muted d-block">Especialidad</small>
+                                                                <span id="especialidad_profesional_permisos" class="badge badge-info"></span>
+                                                            </div>
+                                                            <div class="col-md-6 mb-2">
+                                                                <small class="text-muted d-block">Sub Especialidad</small>
+                                                                <span id="subtipo_especialidad_profesional_permisos" class="badge badge-secondary"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 text-center">
+                                                        <div class="bg-white rounded p-3">
+                                                            <i class="feather icon-user f-40 text-info"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card mb-3">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0">Permisos asignados</h6>
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0"><i class="feather icon-shield"></i> Permisos asignados</h6>
                             </div>
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_cotizar" /> Permiso para cotizar
-                                    </label>
+                                @if($institucion->id_tipo_laboratorio == 4)
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_cotizar">
+                                                <label class="custom-control-label" for="permiso_cotizar">
+                                                    <i class="feather icon-dollar-sign text-success"></i> Permiso para cotizar
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_vender_audifonos">
+                                                <label class="custom-control-label" for="permiso_vender_audifonos">
+                                                    <i class="feather icon-headphones text-primary"></i> Permiso para vender audífonos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_control_audifonos">
+                                                <label class="custom-control-label" for="permiso_control_audifonos">
+                                                    <i class="feather icon-settings text-warning"></i> Permiso para controlar audífonos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_prestar_audifonos">
+                                                <label class="custom-control-label" for="permiso_prestar_audifonos">
+                                                    <i class="feather icon-share-2 text-info"></i> Permiso para prestar audífonos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_estadisticas_laboratorio">
+                                                <label class="custom-control-label" for="permiso_estadisticas_laboratorio">
+                                                    <i class="feather icon-bar-chart-2 text-purple"></i> Permiso para ver estadísticas del laboratorio
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_anular_hora">
+                                                <label class="custom-control-label" for="permiso_anular_hora">
+                                                    <i class="feather icon-x-circle text-danger"></i> Permiso para anular hora
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_subir_ver_archivos">
+                                                <label class="custom-control-label" for="permiso_subir_ver_archivos">
+                                                    <i class="feather icon-upload-cloud text-success"></i> Subir y ver archivos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_eliminar_archivos">
+                                                <label class="custom-control-label" for="permiso_eliminar_archivos">
+                                                    <i class="feather icon-trash-2 text-danger"></i> Eliminar archivos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_editar_pacientes">
+                                                <label class="custom-control-label" for="permiso_editar_pacientes">
+                                                    <i class="feather icon-edit text-primary"></i> Editar pacientes
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_ver_pacientes_centro">
+                                                <label class="custom-control-label" for="permiso_ver_pacientes_centro">
+                                                    <i class="feather icon-eye text-info"></i> Ver pacientes del Centro
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @elseif($institucion->id_tipo_laboratorio == 6)
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_radiologia">
+                                                <label class="custom-control-label" for="permiso_radiologia">
+                                                    <i class="feather icon-image text-success"></i> Permiso para gestionar radiología
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_estadisticas_laboratorio">
+                                                <label class="custom-control-label" for="permiso_estadisticas_laboratorio">
+                                                    <i class="feather icon-bar-chart-2 text-purple"></i> Permiso para ver estadísticas del laboratorio
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_anular_hora">
+                                                <label class="custom-control-label" for="permiso_anular_hora">
+                                                    <i class="feather icon-x-circle text-danger"></i> Permiso para anular hora
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_subir_ver_archivos">
+                                                <label class="custom-control-label" for="permiso_subir_ver_archivos">
+                                                    <i class="feather icon-upload-cloud text-success"></i> Subir y ver archivos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_eliminar_archivos">
+                                                <label class="custom-control-label" for="permiso_eliminar_archivos">
+                                                    <i class="feather icon-trash-2 text-danger"></i> Eliminar archivos
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_editar_pacientes">
+                                                <label class="custom-control-label" for="permiso_editar_pacientes">
+                                                    <i class="feather icon-edit text-primary"></i> Editar pacientes
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="permiso_ver_pacientes_centro">
+                                                <label class="custom-control-label" for="permiso_ver_pacientes_centro">
+                                                    <i class="feather icon-eye text-info"></i> Ver pacientes del Centro
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                <hr>
+                                <div class="text-right">
+                                    <button class="btn btn-info" onclick="guardar_permisos()"><i class="feather icon-save"></i> Guardar cambios</button>
                                 </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_vender_audifonos" /> Permiso para vender audífonos
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_control_audifonos" /> Permiso para controlar audífonos
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_prestar_audifonos" /> Permiso para prestar audífonos
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_estadisticas_laboratorio" /> Permiso para ver estadísticas del laboratorio
-                                    </label>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_anular_hora" /> Permiso para anular hora
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_subir_ver_archivos" /> Subir y ver archivos
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_eliminar_archivos" /> Eliminar archivos
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_editar_pacientes" /> Editar pacientes
-                                    </label>
-                                </div>
-                                <div class="form-group">
-                                    <label>
-                                        <input type="checkbox" id="permiso_ver_pacientes_centro" /> Ver pacientes del Centro
-                                    </label>
-                                </div>
-                                <!-- Más permisos -->
-                                <button class="btn btn-info" onclick="guardar_permisos()">Guardar cambios</button>
                             </div>
                         </div>
                         <div class="card">
@@ -482,6 +607,121 @@
                             </div>
                         </div>
                     </div>
+                    <!--Cierre: Tab permisos-->
+                    <!--Tab vacaciones -->
+                    <div class="tab-pane fade" id="vacaciones" role="tabpanel" aria-labelledby="vacaciones-tab">
+                        <div class="card mb-3">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0"><i class="feather icon-calendar"></i> Administración de Vacaciones</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tabla_vacaciones" class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="align-middle">Profesional / RUT / Especialidad</th>
+                                                <th class="align-middle">Contacto</th>
+                                                <th class="align-middle">Estado</th>
+                                                <th class="align-middle">Días Disponibles</th>
+                                                <th class="align-middle">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($lista_profesionales['MEDICO']) && $lista_profesionales['MEDICO'])
+                                                @foreach ($lista_profesionales['MEDICO'] as $profesional)
+                                                    <tr>
+                                                        <td class="align-middle">
+                                                            <strong>{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}</strong><br>
+                                                            <small class="text-muted">{{ $profesional->rut }}</small><br>
+                                                            <small class="text-info">{{ $profesional->TipoEspecialidad()->first()->nombre ?? 'N/A' }}</small>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <small><i class="feather icon-mail"></i> {{ $profesional->email }}</small><br>
+                                                            <small><i class="feather icon-phone"></i> {{ $profesional->telefono_uno }}</small>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            @if($profesional->pivot->estado == 1)
+                                                                <span class="badge badge-success">Activo</span>
+                                                            @else
+                                                                <span class="badge badge-warning">Vacaciones</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span class="badge badge-success">15 días</span>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <button type="button"
+                                                                    class="btn btn-primary btn-sm"
+                                                                    onclick="abrirModalVacaciones({{ $profesional->id }}, '{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}')"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title="{{ $profesional->tiene_vacacion_vigente ? 'El profesional ya tiene vacaciones activas' : 'Registrar vacaciones' }}"
+                                                                    {{ $profesional->tiene_vacacion_vigente ? 'disabled' : '' }}>
+                                                                <i class="feather icon-calendar"></i>
+                                                            </button>
+                                                            <button type="button"
+                                                                    class="btn btn-info btn-sm"
+                                                                    onclick="verHistorialVacaciones({{ $profesional->id }})"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title="Ver historial">
+                                                                <i class="feather icon-list"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                            @if(isset($lista_profesionales['OTROS']) && $lista_profesionales['OTROS'])
+                                                @foreach ($lista_profesionales['OTROS'] as $profesional)
+                                                    <tr>
+                                                        <td class="align-middle">
+                                                            <strong>{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}</strong><br>
+                                                            <small class="text-muted">{{ $profesional->rut }}</small><br>
+                                                            <small class="text-info">{{ $profesional->TipoEspecialidad()->first()->nombre ?? 'N/A' }}</small>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <small><i class="feather icon-mail"></i> {{ $profesional->email }}</small><br>
+                                                            <small><i class="feather icon-phone"></i> {{ $profesional->telefono_uno }}</small>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            @if($profesional->pivot->estado == 1)
+                                                                <span class="badge badge-success">Activo</span>
+                                                            @else
+                                                                <span class="badge badge-warning">Vacaciones</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <span class="badge badge-success">15 días</span>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <button type="button"
+                                                                    class="btn btn-primary btn-sm"
+                                                                    onclick="abrirModalVacaciones({{ $profesional->id }}, '{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}')"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title="{{ $profesional->tiene_vacacion_vigente ? 'El profesional ya tiene vacaciones activas' : 'Registrar vacaciones' }}"
+                                                                    {{ $profesional->tiene_vacacion_vigente ? 'disabled' : '' }}>
+                                                                <i class="feather icon-calendar"></i>
+                                                            </button>
+                                                            <button type="button"
+                                                                    class="btn btn-info btn-sm"
+                                                                    onclick="verHistorialVacaciones({{ $profesional->id }})"
+                                                                    data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title="Ver historial">
+                                                                <i class="feather icon-list"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Cierre: Tab vacaciones-->
 		</div>
 	</div>
 </div>
@@ -491,70 +731,51 @@
 
 @section('js-profesionales')
     <script>
-$(document).ready(function(){
+    // Deshabilitar autodiscover de Dropzone ANTES del document.ready
+    Dropzone.autoDiscover = false;
+
+    $(document).ready(function(){
+        $('#tabla_vacaciones').DataTable({
+            responsive: true,
+        });
         $('#msj_para_difusion').select2();
-        var dropzone;
-        // inicializar dropzone autodiscover false
-        Dropzone.autoDiscover = false;
-        // inicializar dropzone
-        dropzone = new Dropzone('#dropzone', {
-            url: "{{ route('mensaje_difusion') }}",
+
+        // Dropzone para mensaje a profesional individual
+        var dropzoneProfesional = new Dropzone('#mis-archivos-a-profesional', {
+            url: "{{ route('profesional.archivo.carga') }}",
             autoProcessQueue: false,
-            uploadMultiple: true,
-            parallelUploads: 100,
-            maxFiles: 100,
-            maxFilesize: 2,
-            acceptedFiles: 'image/*',
+            uploadMultiple: false, // Cambiar a false para enviar archivos uno por uno
+            parallelUploads: 1,
+            maxFiles: 10,
+            maxFilesize: 5, // 5 MB
+            paramName: "file", // Nombre del parámetro que espera el servidor
+            acceptedFiles: 'image/*,application/pdf,.doc,.docx,.xls,.xlsx',
             addRemoveLinks: true,
-            dictDefaultMessage: 'Arrastra las imágenes aquí para subirlas',
+            dictDefaultMessage: '<i class="feather icon-upload-cloud f-40 text-muted"></i><br>Arrastra archivos aquí o haz clic para seleccionar',
             dictRemoveFile: 'Eliminar',
-            dictFileTooBig: 'El archivo es muy grande (MiB). Tamaño máximo: MiB.',
+            dictFileTooBig: 'El archivo es muy grande (MB). Tamaño máximo: MB.',
             dictInvalidFileType: 'No puedes subir archivos de este tipo',
             dictCancelUpload: 'Cancelar subida',
             dictUploadCanceled: 'Subida cancelada',
-            dictMaxFilesExceeded: 'No puedes subir más archivos',
+            dictMaxFilesExceeded: 'No puedes subir más de archivos',
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            sending: function(file, xhr, formData) {
+                console.log('Configuración de envío para:', file.name);
+            },
             init: function() {
-                var myDropzone = this;
-                $('#enviar_mensaje_difusion').click(function() {
-                    myDropzone.processQueue();
-                });
-                this.on('sending', function(file, xhr, formData) {
-                    formData.append('id_profesional', $('#id_profesional_mensaje').val());
-                    formData.append('mensaje', $('#mensaje').val());
-                    formData.append('para', $('#msj_para_difusion').val());
-                });
-                this.on('success', function(file, response) {
-                    console.log(response);
-                    if (response.estado == 1)
-                    {
-                        swal({
-                            title: "Mensaje enviado",
-                            icon: "success",
-                        });
-                        $('#mensaje').val('');
-                        $('#msj_para_difusion').val('').trigger('change');
-                        $('#modal_mensaje').modal('hide');
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Problema al enviar mensaje",
-                            icon: "error",
-                        });
-                    }
-                });
-                this.on('error', function(file, response) {
-                    console.log(response);
-                    swal({
-                        title: "Problema al enviar mensaje",
-                        icon: "error",
-                    });
+                var myDropzoneProfesional = this;
+
+                // Limpiar archivos al abrir el modal
+                $('#mensaje_profesional').on('show.bs.modal', function() {
+                    myDropzoneProfesional.removeAllFiles(true);
                 });
             }
         });
+
+        // Guardar la instancia globalmente para acceder desde la función enviar_mensaje_a_profesional
+        window.dropzoneProfesional = dropzoneProfesional;
     });
 
     /** Modals Horariossss */
@@ -967,14 +1188,39 @@ $(document).ready(function(){
                         html += '</div>';
                     }else{
                         mensajes.forEach(mensaje => {
-                            html += '<div class="row">';
+                            html += '<div class="row mb-3">';
                             html += '<div class="col-md-12">';
                             html += '<div class="card">';
-                            html += '<div class="card-header">';
-                            html += '<h4 class="card-title">'+mensaje.datos_mensaje.titulo+'</h4>';
+                            html += '<div class="card-header bg-light">';
+                            html += '<h5 class="card-title mb-0"><i class="feather icon-mail"></i> ' + mensaje.datos_mensaje.titulo + '</h5>';
+                            // Mostrar el nombre del emisor si existe
+                            if(mensaje.profesional_emisor){
+                                html += '<small class="text-muted"><i class="feather icon-user"></i> De: ' + mensaje.profesional_emisor.nombre + ' ' + mensaje.profesional_emisor.apellido_uno + ' ' + mensaje.profesional_emisor.apellido_dos + '</small>';
+                            }
                             html += '</div>';
                             html += '<div class="card-body">';
-                            html += '<p>'+mensaje.datos_mensaje.mensaje+'</p>';
+                            html += '<p class="mb-2"><strong>Asunto:</strong> ' + mensaje.datos_mensaje.asunto + '</p>';
+                            html += '<p class="mb-3">' + mensaje.datos_mensaje.mensaje + '</p>';
+
+                            // Verificar si hay archivos adjuntos
+                            if(mensaje.datos_mensaje.archivos && mensaje.datos_mensaje.archivos.length > 0){
+                                html += '<hr>';
+                                html += '<div class="mb-2"><strong><i class="feather icon-paperclip"></i> Archivos adjuntos (' + mensaje.datos_mensaje.archivos.length + '):</strong></div>';
+                                html += '<div class="list-group">';
+
+                                mensaje.datos_mensaje.archivos.forEach(archivo => {
+                                    html += '<a href="' + archivo.url + '" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" download>';
+                                    html += '<span><i class="feather icon-file"></i> ' + (archivo.nombre_original || archivo.nombre_archivo) + '</span>';
+                                    html += '<span class="badge badge-primary badge-pill"><i class="feather icon-download"></i> Descargar</span>';
+                                    html += '</a>';
+                                });
+
+                                html += '</div>';
+                            }
+
+                            html += '</div>';
+                            html += '<div class="card-footer text-muted small">';
+                            html += '<i class="feather icon-clock"></i> Enviado: ' + (mensaje.fecha_envio || 'Sin fecha');
                             html += '</div>';
                             html += '</div>';
                             html += '</div>';
@@ -986,25 +1232,63 @@ $(document).ready(function(){
                 },
                 error: function(error){
                     console.log(error);
+                    swal({
+                        title: "Error",
+                        text: "No se pudo cargar el historial de mensajes",
+                        icon: "error",
+                    });
                 }
             })
         }
 
         function buscar_profesional_permisos() {
             let rut = $('#buscar_profesional_rut').val();
+            if(rut == ""){
+                swal({
+                    title: "Error",
+                    text: "Debe ingresar un RUT para buscar",
+                    icon: "error",
+                });
+                return;
+            }
+            let id_lugar_atencion = "{{ $institucion->id_lugar_atencion }}";
+            console.log(rut, id_lugar_atencion);
             let url = "{{ ROUTE('profesional.buscador') }}";
             $.ajax({
                 type:'get',
                 url: url,
                 data:{
                     rut:rut,
+                    id_lugar_atencion: id_lugar_atencion
                 },
                 success: function(resp){
                     console.log(resp);
                     let profesionales = resp.registros;
                     console.log(profesionales);
                     if(profesionales.length == 0){
+                        // Ocultar info profesional
                         $('#info_profesional_permisos').addClass('d-none');
+                        // Limpiar campos de info profesional
+                        $('#nombre_profesional_permisos').text("");
+                        $('#rut_profesional_permisos').text("");
+                        $('#especialidad_profesional_permisos').text("");
+                        $('#subtipo_especialidad_profesional_permisos').text("");
+                        // Limpiar checkboxes de permisos
+                        $('#permiso_cotizar').prop('checked', false);
+                        $('#permiso_vender_audifonos').prop('checked', false);
+                        $('#permiso_control_audifonos').prop('checked', false);
+                        $('#permiso_estadisticas_laboratorio').prop('checked', false);
+                        $('#permiso_anular_hora').prop('checked', false);
+                        $('#permiso_subir_ver_archivos').prop('checked', false);
+                        $('#permiso_eliminar_archivos').prop('checked', false);
+                        $('#permiso_editar_pacientes').prop('checked', false);
+                        $('#permiso_ver_pacientes_centro').prop('checked', false);
+                        // Limpiar historial de permisos si existe
+                        if(typeof limpiar_permisos_historial === 'function'){
+                            limpiar_permisos_historial();
+                        } else {
+                            $('#tabla_historial_permisos tbody').html("");
+                        }
                         swal({
                             title: "Profesional no encontrado",
                             icon: "error",
@@ -1035,12 +1319,14 @@ $(document).ready(function(){
         }
 
         function dame_permisos_historial(id_profesional) {
+            let id_lugar_atencion = "{{ $institucion->id_lugar_atencion }}";
             let url = "{{ ROUTE('laboratorio.profesional.obtener_permisos') }}";
             $.ajax({
                 type: 'post',
                 url: url,
                 data: {
                     id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
                     _token: CSRF_TOKEN
                 },
                 success: function(resp) {
@@ -1154,18 +1440,683 @@ $(document).ready(function(){
             });
         }
 
+    function registrar_nuevo_profesional(){
+        console.log('registrar nuevo profesional');
+        let valido = 1;
+        let mensaje = '';
+
+        let id_institucion = $('#id_institucion').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_admin_creador = $('#id_admin_creador').val();
+        let id_tipo_admin_creador = $('#id_tipo_admin_creador').val();
+        let tipo_contrato = $('#tipo_contrato').val();
+
+        let rut = $('#rut_nuevo_profesional').val();
+        let f_ingreso = $('#f_ingreso_nuevo_profesional').val();
+        let nombre = $('#nombre_nuevo_profesional').val();
+        let apellido1 = $('#apellido1_nuevo_profesional').val();
+        let apellido2 = $('#apellido2_nuevo_profesional').val();
+        let sexo = $('#empleado_sexo').val();
+        let fecha_nacimiento = $('#fecha_nacimiento').val();
+        let email = $('#email_nuevo_profesional').val();
+
+        let fecha_inicio = $('#empleado_fecha_inicio').val();
+        let fecha_termino = $('#empleado_fecha_termino').val();
+        let monto_imponible = $('#empleado_monto_imponible').val();
+
+        let locomocion = ( $('#empleado_locomocion').val() == ''?'0':$('#empleado_locomocion').val() );
+        var locomocion_porcentaje = '';
+        if(locomocion == 1)
+            locomocion_porcentaje = $('#empleado_locomocion_porcentaje').val();
+        else
+            locomocion_porcentaje = '0';
+
+        let colacion = ( $('#empleado_colacion').val() == ''?'0':$('#empleado_colacion').val() );
+        var colacion_porcentaje = '';
+        if(colacion == 1)
+            colacion_porcentaje = $('#empleado_colacion_porcentaje').val();
+        else
+            colacion_porcentaje = '0';
+
+        let asignacion_familiar = ( $('#empleado_asignacion_familiar').val() == ''?'0':$('#empleado_asignacion_familiar').val() );
+        var asignacion_familiar_cantidad = '';
+        if(asignacion_familiar == 1)
+            asignacion_familiar_cantidad = $('#empleado_asignacion_familiar_cantidad').val();
+        else
+            asignacion_familiar_cantidad = '0';
+
+        let caja_compensacion = ( $('#empleado_caja_compensacion').val() == ''?'0':$('#empleado_caja_compensacion').val() );
+        var caja_compensacion_porcentaje = '';
+        if(caja_compensacion == 1)
+            caja_compensacion_porcentaje = $('#empleado_caja_compensacion_porcentaje').val();
+        else
+            caja_compensacion_porcentaje = '0';
+
+        let telefono1 = $('#telefono1_nuevo_profesional').val();
+        let telefono2 = $('#telefono2_nuevo_profesional').val();
+        let direccion = $('#direccion_nuevo_profesional').val();
+        let numero = $('#n_dpto_nuevo_profesional').val();
+        let region = $('#region_nuevo_profesional').val();
+        let comuna = $('#comuna_nuevo_profesional').val();
+        let dias_laborales = $('#dias_laborales').val();
+        let hora_entrada = $('#hora_entrada').val();
+        let hora_salida = $('#hora_salida').val();
+        let hora_entrada_colacion = $('#hora_entrada_colacion').val();
+        let hora_salida_colacion = $('#hora_salida_colacion').val();
+        let cargo = $('#cargo_nuevo_profesional').val();
+        let profesion = $('#profesion_nuevo_profesional').val();
+        let especialidad = $('#especialidad_nuevo_profesional').val();
+        let sub_especialidad = $('#sub_especialidad_nuevo_profesional').val();
+        let dias_atencion = $('#dias_atencion_nuevo_profesional').val();
+        let horario = $('#horario_nuevo_profesional').val();
+        let p_hora = $('#p_hora_nuevo_profesional').val();
+        let correo_cont = $('#correo-cont').is(':checked');
+        let banco = $('#banco_nuevo_profesional').val();
+        let n_cta = $('#n_cta_nuevo_profesional').val();
+        let sucursal = $('#sucursal_nuevo_profesional').val();
+
+
+
+        if(rut == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el rut del profesional</li>';
+        }
+        if(f_ingreso == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de ingreso del profesional</li>';
+        }
+        if(nombre == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el nombre del profesional</li>';
+        }
+        if(apellido1 == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el primer apellido del profesional</li>';
+        }
+        if(apellido2 == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el segundo apellido del profesional</li>';
+        }
+        if(sexo == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el sexo del profesional</li>';
+        }
+        if(fecha_nacimiento == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de nacimiento del profesional</li>';
+        }
+        if(email == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el correo electr&oacute;nico del profesional</li>';
+        }
+        if(fecha_inicio == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de inicio del contrato del profesional</li>';
+        }
+        if(monto_imponible == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el monto imponible del profesional</li>';
+        }
+        if(telefono1 == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el tel&eacute;fono del profesional</li>';
+        }
+        if(direccion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la direcci&oacute;n del profesional</li>';
+        }
+        if(cargo == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el cargo del profesional</li>';
+        }
+        if(region == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la regi&oacute;n del profesional</li>';
+        }
+        if(comuna == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la comuna del profesional</li>';
+        }
+        if(dias_laborales == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar los d&iacute;as laborales del profesional</li>';
+        }
+        if(hora_entrada == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de entrada del profesional</li>';
+        }
+        if(hora_salida == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de salida del profesional</li>';
+        }
+        if(hora_entrada_colacion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de entrada de colaci&oacute;n del profesional</li>';
+        }
+        if(hora_salida_colacion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de salida de colaci&oacute;n del profesional</li>';
+        }
+        if(cargo == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el cargo del profesional</li>';
+        }
+        if(profesion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la profesi&oacute;n del profesional</li>';
+        }
+        if(especialidad == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la especialidad del profesional</li>';
+        }
+        if(sub_especialidad == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la sub-especialidad del profesional</li>';
+        }
+        if(dias_atencion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar los d&iacute;as de atenci&oacute;n del profesional</li>';
+        }
+        if(horario == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el horario del profesional</li>';
+        }
+        if(p_hora == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la cantidad de pacientes por hora del profesional</li>';
+        }
+        if(banco == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el banco para el dep&oacute;sito del profesional</li>';
+        }
+        if(n_cta == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el n&uacute;mero de cuenta para el dep&oacute;sito del profesional</li>';
+        }
+        if(sucursal == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la sucursal para el dep&oacute;sito del profesional</li>';
+        }
+
+
+        if(valido == 0){
+            swal({
+                title: "Error",
+                content:{
+                    element: "div",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            })
+            return false;
+        }
+
+
+        let data = {
+            _token: "{{ csrf_token() }}",
+            id_institucion: id_institucion,
+            id_lugar_atencion: id_lugar_atencion,
+            id_admin_creador: id_admin_creador,
+            id_tipo_admin_creador: id_tipo_admin_creador,
+            tipo_contrato: tipo_contrato,
+            rut: rut,
+            f_ingreso: f_ingreso,
+            nombre: nombre,
+            apellido1: apellido1,
+            apellido2: apellido2,
+            sexo: sexo,
+            fecha_nacimiento: fecha_nacimiento,
+            email: email,
+            fecha_inicio: fecha_inicio,
+            fecha_termino: fecha_termino,
+            monto_imponible: monto_imponible,
+            locomocion: locomocion,
+            locomocion_porcentaje: locomocion_porcentaje,
+            colacion: colacion,
+            colacion_porcentaje: colacion_porcentaje,
+            asignacion_familiar: asignacion_familiar,
+            asignacion_familiar_cantidad: asignacion_familiar_cantidad,
+            caja_compensacion: caja_compensacion,
+            caja_compensacion_porcentaje: caja_compensacion_porcentaje,
+            telefono1: telefono1,
+            telefono2: telefono2,
+            direccion: direccion,
+            numero: numero,
+            region: region,
+            comuna: comuna,
+            dias_laborales: dias_laborales,
+            hora_entrada: hora_entrada,
+            hora_salida: hora_salida,
+            hora_entrada_colacion: hora_entrada_colacion,
+            hora_salida_colacion: hora_salida_colacion,
+            cargo: cargo,
+            profesion: profesion,
+            especialidad: especialidad,
+            sub_especialidad: sub_especialidad,
+            dias_atencion: dias_atencion,
+            horario: horario,
+            p_hora: p_hora,
+            correo_cont: correo_cont,
+            banco: banco,
+            n_cta: n_cta,
+            sucursal: sucursal,
+        }
+
+        console.log(data);
+
+
+        let url = "{{ route('laboratorio.registrar_profesional') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+             console.log(data);
+            if (data != null) {
+                if(data.estado == 1){
+                    swal({
+                        title: "Registro Exitoso",
+                        text: data.message,
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                    $('#card_body_profesionales_contratados').empty();
+                    $('#card_body_profesionales_contratados').append(data.v);
+                    // reload after 2 seconds
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }else{
+                    swal({
+                        title: "Error",
+                        text: data.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                }
+            } else {
+                swal({
+                    title: "Error",
+                    text: "Error al registrar profesional",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    // Función para abrir el modal de registro de vacaciones
+    function abrirModalVacaciones(id_profesional, nombre_profesional) {
+        $('#id_profesional_vacaciones').val(id_profesional);
+        $('#nombre_profesional_vacaciones').text(nombre_profesional);
+        $('#form_vacaciones')[0].reset();
+        $('#modal_registrar_vacaciones').modal('show');
+    }
+
+    // Función para formatear fecha de yyyy-mm-dd a dd/mm/yyyy
+    function formatearFecha(fecha) {
+        if (!fecha) return 'N/A';
+
+        // Si la fecha incluye la hora (formato ISO), tomar solo la parte de la fecha
+        if (fecha.includes('T')) {
+            fecha = fecha.split('T')[0];
+        }
+
+        // Separar por guiones
+        let partes = fecha.split('-');
+        if (partes.length === 3) {
+            return partes[2] + '/' + partes[1] + '/' + partes[0];
+        }
+        return fecha;
+    }
+
+    // Función para ver el historial de vacaciones
+    function verHistorialVacaciones(id_profesional) {
+        $.ajax({
+            url: '{{ route("laboratorio.vacaciones.historial", "") }}/' + id_profesional,
+            method: 'GET',
+            success: function(response) {
+                if (response.estado == 1 && response.vacaciones && response.vacaciones.length > 0) {
+                    let html = '<div class="table-responsive"><table class="table table-bordered table-sm">';
+                    html += '<thead class="thead-light"><tr><th>Fecha Inicio</th><th>Fecha Fin</th><th>Días</th><th>Observaciones</th><th>Estado</th><th class="text-center">Acciones</th></tr></thead><tbody>';
+
+                    response.vacaciones.forEach(function(vacacion) {
+                        html += '<tr>';
+                        html += '<td>' + formatearFecha(vacacion.fecha_inicio) + '</td>';
+                        html += '<td>' + formatearFecha(vacacion.fecha_fin) + '</td>';
+                        html += '<td class="text-center"><span class="badge badge-primary">' + vacacion.total_dias + ' día' + (vacacion.total_dias > 1 ? 's' : '') + '</span></td>';
+                        html += '<td><small>' + (vacacion.observaciones || 'Sin observaciones') + '</small></td>';
+                        html += '<td class="text-center">' + (vacacion.estado == 1 ? '<span class="badge badge-success">Activo</span>' : '<span class="badge badge-secondary">Inactivo</span>') + '</td>';
+                        html += '<td class="text-center" style="white-space: nowrap;">';
+                        html += '<button class="btn btn-sm btn-warning mr-1" onclick="editarVacacion(' + vacacion.id + ', \'' + vacacion.fecha_inicio + '\', \'' + vacacion.fecha_fin + '\', \'' + (vacacion.observaciones || '') + '\')" title="Editar"><i class="feather icon-edit"></i></button>';
+                        html += '<button class="btn btn-sm btn-danger" onclick="eliminarVacacion(' + vacacion.id + ', ' + id_profesional + ')" title="Eliminar"><i class="feather icon-trash-2"></i></button>';
+                        html += '</td>';
+                        html += '</tr>';
+                    });
+
+                    html += '</tbody></table></div>';
+
+                    swal({
+                        title: "Historial de Vacaciones",
+                        content: {
+                            element: "div",
+                            attributes: {
+                                innerHTML: html
+                            }
+                        },
+                        buttons: "Cerrar",
+                    });
+                } else {
+                    swal({
+                        title: "Historial de Vacaciones",
+                        text: "No hay registros de vacaciones para este profesional",
+                        icon: "info",
+                        buttons: "Aceptar",
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar el historial de vacaciones",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+            }
+        });
+    }
+
+    // Función para editar una vacación
+    function editarVacacion(id, fecha_inicio, fecha_fin, observaciones) {
+        swal.close(); // Cerrar el modal del historial
+
+        // Limpiar las fechas si vienen en formato ISO (con la 'T' y la 'Z')
+        if (fecha_inicio && fecha_inicio.includes('T')) {
+            fecha_inicio = fecha_inicio.split('T')[0];
+        }
+        if (fecha_fin && fecha_fin.includes('T')) {
+            fecha_fin = fecha_fin.split('T')[0];
+        }
+
+        // Rellenar el modal con los datos de la vacación a editar
+        $('#id_vacacion_editar').val(id);
+        $('#fecha_inicio_editar').val(fecha_inicio);
+        $('#fecha_fin_editar').val(fecha_fin);
+        $('#observaciones_editar').val(observaciones);
+
+        // Calcular días
+        calcularDiasEditar();
+
+        // Mostrar el modal de edición
+        $('#modal_editar_vacaciones').modal('show');
+    }
+
+    // Función para eliminar una vacación
+    function eliminarVacacion(id, id_profesional) {
+        swal.close(); // Cerrar el modal del historial
+
+        swal({
+            title: "¿Está seguro?",
+            text: "Se eliminará el registro de vacaciones. Esta acción no se puede deshacer.",
+            icon: "warning",
+            buttons: ["Cancelar", "Sí, eliminar"],
+            dangerMode: true,
+        }).then((confirmar) => {
+            if (confirmar) {
+                $.ajax({
+                    url: '{{ route("laboratorio.vacaciones.eliminar") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        if (response.estado == 1) {
+                            swal({
+                                title: "Eliminado",
+                                text: response.msj || "Vacación eliminada correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                            }).then(() => {
+                                verHistorialVacaciones(id_profesional);
+                            });
+                        } else {
+                            swal({
+                                title: "Error",
+                                text: response.msj || "Error al eliminar la vacación",
+                                icon: "error",
+                                buttons: "Aceptar",
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        swal({
+                            title: "Error",
+                            text: "Error al procesar la solicitud",
+                            icon: "error",
+                            buttons: "Aceptar",
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    // Función para guardar cambios de vacación editada
+    function guardarEdicionVacacion() {
+        let id = $('#id_vacacion_editar').val();
+        let fecha_inicio = $('#fecha_inicio_editar').val();
+        let fecha_fin = $('#fecha_fin_editar').val();
+        let observaciones = $('#observaciones_editar').val();
+
+        // Validaciones
+        if (!fecha_inicio || !fecha_fin) {
+            swal({
+                title: "Error",
+                text: "Por favor complete las fechas de inicio y fin",
+                icon: "error",
+                buttons: "Aceptar",
+            });
+            return;
+        }
+
+        if (new Date(fecha_fin) < new Date(fecha_inicio)) {
+            swal({
+                title: "Error",
+                text: "La fecha de fin debe ser posterior a la fecha de inicio",
+                icon: "error",
+                buttons: "Aceptar",
+            });
+            return;
+        }
+
+        $.ajax({
+            url: '{{ route("laboratorio.vacaciones.actualizar") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                observaciones: observaciones
+            },
+            success: function(response) {
+                if (response.estado == 1) {
+                    swal({
+                        title: "Éxito",
+                        text: response.msj || "Vacación actualizada correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    }).then(() => {
+                        $('#modal_editar_vacaciones').modal('hide');
+                        // Recargar la página para ver los cambios
+                        location.reload();
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response.msj || "Error al actualizar la vacación",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal({
+                    title: "Error",
+                    text: "Error al procesar la solicitud",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+            }
+        });
+    }
+
+    // Calcular días para edición
+    function calcularDiasEditar() {
+        let fecha_inicio = $('#fecha_inicio_editar').val();
+        let fecha_fin = $('#fecha_fin_editar').val();
+
+        if (fecha_inicio && fecha_fin) {
+            let inicio = new Date(fecha_inicio);
+            let fin = new Date(fecha_fin);
+            let diferencia = fin.getTime() - inicio.getTime();
+            let dias = Math.ceil(diferencia / (1000 * 3600 * 24)) + 1;
+
+            if (dias > 0) {
+                $('#total_dias_editar').text(dias + ' día' + (dias > 1 ? 's' : ''));
+            } else {
+                $('#total_dias_editar').text('0 días');
+            }
+        }
+    }
+
+    // Función para guardar las vacaciones
+    function guardarVacaciones() {
+        let id_profesional = $('#id_profesional_vacaciones').val();
+        let fecha_inicio = $('#fecha_inicio_vacaciones').val();
+        let fecha_fin = $('#fecha_fin_vacaciones').val();
+        let observaciones = $('#observaciones_vacaciones').val();
+        let notificar = $('#notificar_profesional').is(':checked') ? 1 : 0;
+
+        // Validaciones
+        if (!fecha_inicio || !fecha_fin) {
+            swal({
+                title: "Error",
+                text: "Por favor complete las fechas de inicio y fin",
+                icon: "error",
+                buttons: "Aceptar",
+            });
+            return;
+        }
+
+        // Validar que la fecha fin sea mayor que la fecha inicio
+        if (new Date(fecha_fin) < new Date(fecha_inicio)) {
+            swal({
+                title: "Error",
+                text: "La fecha de fin debe ser posterior a la fecha de inicio",
+                icon: "error",
+                buttons: "Aceptar",
+            });
+            return;
+        }
+
+        // Llamada AJAX al controlador
+        $.ajax({
+            url: '{{ route("laboratorio.vacaciones.guardar") }}',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_profesional: id_profesional,
+                fecha_inicio: fecha_inicio,
+                fecha_fin: fecha_fin,
+                observaciones: observaciones,
+                notificar_profesional: notificar,
+                id_lugar_atencion: $('#id_lugar_atencion').val()
+            },
+            success: function(response) {
+                if (response.estado == 1) {
+                    swal({
+                        title: "Éxito",
+                        text: response.msj || "Vacaciones registradas correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    }).then(() => {
+                        $('#modal_registrar_vacaciones').modal('hide');
+                        verHistorialVacaciones(id_profesional);
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response.msj || "Error al registrar vacaciones",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log(xhr, status, error);
+                swal({
+                    title: "Error",
+                    text: "Error al procesar la solicitud",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+            }
+        });
+    }
+
+    // Calcular días entre fechas
+    function calcularDiasVacaciones() {
+        let fecha_inicio = $('#fecha_inicio_vacaciones').val();
+        let fecha_fin = $('#fecha_fin_vacaciones').val();
+
+        if (fecha_inicio && fecha_fin) {
+            let inicio = new Date(fecha_inicio);
+            let fin = new Date(fecha_fin);
+            let diferencia = fin.getTime() - inicio.getTime();
+            let dias = Math.ceil(diferencia / (1000 * 3600 * 24)) + 1;
+
+            if (dias > 0) {
+                $('#total_dias_vacaciones').text(dias + ' día' + (dias > 1 ? 's' : ''));
+            } else {
+                $('#total_dias_vacaciones').text('0 días');
+            }
+        }
+    }
+
     </script>
 @endsection
 
 @section('page-script')
 <script>
-
+function registrar_limpieza_mantencion(){
+    // abrir modal
+    console.log('abrir modal');
+    $('#registrar_personalaseoymantencion').modal('show');
+}
 </script>
 @endsection
 
 @section('modales-profesionales_inst')
     @include('app.laboratorio.modales.profesional.asociar_profesional')
+    @include('app.contabilidad.modals.datos_profesional')
     @include('app.laboratorio.modales.personal.finalizar_contrato')
+    @include('app.laboratorio.modales.personal.finalizar_personal')
+    @include('app.adm_cm.modales.personal.permisos_rol')
+
+
 
     @include('app.adm_cm.modal_adm.mensaje_profesional')
     @include('app.adm_cm.modal_adm.mensaje_difusion')
@@ -1176,6 +2127,7 @@ $(document).ready(function(){
 
     @include('app.adm_cm.modal_adm.datos_banco')
     @include('app.adm_cm.modal_adm.horario_usuario')
+    @include('app.laboratorio.modales.personal.horario_personal_mantencion')
     @include('app.adm_cm.modal_adm.convenio_usuario')
     @include('app.adm_cm.modal_adm.contacto_usuario')
     @include('app.laboratorio.modales.personal.registrar_personal')
@@ -1185,6 +2137,13 @@ $(document).ready(function(){
     {{--  @include('app.adm_cm.modal_adm.registrar_profesional')  --}}
     {{--  @include('app.adm_cm.modal_adm.roles_permisos_prof')  --}}
     @include('app.adm_cm.modal_adm.liquidacion_profesionales')
+    @include('app.adm_cm.modal_adm.registrar_vacaciones')
+    @include('app.adm_cm.modal_adm.editar_vacaciones')
+
+
+    @include('app.laboratorio.modales.personal.registrar_personal_limpieza_mantencion')
+    @include('app.laboratorio.modales.personal.editar_mantencion')
+
 @endsection
 
 

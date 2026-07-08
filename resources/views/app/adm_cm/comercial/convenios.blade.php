@@ -18,7 +18,7 @@
                         </div>
                         <ul class="breadcrumb mb-4">
                             <li class="breadcrumb-item">
-                                <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                <a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                     <i class="feather icon-home"></i>
                                 </a>
                             </li>
@@ -40,28 +40,60 @@
                     <table id="tabla_convenios_institucion" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                         <thead>
                             <tr>
-                                <th class="text-wrap text-center align-middle">Convenio</th>
-                                <th class="text-center align-middle">Tipo</th>
-                                <th class="text-center align-middle">Fecha Inicial</th>
-                                <th class="text-center align-middle">Fecha Final</th>
-                                <th class="text-center align-middle">Productos</th>
-                                <th class="text-center align-middle">Descuento</th>
-                                <th class="text-center align-middle">Accion</th>
+                                <th class="text-wrap text-center align-middle">Convenios</th>
+                                <th class="text-center align-middle">Tipo Atención</th>
+                                <th class="text-center align-middle">Porcentaje</th>
+                                <th class="text-center align-middle">Valor</th>
+                                <th class="text-center align-middle">Valor Garantía</th>
+                                <th class="text-center align-middle">Copago Fonasa</th>
+                                <th class="text-center align-middle">Bono Fonasa</th>
+                                <th class="text-center align-middle">Lugar Atención</th>
+                                <th class="text-center align-middle">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($convenios_institucion as $convenio)
                                 <tr>
-                                    <td class="align-middle text-center">{{ $convenio->nombre_convenio_institucion }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->tipo_convenio }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_inicio_convenio_institucion }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_fin_convenio_institucion }}</td>
                                     <td class="align-middle text-center">
-                                        @foreach($convenio->tipos_productos as $pc)
-                                            <span>{{ $pc }}</span><br>
-                                        @endforeach
+                                        @if(isset($convenio->convenios_array) && count($convenio->convenios_array) > 0)
+                                            @foreach($convenio->convenios_array as $conv)
+                                                <span class="badge badge-info mb-1">{{ $conv }}</span><br>
+                                            @endforeach
+                                        @else
+                                            <span class="text-muted">Sin convenios</span>
+                                        @endif
                                     </td>
-                                    <td class="align-middle text-center">{{ $convenio->porcentaje_convenio_institucion }}%</td>
+                                    <td class="align-middle text-center">{{ $convenio->tipo_atencion }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->porcentaje }}%</td>
+                                    <td class="align-middle text-center">${{ number_format($convenio->valor, 0, ',', '.') }}</td>
+                                    <td class="align-middle text-center">
+                                        @if($convenio->valor_garantia)
+                                            ${{ number_format($convenio->valor_garantia, 0, ',', '.') }}
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @if($convenio->valor_copago_fonasa)
+                                            ${{ number_format($convenio->valor_copago_fonasa, 0, ',', '.') }}
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @if($convenio->valor_bon_fonasa)
+                                            ${{ number_format($convenio->valor_bon_fonasa, 0, ',', '.') }}
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @if(isset($convenio->lugar_atencion_nombre))
+                                            <span class="badge badge-success mb-1">{{ $convenio->lugar_atencion_nombre }}</span><br>
+                                        @else
+                                            <span class="text-muted">Sin lugares de atención</span>
+                                        @endif
+                                    </td>
                                     <td class="align-middle text-center">
                                         <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
@@ -84,23 +116,23 @@
     $(document).ready(function() {
         $('#productos_convenio_').select2();
         $('#productos_convenio_edicion').select2();
+        $('#productos_convenio_especial_editar').select2();
+        $('#productos_convenio_especiales').select2();
     });
 
     function guardar_nuevo_convenio_institucion(){
-        var nombre_convenio = $('#nombre_convenio').val();
-        var tipo_convenio = $('#tipo_convenio').val();
-        var porcentaje_dcto = $('#porcentaje_dcto').val();
-        var tipo_convenio_institucion = $('#tipo_convenio_institucion').val();
-        var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio').val();
-        var fecha_final_pago_convenio = $('#fecha_final_pago_convenio').val();
-        var rut_representante_convenio = $('#rut_representante_convenio').val();
-        var nombre_representante_convenio = $('#nombre_representante_convenio').val();
-        var fecha_pago_convenio = $('#fecha_pago_convenio').val();
-        var telefono_representante_convenio = $('#telefono_representante_convenio').val();
-        var email_representante_convenio = $('#email_representante_convenio').val();
-        var direccion_representante_convenio = $('#direccion_representante_convenio').val();
-        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio').val();
-        var productos_convenio = $('#productos_convenio_').val();
+        console.log('Guardar nuevo convenio especial');
+
+        var nombre_convenio = $('#nombre_convenio_especiales').val();
+        var tipo_convenio = $('#tipo_convenio_especiales').val();
+        var porcentaje_dcto = $('#porcentaje_dcto_especiales').val();
+        var tipo_convenio_institucion = $('#tipo_convenio_institucion_especiales').val();
+        var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio_especiales').val();
+        var fecha_final_pago_convenio = $('#fecha_final_pago_convenio_especiales').val();
+        var productos_convenio = $('#productos_convenio_especiales').val();
+        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio_especiales').val();
+        var id_lugar_atencion = "{{ $institucion->id_lugar_atencion }}"; // No se usa en especiales pero se envía para compatibilidad
+        var id_empresa = $('#id_empresa').val() || 0;
 
         var valido = 1;
         var mensaje = '';
@@ -123,35 +155,11 @@
         }
         if(fecha_inicial_pago_convenio == ''){
             valido = 0;
-            mensaje += '<li>Seleccione fecha de pago</li>';
+            mensaje += '<li>Seleccione fecha inicial</li>';
         }
         if(fecha_final_pago_convenio == ''){
             valido = 0;
-            mensaje += '<li>Seleccione fecha de finalización de pago</li>';
-        }
-        if(rut_representante_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese rut representante</li>';
-        }
-        if(nombre_representante_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese nombre representante</li>';
-        }
-        if(telefono_representante_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese telefono representante</li>';
-        }
-        if(email_representante_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese email representante</li>';
-        }
-        if(direccion_representante_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese direccion representante</li>';
-        }
-        if(observaciones_nuevo_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese observaciones</li>';
+            mensaje += '<li>Seleccione fecha final</li>';
         }
         if(productos_convenio == null){
             valido = 0;
@@ -172,44 +180,54 @@
             return false;
         }
 
+        // Preparar datos en el mismo formato que guardar_tipo_convenio_ffa
+        var data = {
+            nombre_convenio: nombre_convenio,
+            tipo_convenio: tipo_convenio,
+            id_lugar_atencion: id_lugar_atencion,
+            porcentaje: porcentaje_dcto,
+            fecha_inicio: fecha_inicial_pago_convenio,
+            fecha_termino: fecha_final_pago_convenio,
+            observaciones: observaciones_nuevo_convenio,
+            convenios: 'Especial', // Identificador para convenios especiales
+            conveniosSeleccionados: [],
+            id_empresa: id_empresa,
+            productos_convenio: productos_convenio,
+            tipo_convenio_institucion: tipo_convenio_institucion,
+            _token: "{{ csrf_token() }}"
+        };
+
+        console.log(data);
+
         $.ajax({
-            url: "{{ ROUTE('adm_cm.convenio_nuevo') }}",
+            url: "{{ ROUTE('profesional.guardar_tipo_convenio') }}",
             type: 'POST',
-            data: {
-                nombre_convenio: nombre_convenio,
-                tipo_convenio: tipo_convenio,
-                porcentaje_dcto: porcentaje_dcto,
-                tipo_convenio_institucion: tipo_convenio_institucion,
-                fecha_inicial_pago_convenio: fecha_inicial_pago_convenio,
-                fecha_final_pago_convenio: fecha_final_pago_convenio,
-                rut_representante_convenio: rut_representante_convenio,
-                nombre_representante_convenio: nombre_representante_convenio,
-                telefono_representante_convenio: telefono_representante_convenio,
-                email_representante_convenio: email_representante_convenio,
-                direccion_representante_convenio: direccion_representante_convenio,
-                observaciones_nuevo_convenio: observaciones_nuevo_convenio,
-                productos_convenio: productos_convenio,
-                _token: "{{ csrf_token() }}"
-            },
+            data: data,
             success: function(response){
                 console.log(response);
                 if(response.estado == 1){
                     swal({
                         title: 'Convenio registrado',
-                        text: response.msj,
+                        text: response.mensaje,
                         icon: 'success'
                     });
                     $('#nuevoConvenioInstitucion').modal('hide');
-                    $('#card_body_convenios_institucion').empty();
-                    $('#card_body_convenios_institucion').html(response.v);
-                    limpiar_formulario();
+                    location.reload();
                 }else{
                     swal({
                         title: 'Error',
-                        text: response.msj,
+                        text: response.mensaje || 'Error al registrar convenio',
                         icon: 'error'
                     });
                 }
+            },
+            error: function(xhr, status, error){
+                console.error('Error:', error);
+                swal({
+                    title: 'Error',
+                    text: 'Error al procesar la solicitud',
+                    icon: 'error'
+                });
             }
         });
     }
@@ -289,9 +307,12 @@
                         title: 'Convenio eliminado',
                         text: response.msj,
                         icon: 'success'
+                    })
+                    .then(() => {
+                        location.reload();
                     });
-                    $('#card_body_convenios_institucion').empty();
-                    $('#card_body_convenios_institucion').html(response.v);
+                    // $('#card_body_convenios_institucion').empty();
+                    // $('#card_body_convenios_institucion').html(response.v);
                 }else{
                     alert('Error al eliminar convenio');
                 }
@@ -311,19 +332,185 @@
                 $('#id_convenio_institucion').val(id);
                 console.log(response);
                 if(response.estado == 1){
-                    $('#nombre_convenio_edicion').val(response.convenio.nombre_convenio_institucion);
-                    $('#tipo_convenio_edicion').val(response.convenio.id_tipo_convenio);
-                    $('#porcentaje_dcto_edicion').val(response.convenio.porcentaje_convenio_institucion);
-                    $('#tipo_convenio_institucion_edicion').val(response.convenio.id_tipo_convenio_institucion);
-                    $('#fecha_inicial_pago_convenio_edicion').val(response.convenio.fecha_inicio_convenio_institucion);
-                    $('#fecha_final_pago_convenio_edicion').val(response.convenio.fecha_fin_convenio_institucion);
-                    $('#productos_convenio_edicion').val(response.convenio.productos).trigger('change');
-                    $('#rut_representante_convenio_edicion').val(response.convenio.rut_representante_convenio_institucion);
-                    $('#nombre_representante_convenio_edicion').val(response.convenio.nombre_representante_convenio_institucion);
-                    $('#telefono_representante_convenio_edicion').val(response.convenio.telefono_representante_convenio_institucion);
-                    $('#email_representante_convenio_edicion').val(response.convenio.email_representante_convenio_institucion);
-                    $('#direccion_representante_convenio_edicion').val(response.convenio.direccion_representante_convenio_institucion);
-                    $('#observaciones_edicion_convenio').val(response.convenio.observaciones_convenio_institucion);
+                    // Mapeo de convenios institucionales a IDs de checkboxes
+                    const convenioMap = {
+                        'Particular': 1,
+                        'Fonasa': 2,
+                        'Todas las Isapres': 3,
+                        'Banmédica': 4,
+                        'Colmena': 5,
+                        'Nueva Masvida': 6,
+                        'Consalud': 7,
+                        'Cruz Blanca': 8,
+                        'Cruz del Norte': 9,
+                        'Vida Tres': 10,
+                        'Fundación': 11,
+                        'Isalud': 12
+                    };
+
+                    // Mapeo de convenios FFAA a IDs de checkboxes
+                    const convenioFFAAMap = {
+                        'Ejército': 1,
+                        'Armada': 2,
+                        'Bomberos': 3,
+                        'Fuerza Aérea': 4,
+                        'Carabineros': 5,
+                        'PDI': 6,
+                        'Caja Los Andes': 7,
+                        'Caja La Araucana': 8,
+                        'Caja 18 de Septiembre': 9,
+                        'Caja Los Héroes': 10
+                    };
+
+                    // Limpiar todos los checkboxes primero (Institucionales)
+                    for (let i = 1; i <= 12; i++) {
+                        $('#convenio_editar_' + i).prop('checked', false);
+                    }
+
+                    // Limpiar todos los checkboxes de FFAA
+                    for (let i = 1; i <= 10; i++) {
+                        $('#convenio_editar_ffa' + i).prop('checked', false);
+                    }
+
+                    // Llenar los campos de edición (Instituciones)
+                    $('#tipo_atencion_editar').val(response.convenio.tipo_atencion || '');
+                    $('#fecha_inicial_inst_edicion').val(response.convenio.fecha_inicio || '');
+                    $('#fecha_final_inst_edicion').val(response.convenio.fecha_fin || '');
+                    // Manejar el checkbox de convenio infinito para institucionales
+                    if (response.convenio.fecha_fin) {
+                        $('#convenio_infinito_inst_edicion').prop('checked', false);
+                        $('#fecha_final_inst_edicion').prop('disabled', false);
+                    } else {
+                        $('#convenio_infinito_inst_edicion').prop('checked', true);
+                        $('#fecha_final_inst_edicion').prop('disabled', true);
+                    }
+                    $('#valor_editar').val(response.convenio.valor || '');
+                    $('#valor_garantia_editar').val(response.convenio.valor_garantia || '');
+                    $('#porcentaje_editar').val(response.convenio.porcentaje || '');
+                    $('#copago_fonasa_editar').val(response.convenio.valor_copago_fonasa || '');
+                    $('#bono_fonasa_editar').val(response.convenio.valor_bon_fonasa || '');
+                    $('#lugar_atencion_inst_edicion').val(response.convenio.id_lugar_atencion || '');
+                    $('#nivel_fonasa_editar').val(response.convenio.nivel_fonasa || '');
+                    $('#tpo_espera_editar').val(response.convenio.tpo_espera || '');
+                    // Mostrar/ocultar campos Fonasa según si Fonasa está entre los convenios
+                    var conveniosStr = (response.convenio.convenios || '').toLowerCase();
+                    var esFonasa = conveniosStr.indexOf('fonasa') !== -1;
+                    if (esFonasa) {
+                        $('#col_nivel_fonasa_editar, #col_copago_fonasa_editar, #col_bono_fonasa_editar, #col_tpo_espera_fonasa_editar').removeClass('d-none');
+                    } else {
+                        $('#col_nivel_fonasa_editar, #col_copago_fonasa_editar, #col_bono_fonasa_editar, #col_tpo_espera_fonasa_editar').addClass('d-none');
+                    }
+
+                    // Llenar los campos de edición (FFAA) - mismos valores
+                    $('#tipo_atencion_ffa_editar').val(response.convenio.tipo_atencion || '');
+                    $('#valor_ffa_editar').val(response.convenio.valor || '');
+                    $('#valor_garantia_ffa_editar').val(response.convenio.valor_garantia || '');
+                    $('#fecha_inicial_ffa_edicion').val(response.convenio.fecha_inicio || '');
+                    $('#fecha_final_ffa_edicion').val(response.convenio.fecha_fin || '');
+                    // Manejar el checkbox de convenio infinito para FFAA
+                    if (response.convenio.fecha_fin) {
+                        $('#convenio_infinito_ffa_edicion').prop('checked', false);
+                        $('#fecha_final_ffa_edicion').prop('disabled', false);
+                    } else {
+                        $('#convenio_infinito_ffa_edicion').prop('checked', true);
+                        $('#fecha_final_ffa_edicion').prop('disabled', true);
+                    }
+                    $('#porcentaje_ffa_editar').val(response.convenio.porcentaje || '');
+                    $('#copago_fonasa_ffa_editar').val(response.convenio.valor_copago_fonasa || '');
+                    $('#bono_fonasa_ffa_editar').val(response.convenio.valor_bon_fonasa || '');
+                    $('#lugar_atencion_ffa_edicion').val(response.convenio.id_lugar_atencion || '');
+
+                    // Verificar si es un convenio especial
+                    var esConvenioEspecial = false;
+                    if (response.convenio.convenios) {
+                        const conveniosTrimmed = response.convenio.convenios.trim().replace(/,/g, '').toLowerCase();
+                        if (conveniosTrimmed === 'especial' || conveniosTrimmed === 'especialidad') {
+                            esConvenioEspecial = true;
+                        }
+                    }
+
+                    if (esConvenioEspecial) {
+                        // Llenar campos de convenio especial
+                        $('#nombre_convenio_especial_editar').val(response.convenio.nombre_convenio || response.convenio.tipo_atencion || '');
+                        $('#tipo_convenio_especial_edicion').val(response.convenio.tipo_convenio || '0');
+                        $('#porcentaje_dcto_especial_edicion').val(response.convenio.porcentaje || '');
+                        $('#tipo_convenio_institucion_especial_edicion').val(response.convenio.tipo_convenio_institucion || '0');
+                        $('#fecha_inicial_especial_edicion').val(response.convenio.fecha_inicio || '');
+                        $('#fecha_final_especial_edicion').val(response.convenio.fecha_fin || '');
+                        $('#observaciones_especial_edicion').val(response.convenio.observaciones || '');
+
+                        // Manejar el checkbox de convenio infinito
+                        if (response.convenio.fecha_fin) {
+                            $('#convenio_infinito_especial_edicion').prop('checked', false);
+                            $('#fecha_final_especial_edicion').prop('disabled', false);
+                        } else {
+                            $('#convenio_infinito_especial_edicion').prop('checked', true);
+                            $('#fecha_final_especial_edicion').prop('disabled', true);
+                        }
+
+                        // Manejar productos si están disponibles
+                        if (response.convenio.productos_convenio) {
+                            let productos = [];
+                            if (typeof response.convenio.productos_convenio === 'string') {
+                                try {
+                                    productos = JSON.parse(response.convenio.productos_convenio);
+                                } catch(e) {
+                                    productos = response.convenio.productos_convenio.split(',').map(p => p.trim());
+                                }
+                            } else if (Array.isArray(response.convenio.productos_convenio)) {
+                                productos = response.convenio.productos_convenio;
+                            }
+                            $('#productos_convenio_especial_editar').val(productos).trigger('change');
+                        }
+
+                        // Cambiar a la pestaña de Especiales
+                        $('#pills-especiales-edicion-tab').tab('show');
+                    } else {
+                        // Procesar convenios institucionales o FFAA
+                        if (response.convenio.convenios) {
+                            console.log('Convenios string original:', response.convenio.convenios);
+
+                            // Dividir convenios por coma y limpiar saltos de línea, espacios y caracteres especiales
+                            const conveniosArray = response.convenio.convenios.split(',')
+                                .map(c => c.replace(/\n/g, ' ')           // Reemplazar saltos de línea por espacios
+                                           .replace(/\s+/g, ' ')          // Reemplazar múltiples espacios por uno solo
+                                           .trim())                       // Eliminar espacios al inicio y final
+                                .filter(c => c.length > 0);               // Filtrar strings vacíos
+
+                            console.log('Convenios array limpio:', conveniosArray);
+
+                            let tieneConveniosInst = false;
+                            let tieneConveniosFFAA = false;
+
+                            // Marcar checkboxes correspondientes
+                            conveniosArray.forEach(convenio => {
+                                // Intentar primero con convenios institucionales
+                                const convenioId = convenioMap[convenio];
+                                if (convenioId) {
+                                    console.log('Marcando convenio institucional:', convenio, 'ID:', convenioId);
+                                    $('#convenio_editar_' + convenioId).prop('checked', true);
+                                    tieneConveniosInst = true;
+                                } else {
+                                    // Si no es institucional, intentar con FFAA
+                                    const convenioFFAAId = convenioFFAAMap[convenio];
+                                    if (convenioFFAAId) {
+                                        console.log('Marcando convenio FFAA:', convenio, 'ID:', convenioFFAAId);
+                                        $('#convenio_editar_ffa' + convenioFFAAId).prop('checked', true);
+                                        tieneConveniosFFAA = true;
+                                    } else {
+                                        console.log('Convenio no encontrado en mapas:', convenio);
+                                    }
+                                }
+                            });
+
+                            // Cambiar a la pestaña correspondiente según el tipo de convenios
+                            if (tieneConveniosFFAA) {
+                                $('#pills-ffaa-edicion-tab').tab('show');
+                            } else if (tieneConveniosInst) {
+                                $('#pills-instituciones-edicion-tab').tab('show');
+                            }
+                        }
+                    }
                 }else{
                     alert('Error al cargar convenio');
                 }
@@ -335,6 +522,7 @@
 
 @section('modales')
     @include('app.adm_cm.modal_adm.convenio_usuario')
+    @include('app.adm_cm.modal_adm.convenio_institucion_nuevo')
     @include('app.adm_cm.modal_adm.convenio_nuevo')
     @include('app.adm_cm.modal_adm.convenio_editar')
 @endsection

@@ -43,7 +43,7 @@
                                     <h4 class="text-white f-20 d-inline ">Mis asistentes</h4>
                                     {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
                                         <i class="feather icon-plus"></i> Registrar Contrato Profesional </button> --}}
-                                        <button type="button" class="btn btn-sm btn-light d-inline float-right" onclick="asociar_profesional();"><i class="feather icon-plus"></i> Asociar otros profesionales</button>
+                                        {{-- <button type="button" class="btn btn-sm btn-light d-inline float-right" onclick="asociar_profesional();"><i class="feather icon-plus"></i> Asociar otros profesionales</button> --}}
                                 </div>
                             </div>
                         </div>
@@ -59,9 +59,8 @@
                                                 <th>Rut</th>
                                                 <th>Nombre</th>
                                                 <th>Contacto</th>
-                                                <th>Contacto Emergencia</th>
                                                 <th>Dirección</th>
-                                                <th>Desasociar</th>
+                                                <th>Desvincular</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -76,13 +75,8 @@
                                                             {{ $a->nombres . ' ' . $a->apellido_uno . ' ' . $a->apellido_dos }}
                                                         </td>
                                                         <td>
-                                                            <span>{{ $a->email }}</span><br>
-                                                            <span>{{ $a->telefono_uno }}</span>
-                                                        </td>
-                                                        <td>
-                                                            <span></span><br>
-                                                            <span></span><br>
-                                                            <span></span>
+                                                            <span><i class="feather icon-mail icono-tabla"></i>{{ $a->email }}</span><br>
+                                                            <span><i class="feather icon-phone icono-tabla"></i>{{ $a->telefono_uno }}</span>
                                                         </td>
                                                         <td>
                                                             @if(issset($a->id_direccion))
@@ -95,7 +89,7 @@
                                                         <td class="text-center">
                                                             <button onclick="desasociar_asistente({{ $a->id }});"
                                                                 type="button" class="btn btn-danger btn-sm btn-icon"
-                                                                data-toggle="tooltip" data-placement="top" title="Desasociar">
+                                                                data-toggle="tooltip" data-placement="top" title="Desvincular">
                                                                 <i class="feather icon-x"></i>
                                                             </button>
                                                         </td>
@@ -116,14 +110,10 @@
                                                             {{ $asis_la->Asistentes()->first()->nombres .' ' .$asis_la->Asistentes()->first()->apellido_uno .' ' .$asis_la->Asistentes()->first()->apellido_dos }}
                                                         </td>
                                                         <td>
-                                                            <span>{{ $asis_la->Asistentes()->first()->email }}</span><br>
-                                                            <span>{{ $asis_la->Asistentes()->first()->telefono_uno }}</span>
+                                                            <span><i class="feather icon-mail icono-tabla"></i> {{ $asis_la->Asistentes()->first()->email }}</span><br>
+                                                            <span><i class="feather icon-phone icono-tabla"></i> {{ $asis_la->Asistentes()->first()->telefono_uno }}</span>
                                                         </td>
-                                                        <td class="align-middle">
-                                                            <span></span><br>
-                                                            <span></span><br>
-                                                            <span></span>
-                                                        </td>
+                                                  
                                                         <td class="align-middle">
                                                             @if(isset($asis_la->Asistentes()->first()->id_direccion))
                                                                 {{ $asis_la->Asistentes()->first()->Direccion()->first()->direccion }}<br>
@@ -135,9 +125,9 @@
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <button type="button"
-                                                                onclick="desasociar_asistente({{ $asis_la->Asistentes()->first()->id }})"
+                                                                onclick="desasociar_asistente({{ $asis_la->id }})"
                                                                 class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"
-                                                                data-placement="top" title="Desasociar"><i
+                                                                data-placement="top" title="Desvincular"><i
                                                                     class="feather icon-x"></i></button>
                                                         </td>
                                                     </tr>

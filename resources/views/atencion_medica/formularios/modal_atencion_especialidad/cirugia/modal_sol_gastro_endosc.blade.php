@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Solicitud Exámenes Endoscópicos</h5>
-                <button type="button" class="close text-white" data-dismiss="modal"><span
+                <button type="button" class="close text-white" onclick="$('#m_gastroenterologia_end').modal('hide')" data-dismiss="modal"><span
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -128,7 +128,7 @@
                 type: 'GET',
                 dataType: 'json',
                 data: {
-                    sub_tipo_examen: 766
+                    sub_tipo_examen: 893
                 },
         })
         .done(function(response) {

@@ -16,18 +16,22 @@ class ProfesionalHorariosBloqueoController extends Controller
 
     public function registrar_r(Request $request)
     {
+        // Aceptar tanto id_profesional como id_box
+        $id_profesional = $request->id_profesional ?? $request->id_box;
+
         return  $this->registrar(
-                    $request->id_profesional,
+                    $id_profesional,
                     $request->id_lugar_atencion,
                     $request->motivo,
                     $request->fecha_inicio,
                     $request->hora_inicio,
                     $request->fecha_termino,
                     $request->hora_termino,
-                    $request->todo_dia);
+                    $request->todo_dia,
+                    $request->id_box ?? null);
     }
 
-    public function registrar($id_profesional, $id_lugar_atencion, $motivo, $fecha_inicio, $hora_inicio, $fecha_termino, $hora_termino, $todo_dia)
+    public function registrar($id_profesional, $id_lugar_atencion, $motivo, $fecha_inicio, $hora_inicio, $fecha_termino, $hora_termino, $todo_dia, $id_box = null)
     {
 
         $datos = array();
@@ -79,6 +83,11 @@ class ProfesionalHorariosBloqueoController extends Controller
             $registro->hora_termino = $hora_termino;
             $registro->todo_dia = $todo_dia;
             $registro->id_user = Auth::user()->id;
+
+            // Si es laboratorio, guardar también id_box
+            if($id_box) {
+                $registro->id_box = $id_box;
+            }
             if($registro->save())
             {
                 $datos['estado'] = 1;
@@ -102,6 +111,11 @@ class ProfesionalHorariosBloqueoController extends Controller
                     $hora_bloqueo->id_profesional = $id_profesional;
                     $hora_bloqueo->id_estado = 13;
                     $hora_bloqueo->id_lugar_atencion = $id_lugar_atencion;
+
+                    // Si es laboratorio, guardar también id_box
+                    if($id_box) {
+                        $hora_bloqueo->id_box = $id_box;
+                    }
                     $hora_bloqueo->fecha_consulta = \Carbon\Carbon::parse($start)->addDay($i)->format('Y-m-d');
                     if(\Carbon\Carbon::parse($start)->addDay($i)->format('Y-m-d') == $fecha_inicio)
                         $hora_bloqueo->hora_inicio = $registro->hora_inicio;
@@ -130,7 +144,14 @@ class ProfesionalHorariosBloqueoController extends Controller
                         /** BUSCAR HORAS MEDICAS PARA CANCELAR */
                         // SELECT * FROM `horas_medicas` WHERE fecha_consulta = '2024-03-22' AND hora_inicio BETWEEN '00:00:00' and '23:59:00';
                         $filtro_hora_busqueda = array();
-                        $filtro_hora_busqueda[] = array('id_profesional', $id_profesional);
+
+                        // Si es laboratorio, filtrar por id_box; si no, por id_profesional
+                        if($id_box) {
+                            $filtro_hora_busqueda[] = array('id_box', $id_box);
+                        } else {
+                            $filtro_hora_busqueda[] = array('id_profesional', $id_profesional);
+                        }
+
                         $filtro_hora_busqueda[] = array('id_lugar_atencion', $id_lugar_atencion);
                         $filtro_hora_busqueda[] = array('fecha_consulta', $hora_bloqueo->fecha_consulta);
                         $horas_medica_activas = HoraMedica::select('id', 'fecha_consulta', 'hora_inicio', 'hora_termino', 'tipo_hora_medica', 'id_profesional', 'id_lugar_atencion', 'id_asistente', 'id_paciente', 'id_estado')
@@ -240,8 +261,9 @@ class ProfesionalHorariosBloqueoController extends Controller
         $error = array();
         $valido = 1;
 
-        if(empty(trim($request->id_profesional))){
-            $error['id_profesional'] = 'campo requerido';
+        // Validar que venga id_profesional o id_box
+        if(empty(trim($request->id_profesional)) && empty(trim($request->id_box))){
+            $error['id_profesional'] = 'campo requerido (id_profesional o id_box)';
             $valido = 0;
         }
         if(empty(trim($request->id_lugar_atencion))){
@@ -252,7 +274,14 @@ class ProfesionalHorariosBloqueoController extends Controller
         if($valido)
         {
             $filtros = array();
-            $filtros[] = array('id_profesional', $request->id_profesional);
+
+            // Si es laboratorio, filtrar por id_box; si no, por id_profesional
+            if(!empty($request->id_box)) {
+                $filtros[] = array('id_box', $request->id_box);
+            } else {
+                $filtros[] = array('id_profesional', $request->id_profesional);
+            }
+
             $filtros[] = array('id_lugar_atencion', $request->id_lugar_atencion);
             $filtros[] = array('estado','<>' , 2);
             $filtros[] = array('fecha_termino','>=' , date('Y-m-d'));
@@ -293,9 +322,9 @@ class ProfesionalHorariosBloqueoController extends Controller
             $error['ID'] = 'campo requerido';
             $valido = 0;
         }
-        if(empty($request->id_profesional))
+        if(empty($request->id_profesional) && empty($request->id_box))
         {
-            $error['PROFESIONAL'] = 'campo requerido';
+            $error['PROFESIONAL'] = 'campo requerido (id_profesional o id_box)';
             $valido = 0;
         }
         if(empty($request->id_lugar_atencion))
@@ -313,7 +342,14 @@ class ProfesionalHorariosBloqueoController extends Controller
         {
             $filtros = array();
             $filtros[] = array('id',$request->id);
-            $filtros[] = array('id_profesional',$request->id_profesional);
+
+            // Si es laboratorio, filtrar por id_box; si no, por id_profesional
+            if(!empty($request->id_box)) {
+                $filtros[] = array('id_box',$request->id_box);
+            } else {
+                $filtros[] = array('id_profesional',$request->id_profesional);
+            }
+
             $filtros[] = array('id_lugar_atencion',$request->id_lugar_atencion);
 
             $registro = ProfesionalHorariosBloqueo::where($filtros)->first();

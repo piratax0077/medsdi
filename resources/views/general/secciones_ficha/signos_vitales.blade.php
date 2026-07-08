@@ -10,7 +10,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-1">
                         @if (isset($fichaAtencion) && $fichaAtencion->temperatura !=null)
-                        
+
                         <label class="floating-label-activo-sm">Tº</label>
                         <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
                         @else
@@ -42,19 +42,19 @@
                     <div class="form-group col-md-2">
                         @if (isset($fichaAtencion) && $fichaAtencion->peso != null)
                         <label class="floating-label-activo-sm">Peso</label>
-                        <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}">
+                        <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{{ $fichaAtencion->peso }}" onchange="calcularIMC()">
                         @else
                         <label class="floating-label-activo-sm">Peso</label>
-                        <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}">
+                        <input type="text" class="form-control form-control-sm" name="peso" id="peso" value="{!! old('peso') !!}" onchange="calcularIMC()">
                         @endif
                     </div>
                     <div class="form-group col-md-2">
                         @if (isset($fichaAtencion) && $fichaAtencion->talla != null)
                         <label class="floating-label-activo-sm">Talla</label>
-                        <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}">
+                        <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{{ $fichaAtencion->talla }}" onchange="calcularIMC()">
                         @else
                         <label class="floating-label-activo-sm">Talla</label>
-                        <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}">
+                        <input type="text" class="form-control form-control-sm" name="talla" id="talla" value="{!! old('talla') !!}" onchange="calcularIMC()">
                         @endif
                     </div>
                     <div class="form-group col-md-2">
@@ -76,6 +76,33 @@
                         <label class="floating-label-activo-sm">Estado
                             Nutricional</label>
                         <input type="text" class="form-control form-control-sm" name="estado_nutricional" id="estado_nutricional" value="{!! old('estado_nutricional') !!}">
+                        @endif
+                    </div>
+                    <div class="form-group col-md-2">
+                        @if (isset($fichaAtencion) && $fichaAtencion->pas != null)
+                        <label class="floating-label-activo-sm">PAS</label>
+                        <input type="text" class="form-control form-control-sm" name="pas" id="pas" value="{{ $fichaAtencion->pas }}" onchange="calcularPAM()">
+                        @else
+                        <label class="floating-label-activo-sm">PAS</label>
+                        <input type="text" class="form-control form-control-sm" name="pas" id="pas" value="{!! old('pas') !!}" onchange="calcularPAM()">
+                        @endif
+                    </div>
+                    <div class="form-group col-md-2">
+                        @if (isset($fichaAtencion) && $fichaAtencion->pad != null)
+                        <label class="floating-label-activo-sm">PAD</label>
+                        <input type="text" class="form-control form-control-sm" name="pad" id="pad" value="{{ $fichaAtencion->pad }}" onchange="calcularPAM()">
+                        @else
+                        <label class="floating-label-activo-sm">PAD</label>
+                        <input type="text" class="form-control form-control-sm" name="pad" id="pad" value="{!! old('pad') !!}" onchange="calcularPAM()">
+                        @endif
+                    </div>
+                    <div class="form-group col-md-2">
+                        @if (isset($fichaAtencion) && $fichaAtencion->pam != null)
+                        <label class="floating-label-activo-sm">PAM</label>
+                        <input type="text" class="form-control form-control-sm" name="pam" id="pam" value="{{ $fichaAtencion->pam }}" readonly>
+                        @else
+                        <label class="floating-label-activo-sm">PAM</label>
+                        <input type="text" class="form-control form-control-sm" name="pam" id="pam" value="{!! old('pam') !!}" readonly>
                         @endif
                     </div>
                 </div>

@@ -89,7 +89,7 @@
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Observaciones</label>
-                    <textarea class="form-control form-control-sm" data-titulo="Odontopediatria"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_observaciones_odontop{{ $counter }}" id="obs_observaciones_odontop{{ $counter }}"></textarea>
+                    <textarea class="form-control form-control-sm" data-titulo="Odontopediatria"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_observaciones_odontop_{{ $counter }}" id="obs_observaciones_odontop_{{ $counter }}"></textarea>
                 </div>
             </div>
         </div>
@@ -201,13 +201,14 @@
         let resp_perc = $('#sel_odontop_resp_perc'+counter).val();
         let resp_expl = $('#sel_odontop_resp_expl'+counter).val();
         let resp_cavitaria = $('#sel_odontop_cavitaria'+counter).val();
-        let observaciones = $('#obs_observaciones_odontop'+counter).val();
+        let observaciones = $('#obs_observaciones_odontop_'+counter).val();
+        let historia_anterior = $('#ex_odontop_hp_od'+counter).val();
         let id_paciente = $('#id_paciente_fc').val();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_profesional = $('#id_profesional').val();
         let id_ficha_atencion = $('#id_fc').val();
         let id_especialidad = $('#id_especialidad').val();
-        let tipo_examen = 'odontopediatria';
+        let tipo_examen = 'odontop';
 
         let data = {
             _token: CSRF_TOKEN,
@@ -225,6 +226,7 @@
             resp_expl: resp_expl,
             resp_cavitaria: resp_cavitaria,
             observaciones: observaciones,
+            historia_anterior: historia_anterior,
             id_paciente: id_paciente,
             id_lugar_atencion: id_lugar_atencion,
             id_profesional: id_profesional,
@@ -279,8 +281,8 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.mensaje == 'OK'){
-                    $('#contenedor_pieza_dental_odontop').empty();
-                    $('#contenedor_pieza_dental_odontop').append(resp.v);
+                    $('#contenedor_pieza_dental_odontop_examen').empty();
+                    $('#contenedor_pieza_dental_odontop_examen').append(resp.v);
                     $('#contenedor_examenes_grupos_dentales_odontop').empty();
                     $('#contenedor_examenes_grupos_dentales_odontop').append(resp.vista_presupuestos);
                     $('#contenedor_nueva_pieza_dental_odontop').empty();
@@ -319,7 +321,7 @@
                             </div>
                         `);
                     });
-
+                    
                     swal({
                         title: "Pieza dental guardada",
                         text: "La pieza dental para examen odontopediátrico ha sido guardada correctamente.",

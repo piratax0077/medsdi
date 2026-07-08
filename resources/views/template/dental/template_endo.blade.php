@@ -3,7 +3,7 @@
 
 <head>
     @include('atencion_odontologica.include.head_od_endodoncia')
-    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -17,13 +17,14 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
-     <!-- select2 selectbonito css -->
-     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+        <!-- select2 selectbonito css -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
 
+            <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -62,6 +63,11 @@
     {{--  /** agregar css */  --}}
     <!--cara dental-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
+<script>
+        const GUARDAR_PIEZA_URL = "{{ route('dental.guardar_pieza_periodonto') }}";
+    </script>
+    <script src="{{ asset('js/periodontograma.js') }}"></script>
+
     <style>
         .ui-front {
             position: absolute;
@@ -76,6 +82,7 @@
 <body>
     @include('template.dental.header')
     @include('template.menuProfesional')
+     @include('atencion_odontologica.generales.eval_periimplante')
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -120,13 +127,17 @@
     <script src="{{ asset('js/recetas_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/licencias_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
-      <!--Formularios Modals-->
-      <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
-      <!--Formularios Modals-->
-      <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -154,7 +165,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     {{--  @include('template.templateAutorizacion')  --}}
 
@@ -174,7 +186,6 @@
     <!--Tablas y Toggle atención ginecobstetrica-->
     <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
-    <!-- Tratamientos dental autocomplete -->
     <script>
         window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
     </script>
@@ -186,6 +197,8 @@
         $(document).ready(function () {
             $('#table_trabajos_menores_dental').DataTable();
             $('#presup_estado_pago').DataTable();
+            $('#table_trabajos_menores_dental').DataTable();
+            $('#table_trabajos_mayores_dental').DataTable();
 
             $('#presup_estado_pago_gral').DataTable();
 

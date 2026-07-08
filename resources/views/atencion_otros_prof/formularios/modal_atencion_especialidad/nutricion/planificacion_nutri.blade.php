@@ -83,7 +83,7 @@ function guardar_planificacion_nutri() {
     };
 
     $.ajax({
-        url: '{{ route("profesional.guardar_planificacion_nutri") }}', // Reemplaza con la ruta real
+        url: '{{ route("profesional.guardar_planificacion_otros_prof") }}', // Reemplaza con la ruta real
         method: 'POST',
         data: data,
         success: function(response) {

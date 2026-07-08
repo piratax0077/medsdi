@@ -17,8 +17,8 @@
             @else
                 <p>RCM: {{ $receta->profesional->num_colegio }}</p>
             @endif
-            <p>Arlegui 934, Viña del Mar</p>
-            <p>V región</p>
+            <p>{{ $receta->profesional->direccion }} #{{ $receta->profesional->numero_dir }}, {{ $receta->profesional->comuna->nombre }}</p>
+            <p>{{ $receta->profesional->region->nombre }}</p>
         </div>
     </div>
     <div class="contenido-encabezado-dos">
@@ -41,10 +41,13 @@
                         $receta->paciente->direccion .' #'. $receta->paciente->numero_dir .'; '. $receta->paciente->ciudad_nombre .'; '. $receta->paciente->region_nombre }}</td>
                     <!--Calle, Nº, Comuna. Región-->
                 </tr>
+                <tr>
+                    <td><strong>Fecha:</strong></td>
+                    <td>{{ date('d-m-Y') }}</td>
+                    <!--Calle, Nº, Comuna. Región-->
+                </tr>
             </tbody>
         </table>
     </div>
     <hr class="">
-    <div class="fecha" style="padding-left: 20px;"><strong>Fecha:</strong> {{ date('d-m-Y') }}</div>
-    <p style="font-weight: bold; padding-left: 20px; font-size: 14px;">Rp. </p>
 </header>

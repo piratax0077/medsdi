@@ -32,7 +32,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Posiciones bajas</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -100,7 +100,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Posiciones medias</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -141,7 +141,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Posiciones altas</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -183,7 +183,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left">Observaciones y conclusiones</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -202,7 +202,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_func_global()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -210,5 +210,10 @@
 <script>
     function func_global() {
         $('#func_global').modal('show');
+    }
+
+    function guardar_func_global() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('funcion_global');
     }
 </script>

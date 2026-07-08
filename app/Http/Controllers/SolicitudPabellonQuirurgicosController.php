@@ -479,4 +479,17 @@ class SolicitudPabellonQuirurgicosController extends Controller
 
         return $datos;
     }
+
+    public function dame_solicitudes_pabellon_paciente($id_paciente){
+        $solicitudes = SolicitudPabellonQuirurgico::where('id_paciente', $id_paciente)
+                        ->orderBy('created_at', 'DESC')
+                        ->get();
+
+        $datos = array();
+        $datos['estado'] = 1;
+        $datos['msj'] = 'solicitudes encontradas';
+        $datos['solicitudes'] = $solicitudes;
+
+        return $datos;
+    }
 }

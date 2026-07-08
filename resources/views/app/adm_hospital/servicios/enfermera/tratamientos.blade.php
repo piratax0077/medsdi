@@ -100,6 +100,7 @@
                         <h6>Resumen de tratamiento y control Enfermería</h6>
                         <div class="col-sm-12 col-md-12 m-t-20">
                             {!! $resumen_recetas !!}
+                            {!! $resumen_procedimientos !!}
                         </div>
                     </div>
                 </div>

@@ -246,12 +246,12 @@
     <main>
         <div class="contenido-body">
 
-            <h2 id="titulo-azul">{{ $titulo }}</h2>
+            <h2 id="titulo-azul" style="text-transform: uppercase;">{{ $titulo }}</h2>
 
             {{--  informe_medico
             fecha_informe_medico  --}}
             <p>Fecha Informe Medico: {{ $cuerpo['detalle_informe_medico']['fecha_informe_medico'] }}</p>
-            <p>El Profesional que suscribe informa que: <br/> {{ $cuerpo['detalle_informe_medico']['informe_medico'] }}</p>
+            <p>El Profesional que suscribe informa que: <br/> {!! $cuerpo['detalle_informe_medico']['informe_medico'] !!}</p>
         </div>
 
     </main>

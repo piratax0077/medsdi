@@ -6,6 +6,7 @@ use App\Models\AdminInstServ;
 use App\Models\GastosInstitucionales;
 use App\Models\Instituciones;
 use App\Models\Servicios;
+use App\Models\Sucursal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -120,6 +121,7 @@ class GastosInstitucionalesController extends Controller
 
             }
         }
+
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
         /** fultros */
         $ano_toma = '';
@@ -163,6 +165,22 @@ class GastosInstitucionalesController extends Controller
 
         $result_emisor = GastosInstitucionales::select('emisor')->groupBy('emisor')->get();
 
+        $sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
+        // se agrega la institucion a las sucursales
+     
+        if($institucion->id_tipo_institucion == 3)
+        {
+            return view('app.laboratorio.adm_general.inventario.gastos')->with([
+                'institucion' => $institucion,
+                'gastos' => $result_gastos,
+                'emisor' => $result_emisor,
+                'ano_toma' => $ano_toma,
+                'mes_toma' => $mes_toma,
+                'emision_s' => $emision_s,
+                'sucursales' => $sucursales,
+            ]);
+        }
+
         return view('app.adm_cm.gastos')->with([
             'institucion' => $institucion,
             'gastos' => $result_gastos,
@@ -170,11 +188,13 @@ class GastosInstitucionalesController extends Controller
             'ano_toma' => $ano_toma,
             'mes_toma' => $mes_toma,
             'emision_s' => $emision_s,
+            'sucursales' => $sucursales,
         ]);
     }
 
     public function agregar(Request $request)
     {
+      
         $datos = array();
         $error = array();
         $valido = 1;
@@ -268,6 +288,7 @@ class GastosInstitucionalesController extends Controller
             $registro->ano_pago =  $request->ano_pago;
             $registro->modo_pago =  $request->modo_pago;
             $registro->monto =  $request->monto;
+            $registro->tipo_doc =  $request->tipo_pago; // si es por factura o general
             $registro->estado =  1;
 
             if($registro->save())

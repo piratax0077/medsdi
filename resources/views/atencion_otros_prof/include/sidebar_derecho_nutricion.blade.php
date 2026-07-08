@@ -1,12 +1,12 @@
     <!--Sidebar 3 (pediatria)-->
 <div class="position-fixed w-100 h-100"></div>
 <div id="formularios_nutrición" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
-    <header class="bs-canvas-header p-3 bg-info overflow-auto">
-        <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-        <h5 class="d-inline-block text-light mb-0 float-right">Formularios Nutrición</h5>
+    <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+            <button type="button" class="bs-canvas-close close" onclick="$('#formularios_nutrición').modal('hide')" aria-label="Close" data-dismiss="modal"> <span aria-hidden="true" class="text-white">&times;</span></button>
+            <h5 class="d-inline-block text-light mb-0">Formularios Nutrición</h5>
     </header>
     <div class="bs-canvas-content">
-        <div class="accordion" id="accordion_nutri">
+        <div class="accordion" id="accordion_nutri_">   
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_test">
                     <h2 class="mb-0">
@@ -15,7 +15,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_test" class="collapse" aria-labelledby="heading_test" data-parent="#accordion_nutri">
+                <div id="collapse_test" class="collapse" aria-labelledby="heading_test" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="inst_eval();"><i class="fa fa-plus"></i> Instrumentos Evaluación</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="eval_dent();"><i class="fa fa-plus"></i> Pautas de evaluación Dental</button>
@@ -32,7 +32,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_ref_varon" class="collapse" aria-labelledby="heading_ref_varon" data-parent="#accordion_nutri">
+                <div id="collapse_ref_varon" class="collapse" aria-labelledby="heading_ref_varon" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
 
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc519();"><i class="fa fa-plus"></i> IMC 5 a 19 años varones</button>
@@ -60,7 +60,7 @@
                         </button>
                     </h2>
                 </div>
-                <div id="collapse_ref_mujer" class="collapse" aria-labelledby="heading_ref_mujer" data-parent="#accordion_nutri">
+                <div id="collapse_ref_mujer" class="collapse" aria-labelledby="heading_ref_mujer" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="presion_f();"><i class="fa fa-plus"></i> Presión Arterial mujer</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="imc_519f();"><i class="fa fa-plus"></i> IMC 5 a 19 años mujer</button>
@@ -87,42 +87,43 @@
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_nutri">
+                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
-                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="cons_tto_nutri()";>+ Para tratamiento</button>
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="conset_ttonutri()";>+ Para tratamiento</button>
                     </div>
+                    @include("atencion_otros_prof.secciones_especialidad.includes.nutri.consentimiento_nutri")
                 </div>
-                {{--  @include("atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_aconsentcirm")  --}}
+               
             </div>
 
             <div class="card-sidebar">
-                <div class="card-header-sidebar" id="heading_utilidades">
+                <div class="card-header-sidebar" id="heading_utilidades_">
                     <h2 class="mb-0">
-                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_utilidades" aria-expanded="false" aria-controls="collapse_utilidades"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_utilidades_" aria-expanded="false" aria-controls="collapse_utilidades"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
                         UTILIDADES
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_utilidades" class="collapse" aria-labelledby="heading_utilidades" data-parent="#accordion_nutri">
+                <div id="collapse_utilidades_" class="collapse" aria-labelledby="heading_utilidades_" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ufonasa()";>+ Buscador código FONASA</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ucalcimc()";>+ Calculadora de IMC</button>
 
                     </div>
                 </div>
-                @include("atencion_pediatrica.sidebars.modals_generales.m_ucodigofonasa")
-                @include("atencion_pediatrica.sidebars.modals_generales.m_uimc")
+                 @include("general.modal.m_ucodigofonasa")
+                    @include("general.modal.m_uimc")
             </div>
 
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_recom">
                     <h2 class="mb-0">
-                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_recom_" aria-expanded="false" aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
                     INDICACIONES A PACIENTES
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_nutri">
+                <div id="collapse_recom_" class="collapse" aria-labelledby="heading_recom" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="dieta_diab()";>+ Dieta tipo diabéticos</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="raciones()";>+ Tamaño Raciones</button>
@@ -148,7 +149,7 @@
                     </button>
                     </h2>
                 </div>
-                <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_nutri">
+                <div id="collapse_sugerencias" class="collapse" aria-labelledby="heading_sugerencias" data-parent="#accordion_nutri_">
                     <div class="card-body-sidebar">
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="c_faltante()";>+ Consentimiento  faltante</button>
                         <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="f_faltante()";>+ formulario faltante</button>

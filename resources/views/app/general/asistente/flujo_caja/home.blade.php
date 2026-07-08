@@ -8,18 +8,17 @@
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center">
+                    <div class="row align-items-center mt-4">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Rendir caja diaria</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('asistentecm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ route('asistentecm.home') }}">Flujo de caja</a></li>
+                                <li class="breadcrumb-item"><a href="{{ url('/flujo-caja') }}">Flujo de caja</a></li>
                             </ul>
                         </div>
                     </div>
@@ -35,9 +34,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
-                                            @if ($es_institucion)
+                                          {{--  @if ($es_institucion)
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-reset active" id="tab_redicion_cm-tab" data-toggle="tab" href="#tab_redicion_cm" role="tab" aria-controls="tab_redicion_cm" aria-selected="true">Rendición a CM</a>
+                                                    <a class="nav-link text-reset " id="tab_redicion_cm-tab" data-toggle="tab" href="#tab_redicion_cm" role="tab" aria-controls="tab_redicion_cm" aria-selected="true">Rendición a CM</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link text-reset" id="tab_redicion_prof-tab" data-toggle="tab" href="#tab_redicion_prof" role="tab" aria-controls="tab_redicion_prof" aria-selected="true">Rendición a profesional</a>
@@ -51,6 +50,21 @@
 
                                             <li class="nav-item">
                                                 <a class="nav-link text-reset" id="tab_recepcion_programas-tab" data-toggle="tab" href="#tab_recepcion_programas" role="tab" aria-controls="tab_recepcion_programas" aria-selected="true">Recepción de programas</a>
+                                            </li>  --}}
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset active" id="rendiciones-tab" data-toggle="tab" href="#rendiciones" role="tab" aria-controls="rendiciones" aria-selected="true">Rendiciones</a>
+                                            </li>
+
+                                             <li class="nav-item">
+                                                <a class="nav-link text-reset" id="caja-cm-tab" data-toggle="tab" href="#caja-cm" role="tab" aria-controls="caja-cm" aria-selected="true">Gestión de cajas</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset" id="ventas-cm-tab" data-toggle="tab" href="#ventas-cm" role="tab" aria-controls="ventas-cm" aria-selected="true">Ventas</a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset" id="garantia-cm-tab" data-toggle="tab" href="#garantia-cm" role="tab" aria-controls="garantia-cm" aria-selected="true">Registro de Garantías</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -65,7 +79,7 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="tab-content mt-4" id="pills-tabContent">
                         {{-- PESTAÑA RENDICION DE CAJA CM--}}
-                        <div class="tab-pane fade show active " id="tab_redicion_cm" role="tabpanel" aria-labelledby="tab_redicion_cm-tab">
+                        <div class="tab-pane fade  " id="tab_redicion_cm" role="tabpanel" aria-labelledby="tab_redicion_cm-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                      <h5 class="text-c-blue f-18 pt-1">Rendir caja del {{ date('d-m-Y') }}</h5>
@@ -150,9 +164,9 @@
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div class="form-group">
                                                         <label for="" class="floating-label-activo-sm">Fecha</label>
-                                                        <input type="date" value="<?php echo date('Y-m-d'); ?>" class="form-control form-control-sm">
+                                                        <input type="date" value="<?php echo date('Y-m-d'); ?>" id="fecha_rendicion" class="form-control form-control-sm">
                                                     </div>
-                                                    <button type="button" class="btn btn-outline-success btn-sm mt-3"><i class="fas fa-search"></i></button>
+                                                    <button type="button" class="btn btn-outline-success btn-sm mt-3 w-100" onclick="buscarRendicion()"><i class="fas fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,128 +257,12 @@
                             </div>
                         </div>
 
-
-
-                        {{-- PESTAÑA RENDICION DE CAJA A PROFESIONAL --}}
+                        {{-- PESTAÑA RENDICION DE CAJA A PROFESIONAL
                         <div class="tab-pane fade" id="tab_redicion_prof" role="tabpanel" aria-labelledby="tab_redicion_prof-tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h5 class="text-c-blue f-18 pt-1">Rendir caja a Profesional del {{ date('d-m-Y') }}</h5>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Nº de bonos</label>
-                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Efectivo</label>
-                                                                <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Otros</label>
-                                                                <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Total documentos</label>
-                                                                <input type="number" class="form-control form-control-sm" id="total_prof" name="total_prof" value="" readonly="readonly">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Recibe caja</label>
-                                                                <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
-                                                                    @if($listado_recibe_prof)
-                                                                        @foreach ( $listado_recibe_prof as $recibe )
-                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombre.' '.$recibe->apellido_uno).' ('.$recibe->rut.')' }}</option>
-                                                                        @endforeach
-                                                                    @endif
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Observaciones</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
-                                                            <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
-                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
-                                                        </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
-                                                            <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-12 col-xxl-12 col-xxxl-12">
-                                                            <div id="up_archivo_prof" style="display:none" >
-                                                                <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
-                                                                <div class="form-row">
-                                                                    <div class="form-group col-12">
-                                                                        <!-- [ Main Content ] start -->
-                                                                        <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
-                                                                        </div>
-                                                                        <!-- [ file-upload ] end -->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <div class="dt-responsive table-responsive">
-                                                        <table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="align-middle">Tipo</th>
-                                                                    <th class="align-middle">Código</th>
-                                                                    <th class="align-middle">Convenio</th>
-                                                                    <th class="align-middle">Tipo pago</th>
-                                                                    <th class="align-middle">Aporte seguros</th>
-                                                                    <th class="align-middle">Aporte convenio</th>
-                                                                    <th class="align-middle">Copago paciente</th>
-                                                                    <th class="align-middle">Valor total</th>
-                                                                    <th class="align-middle">F/Atención</th>
-                                                                    <th class="align-middle">Paciente</th>
-                                                                    <th class="align-middle">Profesional</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        {{-- PESTAÑA RENDICION PROGRAMAS DE CAJA A PROFESIONAL --}}
+                        </div>--}}
+
+                        {{-- PESTAÑA RENDICION PROGRAMAS DE CAJA A PROFESIONAL
                         <div class="tab-pane fade" id="tab_recepcion_programas" role="tabpanel" aria-labelledby="tab_recepcion_programas-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -447,7 +345,1605 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>--}}
+                        {{-- RENDICIONES BONOS Y PROGRAMAS NUEVA VISTA--}}
+                        <div class="tab-pane fade show active" id="rendiciones" role="tabpanel" aria-labelledby="tab-rendiciones-tab">
+                             <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                    <div class="card py-0">
+                                        <div class="card-body pb-2 pt-2">
+                                            <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset active" id="bono-rendicion-prof-tab" data-toggle="pill" href="#bono-rendicion-prof" role="tab" aria-controls="bono-rendicion-prof" aria-selected="true">
+                                                        Rendición de bonos
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="programa-rendicion-prof-tab" data-toggle="pill" href="#programa-rendicion-prof" role="tab" aria-controls="programa-rendicion-prof" aria-selected="true">
+                                                        Rendición de programas
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!--PESTAÑAS-->
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="tab-content">
+                                        <!---RENDICION DE BONOS-->
+                                        <div class="tab-pane show active" id="bono-rendicion-prof" role="tabpanel" aria-labelledby="bono-rendicion-prof-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h5 class="text-c-blue f-18 pt-1">Rendir bonos del {{ date('d-m-Y') }}</h5>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Nº de bonos</label>
+                                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Efectivo</label>
+                                                                                <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Otros</label>
+                                                                                <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Total documentos</label>
+                                                                                <input type="number" class="form-control form-control-sm" id="total_prof" name="total_prof" value="" readonly="readonly">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Recibe caja</label>
+                                                                                <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
+                                                                                    @if($listado_recibe_prof)
+                                                                                        @foreach ( $listado_recibe_prof as $recibe )
+                                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombre.' '.$recibe->apellido_uno).' ('.$recibe->rut.')' }}</option>
+                                                                                        @endforeach
+                                                                                    @endif
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                            <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                            <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                            <div id="up_archivo_prof" style="display:none" >
+                                                                                <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-12">
+                                                                                        <!-- [ Main Content ] start -->
+                                                                                        <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                                                        </div>
+                                                                                        <!-- [ file-upload ] end -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5>Bonos (Detalle)</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="dt-responsive table-responsive">
+                                                                        <table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Fecha</th>
+                                                                                    <th>Tipo de <br>atención</th>
+                                                                                    <th>Convenio y código</th><!--Poner el codigo como small y salto de linea-->
+                                                                                    <th>Medio de pago</th>
+                                                                                    <th>Aporte seguros</th>
+                                                                                    <th>Aporte convenio</th>
+                                                                                    <th>Copago paciente</th>
+                                                                                    <th>Valor total</th>
+                                                                                    <th>Paciente</th>
+                                                                                    <th>Profesional</th>
+                                                                                    <th>Rendición</th><!--PONER EN BADGE AMARILLO PENDIENTE Y  VERDE RENDIDO-->
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--RENDICION PROGRAMAS-->
+                                           <div class="tab-pane fade" id="programa-rendicion-prof" role="tabpanel" aria-labelledby="programa-rendicion-prof-tab">
+                                              {{--<div id="busqueda_avanzada_aparecer_2" style="display:none">
+                                                <div class="row">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5>Bonos <span class="badge badge-secondary">Detalle</span></h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
+                                                                                <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Nº de programas</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Efectivo</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Otros</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Total documentos</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="total_prof" name="total_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Recibe caja</label>
+                                                                                                <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
+                                                                                                    @if($listado_recibe_prof)
+                                                                                                        @foreach ( $listado_recibe_prof as $recibe )
+                                                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombre.' '.$recibe->apellido_uno).' ('.$recibe->rut.')' }}</option>
+                                                                                                        @endforeach
+                                                                                                    @endif
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                                            <div id="up_archivo_prof" style="display:none" >
+                                                                                                <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="form-group col-12">
+                                                                                                        <!-- [ Main Content ] start -->
+                                                                                                        <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                                                                        </div>
+                                                                                                        <!-- [ file-upload ] end -->
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="dt-responsive table-responsive">
+                                                                        <table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Fecha</th>
+                                                                                    <th>Tipo de <br>atención</th>
+                                                                                    <th>Convenio</th><!--Poner el codigo como small y salto de linea-->
+                                                                                    <th>Medio de pago</th>
+                                                                                    <th>Aporte seguros</th>
+                                                                                    <th>Aporte convenio</th>
+                                                                                    <th>Copago paciente</th>
+                                                                                    <th>Valor total</th>
+                                                                                    <th>Paciente</th>
+                                                                                    <th>Profesional</th>
+                                                                                    <th>Rendición</th><!--PONER EN BADGE AMARILLO PENDIENTE Y  VERDE RENDIDO-->
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>--}}
+
+                                                 <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <h5 class="text-c-blue f-18 pt-1">Rendición de programas del {{ date('d-m-Y') }}</h5>
+                                                    </div>
+                                                     <div class="col-md-12">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
+                                                                                <input type="hidden" name="lista_bonos_prof" id="lista_bonos_prof" value="">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Nº de programas</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="numero_bonos_prof" name="numero_bonos_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Efectivo</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="efectivo_prof" name="efectivo_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Otros</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="otros_prof" name="otros_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Total documentos</label>
+                                                                                                <input type="number" class="form-control form-control-sm" id="total_prof" name="total_prof" value="" readonly="readonly">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Recibe caja</label>
+                                                                                                <select name="id_asistente_receptor_prof" id="id_asistente_receptor_prof" class="form-control form-control-sm" onclick="cargar_registros_prof();">
+                                                                                                    @if($listado_recibe_prof)
+                                                                                                        @foreach ( $listado_recibe_prof as $recibe )
+                                                                                                            <option value="{{ $recibe->id }}">{{ strtoupper($recibe->nombre.' '.$recibe->apellido_uno).' ('.$recibe->rut.')' }}</option>
+                                                                                                        @endforeach
+                                                                                                    @endif
+                                                                                                </select>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxx-3">
+                                                                                            <div class="form-group">
+                                                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                                                            <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                                                            <div id="up_archivo_prof" style="display:none" >
+                                                                                                <input type="hidden" name="input_lista_archivo_prof" id="input_lista_archivo_prof" value="">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="form-group col-12">
+                                                                                                        <!-- [ Main Content ] start -->
+                                                                                                        <div class="dropzone" id="mis-archivos-rendicion-prof" action="{{ route('rendir.archivo.carga') }}">
+                                                                                                        </div>
+                                                                                                        <!-- [ file-upload ] end -->
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                        <div class="card">
+                                                             <div class="card-header-new-md">
+                                                                <h5>Rendición de programas <span class="badge badge-secondary">Detalle</span></h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="tabla_rendir_caja" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Fecha</th>
+                                                                                        <th>Tipo de <br>atención</th>
+                                                                                        <th>Convenio</th><!--Poner el codigo como small y salto de linea-->
+                                                                                        <th>Medio de pago</th>
+                                                                                        <th>Aporte seguros</th>
+                                                                                        <th>Aporte convenio</th>
+                                                                                        <th>Copago paciente</th>
+                                                                                        <th>Valor total</th>
+                                                                                        <th>Paciente</th>
+                                                                                        <th>Profesional</th>
+                                                                                        <th>Rendición</th><!--PONER EN BADGE AMARILLO PENDIENTE Y  VERDE RENDIDO-->
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>00/00/0000</td>
+                                                                                        <td>Programa<br>
+                                                                                            N° 1223</td>
+                                                                                        <td>Banmédica<br><small>CÓD: 23423</small></td>
+                                                                                        <td>Débito</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>
+                                                                                            <strong>Oscar Devia<br>
+                                                                                            823982934-9</strong>
+                                                                                            <br>
+                                                                                            <small>Otorrinolaringología</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>Jaime Kriman<br>
+                                                                                            823982934-9</strong>
+                                                                                            <br>
+                                                                                            <small>Otorrinolaringología</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <span class="badge badge-success">Rendido</span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                      <tr>
+                                                                                        <td>00/00/0000</td>
+                                                                                        <td>Programa<br>
+                                                                                            N° 1223</td>
+                                                                                        <td>Banmédica<br><small>CÓD: 23423</small></td>
+                                                                                        <td>Débito</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>$0</td>
+                                                                                        <td>
+                                                                                            <strong>Oscar Devia<br>
+                                                                                            823982934-9</strong>
+                                                                                            <br>
+                                                                                            <small>Otorrinolaringología</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>Jaime Kriman<br>
+                                                                                            823982934-9</strong>
+                                                                                            <br>
+                                                                                            <small>Otorrinolaringología</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <span class="badge badge-warning">Pendiente</span>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        {{-- CAJAS --}}
+                        <div class="tab-pane fade" id="caja-cm" role="tabpanel" aria-labelledby="caja-cm-tab">
+                            <div class="row mt-3">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mb-2">
+                                    <h6 class="f-22 text-c-blue mb-3 d-inline">Gestión de cajas</h6>
+                                      <button type="button" class="btn btn-info d-inline float-md-right"  onclick="m_abrircaja();"> + Abrir nueva caja </button>
+                                </div>
+                            </div>
+                            <!--CAJA ACTIVA(USANDO)-->
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5><i class="feather icon-credit-card icono-primary"></i> Mi caja actual</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Caja</th>
+                                                                                <th>Responsable actual</th>
+                                                                                <th>Estado</th>
+                                                                                <th>Origen</th>
+                                                                                <th>Saldo inicial del día</th>
+                                                                                <th>Acumulado del día</th>
+                                                                                 <th>Institución</th>
+                                                                                 <th>Acciones</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach($cajas_operativas as $caja)
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <strong>{{ $caja->caja->nombre_caja }}</strong><br>
+                                                                                        <small>{{ $caja->caja->ubicacion }}</small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->responsable)
+                                                                                            <strong>{{ $caja->responsable->nombre }} {{ $caja->responsable->apellido_uno }} {{ $caja->responsable->apellido_dos }}</strong><br>
+                                                                                            <small>{{ $caja->responsable->rut }}</small>
+                                                                                        @else
+                                                                                            <span class="badge badge-warning">Sin responsable</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->estado == 'abierta')
+                                                                                            <span class="badge badge-success">Abierta</span>
+                                                                                        @elseif($caja->estado == 'cerrada')
+                                                                                            <span class="badge badge-danger">Cerrada</span>
+                                                                                        @else
+                                                                                            <span class="badge badge-secondary">{{ ucfirst($caja->estado) }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->origen == 'apertura_propia')
+                                                                                            <span class="badge badge-info">Apertura propia</span>
+                                                                                        @elseif($caja->origen == 'recibida')
+                                                                                            <span class="badge badge-info">Recibida</span><br>
+                                                                                            <small><strong>Desde:</strong> {{ $caja->origen_usuario ? $caja->origen_usuario->nombre.' '.$caja->origen_usuario->apellido_uno.' '.$caja->origen_usuario->apellido_dos : 'N/A' }}</small><br>
+                                                                                            <small><strong>RUT:</strong> {{ $caja->origen_usuario ? $caja->origen_usuario->rut : 'N/A' }}</small>
+                                                                                        @else
+                                                                                            <span class="badge badge-secondary">{{ ucfirst($caja->origen) }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        ${{ number_format($caja->monto_inicial, 0, ',', '.') }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        ${{ number_format($bonos_vendidos_dia->sum('monto'), 0, ',', '.') }}
+                                                                                    </td>
+                                                                                     <td>
+                                                                                        {{ $caja->nombre_institucion }}
+                                                                                    </td>
+                                                                                        <td>
+                                                                                            <button type="button" class="btn btn-info btn-xxs" onclick="m_detallecajaabierta({{ $caja->id }}, '{{ $caja->caja->nombre_caja }}', '{{ $caja->responsable ? $caja->responsable->nombre . ' ' . $caja->responsable->apellido_uno . ' ' . $caja->responsable->apellido_dos : 'Sin responsable' }}');"><i class="feather icon-search"></i> Ver caja</button>
+                                                                                            <!-- editar caja operativa -->
+                                                                                            <button type="button" class="btn btn-outline-secondary btn-xxs" onclick="m_editarcajaoperativa({{ $caja->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                                                        </td>
+
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+@if(isset($caja_pendiente_entrega) && $caja_pendiente_entrega)
+                                                    <div class="card transfer-card">
+                                                        <div class="card-body">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+
+                        <h4 class="font-weight-bold text-warning f-22 mb-3">
+                            <i class="feather icon-bell icono-primary bg-warning"></i>
+                            Entrega de Caja Pendiente
+                        </h4>
+
+                        <p class="mb-3">
+                            <strong>{{ $caja_pendiente_entrega->entregador ? $caja_pendiente_entrega->entregador->nombres . ' ' . $caja_pendiente_entrega->entregador->apellido_uno : 'Un usuario' }}</strong> te está haciendo entrega de la
+                            <strong>{{ $caja_pendiente_entrega->caja->nombre_caja }}</strong> del lugar de atención
+                            <strong>{{ $caja_pendiente_entrega->caja->lugarAtencion ? $caja_pendiente_entrega->caja->lugarAtencion->nombre : 'N/A' }}</strong>.
+                        </p>
+
+                        <ul class="list-unstyled mb-3">
+                            <li class="mb-3">
+                                <i class="feather icon-calendar icono-primary"></i>
+                                <strong>Fecha:</strong> {{ \Carbon\Carbon::parse($caja_pendiente_entrega->fecha_entrega)->format('d-m-Y') }}
+                            </li>
+
+                            <li>
+                                <i class="feather icon-clock icono-primary"></i>
+                                <strong>Hora:</strong> {{ \Carbon\Carbon::parse($caja_pendiente_entrega->fecha_entrega)->format('H:i') }}
+                            </li>
+                        </ul>
+
+                        <button class="btn btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#detallesCajaPendiente">
+                            <i class="fas fa-search"></i>
+                            Ver detalle de caja
+                        </button>
+
+                        <div class="collapse mt-3" id="detallesCajaPendiente">
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Monto inicial:</strong> ${{ number_format($caja_pendiente_entrega->monto_inicial ?? 0, 0, ',', '.') }}</p>
+                                            <p><strong>Monto entregado:</strong> ${{ number_format($caja_pendiente_entrega->monto_entregado ?? 0, 0, ',', '.') }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Total efectivo:</strong> ${{ number_format($caja_pendiente_entrega->total_efectivo ?? 0, 0, ',', '.') }}</p>
+                                            <p><strong>Total bonos físicos:</strong> {{ $caja_pendiente_entrega->total_bonos_fisicos ?? 0 }}</p>
+                                        </div>
+                                        @if($caja_pendiente_entrega->observaciones_entrega)
+                                        <div class="col-md-12 mt-2">
+                                            <p><strong>Observaciones:</strong></p>
+                                            <p class="mb-0">{{ $caja_pendiente_entrega->observaciones_entrega }}</p>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 text-center">
+
+                        <button class="btn btn-warning btn-lg px-4 py-3 shadow-sm" onclick="aceptarTraspasoCaja({{ $caja_pendiente_entrega->id }})">
+                            <i class="feather icon-check"></i>
+                            Aceptar traspaso de caja
+                        </button>
+                         <button class="btn btn-danger btn-lg px-4 py-3 shadow-sm" onclick="rechazarCaja({{ $caja_pendiente_entrega->id }})">
+                            <i class="feather icon-x"></i>
+                            Rechazar caja
+                        </button>
+
+                    </div>
+
+                </div>
+
+                                                        </div>
+                                                    </div>
+@endif
+                                                </div>
+                                            </div>
+                                             <!--TODAS LAS CAJAS(USANDO)-->
+                                            {{-- <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5><i class="feather icon-credit-card icono-primary"></i>Mis cajas</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Caja</th>
+                                                                                <th>Responsable actual</th>
+                                                                                <th>Estado</th>
+                                                                                <th>Origen</th>
+                                                                                <th>Saldo inicial del día</th>
+                                                                                <th>Acumulado del día</th>
+                                                                                 <th>Institución</th>
+                                                                                 <th>Acciones</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach($cajas as $caja)
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <strong>{{ $caja->nombre_caja }}</strong><br>
+                                                                                        <small>{{ $caja->ubicacion }}</small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->responsable)
+                                                                                            <strong>{{ $caja->responsable->nombre }} {{ $caja->responsable->apellido_uno }} {{ $caja->responsable->apellido_dos }}</strong><br>
+                                                                                            <small>{{ $caja->responsable->rut }}</small>
+                                                                                        @else
+                                                                                            <span class="badge badge-warning">Sin responsable</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->estado == 'abierta')
+                                                                                            <span class="badge badge-success">Abierta</span>
+                                                                                        @elseif($caja->estado == 'cerrada')
+                                                                                            <span class="badge badge-danger">Cerrada</span>
+                                                                                        @else
+                                                                                            <span class="badge badge-secondary">{{ ucfirst($caja->estado) }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja->origen == 'apertura_propia')
+                                                                                            <span class="badge badge-info">Apertura propia</span>
+                                                                                        @elseif($caja->origen == 'recibida')
+                                                                                            <span class="badge badge-info">Recibida</span><br>
+                                                                                            <small><strong>Desde:</strong> {{ $caja->origen_usuario ? $caja->origen_usuario->nombre.' '.$caja->origen_usuario->apellido_uno.' '.$caja->origen_usuario->apellido_dos : 'N/A' }}</small><br>
+                                                                                            <small><strong>RUT:</strong> {{ $caja->origen_usuario ? $caja->origen_usuario->rut : 'N/A' }}</small>
+                                                                                        @else
+                                                                                            <span class="badge badge-secondary">{{ ucfirst($caja->origen) }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        ${{ number_format($caja->monto_inicial, 0, ',', '.') }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        ${{ number_format($caja->acumulado, 0, ',', '.') }}
+                                                                                    </td>
+                                                                                     <td>
+                                                                                        {{ $caja->nombre_institucion }}
+                                                                                    </td>
+                                                                                        <td>
+                                                                                                <button type="button" class="btn btn-danger btn-xxs" onclick="eliminarCaja({{ $caja->id }});"><i class="feather icon-trash-2"></i> Eliminar caja</button>
+                                                                                            </td>
+
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> --}}
+                                            <!--HISTORICO DE MIS CAJAS-->
+                                            <div class="row mt-3">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5><i class="feather icon-file-text icono-primary"></i> Histórico de cajas</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Fecha</th>
+                                                                                <th>Caja</th>
+                                                                                <th>Origen</th>
+                                                                                <th>Desde</th>
+                                                                                <th>Hasta</th>
+                                                                                <th>Estado final</th>
+                                                                                <th>Recaudación</th>
+                                                                                <th>Institución</th>
+                                                                                <th>Acciones</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @forelse($cajas_operativas_historico as $caja_hist)
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        {{ $caja_hist->fecha_apertura ? \Carbon\Carbon::parse($caja_hist->fecha_apertura)->format('d/m/Y') : '--/--/----' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <strong>{{ $caja_hist->caja->nombre_caja ?? 'N/A' }}</strong><br>
+                                                                                        <small>{{ $caja_hist->caja->ubicacion ?? '' }}</small>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <span class="badge badge-secondary">--</span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ $caja_hist->fecha_apertura ? \Carbon\Carbon::parse($caja_hist->fecha_apertura)->format('H:i') : '--:--' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ $caja_hist->fecha_cierre ? \Carbon\Carbon::parse($caja_hist->fecha_cierre)->format('H:i') : '--:--' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($caja_hist->estado == 'cerrada')
+                                                                                            <span class="badge badge-danger">Cerrada</span>
+                                                                                        @elseif($caja_hist->estado == 'pendiente_entrega')
+                                                                                            <span class="badge badge-warning">Pendiente de entrega</span>
+                                                                                            @if($caja_hist->entregador && $caja_hist->responsable)
+                                                                                                <br><small class="text-muted">
+                                                                                                    <i class="feather icon-user"></i> De:
+                                                                                                    {{ $caja_hist->entregador->nombres ?? '' }} {{ $caja_hist->entregador->apellido_uno ?? '' }}
+                                                                                                </small>
+                                                                                                <br><small class="text-muted">
+                                                                                                    <i class="feather icon-arrow-right"></i> Para:
+                                                                                                    {{ $caja_hist->responsable->nombres ?? '' }} {{ $caja_hist->responsable->apellido_uno ?? '' }}
+                                                                                                </small>
+                                                                                                @if($caja_hist->fecha_entrega)
+                                                                                                    <br><small class="text-muted">
+                                                                                                        <i class="feather icon-clock"></i>
+                                                                                                        {{ \Carbon\Carbon::parse($caja_hist->fecha_entrega)->format('d/m/Y H:i') }}
+                                                                                                    </small>
+                                                                                                @endif
+                                                                                            @endif
+                                                                                        @elseif($caja_hist->estado == 'entregada')
+                                                                                            <span class="badge badge-success">Entregada</span>
+                                                                                            @if($caja_hist->entregador && $caja_hist->responsable)
+                                                                                                <br><small class="text-muted">
+                                                                                                    <i class="feather icon-user"></i>
+                                                                                                    {{ $caja_hist->entregador->nombres ?? '' }} {{ $caja_hist->entregador->apellido_uno ?? '' }}
+                                                                                                </small>
+                                                                                                <br><small class="text-muted">
+                                                                                                    <i class="feather icon-arrow-right"></i>
+                                                                                                    {{ $caja_hist->responsable->nombres ?? '' }} {{ $caja_hist->responsable->apellido_uno ?? '' }}
+                                                                                                </small>
+                                                                                                @if($caja_hist->fecha_entrega)
+                                                                                                    <br><small class="text-muted">
+                                                                                                        <i class="feather icon-clock"></i>
+                                                                                                        {{ \Carbon\Carbon::parse($caja_hist->fecha_entrega)->format('d/m/Y H:i') }}
+                                                                                                    </small>
+                                                                                                @endif
+                                                                                            @elseif($caja_hist->responsable)
+                                                                                                <br><small>{{ $caja_hist->responsable->nombres ?? '' }} {{ $caja_hist->responsable->apellido_uno ?? '' }}</small>
+                                                                                                <br><small>{{ $caja_hist->responsable->rut ?? '' }}</small>
+                                                                                            @endif
+                                                                                        @else
+                                                                                            <span class="badge badge-secondary">{{ ucfirst($caja_hist->estado) }}</span>
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <strong>${{ number_format($caja_hist->total_acumulado ?? 0, 0, ',', '.') }}</strong>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        {{ $caja_hist->caja->lugarAtencion->nombre ?? 'N/A' }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button type="button" class="btn btn-info btn-xxs" onclick="m_detallecajaabierta({{ $caja_hist->id }}, '{{ $caja_hist->caja->nombre_caja ?? 'Caja' }}', '{{ $caja_hist->responsable ? $caja_hist->responsable->nombres . ' ' . $caja_hist->responsable->apellido_uno : 'Sin responsable' }}');"><i class="feather icon-search"></i> Ver caja</button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @empty
+                                                                                <tr>
+                                                                                    <td colspan="9" class="text-center">
+                                                                                        <span class="text-muted">No hay registros de cajas en el histórico</span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforelse
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                             <!--<div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                    <div class="card py-0">
+                                        <div class="card-body pb-2 pt-2">
+                                            <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                 <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset active" id="micajadiaria-cm-tab" data-toggle="pill" href="#micajadiaria-cm" role="tab" aria-controls="micajadiaria-cm" aria-selected="true">
+                                                        Mis cajas diarias
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="cabiertacm-tab" data-toggle="pill" href="#cabiertacm" role="tab" aria-controls="cabiertacm" aria-selected="true">
+                                                        Cajas Abiertas
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="cerradacm-tab" data-toggle="pill" href="#cerradacm" role="tab" aria-controls="cerradacm" aria-selected="false">
+                                                        Cajas Cerradas
+                                                    </a>
+                                                </li>-->
+                                                <!-- <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="entregacajacm-tab" data-toggle="pill" href="#entregacajacm" role="tab" aria-controls="cerradacm" aria-selected="false">
+                                                       Entregas de caja
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="micierrecajacm-tab" data-toggle="pill" href="#micierrecajacm" role="tab" aria-controls="micierrecajacm" aria-selected="false">
+                                                       Mis cierres de caja
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <!--<div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="tab-content">
+                                        <div class="tab-pane show active" id="micajadiaria-cm" role="tabpanel" aria-labelledby="micajadiaria-cm-tab">
+
+                                        </div>
+                                        <div class="tab-pane fade" id="cabiertacm" role="tabpanel" aria-labelledby="cabiertacm-tab">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h5 class="text-c-blue d-inline float-left f-18">Cajas Abiertas</h5>
+                                                </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>Caja</th>
+                                                                                        <th>Responsable</th>
+                                                                                        <th>Apertura</th>
+                                                                                        <th>Detalle</th>
+                                                                                        <th>Saldo Anterior</th>
+                                                                                        <th>Saldo inicial</th>
+                                                                                        <th>Acumulado</th>
+                                                                                         <th>Institución</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <strong>Nombre o num caja</strong>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>Nombre Usuario <br>
+                                                                                            18.233.434-1</strong><br>
+                                                                                            <small>Asistente</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            12/05/2026 10:55
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                <button type="button" class="btn btn-info btn-xxs" onclick="m_detallecajaabierta();"><i class="feather icon-search"></i> Ver caja</button>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $0
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $0
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            $550.465
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="cerradacm" role="tabpanel" aria-labelledby="cerradacm-tab">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h5 class="text-c-blue d-inline float-left f-18">Cajas Cerradas</h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Caja</th>
+                                                                                <th>Responsable</th>
+                                                                                <th>Apertura</th>
+                                                                                <th>Cierre</th>
+                                                                                <th>Detalle</th>
+                                                                                <th>Total Abonos</th>
+                                                                                <th>Total gastos</th>
+                                                                                <th>Saldo cierre</th>
+                                                                                <th>Institución</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>Nombre o num caja</strong>
+                                                                                </td>
+                                                                                <td>
+                                                                                      <strong>Nombre Usuario <br>
+                                                                                        18.233.434-1</strong><br>
+                                                                                        <small>Asistente</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    12/05/2026 10:55
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    12/05/2026 18:53
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn-info btn-xxs" onclick="m_detallecajacerrada();"><i class="feather icon-search"> Ver caja</button>
+                                                                                </td>
+                                                                                <td>
+                                                                                    $0
+                                                                                </td>
+                                                                                <td>
+                                                                                    $35.000
+                                                                                </td>
+                                                                                <td>
+                                                                                    $550.465
+                                                                                </td>
+                                                                                <td>
+                                                                                    INSI (Casa Matriz)
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="entregacajacm" role="tabpanel" aria-labelledby="entregacajacm-tab">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h5 class="text-c-blue d-inline float-left f-18">Entregas de cajas</h5>
+                                                </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th class="align-middle">Caja</th>
+                                                                                        <th class="align-middle">Entrega</th>
+                                                                                        <th class="align-middle">Recibe</th>
+                                                                                        <th class="align-middle">Fecha / Hora</th>
+                                                                                        <th class="align-middle">Monto</th>
+                                                                                        <th class="align-middle">Institución</th>
+                                                                                        <th class="align-middle">Estado</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                         <td>
+                                                                                            <strong>Nombre de la caja</strong>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>Nombre Usuario <br>
+                                                                                            18.233.434-1</strong><br>
+                                                                                            <small>Asistente</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>Laura mena  <br>
+                                                                                            18.233.434-1</strong><br>
+                                                                                            <small>Administrador</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            12/05/2026 10:55
+
+                                                                                        </td>
+                                                                                        <td>
+                                                                                               $1.553.345
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                        <td><span class="badge badge-success">Aprobado</span></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>-->
+
+                        </div>
+
+                        {{--  VENTAS --}}
+                        <div class="tab-pane fade" id="ventas-cm" role="tabpanel" aria-labelledby="ventas-cm-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mb-2">
+                                    <h5 class="text-c-blue d-inline float-left f-22">Ventas </h5>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                    <div class="card py-0">
+                                        <div class="card-body pb-2 pt-2">
+                                            <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset active" id="venta-bonocm-tab" data-toggle="pill" href="#venta-bonocm" role="tab" aria-controls="venta-bonocm" aria-selected="true">
+                                                        Venta de Bonos
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="ventaprogramacm-tab" data-toggle="pill" href="#ventaprogramacm" role="tab" aria-controls="ventaprogramacm" aria-selected="false">
+                                                        Venta de programas
+                                                    </a>
+                                                </li>
+                                                <!--<li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="ventatotalprofcm-tab" data-toggle="pill" href="#ventatotalprofcm" role="tab" aria-controls="ventatotalprofcm" aria-selected="false">
+                                                        Resumen de ventas por profesional
+                                                    </a>
+                                                </li>-->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="tab-content">
+                                        <!--VENTA BONOS-->
+                                        <div class="tab-pane show active" id="venta-bonocm" role="tabpanel" aria-labelledby="venta-bonocm-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5>Venta de Bonos</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                <th class="align-middle">Tipo atención</th>
+                                                                                <th class="align-middle">Fecha de atención</th>
+                                                                                <th class="align-middle">Profesional</th>
+                                                                                <th class="align-middle">Monto</th>
+                                                                                <th class="align-middle">Medio de pago</th>
+                                                                                <th class="align-middle">Vendido por</th>
+                                                                                 <th class="align-middle">Institución</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @forelse($bonos_vendidos_dia as $bono_venta)
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_venta->paciente->nombres ?? 'N/A' }} {{ $bono_venta->paciente->apellido_uno ?? '' }} {{ $bono_venta->paciente->apellido_dos ?? '' }}<br>
+                                                                                    {{ $bono_venta->paciente->rut ?? 'N/A' }}</strong>
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_venta->convenio->nombre ?? 'N/A' }}<br>
+                                                                                    <small>CÓD: {{ $bono_venta->convenio->codigo ?? 'N/A' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span>{{ $bono_venta->tipoBono->nombre ?? 'N/A' }}</span><br>
+                                                                                    @if($bono_venta->id_clase_bono == 1)
+                                                                                        <small>Bono Físico</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 2)
+                                                                                        <small>Sencillito</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 3)
+                                                                                        <small>Caja Vecina</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 4)
+                                                                                        <small>Bono Web</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 5)
+                                                                                        <small>Bono Web Pre-Pago</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 6)
+                                                                                        <small>Particular</small>
+                                                                                    @elseif($bono_venta->id_clase_bono == 7)
+                                                                                        <small>Bono Institucional</small>
+                                                                                    @else
+                                                                                        <small>Otro</small>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_venta->fecha_atencion ? \Carbon\Carbon::parse($bono_venta->fecha_atencion)->format('d/m/Y') : 'N/A' }}<br>
+                                                                                    {{ $bono_venta->fecha_atencion ? \Carbon\Carbon::parse($bono_venta->fecha_atencion)->format('H:i') : '--:--' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_venta->profesional->nombre ?? 'N/A' }} {{ $bono_venta->profesional->apellido_uno ?? '' }}<br>
+                                                                                    {{ $bono_venta->profesional->rut ?? 'N/A' }}</strong>
+                                                                                    <br>
+                                                                                    <small>{{ $bono_venta->profesional->especialidad->nombre ?? 'N/A' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    ${{ number_format($bono_venta->valor_atencion ?? 0, 0, ',', '.') }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if($bono_venta->id_clase_bono == 1)
+                                                                                        Bono Físico
+                                                                                    @elseif($bono_venta->id_clase_bono == 2)
+                                                                                        Sencillito
+                                                                                    @elseif($bono_venta->id_clase_bono == 3)
+                                                                                        Caja Vecina
+                                                                                    @elseif($bono_venta->id_clase_bono == 4)
+                                                                                        Bono Web
+                                                                                    @elseif($bono_venta->id_clase_bono == 5)
+                                                                                        Bono Web Pre-Pago
+                                                                                    @elseif($bono_venta->id_clase_bono == 6)
+                                                                                        Efectivo
+                                                                                    @else
+                                                                                        Otro
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_venta->asistente->nombres ?? 'N/A' }} {{ $bono_venta->asistente->apellido_uno ?? '' }}<br>
+                                                                                    {{ $bono_venta->asistente->rut ?? 'N/A' }}</strong><br>
+                                                                                    <small>{{ $bono_venta->asistente->asistenteTipo->nombre ?? 'Asistente' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_venta->lugarAtencion->nombre ?? 'N/A' }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            @empty
+                                                                            <tr>
+                                                                                <td colspan="9" class="text-center text-muted">
+                                                                                    <i class="feather icon-info"></i> No hay bonos vendidos el día de hoy
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endforelse
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--VENTA PROGRAMAS-->
+                                        <div class="tab-pane" id="ventaprogramacm" role="tabpanel" aria-labelledby="ventaprogramacm-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                         <div class="card-header-new-md">
+                                                            <h5>Venta de Programas</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                 <th class="align-middle">Tipo atención</th>
+                                                                                <th class="align-middle">N° Programa</th>
+                                                                                <th class="align-middle">Fecha de atención</th>
+                                                                                <th class="align-middle">Profesional</th>
+                                                                                <th class="align-middle">Monto</th>
+                                                                                <th class="align-middle">Medio de pago</th>
+                                                                                <th class="align-middle">Vendido por</th>
+                                                                                 <th class="align-middle">Institución</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>Juan Perez<br>
+                                                                                    18.233.434-1</strong>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span>Fonasa</span><br>
+                                                                                    <small>849839</small><!--CLASE-->
+                                                                                </td>
+                                                                                <td>
+                                                                                    <span>Consulta</span><br>
+                                                                                    <small>Bono emitido por institución</small><!--CLASE-->
+                                                                                </td>
+                                                                                <td>
+                                                                                    N° 10<br>
+                                                                                    <small>CÓD: 48874</small>
+
+                                                                                </td>
+                                                                                <td>
+                                                                                    8/6/2026<!--FECHA--><br>
+                                                                                    15:13 <!--HORA-->
+                                                                                </td>
+                                                                                <td>
+                                                                                    <strong>Jaime Kriman<br>
+                                                                                    823982934-9</strong><br>
+                                                                                    <small>Otorrinolaringología</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    $105.000
+                                                                                </td>
+                                                                                <td>
+                                                                                    Débito
+                                                                                </td>
+
+                                                                                <td>
+                                                                                    <strong>Nombre Usuario <br>
+                                                                                                    18.233.434-1</strong><br>
+                                                                                                    <small>Asistente</small><!--TIPO USUARIO-->
+                                                                                </td>
+                                                                                <td>
+                                                                                    INSI (Casa Matriz)
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         <!--RESUMEN VENTAS POR PROFESIONAL-->
+                                        <div class="tab-pane" id="ventatotalprofcm" role="tabpanel" aria-labelledby="ventatotalprofcm-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                            <div class="card">
+                                                                <div class="card-header-new-md">
+                                                                    <h5>Resumen de ventas diarias por profesional</h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="table-responsive">
+                                                                        <div class="dt-responsive table-responsive">
+                                                                            <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th class="align-middle">Profesional</th>
+                                                                                        <th class="align-middle">Fecha</th>
+                                                                                        <th class="align-middle"> Particular</th>
+                                                                                        <th class="align-middle"> Total Bonos</th>
+                                                                                         <th class="align-middle"> Total Programas</th>
+                                                                                         <th class="align-middle">Institución</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <strong>Juan Perez<br>
+                                                                                            18.233.434-1</strong><br>
+                                                                                            <small>Especialidad</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <span>5/5/2026</span><br>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>2</strong><br>
+                                                                                            <small>$50.000</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>10</strong><br>
+                                                                                            <small>$100.234</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <strong>5</strong><br>
+                                                                                            <small>$55.000</small>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            INSI (Casa Matriz)
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {{--  PESTAÑA DE REGISTRO GARANTIA --}}
+                        <div class="tab-pane fade" id="garantia-cm" role="tabpanel" aria-labelledby="garantia-cm-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mb-2">
+                                    <h5 class="text-c-blue d-inline float-left f-22">Registro de garantía</h5>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                    <div class="card py-0">
+                                        <div class="card-body pb-2 pt-2">
+                                            <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset active" id="garantia-pendiente-tab" data-toggle="pill" href="#garantia-pendiente" role="tab" aria-controls="garantia-pendiente" aria-selected="true">
+                                                        Garantías pendientes de pago
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link-aten text-reset" id="garantia-pagada-tab" data-toggle="pill" href="#garantia-pagada" role="tab" aria-controls="garantia-pagada" aria-selected="false">
+                                                        Garantías pagadas
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="tab-content">
+                                        <!--GARANTIAS PENDIENTE DE PAGO-->
+                                        <div class="tab-pane show active" id="garantia-pendiente" role="tabpanel" aria-labelledby="garantia-pendiente-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <div class="row">
+                                                                <div class="d-flex align-items-end col-6 mb-2">
+                                                                    <h5 class=" d-inline">Garantías pendiente de pago</h5>
+                                                                </div>
+                                                                <div class="d-inline col-6 mb-2">
+                                                                    <div class="switch switch-success float-md-right m-l-5">
+                                                                        <input type="checkbox" id="switch_pagogarantia_5"   checked="">
+                                                                        <label for="switch_pagogarantia_5" class="cr"></label>
+                                                                        <label class="font-weight-bold">PAGAR A TODOS</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Paciente</th>
+                                                                                <th>Monto Garantía</th>
+                                                                                <th>Convenio</th>
+                                                                                <th>Tipo atención</th>
+                                                                                <th>Emisión</th>
+                                                                                <th>Vencimiento</th>
+                                                                                <th>Profesional</th>
+                                                                                <th>Institución</th>
+                                                                                <th>Estado</th>
+                                                                                <th>Atenciones</th>
+                                                                                <th>Estado de pago</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @forelse($bonos_clase_8 as $bono_garantia)
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_garantia->paciente->nombres ?? '' }} {{ $bono_garantia->paciente->apellido_uno ?? '' }} {{ $bono_garantia->paciente->apellido_dos ?? '' }}</strong><br>
+                                                                                    {{ $bono_garantia->paciente->rut ?? 'Sin RUT' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    ${{ number_format($bono_garantia->valor_atencion ?? 0, 0, ',', '.') }}
+                                                                                </td>
+                                                                                 <td>
+                                                                                    {{ $bono_garantia->convenio->nombre ?? 'Sin convenio' }}<br>
+                                                                                    <small>CÓD: {{ $bono_garantia->convenio->id ?? '--' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_garantia->tipoBono->nombre ?? 'Consulta' }}<br>
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_garantia->fecha_atencion ? \Carbon\Carbon::parse($bono_garantia->fecha_atencion)->format('d/m/Y') : '--/--/----' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_garantia->fecha_vencimiento ? \Carbon\Carbon::parse($bono_garantia->fecha_vencimiento)->format('d/m/Y') : '--/--/----' }}<br>
+                                                                                    @if($bono_garantia->fecha_vencimiento)
+                                                                                        @php
+                                                                                            $dias_restantes = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($bono_garantia->fecha_vencimiento), false);
+                                                                                        @endphp
+                                                                                        @if($dias_restantes > 0)
+                                                                                            <small>Vence en {{ ceil($dias_restantes) }} días</small>
+                                                                                        @else
+                                                                                            <small>Vencido</small>
+                                                                                        @endif
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_garantia->profesional->nombre ?? '' }} {{ $bono_garantia->profesional->apellido_uno ?? '' }}</strong><br>
+                                                                                    {{ $bono_garantia->profesional->rut ?? '--' }}<br>
+                                                                                    <small>{{ $bono_garantia->profesional->especialidad->nombre ?? 'Sin especialidad' }}</small>
+                                                                                </td>
+                                                                                 <td>
+                                                                                    INSI (Casa Matriz)
+                                                                                </td>
+                                                                                <td>
+                                                                                    @if($bono_garantia->fecha_vencimiento)
+                                                                                        @php
+                                                                                            $dias = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($bono_garantia->fecha_vencimiento), false);
+                                                                                        @endphp
+                                                                                        @if($dias < 0)
+                                                                                            <h6><span class="badge badge-danger">Vencido</span></h6>
+                                                                                        @elseif($dias <= 7)
+                                                                                            <h6><span class="badge badge-warning">Por vencer</span></h6>
+                                                                                        @else
+                                                                                            <h6><span class="badge badge-success">Vigente</span></h6>
+                                                                                        @endif
+                                                                                    @else
+                                                                                        <h6><span class="badge badge-secondary">Sin vencimiento</span></h6>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <td><button type="button" class="btn btn-info btn-xxs" onclick="ver_detalle_garantia({{ $bono_garantia->id }});"><i class="feather icon-search"></i> Ver</button></td>
+                                                                                <td>
+                                                                                    <label class="switch-moderno-pago">
+                                                                                        <input type="checkbox" id="switchEstado_{{ $bono_garantia->id }}" data-bono-id="{{ $bono_garantia->id }}" onchange="pagar_garantia({{ $bono_garantia->id }}, this)">
+                                                                                        <span class="switch-slider-pago">
+                                                                                                <span class="switch-text-pago off">
+                                                                                                 Pendiente
+                                                                                                </span>
+                                                                                                <span class="switch-text-pago on">
+                                                                                                Pagado
+                                                                                                </span>
+                                                                                        </span>
+                                                                                    </label>
+                                                                                 </td>
+                                                                            </tr>
+                                                                            @empty
+                                                                            <tr>
+                                                                                <td colspan="11" class="text-center">
+                                                                                    <span class="text-muted">No hay garantías pendientes de pago</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endforelse
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--GARANTIAS PAGADAS-->
+                                        <div class="tab-pane" id="garantia-pagada" role="tabpanel" aria-labelledby="garantia-pagada-tab">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="card">
+                                                        <div class="card-header-new-md">
+                                                            <h5>Garantías pagadas</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <div class="dt-responsive table-responsive">
+                                                                    <table id="" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th class="align-middle">Paciente</th>
+                                                                                <th class="align-middle">Monto <br>Garantía</th>
+                                                                                <th class="align-middle">Convenio</th>
+                                                                                <th class="align-middle">Tipo <br>atención</th>
+                                                                                <th class="align-middle">Emisión</th>
+                                                                                <th class="align-middle">Vencimiento</th>
+                                                                                <th class="align-middle">Profesional</th>
+                                                                                <th class="align-middle">Institución</th>
+                                                                                <th class="align-middle">Fecha <br>de pago</th>
+                                                                                <th class="align-middle">Estado</th>
+                                                                                <th class="align-middle">Atenciones</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @forelse($bonos_clase_8_pagados as $bono_pagado)
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_pagado->paciente->nombres ?? '' }} {{ $bono_pagado->paciente->apellido_uno ?? '' }} {{ $bono_pagado->paciente->apellido_dos ?? '' }}</strong><br>
+                                                                                    {{ $bono_pagado->paciente->rut ?? 'Sin RUT' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    ${{ number_format($bono_pagado->valor_atencion ?? 0, 0, ',', '.') }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_pagado->convenio->nombre ?? 'Sin convenio' }}<br>
+                                                                                    <small>CÓD: {{ $bono_pagado->convenio->id ?? '--' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_pagado->tipoBono->nombre ?? 'Consulta' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_pagado->fecha_atencion ? \Carbon\Carbon::parse($bono_pagado->fecha_atencion)->format('d/m/Y') : '--/--/----' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_pagado->fecha_vencimiento ? \Carbon\Carbon::parse($bono_pagado->fecha_vencimiento)->format('d/m/Y') : '--/--/----' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <strong>{{ $bono_pagado->profesional->nombre ?? '' }} {{ $bono_pagado->profesional->apellido_uno ?? '' }}</strong><br>
+                                                                                    {{ $bono_pagado->profesional->rut ?? '--' }}<br>
+                                                                                    <small>{{ $bono_pagado->profesional->especialidad->nombre ?? 'Sin especialidad' }}</small>
+                                                                                </td>
+                                                                                <td>
+                                                                                    INSI (Casa Matriz)
+                                                                                </td>
+                                                                                <td>
+                                                                                    {{ $bono_pagado->fecha_pago_garantia ? \Carbon\Carbon::parse($bono_pagado->fecha_pago_garantia)->format('d/m/Y H:i') : '--/--/---- --:--' }}
+                                                                                </td>
+                                                                                <td>
+                                                                                    <h6><span class="badge badge-success">Pagado</span></h6>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn-info btn-xxs" onclick="ver_detalle_garantia({{ $bono_pagado->id }});"><i class="feather icon-search"></i> Ver</button>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @empty
+                                                                            <tr>
+                                                                                <td colspan="11" class="text-center">
+                                                                                    <span class="text-muted">No hay garantías pagadas</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endforelse
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -456,29 +1952,615 @@
     </div>
 </div>
 
+
+
 <input type="hidden" name="numero_rendicion_hidde" id="numero_rendicion_hidde" value="">
 <input type="hidden" name="id_profesional" id="id_profesional" value="">
+
     <!--Cierre: Container Completo-->
 @endsection
 
 @section('modales')
+   @include('app.general.asistente.flujo_caja.modal.m_detallegarantia')
+    @include('app.general.asistente.flujo_caja.modal.m_detallecajaabierta')
+   @include('app.general.asistente.flujo_caja.modal.m_detallecajacerrada')
+   @include('app.general.asistente.flujo_caja.modal.m_editarcajaoperativa')
     {{-- @include('page.flujo_cajas.asistente_cm_publico.modales.modal_rendicion_caja_diaria') --}}
     @include('app.general.asistente.flujo_caja.modal.modal_rendicion_caja_diaria')
     {{-- @include('page.flujo_cajas.asistente_cm_publico.modales.modal_consulta_agenda') --}}
     @include('app.general.asistente.flujo_caja.modal.modal_consulta_agenda')
+     @include('app.general.asistente.flujo_caja.modal.m_abrircaja')
+
+
+
+
 @endsection
 
 @section('page-script')
-  <script>
-    $('#up_archivo_cm').click(function(){
-            $('#upload_archivo_cm').toggle();
-        });
-    </script>
 
-    <script>
-            let clase_bono = ['Bono Fisico' ,'Sencillito' ,'Caja Vecina' ,'Bono Web' ,'Bono Web Pre-Pago' ,'Particular'];
-            var tiempo = 0; // CANTIDAD MINUTOS A ESPERAR PARA APROBACION
-            var conteo_activo = 0; // valida si conteo esta activo
+<script>
+
+/* Apertura y cierre de cajas*/
+function m_abrircaja(idCaja = null) {
+    // Limpiar el mensaje de información
+    $('#info_ultima_caja').html('');
+
+    if (idCaja !== null) {
+        $('#id_caja').val(idCaja).trigger('change');
+    } else {
+        // Limpiar campos si no hay caja preseleccionada
+        $('#id_caja').val('0');
+        $('#saldo_final_caja_anterior').val('');
+        $('#abono_inicial_caja').val('');
+    }
+
+    $('#abrircaja').modal('show');
+}
+
+function cerrar_abrircaja() {
+    $('#id_caja').val('0').trigger('change');
+    $('#responsable_caja').val('0');
+    $('#saldo_final_caja_anterior').val('');
+    $('#abono_inicial_caja').val('');
+    $('#info_ultima_caja').html('');
+    $('#abrircaja').modal('hide');
+  }
+/* Apertura y cierre de cajas abiertas*/
+  function m_detallecajaabierta(idCaja = null, nombreCaja = 'Caja', nombreResponsable = 'Nombre asistente') {
+    // Validar que se haya proporcionado un ID
+    if (!idCaja) {
+        swal({
+            title: 'Error',
+            text: 'No se ha seleccionado una caja para mostrar.',
+            icon: 'error',
+            buttons: 'Aceptar',
+        });
+        return;
+    }
+
+    // Almacenar el ID de la caja operativa
+    $('#id_caja_operativa_cierre').val(idCaja);
+
+    // Limpiar campos del formulario de cierre
+    $('#saldo_cierre').val('');
+    $('#diferencia_cierre').val('');
+    $('#observaciones_cierre').val('');
+
+    // Limpiar campos del formulario de entrega
+    $('#saldo_entregar').val('');
+    $('#nuevo_responsable').val('');
+    $('#observaciones_entrega').val('');
+
+    // Cargar datos de la caja vía AJAX
+    $.ajax({
+        url: "{{ route('flujo_caja.detalle_caja_operativa', '') }}/" + idCaja,
+        type: 'GET',
+        beforeSend: function() {
+            // Mostrar valores por defecto mientras carga
+            $('#modal_caja_titulo').text('Cargando...');
+            $('#modal_caja_responsable').text('...');
+            $('#caja_saldo_anterior').text('$0');
+            $('#caja_abono_inicial').text('$0');
+            $('#caja_total_efectivo').text('$0');
+            $('#caja_total_bonos').text('0');
+            $('#caja_total_otros').text('$0');
+            $('#caja_total_acumulado').text('$0');
+            $('#caja_total_caja').text('$0');
+            $('#caja_total_acumulado_card').text('$0');
+            $('#caja_fecha_apertura').text('--/--/---- - --:--');
+        },
+        success: function(data) {
+            console.log('Detalle de caja operativa:', data);
+            if (data.estado === 1) {
+                // Actualizar título y responsable
+                $('#modal_caja_titulo').text('Detalle ' + data.nombre_caja);
+                $('#modal_caja_responsable').text(data.responsable);
+
+                // Actualizar responsable actual en la pestaña de entrega
+                $('#responsable_actual_entrega').val(data.responsable);
+
+                // Actualizar totales en la tabla
+                $('#caja_saldo_anterior').text('$' + data.totales.saldo_anterior);
+                $('#caja_abono_inicial').text('$' + data.totales.abono_inicial);
+                $('#caja_total_efectivo').text('$' + data.totales.total_efectivo);
+                $('#caja_total_bonos').text(data.totales.total_bonos);
+                $('#caja_total_otros').text('$' + data.totales.total_otros);
+                $('#caja_total_acumulado').text('$' + data.totales.total_acumulado);
+                $('#caja_total_caja').text('$' + data.totales.total_caja);
+
+                // Actualizar cards adicionales
+                $('#caja_total_acumulado_card').text('$' + data.totales.total_acumulado);
+                $('#caja_fecha_apertura').text(data.fecha_apertura);
+
+                // Mostrar el modal
+                $('#detallecajaabierta').modal('show');
+            } else {
+                swal({
+                    title: 'Error',
+                    text: data.mensaje || 'No se pudo cargar la información de la caja.',
+                    icon: 'error',
+                    buttons: 'Aceptar',
+                });
+            }
+        },
+        error: function(error) {
+            console.error('Error al cargar detalles de caja:', error);
+            swal({
+                title: 'Error',
+                text: 'No se pudo cargar la información de la caja.',
+                icon: 'error',
+                buttons: 'Aceptar',
+            });
+        }
+    });
+}
+
+function m_editarcajaoperativa(){
+    $('#editarcajaoperativa').modal('show');
+}
+
+// Listener para actualizar el saldo de cierre en la tabla en tiempo real
+$(document).on('input', '#saldo_cierre', function() {
+    let valor = $(this).val();
+    if (valor) {
+        $('#caja_saldo_cierre_display').text('$' + parseFloat(valor).toLocaleString('es-CL'));
+    } else {
+        $('#caja_saldo_cierre_display').text('$0');
+    }
+});
+
+function cerrarCaja() {
+    const idCaja = $('#id_caja_operativa_cierre').val();
+    const saldoCierre = $('#saldo_cierre').val();
+    const diferencia = $('#diferencia_cierre').val();
+    const observaciones = $('#observaciones_cierre').val();
+
+    // Validaciones
+    let valido = 1;
+    let mensaje = "Corrija los siguientes errores:<br><br>";
+
+    if (!idCaja || idCaja === '' || idCaja == 0) {
+        valido = 0;
+        mensaje += "- No se ha seleccionado una caja para cerrar.<br>";
+    }
+
+    if (saldoCierre === '' || saldoCierre === null) {
+        valido = 0;
+        mensaje += "- Debe ingresar el saldo de cierre.<br>";
+    }
+
+    if (valido === 0) {
+        swal({
+            title: 'Campos incompletos',
+            html: mensaje,
+            icon: 'warning',
+            buttons: 'Aceptar',
+        });
+        return;
+    }
+
+    // Confirmación
+    swal({
+        title: '¿Cerrar caja?',
+        text: 'Esta acción cerrará la caja operativa. ¿Desea continuar?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Cerrar caja'],
+        dangerMode: true,
+    }).then((willClose) => {
+        if (!willClose) {
+            return;
+        }
+
+        // Petición AJAX
+        $.ajax({
+            url: "{{ route('flujo_caja.cerrar_caja', '') }}/" + idCaja,
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                saldo_cierre: saldoCierre,
+                diferencia: diferencia,
+                observaciones: observaciones,
+            },
+            success: function(data) {
+                console.log(data);
+                if (data.estado === 1) {
+                    swal({
+                        title: 'Caja cerrada',
+                        text: data.mensaje || 'La caja fue cerrada correctamente.',
+                        icon: 'success',
+                        buttons: 'Aceptar',
+                    }).then(() => {
+                        $('#detallecajaabierta').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: data.mensaje || 'No fue posible cerrar la caja.',
+                        icon: 'error',
+                        buttons: 'Aceptar',
+                    });
+                }
+            },
+            error: function(error) {
+                let mensajeError = 'No fue posible cerrar la caja.';
+
+                if (error.responseJSON && error.responseJSON.mensaje) {
+                    mensajeError = error.responseJSON.mensaje;
+                } else if (error.responseJSON && error.responseJSON.message) {
+                    mensajeError = error.responseJSON.message;
+                }
+
+                swal({
+                    title: 'Error al cerrar',
+                    text: mensajeError,
+                    icon: 'error',
+                    buttons: 'Aceptar',
+                });
+            }
+        });
+    });
+}
+
+function entregarCaja() {
+    const idCaja = $('#id_caja_operativa_cierre').val();
+    const saldoEntregar = $('#saldo_entregar').val();
+    const nuevoResponsable = $('#nuevo_responsable').val();
+    const observaciones = $('#observaciones_entrega').val();
+
+    // Validaciones
+    let valido = 1;
+    let mensaje = "Corrija los siguientes errores:<br><br>";
+
+    if (!idCaja || idCaja === '' || idCaja == 0) {
+        valido = 0;
+        mensaje += "- No se ha seleccionado una caja para entregar.<br>";
+    }
+
+    if (saldoEntregar === '' || saldoEntregar === null) {
+        valido = 0;
+        mensaje += "- Debe ingresar el saldo a entregar.<br>";
+    }
+
+    if (!nuevoResponsable || nuevoResponsable === '') {
+        valido = 0;
+        mensaje += "- Debe seleccionar el nuevo responsable de la caja.<br>";
+    }
+
+    if (valido === 0) {
+        swal({
+            title: 'Campos incompletos',
+            html: mensaje,
+            icon: 'warning',
+            buttons: 'Aceptar',
+        });
+        return;
+    }
+
+    // Confirmación
+    swal({
+        title: '¿Entregar caja?',
+        text: 'Esta acción cambiará el responsable de la caja operativa. ¿Desea continuar?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Entregar caja'],
+    }).then((willTransfer) => {
+        if (!willTransfer) {
+            return;
+        }
+
+        // Petición AJAX
+        $.ajax({
+            url: "{{ route('flujo_caja.entregar_caja', '') }}/" + idCaja,
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                saldo_entregar: saldoEntregar,
+                nuevo_responsable: nuevoResponsable,
+                observaciones: observaciones,
+            },
+            success: function(data) {
+                console.log(data);
+                if (data.estado === 1) {
+                    swal({
+                        title: 'Caja entregada',
+                        text: data.mensaje || 'La caja fue entregada correctamente.',
+                        icon: 'success',
+                        buttons: 'Aceptar',
+                    }).then(() => {
+                        $('#detallecajaabierta').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: data.mensaje || 'No fue posible entregar la caja.',
+                        icon: 'error',
+                        buttons: 'Aceptar',
+                    });
+                }
+            },
+            error: function(error) {
+                let mensajeError = 'No fue posible entregar la caja.';
+
+                if (error.responseJSON && error.responseJSON.mensaje) {
+                    mensajeError = error.responseJSON.mensaje;
+                } else if (error.responseJSON && error.responseJSON.message) {
+                    mensajeError = error.responseJSON.message;
+                }
+
+                swal({
+                    title: 'Error al entregar',
+                    text: mensajeError,
+                    icon: 'error',
+                    buttons: 'Aceptar',
+                });
+            }
+        });
+    });
+}
+
+function eliminarCaja(idCaja) {
+    swal({
+        title: '¿Eliminar caja?',
+        text: 'Esta acción eliminará la caja seleccionada.',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Eliminar'],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (!willDelete) {
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('flujo_caja.eliminar_caja') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                id: idCaja,
+            },
+            success: function(data) {
+                if (data.estado === 1) {
+                    swal({
+                        title: 'Caja eliminada',
+                        text: data.mensaje || 'La caja fue eliminada correctamente.',
+                        icon: 'success',
+                        buttons: 'Aceptar',
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: data.mensaje || 'No fue posible eliminar la caja.',
+                        icon: 'error',
+                        buttons: 'Aceptar',
+                    });
+                }
+            },
+            error: function(error) {
+                let mensajeError = 'No fue posible eliminar la caja.';
+
+                if (error.responseJSON && error.responseJSON.mensaje) {
+                    mensajeError = error.responseJSON.mensaje;
+                } else if (error.responseJSON && error.responseJSON.message) {
+                    mensajeError = error.responseJSON.message;
+                }
+
+                swal({
+                    title: 'Error al eliminar',
+                    text: mensajeError,
+                    icon: 'error',
+                    buttons: 'Aceptar',
+                });
+            }
+        });
+    });
+}
+
+function cerrar_detallecajaabierta() {
+    // Limpiar campos del formulario
+    $('#id_caja_operativa_cierre').val('');
+    $('#saldo_cierre').val('');
+    $('#diferencia_cierre').val('');
+    $('#observaciones_cierre').val('');
+    $('#modal_caja_titulo').text('Detalle de caja');
+    $('#modal_caja_responsable').text('Nombre asistente');
+
+    $('#detallecajaabierta').modal('hide');
+}
+
+  /* Apertura y cierre de cajas cerradas*/
+  function m_detallecajacerrada() {
+    $('#detallecajacerrada').modal('show');
+}
+
+function cerrar_detallecajacerrada() {
+    $('#detallecajacerrada').modal ('hide');
+  }
+
+  function verificarUltimaCajaOperativa() {
+    const idCaja = $('#id_caja').val();
+
+    // Limpiar campos y mensajes anteriores
+    $('#saldo_final_caja_anterior').val('');
+    $('#info_ultima_caja').html('');
+
+    // Si no hay caja seleccionada, salir
+    if (!idCaja || idCaja == '0') {
+        return;
+    }
+
+    // Hacer petición AJAX para obtener la última caja operativa
+    $.ajax({
+        url: "{{ route('flujo_caja.ultima_caja_operativa', '') }}/" + idCaja,
+        type: 'GET',
+        beforeSend: function() {
+            $('#info_ultima_caja').html('<i class="feather icon-loader"></i> Consultando historial...');
+        },
+        success: function(data) {
+            console.log('Respuesta última caja operativa:', data);
+            if (data.estado === 1) {
+                if (data.tiene_historial) {
+                    // Si existe historial, prellenar el campo con el saldo de cierre
+                    const saldoCierre = data.saldo_cierre || 0;
+                    $('#saldo_final_caja_anterior').val(saldoCierre);
+
+                    // Formatear fecha de manera más amigable
+                    let fechaCierreFormateada = 'N/A';
+                    if (data.fecha_cierre) {
+                        const fecha = new Date(data.fecha_cierre);
+                        fechaCierreFormateada = fecha.toLocaleDateString('es-CL', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+
+                    // Formatear el saldo con separadores de miles
+                    const saldoFormateado = new Intl.NumberFormat('es-CL').format(saldoCierre);
+
+                    // Mostrar información útil
+                    $('#info_ultima_caja').html(
+                        '<div class="alert alert-info py-2 px-3 mb-0">' +
+                        '<i class="feather icon-info"></i> ' +
+                        '<strong>Último cierre:</strong> $' + saldoFormateado +
+                        ' | <strong>Fecha:</strong> ' + fechaCierreFormateada +
+                        ' | <strong>Responsable:</strong> ' + data.responsable +
+                        '</div>'
+                    );
+                } else {
+                    // Si no hay historial, informar al usuario
+                    $('#info_ultima_caja').html(
+                        '<div class="alert alert-warning py-2 px-3 mb-0">' +
+                        '<i class="feather icon-alert-circle"></i> Esta caja no tiene historial de cierres anteriores. Ingrese el saldo inicial manualmente si es necesario.' +
+                        '</div>'
+                    );
+                }
+            } else {
+                $('#info_ultima_caja').html(
+                    '<div class="alert alert-danger py-2 px-3 mb-0">' +
+                    '<i class="feather icon-x"></i> No se pudo obtener información del historial' +
+                    '</div>'
+                );
+            }
+        },
+        error: function(error) {
+            console.error('Error al consultar última caja operativa:', error);
+            $('#info_ultima_caja').html(
+                '<div class="alert alert-danger py-2 px-3 mb-0">' +
+                '<i class="feather icon-x"></i> Error al consultar el historial de la caja' +
+                '</div>'
+            );
+        }
+    });
+}
+
+function abrir_caja(){
+        let id_caja = $('#id_caja').val();
+        let cajaSeleccionada = $('#id_caja option:selected');
+        let id_lugar_atencion = cajaSeleccionada.data('id-lugar-atencion');
+        // let id_responsable_caja = $('#responsable_caja').val();
+        let saldo_final_caja_anterior = $('#saldo_final_caja_anterior').val();
+        let abono_inicial_caja = $('#abono_inicial_caja').val();
+
+        const normalizarMonto = (valor) => {
+            if (valor === null || valor === undefined) {
+                return 0;
+            }
+            let valorStr = String(valor).replace(/\./g, '').replace(/,/g, '.');
+            return parseFloat(valorStr) || 0;
+        };
+
+        const saldoFinalNormalizado = normalizarMonto(saldo_final_caja_anterior);
+        const abonoInicialNormalizado = normalizarMonto(abono_inicial_caja);
+
+        let valido = 1;
+        let mensaje = "Corrija los siguientes errores:<br><br>";
+
+        if(id_caja === "" || id_caja === null || id_caja == 0){
+            valido = 0;
+            mensaje += "- Debe seleccionar una caja para realizar la apertura.<br>";
+        }
+
+        // if(id_responsable_caja === ""){
+        //     valido = 0;
+        //     mensaje += "- Debe seleccionar un responsable para la caja.<br>";
+        // }
+
+        if(!id_lugar_atencion){
+            valido = 0;
+            mensaje += "- La caja seleccionada no tiene lugar de atención asociado.<br>";
+        }
+
+        if(saldo_final_caja_anterior.trim() === "" || isNaN(saldoFinalNormalizado)){
+            valido = 0;
+            mensaje += "- El saldo final de la caja anterior es obligatorio y debe ser numérico.<br>";
+        }
+
+        if(abono_inicial_caja.trim() === "" || isNaN(abonoInicialNormalizado)){
+            valido = 0;
+            mensaje += "- El abono inicial de la caja es obligatorio y debe ser numérico.<br>";
+        }
+
+        if(valido === 0){
+            swal({
+                title: "Error",
+                content: document.createElement('div'),
+                icon: "error",
+            });
+            $('.swal-content').html(mensaje);
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('flujo_caja.abrir_caja_operativa') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                id_caja: id_caja,
+                // responsable_caja: id_responsable_caja,
+                id_lugar_atencion: id_lugar_atencion,
+                saldo_final_caja_anterior: saldoFinalNormalizado,
+                abono_inicial_caja: abonoInicialNormalizado,
+            },
+            success: function(data) {
+                console.log(data);
+                $('#abrircaja').modal('hide');
+                swal({
+                    title: "Caja abierta",
+                    text: data.mensaje || "La caja fue abierta correctamente.",
+                    icon: "success",
+                    buttons: "Aceptar",
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                let mensajeError = "No fue posible abrir la caja. Intente nuevamente.";
+
+                // Verificar primero 'mensaje' (español) y luego 'message' (inglés)
+                if (error.responseJSON && error.responseJSON.mensaje) {
+                    mensajeError = error.responseJSON.mensaje;
+                } else if (error.responseJSON && error.responseJSON.message) {
+                    mensajeError = error.responseJSON.message;
+                }
+
+                swal({
+                    title: "Error al abrir caja",
+                    text: mensajeError,
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
+            }
+        });
+    }
+
+    let clase_bono = ['Bono Fisico' ,'Sencillito' ,'Caja Vecina' ,'Bono Web' ,'Bono Web Pre-Pago' ,'Particular'];
+    var tiempo = 0; // CANTIDAD MINUTOS A ESPERAR PARA APROBACION
+    var conteo_activo = 0; // valida si conteo esta activo
 
             $(document).ready(function(){
                 $('#id_asistente_receptor').select2();
@@ -1358,7 +3440,14 @@
 
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                    console.log(jqXHR, ajaxOptions, thrownError);
+                    swal({
+                        title: "Error al generar PDF Rendición Caja",
+                        text: jqXHR.responseJSON.error || 'Intente nuevamente, si el problema persiste contacte al administrador',
+                        icon: "error",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
                 });
             }
 
@@ -1384,7 +3473,426 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
             }
-    </script>
-@endsection
+
+            function buscarRendicion(){
+                console.log('buscarRendicion');
+                let url = "{{ route('asistentecm.rendicion_carga_bonos_fecha') }}";
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        'fecha': $('#fecha_rendicion').val()
+                    },
+                })
+                .done(function(data) {
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+
+                        $('#numero_bonos').val(data.total_bonos);
+                        $('#efectivo').val(data.total_efectivo);
+                        $('#otros').val(data.total_otros);
+                        $('#total').val(data.total);
 
 
+                        $('#tabla_rendir_caja tbody').html('');
+
+                        for (var i = 0; i < data.bono.length; i++) {
+                            // formatear numero con separador de miles
+                            var numeroBono = data.bono[i].numero_bono.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            var valorAtencion = data.bono[i].valor_atencion.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            var a_pagar = data.bono[i].a_pagar.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            var aporte_convenio = data.bono[i].aporte_seguro.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                            var bonificacion = data.bono[i].bonificacion.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+                            var fila = '';
+                            fila += '<tr>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].tipo_bono.nombre + '</td>';
+                            fila += '    <td class="align-middle text-center">' + numeroBono + '</td>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].convenio.nombre + '</td>';
+                            fila += '    <td class="align-middle text-center">' + (data.bono[i].tipo || '') + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (aporte_convenio || 0) + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (bonificacion || 0) + '</td>';
+
+                            fila += '    <td class="align-middle text-center">$' + (valorAtencion || 0) + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (a_pagar || valorAtencion) + '</td>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].fecha_atencion + '</td>';
+
+                            fila += '</tr>';
+
+                            $('#tabla_rendir_caja tbody').append(fila);
+                        }
+
+                        $('#lista_bonos').val(data.lista_bonos)
+
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Problemas al cargar bonos del día",
+                            text: data.msj,
+                            icon: "error",
+                            buttons: "Aceptar",
+                            // DangerMode: true,
+                        });
+                        return '0';
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+
+        // Función para aceptar el traspaso de caja pendiente
+        function aceptarTraspasoCaja(idCaja) {
+            swal({
+                title: '¿Aceptar traspaso de caja?',
+                text: "Vas a aceptar la entrega de esta caja y te convertirás en el responsable.",
+                icon: 'warning',
+                buttons: ['Cancelar', 'Sí, aceptar'],
+            }).then((willAccept) => {
+                if (!willAccept) {
+                    return;
+                }
+
+                // Realizar la petición AJAX
+                $.ajax({
+                    url: '{{ route("flujo_caja.aceptar_traspaso_caja", ":id") }}'.replace(':id', idCaja),
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.estado == 1) {
+                            swal({
+                                title: '¡Caja aceptada!',
+                                text: response.mensaje || 'La caja fue aceptada correctamente.',
+                                icon: 'success',
+                                buttons: 'Aceptar'
+                            }).then(() => {
+                                // Recargar la página para mostrar la caja actualizada
+                                window.location.reload();
+                            });
+                        } else {
+                            swal({
+                                title: 'Error',
+                                text: response.mensaje || 'No fue posible aceptar la caja.',
+                                icon: 'error',
+                                buttons: 'Aceptar',
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        let mensaje = 'Error al aceptar el traspaso';
+                        if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                            mensaje = xhr.responseJSON.mensaje;
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            mensaje = xhr.responseJSON.message;
+                        }
+                        swal({
+                            title: 'Error al aceptar',
+                            text: mensaje,
+                            icon: 'error',
+                            buttons: 'Aceptar'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Función para rechazar la caja pendiente
+        function rechazarCaja(idCaja) {
+            swal({
+                title: 'Describa motivo de rechazo',
+                text: "Por favor, indique la razón por la cual rechaza esta caja:",
+                content: {
+                    element: "input",
+                    attributes: {
+                        placeholder: "Escriba el motivo del rechazo",
+                        type: "text",
+                    },
+                },
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "Rechazar caja",
+                        value: true,
+                        visible: true,
+                        className: "btn-danger",
+                        closeModal: true
+                    }
+                },
+                dangerMode: true,
+            }).then((motivo) => {
+                // Si cancela o no escribe motivo
+                if (!motivo) {
+                    if (motivo === null) {
+                        // Canceló
+                        return;
+                    }
+                    // No escribió motivo
+                    swal({
+                        title: 'Motivo requerido',
+                        text: 'Debe indicar un motivo para rechazar la caja.',
+                        icon: 'warning',
+                        buttons: 'Aceptar',
+                    });
+                    return;
+                }
+
+                // Confirmar rechazo
+                swal({
+                    title: '¿Confirmar rechazo?',
+                    text: "La caja será devuelta a su responsable anterior.\nMotivo: " + motivo,
+                    icon: 'warning',
+                    buttons: ['Cancelar', 'Sí, rechazar'],
+                    dangerMode: true,
+                }).then((willReject) => {
+                    if (!willReject) {
+                        return;
+                    }
+
+                    // Realizar la petición AJAX
+                    $.ajax({
+                        url: '{{ route("flujo_caja.rechazar_caja", ":id") }}'.replace(':id', idCaja),
+                        type: 'POST',
+                        data: {
+                            motivo_rechazo: motivo
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.estado == 1) {
+                                swal({
+                                    title: 'Caja rechazada',
+                                    text: response.mensaje || 'La caja fue devuelta a su responsable anterior.',
+                                    icon: 'success',
+                                    buttons: 'Aceptar'
+                                }).then(() => {
+                                    // Recargar la página para ocultar la notificación
+                                    window.location.reload();
+                                });
+                            } else {
+                                swal({
+                                    title: 'Error',
+                                    text: response.mensaje || 'No fue posible rechazar la caja.',
+                                    icon: 'error',
+                                    buttons: 'Aceptar'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            let mensaje = 'Error al rechazar la caja';
+                            if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                                mensaje = xhr.responseJSON.mensaje;
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                mensaje = xhr.responseJSON.message;
+                            }
+                            swal({
+                                title: 'Error al rechazar',
+                                text: mensaje,
+                                icon: 'error',
+                                buttons: 'Aceptar'
+                            });
+                        }
+                    });
+                });
+            });
+        }
+
+/* Detalle de garantía */
+function ver_detalle_garantia(idBono) {
+    if (!idBono) {
+        swal({
+            title: 'Error',
+            text: 'No se ha seleccionado una garantía para mostrar.',
+            icon: 'error',
+            buttons: 'Aceptar',
+        });
+        return;
+    }
+
+    $.ajax({
+        url: "{{ route('flujo_caja.detalle_garantia', '') }}/" + idBono,
+        type: 'GET',
+        beforeSend: function() {
+            // Limpiar campos
+            $('#detalle_paciente_nombre').text('Cargando...');
+            $('#detalle_paciente_rut').text('...');
+            $('#detalle_paciente_email').text('...');
+            $('#detalle_paciente_telefono').text('...');
+            $('#detalle_profesional_nombre').text('Cargando...');
+            $('#detalle_profesional_rut').text('...');
+            $('#detalle_profesional_especialidad').text('...');
+            $('#detalle_fecha_atencion').text('...');
+            $('#detalle_hora_atencion').text('...');
+            $('#detalle_tipo_bono').text('...');
+            $('#detalle_convenio').text('...');
+            $('#detalle_valor_garantia').text('...');
+            $('#detalle_tiempo_espera').text('...');
+            $('#detalle_fecha_vencimiento').text('...');
+            $('#detalle_estado_garantia').html('...');
+            $('#detalle_dias_restantes').text('...');
+            $('#detalle_hora_medica_container').hide();
+        },
+        success: function(data) {
+            console.log('Detalle de garantía:', data);
+            if (data.estado === 1) {
+                // Información del paciente
+                $('#detalle_paciente_nombre').text(data.paciente.nombre_completo || 'Sin información');
+                $('#detalle_paciente_rut').text(data.paciente.rut || 'Sin información');
+                $('#detalle_paciente_email').text(data.paciente.email || 'Sin información');
+                $('#detalle_paciente_telefono').text(data.paciente.telefono || 'Sin información');
+
+                // Información del profesional
+                $('#detalle_profesional_nombre').text(data.profesional.nombre_completo || 'Sin información');
+                $('#detalle_profesional_rut').text(data.profesional.rut || 'Sin información');
+                $('#detalle_profesional_especialidad').text(data.profesional.especialidad || 'Sin especialidad');
+
+                // Información de la atención
+                $('#detalle_fecha_atencion').text(data.bono.fecha_atencion || 'Sin información');
+                $('#detalle_hora_atencion').text(data.bono.hora_atencion || 'Sin información');
+                $('#detalle_tipo_bono').text(data.bono.tipo_bono || 'Sin información');
+                $('#detalle_convenio').text(data.bono.convenio || 'Sin información');
+                $('#detalle_valor_garantia').text(data.bono.valor_garantia || '$0');
+                $('#detalle_tiempo_espera').text(data.bono.tiempo_espera || '0 días');
+
+                // Estado de la garantía
+                $('#detalle_fecha_vencimiento').text(data.bono.fecha_vencimiento || 'Sin vencimiento');
+                $('#detalle_estado_garantia').html(data.bono.estado_badge || '<span class="badge badge-secondary">Sin estado</span>');
+                $('#detalle_dias_restantes').text(data.bono.dias_restantes || 'N/A');
+
+                // Información de la hora médica (si existe)
+                if (data.hora_medica) {
+                    $('#detalle_fecha_hora_medica').text(data.hora_medica.fecha || 'Sin información');
+                    $('#detalle_hora_medica').text(data.hora_medica.hora || 'Sin información');
+                    $('#detalle_estado_hora').text(data.hora_medica.estado || 'Sin información');
+                    $('#detalle_observaciones_hora').text(data.hora_medica.observaciones || 'Sin observaciones');
+                    $('#detalle_hora_medica_container').show();
+                } else {
+                    $('#detalle_hora_medica_container').hide();
+                }
+
+                // Mostrar modal
+                $('#detallegarantia').modal('show');
+            } else {
+                swal({
+                    title: 'Error',
+                    text: data.mensaje || 'No se pudo obtener el detalle de la garantía.',
+                    icon: 'error',
+                    buttons: 'Aceptar'
+                });
+            }
+        },
+        error: function(xhr) {
+            let mensaje = 'Error al obtener el detalle de la garantía';
+            if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                mensaje = xhr.responseJSON.mensaje;
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                mensaje = xhr.responseJSON.message;
+            }
+            swal({
+                title: 'Error',
+                text: mensaje,
+                icon: 'error',
+                buttons: 'Aceptar'
+            });
+        }
+    });
+}
+
+function cerrar_detallegarantia() {
+    $('#detallegarantia').modal('hide');
+}
+
+/* Pagar garantía */
+function pagar_garantia(idBono, checkbox) {
+    if (!checkbox.checked) {
+        // Si se desmarca, revertir sin confirmación
+        checkbox.checked = false;
+        return;
+    }
+
+    // Confirmar acción de pago
+    swal({
+        title: '¿Confirmar pago de garantía?',
+        text: 'Se marcará este bono como pagado con garantía.',
+        icon: 'warning',
+        buttons: {
+            cancel: {
+                text: 'Cancelar',
+                visible: true,
+                closeModal: true,
+            },
+            confirm: {
+                text: 'Confirmar pago',
+            }
+        },
+        dangerMode: false,
+    }).then((willPay) => {
+        if (willPay) {
+            // Realizar el pago
+            $.ajax({
+                url: "{{ route('flujo_caja.pagar_garantia', '') }}/" + idBono,
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    checkbox.disabled = true;
+                },
+                success: function(response) {
+                    if (response.estado === 1) {
+                        swal({
+                            title: 'Pago registrado',
+                            text: response.mensaje || 'La garantía ha sido marcada como pagada.',
+                            icon: 'success',
+                            buttons: 'Aceptar'
+                        }).then(() => {
+                            // Recargar la página para actualizar la tabla
+                            window.location.reload();
+                        });
+                    } else {
+                        checkbox.checked = false;
+                        checkbox.disabled = false;
+                        swal({
+                            title: 'Error',
+                            text: response.mensaje || 'No se pudo registrar el pago.',
+                            icon: 'error',
+                            buttons: 'Aceptar'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    checkbox.checked = false;
+                    checkbox.disabled = false;
+                    let mensaje = 'Error al procesar el pago';
+                    if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                        mensaje = xhr.responseJSON.mensaje;
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        mensaje = xhr.responseJSON.message;
+                    }
+                    swal({
+                        title: 'Error',
+                        text: mensaje,
+                        icon: 'error',
+                        buttons: 'Aceptar'
+                    });
+                }
+            });
+        } else {
+            // Si cancela, desmarcar el checkbox
+            checkbox.checked = false;
+        }
+    });
+}
+        </script>
+    @endsection

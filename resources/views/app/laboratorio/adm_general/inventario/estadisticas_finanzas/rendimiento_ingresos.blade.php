@@ -28,7 +28,7 @@
                     <select class="form-control" id="profesional" name="profesional">
                         <option value="">Todos</option>
                         @foreach($profesionales ?? [] as $prof)
-                            <option value="{{ $prof->id }}" {{ request('profesional') == $prof->id ? 'selected' : '' }}>{{ $prof->nombre }} {{ $prof->apellido_uno }}</option>
+                            <option class="text-uppercase" value="{{ $prof->id }}" {{ request('profesional') == $prof->id ? 'selected' : '' }}>{{ $prof->nombre }} {{ $prof->apellido_uno }}</option>
                         @endforeach
                     </select>
                 </div>

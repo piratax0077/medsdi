@@ -97,8 +97,8 @@
                         aria-labelledby="heading_lab_dental"
                         data-parent="#accordion_formularios_atencion">
                         <div class="card-body-sidebar">
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_menor(); dame_correlativo('Orden Trabajo Menor')";>+ ORDEN DE TRABAJO  MENOR</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_mayor(); dame_correlativo('Orden Trabajo Mayor')";>+ ORDEN DE TRABAJO MAYOR</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_menor()";>+ ORDEN DE TRABAJO  MENOR</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_mayor()";>+ ORDEN DE TRABAJO MAYOR</button>
                         </div>
                     </div>
                 </div>

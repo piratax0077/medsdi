@@ -74,20 +74,7 @@ a:hover {
     padding-right: 5px;
 }
 
-.floating-label-activo-sm {  
-    position: absolute;
-    top: -10px;
-    left: 2px!important;
-    font-size: 0.68rem;
-    color: #1a49a3;
-    background-color: #f4f6ff;
-    border-radius:3px;
-    font-weight:600;
-    z-index: 1;
-    cursor: text;
-    padding: 0px 3px;
-    pointer-events: none !important;
-}
+
 
 h6 {
   margin-bottom: 0rem!important;

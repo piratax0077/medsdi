@@ -12,7 +12,7 @@
     <!--Cierre: Formulario / Menor de edad-->
 --}}
 {{--  SECCION MENOR DE EDAD INICIO  --}}
-@if (\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
+@if (!empty($paciente->fecha_nac) && \Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
     <div class="col-sm-12 col-md-12">
         <div class="card">
             <div class="card-header" id="menor_edad">
@@ -64,6 +64,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+@elseif (empty($paciente->fecha_nac))
+    <div class="col-sm-12 col-md-12">
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Datos incompletos:</strong> Por favor, termine de configurar los datos del paciente (fecha de nacimiento) para determinar si requiere acompañante.
         </div>
     </div>
 @endif

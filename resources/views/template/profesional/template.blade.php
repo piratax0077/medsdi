@@ -59,6 +59,11 @@
     <!-- flatpickr -->
     <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
+
+    {{-- Pusher para Broadcasting en tiempo real --}}
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+
     @yield('page-styles')
 
     <style>
@@ -111,6 +116,7 @@
     </div>
     @include('template.profesional.menu')
     @include('template.profesional.header')
+    @include('components.session_warning')
 
     @yield('content')
 
@@ -131,9 +137,15 @@
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('js/pages/data-responsive-custom.js') }}"></script>
+    <script src="{{ asset('js/pages/data-responsive-custom.js') }}?v={{ filemtime(public_path('js/pages/data-responsive-custom.js')) }}"></script>
     <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!--full calendar 5-->
+
+    <script src="{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}"></script>
+	<script src="{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}"></script>
+
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
@@ -1445,15 +1457,63 @@
 
             let id_lugar_atencion_valor = $('#id_lugar_atencion_valor').val();
             let convenios = '';
+            let valor = $('#valor_convenio').val();
+            let lugar_atencion_convenio = $('#lugar_atencion_convenio').val();
 
-            for (let i = 1; i < 13; i++) {
-                if ($('#convenio_' + i).prop('checked')) {
-                    convenios = convenios + $('#text_convenio_' + i).text() + ',';
+            // ✅ Validaciones
+            let esValido = true;
+            let mensajeError = '';
+
+            // Validar lugar de atención
+            if (!id_lugar_atencion_valor || id_lugar_atencion_valor === '' || id_lugar_atencion_valor === '0') {
+                esValido = false;
+                mensajeError += 'Debe seleccionar un lugar de atención.\n';
+            }
+
+            // Validar tipo de atención
+            if (!lugar_atencion_convenio || lugar_atencion_convenio === '' || lugar_atencion_convenio === '0') {
+                esValido = false;
+                mensajeError += 'Debe seleccionar un tipo de atención.\n';
+            }
+
+            // Validar valor
+            if (!valor || valor === '') {
+                esValido = false;
+                mensajeError += 'Debe ingresar un valor.\n';
+            } else {
+                // Validar que sea numérico y mayor a 0
+                let valorNumerico = parseFloat(valor);
+                if (isNaN(valorNumerico) || valorNumerico <= 0) {
+                    esValido = false;
+                    mensajeError += 'El valor debe ser un número mayor a 0.\n';
                 }
             }
 
-            let valor = $('#valor_convenio').val();
-            let lugar_atencion_convenio = $('#lugar_atencion_convenio').val();
+            // Validar convenios seleccionados
+            let conveniosSeleccionados = 0;
+            for (let i = 1; i < 13; i++) {
+                if ($('#convenio_' + i).prop('checked')) {
+                    convenios = convenios + $('#text_convenio_' + i).text() + ',';
+                    conveniosSeleccionados++;
+                }
+            }
+
+            if (conveniosSeleccionados === 0) {
+                esValido = false;
+                mensajeError += 'Debe seleccionar al menos un convenio.\n';
+            }
+
+            // Si hay errores, mostrar mensaje y detener ejecución
+            if (!esValido) {
+                swal({
+                    title: "Campos requeridos",
+                    text: mensajeError,
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                return;
+            }
+
             let url = "{{ route('profesional.guardar_valores_lugar_atencion') }}";
 
             $.ajax({
@@ -1477,7 +1537,7 @@
                     // ✅ Limpiar formulario
                     limpiarFormularioValoresLugarAtencion();
 
-                    // ✅ Mensaje de éxito (opcional)
+                    // ✅ Mensaje de éxito
                     swal({
                         title: "Convenio guardado",
                         text: "El valor fue registrado correctamente",
@@ -1496,6 +1556,12 @@
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError);
+                swal({
+                    title: "Error de conexión",
+                    text: "No se pudo conectar con el servidor",
+                    icon: "error",
+                    buttons: "Aceptar",
+                });
             });
         };
 
@@ -2258,6 +2324,7 @@
                     $('#mensaje_email_reserva').show();
                     // $('#reserva_hora_correo').focus();
                     //$("#guardar_reserva_paciente").prop('disabled', true);
+                    validar_campos_minimos();
                     return false;
                 }
             } else {
@@ -2287,6 +2354,7 @@
                     $('#btn_reserva_hora_telefono_uno_validar').attr('disabled', true);
                     //$("#guardar_reserva_paciente").prop('disabled', true);
                 }
+                validar_campos_minimos();
                 return false;
             }
 
@@ -2310,7 +2378,8 @@
                         $('#mensaje_email_reserva').show();
                         $('#reserva_hora_correo').focus();
 
-                        $("#guardar_reserva_paciente").prop('disabled', true);
+                        // El control del botón lo maneja validar_campos_minimos()
+                        validar_campos_minimos();
 
                     } else {
 
@@ -2321,17 +2390,21 @@
 
                             $('#mensaje_email_reserva').text('');
                             $('#mensaje_email_reserva').hide();
-                            $("#guardar_reserva_paciente").prop('disabled', false);
+
+                            // El control del botón lo maneja validar_campos_minimos()
+                            validar_campos_minimos();
 
                         } else {
                             console.log("La edad no es válida.");
-                            $("#guardar_reserva_paciente").prop('disabled', true);
+                            // El control del botón lo maneja validar_campos_minimos()
                             $('#mensaje_reserva_hora_fecha_nac').html('');
                             $('#mensaje_reserva_hora_fecha_nac').show();
                             $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
 
                             $('#mensaje_email_reserva').text('');
                             $('#mensaje_email_reserva').hide();
+
+                            validar_campos_minimos();
                         }
                     }
                 })
@@ -2544,8 +2617,7 @@
                                 $('#reserva_convenio').text(data.prevision.nombre);
                                 $('#input_reserva_convenio').val(data.prevision.id);
 
-                                $('#reserva_direccion').text(data.direccion.direccion + ' ' + data.direccion
-                                    .numero_dir + ', ' + data.direccion.ciudad.nombre);
+                                $('#reserva_direccion').text(data.direccion.direccion + ' ' + (data.direccion.numero_dir ?? '') + ', ' + data.direccion.ciudad.nombre);
                                 $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
                                 $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
 
@@ -2665,42 +2737,58 @@
 
         function desasociar_asistente(id_asistente) {
 
-            let id = id_asistente;
-            let url = "{{ route('profesional.desasociar_asistente') }}";
+            // Confirmación antes de eliminar
+            swal({
+                title: "¿Está seguro?",
+                text: "Una vez eliminado, no podrá recuperar esta asociación",
+                icon: "warning",
+                buttons: ["Cancelar", "Sí, eliminar"],
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    let id = id_asistente;
+                    let url = "{{ route('profesional.desasociar_asistente') }}";
 
-            $.ajax({
-
-                    url: url,
-                    type: "get",
-                    data: {
-                        id: id,
-                    },
-                })
-                .done(function(data) {
-                    console.log(data)
-
-                    if (data == 'ok') {
-
-
-                        swal({
-                            title: "Asistente eliminado de forma correcta",
-                            icon: "success",
-                            buttons: "Aceptar",
-                            // DangerMode: true,
+                    $.ajax({
+                            url: url,
+                            type: "get",
+                            data: {
+                                id: id,
+                            },
                         })
-                        setTimeout(function() {
-                            location.reload()
-                        }, 4000);
-                        // alert('asistente eliminado de forma correcta');
-                        // location.reload();
+                        .done(function(data) {
+                            console.log(data)
 
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                            if (data == 'ok') {
+                                swal({
+                                    title: "Asistente eliminado de forma correcta",
+                                    icon: "success",
+                                    buttons: "Aceptar",
+                                })
+                                .then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: "No se pudo eliminar el asistente",
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                });
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            console.log(jqXHR, ajaxOptions, thrownError)
+                            swal({
+                                title: "Error de conexión",
+                                text: "No se pudo conectar con el servidor",
+                                icon: "error",
+                                buttons: "Aceptar",
+                            });
+                        });
+                }
+            });
         }
 
         function buscar_asistente(id) {
@@ -3141,8 +3229,14 @@
             var procedimiento = '';
             var proc_bloque = '';
             if ($('#form_reseva_de_horas_id_procedimiento').length == 1) {
-                procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-                proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+                var selectedVals = $('#form_reseva_de_horas_id_procedimiento').val();
+                procedimiento = Array.isArray(selectedVals) ? selectedVals.join(',') : (selectedVals || '');
+                // Sumar los bloques de todos los procedimientos seleccionados
+                proc_bloque = 0;
+                $('#form_reseva_de_horas_id_procedimiento option:selected').each(function() {
+                    proc_bloque += parseInt($(this).attr('data-cant_bloque') || 1);
+                });
+                if (proc_bloque === 0) proc_bloque = 1;
             } else {
                 proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
             }
@@ -3208,6 +3302,7 @@
                     }
                 })
                 .done(function(data) {
+                    console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
 
@@ -3334,78 +3429,21 @@
             }
 
             let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
-            if (reserva_hora_segundo_apellido == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el segundo apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-
-            }
+            // Segundo apellido es OPCIONAL
             let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
-            if (reserva_hora_fecha_nac == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar la fecha de nacimiento",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-            } else {
+            // Fecha de nacimiento es OPCIONAL, pero si se ingresa debe tener formato válido
+            if (reserva_hora_fecha_nac != '' && reserva_hora_fecha_nac.length > 0) {
+                // Si hay fecha, formatearla
                 reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
+            // Si está vacía, se envía vacía al backend (el backend lo permite)
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
-            if (reserva_hora_sexo == '0') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe seleccionar el del sexo del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-            }
+            // Sexo es OPCIONAL
             let reserva_hora_convenio = $('#reserva_hora_convenio').val();
-            if (reserva_hora_convenio == '0') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe seleccionar la previsión del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
+            // Previsión es OPCIONAL
             let reserva_hora_direccion = $('#reserva_hora_direccion').val();
-            if (reserva_hora_direccion == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar una dirección",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
+            // Dirección es OPCIONAL
             let reserva_hora_numero_dir = $('#reserva_hora_numero_dir').val();
             {{--
             if (reserva_hora_numero_dir == '') {
@@ -3423,91 +3461,43 @@
             }
             --}}
             let reserva_hora_comuna = $('#ciudad_agregar').val();
-            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' ||
-                reserva_hora_comuna == null) {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar la región y la ciudad",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
+            // Ciudad es OPCIONAL
 
             let reserva_hora_email = $('#reserva_hora_correo').val();
             let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val();
             let reserva_result_codigo_validacion = $('#result_codigo_validacion').val();
 
-            let fechaNacimiento = new Date(reserva_hora_fecha_nac);
-            let hoy = new Date();
-            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            // Calcular edad solo si hay fecha de nacimiento
+            let edad = 999; // Valor por defecto (asume adulto independiente si no hay fecha)
+            if (reserva_hora_fecha_nac != '' && reserva_hora_fecha_nac.length > 0) {
+                let fechaNacimiento = new Date(reserva_hora_fecha_nac);
+                let hoy = new Date();
+                edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
-            // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
-                    .getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
-
-            // if( edad > 18 )
-            if ($('#paciente_dependiente').prop('checked') == false) {
-                if (reserva_hora_email == '') {
-
-                    if (reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion == '' ||
-                            reserva_result_codigo_validacion == '0')) {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el email o teléfono",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    } else {
-                        if (reserva_result_codigo_validacion == '0') {
-                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                            if (caract.test(reserva_hora_email) == false) {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                        }
-                    }
-                } else {
-
-                    if (reserva_hora_telefono_uno == '') {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el teléfono",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    } else {
-                        if (reserva_hora_email == '' && (reserva_result_codigo_validacion == '' ||
-                                reserva_result_codigo_validacion == '0')) {
-                            swal({
-                                title: "Error!",
-                                text: "Debe validar el teléfono",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-                            });
-                            return;
-                        }
-                    }
+                // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
+                if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
+                        .getDate() < fechaNacimiento.getDate())) {
+                    edad--;
                 }
             }
 
+            // if( edad > 18 )
+            // Validación simplificada: si NO es dependiente, requiere teléfono (email es opcional)
+            if ($('#paciente_dependiente').prop('checked') == false) {
+                if (reserva_hora_telefono_uno == '') {
+                    swal({
+                        title: "Error!",
+                        text: "Debe ingresar el teléfono del paciente",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+                    });
+                    return;
+                }
+                // Email es opcional, no se valida
+            }
+
+            var reserva_hora_representante_info_libre = $('#reserva_hora_representante_info_libre').val();
             var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
             var reserva_representante_id = $('#reserva_representante_id').val();
             var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
@@ -3572,6 +3562,8 @@
                     // }
                 } else {
                     /** nuevo */
+                    /** Solo valida el formulario completo si los campos existen en el DOM (no aplica en modo info-libre) */
+                    if ($('#reserva_hora_representante_nombres_paciente').length > 0) {
                     if (reserva_hora_representante_nombres_paciente == '') {
                         swal({
                             title: "Error!",
@@ -3735,6 +3727,7 @@
                             }
                         }
                     }
+                    } /** fin if campos representante tradicional existen en DOM */
 
                 }
             }
@@ -3754,6 +3747,7 @@
                         reserva_hora_nombre: reserva_hora_nombre,
                         reserva_hora_primer_apellido: reserva_hora_primer_apellido,
                         reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
+                        fecha_nac: reserva_hora_fecha_nac,
                         reserva_hora_fecha_nac: reserva_hora_fecha_nac,
                         reserva_hora_sexo: reserva_hora_sexo,
                         reserva_hora_convenio: reserva_hora_convenio,
@@ -3768,6 +3762,7 @@
                         id_lugar_atencion: id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
                         /** representante */
+                        reserva_hora_representante_info_libre: reserva_hora_representante_info_libre,
                         reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
                         reserva_representante_id: reserva_representante_id,
                         reserva_representante_id_usuario: reserva_representante_id_usuario,
@@ -4020,13 +4015,21 @@
         };
 
         function mi_horario_lugar_atencion(id) {
-            let array_tipo_agenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes',
+            let array_tipo_agenda = [
+                '',
+                'Atención General',
+                'Atención Dental',
+                'Atención Telemedicina',
+                'Exámenes',
                 'Procedimiento'
-            ]
+            ];
+
             let id_lugar_atencion = id;
             let url = "{{ route('profesional.mi_horario_lugar_atencion') }}";
 
             $('#mi_horario_table tbody').empty();
+            $('#horarios_disponibles_profesional').html('');
+
             $('#duracion_horario').val(0);
             $('#tipo_agenda_medica').val(0);
             $('#dia_horario').val('');
@@ -4034,87 +4037,185 @@
             $('#hora_termino_horario').val(0);
 
             $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion
+                },
+            })
+            .done(function(response) {
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        //_token: _token,
-                        id_lugar_atencion: id_lugar_atencion,
-                    },
-                })
-                .done(function(data) {
+                if (typeof response === 'string') {
+                    response = JSON.parse(response);
+                }
 
+                if (!response || response.estado != 1) {
+                    swal({
+                        title: "Error",
+                        text: response?.msj || "No se pudieron cargar los horarios",
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                    return;
+                }
 
-                    if (data != null) {
+                let horarios = response.horarios_lugar || [];
+                let disponibles = response.horarios_disponibles || [];
 
-                        data = JSON.parse(data);
-                        // console.log(data);
+                $('#modal_editar_horario_atencion').modal('show');
+                $('#mi_horario_id_lugar_atencion').val(id_lugar_atencion);
 
-                        $('#modal_editar_horario_atencion').modal('show');
-                        $('#mi_horario_id_lugar_atencion').val(id);
-                        for (i = 0; i < data.length; i++) {
+                horarios.forEach(function(horario, index) {
+                    let idHorario = horario.id;
+                    let hora_inicio = horario.hora_inicio;
+                    let hora_termino = horario.hora_termino;
+                    let diaTexto = traducirDiasHorario(horario.dia);
+                    let tipoAgenda = array_tipo_agenda[horario.tipo_agenda] || array_tipo_agenda[horario.tipo_Agenda] || 'Sin tipo';
 
-                            let id = data[i].id;
-                            let hora_inicio = data[i].hora_inicio;
-                            let hora_termino = data[i].hora_termino;
-                            let dia = '';
-                            dias = data[i].dia.split(',');
-                            for (let i = 0; i < dias.length; i++) {
-                                if (dias[i] == 0) {
-                                    dia += 'Domingo '
-                                } else if (dias[i] == 1) {
-                                    dia += 'Lunes '
-                                } else if (dias[i] == 2) {
-                                    dia += 'Martes '
-                                } else if (dias[i] == 3) {
-                                    dia += 'Miercoles '
-                                } else if (dias[i] == 4) {
-                                    dia += 'Jueves '
-                                } else if (dias[i] == 5) {
-                                    dia += 'Viernes '
-                                } else if (dias[i] == 6) {
-                                    dia += 'Sabado '
-                                }
-                            }
+                    let fila = '';
+                    fila += '<tr class="tr_horario" id="row' + index + '">';
+                    fila += '   <td class="text-center align-middle">' + tipoAgenda + '</td>';
+                    fila += '   <td class="text-center align-middle">' + hora_inicio + '</td>';
+                    fila += '   <td class="text-center align-middle">' + hora_termino + '</td>';
+                    fila += '   <td class="text-center align-middle">' + diaTexto + '</td>';
+                    fila += '   <td class="text-center align-middle">';
+                    fila += '       <input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" onclick="eliminar_dia_horario(' + idHorario + ',' + id_lugar_atencion + ');" value="X">';
+                    fila += '   </td>';
+                    fila += '</tr>';
 
-                            let j = 1; //contador para asignar id al boton que borrara la fila
-                            let fila = '';
-                            fila += '<tr class="tr_horario" id="row' + j + '">';
-                            fila += '   <td class="text-center align-middle">';
-                            fila += array_tipo_agenda[data[i].tipo_agenda]
-                            fila += '   </td>';
-                            fila += '   <td class="text-center align-middle">';
-                            fila += hora_inicio
-                            fila += '   </td>';
-                            fila += '   <td class="text-center align-middle">';
-                            fila += hora_termino;
-                            fila += '   </td>';
-                            fila += '   <td class="text-center align-middle">';
-                            fila += dia;
-                            fila += '   </td>';
-                            fila += '   <td class="text-center align-middle">';
-                            fila +=
-                                '       <input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" id="btn_eliminar_dia" name="btn_eliminar_dia" onclick="eliminar_dia_horario(' +
-                                id + ',' + id_lugar_atencion + ' );" value="X" >';
-                            fila += '   </td>';
-                            fila += '</tr>';
-
-                            j++;
-
-                            $('#mi_horario_table tbody').append(fila);
-
-                        }
-
-                    } else {
-                        alert('No se pudo Confirmar Reserva');
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                    $('#mi_horario_table tbody').append(fila);
                 });
 
-        };
+                mostrarHorariosDisponiblesProfesional(disponibles);
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+
+                swal({
+                    title: "Error",
+                    text: "Error al cargar horarios",
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
+            });
+        }
+
+        function traducirDiasHorario(dias) {
+            let traductor = {
+                0: 'Domingo',
+                1: 'Lunes',
+                2: 'Martes',
+                3: 'Miércoles',
+                4: 'Jueves',
+                5: 'Viernes',
+                6: 'Sábado',
+                7: 'Domingo'
+            };
+
+            if (!dias) return '';
+
+            return String(dias)
+                .split(',')
+                .map(function(dia) {
+                    return traductor[dia] || '';
+                })
+                .filter(Boolean)
+                .join(' ');
+        }
+
+        function traducirDiasHorario(dias) {
+            let traductor = {
+                0: 'Domingo',
+                1: 'Lunes',
+                2: 'Martes',
+                3: 'Miércoles',
+                4: 'Jueves',
+                5: 'Viernes',
+                6: 'Sábado',
+                7: 'Domingo'
+            };
+
+            if (!dias) return '';
+
+            return String(dias)
+                .split(',')
+                .map(function(dia) {
+                    return traductor[dia] || '';
+                })
+                .filter(Boolean)
+                .join(' ');
+        }
+
+        function mostrarHorariosDisponiblesProfesional(disponibles) {
+            let contenedor = $('#horarios_disponibles_profesional');
+
+            if (!contenedor.length) {
+                $('#mi_horario_table').before(`
+                    <div id="horarios_disponibles_profesional" class="mb-3"></div>
+                `);
+
+                contenedor = $('#horarios_disponibles_profesional');
+            }
+
+            let dias = {
+                0: 'Domingo',
+                1: 'Lunes',
+                2: 'Martes',
+                3: 'Miércoles',
+                4: 'Jueves',
+                5: 'Viernes',
+                6: 'Sábado',
+                7: 'Domingo'
+            };
+
+            if (!disponibles || disponibles.length === 0) {
+                contenedor.html(`
+                    <div class="alert alert-warning mb-2">
+                        No existen bloques libres disponibles entre 08:00 y 20:00.
+                    </div>
+                `);
+                return;
+            }
+
+            let html = `
+                <div class="alert alert-info mb-2">
+                    <strong>Horarios disponibles globales del profesional:</strong><br>
+                    <small>
+                        Estos horarios consideran todos los lugares de atención del profesional,
+                        para evitar que tenga agenda en dos lugares al mismo tiempo.
+                    </small>
+                </div>
+
+                <div class="table-responsive mb-3">
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Día</th>
+                                <th>Desde</th>
+                                <th>Hasta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            disponibles.forEach(function(h) {
+                html += `
+                    <tr>
+                        <td>${dias[h.dia] || h.dia}</td>
+                        <td>${h.hora_inicio}</td>
+                        <td>${h.hora_termino}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            contenedor.html(html);
+        }
 
         function eliminar_dia_horario(id, id_lugar_atencion) {
 
@@ -4221,27 +4322,25 @@
                             var checked = 'checked';
                             let nombres = data[i].nombres + ' ' + data[i].apellido_uno + ' ' + data[i].apellido_dos;
                             let rut = data[i].rut;
-                            let id = data[i].id;
-                            let j = 1; //contador para asignar id al boton que borrara la fila
+                            let id_asistente = data[i].id;
                             var fila = '';
 
-                            fila += '<tr class="tr_asistente" id="row' + j + '">';
+                            fila += '<tr class="tr_asistente" id="row_asistente_' + id_asistente + '">';
                             fila += '    <td>';
                             fila += '       <div class="form-group">';
                             fila += '           <div class="switch switch-success d-inline m-r-10">';
                             if (data[i].estado == 0) checked = '';
                             else checked = 'checked';
                             fila +=
-                                '               <input type = "checkbox" id="estado_asistente" onclick="cambio_estado_asistente(' +
-                                id + ');" ' + checked + '> ';
-                            fila += '               <label for = "estado_asistente" class = "cr"> </label>';
+                                '               <input type = "checkbox" id="estado_asistente_' + id_asistente + '" onclick="cambio_estado_asistente(' +
+                                id_asistente + ');" ' + checked + '> ';
+                            fila += '               <label for = "estado_asistente_' + id_asistente + '" class = "cr"> </label>';
                             fila += '           </div>';
                             fila += '      </div>';
                             fila += '   </td>';
                             fila += '   <td>' + rut + '</td>';
                             fila += '   <td>' + nombres + '</td>';
                             fila += '</tr>';
-                            j++;
 
                             $('#mi_asistente_table tbody').append(fila);
 
@@ -4259,49 +4358,49 @@
 
         };
 
- function eliminar_valor_lugar_atencion(id) {
+        function eliminar_valor_lugar_atencion(id) {
 
-    let id_convenio = id;
-    // el lugar de atención que está siendo editado en el modal
-    let id_lugar_atencion_valor = $('#id_lugar_atencion_valor').val();
-    let url = "{{ route('profesional.eliminar_valor_lugar_atencion') }}";
+            let id_convenio = id;
+            // el lugar de atención que está siendo editado en el modal
+            let id_lugar_atencion_valor = $('#id_lugar_atencion_valor').val();
+            let url = "{{ route('profesional.eliminar_valor_lugar_atencion') }}";
 
-    $.ajax({
-        url: url,
-        type: "get",
-        data: {
-            id_convenio: id_convenio,
-        },
-    })
-    .done(function(data) {
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_convenio: id_convenio,
+                },
+            })
+            .done(function(data) {
 
-        if (data != 'failed') {
-            swal({
-                title: "Convenio eliminado de forma correcta",
-                icon: "success",
-                buttons: "Aceptar",
-            }).then(function () {
-                // 🔄 Volver a cargar la tabla de valores SIN recargar la página
-                if (typeof mis_valores_lugar_atencion === 'function') {
-                    mis_valores_lugar_atencion(id_lugar_atencion_valor);
+                if (data != 'failed') {
+                    swal({
+                        title: "Convenio eliminado de forma correcta",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    }).then(function () {
+                        // 🔄 Volver a cargar la tabla de valores SIN recargar la página
+                        if (typeof mis_valores_lugar_atencion === 'function') {
+                            mis_valores_lugar_atencion(id_lugar_atencion_valor);
+                        }
+                    });
+
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "No se pudo eliminar el convenio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
                 }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
             });
 
-        } else {
-            swal({
-                title: "Error",
-                text: "No se pudo eliminar el convenio",
-                icon: "error",
-                buttons: "Aceptar",
-            });
         }
-
-    })
-    .fail(function(jqXHR, ajaxOptions, thrownError) {
-        console.log(jqXHR, ajaxOptions, thrownError)
-    });
-
-}
 
 
         function cerrar_convenio() {
@@ -4330,13 +4429,14 @@
                         for (i = 0; i < data.length; i++) {
 
                             let tipo_atencion = data[i].tipo_atencion;
-                            let valor = data[i].valor;
+                            // 💰 Formatear valor sin decimales
+                            let valor = Math.round(parseFloat(data[i].valor || 0)).toLocaleString('es-CL');
                             let convenios = data[i].convenios;
 
 
                             let j = 1; //contador para asignar id al boton que borrara la fila
                             let fila = '<tr class="tr_valores" id="row' + j + '"><td>' +
-                                tipo_atencion + '</td><td>' +
+                                tipo_atencion + '</td><td class="text-right">$' +
                                 valor +
                                 '</td><td>' +
                                 convenios +
@@ -4355,12 +4455,23 @@
 
 
                     } else {
-                        alert('Error');
+                        swal({
+                            title: "Sin registros",
+                            text: "No hay valores registrados para este lugar de atención",
+                            icon: "info",
+                            buttons: "Aceptar",
+                        });
                     }
 
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                    console.log(jqXHR, ajaxOptions, thrownError);
+                    swal({
+                        title: "Error de conexión",
+                        text: "No se pudieron cargar los valores",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
                 });
 
 
@@ -4442,339 +4553,297 @@
 
         }
 
+        // function mi_horario_agregar() {
+
+        //     let id_lugar_atencion = $('#mi_horario_id_lugar_atencion').val();
+        //     let url = "{{ route('profesional.mi_horario_lugar_atencion_agregar') }}";
+        //     let duracion = $('#duracion_horario').val();
+        //     if (duracion == 0) {
+        //         swal({
+        //             title: "Error",
+        //             text: "Debe ingresar una duracion",
+        //             icon: "error",
+        //             buttons: "Aceptar",
+        //             DangerMode: true,
+        //         })
+
+        //         return;
+        //     }
+
+        //     let tipo = $('#tipo_agenda_medica').val();
+        //     if (tipo == 0) {
+        //         swal({
+        //             title: "Error",
+        //             text: "Debe ingresar un tipo de agenda",
+        //             icon: "error",
+        //             buttons: "Aceptar",
+        //             DangerMode: true,
+        //         })
+
+        //         return;
+        //     }
+
+
+        //     let dia = $('#dia_horario').val();
+        //     if (dia == '') {
+        //         swal({
+        //             title: "Error",
+        //             text: "Debe ingresar un dia",
+        //             icon: "error",
+        //             buttons: "Aceptar",
+        //             DangerMode: true,
+        //         })
+        //         // alert('no selecciono dia de consulta');
+        //         return;
+        //     }
+        //     let hora_inicio = $('#hora_inicio_horario').val();
+        //     if (hora_inicio == 0) {
+        //         swal({
+        //             title: "Error",
+        //             text: "Debe ingresar una hora de inicio",
+        //             icon: "error",
+        //             buttons: "Aceptar",
+        //             DangerMode: true,
+        //         })
+        //         // alert('no selecciono hora de inicio de consulta');
+        //         return;
+        //     }
+        //     let hora_termino = $('#hora_termino_horario').val();
+        //     if (hora_termino == 0) {
+        //         swal({
+        //             title: "Error",
+        //             text: "Debe ingresar una hora de termino",
+        //             icon: "error",
+        //             buttons: "Aceptar",
+        //             DangerMode: true,
+        //         })
+        //         // alert('no selecciono hora de termino de consulta');
+        //         return;
+        //     }
+        //     let tipo_agenda_medica = $('#tipo_agenda_medica').val();
+
+
+        //     $.ajax({
+
+        //             url: url,
+        //             type: "get",
+        //             data: {
+        //                 //_token: _token,
+        //                 id_lugar_atencion: id_lugar_atencion,
+        //                 duracion: duracion,
+        //                 dia: dia,
+        //                 hora_inicio: hora_inicio,
+        //                 hora_termino: hora_termino,
+        //                 tipo_agenda_medica: tipo_agenda_medica,
+        //             },
+        //         })
+        //         .done(function(data) {
+        //             console.log(data);
+        //             if (data == 'Failed') {
+        //                 swal({
+        //                     title: "Error",
+        //                     text: "Error, horario ya se encuentra registrado",
+        //                     icon: "error",
+        //                     buttons: "Aceptar",
+        //                     DangerMode: true,
+        //                 })
+        //                 // alert('Horario Topa con otro')
+        //             }
+
+        //             if (data != null) {
+        //                 // data = JSON.parse(data);
+        //                 console.log(data);
+
+        //                 $('#modal_editar_horario_atencion').modal('hide');
+        //                 mi_horario_lugar_atencion(id_lugar_atencion);
+
+        //             } else {
+        //                 swal({
+        //                     title: "Error",
+        //                     text: "No se pudo Confirmar Reserva",
+        //                     icon: "error",
+        //                     buttons: "Aceptar",
+        //                     DangerMode: true,
+        //                 })
+        //                 // alert('No se pudo Confirmar Reserva');
+        //             }
+
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
+        // };
         function mi_horario_agregar() {
 
             let id_lugar_atencion = $('#mi_horario_id_lugar_atencion').val();
             let url = "{{ route('profesional.mi_horario_lugar_atencion_agregar') }}";
+
             let duracion = $('#duracion_horario').val();
+
             if (duracion == 0) {
                 swal({
                     title: "Error",
-                    text: "Debe ingresar una duracion",
+                    text: "Debe ingresar una duración",
                     icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-
+                    buttons: "Aceptar"
+                });
                 return;
             }
 
             let tipo = $('#tipo_agenda_medica').val();
+
             if (tipo == 0) {
                 swal({
                     title: "Error",
                     text: "Debe ingresar un tipo de agenda",
                     icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-
+                    buttons: "Aceptar"
+                });
                 return;
             }
 
-
             let dia = $('#dia_horario').val();
+
             if (dia == '') {
                 swal({
                     title: "Error",
-                    text: "Debe ingresar un dia",
+                    text: "Debe ingresar un día",
                     icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-                // alert('no selecciono dia de consulta');
+                    buttons: "Aceptar"
+                });
                 return;
             }
+
             let hora_inicio = $('#hora_inicio_horario').val();
+
             if (hora_inicio == 0) {
                 swal({
                     title: "Error",
                     text: "Debe ingresar una hora de inicio",
                     icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-                // alert('no selecciono hora de inicio de consulta');
+                    buttons: "Aceptar"
+                });
                 return;
             }
+
             let hora_termino = $('#hora_termino_horario').val();
+
             if (hora_termino == 0) {
                 swal({
                     title: "Error",
-                    text: "Debe ingresar una hora de termino",
+                    text: "Debe ingresar una hora de término",
                     icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                })
-                // alert('no selecciono hora de termino de consulta');
+                    buttons: "Aceptar"
+                });
                 return;
             }
+
             let tipo_agenda_medica = $('#tipo_agenda_medica').val();
 
-
             $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_lugar_atencion: id_lugar_atencion,
+                    duracion: duracion,
+                    dia: dia,
+                    hora_inicio: hora_inicio,
+                    hora_termino: hora_termino,
+                    tipo_agenda_medica: tipo_agenda_medica,
+                }
+            })
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        //_token: _token,
-                        id_lugar_atencion: id_lugar_atencion,
-                        duracion: duracion,
-                        dia: dia,
-                        hora_inicio: hora_inicio,
-                        hora_termino: hora_termino,
-                        tipo_agenda_medica: tipo_agenda_medica,
-                    },
-                })
-                .done(function(data) {
-                    console.log(data);
-                    if (data == 'Failed') {
-                        swal({
-                            title: "Error",
-                            text: "Error, horario ya se encuentra registrado",
-                            icon: "error",
-                            buttons: "Aceptar",
-                            DangerMode: true,
-                        })
-                        // alert('Horario Topa con otro')
+            .done(function(response) {
+
+                console.log(response);
+
+                // Horario topa con otro
+                if (response.status === 'error') {
+
+                    let mensaje = response.error;
+
+                    if (
+                        response.horarios_disponibles &&
+                        response.horarios_disponibles.length > 0
+                    ) {
+
+                        mensaje += "\n\nHorarios disponibles cercanos:\n\n";
+
+                        response.horarios_disponibles.forEach(function(h) {
+
+                            let traductor_dias = {
+                                7: 'Domingo',
+                                1: 'Lunes',
+                                2: 'Martes',
+                                3: 'Miércoles',
+                                4: 'Jueves',
+                                5: 'Viernes',
+                                6: 'Sábado'
+                            };
+
+
+                            mensaje +=
+                                `${traductor_dias[h.dia]}: ${h.hora_inicio} - ${h.hora_termino}\n`;
+
+                        });
+
                     }
 
-                    if (data != null) {
-                        data = JSON.parse(data);
-                        console.log(data);
+                    swal({
+                        title: "Horario ocupado",
+                        text: mensaje,
+                        icon: "warning",
+                        buttons: "Aceptar"
+                    });
 
-                        $('#modal_editar_horario_atencion').modal('hide');
-                        mi_horario_lugar_atencion(id_lugar_atencion);
+                    return;
+                }
 
-                    } else {
-                        swal({
-                            title: "Error",
-                            text: "No se pudo Confirmar Reserva",
-                            icon: "error",
-                            buttons: "Aceptar",
-                            DangerMode: true,
-                        })
-                        // alert('No se pudo Confirmar Reserva');
-                    }
+                // Guardado correcto
+                if (response.status === 'ok') {
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                    swal({
+                        title: "Correcto",
+                        text: "Horario agregado correctamente",
+                        icon: "success",
+                        buttons: "Aceptar"
+                    });
+
+                    $('#modal_editar_horario_atencion').modal('hide');
+
+                    mi_horario_lugar_atencion(
+                        id_lugar_atencion
+                    );
+
+                    return;
+                }
+
+                // Error inesperado
+                swal({
+                    title: "Error",
+                    text: "No se pudo guardar el horario",
+                    icon: "error",
+                    buttons: "Aceptar"
                 });
-        };
 
-        function cambio_estado_lugar_atencion(id) {
-            let id_lugar_atencion = id;
-            let url = "{{ route('profesional.cambio_estado_lugar_atencion') }}";
+            })
 
-            if ($('#estado_lugar_atencion_' + id).prop('checked')) {
-                swal({
-                        title: "¿Esta seguro que desea habilitar el lugar de atención?",
-                        text: "Favor confirme o cancele la solicitud",
-                        icon: "warning",
-                        buttons: ["Cancelar", "Solicitar"],
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
 
-
-                            let estado = 1;
-
-                            $.ajax({
-
-                                    url: url,
-                                    type: "get",
-                                    data: {
-                                        //_token: _token,
-                                        id_lugar_atencion: id_lugar_atencion,
-                                        estado: estado
-                                    },
-                                })
-                                .done(function(data) {
-                                    if (data == 'ok') {
-                                        $('#estado_lugar_atencion_' + id).prop('checked', true);
-                                        swal({
-                                            title: "Lugar de atencion habilitado",
-                                            icon: "success",
-                                            buttons: "Aceptar",
-                                            //SuccessMode: true,
-                                        })
-                                        // alert('lugar de atención habilitado');
-
-                                    } else {
-                                        swal({
-                                            title: "Error",
-                                            text: "Error al habilitar el lugar de atencion",
-                                            icon: "error",
-                                            buttons: "Aceptar",
-                                            DangerMode: true,
-                                        })
-                                        // alert('Error al Habilitar el lugar de atención');
-                                        $('#estado_lugar_atencion_' + id).prop('checked', false);
-                                    }
-
-                                })
-                                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                                    console.log(jqXHR, ajaxOptions, thrownError)
-                                });
-
-
-
-                        } else {
-                            $('#estado_lugar_atencion_' + id).prop("checked", false);
-                            swal({
-                                title: "Solicitud Cancelada",
-                                icon: "success",
-                                buttons: "Aceptar",
-                                dangerMode: true,
-                            });
-                        }
-                    });
-                // let confirmacion = confirm('Esta seguro que desea habilitar el lugar de atencion?');
-                // if (confirmacion == true) {
-
-                //     let estado = 1;
-
-                //     $.ajax({
-
-                //             url: url,
-                //             type: "get",
-                //             data: {
-                //                 //_token: _token,
-                //                 id_lugar_atencion: id_lugar_atencion,
-                //                 estado: estado
-                //             },
-                //         })
-                //         .done(function(data) {
-                //             if (data == 'ok') {
-                //                 $('#estado_lugar_atencion_' + id).prop('checked', true);
-                //                 swal({
-                //                     title: "Lugar de atencion habilitado",
-                //                     icon: "success",
-                //                     buttons: "Aceptar",
-                //                     //SuccessMode: true,
-                //                 })
-                //                 // alert('lugar de atención habilitado');
-
-                //             } else {
-                //                 swal({
-                //                     title: "Error",
-                //                     text: "Error al habilitar el lugar de atencion",
-                //                     icon: "error",
-                //                     buttons: "Aceptar",
-                //                     DangerMode: true,
-                //                 })
-                //                 // alert('Error al Habilitar el lugar de atención');
-                //                 $('#estado_lugar_atencion_' + id).prop('checked', false);
-                //             }
-
-                //         })
-                //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-                //             console.log(jqXHR, ajaxOptions, thrownError)
-                //         });
-
-                // } else {
-                //     $('#estado_lugar_atencion_' + id).prop("checked", false);
-                // }
-            } else {
+                console.log(
+                    jqXHR,
+                    ajaxOptions,
+                    thrownError
+                );
 
                 swal({
-                        title: "¿Esta seguro que desea deshabilitar el lugar de atención??",
-                        text: "Favor confirme o cancele la solicitud",
-                        icon: "warning",
-                        buttons: ["Cancelar", "Deshabilitar"],
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
+                    title: "Error",
+                    text: "Error de comunicación con el servidor",
+                    icon: "error",
+                    buttons: "Aceptar"
+                });
 
-                            let estado = 0;
-
-                            $.ajax({
-
-                                    url: url,
-                                    type: "get",
-                                    data: {
-                                        //_token: _token,
-                                        id_lugar_atencion: id_lugar_atencion,
-                                        estado: estado
-                                    },
-                                })
-                                .done(function(data) {
-                                    if (data == 'ok') {
-                                        $('#estado_lugar_atencion_' + id).prop('checked', false)
-
-                                    } else {
-                                        swal({
-                                            title: "Error",
-                                            text: "Error al deshabilitar el lugar de atención",
-                                            icon: "error",
-                                            buttons: "Aceptar",
-                                            DangerMode: true,
-                                        })
-                                        // alert('Error al Deshabilitar el lugar de atención');
-                                        $('#estado_lugar_atencion_' + id).prop("checked", true);
-                                    }
-
-                                })
-                                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                                    console.log(jqXHR, ajaxOptions, thrownError)
-                                });
-
-
-                        } else {
-                            $('#estado_lugar_atencion_' + id).prop("checked", true);
-                            swal({
-                                title: "Solicitud Cancelada",
-                                icon: "success",
-                                buttons: "Aceptar",
-                                dangerMode: true,
-                            });
-                        }
-                    });
-
-                // let confirmacion = confirm('Esta seguro que desea deshabilitar el lugar de atención?');
-
-                // if (confirmacion == true) {
-
-                //     let estado = 0;
-
-                //     $.ajax({
-
-                //             url: url,
-                //             type: "get",
-                //             data: {
-                //                 //_token: _token,
-                //                 id_lugar_atencion: id_lugar_atencion,
-                //                 estado: estado
-                //             },
-                //         })
-                //         .done(function(data) {
-                //             if (data == 'ok') {
-                //                 $('#estado_lugar_atencion_' + id).prop('checked', false)
-
-                //             } else {
-                //                 swal({
-                //                     title: "Error",
-                //                     text: "Error al deshabilitar el lugar de atención",
-                //                     icon: "error",
-                //                     buttons: "Aceptar",
-                //                     DangerMode: true,
-                //                 })
-                //                 // alert('Error al Deshabilitar el lugar de atención');
-                //                 $('#estado_lugar_atencion_' + id).prop("checked", true);
-                //             }
-
-                //         })
-                //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-                //             console.log(jqXHR, ajaxOptions, thrownError)
-                //         });
-
-                // } else {
-                //     $('#estado_lugar_atencion_' + id).prop("checked", true);
-                // }
-            }
+            });
         }
 
         function cambio_estado_asistente(id) {
@@ -4782,84 +4851,114 @@
             let id_asistente = id;
             let id_lugar_atencion = $('#mi_asistente_id_lugar_atencion').val();
             let url = "{{ route('profesional.cambio_estado_asistente') }}";
+            let checkbox_selector = '#estado_asistente_' + id_asistente;
 
-            if ($('#estado_asistente').prop('checked')) {
-                let confirmacion = confirm('Esta seguro que desea habilitar al o la asistente?');
-                if (confirmacion == true) {
+            if ($(checkbox_selector).prop('checked')) {
+                swal({
+                    title: "¿Está seguro?",
+                    text: "¿Desea habilitar a este asistente?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Sí, habilitar"],
+                    dangerMode: false,
+                })
+                .then((willEnable) => {
+                    if (willEnable) {
+                        let estado = 1;
 
-                    let estado = 1;
-
-                    $.ajax({
-
-                            url: url,
-                            type: "get",
-                            data: {
-                                //_token: _token,
-                                id_asistente: id_asistente,
-                                estado: estado,
-                                id_lugar_atencion: id_lugar_atencion,
-                            },
-                        })
-                        .done(function(data) {
-                            if (data == 'ok') {
-                                $('#estado_asistente').prop('checked', true);
-
-                            } else {
+                        $.ajax({
+                                url: url,
+                                type: "get",
+                                data: {
+                                    id_asistente: id_asistente,
+                                    estado: estado,
+                                    id_lugar_atencion: id_lugar_atencion,
+                                },
+                            })
+                            .done(function(data) {
+                                if (data == 'ok') {
+                                    $(checkbox_selector).prop('checked', true);
+                                    swal({
+                                        title: "Asistente habilitado correctamente",
+                                        icon: "success",
+                                        buttons: "Aceptar",
+                                    });
+                                } else {
+                                    swal({
+                                        title: "Error al habilitar asistente",
+                                        icon: "error",
+                                        buttons: "Aceptar",
+                                        dangerMode: true,
+                                    })
+                                    $(checkbox_selector).prop('checked', false);
+                                }
+                            })
+                            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                                console.log(jqXHR, ajaxOptions, thrownError);
+                                $(checkbox_selector).prop('checked', false);
                                 swal({
-                                    title: "Error al Habilitar al o la asistente",
+                                    title: "Error de conexión",
+                                    text: "No se pudo conectar con el servidor",
                                     icon: "error",
                                     buttons: "Aceptar",
-                                    DangerMode: true,
-                                })
-                                // setTimeout(function() {
-                                //     location.reload()
-                                // }, 4000);
-                                // alert('Error al Habilitar al o la asistente');
-                                $('#estado_asistente').prop('checked', false);
-                            }
-
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            console.log(jqXHR, ajaxOptions, thrownError)
-                        });
-
-                } else {
-                    $('#estado_asistente').prop("checked", false);
-                }
+                                });
+                            });
+                    } else {
+                        $(checkbox_selector).prop("checked", false);
+                    }
+                });
             } else {
-                let confirmacion = confirm('Esta seguro que desea deshabilitar al o la asistente?');
-                if (confirmacion == true) {
+                swal({
+                    title: "¿Está seguro?",
+                    text: "¿Desea deshabilitar a este asistente?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Sí, deshabilitar"],
+                    dangerMode: true,
+                })
+                .then((willDisable) => {
+                    if (willDisable) {
+                        let estado = 0;
 
-                    let estado = 0;
-
-                    $.ajax({
-
-                            url: url,
-                            type: "get",
-                            data: {
-                                //_token: _token,
-                                id_asistente: id_asistente,
-                                estado: estado,
-                                id_lugar_atencion: id_lugar_atencion,
-                            },
-                        })
-                        .done(function(data) {
-                            if (data == 'ok') {
-                                $('#estado_asistente').prop('checked', false)
-
-                            } else {
-                                alert('Error al Deshabilitar al o la asistente');
-                                $('#estado_asistente').prop("checked", true);
-                            }
-
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            console.log(jqXHR, ajaxOptions, thrownError)
-                        });
-
-                } else {
-                    $('#estado_asistente').prop("checked", true);
-                }
+                        $.ajax({
+                                url: url,
+                                type: "get",
+                                data: {
+                                    id_asistente: id_asistente,
+                                    estado: estado,
+                                    id_lugar_atencion: id_lugar_atencion,
+                                },
+                            })
+                            .done(function(data) {
+                                if (data == 'ok') {
+                                    $(checkbox_selector).prop('checked', false);
+                                    swal({
+                                        title: "Asistente deshabilitado correctamente",
+                                        icon: "success",
+                                        buttons: "Aceptar",
+                                    });
+                                } else {
+                                    swal({
+                                        title: "Error al deshabilitar asistente",
+                                        icon: "error",
+                                        buttons: "Aceptar",
+                                        dangerMode: true,
+                                    });
+                                    $(checkbox_selector).prop("checked", true);
+                                }
+                            })
+                            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                                console.log(jqXHR, ajaxOptions, thrownError);
+                                $(checkbox_selector).prop("checked", true);
+                                swal({
+                                    title: "Error de conexión",
+                                    text: "No se pudo conectar con el servidor",
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                });
+                            });
+                    } else {
+                        $(checkbox_selector).prop("checked", true);
+                    }
+                });
             }
         };
 
@@ -5449,10 +5548,7 @@
                 "bPaginate": true,
             });
 
-            $('#table_atenciones_profesional').DataTable({
-                responsive: true,
-                "bPaginate": false,
-            });
+
 
             $('#tabla_atenciones_previas_receta').DataTable({
                 responsive: true,
@@ -6240,6 +6336,7 @@
                             valor_bonificacion: bono_valor_bonificacion,
                             valor_seguro: bono_valor_seguro,
                             valor_atencion: bono_valor_consulta,
+                            valor_abono: bono_valor_consulta,
                             glosa: '1',
                             id_profesional: bono_id_profesional,
                             id_asistente: '-1',
@@ -6922,8 +7019,15 @@
                     console.error(jqXHR, ajaxOptions, thrownError);
                 });
         }
-    </script>
 
+        $('#tabla_convenios_profesional').DataTable({
+            responsive: true,
+        });
+
+
+
+    </script>
+    @yield('modales')
     @yield('page-script')
     @yield('btn-script-agenda')
 </body>

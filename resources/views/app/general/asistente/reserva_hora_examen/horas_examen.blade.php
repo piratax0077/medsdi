@@ -1,52 +1,51 @@
 {{-- modal horas examen --}}
 <div class="modal fade" id="m_hora_examen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_hora_examen" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1">Agregar Horas Examen</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_m_hora_examen();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="form-row">
                     <div class="col-md-12">
-
                         <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
 
-                        <div class="row">
+                        <div class="form-row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
-                                    <h6 class="text-c-blue ml-2 mb-3">Seleccione Examen a realizar</h6>
-                                    <select class="form-control" name="m_hora_examen_lista_examenes" id="m_hora_examen_lista_examenes">
+                                    <h6 class="text-c-blue ml-0 mb-3">Examen a realizar</h6>
+                                    <select class="form-control form-control-sm" name="m_hora_examen_lista_examenes" id="m_hora_examen_lista_examenes">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row mt-2">
                             <div class="m_hora_examen_busqueda">
 
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
-                                            <h6 class="text-c-blue ml-2 mb-3">Ingrese el rut del paciente</h6>
+                                            <h6 class="text-c-blue ml-0 mb-3">Ingrese el rut del paciente</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row div_rut_buscar">
+                                <div class="form-row div_rut_buscar">
                                     <div class="col-sm-8 col-md-8 mb-3">
                                         <div class="form-group">
-                                            <input type="text" id="m_hora_examen_rut" name="m_hora_examen_rut" class="form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
+                                            <input type="text" id="m_hora_examen_rut" name="m_hora_examen_rut" class="form-control-sm form-control" placeholder="Rut del paciente" aria-label="Rut del paciente" aria-describedby="button-addon2" required oninput="formatoRut(this)">
                                         </div>
                                     </div>
                                     <div class="col-sm-4 col-md-4 mb-3">
-                                        <button class="btn btn-info" onclick="buscar_paciente_hora_examen();" type="button"id="button-addon2">Buscar</button>
+                                        <button class="btn btn-info btn-sm btn-block" onclick="buscar_paciente_hora_examen();" type="button"id="button-addon2"><i class="feather icon-search"></i> Buscar</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="m_hora_examen_paciente_existente" style="display: none">
-                                <div class="row mx-3">
+                                <div class="form-row mx-1">
+                                    <div class="col-12">
                                     <input type="hidden" name="m_hora_examen_ex_id_paciente" id="m_hora_examen_ex_id_paciente" value="">
                                     <table class="table table-borderless table-xs">
                                         <tbody>
@@ -101,15 +100,20 @@
                                         </tbody>
                                     </table>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" onclick="agendar_hex_ex();" class="btn btn-info">Agendar Hora examen</button>
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                            <button type="button" onclick="agendar_hex_ex();" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Agendar Hora Examen</button>
+                                            </div>
+                                        </div>
                                     </div>
+                                      </div>
                                 </div>
                             </div>
 
                             <div class="m_hora_examen_paciente_nuevo" style="display: none">
                                 <div>
-                                    <div class="row">
+                                    <div class="form-row">
                                         <div class="col-sm-12 col-md-12">
                                             <div class="alert alert-danger" role="alert">
                                                 Paciente no registrado, complete los datos para registrar al paciente
@@ -187,8 +191,8 @@
 
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
-                                                <label class="floating-label-activo-sm">Region</label>
-                                                <select class="form-control" name="m_hora_examen_nv_region" id="m_hora_examen_nv_region" onchange="buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', '0');" required>
+                                                <label class="floating-label-activo-sm">Región</label>
+                                                <select class="form-control form-control-sm" name="m_hora_examen_nv_region" id="m_hora_examen_nv_region" onchange="buscar_ciudad_le('m_hora_examen_nv_region', 'm_hora_examen_nv_ciudad', '0');" required>
                                                     <option value="0">Seleccione Regio&oacute;n</option>
                                                     @if (isset($region))
                                                         @foreach ($region as $reg)
@@ -202,8 +206,8 @@
                                         <div class="col-sm-12 col-md-12">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select class="form-control" id="m_hora_examen_nv_ciudad" name="m_hora_examen_nv_ciudad" required>
-                                                    <option value="0">Seleccione Ciudad</option>
+                                                <select class="form-control form-control-sm" id="m_hora_examen_nv_ciudad" name="m_hora_examen_nv_ciudad" required>
+                                                    <option value="0">Seleccione</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -223,20 +227,20 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" onclick="agendar_hex_np();" class="btn btn-info">Registrar Paciente</button>
+                                        <button type="button" onclick="cancelar_busqueda_horas_examen();"class="btn btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                                        <button type="button" onclick="agendar_hex_np();" class="btn btn-info"><i class="feather icon-check"></i> Registrar Paciente</button>
                                     </div>
                                 </div>
                             </div>
 
-                        </div>
+                 
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <!--<div class="modal-footer">
                 <button type="button" class="btn btn-danger align-middle" onclick="cerrar_m_hora_examen()"; data-dismiss="modal">Cerrar</button>
                 {{-- <button type="button" class="btn btn-success align-middle" onclick="registrar_horas_examen()"; data-dismiss="modal">Registras</button> --}}
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

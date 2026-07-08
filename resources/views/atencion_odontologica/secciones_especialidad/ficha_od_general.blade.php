@@ -43,6 +43,10 @@
                         <div class="alert-atencion alert alert-success-b alert-dismissible fade show" role="alert"
                             id="mensaje_historias"></div>
                     </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"
+                            id="mensaje_interconsulta"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-12">
@@ -637,9 +641,8 @@
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
 @include('atencion_odontologica.modals.atencion_general.formularios_generales.m_info_lab')
-@include('atencion_odontologica.modals.odontograma.modal_insumos')
-@include('atencion_odontologica.modals.odontograma.modal_insumos_editar')
-@include('atencion_odontologica.modals.odontograma.modal_insumos_urgencias')
+
+
 <!--Modal reservar hora -->
 <div class="modal fade" id="reservar_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="reservar_hora" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -2417,27 +2420,27 @@
             });
 
             // Control de selección de piezas en el odontograma
-            $('.pieza').on('click', function() {
-                const piezaNumero = $(this).data('pieza').toString(); // Convertir a string por seguridad
+            // $('.pieza').on('click', function() {
+            //     const piezaNumero = $(this).data('pieza').toString(); // Convertir a string por seguridad
 
-                if ($(this).hasClass('seleccionada')) {
-                    // Si ya está seleccionada, deseleccionarla
-                    $(this).removeClass('seleccionada');
-                    const options = piezasSelect.val().filter(item => item !==
-                    piezaNumero); // Filtra el elemento a eliminar
-                    piezasSelect.val(options).trigger('change');
-                } else {
-                    // Si no está seleccionada, agregarla
-                    $(this).addClass('seleccionada');
+            //     if ($(this).hasClass('seleccionada')) {
+            //         // Si ya está seleccionada, deseleccionarla
+            //         $(this).removeClass('seleccionada');
+            //         const options = piezasSelect.val().filter(item => item !==
+            //         piezaNumero); // Filtra el elemento a eliminar
+            //         piezasSelect.val(options).trigger('change');
+            //     } else {
+            //         // Si no está seleccionada, agregarla
+            //         $(this).addClass('seleccionada');
 
-                    let opcionesSeleccionadas = piezasSelect.val() || [];
-                    if (!opcionesSeleccionadas.includes(piezaNumero)) {
-                        opcionesSeleccionadas.push(piezaNumero);
-                    }
+            //         let opcionesSeleccionadas = piezasSelect.val() || [];
+            //         if (!opcionesSeleccionadas.includes(piezaNumero)) {
+            //             opcionesSeleccionadas.push(piezaNumero);
+            //         }
 
-                    piezasSelect.val(opcionesSeleccionadas).trigger('change');
-                }
-            });
+            //         piezasSelect.val(opcionesSeleccionadas).trigger('change');
+            //     }
+            // });
 
             // generar numero random entre el 10 y el 20
             var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
@@ -4226,7 +4229,96 @@ setTimeout(function(){
 
         }
 
-        function eliminar_medicamento_sdi(id) {
+        // function eliminar_medicamento_sdi(id) {
+        //     swal({
+        //         title: "Eliminar Medicamento",
+        //         text: "¿Está seguro de eliminar el medicamento?",
+        //         icon: "warning",
+        //         buttons: ["Cancelar", "Aceptar"],
+        //         dangerMode: true,
+        //     }).then((willDelete) => {
+        //         if (willDelete) {
+        //             let url = "{{ route('detalle_receta.eliminar') }}";
+        //             var _token = CSRF_TOKEN;
+        //             $.ajax({
+        //                 url: url,
+        //                 type: "POST",
+        //                 data: {
+        //                     _token: _token,
+        //                     id: id,
+        //                 },
+        //                 success: function(resp) {
+        //                     console.log(resp);
+        //                     let mensaje = resp.status;
+        //                     if (mensaje == 'success') {
+        //                         let medicamentos = resp.data;
+        //                         $('#tbody_tabla_medicamento_cirugia_sdi').empty();
+        //                         $('#tbody_tabla_medicamento_manual').empty();
+        //                         $('#tabla_tratamientos_servicio tbody').empty();
+        //                         medicamentos.forEach(medicamento => {
+        //                             console.log(medicamento);
+        //                             if (medicamento.id_dosis == null) {
+        //                                 medicamento.dosis = medicamento.nombre_dosis;
+        //                             }
+
+        //                             if (medicamento.id_frecuencia == null || medicamento
+        //                                 .id_frecuencia == 0) {
+        //                                 medicamento.indicaciones = medicamento
+        //                                     .nombre_frecuencia;
+        //                             }
+
+        //                             let fila = `<tr id="row${medicamento.id}">
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_tipo_control}</td>
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_medicamento}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.farmaco}</td>
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_dosis_medicamento_ficha_dental}</td>
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_frecuencia_medicamento_ficha_dental}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
+        //                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+        //                                 <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
+        //                             </tr>`;
+
+        //                             let fila_ = `<tr id="row${medicamento.id}">
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.fecha} ${medicamento.hora} <br> ${medicamento.responsable}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.nombre_medicamento}</td>
+        //                                 <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
+        //                                 <td><input type="text" disabled></td>
+        //                                 <td class="p-0">
+        //                                     <div class="switch switch-success d-inline">
+        //                                         <input type="checkbox" id="tratamiento_listo${medicamento.id}">
+        //                                         <label for="tratamiento_listo${medicamento.id}" class="cr"></label>
+        //                                     </div><br>
+        //                                     <label>Listo</label>
+        //                                 </td>
+        //                                 <td></td>
+        //                                 <td>
+        //                                     <button type="button" class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#modalAgregarInsumos">Insumos</button>
+        //                                 </td>
+        //                                 <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"> </i></button> </td>
+        //                             </tr>`;
+        //                             $('#tbody_tabla_medicamento_cirugia_sdi').append(fila);
+        //                             $('#tbody_tabla_medicamento_manual').append(fila);
+        //                             $('#tabla_tratamientos_servicio tbody').append(fila_);
+        //                         });
+        //                         swal({
+        //                             title: "Medicamento Eliminado",
+        //                             icon: "success",
+        //                             // buttons: "Aceptar",
+        //                             //SuccessMode: true,
+        //                         });
+        //                     }
+        //                 },
+        //                 error: function(error) {
+        //                     console.log(error.responseText);
+        //                 }
+        //             })
+        //         }
+        //     });
+        // }
+        function eliminar_medicamento_sdi(id_row) {
             // swal({
             //     title: "Eliminar Medicamento",
             //     text: "¿Está seguro de eliminar el medicamento?",
@@ -5173,7 +5265,7 @@ setTimeout(function(){
         function cargar_a_presupuesto_impl_g_confirmar() {
             // Obtener los valores seleccionados en el select
             var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val();
-            let diagnosticoPiezas = $('#diagnostico_combo_g').val();
+            let diagnosticoPiezas = $('#diagnostico_combo_g_od_gral').val();
             var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
 
             let valido = 1;
@@ -11097,6 +11189,13 @@ setTimeout(function(){
         $('#mensaje_historias').show();
         setTimeout(function() {
             $('#mensaje_historias').hide();
+        }, 6000);
+        @if(isset($interconsulta))
+                $('#mensaje_interconsulta').html(' El paciente posee interconsulta previa. ');
+        @endif
+        $('#mensaje_interconsulta').show();
+        setTimeout(function() {
+            $('#mensaje_interconsulta').hide();
         }, 6000);
 
 

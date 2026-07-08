@@ -1,4 +1,4 @@
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+ <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
@@ -11,12 +11,19 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
-
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_trau_ort') }}" method="POST">
+
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -39,7 +46,7 @@
                                 <div class="col-md-12">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-									
+
                                         <!--Formulario / Menor de edad-->
 										@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
 										<!--Cierre: Formulario / Menor de edad-->
@@ -65,7 +72,7 @@
                                                                             <a class="nav-link-aten text-reset active" id="exam-traumato-ft-tab" data-toggle="tab" href="#exam-traumato-ft" role="tab" aria-controls="exam-traumato-ft" aria-selected="true">Ficha tipo</a>
                                                                         </li> --}}
                                                                         <li class="nav-item">
-                                                                            <a class="nav-link-aten text-reset active" id="examen-segment-traumato-tab" data-toggle="tab" href="#examen-segment-traumato" role="tab" aria-controls="examen-segment-traumato" aria-selected="false">Exámen segmentario</a>
+                                                                            <a class="nav-link-aten text-reset active" id="examen-segment-traumato-tab" data-toggle="tab" href="#examen-segment-traumato" role="tab" aria-controls="examen-segment-traumato" aria-selected="false">Examen segmentario</a>
                                                                         </li>
                                                                         <li class="nav-item">
                                                                             <a class="nav-link-aten text-reset" id="examen-traumato-tab" data-toggle="tab" href="#examen-traumato" role="tab" aria-controls="examen-traumato" aria-selected="false">Tumores y otros </a>
@@ -119,7 +126,7 @@
                                                                                             <option selected value="1">Accidente deportivo</option>
                                                                                             <option selected value="2">Accidente casero</option>
                                                                                             <option selected value="3">Accidente Hogar</option>
-                                                                                            <option value="4">Otro Describir</option>
+                                                                                            <option value="4">Otro (Describir)</option>
                                                                                         </select>
                                                                                     </div>
                                                                                     <div class="form-group" id="div_e_causa_traum" style="display:none">
@@ -135,7 +142,7 @@
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <div class="form-group">
-                                                                                        <label class="floating-label-activo-sm" for="obs_egp_tr">Observaciones estado general del paciente</label>
+                                                                                        <label class="floating-label-activo-sm" for="obs_egp_tr">Obs. Estado general del paciente</label>
                                                                                         <textarea class="form-control caja-texto form-control-sm"rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Observaciones estado general del paciente" data-seccion="Examen segmentario" data-tipo="Traumatología"  onfocus="this.rows=3" onblur="this.rows=2;" name="obs_egp_tr" id="obs_egp_tr" placeholder="OBSERVACIONES ACERCA DEL ESTADO GENERAL DEL PACIENTE"></textarea>
                                                                                     </div>
                                                                                 </div>
@@ -289,7 +296,7 @@
                                                                                         <div class="tab-pane fade show active" id="orto_ped_gen" role="tabpanel" aria-labelledby="orto_ped_gen-tab">
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <h6 class="t-aten">Exámen especialidad</h6>
+                                                                                                    <h6 class="t-aten">Examen especialidad</h6>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
@@ -379,7 +386,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="rig_ext_msup">  Rigidez</label>
+                                                                                                        <label class="floating-label-activo-sm" for="rig_ext_msup">Rigidez</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Rigidez" data-seccion="Exploración Periférica Mb. Superior" data-tipo="traumatología" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="rig_ext_msup" id="rig_ext_msup"></textarea>
                                                                                                     </div>
                                                                                                 </div>
@@ -444,7 +451,7 @@
                                                                                         </div>
                                                                                         <div class="form-row">
                                                                                             <div class="form-group col-md-12">
-                                                                                                <label class="floating-label-activo-sm" for="obs_ex_oij">Observaciones Ortopedia del Infanto-juvenil</label>
+                                                                                                <label class="floating-label-activo-sm" for="obs_ex_oij">Obs. Ortopedia del Infanto-juvenil</label>
                                                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Ortopedia del Infanto-juvenil" data-seccion="Examen Ortopedico"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oij" id="obs_ex_oij"></textarea>
                                                                                             </div>
                                                                                         </div>
@@ -468,7 +475,7 @@
                                                                                         <div class="tab-pane fade show active" id="orto_adult_gen" role="tabpanel" aria-labelledby="orto_adult_gen-tab">
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <h6 class="t-aten">Exámen especialidad</h6>
+                                                                                                    <h6 class="t-aten">Examen especialidad</h6>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="form-row">
@@ -525,7 +532,7 @@
                                                                                                 </div>
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                                     <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="orto_ea_icls_ad">indice Cif/Lord Sagital</label>
+                                                                                                        <label class="floating-label-activo-sm" for="orto_ea_icls_ad">Indice Cif/Lord Sagital</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="indice Cif/Lord Sagital" data-seccion="Exploración Axial" data-tipo="ortopedia-Adultos"rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ea_icls_ad" id="orto_ea_icls_ad"></textarea>
                                                                                                     </div>
                                                                                                 </div>
@@ -553,7 +560,7 @@
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                                                                     <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="orto_ep_bart_ad">Balance articular (inclinómetro)</label>
+                                                                                                        <label class="floating-label-activo-sm" for="orto_ep_bart_ad">Balance articular (Inclinómetro)</label>
                                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="balance articular (inclinómetro)" data-seccion="Exploración Periférica" data-tipo="ortopedia-Adultos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="orto_ep_bart_ad" id="obs_e_ext_sup" placeholder="ESTUDIO DEL BALANCE ARTICULAR (INCLINÓMETRO)"></textarea>
                                                                                                     </div>
                                                                                                 </div>
@@ -613,6 +620,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        @include('general.secciones_ficha.comun_neuro_trauma_kine.trauma_locomotor')
                                     </div>
                                 </div>
 
@@ -665,15 +673,15 @@
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             <hr>
 
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                            <div class="row mb-3">
+
+                        </div>
+                        <!--GUARDAR O IMPRIMIR FICHA-->
+                            <div class="form-row mb-3">
                                 <div class="col-md-12 text-center">
                                     <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
                                     <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                                 </div>
                             </div>
-
-                        </div>
                     </div>
                 </form>
             </div>
@@ -711,13 +719,23 @@
 
         $(document).ready(function() {
 
-            /** MENSAJE*/
             /** CARGAR mensaje */
-            $('#mensaje_ficha').html(' Solo el campo DIAGNÓSTICO ES OBLIGATORIO, el resto es opcional');
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional');
             $('#mensaje_ficha').show();
             setTimeout(function(){
                 $('#mensaje_ficha').hide();
             }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
 
             /** fin formulario pestaña 1 */
             $("#descripcion_cie").autocomplete({

@@ -80,52 +80,50 @@
                                         </div>
                                         <div id="exmental-c" class="collapse" aria-labelledby="exmental" data-parent="#exmental">
                                             <div class="card-body-aten-a">
-                                                <form>
-                                                    <div class="form-row">
+                                                <div class="form-row">
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Aspecto y actitud</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi-actitud" id="psi-actitud"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi-actitud" id="psi-actitud">{{ old('psi-actitud') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Estado de animo y afecto</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo" id="psi_e_animo"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo" id="psi_e_animo">{{ old('psi_e_animo') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Pensamiento</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam" id="psi_pensam"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam" id="psi_pensam">{{ old('psi_pensam') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Percepción</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep" id="psi_percep"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep" id="psi_percep">{{ old('psi_percep') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Orientación</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion" id="psi_orientacion"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion" id="psi_orientacion">{{ old('psi_orientacion') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Memoria</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria" id="psi_memoria"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria" id="psi_memoria">{{ old('psi_memoria') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Atención y concentración</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion" id="psi_concentracion"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion" id="psi_concentracion">{{ old('psi_concentracion') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Juicio y raciocinio</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio" id="psi_raciocinio"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio" id="psi_raciocinio">{{ old('psi_raciocinio') }}</textarea>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <label class="floating-label-activo-sm">Conciencia de enfermedad/Tratamiento</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad" id="psi_con_enfermedad"></textarea>
+                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad" id="psi_con_enfermedad">{{ old('psi_con_enfermedad') }}</textarea>
                                                         </div>
-                                                    </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!--PLAN DE TRATAMIENTO SIQUIATRICO-->
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="plan-trabajo">
                                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#plan-trabajo-c" aria-expanded="false" aria-controls="plan-trabajo-c">
@@ -134,7 +132,6 @@
                                         </div>
                                         <div id="plan-trabajo-c" class="collapse" aria-labelledby="plan-trabajo" data-parent="#plan-trabajo">
                                             <div class="card-body-aten-a">
-                                                <form>
                                                     <div class="form-row">
                                                         <div class="form-group col-md-3">
                                                             <div class="row">
@@ -197,7 +194,7 @@
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Obs. Plan de tratamiento</label>
-                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="psi_obs_plan_tratamiento" id="psi_obs_plan_tratamiento"></textarea>
+                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="psi_obs_plan_tratamiento" id="psi_obs_plan_tratamiento">{{ old('psi_obs_plan_tratamiento') }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -212,11 +209,43 @@
                                                             <button type="button" class="btn btn-outline-primary btn-block btn-sm mt-1" onclick="informe_psi();"><i class="feather icon-plus"></i> Enviar informe</button>
                                                         </div>
                                                     </div>
-                                                </form>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
+                                <!--PLAN DE TRABAJO-->
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="plan-trabajo">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#plan-trabajo-c" aria-expanded="true" aria-controls="plan-trabajo-c">
+													Plan de trabajo
+													</button>
+												</div>
+												<div id="plan-trabajo-c" class="collapse show" aria-labelledby="plan-trabajo" data-parent="#plan-trabajo">
+													<div class="card-body-aten-a">
+
+														<div class="form-row">
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																{{-- <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button> --}}
+                                                                <button type="button"
+                                                                class="btn btn-outline-primary btn-block btn-sm "
+                                                                onclick="hora_medica_pedir({{ $profesional->id }},{{ $id_lugar_atencion }}); dame_plan_tratamiento({{ $id_ficha_atencion }})"><i
+                                                                    class="feather icon-edit-1"></i> Plan de
+                                                                Tratamiento</button>
+															</div>
+
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="ind_ic_psi();"><i class="feather icon-edit-1"></i> Indicar Interconsulta Psicología</button>
+															</div>
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="informe_psi();"><i class="feather icon-edit-1"></i> Enviar Informe</button>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
                                 <!--CRONICOS / GES / CONFIDENCIAL -->
                                 {{--  @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
                                 {{--  @include('general.secciones_ficha.diagnostico')  --}}
@@ -233,16 +262,16 @@
                                             <div class="card-body-aten-a">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-4">
-                                                        <label class="floating-label-activo-sm"for="hipotesis">Hipótesis diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="hipotesis_certificado,eno_diagnositico_confirmado" name="hipotesis" id="hipotesis" onchange="cargarIgual('hipotesis')">
+                                                        <label class="floating-label-activo-sm"for="descripcion_hipotesis">Hipótesis diagnóstica</label>
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="hipotesis_certificado,eno_diagnositico_confirmado" name="descripcion_hipotesis" id="descripcion_hipotesis" value="{{ old('descripcion_hipotesis') }}" onchange="cargarIgual('descripcion_hipotesis')">
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm"for="indicaciones">Indicaciones</label>
-                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones">{{ old('indicaciones') }}</textarea>
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <label class="floating-label-activo-sm"for="pronostico">Pronóstico</label>
-                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="pronostico" id="pronostico"></textarea>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="pronostico" id="pronostico">{{ old('pronostico') }}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
@@ -253,12 +282,12 @@
                                                     </div>  --}}
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="{{ old('descripcion_cie') }}" onchange="cargarIgual('descripcion_cie')">
                                                         <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="floating-label-activo-sm" for="descripcion_dsm-5">Diagnóstico DSM-5</label>
-                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="" onchange="cargarIgual('descripcion_dsm-5')">
+                                                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="{{ old('descripcion_dsm-5') }}" onchange="cargarIgual('descripcion_dsm-5')">
                                                         <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_dsm-5" id="id_descripcion_dsm-5" value="" onchange="cargarIgual('id_descripcion_dsm-5')">
                                                     </div>
 
@@ -334,115 +363,105 @@
                                                                     <div class="tab-content" id="v-pills-tabContent">
                                                                         <!--ANTECEDENTES GENERALES-->
                                                                         <div class="tab-pane fade show active" id="ant_generales" role="tabpanel" aria-labelledby="ant_generales-tab">
-                                                                             <form>
-                                                                                <div class="form-row">
+                                                                             <div class="form-row">
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Lugar de nacimiento</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_lugar_nacimiento" id="psi_ant_lugar_nacimiento">
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_lugar_nacimiento" id="psi_ant_lugar_nacimiento" value="{{ old('psi_ant_lugar_nacimiento') }}">
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Estado civil</label>
                                                                                         <select class="form-control form-control-sm" name="psi_ant_gen_estado_civil " id="psi_ant_gen_estado_civil">
                                                                                         <option value="0">Seleccione</option>
-                                                                                        <option value="1">Soltero/a</option>
-                                                                                        <option value="2">En pareja</option>
-                                                                                        <option value="3">Casado/a</option>
-                                                                                        <option value="4">Separado/a</option>
-                                                                                        <option value="5">Viudo/a</option>
+                                                                                        <option value="1" @selected(old('psi_ant_gen_estado_civil') == '1')>Soltero/a</option>
+                                                                                        <option value="2" @selected(old('psi_ant_gen_estado_civil') == '2')>En pareja</option>
+                                                                                        <option value="3" @selected(old('psi_ant_gen_estado_civil') == '3')>Casado/a</option>
+                                                                                        <option value="4" @selected(old('psi_ant_gen_estado_civil') == '4')>Separado/a</option>
+                                                                                        <option value="5" @selected(old('psi_ant_gen_estado_civil') == '5')>Viudo/a</option>
                                                                                         </select>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Nivel de educación</label>
                                                                                         <select class="form-control form-control-sm" name="psi_ant_gen_niv_ed" id="psi_ant_gen_niv_ed">
                                                                                         <option value="0">Seleccione</option>
-                                                                                        <option value="1">Básica incompleta</option>
-                                                                                        <option value="2">Básica completa</option>
-                                                                                        <option value="3">Ens. Media incompleta</option>
-                                                                                        <option value="4">Ens. Media completa</option>
-                                                                                        <option value="5">Universitaria incompleta</option>
-                                                                                        <option value="6">Universitaria completa</option>
+                                                                                        <option value="1" @selected(old('psi_ant_gen_niv_ed') == '1')>Básica incompleta</option>
+                                                                                        <option value="2" @selected(old('psi_ant_gen_niv_ed') == '2')>Básica completa</option>
+                                                                                        <option value="3" @selected(old('psi_ant_gen_niv_ed') == '3')>Ens. Media incompleta</option>
+                                                                                        <option value="4" @selected(old('psi_ant_gen_niv_ed') == '4')>Ens. Media completa</option>
+                                                                                        <option value="5" @selected(old('psi_ant_gen_niv_ed') == '5')>Universitaria incompleta</option>
+                                                                                        <option value="6" @selected(old('psi_ant_gen_niv_ed') == '6')>Universitaria completa</option>
                                                                                         </select>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Ocupación</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_ocupacion" id="psi_ant_gen_ocupacion">
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_ocupacion" id="psi_ant_gen_ocupacion" value="{{ old('psi_ant_gen_ocupacion') }}">
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Religión</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_religion" id="psi_ant_gen_religion">
+                                                                                        <input type="text" class="form-control form-control-sm" name="psi_ant_gen_religion" id="psi_ant_gen_religion" value="{{ old('psi_ant_gen_religion') }}">
                                                                                     </div>
 
                                                                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <label class="floating-label-activo-sm">Residencia </label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="¿Con quién vive el paciente?"  onfocus="this.rows=8" onblur="this.rows=1;"name="residencia_psiq_obs" id="residencia_psiq_obs"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="¿Con quién vive el paciente?"  onfocus="this.rows=8" onblur="this.rows=1;"name="residencia_psiq_obs" id="residencia_psiq_obs">{{ old('residencia_psiq_obs') }}</textarea>
                                                                                     </div>
 
                                                                                 </div>
-                                                                            </form>
                                                                         </div>
                                                                           <!--ANTECEDENTES ESPECIALIDAD-->
                                                                         <div class="tab-pane fade show" id="ant_especialidad" role="tabpanel" aria-labelledby="ant_especialidad-tab">
-                                                                            <form>
-                                                                                <div class="form-row">
+                                                                            <div class="form-row">
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Antecedentes médicos</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_medicos" id="psi_am_ant_medicos"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_medicos" id="psi_am_ant_medicos">{{ old('psi_am_ant_medicos') }}</textarea>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Ant. de suicidio (paciente o familiares)</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_enf_mentales" id="psi_am_ant_enf_mentales"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_enf_mentales" id="psi_am_ant_enf_mentales">{{ old('psi_am_ant_enf_mentales') }}</textarea>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Ant. de enfermedades mentales (paciente o familiares)</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_suicidio" id="psi_am_ant_suicidio"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_ant_suicidio" id="psi_am_ant_suicidio">{{ old('psi_am_ant_suicidio') }}</textarea>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Tratamientos psicologicos previos</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psicologicos_prev" id="psi_am_trat_psicologicos_prev"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psicologicos_prev" id="psi_am_trat_psicologicos_prev">{{ old('psi_am_trat_psicologicos_prev') }}</textarea>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Tratamientos psiquiátricos previos</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psiquiatricos_prev" id="psi_am_trat_psiquiatricos_prev"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_trat_psiquiatricos_prev" id="psi_am_trat_psiquiatricos_prev">{{ old('psi_am_trat_psiquiatricos_prev') }}</textarea>
                                                                                     </div>
                                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <label class="floating-label-activo-sm">Medicación (actual)</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_medicacion_actual" id="psi_am_medicacion_actual"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_am_medicacion_actual" id="psi_am_medicacion_actual">{{ old('psi_am_medicacion_actual') }}</textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
                                                                         </div>
                                                                         <!--HABITOS-->
                                                                         <div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
-                                                                            <form>
-                                                                                <div class="form-row">
+                                                                            <div class="form-row">
                                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                         <label class="floating-label-activo-sm">Hábitos</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Comentario de consumo de alcohol, sust. ilícitas, tabaco, sexualidad, otros."  onfocus="this.rows=6" onblur="this.rows=1;"name="habitos-psiq" id="habitos-psiq"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Comentario de consumo de alcohol, sust. ilícitas, tabaco, sexualidad, otros."  onfocus="this.rows=6" onblur="this.rows=1;"name="habitos-psiq" id="habitos-psiq">{{ old('habitos-psiq') }}</textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
                                                                         </div>
                                                                         <!--TRABAJO-->
                                                                         <div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
-                                                                            <form>
-                                                                                <div class="form-row">
+                                                                            <div class="form-row">
                                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                         <label class="floating-label-activo-sm">Antecedentes laborales</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" placeholder="Comentarios" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_laborales" id="psi_ant_laborales"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" placeholder="Comentarios" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_laborales" id="psi_ant_laborales">{{ old('psi_ant_laborales') }}</textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
                                                                         </div>
                                                                         <!--ESPARCIMIENTO-->
                                                                         <div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
-                                                                            <form>
-                                                                                <div class="form-row">
+                                                                            <div class="form-row">
                                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                         <label class="floating-label-activo-sm">Esparcimiento</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  placeholder="Comentarios" onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_esparc" id="psi_ant_esparc"></textarea>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  placeholder="Comentarios" onfocus="this.rows=6" onblur="this.rows=1;"name="psi_ant_esparc" id="psi_ant_esparc">{{ old('psi_ant_esparc') }}</textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
                                                                         </div>
                                                                         <!--OBSERVACIONES GENERALES-->
                                                                         <div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
@@ -665,58 +684,54 @@
                                                         <!--BIOPATOLOGIA-->
                                                         <div class="tab-pane fade show" id="biopat" role="tabpanel" aria-labelledby="biopat-tab">
                                                            <div class="card-body-aten-a">
-                                                                <form>
-                                                                    <div class="form-row">
+                                                                <div class="form-row">
                                                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                             <label class="floating-label-activo-sm">Historia social / Biopatografía</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Descripción de biografía , experiencias pasadas."  onfocus="this.rows=13" onblur="this.rows=1;"name="biopat-psiq" id="biopat-psiq"></textarea>
+                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" placeholder="Descripción de biografía , experiencias pasadas."  onfocus="this.rows=13" onblur="this.rows=1;"name="biopat-psiq" id="biopat-psiq">{{ old('biopat-psiq') }}</textarea>
                                                                         </div>
                                                                     </div>
-                                                                </form>
                                                             </div>
                                                         </div>
                                                         <!--EXAMEN MENTAL INICIO-->
                                                         <div class="tab-pane fade show" id="ex_ment_inicio" role="tabpanel" aria-labelledby="ex_ment_inicio-tab">
-                                                            <form>
-                                                                <div class="form-row">
+                                                            <div class="form-row">
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Aspecto y actitud</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi-actitud" id="psi-actitud"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_actitud_inicio" id="psi_actitud_inicio">{{ old('psi_actitud_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Estado de animo y afecto</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo" id="psi_e_animo"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_e_animo_inicio" id="psi_e_animo_inicio">{{ old('psi_e_animo_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Pensamiento</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam" id="psi_pensam"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_pensam_inicio" id="psi_pensam_inicio">{{ old('psi_pensam_inicio') }}</textarea>
                                                                     </div>
                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Percepción</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep" id="psi_percep"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_percep_inicio" id="psi_percep_inicio">{{ old('psi_percep_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Orientación</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion" id="psi_orientacion"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_orientacion_inicio" id="psi_orientacion_inicio">{{ old('psi_orientacion_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Memoria</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria" id="psi_memoria"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_memoria_inicio" id="psi_memoria_inicio">{{ old('psi_memoria_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Atención y concentración</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion" id="psi_concentracion"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_concentracion_inicio" id="psi_concentracion_inicio">{{ old('psi_concentracion_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                         <label class="floating-label-activo-sm">Juicio y raciocinio</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio" id="psi_raciocinio"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_raciocinio_inicio" id="psi_raciocinio_inicio">{{ old('psi_raciocinio_inicio') }}</textarea>
                                                                     </div>
                                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                         <label class="floating-label-activo-sm">Conciencia de enfermedad/Tratamiento</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad" id="psi_con_enfermedad"></textarea>
+                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psi_con_enfermedad_inicio" id="psi_con_enfermedad_inicio">{{ old('psi_con_enfermedad_inicio') }}</textarea>
                                                                     </div>
                                                                 </div>
-                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -732,6 +747,7 @@
         </div>
     </div>
 </div>
+@include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.modal_indicar_terapia')
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
@@ -3033,4 +3049,459 @@
        }
        return (fecha);
    }
+
+   /*-Agendar hora medica-*/
+        function hora_medica_pedir(id_profesional, id_lugar_atencion, tipo_agenda = null){
+
+            $('#modal_reserva_hora_lugar_atencion').val('');
+            $('#modal_reserva_dias_atencion').val('');
+            $('#modal_reserva_fecha').val('');
+            $('#modal_reserva_hora_lista_horas').html('');
+            // asigno id profesioanl
+            $('#modal_reserva_hora_id_profesional').val(id_profesional);
+            $('#modal_reserva_hora_tipo_agenda').val(tipo_agenda);
+
+            carga_calendario_profesional_pedir();
+
+            // cargo lugares de atencion  y asigno lugar con hora mas proxima
+            lugar_atencion_profesional($('#modal_reserva_hora_id_profesional'), 'modal_reserva_hora_lugar_atencion', id_lugar_atencion)
+            $('#indicar_terapia').modal('show');
+        }
+
+
+
+        function carga_calendario_profesional_pedir()
+        {
+            $('#modal_reserva_fecha').val('');
+            $('#modal_reserva_fecha').attr('disabled',true);
+            $('#modal_reserva_hora_lista_horas').html('');
+
+            let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+            let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            let tipo_agenda = 1;
+            let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_profesional: id_profesional,
+                    lugar_atencion: id_lugar_atencion,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+
+
+                    {{--  calendario(data.registros.horario_agenda_laboral, data.registros.horario_agenda_no_laboral);  --}}
+
+                    if(data.registros.horario_agenda_laboral != '')
+                    {
+                        console.log(data);
+                        let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                        var dias_activos = data.registros.horario_agenda_laboral.split(',');
+                        var dias_texto = '';
+                        var cant = 0;
+
+                        $.each(dias_activos, function(index, value)
+                        {
+                            if(cant>0)
+                                dias_texto += ' - '+dias[value];
+                            else
+                                dias_texto += dias[value];
+
+                            cant++;
+                        });
+
+                        $('#modal_reserva_dias_atencion').html(dias_texto);
+
+                        /** calendario */
+                        $('#modal_reserva_fecha').attr('disabled',false);
+
+                        $("#modal_reserva_fecha").flatpickr({
+                            "disable": [
+                                function(date) {
+                                    return !dias_activos.includes(String(date.getDay()));
+                                }
+                            ],
+                            minDate: "today",
+                            maxDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 días desde hoy
+                            locale: {
+                                firstDayOfWeek: 1,
+                                weekdays: {
+                                shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                                longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                                },
+                                months: {
+                                shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Оct', 'Nov', 'Dic'],
+                                longhand: ['Enero', 'Febrero', 'Мarzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                },
+                            },
+                        });
+                        /** fin calendario */
+
+                    }
+                    else
+                    {
+                        $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
+                        $('#modal_reserva_fecha').attr('disabled',true);
+                        $('#modal_reserva_fecha_seleccionada').html('');
+                    }
+
+                } else {
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+
+        function lugar_atencion_profesional(element, div_destino, value_init = '')
+        {
+            let id_profesional = $(element).val();
+            let url = "{{ route('profesional.lugaresAtencionProfesionalBuscador') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        id_profesional: id_profesional,
+                    },
+                })
+                .done(function(data) {
+                    if (data.estado == 1) {
+                        {{--  console.log(data);  --}}
+                        let input_lugar_atencion = $('#'+div_destino);
+
+                        input_lugar_atencion.find('option').remove();
+                        input_lugar_atencion.append('<option value="">Seleccione</option>');
+                        $(data.registros).each(function(i, v) { // indice, valor
+                            input_lugar_atencion.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                        })
+
+                        if(value_init != '')
+                        {
+                            input_lugar_atencion.val(value_init);
+                            carga_calendario_profesional_pedir();
+                        }
+
+                    } else {
+                        // alert('No se pudo Cargar las ciudades');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function cargar_horas_disponibles_calendario_profesion(dia)
+    {
+
+        let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+        console.log('cargar_horas_disponibles_calendario_profesion');
+        console.log(dia);
+
+        let url = "{{ route('profesional.HorasDisponiblesProfesionalLugarAtencionBuscador') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                //_token: _token,
+                id_profesional: id_profesional,
+                id_lugar_atencion: id_lugar_atencion,
+                dia: dia,
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1) {
+                $('#modal_reserva_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
+
+                $('#modal_reserva_hora_lista_horas').html('');
+                $.each(data.registros, function(index, value)
+                {
+                    var hr1 = moment(value.hora,'HH:mm:ss').format('HH:mm');
+                    var html = '';
+                    html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
+                    html += ''+hr1;
+                    html += '</div>';
+
+                    $('#modal_reserva_hora_lista_horas').append(html);
+                });
+
+            } else {
+                // alert('No se pudo Cargar las ciudades');
+                $('#modal_reserva_hora_lista_horas').html('<span style="font-weight: bold; text-align: center;">"Sin disponibilidad de Horas"</span>');
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    function generar_reserva_cita(hora)
+    {
+        console.log('generar_reserva_cita');
+        $('.div_rut_buscar').hide();
+        $('#form_reseva_de_horas').hide();
+        $('#reserva_datos_paciente').hide();
+        $('#reserva_agregar_paciente_hora').hide();
+
+        $('#indicar_terapia').modal('hide');
+
+        let id_profesional = $('#modal_reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+        let fecha_consulta = $('#modal_reserva_fecha').val();
+        $('#reserva_hora_id_profesional').val('');
+        $('#reserva_hora_id_lugar_atencion').val('');
+        $('#reserva_hora_fecha_consulta').val('');
+        $('#reserva_hora_hora_consulta').val('');
+
+        let url = "{{ route('paciente.get.informacion') }}";
+        var datos = {};
+        var id_dependiente_activo = '{{ $paciente->id }}';
+
+        if(id_dependiente_activo != '')
+            datos.id_dependiente_activo = id_dependiente_activo;
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: datos,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+
+                $('.div_rut_buscar').hide();
+                $('#form_reseva_de_horas').show();
+                $('#reserva_datos_paciente').show();
+                $('#reserva_agregar_paciente_hora').hide();
+
+                $('#agenda_agregar_paciente').modal('show');
+
+                $('#reserva_hora_id_profesional').val(id_profesional);
+                $('#reserva_hora_id_lugar_atencion').val(id_lugar_atencion);
+                $('#reserva_hora_fecha_consulta').val(fecha_consulta);
+                $('#reserva_hora_hora_consulta').val(hora);
+
+                $('#reserva_hora_id_paciente').val(data.registro.id);
+
+                $('#reserva_rut_paciente').html(data.registro.rut);
+                $('#reserva_hora_nombre').html(data.registro.nombres + ' ' + data.registro.apellido_uno + ' ' + data.registro.apellido_dos);
+                $('#reserva_fecha_nacimiento').html(data.registro.fecha_nac);
+                if (data.registro.sexo == 'M') {
+                    $('#reserva_sexo').text('Masculino');
+                } else {
+                    $('#reserva_sexo').text('Femenino');
+                }
+                $('#reserva_convenio').html(data.registro.prevision.nombre);
+                $('#reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
+                $('#reserva_hora_email').html(data.registro.email);
+                $('#reserva_hora_telefono').html(data.registro.telefono_uno);
+
+
+
+            }
+            else
+            {
+                swal({
+                    title: "Debe completar los datos de Inscripción",
+                    text: error,
+                    icon: "error",
+                    // buttons: "Aceptar",
+                    //SuccessMode: true,
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    {{--  GENERAR HORA USUARIO EXISTENTE  --}}
+    function agendar_hora() {
+
+        let url = "{{ route('paciente.solicitar.hora') }}";
+        let _token = $('#_token').val();
+        let fecha_consulta = $('#reserva_hora_fecha_consulta').val()+' '+$('#reserva_hora_hora_consulta').val();
+        let reserva_hora_id = $('#reserva_hora_id_paciente').val();
+        let id_profesional = $('#reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#reserva_hora_id_lugar_atencion').val();
+        let id_asistente = $('#reserva_hora_id_asistente').val();
+        let origen = $('#reserva_hora_origen').val();
+
+        let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
+        var tipo_agenda_text = 'C';
+
+        console.log(tipo_agenda);
+        console.log(tipo_agenda_text);
+
+        switch (tipo_agenda) {
+            case '1':
+                tipo_agenda_text = 'C';//CONSULTA
+                break;
+            case '2':
+                tipo_agenda_text = 'D';//DENTAL
+                break;
+            case '3':
+                tipo_agenda_text = 'T';//TELEMEDICINA
+                break;
+            case '4':
+                tipo_agenda_text = 'E';//EXAMEN
+                break;
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                fecha_consulta: fecha_consulta,
+                reserva_hora_id: reserva_hora_id,
+                id_lugar_atencion: id_lugar_atencion,
+                id_profesional: id_profesional,
+                id_asistente: id_asistente,
+                origen: origen,
+                tipo_hora_medica: tipo_agenda_text,
+            }
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+
+                data = JSON.parse(data);
+                console.log(data);
+                if(data.estado == 'error')
+                {
+                    swal({
+                        title: "Error!",
+                        text: data.msj,
+                        icon: "error",
+                        type: "error",
+                        buttons: "Cerrar",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Hora Agendada Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                    // ponemos la fecha y hora de la proxima atencion
+                    $('#proxima_fecha_atencion').html(data.fecha_consulta);
+                    $('#proxima_hora_atencion_inicio').html(data.hora_inicio);
+                    $('#proxima_hora_atencion_fin').html(data.hora_termino);
+                    // Incrementar hora_agendada DENTRO del success de guardar_plan
+                    guardar_plan_tratamiento_psico(true); // true = llamado desde agendar_hora
+                    let esUltimaSesion = false;
+                    if($('#finalizando_sesiones').val() == 1){
+                        esUltimaSesion = true;
+                    }
+                    console.log(esUltimaSesion);
+                }
+                $('#agenda_agregar_paciente').modal('hide');
+
+                    $('#reserva_hora_id_profesional').val('');
+                    $('#reserva_hora_id_lugar_atencion').val('');
+                    $('#reserva_hora_fecha_consulta').val('');
+                    $('#reserva_hora_hora_consulta').val('');
+                    $('#reserva_hora_id_paciente').val('');
+                    $('#reserva_rut_paciente').html('');
+                    $('#reserva_hora_nombre').html('');
+                    $('#reserva_fecha_nacimiento').html('');
+                    $('#reserva_sexo').text('');
+                    $('#reserva_convenio').html('');
+                    $('#reserva_direccion').html('');
+                    $('#reserva_hora_email').html('');
+                    $('#reserva_hora_telefono').html('');
+
+
+            } else {
+
+                swal({
+                    title: "Error!",
+                    text: "Problema en la solicitud de la hora",
+                    icon: "error",
+                    type: "error",
+                    buttons: "Cerrar",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+    function dame_plan_tratamiento(id_ficha_atencion){
+        let url = "{{ route('profesional.dame_plan_tratamiento') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id_ficha_atencion: id_ficha_atencion,
+                id_profesional: $('#id_profesional_fc').val(),
+                id_paciente: $('#id_paciente_fc').val(),
+                hora_agendada : $('#hora_agendada').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val(),
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.mensaje == 'ok') {
+                var numero_sesion;
+                var consulta = '';
+                if(data.registro.sesion_actual == null || data.registro.sesion_actual == 0){
+                    numero_sesion = 0 + ' de ' + data.registro.numero_sesiones + ' (No se ha iniciado tratamiento)';
+                }else if(data.registro.sesion_actual == data.registro.numero_sesiones){
+                    numero_sesion = 'Estamos finalizando el tratamiento con un total de ' + data.registro.numero_sesiones + ' sesiones';
+                    consulta = '¿Desea continuar con mas sesiones? Presione <a href="javascript:void(0)" onclick="agregar_sesiones()"> aquí </a>';
+                    $('#finalizando_sesiones').val(1);
+                    $('#contenedor_agendar_hora').addClass('d-none', true);
+                }
+                else{
+                    $('#contenedor_agendar_hora').removeClass('d-none', true);
+                    $('#contenedor_agendar_hora').css('display','block');
+                    numero_sesion = 'Vamos en la sesión '+parseInt(data.registro.sesion_actual) + ' de ' + data.registro.numero_sesiones + ' sesiones';
+                }
+                $('#id_plan').val(data.registro.id);
+                $('#numero_sesion').html(numero_sesion);
+                $('#consulta').html(consulta);
+                $('#num_sesion_obesidad').val(parseInt(data.registro.sesion_actual));
+                $('#num_sesion_diabetes').val(parseInt(data.registro.sesion_actual));
+                $('#num_sesion_hipertension').val(parseInt(data.registro.sesion_actual));
+                $('#num_sesion_dislipidemia').val(parseInt(data.registro.sesion_actual));
+                $('#num_sesion_irenal').val(parseInt(data.registro.sesion_actual));
+                $('#num_sesion_hiperuric').val(parseInt(data.registro.sesion_actual));
+                $('#diagnostico_tratamiento').val(data.registro.diagnostico);
+                $('#hipotesis').val(data.registro.diagnostico);
+                $('#tratamiento_seguir').val(data.registro.tratamiento);
+                $('#numero_sesiones').val(data.registro.numero_sesiones);
+                $('#objetivos').val(data.registro.objetivos);
+            } else {
+                var numero_sesion = ' (No se ha iniciado tratamiento)';
+
+                $('#numero_sesion').html(numero_sesion);
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 </script>

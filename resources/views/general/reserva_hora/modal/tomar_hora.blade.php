@@ -109,8 +109,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
                                     <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    {{-- <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/> --}}
-                                    <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
+                                    <input class="form-control form-control-sm" type="text" name="modal_reserva_fecha" id="modal_reserva_fecha" placeholder="Seleccione una fecha" disabled />
                                 </div>
                             </div>
                         </div>
@@ -148,7 +147,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar hora 2</h5>
+                    <h5 class="modal-title text-white text-center">Tomar hora</h5>
                     <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -862,8 +861,14 @@
     function carga_calendario_profesional()
     {
         $('#modal_reserva_fecha').val('');
-        $('#modal_reserva_fecha').attr('disabled',true);
+        $('#modal_reserva_fecha').prop('disabled',true);
         $('#modal_reserva_hora_lista_horas').html('');
+
+        // Destruir instancia anterior de flatpickr si existe
+        var fpInput = document.getElementById('modal_reserva_fecha');
+        if (fpInput && fpInput._flatpickr) {
+            fpInput._flatpickr.destroy();
+        }
 
         let id_profesional = $('#modal_reserva_hora_id_profesional').val();
         let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
@@ -879,6 +884,7 @@
                 },
             })
             .done(function(data) {
+                console.log(data);
                 if (data.estado == 1)
                 {
 
@@ -890,6 +896,7 @@
                         console.log(data);
                         let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
                         var dias_activos = data.registros.horario_agenda_laboral.split(',');
+                        console.log(dias_activos);
                         var dias_texto = '';
                         var cant = 0;
 
@@ -906,7 +913,7 @@
                         $('#modal_reserva_dias_atencion').html(dias_texto);
 
                         /** calendario */
-                        $('#modal_reserva_fecha').attr('disabled',false);
+                        $('#modal_reserva_fecha').prop('disabled', false).removeAttr('disabled');
 
                         $("#modal_reserva_fecha").flatpickr({
                             "disable": [
@@ -915,7 +922,11 @@
                                 }
                             ],
                             minDate: "today",
-                            maxDate: new Date().fp_incr(60), // 14 days from now
+                            maxDate: new Date().fp_incr(60), // 60 days from now
+                            dateFormat: "Y-m-d",
+                            onChange: function(selectedDates, dateStr, instance) {
+                                cargar_horas_disponibles_calendario_profesion(dateStr);
+                            },
                             locale: {
                                 firstDayOfWeek: 1,
                                 weekdays: {
@@ -934,7 +945,7 @@
                     else
                     {
                         $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
-                        $('#modal_reserva_fecha').attr('disabled',true);
+                        $('#modal_reserva_fecha').prop('disabled',true);
                         $('#modal_reserva_fecha_seleccionada').html('');
                     }
 

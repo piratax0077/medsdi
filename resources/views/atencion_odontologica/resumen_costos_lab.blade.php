@@ -9,6 +9,11 @@
             @php $suma += $o->valor_prestacion; @endphp
         @endif
     @endforeach
+    @foreach ($ordenes_trabajo_mayor as $o)
+        @if($o->presupuesto == 1)
+            @php $suma += $o->valor_prestacion; @endphp
+        @endif
+    @endforeach
 
     <div class="col-md-6 offset-md-3">
         <div class="card border-success shadow-sm">

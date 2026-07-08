@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminInstServ;
 use App\Models\AdminMed;
+use App\Models\AdminMantenInst;
 use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteTipo;
@@ -15,6 +16,7 @@ use App\Models\Bono;
 use App\Models\Bodega;
 use App\Models\CalibracionAudifono;
 use App\Models\CampaniaPublicitaria;
+use App\Models\Cliente;
 use App\Models\ConvenioInstitucion;
 use App\Models\DevolucionProducto;
 use App\Models\BoxesCm;
@@ -22,6 +24,8 @@ use App\Models\CarritoCompra;
 use App\Models\CarritoPrestamo;
 use App\Models\Compras_detalle;
 use App\Models\FichaAtencion;
+use App\Models\FichaGinecoObstetrica;
+use App\Models\FormasPago;
 use App\Models\GastosInstitucionales;
 use App\Models\TipoAreasCm;
 use Illuminate\Http\Request;
@@ -33,8 +37,10 @@ use App\Models\ContratoConvenioProfesional;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
+use App\Models\ExamenEspecialidad;
 use App\Models\ExamenMedico;
 use App\Models\FichaOtrosProfesionales;
+use App\Models\FichaAtencionRayo;
 use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
@@ -46,7 +52,9 @@ use App\Models\MensajesProfesional;
 use App\Models\Mensajes;
 use App\Models\MisProducto;
 use App\Models\Paciente;
+use App\Models\Pago;
 use App\Models\PermisoProfesional;
+use App\Models\PedidosDistribucion;
 use App\Models\Prevision;
 use App\Models\PrestacionesLaboratorio;
 use App\Models\ProcedimientosCentro;
@@ -55,6 +63,7 @@ use App\Models\ProductoSolicitado;
 use App\Models\Profesional;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
+use App\Models\ProfesionalHorario;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\RegistroConfirmacionHoraAgenda;
@@ -66,6 +75,7 @@ use App\Models\Roles;
 use App\Models\Servicios;
 use App\Models\ServiciosInternos;
 use App\Models\TerapiaVoz;
+use App\Models\TipoConvenio;
 use App\Models\TraspasoProducto;
 use App\Models\TratamientoVppb;
 use App\Models\TipoAdministrador;
@@ -80,7 +90,9 @@ use App\Models\TipoBono;
 use App\Models\TipoInstitucion;
 use App\Models\User;
 use App\Models\LogUsersDevices;
+use App\Models\VacacionesProfesional;
 
+use App\Mail\CorreoGenerico;
 use App\Mail\NotificacionPrestamoProductos;
 
 // Mail
@@ -200,65 +212,229 @@ class LaboratorioController extends Controller
         return view('app.laboratorio.lab_asistente.perfil');
     }
 
-    public function agenda_laboratorio()
+    public function agenda_laboratorio(Request $request)
     {
+
         $array_id_lugare = array();
+        $sucursales = collect([]);
+        $procedimientos = '';
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $array_id_lugare = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
-                                                                                    ->pluck('id_lugar_atencion')
-                                                                                    ->toArray();
 
-        $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        // ->where('id_tipo_institucion', 3)
-                                        ->pluck('id')
-                                        ->toArray();
-
-        $institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        // ->where('id_tipo_institucion', 3)
-                                        ->get();
-
-        $procedimientos = '';
-        if($institucion)
-        {
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
-
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
+        if (!$profesional) {
+            // Si no existe profesional, buscar en Laboratorio
+            $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
+            if($laboratorio) {
+                $lugar_atencion_principal = $laboratorio->id_lugar_atencion;
+                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $lugar_atencion_principal)->get();
+                $institucion = collect([
+                    (object)[
+                        'id' => $laboratorio->id,
+                        'id_lugar_atencion' => $laboratorio->id_lugar_atencion,
+                        'nombre' => $laboratorio->nombre ?? 'Laboratorio',
+                        'sucursales' => 0
+                    ]
+                ]);
+            } else {
+                // Fallback: buscar lugares de atención asociados al usuario en profesionales_lugares_atencion
+                $lugares_usuario = ProfesionalesLugaresAtencion::where('id_usuario', Auth::user()->id)
+                    ->pluck('id_lugar_atencion')
+                    ->toArray();
+                if (!empty($lugares_usuario)) {
+                    // Buscar si alguno de estos lugares es un laboratorio
+                    $laboratorio_lugar = Sucursal::whereIn('id', $lugares_usuario)
+                        ->where('tipo_sucursal', 3) // 3 = laboratorio (ajustar si el valor es diferente)
+                        ->first();
+                    if ($laboratorio_lugar) {
+                        $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $laboratorio_lugar->id_lugar_atencion)->get();
+                        $institucion = collect([
+                            (object)[
+                                'id' => $laboratorio_lugar->id,
+                                'id_lugar_atencion' => $laboratorio_lugar->id_lugar_atencion,
+                                'nombre' => $laboratorio_lugar->nombre ?? 'Laboratorio',
+                                'sucursales' => 0
+                            ]
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No se encontraron lugares de atención',
+                            'error' => 'No se encontraron instituciones, sucursales ni laboratorio asignado'
+                        ], 404);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No se encontraron lugares de atención',
+                        'error' => 'No se encontraron instituciones, sucursales ni laboratorio asignado'
+                    ], 404);
+                }
             }
-        }
-        else
-        {
-            $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare)
-                            ->pluck('id_institucion')
-                            ->toArray();
-
-            $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
-                                                ->pluck('id')
-                                                ->toArray();
-            $institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)->get();
+        } else {
+            $array_id_lugare = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+                ->pluck('id_lugar_atencion')
+                ->toArray();
 
 
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
 
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
+            $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
+                ->pluck('id')
+                ->toArray();
+
+            $institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
+                ->get();
+
+
+
+            if($institucion && $institucion->count() > 0)
+            {
+                // Sucursales de instituciones
+                $sucursales = Sucursal::with('Horario')
+                    ->whereIn('id_institucion', $array_institucion)
+                    ->where('estado',1)
+                    ->get();
+
+                foreach ($sucursales as $key => $value) {
+                    $inst_tem = Instituciones::find($value->id_institucion);
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
+                    $sucursales[$key]->procedimiento = $procedimientos;
+                }
+
+                // Sucursales de laboratorio por lugares de atención del profesional
+                $sucursales_laboratorio = Sucursal::with('Horario')
+                    ->whereIn('id_lugar_atencion', $array_id_lugare)
+                    ->where('tipo_sucursal', 3) // 3 = laboratorio (ajustar si corresponde)
+                    ->where('estado',1)
+                    ->get();
+
+                foreach ($sucursales_laboratorio as $key => $value) {
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
+                    $sucursales_laboratorio[$key]->procedimiento = $procedimientos;
+                }
+
+                // Unir ambas colecciones, evitando duplicados por id
+                $sucursales = $sucursales->merge($sucursales_laboratorio)->unique('id')->values();
             }
+            else
+            {
+                $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare)
+                    ->pluck('id_institucion')
+                    ->toArray();
+
+
+
+                $array_institucion = Instituciones::whereIn('id', $array_id_lug)->where('id_tipo_institucion', 3)
+                    ->pluck('id')
+                    ->toArray();
+                $institucion = Instituciones::whereIn('id', $array_id_lug)->where('id_tipo_institucion', 3)->get();
+
+                $sucursales = Sucursal::with('Horario')
+                    ->whereIn('id_institucion', $array_institucion)
+                    ->where('estado',1)
+                    ->get();
+
+                foreach ($sucursales as $key => $value) {
+                    $inst_tem = Instituciones::find($value->id_institucion);
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
+                    $sucursales[$key]->procedimiento = $procedimientos;
+                }
+            }
+
+            // Si no hay institución/sucursal, buscar laboratorios asociados a los lugares de atención del profesional
+            // if($institucion->count() === 0) {
+                // Buscar laboratorios cuyo id_lugar_atencion esté en el array de lugares de atención
+                $laboratorios = Laboratorio::whereIn('id_lugar_atencion', $array_id_lugare)->get();
+
+                if($laboratorios && $laboratorios->count() > 0) {
+                    $institucion = collect();
+                    foreach ($laboratorios as $lab) {
+                        $institucion->push((object)[
+                            'id' => $lab->id,
+                            'id_lugar_atencion' => $lab->id_lugar_atencion,
+                            'nombre' => $lab->nombre ?? 'Laboratorio',
+                            'sucursales' => 0
+                        ]);
+                    }
+                    // Opcional: podrías cargar procedimientos del primer laboratorio o de todos
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $laboratorios->first()->id_lugar_atencion)->get();
+                } else {
+                    // Fallback anterior: buscar por usuario
+                    $laboratorio = Laboratorio::where('id_lugar_atencion', $request->input('lugares_atencion'))->first();
+                    if($laboratorio) {
+                        $lugar_atencion_principal = $laboratorio->id_lugar_atencion;
+                        $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $lugar_atencion_principal)->get();
+                        $institucion = collect([
+                            (object)[
+                                'id' => $laboratorio->id,
+                                'id_lugar_atencion' => $laboratorio->id_lugar_atencion,
+                                'nombre' => $laboratorio->nombre ?? 'Laboratorio',
+                                'sucursales' => 0
+                            ]
+                        ]);
+                        $sucursales = collect();
+                        $sucursal = new \stdClass();
+                        $sucursal->id = $laboratorio->id;
+                        $sucursal->id_lugar_atencion = $laboratorio->id_lugar_atencion;
+                        $sucursal->nombre = $laboratorio->nombre ?? 'Laboratorio';
+                        $sucursal->procedimiento = $procedimientos;
+                        $sucursales->push($sucursal);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No se encontraron lugares de atención',
+                            'error' => 'No se encontraron instituciones, sucursales ni laboratorio asignado'
+                        ], 404);
+                    }
+                }
+            // }
         }
 
         $prevision = Prevision::all();
         $tipo_bonos = TipoBono::where('estado', 1)->get();
         $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+        $regiones = Region::orderBy('nombre')->get();
+
+        if($sucursales->count() == 0){
+            $sucursales = collect();
+            $lugares_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->pluck('id_lugar_atencion')->toArray();
+            $laboratorio = Laboratorio::whereIn('id_lugar_atencion', $lugares_atencion)->first();
+            if($laboratorio) {
+                $sucursal = new \stdClass();
+                $sucursal->id = $laboratorio->id;
+                $sucursal->id_lugar_atencion = $laboratorio->id_lugar_atencion;
+                $sucursal->nombre = $laboratorio->nombre ?? 'Laboratorio';
+                $sucursal->procedimiento = ProcedimientosCentro::where('id_lugar_atencion', $laboratorio->id_lugar_atencion)->get();
+                $sucursales->push($sucursal);
+            }
+        }
+
+        $tipo_agendas = [];
+        if(isset($laboratorio) && $laboratorio->id_lugar_atencion) {
+            $tipo_agendas = ProfesionalHorario::select('tipo_agenda')
+                                            ->whereIn('id_lugar_atencion', [$laboratorio->id_lugar_atencion])
+                                            ->where('id_profesional', $profesional->id)
+                                            ->groupBy('tipo_agenda')
+                                            ->pluck('tipo_agenda')
+                                            ->toArray();
+        }
+
+        $arrayTipoAgenda = array('', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Laboratorio');
+        $listaTipoAgendaProf = array();
+        foreach ($tipo_agendas as $keyTA => $valueTA) {
+            array_push($listaTipoAgendaProf, array('id' => $valueTA, 'texto' => $arrayTipoAgenda[$valueTA]));
+        }
+
+        $arrayTipoAgenda = array('', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Laboratorio');
+        $listaTipoAgendaProf = array();
+        foreach ($tipo_agendas as $keyTA => $valueTA) {
+            array_push($listaTipoAgendaProf, array('id' => $valueTA, 'texto' => $arrayTipoAgenda[$valueTA]));
+        }
+
+        if(isset($laboratorio) && $laboratorio->id_lugar_atencion) {
+            $lugar_atencion = LugarAtencion::find($laboratorio->id_lugar_atencion);
+        } else {
+            $lugar_atencion = null;
+        }
 
         return view('app.laboratorio.agenda_laboratorio')->with([
             'profesional' => $profesional,
@@ -266,10 +442,13 @@ class LaboratorioController extends Controller
             'institucion_agenda' => $institucion, // Para diferenciarlo en el menu de asistente
             'sucursales' => $sucursales,
             'procedimientos' => $procedimientos,
-
+            'regiones' => $regiones,
             'prevision' => $prevision,
             'tipo_bonos' => $tipo_bonos,
             'reg_confirmacion_hora' => $reg_confirmacion_hora,
+            'listaTipoAgendaProf' => $listaTipoAgendaProf,
+            'tipo_agendas' => $tipo_agendas,
+            'lugar_atencion' => $lugar_atencion ? $lugar_atencion->id : null,
         ]);
     }
     public function cotizar_laboratorio(){
@@ -376,8 +555,49 @@ class LaboratorioController extends Controller
     }
 
     public function escritorio_profesional_laboratorio(){
+        $institucion = '';
+        $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            /** INFORMACION DE INSTITUCION Y RESPONSABLE */
 
-        return view('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+            }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+
+        return view('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio',[
+            'institucion' => $institucion,
+            'tipo_institucion' => $tipo_institucion,
+        ]);
     }
     public function gastos_laboratorio(){
         return view('app.laboratorio.lab_profesional.gastos_laboratorio');
@@ -650,13 +870,15 @@ class LaboratorioController extends Controller
     }
 
     public function estadisticas_finanzas($id_institucion = null){
+
         if($id_institucion){
             $institucion = Instituciones::find($id_institucion);
+
             if(!$institucion){
                 return redirect()->route('laboratorio.escritorio_adm_comercial')->with('error','Institución no encontrada');
             }
         }
-         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $profesionales = [];
         if(isset($institucion)){
             $sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
@@ -1080,20 +1302,42 @@ class LaboratorioController extends Controller
                                         }
                                         else
                                         {
-                                            return back()->with('error','Institución no encontrada');
+                                            $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                                            if($registro){
+                                                /** LABORATORIO */
+                                                $institucion = $registro;
+                                                $tipo_institucion = 'laboratorio';
+                                            }
+                                            else
+                                                 return back()->with('error','Institución no encontrada');
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                    $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                                    if($registro){
+                                        /** LABORATORIO */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'laboratorio';
+                                    }
+                                    else
+                                        return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                    // return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
                                 }
                             }
                         }
                     }
                     else
                     {
-                        return back()->with('error','Institución no encontrada');
+                        $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                        if($registro){
+                            /** LABORATORIO */
+                            $institucion = $registro;
+                            $tipo_institucion = 'laboratorio';
+                        }
+                        else
+                            return back()->with('error','Institución no encontrada');
                     }
 
                 }
@@ -1196,12 +1440,56 @@ class LaboratorioController extends Controller
                 $nueva_direccion->direccion = $request->direccion_laboratorio;
                 $nueva_direccion->numero_dir = $request->numero_laboratorio;
                 $nueva_direccion->id_ciudad = $request->ciudad_laboratorio;
+                if($request->filled('lat_laboratorio')) $nueva_direccion->latitud  = $request->lat_laboratorio;
+                if($request->filled('lng_laboratorio')) $nueva_direccion->longitud = $request->lng_laboratorio;
                 $nueva_direccion->save();
 
                 $laboratorio->id_direccion = $nueva_direccion->id;
             }
             $laboratorio->estado = 1;
             if($laboratorio->save()){
+
+                // Crear o reutilizar usuario para la sucursal con rol AsistenteLaboratorio
+                $lab_user = null;
+                if(empty($laboratorio->id_usuario)){
+                    $lab_user = User::where('email', $request->email_laboratorio)->first();
+                    if(!$lab_user){
+                        $lab_user = new User();
+                        $lab_user->email = $request->email_laboratorio;
+                        $pass_temp = rand(11111, 99999);
+                        $lab_user->password = Hash::make($pass_temp);
+                        $lab_user->name = $request->nombre_laboratorio;
+                        if($lab_user->save()){
+                            $lab_user->assignRole('AsistenteLaboratorio');
+                            $laboratorio->id_usuario = $lab_user->id;
+                            $laboratorio->save();
+                        }
+                    } else {
+                        if(!$lab_user->hasRole('AsistenteLaboratorio')){
+                            $lab_user->assignRole('AsistenteLaboratorio');
+                        }
+                        $laboratorio->id_usuario = $lab_user->id;
+                        $laboratorio->save();
+                    }
+                }
+
+                // Crear o actualizar registro en tabla laboratorios
+                $reg_laboratorio = Laboratorio::where('rut', $request->rut_laboratorio)->first();
+                if(!$reg_laboratorio){
+                    $reg_laboratorio = new Laboratorio();
+                }
+                $reg_laboratorio->nombre     = $request->nombre_laboratorio;
+                $reg_laboratorio->rut        = $request->rut_laboratorio;
+                $reg_laboratorio->email      = $request->email_laboratorio;
+                $reg_laboratorio->telefono   = $request->telefono_laboratorio;
+                $reg_laboratorio->id_direccion = $laboratorio->id_direccion;
+                $reg_laboratorio->id_sucursal  = $laboratorio->id;
+                if($lab_user){
+                    $reg_laboratorio->id_usuario = $lab_user->id;
+                } elseif(!empty($laboratorio->id_usuario)){
+                    $reg_laboratorio->id_usuario = $laboratorio->id_usuario;
+                }
+                $reg_laboratorio->save();
 
                 $laboratorios = $this->dame_laboratorios($institucion->id_lugar_atencion);
                 $v = view('fragm.laboratorios',[
@@ -1255,6 +1543,8 @@ class LaboratorioController extends Controller
             $direccion->direccion = $request->direccion_laboratorio;
             $direccion->numero_dir = $request->numero_laboratorio;
             $direccion->id_ciudad = $request->ciudad_laboratorio;
+            if($request->filled('lat_laboratorio')) $direccion->latitud  = $request->lat_laboratorio;
+            if($request->filled('lng_laboratorio')) $direccion->longitud = $request->lng_laboratorio;
             $direccion->save();
             $laboratorio->id_direccion = $direccion->id;
             if($laboratorio->save()){
@@ -1293,9 +1583,87 @@ class LaboratorioController extends Controller
         }
     }
 
+    public function sincronizar_usuarios_laboratorios(Request $request)
+    {
+        try {
+            $institucion = Instituciones::find($request->id_institucion);
+            if (!$institucion) {
+                return ['estado' => 0, 'msj' => 'Institución no encontrada'];
+            }
+
+            $sucursales = Sucursal::where('id_lugar_atencion', $institucion->id_lugar_atencion)->get();
+
+            $creados   = 0;
+            $omitidos  = 0;
+            $resultado = [];
+
+            foreach ($sucursales as $sucursal) {
+
+                // Buscar registro en laboratorios por rut
+                $reg_lab = Laboratorio::where('rut', $sucursal->rut)->first();
+
+                // Si ya tiene usuario, no hace nada
+                if ($reg_lab && !empty($reg_lab->id_usuario)) {
+                    $omitidos++;
+                    continue;
+                }
+
+                // Buscar o crear usuario por email
+                $lab_user = User::where('email', $sucursal->email)->first();
+                if (!$lab_user) {
+                    if (empty($sucursal->email)) {
+                        $resultado[] = ['sucursal' => $sucursal->nombre, 'msj' => 'Sin email, omitido'];
+                        $omitidos++;
+                        continue;
+                    }
+                    $lab_user = new User();
+                    $lab_user->email    = $sucursal->email;
+                    $pass_temp          = rand(11111, 99999);
+                    $lab_user->password = Hash::make($pass_temp);
+                    $lab_user->name     = $sucursal->nombre;
+                    $lab_user->save();
+                    $resultado[] = ['sucursal' => $sucursal->nombre, 'msj' => 'Usuario creado', 'email' => $sucursal->email, 'pass' => $pass_temp];
+                } else {
+                    $resultado[] = ['sucursal' => $sucursal->nombre, 'msj' => 'Usuario existente vinculado', 'email' => $sucursal->email];
+                }
+
+                if (!$lab_user->hasRole('AsistenteLaboratorio')) {
+                    $lab_user->assignRole('AsistenteLaboratorio');
+                }
+
+                // Crear o actualizar registro en laboratorios
+                if (!$reg_lab) {
+                    $reg_lab = new Laboratorio();
+                    $reg_lab->nombre      = $sucursal->nombre;
+                    $reg_lab->rut         = $sucursal->rut;
+                    $reg_lab->email       = $sucursal->email;
+                    $reg_lab->telefono    = $sucursal->telefono;
+                    $reg_lab->id_direccion = $sucursal->id_direccion;
+                }
+                $reg_lab->id_usuario = $lab_user->id;
+                $reg_lab->save();
+
+                $creados++;
+            }
+
+            return [
+                'estado'   => 1,
+                'msj'      => "Proceso completado. Creados/vinculados: {$creados}, Omitidos: {$omitidos}",
+                'detalle'  => $resultado,
+            ];
+
+        } catch (\Exception $e) {
+            return ['estado' => 0, 'msj' => $e->getMessage()];
+        }
+    }
+
     public function dame_laboratorios($id_lugar_atencion){
-        $laboratorios = Sucursal::select('sucursal.*','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
+        $laboratorios = Sucursal::select('sucursal.*','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad','laboratorios.id as id_laboratorio','laboratorios.id_usuario')
             ->join('direcciones','sucursal.id_direccion','=','direcciones.id')
+            ->leftJoin('laboratorios', function($join) {
+                $join->on('laboratorios.rut', '=', 'sucursal.rut')
+                     ->whereNotNull('laboratorios.rut');
+            })
             ->where('sucursal.id_lugar_atencion',$id_lugar_atencion)
             ->get();
 
@@ -1490,6 +1858,7 @@ class LaboratorioController extends Controller
 
     public function buscar_paciente_rut(Request $request)
     {
+
         $datos = array();
         $id_lugar_atencion = $request->id_lugar_atencion;
         $rut = $request->rut;
@@ -1763,6 +2132,7 @@ class LaboratorioController extends Controller
         $institucion = '';
         $tipo_institucion = '1';
         $id_busqueda = Auth::user()->id;
+
         if(Auth::user()->id == 3)
         {
             $id_busqueda = 5;
@@ -1772,6 +2142,7 @@ class LaboratorioController extends Controller
         {
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
+
 
         if($registro)
         {
@@ -1843,6 +2214,8 @@ class LaboratorioController extends Controller
                 }
             }
         }
+
+
 
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
@@ -1964,6 +2337,7 @@ class LaboratorioController extends Controller
         $cargos = TipoAdministrador::orderBy('nombres', 'ASC')->get();
 
         $director_cm = null;
+
         if($institucion->id_director_medico !== '' && $institucion->id_director_medico != null){
             $director_cm = Profesional::where('id_usuario',$institucion->id_director_medico)->first();
         }
@@ -2000,18 +2374,26 @@ class LaboratorioController extends Controller
             $sucursales[$key]->regionObj = $region_suc;
         }
 
-           $tipos_producto = TipoProducto::all();
+        $tipos_producto = TipoProducto::all();
 
-            $bodegas = Bodega::where('id_institucion',$institucion->id)->get();
-            foreach($bodegas as $bodega){
-                $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
-                $bodega->tipos_productos = json_decode($bodega->tipos_productos);
-                $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
-                    ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
-                    ->where('responsable_bodega.id_bodega',$bodega->id)
-                    ->get();
-                $bodega->responsables = $responsables;
-            }
+        $bodegas = Bodega::where('id_institucion',$institucion->id)->get();
+        foreach($bodegas as $bodega){
+            $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+            $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+            $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                ->where('responsable_bodega.id_bodega',$bodega->id)
+                ->get();
+            $bodega->responsables = $responsables;
+        }
+
+
+        // $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
+        // $lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->first();
+
+        $institucion = Instituciones::where('id_lugar_atencion',$registro->id_lugar_atencion)->first();
+
 
         return view('app.laboratorio.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
@@ -2042,6 +2424,47 @@ class LaboratorioController extends Controller
         ]);
     }
 
+    public function editarDatosPerfilResponsableMedico(Request $request)
+    {
+        try {
+
+            $datos = array();
+
+            $profesional = Profesional::where('rut', $request->rut)->first();
+            $responsable = AdminInstServ::where('rut',$request->rut)->first();
+
+
+
+            if($profesional && $responsable)
+            {
+                $profesional->nombre = $request->nombres;
+                $profesional->apellido_uno = $request->apellido_uno;
+                $profesional->apellido_dos = $request->apellido_dos;
+                $profesional->fecha_nacimiento = $request->fecha_nac;
+                $profesional->save();
+
+                $responsable->nombres = $request->nombres;
+                $responsable->apellido_uno = $request->apellido_uno;
+                $responsable->apellido_dos = $request->apellido_dos;
+                $responsable->fecha_nac = $request->fecha_nac;
+                $responsable->save();
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Datos actualizados correctamente';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Error al actualizar los datos';
+            }
+
+            return $datos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
     public function dame_boxes_cm($id_lugar_atencion){
         $boxes = BoxCm::where('id_lugar_atencion',$id_lugar_atencion)->get();
         foreach($boxes as $box){
@@ -2151,12 +2574,19 @@ class LaboratorioController extends Controller
         $filtro_prodce[]  = array('id_lugar_atencion', $institucion->id_lugar_atencion);
         $filtro_prodce[]  = array('estado', 1);
         $procedimientos = ProcedimientosCentro::where($filtro_prodce)->get();
+        if($institucion->id_tipo_institucion && $institucion->id_tipo_institucion == 1){
+            $profesionales = Instituciones::find($institucion->id)->LugarAtencion()->first()->Profesionales()->get();
+        }else{
+            $profesionales = Laboratorio::find($institucion->id)->LugarAtencion()->first()->Profesionales()->get();
+        }
+
 
         return view('app.laboratorio.prestaciones',[
             'responsable' => $responsable,
             'institucion' => $institucion,
             'tipo_institucion' => $tipo_institucion,
             'prestaciones' => $procedimientos,
+            'profesionales' => $profesionales
         ]);
     }
 
@@ -2260,7 +2690,17 @@ class LaboratorioController extends Controller
                 }
                 else
                 {
-                    return back()->with('error','Institución no encontrada');
+                    $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                    if($registro)
+                    {
+                        /** LABORATORIO */
+                        $institucion = $registro;
+                        $tipo_institucion = 'laboratorio';
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
                 }
 
             }
@@ -2269,6 +2709,7 @@ class LaboratorioController extends Controller
 
         /** CARGA DE PROFESIONALES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+
 
         $lista_profesionales = array();
         $lista_profesionales['MEDICO'] = array();
@@ -2290,7 +2731,9 @@ class LaboratorioController extends Controller
 
             $profesionales = array();
             foreach ($LugaresAtencion as $key_lug => $value_lug){
-                $profesionales_lug = $value_lug->Profesionales()->get();
+                $profesionales_lug = $value_lug->Profesionales()
+                    ->withPivot('estado')
+                    ->get();
                 if($profesionales_lug){
                     foreach ($profesionales_lug as $key_prof_lug => $value_prof_lug){
                         array_push($profesionales, $value_prof_lug);
@@ -2298,12 +2741,23 @@ class LaboratorioController extends Controller
                 }
             }
 
+            // Eliminar duplicados por id
+            $profesionales = collect($profesionales)->unique('id')->values()->all();
 
             if($profesionales)
             {
 
                 foreach ($profesionales as $key_prof => $value_prof)
                 {
+                    // Verificar si tiene vacaciones vigentes hoy
+                    $hoy = Carbon::now()->format('Y-m-d');
+                    $vacacion_vigente = VacacionesProfesional::where('id_profesional', $value_prof->id)
+                        ->where('estado', 1)
+                        ->where('fecha_inicio', '<=', $hoy)
+                        ->where('fecha_fin', '>=', $hoy)
+                        ->first();
+
+                    $value_prof->tiene_vacacion_vigente = $vacacion_vigente ? true : false;
 
                     if($value_prof->id_especialidad == 1)//MEDICO
                     {
@@ -2400,6 +2854,7 @@ class LaboratorioController extends Controller
             }
         }
 
+
         /** CARGA DE ASISTENTES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
         $lista_asistente = array();
@@ -2415,17 +2870,21 @@ class LaboratorioController extends Controller
                     /** roles */
                     $usuario = User::where('id', $value->id_usuario)->first();
 
-                    $roles = $usuario->roles()->get();
+                    if($usuario) {
+                        $roles = $usuario->roles()->get();
 
-                    $array_roles = array();
-                    foreach ($roles as $key_2 => $value_2) {
-                        array_push($array_roles, $value_2->name);
-                    }
+                        $array_roles = array();
+                        foreach ($roles as $key_2 => $value_2) {
+                            array_push($array_roles, $value_2->name);
+                        }
 
-                    if(!empty($array_roles))
-                        $lista_asistente[$key]->roles = implode(",",$array_roles);
-                    else
+                        if(!empty($array_roles))
+                            $lista_asistente[$key]->roles = implode(",",$array_roles);
+                        else
+                            $lista_asistente[$key]->roles = '';
+                    } else {
                         $lista_asistente[$key]->roles = '';
+                    }
 
                     /** tipo asistente */
                     $lista_asistente[$key]->asistente_tipo = AsistenteTipo::find($value->id_asistente_tipo);
@@ -2446,6 +2905,52 @@ class LaboratorioController extends Controller
         $especialidades = Especialidad::all();
         $bancos = Bancos::where('estado',1)->get();
 
+        $lista_mantencion = array();
+        if($LugarAtencion)
+        {
+            $lista_mantencion = $LugarAtencion->MantencionInstitucion()->get();
+
+            if($lista_mantencion)
+            {
+                foreach ($lista_mantencion as $key => $value)
+                {
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    if($usuario){
+                        $roles = $usuario->roles()->get();
+                        $array_roles = array();
+                        foreach ($roles as $key_2 => $value_2) {
+                            array_push($array_roles, $value_2->name);
+                        }
+
+                        if(!empty($array_roles))
+                            $lista_mantencion[$key]->roles = implode(",",$array_roles);
+                        else
+                            $lista_mantencion[$key]->roles = '';
+                    }
+
+                    if($value->empresa == 1){
+                        $lista_mantencion[$key]->empresa = true;
+                    }else{
+                        $lista_mantencion[$key]->empresa = false;
+                    }
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+        $laboratorio = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+
+        if($laboratorio)
+        {
+            $institucion->id_tipo_laboratorio = $laboratorio->id_tipo_laboratorio;
+        }
+
         return view('app.laboratorio.profesionales')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
@@ -2461,15 +2966,139 @@ class LaboratorioController extends Controller
             'lista_tipo_contrato' => (object)$lista_tipo_contrato,
             'lista_administrativo' => $lista_administrativo,
             'lista_asistente' => $lista_asistente,
+            'lista_mantencion' => $lista_mantencion,
             'sucursales' => $sucursales,
             'especialidades' => $especialidades,
             'bancos' => $bancos,
         ]);
     }
 
-    public function mi_horario_lugar_atencion(){
+    public function administrador_tecnico_home()
+    {
+        return view('app.laboratorio.administrador_tecnico.home');
+    }
+
+    public function radiologia(){
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        return $profesional;
+        $array_id_lugare_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+                                                                                    ->pluck('id_lugar_atencion')
+                                                                                    ->toArray();
+
+        $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                                        ->where('id_tipo_institucion', 3)
+                                        ->pluck('id')
+                                        ->toArray();
+
+        if($array_institucion)
+        {
+            $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                ->pluck('id_lugar_atencion')
+                                ->toArray();
+        }
+        else
+        {
+            $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                            ->pluck('id_institucion')
+                            ->toArray();
+
+            $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
+                                                ->pluck('id')
+                                                ->toArray();
+
+            $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                                ->pluck('id_lugar_atencion')
+                                                ->toArray();
+        }
+
+        $horas_medicas = HoraMedica::select('horas_medicas.id','horas_medicas.fecha_consulta','horas_medicas.hora_inicio',
+                                            'horas_medicas.hora_termino', 'horas_medicas.tipo_hora_medica', 'horas_medicas.alias_examen',
+                                            'horas_medicas.id_box', 'horas_medicas.id_procedimiento', 'horas_medicas.id_jitsi_video_consulta',
+                                            'horas_medicas.descripcion','horas_medicas.comentarios_confirmacion','horas_medicas.fecha_confirmacion',
+                                            'horas_medicas.comentarios_cancelacion','horas_medicas.fecha_cancelacion','horas_medicas.fecha_realizacion_consulta',
+                                            'horas_medicas.id_ficha_atencion','horas_medicas.id_ficha_otros_prof','horas_medicas.id_profesional',
+                                            'horas_medicas.id_lugar_atencion','horas_medicas.id_asistente','horas_medicas.id_paciente',
+                                            'horas_medicas.acomp_representante','horas_medicas.acomp_acompanante','horas_medicas.acomp_lista',
+                                            'horas_medicas.autorizacion_atencion','horas_medicas.id_log_users_devices','horas_medicas.id_estado',
+                                            'horas_medicas.created_at','horas_medicas.updated_at')
+                                    ->with('Estado')
+                                    ->with('Paciente')
+                                    ->with('Profesional')
+                                    ->with('LugarAtencion')
+                                    ->with('ProcedimientoCentro')
+                                    ->with(['FichaOtrosProfesionales' => function($query){
+                                        $query->where('estado_archivo', 0);
+                                    }])
+                                    ->with(['FichaAtencion' => function($query){
+                                        $query->where('estado_archivo', 0);
+                                    }])
+                                    // LEFT JOIN para considerar fichas de otros profesionales (fonoaudiología, etc)
+                                    ->leftJoin('ficha_otros_profesionales', function($join){
+                                        $join->on('ficha_otros_profesionales.id', '=', 'horas_medicas.id_ficha_otros_prof');
+                                        $join->where('ficha_otros_profesionales.estado_archivo',0);
+                                    })
+                                    // LEFT JOIN para considerar fichas de atención (laboratorio, rayos X, etc)
+                                    ->leftJoin('fichas_atenciones', function($join){
+                                        $join->on('fichas_atenciones.id', '=', 'horas_medicas.id_ficha_atencion');
+                                        $join->where('fichas_atenciones.estado_archivo',0);
+                                    })
+                                    ->whereIn('horas_medicas.id_lugar_atencion', $array_id_lugar_suc)
+                                    ->where('horas_medicas.id_estado', 6)// realizadas
+                                    // Verificar que tenga al menos una ficha válida (otros profesionales O atención)
+                                    ->where(function($query) {
+                                        $query->whereNotNull('ficha_otros_profesionales.id')
+                                              ->orWhereNotNull('fichas_atenciones.id');
+                                    })
+                                    ->get();
+
+        // echo json_encode($horas_medicas);
+        // die();
+
+
+
+        return view('app.laboratorio.subir_examenes')->with([
+            'horas_medicas' => $horas_medicas,
+            'array_lugares' => implode(",", $array_id_lugar_suc),
+        ]);
+    }
+
+    public function buscar_mantencion(Request $req){
+
+            $datos = array();
+            $mantencion = AdminMantenInst::where('id', $req->id)->first();
+
+            // buscamos al profesional relacionado
+
+            if($mantencion)
+            {
+                $direccion_text = 'No Informada';
+                if($mantencion->id_direccion != '' || $mantencion->id_direccion!=0)
+                {
+                    $direccion = Direccion::where('id', $mantencion->id_direccion)->first();
+                    if($direccion)
+                        $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
+                }
+
+                $mantencion->contrato = ContratoDependiente::where('id_empleado', $mantencion->id)->first();
+
+                $mantencion->direccion = Direccion::with('Ciudad')->find($mantencion->id_direccion);
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $mantencion;
+                $datos['direccion'] = $direccion_text;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+            }
+
+            return $datos;
+    }
+
+    public function mi_horario_lugar_atencion(Request $request){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
         $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->id_lugar_atencion)->get();
 
         return json_encode($horario);
@@ -2544,7 +3173,7 @@ class LaboratorioController extends Controller
             return response()->json([
                 'estado' => 0,
                 'mensaje' => 'Profesional no encontrado',
-            ], 404);
+            ]);
         }
 
         // Si tienes id_paciente en el request, úsalo, si no, null
@@ -2559,7 +3188,7 @@ class LaboratorioController extends Controller
             return response()->json([
                 'estado' => 0,
                 'mensaje' => 'Permisos no encontrados',
-            ], 404);
+            ]);
         }
 
         return response()->json([
@@ -2567,6 +3196,22 @@ class LaboratorioController extends Controller
             'mensaje' => 'Permisos obtenidos correctamente',
             'permisos' => $permisos
         ]);
+    }
+
+    public function historial_mensajes_profesional($id){
+        $mensajes = Mensajes::where('id_receptor', $id)
+                    ->with('profesionalEmisor')  // Carga la relación
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
+
+        foreach($mensajes as $mensaje){
+            $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
+            $mensaje->destinatarios = json_decode($mensaje->destinatarios);
+            // Ahora puedes acceder al nombre del emisor con:
+            // $mensaje->profesionalEmisor->nombre
+            // $mensaje->profesionalEmisor->apellido_uno
+        }
+        return ['estado' => 1, 'mensajes' => $mensajes];
     }
 
     public function adm_buscar_pacientes()
@@ -2673,15 +3318,31 @@ class LaboratorioController extends Controller
                 }
                 else
                 {
-                    return back()->with('error','Institución no encontrada');
+                    //return back()->with('error','Institución no encontrada');
+                    $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                    if($registro)
+                    {
+                        /** LABORATORIO */
+                        $institucion = $registro;
+                        $tipo_institucion = 'laboratorio';
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
                 }
 
             }
         }
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
 
+
+
         /** CARGA DE ASISTENTES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+
+        $profesionalesLugarAtencion = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $institucion->id_lugar_atencion)->with('Profesionales')->get();
+
         $lista_asistente = array();
         if($LugarAtencion)
         {
@@ -2689,6 +3350,7 @@ class LaboratorioController extends Controller
             $array_data = array(
                 'lugares_atencion' => $LugarAtencion,
                 'institucion' => $institucion,
+                'profesionales' => $profesionalesLugarAtencion,
             );
             return view($url, $array_data);
         }
@@ -3079,64 +3741,130 @@ class LaboratorioController extends Controller
         $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_institucion', $institucion->id_tipo_institucion)->get();
         $convenios_prevision = ConvenioInstitucion::where('id_institucion', $institucion->id)->get();
 
-        $profesional = $institucion;
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
-        return view('app.laboratorio.mis_convenios', compact('profesional','regiones','tipoproducto_convenios','convenios_prevision'));
+        $tipos_convenio_institucion = TipoProductoConvenios::where('id_tipo_institucion', $institucion->id_tipo_institucion)->get();
+
+        $lugares_atencion = Sucursal::select('lugares_atencion.id as lugar_atencion_id','lugares_atencion.nombre as lugar_atencion_nombre','sucursal.*')
+        ->join('lugares_atencion','sucursal.id_lugar_atencion','=','lugares_atencion.id')
+        ->where('sucursal.id_institucion', $institucion->id)
+        ->get();
+
+        $tipos_convenio = TipoConvenio::all();
+        $convenios_profesional = ProfesionalConvenio::where('id_profesional', $profesional->id)->get();
+
+        return view('app.laboratorio.mis_convenios', compact('profesional','institucion','regiones','tipoproducto_convenios','convenios_prevision','institucion','lugares_atencion', 'tipos_convenio_institucion', 'tipos_convenio', 'convenios_profesional'));
     }
+
 
     public function adm_inst_mis_profesionales()
     {
-        $array_id_lugare = array();
-
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $array_id_lugare = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
-                                                                                    ->pluck('id_lugar_atencion')
-                                                                                    ->toArray();
+        $array_id_lugare = array();
+        $sucursales = collect([]);
+        $institucion = collect([]);
+        $procedimientos = '';
+        $lugar_atencion_principal = null;
 
-        $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        // ->where('id_tipo_institucion', 3)
-                                        ->pluck('id')
-                                        ->toArray();
+        // Si existe profesional, cargar sus lugares de atención
+        if ($profesional) {
+            $array_id_lugare = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+                                                                                        ->pluck('id_lugar_atencion')
+                                                                                        ->toArray();
 
-        $institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        // ->where('id_tipo_institucion', 3)
+            $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
+                                            ->pluck('id')
+                                            ->toArray();
+
+            $institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)->get();
+
+            if($institucion && $institucion->count() > 0)
+            {
+                // Solo cargar sucursales de instituciones que tienen el atributo sucursales = 1
+                $array_institucion_con_sucursales = $institucion
+                    ->where('sucursales', 1)
+                    ->pluck('id')
+                    ->toArray();
+
+                if(!empty($array_institucion_con_sucursales)) {
+                    $sucursales = Sucursal::with('Horario')
+                                        ->whereIn('id_institucion', $array_institucion_con_sucursales)
                                         ->get();
 
-        $procedimientos = '';
-        if($institucion)
-        {
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
-
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
+                    foreach ($sucursales as $key => $value) {
+                        $inst_tem = Instituciones::find($value->id_institucion);
+                        $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
+                        $sucursales[$key]->procedimiento = $procedimientos;
+                    }
+                } else {
+                    // La institución no registra sucursales: array vacío
+                    $sucursales = collect([]);
+                    // Cargar procedimientos desde el lugar_atencion principal
+                    $lugar_atencion_principal = $institucion[0]->id_lugar_atencion;
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $lugar_atencion_principal)->get();
+                }
             }
-        }
-        else
-        {
-            $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare)
-                            ->pluck('id_institucion')
+            else
+            {
+                // Si no hay institución, buscar en sucursales
+                $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare)
+                                ->pluck('id_institucion')
+                                ->toArray();
+
+                if(!empty($array_id_lug)) {
+                    $array_institucion = Instituciones::whereIn('id', $array_id_lug)->where('id_tipo_institucion', 3)
+                                                        ->pluck('id')
+                                                        ->toArray();
+                    $institucion = Instituciones::whereIn('id', $array_id_lug)->where('id_tipo_institucion', 3)->get();
+
+                    if($institucion && $institucion->count() > 0) {
+                        $array_institucion_con_sucursales = $institucion
+                            ->where('sucursales', 1)
+                            ->pluck('id')
                             ->toArray();
 
-            $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
-                                                ->pluck('id')
-                                                ->toArray();
-            $institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)->get();
+                        if(!empty($array_institucion_con_sucursales)) {
+                            $sucursales = Sucursal::with('Horario')
+                                                ->whereIn('id_institucion', $array_institucion_con_sucursales)
+                                                ->get();
 
+                            foreach ($sucursales as $key => $value) {
+                                $inst_tem = Instituciones::find($value->id_institucion);
+                                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
+                                $sucursales[$key]->procedimiento = $procedimientos;
+                            }
+                        } else {
+                            $sucursales = collect([]);
+                            $lugar_atencion_principal = $institucion[0]->id_lugar_atencion;
+                            $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $lugar_atencion_principal)->get();
+                        }
+                    }
+                }
+            }
+        }
 
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
+        // Si no hay institución/sucursal o no existe profesional, buscar en Laboratorio
+        if($institucion->count() === 0) {
+            $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
 
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
+            if($laboratorio) {
+                $lugar_atencion_principal = $laboratorio->id_lugar_atencion;
+                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $lugar_atencion_principal)->get();
+                // Crear una colección con los datos del laboratorio como institución
+                $institucion = collect([
+                    (object)[
+                        'id' => $laboratorio->id,
+                        'id_lugar_atencion' => $laboratorio->id_lugar_atencion,
+                        'nombre' => $laboratorio->nombre ?? 'Laboratorio',
+                        'sucursales' => 0
+                    ]
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontraron lugares de atención',
+                    'error' => 'No se encontraron instituciones, sucursales ni laboratorio asignado'
+                ], 404);
             }
         }
 
@@ -3144,16 +3872,70 @@ class LaboratorioController extends Controller
         $tipo_bonos = TipoBono::where('estado', 1)->get();
         $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
 
+        // Validar que lugar_atencion_principal esté definido
+        if(!$lugar_atencion_principal && $institucion->count() > 0) {
+            $lugar_atencion_principal = $institucion[0]->id_lugar_atencion;
+        }
+
+        $tipo_agendas = [];
+        if($lugar_atencion_principal) {
+            $tipo_agendas = ProfesionalHorario::select('tipo_agenda')
+                                            ->where('id_lugar_atencion', $lugar_atencion_principal)
+                                            ->where('id_profesional', $profesional->id)
+                                            ->groupBy('tipo_agenda')
+                                            ->pluck('tipo_agenda')
+                                            ->toArray();
+        }
+
+        $arrayTipoAgenda = array('', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Laboratorio');
+        $listaTipoAgendaProf = array();
+        foreach ($tipo_agendas as $keyTA => $valueTA) {
+            array_push($listaTipoAgendaProf, array('id' => $valueTA, 'texto' => $arrayTipoAgenda[$valueTA]));
+        }
+
         return view('app.laboratorio.agenda_laboratorio_adm')->with([
             'profesional' => $profesional,
             'institucion' => $institucion,
             'sucursales' => $sucursales,
             'procedimientos' => $procedimientos,
-
+            'listaTipoAgendaProf' => $listaTipoAgendaProf,
+            'lugar_atencion' => $lugar_atencion_principal,
             'prevision' => $prevision,
             'tipo_bonos' => $tipo_bonos,
             'reg_confirmacion_hora' => $reg_confirmacion_hora,
         ]);
+    }
+
+    public function actualizarPrestacionLab(Request $request)
+    {
+        try {
+
+            $prestacion = ProcedimientosCentro::find($request->id);
+
+            if (!$prestacion) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Prestación no encontrada'
+                ]);
+            }
+            $prestacion->nombre = $request->nombre;
+            $prestacion->descripcion = $request->descripcion;
+            $prestacion->cantidad_bloques = $request->cantidad_bloques;
+            $prestacion->valor = $request->valor;
+            $prestacion->indicaciones = $request->indicaciones;
+            $prestacion->save();
+
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Prestación actualizada correctamente'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function dame_especialidades_cm($id_institucion){
@@ -3295,7 +4077,17 @@ class LaboratorioController extends Controller
                                     }
                                     else
                                     {
-                                        return back()->with('error','Institución no encontrada');
+                                        //return back()->with('error','Institución no encontrada');
+                                        $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                                        if($registro){
+                                            /** LABORATORIO */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'laboratorio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
                                     }
                                 }
                             }
@@ -3308,7 +4100,16 @@ class LaboratorioController extends Controller
                 }
                 else
                 {
-                    return back()->with('error','Institución no encontrada');
+                    $registro = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                    if($registro){
+                        /** LABORATORIO */
+                        $institucion = $registro;
+                        $tipo_institucion = 'laboratorio';
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
                 }
 
             }
@@ -3363,19 +4164,33 @@ class LaboratorioController extends Controller
 
     public function cargarAgendaSucursalBox(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
 
         if($valido)
         {
-            $sucursal = Sucursal::find($request->id_sucursal);
-            $horario_suc = SucursalHorario::where('id_sucursal', $request->id_sucursal)
-                                            ->where('id_lugar_atencion', $request->id_lugar_atencion)
-                                            ->get();
+            // Si id_sucursal es 0 o vacío la institución no registra sucursales;
+            // se usa id_lugar_atencion directamente para resolver la institución.
+            $sinSucursal = (empty($request->id_sucursal) || $request->id_sucursal == 0);
 
-            if($horario_suc)
+            $sucursal = $sinSucursal ? null : Sucursal::find($request->id_sucursal);
+
+            // Horario: sin sucursal se busca por lugar_atencion ignorando id_sucursal
+            if($sinSucursal) {
+                $horario_suc = SucursalHorario::where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+            } else {
+                $horario_suc = SucursalHorario::where('id_sucursal', $request->id_sucursal)
+                                                ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                                                ->get();
+            }
+
+
+
+            if($horario_suc->count() > 0)
             {
+
                 $horario_data = array();
                 $horario_agenda = '0,1,2,3,4,5,6';
                 $periodo_agenda = '';
@@ -3419,10 +4234,14 @@ class LaboratorioController extends Controller
                 $horario_data['hora_termino_agenda'] = $hora_termino_agenda;
 
 
-                $id_institucion = $sucursal->id_institucion;
-
-                $institucion = Instituciones::find($id_institucion);
-
+                // Resolver institución: si hay sucursal la obtenemos de ella,
+                // si no (sin sucursales) la buscamos directo por id_lugar_atencion.
+                if($sucursal) {
+                    $id_institucion = $sucursal->id_institucion;
+                    $institucion = Instituciones::find($id_institucion);
+                } else {
+                    $institucion = Instituciones::where('id_lugar_atencion', $request->id_lugar_atencion)->first();
+                }
 
                 $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $institucion->id_lugar_atencion)->get();
 
@@ -3438,9 +4257,61 @@ class LaboratorioController extends Controller
             }
             else
             {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'sin horario';
-                $datos['request'] = $request->all();
+                // Si no hay horarios en SucursalHorario, buscar en ProfesionalHorario
+                $horario_prof = ProfesionalHorario::where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+
+                if ($horario_prof && $horario_prof->count() > 0) {
+                    // Procesar datos igual que con SucursalHorario
+                    $horario_data = array();
+                    $horario_agenda = '0,1,2,3,4,5,6';
+                    $periodo_agenda = '';
+                    $periodo_agenda_temp = '01:00';
+                    $hora_inicio_agenda = '';
+                    $hora_inicio_agenda_temp = '24:00';
+                    $hora_termino_agenda = '';
+                    $hora_termino_agenda_temp = 0;
+                    foreach ($horario_prof as $hor) {
+                        $ho = explode(',', $hor->dia);
+                        foreach ($ho as $h) {
+                            if ($h == '0') {
+                                $horario_agenda = str_replace($h, '', $horario_agenda);
+                            } else {
+                                $horario_agenda = str_replace(',' . $h, '', $horario_agenda);
+                            }
+                        }
+                        if(strtotime($hor->duracion_consulta) < strtotime($periodo_agenda_temp))
+                            $periodo_agenda_temp = $hor->duracion_consulta;
+
+                        if(strtotime($hor->hora_inicio) < strtotime($hora_inicio_agenda_temp))
+                            $hora_inicio_agenda_temp = $hor->hora_inicio;
+
+                        if(strtotime($hor->hora_termino) > strtotime($hora_termino_agenda_temp))
+                            $hora_termino_agenda_temp = $hor->hora_termino;
+                    }
+                    $horario_agenda = ltrim($horario_agenda, ',');
+                    $periodo_agenda = $periodo_agenda_temp;
+                    $hora_inicio_agenda = $hora_inicio_agenda_temp;
+                    $hora_termino_agenda = $hora_termino_agenda_temp;
+
+                    $horario_data['horario_agenda'] = $horario_agenda;
+                    $horario_data['periodo_agenda'] = $periodo_agenda;
+                    $horario_data['hora_inicio_agenda'] = $hora_inicio_agenda;
+                    $horario_data['hora_termino_agenda'] = $hora_termino_agenda;
+
+                    $institucion = Instituciones::where('id_lugar_atencion', $request->id_lugar_atencion)->first();
+                    $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'horario_profesional';
+                    $datos['horario'] = $horario_prof;
+                    $datos['horario_data'] = $horario_data;
+                    $datos['procedimientos'] = $procedimientos;
+                    $datos['request'] = $request->all();
+                } else {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'sin horario';
+                    $datos['request'] = $request->all();
+                }
             }
         }
         else
@@ -3453,8 +4324,29 @@ class LaboratorioController extends Controller
         return $datos;
     }
 
+    public function distribuidores(){
+                // Resolver la institución/laboratorio del usuario autenticado
+        $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$laboratorio) {
+            $responsable = AdminInstServ::where('id_admin', Auth::user()->id)->first();
+            if ($responsable) {
+                $laboratorio = Laboratorio::where('id_responsable', $responsable->id)->first();
+            }
+        }
+
+        if (!$laboratorio) {
+            //return back()->with('error', 'Institución no encontrada');
+        }
+        return view('app.laboratorio.adm_general.distribuidores.home', [
+            'laboratorio' => $laboratorio,
+            'institucion' => $laboratorio, // Para mantener compatibilidad con vistas que esperan una variable 'institucion'
+        ]);
+    }
+
     public function agendar_horas(Request $request)
     {
+
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         // $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
@@ -3502,9 +4394,11 @@ class LaboratorioController extends Controller
         // var_dump($profesional->id);
         // var_dump($filtro_tipo_hora_medica);
         // var_dump(\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'));
+
         $validar = HoraMedica::where('id_paciente', $paciente->id)
                                 ->whereIn('id_estado',[1,2,4,5,6,8])
-                                ->where('id_box',$request->id_box)
+                                ->where('id_box',$request->id_box ? $request->id_box : null)
+                                ->where('id_lugar_atencion', $request->id_lugar_atencion ? $request->id_lugar_atencion : null)
                                 ->whereIn('tipo_hora_medica',$filtro_tipo_hora_medica)
                                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                                 ->first();
@@ -3585,17 +4479,24 @@ class LaboratorioController extends Controller
         }
 
         $nombres_procedimientos = '';
+        $indicaciones_procedimientos = '';
         if(is_array($request->procedimiento))
         {
             $procedimiento_centro = ProcedimientosCentro::whereIn('id', $request->procedimiento)->get();
             foreach ($procedimiento_centro as $key_pc => $value_pc) {
                 $nombres_procedimientos .= $value_pc->nombre.', ';
+                if(!empty($value_pc->indicaciones)){
+                    $indicaciones_procedimientos .= '<strong>' . $value_pc->nombre . ':</strong><br>' . $value_pc->indicaciones . '<br><br>';
+                }
             }
         }
         else
         {
             $procedimiento_centro = ProcedimientosCentro::find($procedimiento);
             $nombres_procedimientos = $procedimiento_centro->nombre;
+            if(!empty($procedimiento_centro->indicaciones)){
+                $indicaciones_procedimientos = $procedimiento_centro->indicaciones;
+            }
         }
 
 
@@ -3626,6 +4527,7 @@ class LaboratorioController extends Controller
             'hora'=> $hora_medica->hora_inicio,
             'lugar_atencion'=> $lugar_atencion->nombre,
             'procedimiento'=> $nombres_procedimientos,
+            'indicaciones'=> $indicaciones_procedimientos,
             'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
         );
         $archivo = '';/** pendiente */
@@ -3650,14 +4552,18 @@ class LaboratorioController extends Controller
     public function cargarResultado(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
         $array_id_lugare_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
                                                                                     ->pluck('id_lugar_atencion')
                                                                                     ->toArray();
+
+
 
         $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare_prof)
                                         ->where('id_tipo_institucion', 3)
                                         ->pluck('id')
                                         ->toArray();
+
 
         if($array_institucion)
         {
@@ -3680,6 +4586,8 @@ class LaboratorioController extends Controller
                                                 ->toArray();
         }
 
+
+
         $horas_medicas = HoraMedica::select('horas_medicas.id','horas_medicas.fecha_consulta','horas_medicas.hora_inicio',
                                             'horas_medicas.hora_termino', 'horas_medicas.tipo_hora_medica', 'horas_medicas.alias_examen',
                                             'horas_medicas.id_box', 'horas_medicas.id_procedimiento', 'horas_medicas.id_jitsi_video_consulta',
@@ -3698,22 +4606,44 @@ class LaboratorioController extends Controller
                                     ->with(['FichaOtrosProfesionales' => function($query){
                                         $query->where('estado_archivo', 0);
                                     }])
-                                    ->join('ficha_otros_profesionales', function($join){
+                                    ->with(['FichaAtencion' => function($query){
+                                        $query->where('estado_archivo', 0);
+                                    }])
+                                    // LEFT JOIN para considerar fichas de otros profesionales (fonoaudiología, etc)
+                                    ->leftJoin('ficha_otros_profesionales', function($join){
                                         $join->on('ficha_otros_profesionales.id', '=', 'horas_medicas.id_ficha_otros_prof');
                                         $join->where('ficha_otros_profesionales.estado_archivo',0);
                                     })
+                                    // LEFT JOIN para considerar fichas de atención (laboratorio, rayos X, etc)
+                                    ->leftJoin('fichas_atenciones', function($join){
+                                        $join->on('fichas_atenciones.id', '=', 'horas_medicas.id_ficha_atencion');
+                                        $join->where('fichas_atenciones.estado_archivo',0);
+                                    })
                                     ->whereIn('horas_medicas.id_lugar_atencion', $array_id_lugar_suc)
                                     ->where('horas_medicas.id_estado', 6)// realizadas
+
+                                    ->where('horas_medicas.id_profesional', $profesional->id)
+                                    // Verificar que tenga al menos una ficha válida (otros profesionales O atención)
+                                    ->where(function($query) {
+                                        $query->whereNotNull('ficha_otros_profesionales.id')
+                                              ->orWhereNotNull('fichas_atenciones.id');
+                                    })
                                     ->get();
 
         // echo json_encode($horas_medicas);
         // die();
 
 
+                $lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->first();
+
+                $institucion = Instituciones::where('id_lugar_atencion',$lugar_atencion->id_lugar_atencion)->first();
+
 
         return view('app.laboratorio.subir_examenes')->with([
             'horas_medicas' => $horas_medicas,
             'array_lugares' => implode(",", $array_id_lugar_suc),
+            'institucion' => $institucion,
+            'profesional' => $profesional,
         ]);
     }
 
@@ -3747,15 +4677,29 @@ class LaboratorioController extends Controller
             ->with(['FichaOtrosProfesionales' => function($query){
                 $query->where('estado_archivo', 0);
             }])
-            ->join('ficha_otros_profesionales', function($join){
+            ->with(['FichaAtencion' => function($query){
+                $query->where('estado_archivo', 0);
+            }])
+            // LEFT JOIN para considerar fichas de otros profesionales (fonoaudiología, etc)
+            ->leftJoin('ficha_otros_profesionales', function($join){
                 $join->on('ficha_otros_profesionales.id', '=', 'horas_medicas.id_ficha_otros_prof');
                 $join->where('ficha_otros_profesionales.estado_archivo',0);
+            })
+            // LEFT JOIN para considerar fichas de atención (laboratorio, rayos X, etc)
+            ->leftJoin('fichas_atenciones', function($join){
+                $join->on('fichas_atenciones.id', '=', 'horas_medicas.id_ficha_atencion');
+                $join->where('fichas_atenciones.estado_archivo',0);
             })
             ->join('pacientes', function($join) use ( $rut, $nombre, $apellido ) {
                 $join->on('pacientes.id', '=', 'horas_medicas.id_paciente');
             } )
             ->whereIn('horas_medicas.id_lugar_atencion', explode(",",$request->lista_array))
             ->where('horas_medicas.id_estado', 6)// realizadas
+            // Verificar que tenga al menos una ficha válida (otros profesionales O atención)
+            ->where(function($query) {
+                $query->whereNotNull('ficha_otros_profesionales.id')
+                      ->orWhereNotNull('fichas_atenciones.id');
+            })
             ->where(function ($query) use ($rut, $nombre, $apellido) {
                 if (!empty($rut)) {
                     $query->where('pacientes.rut', 'like', '%' . $rut . '%');
@@ -3764,7 +4708,7 @@ class LaboratorioController extends Controller
                     $query->where('pacientes.nombres', 'like', '%' . $nombre . '%');
                 }
                 if (!empty($apellido)) {
-                    $query->where('pacientes.apellido_uno', 'like', '%' . $apellido . '%')->whereOr('pacientes.apellido_dos', 'like', '%' . $apellido . '%');
+                    $query->where('pacientes.apellido_uno', 'like', '%' . $apellido . '%')->orWhere('pacientes.apellido_dos', 'like', '%' . $apellido . '%');
                 }
             })
             ->get();
@@ -3792,87 +4736,154 @@ class LaboratorioController extends Controller
         return $datos;
     }
 
-    public function subirResultado(Request $request)
+     public function subirResultado(Request $request)
     {
-        $datos = array();
         $error = array();
         $valido = 1;
 
+        // Validar que se recibió el tipo de ficha
+        if(empty($request->tipo_ficha))
+        {
+            return response()->json([
+                'estado' => 0,
+                'msj'    => 'tipo de ficha no especificado',
+            ]);
+        }
+
         if($valido)
         {
-            $registro = FichaOtrosProfesionales::find($request->id_ficha_otros_profesionales);
+            // Buscar el registro según el tipo de ficha
+            $registro = null;
+            $tipo_ficha = $request->tipo_ficha;
+
+            if($tipo_ficha === 'otros_prof')
+            {
+                // Buscar en ficha_otros_profesionales
+                $registro = FichaOtrosProfesionales::find($request->id_ficha_otros_profesionales);
+            }
+            elseif($tipo_ficha === 'ficha_atencion')
+            {
+                // Buscar en fichas_atenciones (laboratorio, rayos X)
+                $registro = FichaAtencion::find($request->id_ficha_otros_profesionales);
+            }
+            else
+            {
+                return response()->json([
+                    'estado' => 0,
+                    'msj'    => 'tipo de ficha inválido: ' . $tipo_ficha,
+                ]);
+            }
 
             if($registro)
             {
+                // Acumular archivos existentes en lugar de sobrescribir
                 $registro_archivo = array();
+                if(!empty($registro->archivo))
+                {
+                    $archivos_existentes = json_decode($registro->archivo, true);
+                    if(is_array($archivos_existentes))
+                        $registro_archivo = $archivos_existentes;
+                }
+
                 if(!empty($request->lista_archivos))
                 {
                     $paciente = Paciente::find($request->id_paciente);
+
                     $array_archivo = json_decode($request->lista_archivos);
 
-                    $resulto_img = array();
                     foreach ($array_archivo as $key => $value)
                     {
-                        $ruta_temp = $value[0];
-                        $nombre_real = $value[1];
-                        $nombre_temp = $value[2];
-                        $file_extension = $value[3];
-                        $nombre_final = $paciente->rut.'_examen_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+                        $nombre_temp      = $value[2];
+                        $file_extension   = $value[3];
+                        $nombre_final     = $paciente->rut.'_examen_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
 
-                        $resulto_archivo[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
-                        $url = $resulto_archivo[$key]['proceso']['url'];
-
-                        $url_temp = Storage::disk('archivo_archivo')->url($nombre_final);
-                        $archivo_correo[] = array('url' => $url_temp, 'nombre' => $nombre_final);
+                        $resulto_archivo  = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+                        $url              = $resulto_archivo['proceso']['url'];
 
                         array_push($registro_archivo, array(
                             'nombre' => $nombre_final,
-                            'url' => $url
+                            'url'    => $url
                         ));
                     }
 
-                    $registro_archivo = json_encode($registro_archivo);
-                }
-
-                if(!empty($registro_archivo))
                     $registro->estado_archivo = 1;
-                else
-                    $registro->estado_archivo = 0;
+                    $registro->archivo        = json_encode($registro_archivo);
 
-                $registro->archivo = $registro_archivo;
+                    if($registro->save())
+                    {
+                        // Notificar al paciente por email
+                        if($paciente && $paciente->email)
+                        {
+                            try
+                            {
+                                $procedimiento = 'Examen';
+                                $hora_medica   = HoraMedica::find($request->id_hora);
+                                if($hora_medica && $hora_medica->procedimientocentro)
+                                    $procedimiento = $hora_medica->procedimientocentro->nombre;
 
-                if($registro->save())
-                {
-                    $datos['estado'] = 1;
-                    $datos['msj'] = 'exito';
+                                $url_documento = !empty($registro_archivo) ? $registro_archivo[0]['url'] : '';
+
+                                $datos_correo = [
+                                    'asunto'      => 'Resultado de examen disponible - Medichile',
+                                    'blade'       => 'resultado_examen',
+                                    'url_archivo' => null,
+                                    'body'        => [
+                                        'nombre_cliente' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                                        'mensaje'        => 'El resultado de su examen <strong>'.$procedimiento.'</strong> ya está disponible. Fecha de carga: '.now()->format('d/m/Y H:i').'.',
+                                        'url_documento'  => $url_documento,
+                                    ],
+                                ];
+                                Mail::to($paciente->email)->send(new CorreoGenerico($datos_correo));
+                            }
+                            catch(\Exception $e)
+                            {
+                                \Log::warning('No se pudo enviar email de resultado examen: '.$e->getMessage());
+                            }
+                        }
+
+                        return response()->json([
+                            'estado'     => 1,
+                            'msj'        => 'exito',
+                            'tipo_ficha' => $tipo_ficha,
+                        ]);
+                    }
+                    else
+                    {
+                        return response()->json([
+                            'estado' => 0,
+                            'msj'    => 'falla en registro',
+                        ]);
+                    }
                 }
                 else
                 {
-                    $datos['estado'] = 0;
-                    $datos['msj'] = 'falla en registro';
+                    return response()->json([
+                        'estado' => 0,
+                        'msj'    => 'No se recibieron archivos',
+                    ]);
                 }
             }
             else
             {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'registro no encontrado';
+                return response()->json([
+                    'estado' => 0,
+                    'msj'    => 'registro no encontrado para tipo: ' . $tipo_ficha,
+                ]);
             }
         }
         else
         {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'campos requeridos';
-            $datos['error'] = $error;
+            return response()->json([
+                'estado' => 0,
+                'msj'    => 'campos requeridos',
+                'error'  => $error,
+            ]);
         }
-
-        return $datos;
     }
 
     public function buscar_pacientes_profesional_asistente(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-
-
 
         if($profesional)
         {
@@ -3890,6 +4901,13 @@ class LaboratorioController extends Controller
                 $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
                                 ->pluck('id_lugar_atencion')
                                 ->toArray();
+
+                if(count($array_id_lugar_suc) == 0)
+                {
+                    $array_id_lugar_suc = Laboratorio::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                                            ->pluck('id_lugar_atencion')
+                                            ->toArray();
+                }
             }
             else
             {
@@ -3951,18 +4969,26 @@ class LaboratorioController extends Controller
         return view($url, $array_data);
     }
 
-    public function audifonosVenta(Request $request)
+    public function audifonosVenta($id_lugar_atencion)
     {
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $permisos = PermisoProfesional::where('id_profesional', $profesional->id)->first();
         $prevision = Prevision::all();
         $regiones = Region::all();
+
+
+        $lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->first();
+
+        $institucion = Instituciones::where('id_lugar_atencion',$lugar_atencion->id_lugar_atencion)->first();
 
         return view('app.laboratorio.lab_profesional.venta_audifono',[
             'profesional' => $profesional,
             'permiso_profesional' => $permisos,
             'prevision' => $prevision,
             'regiones' => $regiones,
+            'id_lugar_atencion' => $id_lugar_atencion,
+            'institucion' => $institucion,
         ]);
     }
 
@@ -3970,19 +4996,72 @@ class LaboratorioController extends Controller
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $permisos = PermisoProfesional::where('id_profesional', $profesional->id)->first();
+
+        $lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->first();
+
+        $institucion = Instituciones::where('id_lugar_atencion',$lugar_atencion->id_lugar_atencion)->first();
         return view('app.laboratorio.lab_profesional.control_audifono',[
             'profesional' => $profesional,
             'permiso_profesional' => $permisos,
+            'institucion' => $institucion,
         ]);
     }
 
+    /**
+     * Obtener productos del paciente para devolver a proveedor
+     */
+    public function obtenerProductosPacienteParaDevolver(Request $request)
+    {
+        try {
+            $id_paciente = $request->input('id_paciente');
+
+            if (!$id_paciente) {
+                return response()->json(['estado' => 0, 'mensaje' => 'ID de paciente requerido']);
+            }
+
+            // Obtener productos del paciente desde mis_productos
+            // Se unen con productos para obtener nombre, código e imagen
+            $productos = DB::table('mis_productos')
+                ->join('productos', 'mis_productos.id_producto', 'productos.id')
+                ->leftJoin('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->select(
+                    'mis_productos.id',
+                    'productos.id as id_producto',
+                    'productos.nombre',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'mis_productos.fecha_compra',
+                    'mis_productos.observaciones'
+                )
+                ->where('mis_productos.id_paciente', $id_paciente)
+                ->where('mis_productos.estado', 1) // Solo productos activos
+                ->orderBy('mis_productos.fecha_compra', 'desc')
+                ->get();
+
+            if (count($productos) === 0) {
+                return response()->json(['estado' => 1, 'mensaje' => 'Sin productos', 'productos' => []]);
+            }
+
+            return response()->json(['estado' => 1, 'productos' => $productos]);
+        } catch (\Exception $e) {
+            return response()->json(['estado' => 0, 'mensaje' => $e->getMessage()]);
+        }
+    }
+
     public function estadisticas($id_institucion = null){
+
         if($id_institucion){
             $institucion = Instituciones::find($id_institucion);
+
             if(!$institucion){
-                return redirect()->route('laboratorio.escritorio_adm_comercial')->with('error','Institución no encontrada');
+                $institucion = Laboratorio::where('id_usuario', Auth::user()->id)->first();
+                if(!$institucion){
+                    return redirect()->back()->with('error', 'Institución no encontrada');
+                }
             }
         }
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $profesionales = [];
         if(isset($institucion)){
@@ -4010,6 +5089,12 @@ class LaboratorioController extends Controller
         }else{
             $sucursales = [];
         }
+
+
+        // $lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->first();
+
+        $institucion = Instituciones::where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+
         return view('app.laboratorio.lab_profesional.estadisticas',[
             'profesional' => $profesional,
             'institucion' => isset($institucion) ? $institucion : null,
@@ -4026,6 +5111,7 @@ class LaboratorioController extends Controller
         $id_sucursal = $request->id_sucursal ?? null;
         $id_profesional = $request->id_profesional ?? null;
         $tipo_estadistica = $request->tipo_estadistica ?? null;
+
 
         if($tipo_estadistica == 'ventas'){
             $profesional = Profesional::find($id_profesional);
@@ -4113,9 +5199,15 @@ class LaboratorioController extends Controller
 
         if($tipo_estadistica == 'profesional'){
             $profesional = Profesional::find($id_profesional);
+            $institucion = Instituciones::find($id_institucion);
+            return $institucion;
+            if(!$institucion){
+                $institucion = Sucursal::find($id_sucursal);
+            }
             if($profesional){
                 $mis_pacientes = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                ->where('horas_medicas.id_lugar_atencion', $institucion->id_lugar_atencion)
                 ->where('horas_medicas.id_estado', 6) // solo horas realizadas
                 ->select('horas_medicas.id_profesional')
                 ->selectRaw('COUNT(DISTINCT horas_medicas.id_paciente) as cantidad_pacientes')
@@ -4143,6 +5235,7 @@ class LaboratorioController extends Controller
                         'cantidad_pacientes' => $item->cantidad_pacientes,
                     ];
                 });
+
                 $mis_pacientes_agendados = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
                 ->where('horas_medicas.id_estado', 1) // solo horas agendadas
@@ -4595,10 +5688,14 @@ class LaboratorioController extends Controller
 
         if($tipo_estadistica == 'agenda'){
             $profesional = Profesional::find($id_profesional);
-
+            $institucion = Instituciones::find($request->id_institucion);
+            if(!$institucion){
+                $institucion = Sucursal::find($request->id_sucursal);
+            }
             if($profesional){
                 $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $id_profesional)
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                                ->where('horas_medicas.id_lugar_atencion', $institucion->id_lugar_atencion)
                                 ->with('Estado')
                                 ->get();
 
@@ -4700,36 +5797,88 @@ class LaboratorioController extends Controller
         }
 
         if($tipo_estadistica == 'comparativo'){
-            // Obtener los lugares de atención de la institución
-            $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
-            $lugares_atencion_institucion = Sucursal::where('id_institucion', $laboratorio->id)->pluck('id_lugar_atencion')->toArray();
-            array_push($lugares_atencion_institucion, LugarAtencion::where('id', $laboratorio->id_lugar_atencion)->first()->id);
+            if(!$id_institucion){
+                // Obtener los lugares de atención de la institución
+                $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
+                $lugares_atencion_institucion = Sucursal::where('id_institucion', $laboratorio->id)->pluck('id_lugar_atencion')->toArray();
+                array_push($lugares_atencion_institucion, LugarAtencion::where('id', $laboratorio->id_lugar_atencion)->first()->id);
 
-            // Ingresos (ventas)
-            $mis_ventas = MisProducto::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
-                ->with('Producto')
-                ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                ->get();
+                // Ingresos (ventas)
+                $mis_ventas = MisProducto::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
+                    ->with('Producto')
+                    ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                    ->get();
 
-            $total_ingresos = 0;
-            foreach ($mis_ventas as $venta) {
-                $precio = $venta['producto']['precio_venta'];
-                $total_ingresos += $precio;
+                // atenciones
+                $horas_medicas = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
+                                ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                                ->join('procedimientos_centro', 'procedimientos_centro.id', 'horas_medicas.id_procedimiento')
+                                ->where('id_estado', 6) // realizadas
+                                ->get();
+
+                $total_atenciones = 0;
+                foreach($horas_medicas as $hora_medica) {
+                    $total_atenciones += $hora_medica->valor;
+                }
+
+                $total_ingresos = 0;
+                foreach ($mis_ventas as $venta) {
+                    $precio = $venta['producto']['precio_venta'];
+                    $total_ingresos += $precio;
+                }
+
+                $total_ingresos += $total_atenciones;
+
+                // Gastos
+                $gastos = GastosInstitucionales::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
+                    ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                    ->get();
+
+                $total_gastos = $gastos->sum('monto'); // Asegúrate que el campo sea 'monto' o el que corresponda
+
+                return view('app.laboratorio.lab_profesional.estadisticas_comparativa', [
+                    'total_ingresos' => $total_ingresos,
+                    'total_gastos' => $total_gastos,
+                    'mis_ventas' => $mis_ventas,
+                    'gastos' => $gastos,
+                ]);
+            }else{
+                $laboratorio = Sucursal::where('id', $id_institucion)->first();
+                $lugares_atencion_institucion = [$laboratorio->id_lugar_atencion];
+                // Ingresos (ventas)
+                $mis_ventas = MisProducto::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
+                    ->with('Producto')
+                    ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                    ->get();
+                // atenciones
+                $horas_medicas = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
+                                ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                                ->join('procedimientos_centro', 'procedimientos_centro.id', 'horas_medicas.id_procedimiento')
+                                ->where('id_estado', 6) // realizadas
+                                ->get();
+                $total_atenciones = 0;
+                foreach($horas_medicas as $hora_medica) {
+                    $total_atenciones += $hora_medica->valor;
+                }
+                $total_ingresos = 0;
+                foreach ($mis_ventas as $venta) {
+                    $precio = $venta['producto']['precio_venta'];
+                    $total_ingresos += $precio;
+                }
+                $total_ingresos += $total_atenciones;
+                // Gastos
+                $gastos = GastosInstitucionales::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
+                    ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
+                    ->get();
+                $total_gastos = $gastos->sum('monto'); // Asegúrate que el campo sea 'monto' o el que corresponda
+                return view('app.laboratorio.lab_profesional.estadisticas_comparativa', [
+                    'total_ingresos' => $total_ingresos,
+                    'total_gastos' => $total_gastos,
+                    'mis_ventas' => $mis_ventas,
+                    'gastos' => $gastos,
+                ]);
             }
 
-            // Gastos
-            $gastos = GastosInstitucionales::whereIn('id_lugar_atencion', $lugares_atencion_institucion)
-                ->whereBetween('created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
-                ->get();
-
-            $total_gastos = $gastos->sum('monto'); // Asegúrate que el campo sea 'monto' o el que corresponda
-
-            return view('app.laboratorio.lab_profesional.estadisticas_comparativa', [
-                'total_ingresos' => $total_ingresos,
-                'total_gastos' => $total_gastos,
-                'mis_ventas' => $mis_ventas,
-                'gastos' => $gastos,
-            ]);
         }
 
         $sucursal = Sucursal::find($id_sucursal);
@@ -4996,6 +6145,7 @@ class LaboratorioController extends Controller
                     $sucursales_institucion = Sucursal::where('id_institucion', $institucion->id)->get();
                     $lugares_atencion_institucion = $sucursales_institucion->pluck('id_lugar_atencion')->toArray();
                 }
+
                 if($sucursal){
                     $lugares_atencion_institucion = [$sucursal->id_lugar_atencion];
                 }
@@ -5007,6 +6157,7 @@ class LaboratorioController extends Controller
                     $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
                     $id_profesional = $profesional->id;
                 }
+
                 $horas_medicas = HoraMedica::whereIn('horas_medicas.id_lugar_atencion', $lugares_atencion_institucion)
                                 ->where('horas_medicas.id_profesional', $id_profesional)
                                 ->whereBetween('horas_medicas.created_at', [$fecha_inicio.' 00:00:00', $fecha_fin.' 23:59:59'])
@@ -5034,6 +6185,7 @@ class LaboratorioController extends Controller
                     }
                     $productos[$nombre]['total'] += $precio;
                 }
+
                 return view('app.laboratorio.lab_profesional.estadisticas_resultado_remuneraciones',[
                     'institucion' => $institucion,
                     'horas_medicas' => $horas_medicas,
@@ -5052,6 +6204,7 @@ class LaboratorioController extends Controller
 
     public function finalizar_contrato(Request $request){
         try {
+
             $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;
@@ -5731,6 +6884,27 @@ class LaboratorioController extends Controller
             // Si no es 0, buscar productos normalmente
             $query = Producto::with(['tipoProducto', 'marca', 'bodega']);
 
+            // Filtrar por bodegas del lugar de atención
+            if (!empty($id_lugar_atencion)) {
+                $lugar_atencion = LugarAtencion::find($id_lugar_atencion);
+                $institucion = Instituciones::where('id_lugar_atencion', $id_lugar_atencion)->first();
+                $bodegas_ids = Bodega::where('id_institucion', $institucion->id)
+                                     ->pluck('id')
+                                     ->toArray();
+
+                if (!empty($bodegas_ids)) {
+                    $query->whereIn('id_bodega', $bodegas_ids);
+                } else {
+                    // Si no hay bodegas asignadas, retornar vacío
+                    return response()->json([
+                        'estado' => 1,
+                        'mensaje' => 'No hay bodegas asignadas a este lugar de atención',
+                        'productos' => [],
+                        'total' => 0
+                    ]);
+                }
+            }
+
             // Filtrar por tipo
             if (!empty($tipo_producto)) {
                 $query->tipoProducto($tipo_producto);
@@ -5787,6 +6961,8 @@ class LaboratorioController extends Controller
         $institucion = Instituciones::find($request->id_institucion);
         $id_lugar_atencion = $institucion->id_lugar_atencion;
 
+        $bodegas = Bodega::where('id_institucion', $institucion->id)->pluck('id')->toArray();
+
         // $productos = Producto::select(
         //         'productos.*',
         //         'tipo_producto.nombre as tipo_producto',
@@ -5819,12 +6995,14 @@ class LaboratorioController extends Controller
             ->leftJoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
             ->join('bodega', 'productos.id_bodega', 'bodega.id')
             ->where('productos.nombre', 'like', '%' . $request->nombre . '%')
+            ->whereIn('productos.id_bodega', $bodegas)
             ->groupBy('productos.codigo_interno')
             ->get();
 
         return response()->json([
             'estado' => 1,
-            'productos' => $productos
+            'productos' => $productos,
+            'bodegas' => $bodegas
         ]);
     }
 
@@ -5869,6 +7047,7 @@ class LaboratorioController extends Controller
             $nuevo_traspaso->id_bodega_destino = $request->id_bodega_destino;
             $nuevo_traspaso->cantidad = $request->cantidad;
             $nuevo_traspaso->id_responsable = Auth::id();
+
             $nuevo_traspaso->save();
 
             $producto->stock_actual -= $request->cantidad;
@@ -5911,6 +7090,7 @@ class LaboratorioController extends Controller
                 $nuevo_producto->stock_minimo = $producto->stock_minimo;
                 $nuevo_producto->stock_actual = $request->cantidad;
                 $nuevo_producto->id_bodega = $request->id_bodega_destino;
+
                 if($nuevo_producto->save()){
                     return response()->json([
                         'estado' => 1,
@@ -5922,6 +7102,7 @@ class LaboratorioController extends Controller
                     ]);
                 }
             }
+
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
@@ -5929,11 +7110,13 @@ class LaboratorioController extends Controller
                 'mensaje' => 'Error al realizar el traspaso: ' . $e->getMessage(),
             ]);
         }
+
     }
 
     public function rechazarProductosGuardar(Request $request){
         try {
             $producto = Producto::find($request->id_bodega_origen);
+
             $bodega_origen = Bodega::find($producto->id_bodega);
             $bodega_destino = Bodega::find($request->id_bodega_destino);
             // validar que el producto tenga stock suficiente
@@ -5954,6 +7137,7 @@ class LaboratorioController extends Controller
             $devolucion->id_bodega_origen = $producto->id_bodega;
             $devolucion->cantidad = $request->cantidad_rechazo;
             $devolucion->id_responsable = Auth::id();
+
             $devolucion->save();
 
             $producto->stock_actual -= $request->cantidad_rechazo;
@@ -5971,6 +7155,7 @@ class LaboratorioController extends Controller
                 'bodega_origen' => $bodega_origen,
                 'bodega_destino' => $bodega_destino,
             ]);
+
         } catch (\Exception $e) {
             //throw $th;
             return response()->json([
@@ -6043,7 +7228,7 @@ public function agregarAlCarrito(Request $request)
 
         // Obtener datos del usuario/profesional
         $id_usuario = Auth::id();
-        $profesional = \App\Models\Profesional::where('id_usuario', $id_usuario)->first();
+        $profesional = Profesional::where('id_usuario', $id_usuario)->first();
         $session_id = session()->getId();
 
         // Verificar si el producto ya está en el carrito
@@ -6081,9 +7266,21 @@ public function agregarAlCarrito(Request $request)
         $carritoItem = new CarritoCompra();
         $carritoItem->id_usuario = $id_usuario;
         $carritoItem->id_profesional = $profesional ? $profesional->id : null;
+        $carritoItem->id_cliente = $request->id_cliente; // Si llega vacío, guardará NULL
         $carritoItem->id_paciente = $request->id_paciente;
         $carritoItem->id_ficha = $request->id_ficha;
         $carritoItem->id_producto = $producto->id;
+
+        // Validar que si viene id_cliente, no sea NULL o vacío
+        if (empty($request->id_cliente) && !empty($request->id_paciente)) {
+            // OK - es un paciente sin cliente específico
+        } elseif (empty($request->id_cliente) && empty($request->id_paciente)) {
+            // ERROR - debe venir al menos un identificador
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'Debe especificar un cliente o paciente'
+            ], 400);
+        }
 
         // Cache de datos del producto
         $carritoItem->codigo_producto = $producto->codigo_interno;
@@ -6272,21 +7469,43 @@ public function agregarAlCarritoPrestamo(Request $request){
 public function obtenerCarrito(Request $request)
 {
     try {
+
         $id_usuario = Auth::id();
         $session_id = session()->getId();
+        $id_cliente = $request->input('id_cliente');
+        $id_paciente = $request->input('id_paciente');
 
-        $items = CarritoCompra::with(['producto', 'paciente'])
+        // Si no viene ni id_cliente ni id_paciente, devolver carrito vacío
+        if (empty($id_cliente) && empty($id_paciente)) {
+            return response()->json([
+                'estado' => 1,
+                'items' => [],
+                'total' => 0,
+                'cantidad_items' => 0,
+                'mensaje' => 'Carrito vacío (sin cliente o paciente seleccionado)'
+            ]);
+        }
+
+        // Construir query base - IMPORTANTE: filtrar siempre por id_usuario primero
+        $query = CarritoCompra::with(['producto', 'paciente'])
                               ->activos()
                               ->noExpirados()
-                              ->where(function($q) use ($id_usuario, $session_id) {
-                                  $q->where('id_usuario', $id_usuario)
-                                    ->orWhere('session_id', $session_id);
-                              })
-                              ->orderBy('created_at', 'desc')
-                              ->get();
+                              ->where('id_usuario', $id_usuario);
 
-        $total = CarritoCompra::obtenerTotal($id_usuario, $session_id);
-        $cantidadTotal = CarritoCompra::contarItems($id_usuario, $session_id);
+        // Filtrar por cliente o paciente
+        if (!empty($id_cliente)) {
+            // Buscar items que coincidan exactamente con el cliente
+            $query->where('id_cliente', $id_cliente);
+        } elseif (!empty($id_paciente)) {
+            // Si no hay id_cliente pero sí id_paciente, filtrar por paciente
+            $query->where('id_paciente', $id_paciente);
+        }
+
+        $items = $query->orderBy('created_at', 'desc')->get();
+
+        // Calcular totales directamente desde los items obtenidos
+        $total = $items->sum('subtotal');
+        $cantidadTotal = $items->sum('cantidad');
 
         return response()->json([
             'estado' => 1,
@@ -6303,6 +7522,7 @@ public function obtenerCarrito(Request $request)
         ], 500);
     }
 }
+
 
 /**
  * Obtener items del carrito de préstamos
@@ -6524,28 +7744,46 @@ public function procesarVentaCarrito(Request $request)
     try {
 
         $validated = $request->validate([
-            'id_paciente' => 'required|integer|exists:pacientes,id',
+            'id_cliente' => 'nullable|integer|exists:clientes,id',
+            'id_paciente' => 'nullable|integer|exists:pacientes,id',
             'id_ficha' => 'nullable|integer',
-            'metodo_pago' => 'required|string',
+            'id_forma_pago' => 'required|integer|exists:formas_pago,id',
             'observaciones' => 'nullable|string',
             'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id'
         ]);
 
-        $id_usuario = Auth::id();
+        // Obtener valores usando input() para evitar Undefined index
+        $id_cliente = $request->input('id_cliente');
+        $id_paciente = $request->input('id_paciente');
+        $id_forma_pago = $validated['id_forma_pago'];
 
+        // Validar que al menos uno esté presente
+        if (empty($id_cliente) && empty($id_paciente)) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'Debe enviar id_cliente o id_paciente'
+            ], 400);
+        }
+
+        $id_usuario = Auth::id();
         $session_id = session()->getId();
 
         DB::beginTransaction();
 
-        // Obtener items del carrito
-        $items = CarritoCompra::activos()
+        // Obtener items del carrito (filtrar por cliente o paciente según lo que llegue)
+        $query = CarritoCompra::activos()
                               ->noExpirados()
-                              ->where(function($q) use ($id_usuario, $session_id) {
-                                  $q->where('id_usuario', $id_usuario)
-                                    ->orWhere('session_id', $session_id);
-                              })
-                              ->get();
+                              ->where('id_usuario', $id_usuario);
 
+        if ($id_cliente) {
+            // Si llega id_cliente, filtrar por cliente
+            $query->where('id_cliente', $id_cliente);
+        } elseif ($id_paciente) {
+            // Si llega id_paciente, filtrar por paciente
+            $query->where('id_paciente', $id_paciente);
+        }
+
+        $items = $query->get();
 
         if ($items->isEmpty()) {
             return response()->json([
@@ -6565,7 +7803,98 @@ public function procesarVentaCarrito(Request $request)
             }
         }
 
-        // Marcar items como procesados
+        // Calcular totales
+        $total = $items->sum('subtotal');
+        $descuento_total = $items->sum('descuento');
+        $monto_neto = $total - $descuento_total;
+
+        // Determinar id_paciente para guardar el producto
+        $paciente_para_guardar = $id_paciente;
+
+        if (!$paciente_para_guardar && $id_cliente) {
+            // Si no hay id_paciente pero sí id_cliente, obtener del cliente
+            $cliente = Cliente::find($id_cliente);
+            if ($cliente && $cliente->id_paciente) {
+                $paciente_para_guardar = $cliente->id_paciente;
+            }
+        }
+
+        // Si aún no hay id_paciente, intentar obtener del primer item del carrito
+        if (!$paciente_para_guardar && $items->isNotEmpty() && $items->first()->id_paciente) {
+            $paciente_para_guardar = $items->first()->id_paciente;
+        }
+
+        // Si es CLIENTE (distribuidores), guardar en PedidosDistribucion
+        if ($id_cliente && !empty($id_cliente)) {
+            $items_pedido = $items->map(function($item) {
+                return [
+                    'id_producto' => $item->id_producto,
+                    'nombre_producto' => $item->nombre_producto,
+                    'cantidad' => $item->cantidad,
+                    'precio_unitario' => $item->precio_unitario,
+                    'descuento' => $item->descuento,
+                    'subtotal' => $item->subtotal,
+                    'observaciones' => $item->observaciones
+                ];
+            })->toArray();
+
+            $pedido = new PedidosDistribucion();
+            $pedido->id_cliente = $id_cliente;
+            $pedido->id_usuario = $id_usuario;
+            $pedido->id_lugar_atencion = $validated['id_lugar_atencion'];
+            $pedido->numero_pedido = PedidosDistribucion::generarNumeroPedido();
+            $pedido->estado = 'procesado';
+            $pedido->items_pedido = $items_pedido;
+            $pedido->total = $total;
+            $pedido->descuento_total = $descuento_total;
+            $pedido->monto_neto = $monto_neto;
+            $pedido->metodo_pago = $id_forma_pago; // Guardar el ID de la forma de pago
+            $pedido->observaciones = $validated['observaciones'];
+            $pedido->fecha_procesamiento = now();
+            $pedido->save();
+
+            //registramos el pago solo si el id forma pago es efectivo, si es credito se registrara el pago cuando se realice el pago del pedido
+            $forma_pago = FormasPago::find($id_forma_pago);
+            if($forma_pago && $forma_pago->id == 2){ // Suponiendo que el ID 2 corresponde a efectivo
+
+                // Crear registro en tabla pagos para el cliente
+                $pago = new Pago();
+                $pago->id_cliente = $id_cliente;
+                $pago->monto = $monto_neto;
+                $pago->fecha_pago = now()->format('Y-m-d');
+                $pago->id_forma_pago = $id_forma_pago;
+                $pago->numero_documento = $pedido->numero_pedido; // Usar el número del pedido como referencia
+                $pago->observaciones = $validated['observaciones'] ?? 'Venta procesada';
+                $pago->estado = 'pendiente';
+                $pago->id_usuario = $id_usuario;
+                $pago->activo = 1;
+                $pago->save();
+            }
+        }
+
+        // Guardar producto de la venta (si existe id_paciente - aplica para ambos casos)
+        if ($paciente_para_guardar) {
+            $producto_paciente_controller = new ProductoPacienteController();
+            foreach ($items as $item) {
+                $producto_paciente_controller->guardar(
+                    $item->id_producto,
+                    $paciente_para_guardar,
+                    $item->cantidad,
+                    $item->precio_unitario,
+                    $item->descuento,
+                    $item->observaciones,
+                    0,                                      // $tiene_garantia
+                    null,                                   // $tipo_garantia
+                    null,                                   // $valor_garantia
+                    $id_usuario,                            // $id_usuario
+                    $item->fecha_devolucion_esperada,       // $fecha_devolucion
+                    $validated['id_lugar_atencion'],        // $id_lugar_atencion
+                    'vendido'                               // $estado
+                );
+            }
+        }
+
+        // Marcar items como procesados y descontar stock
         foreach ($items as $item) {
             $item->marcarProcesado();
 
@@ -6577,19 +7906,13 @@ public function procesarVentaCarrito(Request $request)
             }
         }
 
-        // guardar producto de la venta al paciente
-        $producto_paciente_controller = new ProductoPacienteController();
-        foreach ($items as $item) {
-            $producto_paciente_controller->guardar($item->id_producto, $validated['id_paciente'], $item->cantidad, $item->precio_unitario, $item->descuento, $item->observaciones, $id_usuario, $item->fecha_devolucion_esperada, $request->id_lugar_atencion, 'vendido');
-        }
-
         DB::commit();
 
         return response()->json([
             'estado' => 1,
             'mensaje' => 'Venta procesada exitosamente',
             'items_procesados' => $items->count(),
-            'total' => $items->sum('subtotal')
+            'total' => $monto_neto
         ]);
 
     } catch (\Exception $e) {
@@ -6664,7 +7987,7 @@ public function procesarPrestamoCarrito(Request $request)
 
             // Descontar stock
             $producto = $item->producto;
-            if ($producto) {
+            if ($producto && $producto->stock_actual >= $item->cantidad) {
                 $producto->stock_actual -= $item->cantidad;
                 $producto->save();
             }
@@ -6742,9 +8065,8 @@ public function productos_tipos(){
 
 public function dameAtencionesPrevias(Request $request){
 
-
     $hora_medica = HoraMedica::find($request->id_hora);
-    $ficha_atencion = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
     if (!$hora_medica) {
         return response()->json([
             'estado' => 0,
@@ -6752,17 +8074,42 @@ public function dameAtencionesPrevias(Request $request){
         ], 404);
     }
 
+    $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
-    $atenciones = HoraMedica::where('horas_medicas.id_paciente', $hora_medica->id_paciente)
-                    // ->where('id_lugar_atencion', $hora_medica->id_lugar_atencion)
-                    ->where('horas_medicas.id_profesional', $hora_medica->id_profesional)
-                    ->where('horas_medicas.id_estado',6)
-                    // ->where('fecha_hora', '<', $hora_medica->fecha_hora)
-                    ->join('ficha_otros_profesionales', 'horas_medicas.id_ficha_otros_prof', '=', 'ficha_otros_profesionales.id')
-                    // ->orderBy('fecha_hora', 'desc')
-                    // ->limit(5)
-                    ->with(['lugarAtencion', 'profesional', 'paciente'])
-                    ->get();
+    if ($profesional && $profesional->id_sub_tipo_especialidad == 27) {
+        // Gineco-Obstetricia: la ficha está en ficha_gineco_obstetrica
+        $ficha_atencion = FichaGinecoObstetrica::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
+        $atenciones = HoraMedica::where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+                        ->where('horas_medicas.id_profesional', $hora_medica->id_profesional)
+                        ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
+                        ->where('horas_medicas.id_estado', 6)
+                        ->join('ficha_gineco_obstetrica', 'horas_medicas.id_ficha_otros_prof', '=', 'ficha_gineco_obstetrica.id')
+                        ->with(['lugarAtencion', 'profesional', 'paciente'])
+                        ->get();
+    } else {
+        // Otros profesionales: ficha_otros_profesionales con fallback a fichas_atenciones
+        $ficha_atencion = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+        if (!$ficha_atencion) $ficha_atencion = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+
+        $atenciones = HoraMedica::where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+                        ->where('horas_medicas.id_profesional', $hora_medica->id_profesional)
+                        ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
+                        ->where('horas_medicas.id_estado', 6)
+                        ->join('ficha_otros_profesionales', 'horas_medicas.id_ficha_otros_prof', '=', 'ficha_otros_profesionales.id')
+                        ->with(['lugarAtencion', 'profesional', 'paciente'])
+                        ->get();
+
+        if ($atenciones->isEmpty()) {
+            $atenciones = HoraMedica::where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+                            ->where('horas_medicas.id_profesional', $hora_medica->id_profesional)
+                            ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
+                            ->where('horas_medicas.id_estado', 6)
+                            ->join('fichas_atenciones', 'horas_medicas.id_ficha_atencion', '=', 'fichas_atenciones.id')
+                            ->with(['lugarAtencion', 'profesional', 'paciente'])
+                            ->get();
+        }
+    }
 
     // Procesar cada atención para agregar los procedimientos
     foreach ($atenciones as $atencion) {
@@ -6805,7 +8152,16 @@ public function dameAtencionesPrevias(Request $request){
         $atencion->procedimientos_texto = collect($procedimientos)->map(function($proc) {
             return $proc['descripcion'] ?: $proc['nombre'];
         })->filter()->implode(', ');
+
+        if($profesional->id_tipo_especialidad == 59){
+            $informe = FichaAtencionRayo::where('id_ficha_atencion', $atencion->id)
+                            ->first();
+            $atencion->informe_rayos = $informe ?? null;
+        }
+
     }
+
+
 
     return response()->json([
         'estado' => 1,
@@ -7091,7 +8447,7 @@ public function finalizarSesiones(Request $request){
 
         $id_lugar_atencion = array();
         $es_institucion = 0;
-        $contrato = ContratoDependiente::where('id_empleado',$profesional->id)->first();
+        $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->first();
 
         if($contrato)
         {
@@ -7113,141 +8469,7 @@ public function finalizarSesiones(Request $request){
             }
         }
 
-        if(!empty($id_lugar_atencion))
-        {
-             // Paso 3: Bonos del mes (no rendidos)
-            $filtro = array();
-            $filtro[] = array('id_asistente',$profesional->id);
-            $filtro[] = array('numero_sesiones','=','0');
-            $filtro[] = array('rendido','0');
-
-            $bonos_dia = Bono::where($filtro)
-                            ->whereDate('fecha_atencion', Carbon::now())
-                            ->get();
-
-            // Paso 4: Unir los dos conjuntos
-            $bonos = $bonos_dia->merge($bonos_rendidos);
-
-            // Paso 5 (opcional): Eliminar duplicados por ID
-            $bonos = $bonos->unique('id')->values(); // 'values' para resetear índices
-
-            foreach($bonos as $b){
-                $responsable = Asistente::where('id',$b->id_asistente)->first();
-                $b->responsable = $responsable->nombres.' '.$responsable->apellido_uno;
-            }
-
-            // echo json_encode($bonos);
-            /** programa */
-            // $bonos_programa = Bono::where($filtro)
-            //     ->where('numero_sesiones','>','0')
-            //     ->where('rendido','0')
-            //     ->get();
-
-            $total = 0;
-            $total_bonos = 0;
-            $total_bonos_fisicos = 0;
-            $total_efectivo = 0;
-            $total_otros = 0;
-            $total_bono_institucional = 0;
-            $lista_bonos = array();
-
-            foreach ($bonos as $bono){
-                $lista_bonos[] = $bono->id;
-
-                $total++;
-                // 1->Bono Fisico
-                if($bono->id_clase_bono == 1){
-                    $total_bonos++;
-                    $total_bonos_fisicos++;
-                }
-                // 2->Sencillito
-                else if($bono->id_clase_bono == 2)
-                    $total_bonos++;
-                // 3->Caja Vecina
-                else if($bono->id_clase_bono == 3)
-                    $total_bonos++;
-                // 4->Bono Web
-                else if($bono->id_clase_bono == 4)
-                    $total_bonos++;
-                // 5->Bono Web Pre-Pago
-                else if($bono->id_clase_bono == 5)
-                    $total_bonos++;
-                // 6->Particular
-                else if($bono->id_clase_bono == 6)
-                    $total_efectivo += $bono->valor_atencion;
-                else if($bono->id_clase_bono == 7)
-                    $total_bono_institucional++;
-                else
-                    $total_otros++;
-            }
-
-
-            if($es_institucion)
-            {
-
-                $institucion = Instituciones::whereIn('id_lugar_atencion',$id_lugar_atencion)->first();
-
-                $lista_asistente_lugar = AsistenteLugarAtencion::whereIn('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_asistente')->toArray();
-
-                /** PERSONAL QUE RECIBE */
-                /** ASISTENTE */
-                $listado_recibe_a = Asistente::select('id', 'nombres', 'apellido_uno', 'apellido_dos')->whereIn('id_asistente_tipo', [1,2,3])
-                                                ->whereIn('id', $lista_asistente_lugar)
-                                                ->whereNotIn('id',[$asistente->id]);
-
-                /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
-                $listado_recibe = ContratoDependiente::select('id_empleado as id', 'nombres', 'apellido_uno', 'apellido_dos')
-                                    ->where('id_institucion', $institucion->id)
-                                    ->where('tipo_empleado', 'like', '%ADMINISTRADOR%')
-                                    ->whereNotIn('id_empleado',[$asistente->id])
-                                    ->union($listado_recibe_a)
-                                    ->get();
-
-                $institucion = Instituciones::whereIn('id_lugar_atencion',$id_lugar_atencion)->first();
-                $lista_asistente_lugar = AsistenteLugarAtencion::whereIn('id_lugar_atencion',$id_lugar_atencion)->where('id_institucion',$institucion->id)->pluck('id_lugar_atencion')->toArray();
-
-                /** PERSONAL QUE RECIBE */
-                /** profesional */
-                $lista_profesionales = ProfesionalesLugaresAtencion::whereIn('id_lugar_atencion', $lista_asistente_lugar)->pluck('id_profesional')->toArray();
-
-                $profesionales = Profesional::whereIn('id', $lista_profesionales)->orderBy('apellido_uno', 'ASC')->get();
-            }
-            else
-            {
-                $listado_recibe = '';
-                $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
-                if($asistentes_lugar_atencion)
-                {
-                    $profesionales = $listado_recibe = Profesional::select('id', 'nombre', 'apellido_uno', 'apellido_dos')->whereIn('id', $asistentes_lugar_atencion)->get();
-                }
-            }
-
-
-            $bonos_profesionales = Bono::where($filtro)
-                                    ->whereDay('fecha_atencion','<=', date('d'))
-                                    ->whereMonth('fecha_atencion',  date('m'))
-                                    ->whereYear('fecha_atencion', date('Y'))
-                                    ->get();
-
-            return view('app.laboratorio.adm_general.rendiciones',[
-                    'es_institucion' => $es_institucion,
-                    'asistente' => $asistente,
-                    'institucion' => isset($institucion) ? $institucion : null,
-                    'lista_bonos' => implode('|',$lista_bonos),
-                    'bono' => $bonos,
-                    'bonos_profesionales' => $bonos_profesionales,
-                    'listado_recibe' => $listado_recibe,
-                    'total' => $total,
-                    'total_bonos' => $total_bonos,
-                    'total_efectivo' => $total_efectivo,
-                    'total_otros' => $total_otros,
-                    'prevision' => $prevision,
-                    'listado_recibe_prof' => $profesionales,
-            ]);
-        }
-        else
-        {
-             // Paso 3: Bonos del mes (no rendidos)
+         // Paso 3: Bonos del mes (no rendidos)
             $filtro = array();
             $filtro[] = array('id_profesional',$profesional->id);
             $filtro[] = array('numero_sesiones','=','0');
@@ -7343,9 +8565,6 @@ public function finalizarSesiones(Request $request){
                     'listado_recibe' => $listado_recibe,
                     'fecha_rendicion' => date('Y-m-d'),
             ]);
-
-            return back()->with('mensaje','Lugar de Atención no valido');
-        }
 
     }
 
@@ -7459,48 +8678,48 @@ public function finalizarSesiones(Request $request){
         {
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
 
-             /** RENDICION */
-             $rendiciones = RendicionCaja::where('id_profesional_receptor', $profesional->id)
-                                    ->where('rendicion','0')
-                                    ->where('estado',4)
-                                    ->with('ProfesionalEmisor')
-                                    ->with('ProfesionalReceptor')
-                                    ->get();
+            /** RENDICION */
+            $rendiciones = RendicionCaja::where('id_profesional_receptor', $profesional->id)
+                                ->where('rendicion','0')
+                                ->where('estado',4)
+                                ->with('ProfesionalEmisor')
+                                ->with('ProfesionalReceptor')
+                                ->get();
 
-             $total_rendiciones = 0;
-             $total_documentos_rendiciones = 0;
-             $total_bonos_rendiciones = 0;
-             $total_efectivo_rendicion = 0;
-             $total_copago_rendicion = 0;
-             $total_otros_rendicion = 0;
-             $total_archivos_rendicion = 0;
-             $lista_rendiciones = array();
+            $total_rendiciones = 0;
+            $total_documentos_rendiciones = 0;
+            $total_bonos_rendiciones = 0;
+            $total_efectivo_rendicion = 0;
+            $total_copago_rendicion = 0;
+            $total_otros_rendicion = 0;
+            $total_archivos_rendicion = 0;
+            $lista_rendiciones = array();
 
-             if($rendiciones)
-             {
-                 foreach ($rendiciones as $rendicion)
-                 {
-                     $lista_rendiciones[] = $rendicion->id;
+            if($rendiciones)
+            {
+                foreach ($rendiciones as $rendicion)
+                {
+                    $lista_rendiciones[] = $rendicion->id;
 
-                     $total_rendiciones++;
-                     $total_documentos_rendiciones += $rendicion->total_documentos;
-                     $total_bonos_rendiciones += $rendicion->total_bono;
-                     $total_efectivo_rendicion += $rendicion->total_efectivo;
-                     $total_copago_rendicion += $rendicion->total_copago;
-                     $total_otros_rendicion += $rendicion->total_otros;
+                    $total_rendiciones++;
+                    $total_documentos_rendiciones += $rendicion->total_documentos;
+                    $total_bonos_rendiciones += $rendicion->total_bono;
+                    $total_efectivo_rendicion += $rendicion->total_efectivo;
+                    $total_copago_rendicion += $rendicion->total_copago;
+                    $total_otros_rendicion += $rendicion->total_otros;
 
-                     if(!empty($rendicion->archivos))
-                     {
-                         $archivos_array  = explode('|',$rendicion->archivos);
-                         $total_archivos_rendicion += count($archivos_array);
-                         $rendicion->cantidad_archivos = count($archivos_array);
-                     }
-                     else
-                     {
-                         $rendicion->cantidad_archivos = 0;
-                     }
-                 }
-             }
+                    if(!empty($rendicion->archivos))
+                    {
+                        $archivos_array  = explode('|',$rendicion->archivos);
+                        $total_archivos_rendicion += count($archivos_array);
+                        $rendicion->cantidad_archivos = count($archivos_array);
+                    }
+                    else
+                    {
+                        $rendicion->cantidad_archivos = 0;
+                    }
+                }
+            }
 
             /** PERSONAL QUE RECIBE */
             /** ADMINISTRADOR CENTRO, ADMINISTRADOR COMERCIAL */
@@ -7522,6 +8741,8 @@ public function finalizarSesiones(Request $request){
                 'total_copago_rendicion' => $total_copago_rendicion,
                 'total_otros_rendicion' => $total_otros_rendicion,
                 'lista_rendiciones' => implode('|',$lista_rendiciones),
+                'institucion' => $institucion,
+                'tipo_institucion' => $tipo_institucion,
              ]);
         }
         else
@@ -7536,7 +8757,8 @@ public function finalizarSesiones(Request $request){
         $fecha_inicio = now()->startOfMonth()->format('Y-m-d');
         $fecha_fin = now()->format('Y-m-d');
 
-        $contrato = ContratoDependienteProfesional::where('id_empleado',$request->id)->first();
+        $contrato = ContratoDependienteProfesional::where('id_profesional',$request->id)->first();
+
         $profesional_convenio = ProfesionalInstitucionConvenio::where('id_profesional', $request->id)
                         ->where('id_institucion', $request->id_institucion)
                         ->first();
@@ -7885,7 +9107,295 @@ public function finalizarSesiones(Request $request){
         return $datos;
     }
 
-    public function cajaRendirBonos(Request $request){
+    // public function cajaRendirBonos(Request $request){
+
+    //     $datos = array();
+    //     $error = array();
+    //     $valido = 1;
+
+    //     if(empty($request->bonos))
+    //     {
+    //         $error['bonos'] = 'Campo requerido';
+    //         $valido = 0;
+    //     }
+    //     if(empty($request->id_asistente_receptor))
+    //     {
+    //         $error['id_asistente_receptor'] = 'Campo requerido';
+    //         $valido = 0;
+    //     }
+
+
+
+    //     // if(empty($request->observaciones)){
+    //     //     $error['observaciones'] = 'Campo requerido';
+    //     //     $valido = 0;
+    //     // }
+
+    //     if($valido)
+    //     {
+    //         $tipo_rendicion = 1; // rendicion caja institucion
+    //         $profesionalRendicion = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+    //         $fecha_rendicion = date('Y-m-d H:i:s');
+
+    //         $profesionalReceptor = Profesional::where('id', $request->id_asistente_receptor)->first();
+
+    //         if($profesionalReceptor)
+    //         {
+    //             // $profesionalReceptor = Profesional::where('id', $request->id_asistente_receptor)->first();
+    //         }
+    //         else
+    //         {
+    //             $profesionalReceptor = AdminInstServ::where('id', $request->id_asistente_receptor)->first();
+    //         }
+
+    //         $bonos = $request->bonos;
+
+    //         $observaciones = $request->observaciones;
+
+    //         $total = 0;
+    //         $total_bonos = 0;
+    //         $total_efectivo = 0;
+    //         $total_otros = 0;
+    //         $detalle_bonos = Bono::whereIn('id',explode('|', $bonos))->get();
+    //         if($detalle_bonos)
+    //         {
+    //             $datos['update_bonos'] = array();
+    //             foreach ($detalle_bonos as $key_bono => $value_bono)
+    //             {
+    //                 $bono = Bono::find($value_bono->id);
+    //                 $bono->rendido = 1;// en proceso de rendicion
+
+    //                 if($bono->save())
+    //                 {
+    //                     $datos['update_bonos'][$bono->id]['estado'] = 1;
+    //                     $datos['update_bonos'][$bono->id]['maj'] = 'registro actualizado';
+    //                 }
+    //                 else
+    //                 {
+    //                     $datos['update_bonos'][$bono->id]['estado'] = 0;
+    //                     $datos['update_bonos'][$bono->id]['maj'] = 'registro NO actualizado';
+    //                 }
+
+    //                 $total++;
+    //                 // 1->Bono Fisico
+    //                 if($value_bono->id_clase_bono == 1)
+    //                     $total_bonos++;
+    //                 // 2->Sencillito
+    //                 else if($value_bono->id_clase_bono == 2)
+    //                     $total_bonos++;
+    //                 // 3->Caja Vecina
+    //                 else if($value_bono->id_clase_bono == 3)
+    //                     $total_bonos++;
+    //                 // 4->Bono Web
+    //                 else if($value_bono->id_clase_bono == 4)
+    //                     $total_bonos++;
+    //                 // 5->Bono Web Pre-Pago
+    //                 else if($value_bono->id_clase_bono == 5)
+    //                     $total_bonos++;
+    //                 // 6->Particular
+    //                 else if($value_bono->id_clase_bono == 6)
+    //                     $total_efectivo += $value_bono->valor_atencion;
+    //                 else
+    //                     $total_otros++;
+    //             }
+    //         }
+
+    //         $rendicionCaja = new RendicionCaja();
+
+    //         $rendicionCaja->tipo_rendicion = $tipo_rendicion;
+
+    //         $rendicionCaja->bonos = $bonos;
+
+    //         // $rendicionCaja->id_asistente = $asistenteRendicion->id;
+    //         $rendicionCaja->id_profesional = $profesionalRendicion->id;
+    //         $rendicionCaja->fecha_rendicion = $fecha_rendicion;
+
+    //         $rendicionCaja->total_documentos = $total;
+    //         $rendicionCaja->total_bono = $total_bonos;
+    //         $rendicionCaja->total_efectivo = $total_efectivo;
+    //         $rendicionCaja->total_otros = $total_otros;
+
+    //         // $rendicionCaja->id_asistente_receptor = $asistenteReceptor->id;
+    //         $rendicionCaja->id_profesional_receptor = $profesionalReceptor->id;
+    //         $rendicionCaja->fecha_recepcion = Carbon::now()->format('Y-m-d H:i:s');
+    //         $rendicionCaja->codigo_autorizacion = '';
+    //         $rendicionCaja->observacion = $observaciones;
+    //         $rendicionCaja->otro = '';
+    //         $rendicionCaja->estado = 0;
+
+    //         if($rendicionCaja->save())
+    //         {
+    //             $datos['estado'] = 1;
+    //             $datos['msj'] = 'Registro de Rendicion';
+    //             $datos['last_id'] = $rendicionCaja->id;
+
+
+    //             /** MANEJO DE ARCHIVOS */
+    //             $archivos = json_decode($request->archivos);
+    //             $info_archivos = '';
+    //             $resulto_img = [];
+    //             if($archivos)
+    //             {
+    //                 foreach ($archivos as $key => $value)
+    //                 {
+    //                     // [0] = url
+    //                     // [1] = nombre_original
+    //                     // [2] = nombre_archivo
+    //                     // [3] = file_extension
+    //                     $nombre_temp = $value[2];
+    //                     $file_extension = $value[3];
+
+
+    //                     $nombre_final = 'rendicion_'.$rendicionCaja->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+    //                     $resulto_img[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+    //                     $info_archivos .= $nombre_final.'|';
+    //                 }
+
+    //                 if(!empty($info_archivos))
+    //                 {
+    //                     $info_archivos = substr($info_archivos, 0, -1);
+    //                     $rendicionCaja->archivos = $info_archivos;
+    //                     if($rendicionCaja->save())
+    //                     {
+    //                         $datos['rendicion_archivo']['estado'] = 1;
+    //                         $datos['rendicion_archivo']['msj'] = 'archivo registrado';
+    //                     }
+    //                     else
+    //                     {
+    //                         $datos['rendicion_archivo']['estado'] = 0;
+    //                         $datos['rendicion_archivo']['msj'] = 'falla en registro de archivo';
+    //                     }
+    //                 }
+    //                 else
+    //                 {
+    //                     $datos['rendicion_archivo']['estado'] = 0;
+    //                     $datos['rendicion_archivo']['msj'] = 'problema en lectura de archivos';
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 $datos['rendicion_archivo']['estado'] = 1;
+    //                 $datos['rendicion_archivo']['msj'] = 'sin archivos a registrar';
+    //             }
+
+
+    //             $registro = RendicionCaja::where('id', $rendicionCaja->id)
+    //                 ->with(['ProfesionalEmisor' => function($query){
+    //                     $query->select('id','nombre','apellido_uno','apellido_dos');
+    //                 }])
+    //                 // ->with(['AsistenteReceptor' => function($query){
+    //                 //     $query->select('id','nombres','apellido_uno','apellido_dos');
+    //                 // }])
+    //                 ->first();
+
+    //             /** informacion de asistente o admin_inst_serv */
+    //             $registro_receptor = Profesional::where('id', $profesionalReceptor->id)->first();
+    //             if($registro_receptor)
+    //             {
+    //                 $registro->asistente_receptor = $registro_receptor;
+    //             }
+    //             else
+    //             {
+    //                 $registro_receptor = AdminInstServ::where('id', $registro->id_asistente_receptor)->first();
+    //                 $registro->asistente_receptor = $registro_receptor;
+    //             }
+    //             $datos['registro'] = $registro;
+
+    //             /** ENVIO DE AUTORIZACION POR EMAIL */
+    //             $blade = 'solicitud_aprobacion_rendicion_caja';
+    //             $to = array(
+    //                 array('email' => $profesionalReceptor->email, 'name' => $profesionalReceptor->nombres.' '.$profesionalReceptor->apellido_uno.' '.$profesionalReceptor->apellido_dos)
+    //             );
+    //             $cc = array();
+    //             $bcc = array();
+    //             $asunto = 'MED-SDI - Solicitud de Aprobación de Rendición de Caja N°'.$rendicionCaja->id;
+    //             $body = array(
+    //                 'id_rendicion' => $rendicionCaja->id,
+    //                 'nombre_asistente' => $profesionalRendicion->nombres.' '.$profesionalRendicion->apellido_uno.' '.$profesionalRendicion->apellido_dos,
+    //                 'fecha_rendicion' => $fecha_rendicion,
+    //             );
+    //             $archivo = ''; // pendiente
+    //             $id_institucion = '';
+
+    //             $result_email = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+    //             if($result_email['estado'])
+    //             {
+    //                 $datos['mail']['institucion']['estado'] = 1;
+    //                 $datos['mail']['institucion']['msj'] = 'Notificacion de rendicion enviado';
+    //             }
+    //             else
+    //             {
+    //                 $datos['mail']['institucion']['estado'] = 0;
+    //                 $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de rendicion';
+    //             }
+
+    //             /** SOLICITAR AUTORIZACION POR APP */
+    //             $msj = array(
+    //                 'id' => $rendicionCaja->id,
+    //                 'nombre' => $profesionalReceptor->nombres.' '.$profesionalReceptor->apellido_uno.' '.$profesionalReceptor->apellido_dos,
+    //                 'fecha' => $fecha_rendicion,
+    //                 'tipo' => 'rendicion',
+    //                 // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
+    //             );
+
+    //             /** calculo de periodo de vigencia para aprobacion */
+    //             $fecha_actual  = date('Y-m-d H:i:s');
+    //             $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA').' minute' , strtotime ($fecha_actual) ) );
+
+    //             $log_users_devices = new LogUsersDevices();
+    //             $log_users_devices->id_user_create = $profesionalRendicion->id_usuario;
+    //             if($profesionalReceptor->id_usuario)
+    //                 $log_users_devices->id_user_recept = $profesionalReceptor->id_usuario;
+    //             else
+    //                 $log_users_devices->id_user_recept = $profesionalReceptor->id_usuario;
+    //             $log_users_devices->msg = json_encode($msj);
+    //             $log_users_devices->estado = 0;
+    //             $log_users_devices->fecha_ingreso = $fecha_actual;
+    //             $log_users_devices->fecha_termino = $fecha_vencimiento;
+    //             $log_users_devices->tipo = 1; // rendicion
+
+    //             if($log_users_devices->save())
+    //             {
+    //                 $datos['autorizacion']['estado'] = 1;
+    //                 $datos['autorizacion']['msj'] = 'Solicitud de aprobacion enviada';
+    //                 $datos['autorizacion']['fecha_inicio'] = $fecha_actual;
+    //                 $datos['autorizacion']['fecha_termino'] = $fecha_vencimiento;
+    //                 $datos['autorizacion']['tiempo'] = 10;
+    //                 $datos['autorizacion']['last_id'] = $log_users_devices->id;
+
+    //                 $rendicionCaja->id_log_users_devices = $log_users_devices->id;
+    //                 $rendicionCaja->estado = 1;
+    //                 if($rendicionCaja->save())
+    //                 {
+    //                     $datos['update_log_users_devices']['estado'] = 1;
+    //                     $datos['update_log_users_devices']['msj'] = 'Registro de id_log_users_devices';
+    //                 }
+    //                 else
+    //                 {
+    //                     $datos['update_log_users_devices']['estado'] = 1;
+    //                     $datos['update_log_users_devices']['msj'] = 'Falla registro de id_log_users_devices';
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 $datos['autorizacion']['estado'] = 0;
+    //                 $datos['autorizacion']['msj'] = 'Solicitud de aprobacion con falla';
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         $datos['estado'] = 0;
+    //         $datos['msj'] = 'Campos requeridos';
+    //         $datos['error'] = $error;
+    //     }
+    //     return $datos;
+    // }
+
+     public function cajaRendirBonos(Request $request){
 
         $datos = array();
         $error = array();
@@ -7936,6 +9446,7 @@ public function finalizarSesiones(Request $request){
             $total_efectivo = 0;
             $total_otros = 0;
             $detalle_bonos = Bono::whereIn('id',explode('|', $bonos))->get();
+
             if($detalle_bonos)
             {
                 $datos['update_bonos'] = array();
@@ -7957,11 +9468,16 @@ public function finalizarSesiones(Request $request){
 
                     $total++;
                     // 1->Bono Fisico
-                    if($value_bono->id_clase_bono == 1)
+                    if($value_bono->id_clase_bono == 1){
                         $total_bonos++;
+                        $total_efectivo += $value_bono->valor_atencion;
+                    }
+
                     // 2->Sencillito
-                    else if($value_bono->id_clase_bono == 2)
+                    else if($value_bono->id_clase_bono == 2){
                         $total_bonos++;
+                        $total_efectivo += $value_bono->valor_atencion;
+                    }
                     // 3->Caja Vecina
                     else if($value_bono->id_clase_bono == 3)
                         $total_bonos++;
@@ -8081,6 +9597,49 @@ public function finalizarSesiones(Request $request){
                 }
                 $datos['registro'] = $registro;
 
+                /** ENVIO DE AUTORIZACION POR EMAIL */
+                $blade = 'solicitud_aprobacion_rendicion_caja';
+                $to = array(
+                    array('email' => $profesionalReceptor->email, 'name' => $profesionalReceptor->nombres.' '.$profesionalReceptor->apellido_uno.' '.$profesionalReceptor->apellido_dos)
+                );
+                $cc = array();
+                $bcc = array();
+                $asunto = 'MED-SDI - Solicitud de Aprobación de Rendición de Caja N°'.$rendicionCaja->id;
+
+                // Generar URLs firmadas con expiración de 24 horas
+                $url_aprobar = url('/api/laboratorio/aprobar-rendicion/' . $rendicionCaja->id . '/' . base64_encode($profesionalReceptor->email));
+                $url_rechazar = url('/api/laboratorio/rechazar-rendicion/' . $rendicionCaja->id . '/' . base64_encode($profesionalReceptor->email));
+
+                $body = array(
+                    'id_rendicion' => $rendicionCaja->id,
+                    'nombre_asistente' => $profesionalRendicion->nombres.' '.$profesionalRendicion->apellido_uno.' '.$profesionalRendicion->apellido_dos,
+                    'fecha_rendicion' => $fecha_rendicion,
+                    'url_aprobar' => $url_aprobar,
+                    'url_rechazar' => $url_rechazar,
+                    'total_documentos' => $total,
+                    'total_bonos' => $total_bonos,
+                    'total_efectivo' => $total_efectivo,
+                );
+
+                $archivo = ''; // pendiente
+                $id_institucion = '';
+
+                $result_email = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                if($result_email['estado'])
+                {
+                    $datos['mail']['institucion']['estado'] = 1;
+                    $datos['mail']['institucion']['msj'] = 'Notificacion de rendicion enviado';
+
+                    // Cambiar estado de la rendición a pendiente de aprobación
+                    $rendicionCaja->estado = 1; // Pendiente de aprobación
+                    $rendicionCaja->save();
+                }
+                else
+                {
+                    $datos['mail']['institucion']['estado'] = 0;
+                    $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de rendicion';
+                }
                 /** SOLICITAR AUTORIZACION POR APP */
                 $msj = array(
                     'id' => $rendicionCaja->id,
@@ -8095,11 +9654,11 @@ public function finalizarSesiones(Request $request){
                 $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.env('TIEMPO_ESPERA').' minute' , strtotime ($fecha_actual) ) );
 
                 $log_users_devices = new LogUsersDevices();
-                $log_users_devices->id_user_create = $profesionalRendicion->id_usuario;
+                $log_users_devices->id_user_create = $profesionalReceptor->id_usuario;
                 if($profesionalReceptor->id_usuario)
                     $log_users_devices->id_user_recept = $profesionalReceptor->id_usuario;
                 else
-                    $log_users_devices->id_user_recept = $profesionalReceptor->id_usuario;
+                    $log_users_devices->id_user_recept = $profesionalReceptor->id_admin;
                 $log_users_devices->msg = json_encode($msj);
                 $log_users_devices->estado = 0;
                 $log_users_devices->fecha_ingreso = $fecha_actual;
@@ -8144,6 +9703,184 @@ public function finalizarSesiones(Request $request){
         return $datos;
     }
 
+     /**
+     * Aprobar rendición desde correo electrónico
+     */
+    public function aprobarRendicionEmail($id_rendicion, $email_encoded)
+    {
+        try {
+            $email = base64_decode($email_encoded);
+
+            // Buscar la rendición
+            $rendicion = RendicionCaja::find($id_rendicion);
+
+            if (!$rendicion) {
+                return view('respuesta_email', [
+                    'estado' => 'error',
+                    'titulo' => 'Rendición no encontrada',
+                    'mensaje' => 'La rendición solicitada no existe en el sistema.'
+                ]);
+            }
+
+            // Verificar que el email coincida con el receptor
+            $profesional = Profesional::find($rendicion->id_profesional_receptor);
+            if (!$profesional || $profesional->email !== $email) {
+                $admin = AdminInstServ::find($rendicion->id_profesional_receptor);
+                if (!$admin || $admin->email !== $email) {
+                    return view('respuesta_email', [
+                        'estado' => 'error',
+                        'titulo' => 'No autorizado',
+                        'mensaje' => 'No tienes permisos para aprobar esta rendición.'
+                    ]);
+                }
+            }
+
+            // actualizamos el registro en log_users_devices
+            $log = LogUsersDevices::find($rendicion->id_log_users_devices);
+
+            if ($log) {
+                $log->estado = 1; // aprobado
+                $log->save();
+            }
+
+            // Verificar que la rendición esté en estado pendiente (1)
+            if ($rendicion->estado != 1) {
+                $estados = [
+                    0 => 'Creada',
+                    1 => 'Pendiente de aprobación',
+                    2 => 'Rechazada',
+                    4 => 'Aprobada'
+                ];
+                return view('respuesta_email', [
+                    'estado' => 'warning',
+                    'titulo' => 'Rendición ya procesada',
+                    'mensaje' => 'Esta rendición ya fue procesada. Estado actual: ' . ($estados[$rendicion->estado] ?? 'Desconocido')
+                ]);
+            }
+
+            // Aprobar la rendición
+            $rendicion->estado = 4; // Aprobada
+            // $rendicion->fecha_aprobacion = now();
+            $rendicion->save();
+
+            // Actualizar estado de bonos a rendidos (2)
+            $bonos = explode('|', $rendicion->bonos);
+            foreach ($bonos as $id_bono) {
+                $bono = Bono::find($id_bono);
+                if ($bono) {
+                    $bono->rendido = 2; // Completamente rendido
+                    $bono->save();
+                }
+            }
+
+            // Notificar al emisor de la aprobación
+            $profesionalEmisor = Profesional::find($rendicion->id_profesional);
+            if ($profesionalEmisor && $profesionalEmisor->email) {
+                $blade = 'notificacion_aprobacion_rendicion';
+                $to = [['email' => $profesionalEmisor->email, 'name' => $profesionalEmisor->nombres.' '.$profesionalEmisor->apellido_uno]];
+                $asunto = 'Rendición de Caja N°'.$rendicion->id.' - APROBADA';
+                $body = [
+                    'id_rendicion' => $rendicion->id,
+                    'nombre_receptor' => $profesional ? ($profesional->nombres.' '.$profesional->apellido_uno) : ($admin->nombre ?? 'Administrador'),
+                    'fecha_aprobacion' => now()->format('d/m/Y H:i'),
+                ];
+                SendMailController::envioCorreo($blade, $to, [], [], $asunto, $body, '', '');
+            }
+
+            // Nombre del aprobador
+            $nombre_aprobador = $profesional ? ($profesional->nombres.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos) : ($admin->nombre ?? 'Administrador');
+
+            return view('rendicion_aprobada', [
+                'id_rendicion' => $rendicion->id,
+                'total_documentos' => $rendicion->total_documentos,
+                'total_bonos' => $rendicion->total_bono,
+                'total_efectivo' => $rendicion->total_efectivo,
+                'nombre_aprobador' => $nombre_aprobador,
+                'fecha_aprobacion' => now()->format('d/m/Y H:i'),
+                'observaciones' => $rendicion->observacion
+            ]);
+
+        } catch (\Exception $e) {
+            return view('respuesta_email', [
+                'estado' => 'error',
+                'titulo' => 'Error al procesar',
+                'mensaje' => 'Ocurrió un error al aprobar la rendición: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function rechazarRendicionEmail($id_rendicion, $email_encoded)
+    {
+        try {
+            $email = base64_decode($email_encoded);
+
+            // Buscar la rendición
+            $rendicion = RendicionCaja::find($id_rendicion);
+
+            if (!$rendicion) {
+                return view('respuesta_email', [
+                    'estado' => 'error',
+                    'titulo' => 'Rendición no encontrada',
+                    'mensaje' => 'La rendición solicitada no existe en el sistema.'
+                ]);
+            }
+
+            // Verificar que el email coincida con el receptor
+            $profesional = Profesional::find($rendicion->id_profesional_receptor);
+            if (!$profesional || $profesional->email !== $email) {
+                $admin = AdminInstServ::find($rendicion->id_profesional_receptor);
+                if (!$admin || $admin->email !== $email) {
+                    return view('respuesta_email', [
+                        'estado' => 'error',
+                        'titulo' => 'No autorizado',
+                        'mensaje' => 'No tienes permisos para rechazar esta rendición.'
+                    ]);
+                }
+            }
+
+            // actualizamos el registro en log_users_devices
+            $log = LogUsersDevices::find($rendicion->id_log_users_devices);
+
+            if ($log) {
+                $log->estado = 2; // rechazado
+                $log->save();
+            }
+
+            // Verificar que la rendición esté en estado pendiente (1)
+            if ($rendicion->estado != 1) {
+                $estados = [
+                    0 => 'Creada',
+                    1 => 'Pendiente de aprobación',
+                    2 => 'Rechazada',
+                    4 => 'Aprobada'
+                ];
+                return view('respuesta_email', [
+                    'estado' => 'warning',
+                    'titulo' => 'Rendición ya procesada',
+                    'mensaje' => 'Esta rendición ya fue procesada. Estado actual: ' . ($estados[$rendicion->estado] ?? 'Desconocido')
+                ]);
+            }
+
+            // Rechazar la rendición
+            $rendicion->estado = 2; // Rechazada
+            $rendicion->save();
+
+            return view('respuesta_email', [
+                'estado' => 'success',
+                'titulo' => 'Rendición Rechazada',
+                'mensaje' => 'Has rechazado correctamente la rendición N°' . $rendicion->id . '.'
+            ]);
+
+        } catch (\Exception $e) {
+            return view('respuesta_email', [
+                'estado' => 'error',
+                'titulo' => 'Error al procesar',
+                'mensaje' => 'Ocurrió un error al rechazar la rendición: ' . $e->getMessage()
+            ]);
+        }
+
+    }
+
     public function lab_liquidacion_profesionales_pdf(Request $request){
         try {
             $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
@@ -8157,7 +9894,6 @@ public function finalizarSesiones(Request $request){
             $profesional = Profesional::find($request->id_profesional);
 
             $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->first();
-            return $contrato;
 
             $laboratorio = Instituciones::where('id_usuario', Auth::user()->id)->first();
             $horas_medicas = HoraMedica::where('horas_medicas.id_profesional', $profesional->id)
@@ -8172,9 +9908,14 @@ public function finalizarSesiones(Request $request){
 
             $porcentaje = $profesional_convenio ? $profesional_convenio->atencion : 10;
 
-            $total_valor = $horas_medicas->sum('valor');
+            if($contrato){
+                $total_valor = $contrato->monto_imponible;
+                $total_valor_convenio = $total_valor;
+            }else{
+                $total_valor = $horas_medicas->sum('valor');
+                $total_valor_convenio = $total_valor * ($porcentaje / 100);
+            }
 
-            $total_valor_convenio = $total_valor * ($porcentaje / 100);
 
             $mis_ventas = MisProducto::where('id_profesional', $profesional->id)
                     ->with('Producto')
@@ -8196,10 +9937,13 @@ public function finalizarSesiones(Request $request){
                 $total += $precio;
             }
 
-            $total_a_pagar = $total * (($profesional_convenio->ventas ?? 10) / 100);
+            if($contrato){
+                $total_a_pagar = $total;
+            }else{
+                $total_a_pagar = $total * (($profesional_convenio->ventas ?? 10) / 100);
+            }
 
-            $total_Valor_productos = $total;
-
+            $total_Valor_productos = $total_a_pagar;
 
             $bonos = Bono::where('id_profesional', $profesional->id)
                         ->whereBetween('created_at', [$request->fecha_inicio.' 00:00:00', $request->fecha_termino.' 23:59:59'])
@@ -8279,5 +10023,562 @@ public function finalizarSesiones(Request $request){
             'estado' => 1,
             'liquidaciones' => $liquidaciones,
         ];
+    }
+
+    public function cambiarEstadoSucursal(Request $request){
+        $sucursal = Sucursal::find($request->id_sucursal);
+        if($sucursal){
+            $sucursal->estado = $request->estado;
+            if($sucursal->save()){
+                return [
+                    'estado' => 1,
+                    'msj' => 'Estado de sucursal actualizado',
+                ];
+            }else{
+                return [
+                    'estado' => 0,
+                    'msj' => 'Falla al actualizar estado de sucursal',
+                ];
+            }
+        }
+    }
+
+    public function eliminarSucursal(Request $request){
+
+        $sucursal = Sucursal::find($request->id);
+        if($sucursal){
+            if($sucursal->delete()){
+                return [
+                    'estado' => 1,
+                    'msj' => 'Sucursal eliminada',
+                ];
+            }else{
+                return [
+                    'estado' => 0,
+                    'msj' => 'Falla al eliminar sucursal',
+                ];
+            }
+        }
+    }
+
+    /**
+     * MÉTODOS PARA GESTIÓN DE VACACIONES DE PROFESIONALES
+     */
+
+    // Guardar vacaciones de un profesional
+    public function guardarVacaciones(Request $request) {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        // Validaciones
+        if(empty($request->id_profesional)) {
+            $error['id_profesional'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->fecha_inicio)) {
+            $error['fecha_inicio'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->fecha_fin)) {
+            $error['fecha_fin'] = 'Campo requerido';
+            $valido = 0;
+        }
+
+        if($valido) {
+            // Validar que la fecha fin sea mayor que la fecha inicio
+            $fecha_inicio = Carbon::parse($request->fecha_inicio);
+            $fecha_fin = Carbon::parse($request->fecha_fin);
+
+            if($fecha_fin->lt($fecha_inicio)) {
+                return [
+                    'estado' => 0,
+                    'msj' => 'La fecha de fin debe ser posterior a la fecha de inicio'
+                ];
+            }
+
+            // Calcular días
+            $total_dias = $fecha_inicio->diffInDays($fecha_fin) + 1;
+
+            // Crear registro de vacaciones
+            try {
+                $vacacion = new VacacionesProfesional();
+                $vacacion->id_profesional = $request->id_profesional;
+                $vacacion->fecha_inicio = $request->fecha_inicio;
+                $vacacion->fecha_fin = $request->fecha_fin;
+                $vacacion->total_dias = $total_dias;
+                $vacacion->observaciones = $request->observaciones;
+                $vacacion->notificar_profesional = $request->notificar_profesional ?? 0;
+                $vacacion->estado = 1;
+                $vacacion->id_usuario_registro = Auth::user()->id;
+                $vacacion->save();
+
+                // Si se debe notificar al profesional
+                if($request->notificar_profesional == 1) {
+                    $profesional = Profesional::find($request->id_profesional);
+                    if($profesional) {
+                        // Aquí puedes enviar un correo de notificación
+                        // SendMailController::envioCorreo(...);
+                    }
+                }
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Vacaciones registradas correctamente';
+                $datos['total_dias'] = $total_dias;
+
+                // Verificar si la vacación es vigente hoy
+                $hoy = Carbon::now()->format('Y-m-d');
+                $es_vigente = $request->fecha_inicio <= $hoy && $request->fecha_fin >= $hoy;
+
+                // Actualizar estado en profesionales_lugares_atencion
+                if($es_vigente) {
+                    // Vacación vigente hoy, desactivar profesional
+                    DB::table('profesionales_lugares_atencion')
+                        ->where('id_profesional', $request->id_profesional)
+                        ->update(['estado' => 0]);
+                } else {
+                    // Vacación no vigente aún o ya pasada, verificar si hay otras vigentes
+                    $vacacion_vigente = VacacionesProfesional::where('id_profesional', $request->id_profesional)
+                        ->where('estado', 1)
+                        ->where('fecha_inicio', '<=', $hoy)
+                        ->where('fecha_fin', '>=', $hoy)
+                        ->first();
+
+                    if($vacacion_vigente) {
+                        DB::table('profesionales_lugares_atencion')
+                            ->where('id_profesional', $request->id_profesional)
+                            ->update(['estado' => 0]);
+                    } else {
+                        DB::table('profesionales_lugares_atencion')
+                            ->where('id_profesional', $request->id_profesional)
+                            ->update(['estado' => 1]);
+                    }
+                }
+
+            } catch (\Exception $e) {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Error al registrar vacaciones: ' . $e->getMessage();
+            }
+        } else {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos incompletos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    // Ver historial de vacaciones de un profesional
+    public function historialVacaciones($id_profesional) {
+        $datos = array();
+
+        try {
+            // Desactivar vacaciones expiradas antes de consultar
+            $this->desactivarVacacionesExpiradas($id_profesional);
+
+            // Buscar vacaciones del profesional
+            $vacaciones = VacacionesProfesional::where('id_profesional', $id_profesional)
+                                                ->where('estado', 1)
+                                                ->orderBy('fecha_inicio', 'desc')
+                                                ->get();
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'Historial de vacaciones';
+            $datos['vacaciones'] = $vacaciones;
+
+        } catch (\Exception $e) {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Error al obtener historial: ' . $e->getMessage();
+            $datos['vacaciones'] = [];
+        }
+
+        return $datos;
+    }
+
+    // Listar vacaciones
+    public function listarVacaciones($id_profesional = null) {
+        $datos = array();
+
+        try {
+            // Si se especifica id_profesional, filtrar por ese profesional
+            // De lo contrario, obtener todas las vacaciones de la institución
+
+            if($id_profesional) {
+                $vacaciones = VacacionesProfesional::where('id_profesional', $id_profesional)
+                                                    ->where('estado', 1)
+                                                    ->with('profesional')
+                                                    ->orderBy('fecha_inicio', 'desc')
+                                                    ->get();
+            } else {
+                $vacaciones = VacacionesProfesional::where('estado', 1)
+                                                    ->with('profesional')
+                                                    ->orderBy('fecha_inicio', 'desc')
+                                                    ->get();
+            }
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'Listado de vacaciones';
+            $datos['vacaciones'] = $vacaciones;
+
+        } catch (\Exception $e) {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Error al listar vacaciones: ' . $e->getMessage();
+        }
+
+        return $datos;
+    }
+
+    // Eliminar vacaciones
+    public function eliminarVacaciones(Request $request) {
+        $datos = array();
+
+        if(empty($request->id)) {
+            return [
+                'estado' => 0,
+                'msj' => 'ID de vacaciones requerido'
+            ];
+        }
+
+        try {
+            $vacacion = VacacionesProfesional::find($request->id);
+            if($vacacion) {
+                $id_profesional = $vacacion->id_profesional;
+
+                $vacacion->estado = 0; // Inactivar en lugar de eliminar
+                $vacacion->save();
+
+                // Verificar si quedan vacaciones activas
+                $vacaciones_activas = VacacionesProfesional::where('id_profesional', $id_profesional)
+                    ->where('estado', 1)
+                    ->get();
+
+                if($vacaciones_activas->isEmpty()) {
+                    // No quedan vacaciones, volver estado a 1 (Activo) en todas las relaciones
+                    DB::table('profesionales_lugares_atencion')
+                        ->where('id_profesional', $id_profesional)
+                        ->update(['estado' => 1]);
+                } else {
+                    // Verificar si alguna vacación está vigente hoy
+                    $hoy = Carbon::now()->format('Y-m-d');
+                    $vacacion_vigente = $vacaciones_activas->filter(function($vac) use ($hoy) {
+                        return $vac->fecha_inicio <= $hoy && $vac->fecha_fin >= $hoy;
+                    })->first();
+
+                    if($vacacion_vigente) {
+                        // Hay vacaciones vigentes, mantener estado = 0 (Vacaciones)
+                        DB::table('profesionales_lugares_atencion')
+                            ->where('id_profesional', $id_profesional)
+                            ->update(['estado' => 0]);
+                    } else {
+                        // No hay vacaciones vigentes, volver estado a 1 (Activo)
+                        DB::table('profesionales_lugares_atencion')
+                            ->where('id_profesional', $id_profesional)
+                            ->update(['estado' => 1]);
+                    }
+                }
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Vacaciones eliminadas correctamente';
+            } else {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Vacaciones no encontradas';
+            }
+
+        } catch (\Exception $e) {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Error al eliminar vacaciones: ' . $e->getMessage();
+        }
+
+        return $datos;
+    }
+
+    // Actualizar vacaciones
+    public function actualizarVacaciones(Request $request) {
+        $datos = array();
+
+        if(empty($request->id)) {
+            return [
+                'estado' => 0,
+                'msj' => 'ID de vacaciones requerido'
+            ];
+        }
+
+        try {
+            // Validar fechas
+            $fecha_inicio = Carbon::parse($request->fecha_inicio);
+            $fecha_fin = Carbon::parse($request->fecha_fin);
+
+            if($fecha_fin->lt($fecha_inicio)) {
+                return [
+                    'estado' => 0,
+                    'msj' => 'La fecha de fin debe ser posterior a la fecha de inicio'
+                ];
+            }
+
+            $total_dias = $fecha_inicio->diffInDays($fecha_fin) + 1;
+
+            $vacacion = VacacionesProfesional::find($request->id);
+            if($vacacion) {
+                $id_profesional = $vacacion->id_profesional;
+
+                $vacacion->fecha_inicio = $request->fecha_inicio;
+                $vacacion->fecha_fin = $request->fecha_fin;
+                $vacacion->total_dias = $total_dias;
+                $vacacion->observaciones = $request->observaciones;
+                $vacacion->save();
+
+                // Verificar si alguna vacación está vigente hoy después de la actualización
+                $hoy = Carbon::now()->format('Y-m-d');
+                $vacacion_vigente = VacacionesProfesional::where('id_profesional', $id_profesional)
+                    ->where('estado', 1)
+                    ->where('fecha_inicio', '<=', $hoy)
+                    ->where('fecha_fin', '>=', $hoy)
+                    ->first();
+
+                if($vacacion_vigente) {
+                    // Hay vacaciones vigentes, estado = 0 (Vacaciones)
+                    DB::table('profesionales_lugares_atencion')
+                        ->where('id_profesional', $id_profesional)
+                        ->update(['estado' => 0]);
+                } else {
+                    // No hay vacaciones vigentes, estado = 1 (Activo)
+                    DB::table('profesionales_lugares_atencion')
+                        ->where('id_profesional', $id_profesional)
+                        ->update(['estado' => 1]);
+                }
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Vacaciones actualizadas correctamente';
+            } else {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Vacaciones no encontradas';
+            }
+
+        } catch (\Exception $e) {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Error al actualizar vacaciones: ' . $e->getMessage();
+        }
+
+        return $datos;
+    }
+
+    // Método para desactivar vacaciones expiradas
+    public function desactivarVacacionesExpiradas($id_profesional = null) {
+        try {
+            $hoy = Carbon::now()->format('Y-m-d');
+
+            $query = VacacionesProfesional::where('estado', 1)
+                ->where('fecha_fin', '<', $hoy);
+
+            if($id_profesional) {
+                $query->where('id_profesional', $id_profesional);
+            }
+
+            $vacaciones_expiradas = $query->get();
+
+            foreach($vacaciones_expiradas as $vacacion) {
+                $vacacion->estado = 0;
+                $vacacion->save();
+
+                // Verificar si quedan vacaciones activas para este profesional
+                $vacaciones_vigentes = VacacionesProfesional::where('id_profesional', $vacacion->id_profesional)
+                    ->where('estado', 1)
+                    ->where('fecha_inicio', '<=', $hoy)
+                    ->where('fecha_fin', '>=', $hoy)
+                    ->first();
+
+                if(!$vacaciones_vigentes) {
+                    // No hay vacaciones vigentes, activar profesional
+                    DB::table('profesionales_lugares_atencion')
+                        ->where('id_profesional', $vacacion->id_profesional)
+                        ->update(['estado' => 1]);
+                }
+            }
+
+            return [
+                'estado' => 1,
+                'msj' => 'Vacaciones expiradas desactivadas: ' . $vacaciones_expiradas->count(),
+                'total' => $vacaciones_expiradas->count()
+            ];
+
+        } catch (\Exception $e) {
+            return [
+                'estado' => 0,
+                'msj' => 'Error al desactivar vacaciones: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function transcripcionExamenes()
+    {
+        // Resolver la institución/laboratorio del usuario autenticado
+        $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$laboratorio) {
+            $responsable = AdminInstServ::where('id_admin', Auth::user()->id)->first();
+            if ($responsable) {
+                $laboratorio = Laboratorio::where('id_responsable', $responsable->id)->first();
+            }
+        }
+
+        if (!$laboratorio) {
+            return back()->with('error', 'Institución no encontrada');
+        }
+
+        $examenes_transcritos = FichaAtencion::select(
+                                    'fichas_atenciones.id as fichas_atenciones_id',
+                                    'fichas_atenciones.id_lugar_atencion as fichas_atenciones_id_lugar_atencion',
+                                    'fichas_atenciones.id_paciente as fichas_atenciones_id_paciente',
+                                    'fichas_atenciones.id_profesional as fichas_atenciones_id_profesional',
+                                    'fichas_atenciones.finalizada as fichas_atenciones_finalizada',
+
+                                    'examen_especialidad.id as examen_especialidad_id',
+                                    'examen_especialidad.nombre as examen_especialidad_nombre',
+                                    'examen_especialidad.cuerpo as examen_especialidad_cuerpo',
+                                    'examen_especialidad.estado as examen_especialidad_estado',
+                                    'examen_especialidad.id_ficha_atencion as examen_especialidad_id_ficha_atencion',
+                                    'examen_especialidad.id_paciente as examen_especialidad_id_paciente',
+                                    'examen_especialidad.id_profesional as examen_especialidad_id_profesional',
+                                    'examen_especialidad.id_asistente as examen_especialidad_id_asistente',
+                                    'examen_especialidad.id_tipo as examen_especialidad_id_tipo',
+                                    'examen_especialidad.id_template as examen_especialidad_id_template',
+                                    'examen_especialidad.id_examen_tipo as examen_especialidad_id_examen_tipo',
+                                    'examen_especialidad.id_sub_tipo_especialidad as examen_especialidad_id_sub_tipo_especialidad',
+                                    'examen_especialidad.id_ficha_especialidad as examen_especialidad_id_ficha_especialidad',
+
+                                    'pacientes.id as paciente_id',
+                                    'pacientes.rut as paciente_rut',
+                                    'pacientes.nombres as paciente_nombres',
+                                    'pacientes.apellido_uno as paciente_apellido_uno',
+                                    'pacientes.apellido_dos as paciente_apellido_dos',
+                                    'pacientes.telefono_uno as paciente_telefono_uno',
+                                    'pacientes.email as paciente_email',
+                                    'pacientes.fecha_nac as paciente_fecha_nac',
+
+                                    'asistentes.id as asistentes_id',
+                                    'asistentes.rut as asistentes_rut',
+                                    'asistentes.nombres as asistentes_nombres',
+                                    'asistentes.apellido_uno as asistentes_apellido_uno',
+                                    'asistentes.apellido_dos as asistentes_apellido_dos',
+
+                                    'horas_medicas.id as horas_medicas_id',
+                                    'horas_medicas.fecha_consulta as horas_medicas_fecha_consulta',
+                                    'horas_medicas.hora_inicio as horas_medicas_hora_inicio',
+                                    'horas_medicas.hora_termino as horas_medicas_hora_termino',
+                                    'horas_medicas.alias_examen as horas_medicas_alias_examen',
+                                    'horas_medicas.descripcion as horas_medicas_descripcion',
+                                    'horas_medicas.id_ficha_atencion as horas_medicas_id_ficha_atencion',
+                                    'horas_medicas.id_estado as horas_medicas_id_estado'
+                                )
+                                ->join('examen_especialidad', 'examen_especialidad.id_ficha_atencion', '=', 'fichas_atenciones.id')
+                                ->join('pacientes', 'pacientes.id', '=', 'fichas_atenciones.id_paciente')
+                                ->join('asistentes', 'asistentes.id', '=', 'examen_especialidad.id_asistente')
+                                ->join('horas_medicas', 'horas_medicas.id_ficha_atencion', '=', 'fichas_atenciones.id')
+                                ->where('fichas_atenciones.id_lugar_atencion', $laboratorio->id_lugar_atencion)
+                                ->whereIn('fichas_atenciones.finalizada', [2, 3])
+                                ->get();
+
+        return view('app.laboratorio.transcripcion_examenes', [
+            'examenes_transcritos' => $examenes_transcritos,
+            'laboratorio'          => $laboratorio,
+        ]);
+    }
+
+    public function generarPdfInformeDictado(Request $request)
+    {
+        try {
+            $ficha_atencion = FichaAtencion::where('id', $request->id_ficha_atencion)->first();
+            $lugar_atencion = LugarAtencion::with('direccion')->find($ficha_atencion->id_lugar_atencion);
+            $paciente = Paciente::where('id', $ficha_atencion->id_paciente)->first();
+            $lugar_atencion = LugarAtencion::where('id', $ficha_atencion->id_lugar_atencion)->first();
+            $profesional = Profesional::where('id', $ficha_atencion->id_profesional)->first();
+            // Certificados y QR - tipo 6 = Informe de Exámenes (transcripción)
+            $token_receta = '';
+            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 6);
+            if ($temp_token['estado'] != 1) {
+                $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 6);
+            }
+            $token_receta = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+            $qr_documento = GeneradorQrController::generar($url_documento);
+
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 6, $ficha_atencion->id);
+            if ($temp_token['estado'] != 1) {
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 6, $ficha_atencion->id);
+            }
+            $token_profesional = $temp_token['certificado'];
+            $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+            $qr_profesional = GeneradorQrController::generar($url_profesional);
+
+            // Arreglos para la vista
+            $array_ficha_atencion = [
+                'id' => $ficha_atencion->id,
+                'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                'token' => $token_receta,
+                'url' => $url_documento,
+                'qr' => $qr_documento,
+            ];
+
+            $array_lugar_atencion = [
+                'id' => $lugar_atencion->id,
+                'nombre' => $lugar_atencion->nombre,
+                'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+            ];
+
+            $array_profesional = [
+                'id' => $profesional->id,
+                'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                'rut' => $profesional->rut,
+                'direccion' => $profesional->direccion->direccion.' '.$profesional->direccion->numero_dir.', '.$profesional->direccion->Ciudad()->first()->nombre,
+                'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+                'id_especialidad' => $profesional->id_especialidad,
+                'num_colegio' => $profesional->num_colegio,
+                'region' => $profesional->direccion->Ciudad()->first()->Region()->first()->nombre,
+                'token' => $token_profesional,
+                'url' => $url_profesional,
+                'qr' => $qr_profesional,
+            ];
+
+            $direccion = $paciente->Direccion()->first();
+            $array_paciente = [
+                'id' => $paciente->id,
+                'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                'fecha_nac' => $paciente->fecha_nac,
+                'rut' => $paciente->rut,
+                'sexo' => $paciente->sexo,
+                'direccion' => $direccion->direccion.' '.$direccion->numero_dir.', '.$direccion->Ciudad()->first()->nombre
+            ];
+            $contenido_html = $request->input('contenido_html', '');
+
+            // Generar PDF
+            $titulo  = 'Informe de Examen';
+            $nombre  = 'informe_dictado_'.$ficha_atencion->id.'_'.date('YmdHis');
+            $template = 'pdf_informe_dictado';
+
+            $datos = [
+                'array_ficha_atencion' => $array_ficha_atencion,
+                'array_lugar_atencion' => $array_lugar_atencion,
+                'array_profesional'    => $array_profesional,
+                'array_paciente'       => $array_paciente,
+                'contenido_html'       => $contenido_html,
+            ];
+
+            $resultado = PdfController::generarPDF($titulo, $datos, $nombre, $template, 'G');
+
+            if ($resultado->estado == 1) {
+                return response()->json([
+                    'estado' => 1,
+                    'msj'    => 'PDF generado correctamente',
+                    'url'    => $resultado->pdf_url,
+                ]);
+            }
+
+            return response()->json(['estado' => 0, 'msj' => 'Error al guardar el PDF']);
+
+        } catch (\Exception $e) {
+            return response()->json(['estado' => 0, 'msj' => 'Error al generar PDF: ' . $e->getMessage()]);
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 <div class="user-profile user-card mt-0" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-4 shadow-none">
- 
+
         <div class="row mb-2">
             <div class="col-md-12">
                 <h6 class="f-20 text-c-blue d-inline">Ingreso de Paciente</h6>
@@ -14,7 +14,7 @@
                     </script>
                 </div>
             </div>
-        </div>    
+        </div>
 		<div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">

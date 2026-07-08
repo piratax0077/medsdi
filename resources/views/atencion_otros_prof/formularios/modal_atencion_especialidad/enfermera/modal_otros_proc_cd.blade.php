@@ -10,20 +10,19 @@
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo-sm">Procedimiento</label>
-                            <input class="form-control form-control-sm"  name="medicamento" id="medicamento"></input>
+                            <input class="form-control form-control-sm"  name="procedimiento_enfermera" id="procedimiento_enfermera"></input>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="caja-texto form-control form-control-sm" rows="3"  onfocus="this.rows=6" onblur="this.rows=3;" name="anamnesis" id="anamnesis"></textarea>
+                            <textarea class="caja-texto form-control form-control-sm" rows="3"  onfocus="this.rows=6" onblur="this.rows=3;" name="observaciones_enfermera" id="observaciones_enfermera"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardarInformeOtrosProcedimiento()"><i class="feather icon-save"></i> Guardar</button>
             </div>
-        </div>  
+        </div>
     </div>
 </div>
-    

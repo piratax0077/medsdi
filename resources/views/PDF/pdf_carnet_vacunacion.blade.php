@@ -260,7 +260,9 @@
                         {{ $detalle->observacion_vacuna }}
                     @endif
                     <span style="font-weight: 600;">Centro Atención:</span> {{ $detalle->LugarAtencion->nombre }}<br/>
+                    @if($detalle->profesional)
                     <span style="font-weight: 600;">Profesional:</span> {{ $detalle->profesional->nombre.' '.$detalle->profesional->apellido_uno.' '.$detalle->profesional->apellido_dos }}<br/>
+                    @endif
                 </div>
             @endforeach
         </div>

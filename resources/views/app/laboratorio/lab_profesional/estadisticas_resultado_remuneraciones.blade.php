@@ -3,7 +3,7 @@
     <div class="col-md-4">
         <div class="card shadow-sm border-primary">
             <div class="card-body text-center">
-                <h6 class="card-title text-muted mb-2">Remuneración total</h6>
+                <h6 class="card-title text-muted mb-2">Producción del periodo</h6>
                 <h3 class="text-primary font-weight-bold mb-0">${{ number_format($total_valor, 0, ',', '.') }}</h3>
             </div>
         </div>

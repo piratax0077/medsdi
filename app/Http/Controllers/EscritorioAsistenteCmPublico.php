@@ -6,6 +6,7 @@ use App\Models\Asistente;
 use App\Models\AsistenteContactoEmergencia;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
+use App\Models\BoxesCm;
 use App\Models\Categoria;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
@@ -17,6 +18,7 @@ use App\Models\Instituciones;
 use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
+use App\Models\PermisoAsistente;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalConvenio;
@@ -30,6 +32,7 @@ use App\Models\TipoEspecialidad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class EscritorioAsistenteCmPublico extends Controller
 {
@@ -62,8 +65,10 @@ class EscritorioAsistenteCmPublico extends Controller
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
-
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
+            $id_institucion = $contrato->id_institucion;
+            $institucion = Instituciones::where('id', $id_institucion)->first();
             $profesionales = $lugares_atencion->profesionales()
             ->orderBy('apellido_uno','asc')
             ->get();
@@ -86,10 +91,14 @@ class EscritorioAsistenteCmPublico extends Controller
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
 
-
-
             $url = 'app.asistente_cm_publico.escritorio_asistente'; // institucion
             $asistente->id_lugar_atencion = $id_lugar_atencion;
+
+			// box de institucion
+            $filtro_box = array();
+            $filtro_box[] = array('estado',1);
+            $filtro_box[] = array('id_lugar_atencion',$id_lugar_atencion);
+            $boxes = BoxesCm::where($filtro_box)->get();
 
             $array_data = array(
                 'asistente' => $asistente,
@@ -100,8 +109,13 @@ class EscritorioAsistenteCmPublico extends Controller
                 'region' => $region,
                 'profesion_oficio' => $profesion_oficio,
                 'tipo_bonos' => $tipo_bonos,
+                'boxes' => $boxes,
+                'institucion' => $institucion,
+                'permisos_asistente' => PermisoAsistente::firstOrNew([
+                    'id_asistente' => $asistente->id,
+                    'id_lugar_atencion' => $id_lugar_atencion,
+                ]),
             );
-
 
             if (isset($asistente)) {
                 if($asistente->bienvenido == 0)
@@ -202,6 +216,14 @@ class EscritorioAsistenteCmPublico extends Controller
         $filtro[] = array('estado',2) ;
         $contrato = ContratoDependiente::where($filtro)->first();
         $id_lugar_atencion = $contrato->id_lugar_atencion;
+
+        $permiso_ver_pacientes = PermisoAsistente::where('id_asistente', $asistente->id)
+            ->where('id_lugar_atencion', $id_lugar_atencion)
+            ->value('permiso_ver_pacientes');
+
+        if ((int)$permiso_ver_pacientes !== 1) {
+            return redirect()->route('asistentecm.home')->with('error', 'No tienes permiso para ver pacientes en este lugar de atencion.');
+        }
 
         $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
 
@@ -1050,6 +1072,7 @@ class EscritorioAsistenteCmPublico extends Controller
                 'fecha_incio' => $fecha_incio,
                 'fecha_termino' => $fecha_termino,
                 'lugares_atencion' => $lugares_atencion,
+                'asistente' => $asistente,
             ]);
 
         }
@@ -1118,6 +1141,67 @@ class EscritorioAsistenteCmPublico extends Controller
         }
 
         return $datos;
+    }
+
+     public function actualizarFoto(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'foto_perfil' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB máximo
+            ]);
+
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+
+            // Eliminar la foto anterior si existe
+            if ($asistente->foto_perfil) {
+                Storage::disk('public')->delete($asistente->foto_perfil);
+            }
+
+            // Guardar la nueva foto
+            $path = $request->file('foto_perfil')->store('fotos_perfil', 'public');
+
+            // Actualizar en la base de datos
+            $asistente->update(['foto_perfil' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto actualizada correctamente',
+                'foto_url' => asset('storage/' . $path)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la foto: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function eliminarFoto()
+    {
+        try {
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+
+            if ($asistente->foto_perfil) {
+                // Eliminar archivo del storage
+                Storage::disk('public')->delete($asistente->foto_perfil);
+
+                // Actualizar en la base de datos
+                $asistente->update(['foto_perfil' => null]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto eliminada correctamente'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar la foto: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ConvenioInstitucion;
 use App\Models\EmpresasConvenios;
+use App\Models\Laboratorio;
+use App\Models\LugarAtencion;
 use App\Models\TipoConvenio;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoProductoConvenios;
@@ -13,6 +15,8 @@ use App\Models\Responsable;
 use App\Models\TipoPago;
 use App\Models\Convenio;
 use App\Models\Profesional;
+use App\Models\ProfesionalConvenio;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalConveniosIndependientes;
 use App\Models\Region;
 use App\Models\Instituciones;
@@ -111,26 +115,41 @@ class ConveniosController extends Controller
         $tipos_convenio_institucion = TipoConvenioInstitucion::all();
         $tipoproducto_convenios = TipoProductoConvenios::all();
 
-        $convenios_institucion = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
-        ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
-        ->where('convenio_institucion.id_institucion',$institucion->id)
+        $convenios_institucion = ProfesionalConvenio::select('profesional_convenios.*','lugares_atencion.nombre as lugar_atencion_nombre','lugares_atencion.id as lugar_atencion_id')
+        ->join('lugares_atencion','profesional_convenios.id_lugar_atencion','lugares_atencion.id')
+        ->where('profesional_convenios.id_lugar_atencion',$institucion->id_lugar_atencion)
         ->get();
 
+        // Procesar convenios para convertir el campo 'convenios' de string a array
+        $convenios_institucion = $convenios_institucion->map(function($convenio) {
+            // Convertir string "Particular,Fonasa," a array limpio
+            $convenios_array = array_filter(
+                array_map('trim', explode(',', $convenio->convenios)),
+                function($item) {
+                    return !empty($item);
+                }
+            );
 
+            $convenio->convenios_array = $convenios_array;
+            return $convenio;
+        });
 
-        foreach($convenios_institucion as $convenio)
-        {
-            $tipos_productos = [];
-            // pasar el json a array
-            $convenio->productos = json_decode($convenio->productos_convenio_institucion);
-            foreach($convenio->productos as $producto)
-            {
-                $tipo_producto = TipoProductoConvenios::find($producto);
-                array_push($tipos_productos,$tipo_producto->descripcion);
-            }
+        $regiones = Region::all();
+        $convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                                                    ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                                                    ->where('empresas_convenios.id_empresa',null)
+                                                    ->get();
 
-            $convenio->tipos_productos = $tipos_productos;
-        }
+        $lugares_atencion = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','lugares_atencion.id as lugar_atencion_id','lugares_atencion.nombre as lugar_atencion_nombre')
+        ->join('lugares_atencion','profesionales_lugares_atencion.id_lugar_atencion','lugares_atencion.id')
+        ->where('profesionales_lugares_atencion.id_profesional', $institucion->id)
+        ->get();
+
+        // agregamos a la institucion a los lugares de atencion
+        $lugares_atencion->push((object)[
+            'lugar_atencion_id' => $institucion->id_lugar_atencion,
+            'lugar_atencion_nombre' => $institucion->nombre
+        ]);
 
         return view ('app.adm_cm.comercial.convenios',[
             'tipos_convenio' => $tipos_convenio,
@@ -141,6 +160,11 @@ class ConveniosController extends Controller
             'tipos_convenio_institucion' => $tipos_convenio_institucion,
             'tipoproducto_convenios' => $tipoproducto_convenios,
             'convenios_institucion' => $convenios_institucion,
+            'institucion' => $institucion,
+            'tipo_institucion' => $tipo_institucion,
+            'regiones' => $regiones,
+            'convenios_prevision' => $convenios_prevision,
+            'lugares_atencion' => $lugares_atencion
         ]);
     }
 
@@ -242,22 +266,134 @@ class ConveniosController extends Controller
 
 
     public function misPropiosConvenios(){
+
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                            // $institucion = Profesional::where('id_usuario',Auth::user()->id)->first();
+                            // $tipo_institucion = 'profesional';
+                        }
+                    }
+                }
+                else
+                {
+                    //return back()->with('error','Institución no encontrada');
+                    $institucion = Laboratorio::where('id_usuario',Auth::user()->id)->first();
+                    $tipo_institucion = 'laboratorio';
+                }
+            }
+        }
+        //
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
         $tipos_convenio = TipoConvenio::all();
         $tipos_producto = TipoProducto::all();
         $responsables = Responsable::all();
         $tipos_pago = TipoPago::all();
         $convenios = Convenio::all();
         $tipos_convenio_institucion = TipoConvenioInstitucion::all();
+
         // 1: CM 2: DENTAL
-        $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_convenio',2)->get();
+        if($profesional->id_especialidad == 2){
+            $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_convenio',2)->get();
+        }else{
+            $tipoproducto_convenios = TipoProductoConvenios::whereNull('id_tipo_convenio')->get();
+        }
         $regiones = Region::all();
-        $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
-        $convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
-                                                    ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
-                                                    ->where('empresas_convenios.id_empresa',null)
-                                                    ->where('empresas_convenios.id_profesional', $profesional->id)
-                                                    ->get();
+        $convenios_empresas = EmpresasConvenios::select(
+                'empresas_convenios.*',
+                'empresas.nombre_empresa',
+                'tipoproducto_convenios.descripcion as tipo_atencion'
+            )
+            ->leftJoin('empresas', 'empresas_convenios.id_empresa', 'empresas.id')
+            ->leftJoin('tipoproducto_convenios', 'empresas_convenios.id_convenio', 'tipoproducto_convenios.id')
+            ->where('empresas_convenios.id_profesional', $profesional->id)
+            ->get();
+        $convenios_prevision = ProfesionalConvenio::select('profesional_convenios.*','lugares_atencion.nombre as lugar_atencion_nombre','lugares_atencion.id as lugar_atencion_id')
+        ->join('lugares_atencion','profesional_convenios.id_lugar_atencion','lugares_atencion.id')
+        ->where('profesional_convenios.id_profesional',$profesional->id)
+        ->get();
+
+        // Obtener convenios profesionales y procesar el campo 'convenios'
+        $convenios_profesional = ProfesionalConvenio::select('profesional_convenios.*','lugares_atencion.nombre as lugar_atencion_nombre','lugares_atencion.id as lugar_atencion_id')
+        ->join('lugares_atencion','profesional_convenios.id_lugar_atencion','lugares_atencion.id')
+        ->where('profesional_convenios.id_profesional',$profesional->id)
+        ->get();
+        $convenios_profesional = $convenios_profesional->map(function($convenio) {
+            // Convertir string "Particular,Fonasa," a array limpio
+            $convenios_array = array_filter(
+                array_map('trim', explode(',', $convenio->convenios)),
+                function($item) {
+                    return !empty($item);
+                }
+            );
+            $convenio->convenios_array = $convenios_array;
+            return $convenio;
+        });
+
+        $lugares_atencion = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','lugares_atencion.id as lugar_atencion_id','lugares_atencion.nombre as lugar_atencion_nombre')
+        ->join('lugares_atencion','profesionales_lugares_atencion.id_lugar_atencion','lugares_atencion.id')
+        ->where('profesionales_lugares_atencion.id_profesional', $profesional->id)
+        ->get();
+
+        $empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
 
         return view('app.profesional.mis_convenios')->with([
             'profesional' => $profesional,
@@ -267,7 +403,11 @@ class ConveniosController extends Controller
             'tipoproducto_convenios' => $tipoproducto_convenios,
             'regiones' => $regiones,
             'convenios_empresas' => $convenios_empresas,
-            'convenios_prevision' => $convenios_prevision
+            'convenios_prevision' => $convenios_prevision,
+            'convenios_profesional' => $convenios_profesional,
+            'institucion' => $institucion,
+            'tipo_institucion' => $tipo_institucion,
+            'lugares_atencion' => $lugares_atencion
         ]);
     }
 
@@ -318,5 +458,41 @@ class ConveniosController extends Controller
             return ['estado' => 0, 'mensaje' => $e->getMessage()];
         }
 
+    }
+
+    /**
+     * Retorna los convenios del profesional en un lugar de atención específico
+     * @param Request $request (espera id_lugar_atencion)
+     * @return \Illuminate\Http\Response
+     */
+    public function obtenerConveniosLugarAtencion(Request $request)
+    {
+        $id_lugar_atencion = $request->input('id_convenio_profesional');
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$profesional) {
+            return response()->json([], 200);
+        }
+        // Buscar los convenios del profesional en ese lugar de atención
+        $convenios = ProfesionalConvenio::where('id_profesional', $profesional->id)
+            ->where('id_lugar_atencion', $id_lugar_atencion)
+            ->get();
+
+        // Retornar solo id y nombre (puedes ajustar según tu modelo)
+        $result = [];
+        foreach ($convenios as $c) {
+            // Si el campo convenios es string separado por comas:
+            $convenios_array = array_filter(array_map('trim', explode(',', $c->convenios)));
+            foreach ($convenios_array as $nombre) {
+                $result[] = [
+                    'id' => $c->id,
+                    'nombre' => $nombre,
+                    'valor' => $c->valor,
+                    'valor_garantia' => $c->valor_garantia,
+                    'tpo_espera' => $c->tpo_espera
+                ];
+            }
+        }
+        return response()->json($result, 200);
     }
 }

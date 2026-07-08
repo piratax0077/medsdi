@@ -6,14 +6,14 @@
                     <img class="img-radius" src="{{ asset('images/iconos/usuario_profesional.svg') }}"
                         alt="Profesional">
                     <div class="user-details">
-                        <div id="more-details">{{ @Auth::user()->name }} <i class="fa fa-caret-down"></i></div>
+                        <div id="more-details">{{ @Auth::user()->name }} <i class="fa fa-caret-down" style="font-size: 1.2rem!important;"></i></div>
                     </div>
                 </div>
                 <div id="nav-user-link">
                     <ul class="list-inline">
                         <li class="list-inline-item">
                             <a href="{{ route('profesional.mi_perfil') }}" data-toggle="tooltip" title="Mi perfil">
-                                <i class="feather icon-user"></i>
+                                <i class="feather icon-user" style="font-size: 1.2rem!important;"></i>
                             </a>
                         </li>
                         <li class="list-inline-item">

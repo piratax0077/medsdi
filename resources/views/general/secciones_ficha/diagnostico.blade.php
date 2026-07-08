@@ -11,32 +11,38 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_hipotesis">Hipótesis diagnóstica</label>
-                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons,diag_endos_eda" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="">
+                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_cons,diag_endos_eda" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ old('hipotesis_diagnostico', $fichaAtencion->hipotesis_diagnostico ?? '') }}">
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
-                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
-                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+                        <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="{{ old('diagnostico_ce10', $fichaAtencion->diagnostico_ce10 ?? '') }}" onchange="cargarIgual('descripcion_cie')">
+                        <input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="{{ old('id_descripcion_cie', $fichaAtencion->id_descripcion_cie ?? '') }}" onchange="cargarIgual('id_descripcion_cie')">
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo-sm" for="indicaciones">Indicaciones</label>
-                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="indicaciones" id="indicaciones">{{ old('indicaciones', $fichaAtencion->indicaciones ?? '') }}</textarea>
                     </div>
-                    {{--  <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                        <div class="custom-control custom-switch" >
-                            <input type="checkbox" class="custom-control-input accor-closed  collapsed" id="motivo1"  data-toggle="collapse" data-target="#motivo1_c" aria-expanded="false" aria-controls="motivo1_c">
-                            <label class="custom-control-label font-weight-bold text-c-blue" for="motivo1">Ingresar Plan de tratamiento</label>
+
+                    <!-- ADJUNTOS -->
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 d-none" id="archivos_adjuntos_ficha_atencion">
+                        <div class="alert alert-warning mb-0" role="alert">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Archivos Adjuntos</strong>
+                                <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="mt-3" id="adjuntos_indicaciones">
+                                <!-- Los adjuntos se cargan dinámicamente aquí -->
+                                <button type="button" class="btn btn-sm btn-success" onclick="cargarAdjuntoPersonalizado()">
+                                    <i class="feather icon-plus"></i> Agregar adjunto
+                                </button>
+                            </div>
                         </div>
-                    </div>  --}}
+                    </div>
+                    <!-- FIN ADJUNTOS -->
+
                     <div class=" col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div id="motivo1_c" class="collapse" aria-labelledby="motivo1" data-parent="#motivo1">
                             <div class="card-body-aten-a">
-                                {{--  <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-aten">Plan de tratamiento</h6>
-                                    </div>
-                                </div>
-                                <hr>  --}}
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-row">
@@ -841,3 +847,51 @@
         </div>
     </div>
 </div>
+
+<script>
+    // ✅ CARGAR ADJUNTOS AL INICIALIZAR LA PÁGINA
+    $(document).ready(function() {
+        let adjuntos = @json($adjuntos_ficha ?? []);
+
+        if(adjuntos && adjuntos.length > 0) {
+            // Mostrar el div de adjuntos
+            $('#archivos_adjuntos_ficha_atencion').removeClass('d-none');
+
+            // Agregar cada adjunto como un botón
+            $.each(adjuntos, function(index, adjunto) {
+                let boton_pdf = `
+                    <button type="button" class="btn btn-sm btn-outline-info me-2 mb-2" onclick="abrirAdjunto('${adjunto.url_pdf}')">
+                        <i class="feather icon-file-pdf"></i> ${adjunto.nombre} - ${adjunto.fecha}
+                    </button>
+                `;
+
+                // Insertar antes del botón "+ Agregar adjunto"
+                $('#adjuntos_indicaciones .btn-success').before(boton_pdf);
+            });
+        }
+    });
+
+    // Función para abrir adjuntos en modal
+    function abrirAdjunto(url_pdf) {
+        Fancybox.show(
+            [
+                {
+                    src: url_pdf,
+                    type: "iframe",
+                    preload: false,
+                },
+            ]
+        );
+    }
+
+    // Función para agregar adjuntos personalizados
+    function cargarAdjuntoPersonalizado() {
+        // Aquí puedes agregar lógica para cargar archivos
+        // Por ejemplo, abrir un input file o un modal
+        swal({
+            title: "Cargar Adjunto Personalizado",
+            text: "Funcionalidad para cargar adjuntos personalizados aún no implementada.",
+            icon: "info",
+        })
+    }
+</script>

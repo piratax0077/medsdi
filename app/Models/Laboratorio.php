@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Laboratorio extends Model
@@ -13,6 +12,11 @@ class Laboratorio extends Model
     public function Direccion()
     {
         return $this->hasOne(Direccion::class, 'id', 'id_direccion');
+    }
+
+    public function LugarAtencion()
+    {
+        return $this->belongsTo(LugarAtencion::class, 'id_lugar_atencion', 'id');
     }
 
     public function Usuario()

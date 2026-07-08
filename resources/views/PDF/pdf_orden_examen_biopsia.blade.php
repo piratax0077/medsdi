@@ -13,35 +13,30 @@
 
     <main>
         <h3 style="text-align: center">Exámen de Biopsia</h3>
-            <table class="tabla-receta" style="margin-top: 10px; border-collapse: collapse; width: 100%;">
-                <thead>
-                    <tr style="background-color: #FAFAFA; text-align: left;">
-                        <th>Fecha</th>
-                        <th>N° Orden</th>
-                        <th>Zonas</th>
-                        <th>Patólogo</th>
-                        <th>Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ $cuerpo['array_examenes']['fecha'] }}</td>
-                        <td>{{ $cuerpo['array_examenes']['id'] }}</td>
-                        <td>
-                            @php
-                                $zonas = [];
-                                if ($cuerpo['array_examenes']['zona1']) $zonas[] = $cuerpo['array_examenes']['zona1'];
-                                if ($cuerpo['array_examenes']['zona2']) $zonas[] = $cuerpo['array_examenes']['zona2'];
-                                if ($cuerpo['array_examenes']['zona3']) $zonas[] = $cuerpo['array_examenes']['zona3'];
-                                if ($cuerpo['array_examenes']['zona4']) $zonas[] = $cuerpo['array_examenes']['zona4'];
-                            @endphp
-                            {{ implode(', ', $zonas) }}
-                        </td>
-                        <td>{{ $cuerpo['array_examenes']['patologo'] }}</td>
-                        <td>{{ $cuerpo['array_examenes']['observaciones'] }}</td>
-                    </tr>
-                </tbody>
-            </table>
+
+        @foreach($cuerpo['array_examenes'] as $examen)
+        @php
+            $zonas = [];
+            if (!empty($examen['zona1'])) $zonas[] = 'Frasco 1: ' . $examen['zona1'];
+            if (!empty($examen['zona2'])) $zonas[] = 'Frasco 2: ' . $examen['zona2'];
+            if (!empty($examen['zona3'])) $zonas[] = 'Frasco 3: ' . $examen['zona3'];
+            if (!empty($examen['zona4'])) $zonas[] = 'Frasco 4: ' . $examen['zona4'];
+        @endphp
+        <div style="margin-top: 18px; padding: 12px 16px; border: 1px solid #ccc; border-radius: 4px; page-break-inside: avoid;">
+            <p style="margin: 4px 0;"><strong>Fecha:</strong> {{ $examen['fecha'] ?? '' }}</p>
+            <p style="margin: 4px 0;"><strong>N° Orden:</strong> {{ $examen['n_orden'] ?? '' }}</p>
+            @if(count($zonas))
+                <p style="margin: 4px 0;"><strong>Zonas:</strong></p>
+                @foreach($zonas as $zona)
+                    <p style="margin: 2px 0 2px 16px;">• {{ $zona }}</p>
+                @endforeach
+            @endif
+            <p style="margin: 4px 0;"><strong>Patólogo / Laboratorio:</strong> {{ $examen['patologo'] ?? '' }}</p>
+            @if(!empty($examen['observaciones']))
+                <p style="margin: 4px 0;"><strong>Observaciones:</strong> {{ $examen['observaciones'] }}</p>
+            @endif
+        </div>
+        @endforeach
     </main>
 
 

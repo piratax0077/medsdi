@@ -424,9 +424,14 @@
         let obs_period_furca = $('#obs_period_furca'+counter).val();
         let obs_period_inst = $('#obs_period_inst'+counter).val();
         let biopsia = $('#biopsia_check_period'+counter).is(':checked') ? 1 : 0;
+        
+        // Declarar variables de biopsia fuera del if
+        let zona_biopsia = '';
+        let obs_result_biopsia = '';
+        
         if(biopsia == 1){
-            let zona_biopsia = $('#period_biop_zona'+counter).val();
-            let obs_result_biopsia = $('#period_obs_result_biopsia'+counter).val();
+            zona_biopsia = $('#period_biop_zona'+counter).val();
+            obs_result_biopsia = $('#period_obs_result_biopsia'+counter).val();
             if(zona_biopsia == null || zona_biopsia == ""){
                 swal({
                     icon: 'warning',
@@ -548,10 +553,10 @@
             mov_dent: mov_dent,
             furca: furca,
             tipo_sonda: tipo_sonda,
-            obs_perio_pza: obs_perio_pza,
+            observaciones: obs_perio_pza,
             biopsia: biopsia,
-            zona_biopsia: biopsia == 1 ? zona_biopsia : '',
-            obs_result_biopsia: biopsia == 1 ? obs_result_biopsia : '',
+            zona_y_motivo: zona_biopsia,
+            obs_result_biopsia: obs_result_biopsia,
             id_ficha_atencion: $('#id_fc').val(),
             id_paciente: $('#id_paciente').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
@@ -567,13 +572,12 @@
             type: 'POST',
             data: data,
             success: function(resp){
-                return console.log(resp);
+                console.log(resp);
                 if(resp.mensaje == 'OK'){
-                    mostrar_pieza_dental_examen(2000);
-                    $('#contenedor_pieza_dental_endo_gral').empty();
-                    $('#contenedor_pieza_dental_endo_gral').append(resp.v);
-                    $('#contenedor_examenes_grupos_dentales').empty();
-                    $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                    $('#contenedor_piezas_tto_period').empty();
+                    $('#contenedor_piezas_tto_period').append(resp.v);
+                    // $('#contenedor_examenes_grupos_dentales').empty();
+                    // $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
                     $('#contenedor_nueva_pieza_dental').empty();
                     $('#planificacion_examenes_gral').empty();
                     let examenes = resp.examenes;

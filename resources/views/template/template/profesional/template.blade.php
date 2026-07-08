@@ -440,6 +440,7 @@
                                         // 'Llamando')//Esperando atención
                                         $('#hm_anular_hora').hide();
                                         $('#hm_atender_hora').show();
+										$('#hm_llamar_paciente').show();
                                         $('#hm_confirmar_hora').hide();
                                         $('#hm_ver_hora').hide();
                                         $('#hm_espera_paciente_hora').hide();
@@ -460,6 +461,7 @@
                                         //'Realizando')
                                         $('#hm_anular_hora').hide();
                                         $('#hm_atender_hora').show();
+										$('#hm_llamar_paciente').show();
                                         $('#hm_confirmar_hora').hide();
                                         $('#hm_ver_hora').hide();
                                         $('#hm_espera_paciente_hora').hide();
@@ -6252,6 +6254,7 @@
                                     // 'Llamando')//Esperando atención
                                     $('#hm_anular_hora').hide();
                                     $('#hm_atender_hora').show();
+									$('#hm_llamar_paciente').show();
                                     $('#hm_confirmar_hora').hide();
                                     $('#hm_ver_hora').hide();
                                     $('#hm_espera_paciente_hora').hide();
@@ -6272,6 +6275,7 @@
                                     //'Realizando')
                                     $('#hm_anular_hora').hide();
                                     $('#hm_atender_hora').show();
+									$('#hm_llamar_paciente').show();
                                     $('#hm_confirmar_hora').hide();
                                     $('#hm_ver_hora').hide();
                                     $('#hm_espera_paciente_hora').hide();

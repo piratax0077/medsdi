@@ -199,18 +199,24 @@
                 {
                     $.each(data.registros, function(index, value)
                     {
-                        var f_temp = (value.fecha).replace('T',' ').replace('Z','').replace('.000000','');
-                        var fecha = new Date(f_temp);
-                        fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
+                        var fecha = 'N/A';
+
+                        // Validar que fecha no sea null antes de procesarla
+                        if(value.fecha != null && value.fecha != undefined && value.fecha != '')
+                        {
+                            var f_temp = (value.fecha).replace('T',' ').replace('Z','').replace('.000000','');
+                            fecha = new Date(f_temp);
+                            fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
+                        }
 
                         html += '<tr>';
                         html += '    <td class="text-center align-middle">'+fecha+'</td>';//Fecha //fecha
-                        html += '    <td class="text-center align-middle">'+value.num_emb+'</td>';//N° de Embarazo //num_emb
-                        html += '    <td class="text-center align-middle">'+value.control_emb+'</td>';//Control //control_emb
-                        html += '    <td class="text-center align-middle">'+value.tipo_parto+'</td>';//Tipo de Parto //tipo_parto
-                        html += '    <td class="text-center align-middle">'+value.puerperio+'</td>';//Puerperio //puerperio
-                        html += '    <td class="text-center align-middle">'+value.recien_nacido+'</td>';//R-N //recien_nacido
-                        html += '    <td class="text-center align-middle">'+value.tto_complicaciones+'</td>';//Tratamientos complicaciones //tto_complicaciones
+                        html += '    <td class="text-center align-middle">'+(value.num_emb || '-')+'</td>';//N° de Embarazo //num_emb
+                        html += '    <td class="text-center align-middle">'+(value.control_emb || '-')+'</td>';//Control //control_emb
+                        html += '    <td class="text-center align-middle">'+(value.tipo_parto || '-')+'</td>';//Tipo de Parto //tipo_parto
+                        html += '    <td class="text-center align-middle">'+(value.puerperio || '-')+'</td>';//Puerperio //puerperio
+                        html += '    <td class="text-center align-middle">'+(value.recien_nacido || '-')+'</td>';//R-N //recien_nacido
+                        html += '    <td class="text-center align-middle">'+(value.tto_complicaciones || '-')+'</td>';//Tratamientos complicaciones //tto_complicaciones
                         html += '</tr>';
                     });
 

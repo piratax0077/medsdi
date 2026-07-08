@@ -81,7 +81,7 @@
                                                         <div class="col">
                                                             <div class="position-relative d-inline-block">
                                                                 <img class="img-radius img-fluid wid-80" id="profile-image"
-                                                                    src="{{ $profesional->foto_perfil ? asset('storage/' . $profesional->foto_perfil) : asset('images/iconos/usuario_profesional.svg') }}"
+                                                                    src="{{ $p->foto_perfil ? asset('storage/' . $p->foto_perfil) : asset('images/iconos/usuario_profesional.svg') }}"
                                                                     alt="User image">
                                                             </div>
                                                         </div>

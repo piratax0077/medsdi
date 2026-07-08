@@ -245,6 +245,7 @@
                     function finalizarCarga() {
                         setTimeout(() => {
                             recargar_imagenes_rx('gral');
+                            mostrar_nuevas_imagenes_dent();
                         }, 1000);
                     }
 
@@ -299,10 +300,12 @@
     function recargar_imagenes_rx(seccion){
         let url = "{{ ROUTE('profesional.recargar_imagenes_dental_paciente') }}";
         let id_paciente = $('#id_paciente_fc').val();
+        let id_ficha_atencion = $('#id_fc').val();
 
         let data = {
             _token: CSRF_TOKEN,
             id_paciente: id_paciente,
+            id_ficha_atencion: id_ficha_atencion,
             seccion: seccion
         }
 

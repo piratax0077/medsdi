@@ -11,16 +11,16 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h5>
-                            Usted esta por <span style="color:red">Finalizar el contrato y Desasociar</span> a <span id="modal_finalizar_empleado_nombre" style="font-weight: bold; color:#1317d6"></span> de forma definitiva.<br>
-                            Si esta seguro presione el botón de "Finalizar / Desasociar"
+                            Usted está a punto de <span class="text-danger">Finalizar el contrato y desasociar</span> de forma definitiva a <span class="font-weight-bold text-c-blue text-uppercase" id="modal_finalizar_empleado_nombre"></span>.<br><br>
+                            Si está seguro, presione el botón “Finalizar / Desasociar”.
                         </h5>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="finalizar_personal_profesional();">Finalizar / Desasociar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="finalizar_personal_profesional();"><i class="feather icon-check"></i> Finalizar / Desasociar</button>
             </div>
         </div>
     </div>
@@ -40,16 +40,16 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h5>
-                            Usted esta por <span style="color:red">Finalizar el contrato y Desasociar</span> a <span id="modal_finalizar_otro_nombre" style="font-weight: bold; color:#1317d6"></span> de forma definitiva.<br>
-                            Si esta seguro presione el botón de "Finalizar / Desasociar"
+                            Usted está a punto de <span class="text-danger">Finalizar el contrato y desasociar</span> de forma definitiva a <span class="font-weight-bold text-c-blue text-uppercase" id="modal_finalizar_otro_nombre"></span>.<br><br>
+                            Si está seguro, presione el botón “Finalizar / Desasociar”.
                         </h5>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="finalizar_personal_otro_profesional();">Finalizar / Desasociar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="finalizar_personal_otro_profesional();"><i class="feather icon-check"></i> Finalizar / Desasociar</button>
             </div>
         </div>
     </div>

@@ -909,7 +909,6 @@
 
     function indicar_medicamento_sdi()
     {
-
         let nombre_medicamento_ficha_dental = $('#nombre_medicamento_ficha_dental').val();
         let farmaco = $('#nombre_composicion_farmaco').html();
         let id_medicamento = $('#id_medicamento_ficha_dental').val();
@@ -1062,32 +1061,27 @@
 
                 var i = $('#tabla_medicamento_cirugia_sdi tr').length; //contador para asignar id al boton que borrara la fila
 
+                // Forzar valores por defecto si están vacíos
+                var periodo_val = periodo_ficha_dental && periodo_ficha_dental.trim() !== '' ? periodo_ficha_dental : '-';
+                var cantidad_val = cantidad_comprar && cantidad_comprar.trim() !== '' ? cantidad_comprar : '-';
+
                 var fila = '<tr class="tabla_medicamento_cirugia_sdi" id="row' + i + '">' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_tipo_control + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_dosis_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_frecuencia_medicamento_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_periodo_ficha_dental + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + periodo_ficha_dental + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_cantidad_comprar + '</td>' +
-                                '<td class="text-center align-middle text-wrap">' + cantidad_comprar + '</td>' +
-
-                                '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
-                            '</tr>';
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_tipo_control + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_medicamento + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + nombre_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + farmaco + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_dosis_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + dosis_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_frecuencia_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + frecuencia_medicamento_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
+                    // Aquí van las columnas visibles de periodo y cantidad (en el orden visual de la tabla)
+                    '<td class="text-center align-middle text-wrap">' + periodo_val + '</td>' +
+                    '<td class="text-center align-middle text-wrap">' + cantidad_val + '</td>' +
+                    // Botón eliminar al final
+                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+\
+                '</tr>';
 
                 i++;
 

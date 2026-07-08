@@ -1,41 +1,48 @@
 {{-- modal agendar Hora examen --}}
 <div class="modal fade" id="m_agendar_hora_examen" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_agendar_hora_examen" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1">Agendar de Hora de Examen</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_modal_hex_agenda();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="form-row">
                     <div class="col-md-12">
                         <input type="hidden" name="m_agendar_hora_examen_lista_examenes" id="m_agendar_hora_examen_lista_examenes" value="">
-                        <label class="mt-4">Examen: <span id="m_agendar_hora_examen_text_lista_examenes" class="hljs-strong"></span></label>
+                        <h6 class="mt-4 text-c-blue mx-3 mb-3">Examen: <span id="m_agendar_hora_examen_text_lista_examenes" class="hljs-strong"></span></h6>
+                        <hr>
                     </div>
+                    
                 </div>
-                <div class="row">
+                <div class="form-row">
                     <div class="col-md-12">
                         <input type="hidden" name="m_agendar_hora_examen_agendar_id_paciente" id="m_agendar_hora_examen_agendar_id_paciente" value="">
-                        <div class="col-md-6">
-                            <label class="mt-4">El Profesional atiende los dias <span id="m_agendar_hora_examen_dias_atencion" class="hljs-strong"></span></label>
+
+                        <div class="col-md-12 mb-3">
+                            <div class="alert alert-primary f-16" role="alert">
+                              El Profesional atiende los días:  <span id="m_agendar_hora_examen_dias_atencion" class="hljs-strong"></span>
+                            </div>
                         </div>
 
-                        <div class="col-md-12">
-                            <div class="form-row">
+                        <div class="col-md-12 ">
+                            <div class="form-row mt-3">
                                 <div class="form-group col-md-12 mb-2 mt-0">
-                                    <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_examen_fecha" onchange="carga_horas_profesional_horas_examens(this.value);" id="m_agendar_hora_examen_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
+                                    <label class="floating-label-activo-sm text-c-blue mb-0">Seleccione una fecha</label>
+                                    <input class="form-control form-control-lg" type="date" name="m_agendar_hora_examen_fecha" onchange="carga_horas_profesional_horas_examens(this.value);" id="m_agendar_hora_examen_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12 mt-4">
                             <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <h6 class="text-petroleo" id="m_agendar_hora_examen_fecha_seleccionada"></h6>
+                                <div class="col-md-12 text-center m-3">
+                                    <h6 class="text-c-blue f-14" id="m_agendar_hora_examen_fecha_seleccionada"></h6>
                                 </div>
-                                <div class="col-md-12 mx-auto" >
-                                    <div class="row" id="m_agendar_hora_examen_lista_horas">
+                                <div class="col-md-12 mx-auto">
+                                    <div class="row">
+                                        <div class="col-12 text-center" id="m_agendar_hora_examen_lista_horas">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -44,10 +51,10 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <!--<div class="modal-footer">
                 {{-- <button type="button" class="btn btn-danger align-middle" onclick="agendar_hora_examen()"; data-dismiss="modal">Eliminar</button> --}}
                 <button type="button" class="btn btn-info align-middle" onclick="cerrar_modal_hex_agenda()"; data-dismiss="modal">Cerrar</button>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -140,13 +147,13 @@
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label class="floating-label">Descripción Reserva</label>
+                                <label class="floating-label-active-sm">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="hex_reserva_hora_descripcion" id="hex_reserva_hora_descripcion">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger close_hex_agenda_agregar_paciente" onclick="$('#hex_agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
-                            <button type="button" onclick="agendar_hora_examen();" class="btn btn-info">Agendar Hora</button>
+                            <button type="button" class="btn btn-danger close_hex_agenda_agregar_paciente" onclick="$('#hex_agenda_agregar_paciente').modal('hide');" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                            <button type="button" onclick="agendar_hora_examen();" class="btn btn-info"><i class="feather icon-check"></i> Agendar Hora</button>
 
                         </div>
                     </div>
@@ -204,7 +211,7 @@
                 if(data.registros.horario_agenda_laboral != '')
                 {
                     console.log(data);
-                    let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                    let dias = ['','LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
                     var dias_activos = data.registros.horario_agenda_laboral.split(',');
                     var dias_texto = '';
                     var cant = 0;
@@ -288,7 +295,7 @@
         .done(function(data) {
             console.log(data);
             if (data.estado == 1) {
-                $('#m_agendar_hora_examen_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
+                $('#m_agendar_hora_examen_fecha_seleccionada').html('Horas disponibles para el día: '+data.text_fecha);
 
                 $('#m_agendar_hora_examen_lista_horas').html('');
                 $.each(data.registros, function(index, value)

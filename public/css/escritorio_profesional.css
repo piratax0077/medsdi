@@ -3,7 +3,11 @@ body {
 }
 
 .bg-c-info {
-	background-color: #1CBEBE;  
+	background: #31BEBE;
+background: -webkit-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(41, 159, 180, 1) 100%, rgba(26, 154, 163, 1) 71%);
+background: -moz-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(41, 159, 180, 1) 100%, rgba(26, 154, 163, 1) 71%);
+background: linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(41, 159, 180, 1) 100%, rgba(26, 154, 163, 1) 71%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#31BEBE", endColorstr="#1A9AA3", GradientType=0);;  
 }
 
 .btn.btn-icon {

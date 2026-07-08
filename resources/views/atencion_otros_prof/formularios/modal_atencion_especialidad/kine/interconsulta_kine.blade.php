@@ -118,7 +118,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_interconsulta_kine()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
 	</div>
@@ -126,5 +126,10 @@
 <script>
     function interkine() {
         $('#modal_interkine').modal('show');
+    }
+
+    function guardar_interconsulta_kine() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('interconsulta_kine');
     }
 </script>

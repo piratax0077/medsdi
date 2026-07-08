@@ -52,33 +52,5 @@
     leyendaHtml += '</ul>';
     document.getElementById('leyendaProducto').innerHTML = leyendaHtml;
 
-    // --- Pacientes atendidos por profesional ---
-    let profLabels = pacientesPorProfesional.map(p => p.profesional);
-    let profData = pacientesPorProfesional.map(p => p.cantidad_pacientes);
-    let profColors = profLabels.map((_, i) => colores[i % colores.length]);
-    let ctxPac = document.getElementById('ventasPorPaciente').getContext('2d');
-    new Chart(ctxPac, {
-        type: 'bar',
-        data: {
-            labels: profLabels,
-            datasets: [{
-                label: 'Pacientes atendidos',
-                data: profData,
-                backgroundColor: profColors
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            responsive: true
-        }
-    });
-    // Leyenda profesionales
-    let leyendaPacHtml = '<strong>Leyenda:</strong><ul>';
-    profLabels.forEach((nombre, i) => {
-        leyendaPacHtml += `<li><span style="display:inline-block;width:20px;height:20px;background:${profColors[i]};margin-right:5px;"></span>${nombre}</li>`;
-    });
-    leyendaPacHtml += '</ul>';
-    document.getElementById('leyendaPaciente').innerHTML = leyendaPacHtml;
-
 })();
 </script>

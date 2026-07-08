@@ -1,15 +1,15 @@
     <!--Sidebar 3 (formularios_enfermeria)-->
 <div class="position-fixed w-100 h-100"></div>
 <div id="formularios_enfermeria" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
-    <header class="bs-canvas-header p-3 bg-info overflow-auto">
-        <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-        <h5 class="d-inline-block text-light mb-0 float-right">Formularios Enfermería</h5>
-    </header>
+     <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+             <button type="button" class="bs-canvas-close close" onclick="$('#formularios_enfermeria').modal('hide')" aria-label="Close" data-dismiss="modal"> <span aria-hidden="true" class="text-white">&times;</span></button>
+             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Enfermería</h5>
+        </header>
     <div class="bs-canvas-content">
         <div class="accordion" id="accordion_ped">
 
             <div class="card-sidebar">
-                <div class="card-header-sidebar" id="heading_test">
+                <div class="card-header-sidebar" id="heading_test">    
                     <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_test" aria-expanded="true" aria-controls="collapse_test"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
                         TEST PEDIÀTRICOS
@@ -82,8 +82,16 @@
                 </div>
 
             </div>
-            <!-- SECCION CONSENTIMIENTOS -->
-            @include('general.sidebar.seccion_consentimientos')
+            <div class="card-header-sidebar" id="heading_consentimientos_informados">
+                <h2 class="mb-0">
+                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        CONSENTIMIENTOS INFORMADOS 
+                    </button>
+                </h2>
+           </div>
+            @include('general.sidebar.seccion_consentimientos') 
+                        <!-- SECCION CONSENTIMIENTOS -->
+              
 
 
             <div class="card-sidebar">

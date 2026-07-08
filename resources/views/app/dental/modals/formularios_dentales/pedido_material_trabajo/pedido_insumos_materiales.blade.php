@@ -109,7 +109,6 @@
                         </thead>
                         <tbody id="cuerpo_tabla_pedido_insumos_materiales">
                             {{-- Aquí se llenará la tabla con los datos --}}
-                            @if(isset($insumos_bodega))
                             @foreach ($insumos_bodega as $i)
                                 <tr>
                                     <td>{{ $i->tipo_solicitud }}</td>
@@ -122,7 +121,6 @@
                                     </td>
                                 </tr>
                             @endforeach
-                            @endif
                         </tbody>
                 </table>
                 <div class="col-sm-12 col-md-12 text-center mb-2">

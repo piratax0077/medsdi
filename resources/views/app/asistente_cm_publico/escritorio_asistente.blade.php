@@ -17,6 +17,12 @@
 @endsection
 
 @section('content')
+    @php
+        $puede_confirmar_hora = (int)($permisos_asistente->permiso_confirmar_hora ?? 0) === 1;
+        $puede_ver_pacientes = (int)($permisos_asistente->permiso_ver_pacientes ?? 0) === 1;
+        $puede_entrega_caja = (int)($permisos_asistente->permiso_entrega_caja ?? 0) === 1;
+    @endphp
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -45,31 +51,35 @@
                 <div class="col-md-12 mb-3">
                     <div class="card-deck">
 
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                        @if($puede_confirmar_hora)
+                            <div class="card subir px-4 py-2">
+                                <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
+                                    <div class="row my-auto">
+                                        <div class="col-md-4 col-xs-12 d-inline">
+                                            <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                        </div>
+                                        <div class="col-md-8 col-xs-12 d-inline">
+                                            <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                                        </div>
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Confirmar Hora</h5>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endif
 
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                        @if($puede_ver_pacientes)
+                            <div class="card subir px-4 py-2">
+                                <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
+                                    <div class="row my-auto">
+                                        <div class="col-md-4 col-xs-12 d-inline">
+                                            <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                        </div>
+                                        <div class="col-md-8 col-xs-12 d-inline">
+                                            <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                        </div>
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endif
 
                         {{--
                         <div class="card subir px-4 py-2">
@@ -114,18 +124,20 @@
                         </div>
                         --}}
 
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.rendir') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                        @if($puede_entrega_caja)
+                            <div class="card subir px-4 py-2">
+                                <a href="{{ ROUTE('asistentecm.rendir') }}">
+                                    <div class="row my-auto">
+                                        <div class="col-md-4 col-xs-12 d-inline">
+                                            <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                        </div>
+                                        <div class="col-md-8 col-xs-12 d-inline">
+                                            <h5 class="mt-1 mb-0">Entrega de Caja</h5>
+                                        </div>
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Entrega de Caja</h5>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                                </a>
+                            </div>
+                        @endif
 
                         {{--
                         <div class="card py-auto subir">
@@ -162,20 +174,37 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        <div id="convenios_profesional_container" class="mt-2" style="display:none;">
+                                            <small class="d-block text-muted mb-1">Convenios del profesional en este lugar:</small>
+                                            <div id="convenios_profesional_lista"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 f-12 pb-0" id="tabla_info_profesional" style="display: none;">
-                                     <div class="align-middle m-b-25">
-                                        <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
-                                        <div class="d-inline-block f-11">
-                                            <span>
-                                                <strong id="nombre_profesional_agenda"></strong>
-                                            </span><br>
-                                            <span id="especialidad_porfesional_agenda"></span>
-                                            <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
-                                            @include('general.bloqueo_hora.bloque_hora_asistente')
-                                            @include('general.anular_hora.anular_hora_asistente')
-                                            <span class="status active"></span>
+                                     <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="align-middle m-b-25">
+                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
+                                                <div class="d-inline-block f-11">
+                                                    <span>
+                                                        <strong id="nombre_profesional_agenda"></strong>
+                                                    </span><br>
+                                                    <span id="especialidad_porfesional_agenda"></span>
+                                                    <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
+                                                    @include('general.bloqueo_hora.bloque_hora_asistente')
+                                                    @include('general.anular_hora.anular_hora_asistente')
+                                                    <span class="status active"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4" {{ $boxes->count() > 0 ? '' : 'style=display:none' }}>
+                                            <div class="align-middle m-b-25">
+                                                <div class="d-inline-block f-11">
+                                                    <span><strong>BOX</strong></span> <button type="button" class="btn btn-warning-light-c btn-xxxs" id="btn_ver_modificar_box_prof"  onclick=""><i class="feather icon-edit"></i></button><br>
+                                                    <span><strong id="profesional_box" style="font-size: 16px;"></strong></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -195,7 +224,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 class="text-c-blue my-1" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    <h5 class="text-c-blue my-1 d-inline" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    @include('general.info_simbologia.simbologia_agenda')
                                 </div>
                             </div>
                             <div id='agenda'></div>
@@ -212,6 +242,7 @@
     <!-- DATOS DE VITAL IMPORTANCIA -->
     <input type="hidden" name="id_especialidad_profesional" id="id_especialidad_profesional" value="">
     <input type="hidden" name="id_profesional" id="id_profesional" value="">
+    <input type="hidden" id="voucher_id" value="">
 @endsection
 
 @section('modales')
@@ -228,12 +259,20 @@
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
+
+    {{-- lugar atencion box profesional --}}
+    @include('general.asignacion_box_prof.asignacion_box_prof')
+
+
 @endsection
 
 
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
+        const PERMISO_CONFIRMAR_HORA = {{ $puede_confirmar_hora ? 1 : 0 }};
+        const PERMISO_VER_PACIENTES = {{ $puede_ver_pacientes ? 1 : 0 }};
+        const PERMISO_ENTREGA_CAJA = {{ $puede_entrega_caja ? 1 : 0 }};
 
         var CalendarEl = null;
         $(document).ready(function()
@@ -580,6 +619,115 @@
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
         var activeDaysInRange = [];
+        var _bonoPrevisionOptionsBase = null;
+
+        function normalizarNombreConvenio(valor)
+        {
+            if(valor === null || valor === undefined)
+                return '';
+
+            return valor.toString().trim().toLowerCase();
+        }
+
+        function escapeHtml(texto)
+        {
+            return $('<div>').text(texto || '').html();
+        }
+
+        function actualizarConveniosProfesionalVisual(conveniosPermitidos)
+        {
+            var $container = $('#convenios_profesional_container');
+            var $lista = $('#convenios_profesional_lista');
+
+            if($container.length === 0 || $lista.length === 0)
+                return;
+
+            $lista.empty();
+
+            if(!Array.isArray(conveniosPermitidos) || conveniosPermitidos.length === 0)
+            {
+                $lista.html('<span class="badge badge-light border text-muted mr-1 mb-1">Sin convenios configurados</span>');
+                $container.show();
+                return;
+            }
+
+            conveniosPermitidos.forEach(function(convenio)
+            {
+                var convenioSeguro = escapeHtml(convenio);
+                if(convenioSeguro !== '')
+                {
+                    $lista.append('<span class="badge badge-info mr-1 mb-1">'+convenioSeguro+'</span>');
+                }
+            });
+
+            if($lista.children().length === 0)
+            {
+                $lista.html('<span class="badge badge-light border text-muted mr-1 mb-1">Sin convenios configurados</span>');
+            }
+
+            $container.show();
+        }
+
+        function actualizarConveniosProfesionalEnBono(conveniosPermitidos)
+        {
+            var $bonoPrevision = $('#bono_prevision');
+            var $bonoPrevisionTxt = $('#bono_prevision_txt');
+
+            if($bonoPrevision.length == 0)
+                return;
+
+            if(_bonoPrevisionOptionsBase === null)
+            {
+                _bonoPrevisionOptionsBase = $bonoPrevision.find('option').clone();
+            }
+
+            var permitidosNormalizados = [];
+            if(Array.isArray(conveniosPermitidos))
+            {
+                conveniosPermitidos.forEach(function(item)
+                {
+                    var convenio = normalizarNombreConvenio(item);
+                    if(convenio !== '' && permitidosNormalizados.indexOf(convenio) === -1)
+                    {
+                        permitidosNormalizados.push(convenio);
+                    }
+                });
+            }
+
+            var htmlOptions = '<option value="0">Selecione una opción</option>';
+
+            _bonoPrevisionOptionsBase.each(function()
+            {
+                var value = $(this).val();
+                var text = $(this).text();
+
+                if(value == '0')
+                    return;
+
+                if(permitidosNormalizados.length == 0)
+                {
+                    htmlOptions += '<option value="'+value+'">'+text+'</option>';
+                    return;
+                }
+
+                var textNormalizado = normalizarNombreConvenio(text);
+                if(permitidosNormalizados.indexOf(textNormalizado) !== -1)
+                {
+                    htmlOptions += '<option value="'+value+'">'+text+'</option>';
+                }
+            });
+
+            $bonoPrevision.html(htmlOptions);
+            $bonoPrevision.val('0');
+            $bonoPrevision.show();
+
+            // if($bonoPrevisionTxt.length > 0)
+            // {
+            //     $bonoPrevisionTxt.val('');
+            //     $bonoPrevisionTxt.show();
+            // }
+        }
+
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
 			 var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
@@ -615,7 +763,7 @@
                         tipo_agenda: tipo_agenda,
                     },
                     success:function(data){
-                        console.log(data.profesional);
+                        console.log(data);
                         $('.boton').hide();
                         if (data !== 'null')
                         {
@@ -626,6 +774,8 @@
                                 $('#id_tipo_agenda').val(tipo_agenda);
                                 $('#id_especialidad_profesional').val(data.profesional.id_especialidad);
                                 $('#id_profesional').val(data.profesional.id);
+                                actualizarConveniosProfesionalVisual(data.convenios_profesional_lugar || []);
+                                actualizarConveniosProfesionalEnBono(data.convenios_profesional_lugar || []);
 
                                 if (data.profesional.id_especialidad == 2) {
                                     console.log('dentista');
@@ -669,6 +819,19 @@
                                         $('.btn-agenda-'+value).show();
                                     });
                                 }
+
+                                // informacion de box
+                                if (data.lug_prof_box !== null && data.lug_prof_box !== undefined)
+                                {
+                                    $('#profesional_box').html(data.lug_prof_box.box.tipo_box+' '+data.lug_prof_box.box.numero_box);
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_editar_box_prof(\''+data.lug_prof_box.id+'\')');
+                                }
+                                else
+                                {
+                                    $('#profesional_box').html('');
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_agregar_box_prof('+data.profesional.id+')');
+                                }
+
                             }
 
                             if(data.estado == 1 && data.horario.length!=0)
@@ -771,7 +934,8 @@
                                                 url: url,
                                                 type: "GET",
                                                 data: {
-                                                    id_profesional: id_profesional
+                                                    id_profesional: id_profesional,
+                                                    id_lugar_atencion: id_lugar_atencion,
                                                 },
                                                 success:function(data){
                                                     console.log(data);
@@ -824,7 +988,6 @@
                                                                             });
                                                                         }
                                                                     });
-                                                                    console.log(arrayTemp);
                                                                     end(arrayTemp);
                                                                 }
                                                                 else
@@ -851,6 +1014,7 @@
                                                     }
                                                 })
                                                 .done(function(data) {
+                                                    console.log('hola:' + data.voucher);
                                                     if (data != null) {
                                                         $('#modal_consulta_mensaje').text('');
                                                         $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
@@ -915,7 +1079,10 @@
                                                             //'Reservada') //Hora pendiente
                                                             $('#hm_anular_hora').show();
                                                             $('#hm_atender_hora').hide();
-                                                            $('#hm_confirmar_hora').show();
+                                                            if(PERMISO_CONFIRMAR_HORA === 1)
+                                                                $('#hm_confirmar_hora').show();
+                                                            else
+                                                                $('#hm_confirmar_hora').hide();
                                                             $('#hm_ver_hora').hide();
                                                             $('#hm_espera_paciente_hora').hide();
                                                             $('#confirmar_anulacion_hora').hide();
@@ -978,8 +1145,20 @@
                                                             $('#bono_id_profesional').val(data.profesional.id);
                                                             $('#bono_id_paciente').val(data.paciente.id);
                                                             $('#bono_prevision').val(data.paciente.id_prevision);
+                                                            $('#bono_paciente_telefono').val(data.paciente.telefono_uno);
+                                                            $('#bono_paciente_email').val(data.paciente.email);
                                                             $('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );
+                                                            console.log(data.voucher);
 
+                                                            $('#bono_prevision').show();
+
+                                                            if (data.voucher) {
+                                                                $('#bono_prevision').val(data.voucher.prevision_id || data.paciente.id_prevision || 0);
+                                                            } else {
+                                                                $('#bono_prevision').val(data.paciente.id_prevision || 0);
+                                                            }
+
+                                                             cargarVoucherEnRecepcion(data.voucher);
                                                             /** PESTAÑA DE VENTA DE BONO */
                                                             $('#venta_rut').val(data.paciente.rut);
                                                             $('#venta_serie').val('');
@@ -1357,6 +1536,8 @@
                                     $('#tabla_info_profesional').hide();
                                     $('#seccion_agenda_botones').hide();
                                     $('#seccion_agenda_agendas').hide();
+                                    $('#convenios_profesional_container').hide();
+                                    actualizarConveniosProfesionalEnBono([]);
                                 }
 
                             }
@@ -1375,6 +1556,8 @@
                                 $('#tabla_info_profesional').hide();
                                 $('#seccion_agenda_botones').hide();
                                 $('#seccion_agenda_agendas').hide();
+                                $('#convenios_profesional_container').hide();
+                                actualizarConveniosProfesionalEnBono([]);
                             }
                         }
                         else
@@ -1384,6 +1567,8 @@
                             $('#tabla_info_profesional').hide();
                             $('#seccion_agenda_botones').hide();
                             $('#seccion_agenda_agendas').hide();
+                            $('#convenios_profesional_container').hide();
+                            actualizarConveniosProfesionalEnBono([]);
                         }
                     }
                 });
@@ -1395,10 +1580,207 @@
                 $('#tabla_info_profesional').hide();
                 $('#seccion_agenda_botones').hide();
                 $('#seccion_agenda_agendas').hide();
+                $('#convenios_profesional_container').hide();
+                actualizarConveniosProfesionalEnBono([]);
             }
 
 
 
+        }
+
+        function loadQRCodeLibrary(callback) {
+            if (window.QRCode) {
+                if (typeof callback === 'function') callback();
+                return;
+            }
+
+            var existingScript = document.getElementById('qrcodejs_library');
+            if (existingScript) {
+                existingScript.addEventListener('load', function() {
+                    if (typeof callback === 'function') callback();
+                });
+                return;
+            }
+
+            var script = document.createElement('script');
+            script.id = 'qrcodejs_library';
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+            script.onload = function() {
+                if (typeof callback === 'function') callback();
+            };
+            script.onerror = function() {
+                console.log('No se pudo cargar la librería QRCode.');
+                if (typeof callback === 'function') callback(true);
+            };
+            document.head.appendChild(script);
+        }
+
+        function obtenerTextoQrVoucher(voucher) {
+            if (!voucher) {
+                return '';
+            }
+
+            if (voucher.qr_payload) {
+                if (typeof voucher.qr_payload === 'string') {
+                    return voucher.qr_payload;
+                }
+
+                try {
+                    return JSON.stringify(voucher.qr_payload);
+                } catch (e) {
+                    console.log('No se pudo convertir qr_payload', e);
+                }
+            }
+
+            if (voucher.qr_token) {
+                return JSON.stringify({
+                    token: voucher.qr_token,
+                    tipo: 'voucher'
+                });
+            }
+
+            return JSON.stringify({
+                orden_id: voucher.id || voucher.orden_id || '',
+                tipo: 'voucher'
+            });
+        }
+
+        function generarQrVoucherAsistente(voucher, contenedorId = 'qr_voucher_asistente') {
+            var contenedor = document.getElementById(contenedorId);
+
+            if (!contenedor) {
+                return;
+            }
+
+            contenedor.innerHTML = '';
+
+            var textoQr = obtenerTextoQrVoucher(voucher);
+
+            if (!textoQr) {
+                contenedor.innerHTML = '<small class="text-muted">Sin QR</small>';
+                return;
+            }
+
+            contenedor.innerHTML = '<small class="text-muted">Generando QR...</small>';
+
+            loadQRCodeLibrary(function(errorCarga) {
+                contenedor.innerHTML = '';
+
+                if (!errorCarga && typeof QRCode !== 'undefined') {
+                    new QRCode(contenedor, {
+                        text: textoQr,
+                        width: 120,
+                        height: 120,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    return;
+                }
+
+                if (typeof generateQRCode === 'function') {
+                    try {
+                        generateQRCode(JSON.parse(textoQr), contenedorId);
+                        return;
+                    } catch (e) {
+                        console.log('No se pudo generar QR con generateQRCode', e);
+                    }
+                }
+
+                contenedor.innerHTML = `
+                    <div class="border rounded p-2 bg-white text-center">
+                        <small class="text-muted d-block">QR no disponible</small>
+                        <small class="text-break">${escapeHtml(voucher.qr_token || voucher.id || '')}</small>
+                    </div>
+                `;
+            });
+        }
+
+        function cargarVoucherEnRecepcion(voucher) {
+            $('#alerta_voucher_pagado').remove();
+
+            $('#pills-tab-recibir-bono').tab('show');
+            $('#bono_prevision').show();
+
+            if (!voucher) {
+                $('#modal_recepcion_bonos_api .modal-body').prepend(`
+                    <div id="alerta_voucher_pagado" class="alert alert-warning">
+                        Este paciente no tiene voucher pagado para esta atención.
+                    </div>
+                `);
+
+                $('#bono_id_clase_bono').val(0);
+                $('#bono_numero').val('');
+                $('#valor_bonificacion').val('');
+                $('#valor_seguro').val(0);
+                $('#bono_valor_consulta').val('');
+
+                return;
+            }
+
+            const montoVoucher = voucher.monto || voucher.total || 0;
+            const estadoVoucher = voucher.estado || voucher.estado_orden || 'PAGADO';
+            const fechaVoucher = voucher.fecha_pagado_cap || voucher.fecha || '';
+            const folioVoucher = voucher.folio || voucher.qr_token || voucher.id || voucher.orden_id || '';
+
+            const html = `
+                <div id="alerta_voucher_pagado" class="alert alert-success mb-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="mb-2">
+                                <i class="fa fa-check-circle text-success"></i>
+                                Voucher pagado encontrado
+                            </h5>
+
+                            <strong>Monto:</strong> $${formatMonto(montoVoucher)}<br>
+                            <strong>Estado:</strong> ${escapeHtml(estadoVoucher)}<br>
+                            <strong>Fecha pago:</strong> ${escapeHtml(fechaVoucher || 'N/A')}<br>
+                            <strong>Folio/Token:</strong> ${escapeHtml(folioVoucher || 'N/A')}
+                        </div>
+
+                        <div class="col-md-4 text-center">
+                            <div id="qr_voucher_asistente" class="d-inline-block bg-white border rounded p-2"></div>
+                            <small class="d-block text-muted mt-1">QR del voucher</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#modal_recepcion_bonos_api .modal-body').prepend(html);
+
+            $('#bono_id_clase_bono').val(voucher.clase_pago_id || 1);
+            $('#bono_numero').val(voucher.id || voucher.folio || voucher.qr_token || '');
+            $('#bono_prevision').val(voucher.prevision_id || $('#bono_prevision').val() || 0);
+            $('#valor_bonificacion').val(voucher.bonificacion || 0);
+            $('#valor_seguro').val(voucher.seguro || 0);
+            $('#bono_valor_consulta').val(montoVoucher);
+            $('#voucher_id').val(voucher.id || voucher.orden_id || '');
+
+            $('#recepcion_programa').prop('checked', false);
+            $('#sesiones_programa').hide();
+
+            setTimeout(function () {
+                generarQrVoucherAsistente(voucher, 'qr_voucher_asistente');
+            }, 250);
+        }
+
+        function formatMonto(monto) {
+            monto = monto || 0;
+
+            if (typeof monto === 'string') {
+                monto = monto.replace(/\./g, '').replace(',', '.');
+            }
+
+            monto = Number(monto);
+
+            if (isNaN(monto)) {
+                monto = 0;
+            }
+
+            return monto.toLocaleString('es-CL', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
         }
 
         {{--  CANCELAR HORA CARGA DE MENSAJE --}}
@@ -1460,6 +1842,16 @@
         {{--  CONFIRMAR HORA OPCION --}}
         function opcion_confirmar_hora()
         {
+            if(PERMISO_CONFIRMAR_HORA !== 1)
+            {
+                swal({
+                    title: "Permiso denegado",
+                    text: "No tienes permiso para confirmar horas en este lugar de atencion.",
+                    icon: "error",
+                });
+                return;
+            }
+
             $('#datos_hora_medica').hide();
             $('#cancelacion_hora_medica').hide();
             $('#cabecera_hora_medica').text('Confirmar Hora Medica');
@@ -1469,6 +1861,7 @@
             $('#hm_ver_hora').hide();
             $('#confirmacion_hora').show();
             $('#confirmacion_hora_medica').show();
+            $('#confirmacion_hora_medica .row.d-none').removeClass('d-none');
         };
 
         {{--  CONFIRMAR HORA  --}}
@@ -1526,13 +1919,15 @@
             let token = CSRF_TOKEN;
             var bono_paciente_rut = $('#bono_paciente_rut').val();
             var bono_paciente_nombre = $('#bono_paciente_nombre').val();
+            var bono_paciente_email = $('#bono_paciente_email').val();
+            var bono_paciente_telefono = $('#bono_paciente_telefono').val();
+            var result_codigo_validacion_bono = $('#result_codigo_validacion_bono').val();
             var bono_profesional_nombre = $('#bono_profesional_nombre').val();
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
-            var bono_valor_seguro = $('#valor_seguro').val();
-            var bono_valor_bonificacion = $('#valor_bonificacion').val();
-            var id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
+            var bono_valor_bonificacion = $('#valor_bonificacion').val();
+            var bono_valor_seguro = $('#valor_seguro').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
             var recepcion_programa = $('#recepcion_programa').val();
@@ -1543,6 +1938,7 @@
             var bono_id_paciente = $('#bono_id_paciente').val();
             var bono_id_tipo_bono = $('#bono_id_tipo_bono').val();
             var bono_id_clase_bono = $('#bono_id_clase_bono').val();
+            var voucher_id = $('#voucher_id').val();
 
             var mensaje = '';
             var valido = 1;
@@ -1557,6 +1953,27 @@
                 mensaje += 'Campo requerido NOMBRE DEL PACIENTE\n';
                 valido = 0;
             }
+
+            // Validación de email y teléfono validado
+            // Considerar emails temporales del sistema como "sin email"
+            var tieneEmailReal = (bono_paciente_email != '' &&
+                                  bono_paciente_email.trim() != '' &&
+                                  bono_paciente_email.indexOf('@med-sdi.cl') === -1);
+
+            if(!tieneEmailReal && (bono_paciente_telefono == '' || bono_paciente_telefono.trim() == ''))
+            {
+                mensaje += 'Debe ingresar al menos un medio de contacto (Email o Teléfono)\n';
+                valido = 0;
+            }
+
+            // Si no hay email real, el teléfono debe estar validado con SMS
+            if(!tieneEmailReal &&
+               (result_codigo_validacion_bono == '' || result_codigo_validacion_bono == '0'))
+            {
+                // mensaje += 'Debe validar el número de teléfono con el código SMS\n';
+                // valido = 0;
+            }
+
             if(bono_profesional_nombre == '')
             {
                 mensaje += 'Campo requerido NOMBRE DEL PROFESIONAL\n';
@@ -1584,10 +2001,13 @@
                 mensaje += 'Campo requerido VALOR SEGURO\n';
                 valido = 0;
             }
-            if(bono_valor_bonificacion == ''){
+
+            if(bono_valor_bonificacion == '')
+            {
                 mensaje += 'Campo requerido VALOR BONIFICACION\n';
                 valido = 0;
             }
+
             if(bono_prevision == '' || bono_prevision == 0)
             {
                 mensaje += 'Campo requerido CONVENIO\n';
@@ -1607,9 +2027,8 @@
                         convenio_nombre: bono_prevision_nombre,
                         numero_bono: bono_numero,
                         valor_atencion: bono_valor_consulta,
-                        valor_seguro: bono_valor_seguro,
-                        id_lugar_atencion: id_lugar_atencion,
                         valor_bonificacion: bono_valor_bonificacion,
+                        valor_seguro: bono_valor_seguro,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
                         id_asistente: '{{ $asistente->id }}',
@@ -1617,31 +2036,29 @@
                         id_tipo_bono: bono_id_tipo_bono,
                         id_clase_bono: bono_id_clase_bono,
                         id_referencia: bono_hora_medica,//une bono a hora medica (para buscar id ficha atencion)
-                        numero_sesiones: bono_sn_sesiones
+                        numero_sesiones: bono_sn_sesiones,
+                        paciente_email: bono_paciente_email,
+                        paciente_telefono: bono_paciente_telefono,
+                        voucher_id: voucher_id,
                     }
                 })
                 .done(function(data)
                 {
-                    console.log(data);
                     if (data !== 'null')
                     {
-                        //data = JSON.parse(data);
-                        {{--  console.log('-----------------------');  --}}
-                        {{--  console.log(data);  --}}
-                        {{--  console.log('-----------------------');  --}}
                         if(data.estado == 1)
                         {
                             swal({
                                 title: "Recepción de bonos y programas",
                                 text: 'Pago Exitoso',
                                 icon: "success",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
                             });
-                            cargarAgendaProfesional($('#id_tipo_agenda').val(), data.hora_medica.fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(),data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
+                            $('#bono_paciente_email').val('');
+                            $('#bono_paciente_telefono').val('');
                             $('#bono_profesional_nombre').val('');
                             $('#bono_profesional_rut').val('');
                             $('#bono_numero').val('');
@@ -1650,6 +2067,14 @@
                             $('#recepcion_programa').val('');
                             $('#bono_sn_sesiones').val('');
                             $('#bono_hora_medica').val('');
+                            $('#voucher_id').val('');
+                            // Limpiar validación de teléfono
+                            $('#btn_bono_paciente_telefono_validar').show();
+                            $('#btn_bono_paciente_telefono_validar').attr('disabled', true);
+                            $('#div_codigo_validador_bono').hide();
+                            $('#div_codigo_validador_mensaje_bono').hide();
+                            $('#result_codigo_validacion_bono').val('0');
+                            $('#mensaje_email_bono').hide();
                             {{--  $('#bono_id_profesional').val('');  --}}
                             {{--  $('#bono_id_paciente').val('');  --}}
                             {{--  $('#bono_id_tipo_bono').val('');  --}}
@@ -1678,8 +2103,6 @@
                                 title: "Recepción de bonos y programas",
                                 text: 'Pago con Problemas.\n'+data.msj+'\n'+mensaje,
                                 icon: "success",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
                             });
 
                         }
@@ -1697,8 +2120,6 @@
                     title: "Recepción de bonos y programas",
                     text: mensaje,
                     icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
                 });
             }
 
@@ -1999,6 +2420,7 @@
                     _token: CSRF_TOKEN
                 },
                 success: function(resp){
+                    $('#n_presupuesto_dental').val(id_presupuesto);
                     console.log(resp);
                     let tratamientos = resp.tratamientos;
                     let todos = resp.todos;
@@ -2064,500 +2486,119 @@
         }
 
         {{--  REGISTRO NUEVO PACIENTE GENERACION DE HORA  --}}
-        function agendar_hora_paciente_nuevo() {
+         function agendar_hora_paciente_nuevo() {
 
             let url = "{{ route('agenda.agendar_hora_nuevo_paciente') }}";
             let _token = $('#_token').val();
             let fecha_consulta = $('#fecha_consulta').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
-            var tipo_agenda_text = 'C';
-
-            console.log(tipo_agenda);
-            console.log(tipo_agenda_text);
+            let tipo_agenda_text = 'C';
 
             switch (tipo_agenda) {
-                case '1':
-                    tipo_agenda_text = 'C'; //CONSULTA
-                    break;
-                case '2':
-                    tipo_agenda_text = 'D'; //DENTAL
-                    break;
-                case '3':
-                    tipo_agenda_text = 'T'; //TELEMEDICINA
-                    break;
-                case '4':
-                    tipo_agenda_text = 'E'; //EXAMEN
-                    break;
+                case '1': tipo_agenda_text = 'C'; break;
+                case '2': tipo_agenda_text = 'D'; break;
+                case '3': tipo_agenda_text = 'T'; break;
+                case '4': tipo_agenda_text = 'E'; break;
             }
 
-            console.log(tipo_agenda_text);
-
             let rut_paciente_reserva = $('#rut_paciente_reserva').val();
-            if (rut_paciente_reserva == '')
-            {
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el Rut",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-                });
+            if (rut_paciente_reserva == '') {
+                swal("Error!", "Debe ingresar el Rut", "error");
                 return false;
             }
 
             let reserva_hora_nombre = $('#reserva_hora_nombres_paciente').val();
             if (reserva_hora_nombre == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar los nombres del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
+                swal("Error!", "Debe ingresar los nombres del paciente", "error");
+                return false;
             }
 
             let reserva_hora_primer_apellido = $('#reserva_hora_apellido_uno').val();
             if (reserva_hora_primer_apellido == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el primer apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
+                swal("Error!", "Debe ingresar el primer apellido", "error");
+                return false;
             }
 
             let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
-            if (reserva_hora_segundo_apellido == '') {
 
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el segundo apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-
-            }
             let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
-            if (reserva_hora_fecha_nac == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar la fecha de nacimiento",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
+            if (reserva_hora_fecha_nac != '') {
+                reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
-            if (reserva_hora_sexo == '0') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe seleccionar el del sexo del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-            }
             let reserva_hora_convenio = $('#reserva_hora_convenio').val();
-            if (reserva_hora_convenio == '0') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe seleccionar la previsión del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
             let reserva_hora_direccion = $('#reserva_hora_direccion').val();
-            if (reserva_hora_direccion == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar una dirección",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
             let reserva_hora_numero_dir = $('#reserva_hora_numero_dir').val();
-            {{--
-            if (reserva_hora_numero_dir == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar un numero a su dirección",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
-            --}}
             let reserva_hora_comuna = $('#ciudad_agregar').val();
-            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' || reserva_hora_comuna == null) {
 
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar la región y la ciudad",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
-
-            let reserva_hora_email = $('#reserva_hora_correo').val();
-            let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val();
+            let reserva_hora_email = $('#reserva_hora_correo').val() || '';
+            let reserva_hora_telefono_uno = $('#reserva_hora_telefono_uno').val() || '';
             let reserva_result_codigo_validacion = $('#result_codigo_validacion').val();
 
-            let fechaNacimiento = new Date(reserva_hora_fecha_nac);
-            let hoy = new Date();
-            let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            let dependiente = $('#paciente_dependiente').prop('checked') ? 1 : 0;
 
-            // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
-                edad--;
-            }
+            let edad = 999;
+            if (reserva_hora_fecha_nac != '') {
+                let fechaNacimiento = new Date(reserva_hora_fecha_nac);
+                let hoy = new Date();
 
-            // if( edad > 18 )
-            if( $('#paciente_dependiente').prop('checked') == false )
-            {
-                if (reserva_hora_email == '') {
+                if (!isNaN(fechaNacimiento.getTime())) {
+                    edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
-                    if(reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0') )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el email o teléfono",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        if(reserva_result_codigo_validacion =='0')
-                        {
-                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                            if (caract.test(reserva_hora_email) == false){
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-
-                    if (reserva_hora_telefono_uno == '')
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el teléfono",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        if(reserva_hora_email == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0'))
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Debe validar el teléfono",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-                            });
-                            return;
-                        }
+                    if (
+                        hoy.getMonth() < fechaNacimiento.getMonth() ||
+                        (
+                            hoy.getMonth() === fechaNacimiento.getMonth() &&
+                            hoy.getDate() < fechaNacimiento.getDate()
+                        )
+                    ) {
+                        edad--;
                     }
                 }
             }
 
-            var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
-            var reserva_representante_id = $('#reserva_representante_id').val();
-            var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
-            var reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
-            var reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
-            var reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
-            var reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
-            var reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
-            var reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
-            var reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
-            var reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
-            var reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
-            var reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
-            var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
-            var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
-            var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
-            var reserva_hora_representante_result_codigo_validacion = $('#result_representante_codigo_validacion').val();
-            var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
+            let reserva_hora_representante_info_libre = $('#reserva_hora_representante_info_libre').val() || '';
 
+            let pacienteTieneContacto =
+                reserva_hora_email.trim() != '' ||
+                reserva_hora_telefono_uno.trim() != '';
 
-            var dependiente = 0;
-            if($('#paciente_dependiente').prop('checked')  == true)
-                dependiente = 1;
-            else if($('#paciente_dependiente').prop('checked')  == false)
-                dependiente = 0;
+            let esMenorODependiente = edad < 18 || dependiente == 1;
 
-            if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
-            {
-                if(reserva_hora_representante_agregar_relacion == '')
-                {
-                    swal({
-                        title: "Error!",
-                        text: "Debe seleccionar Relación",
-                        icon: "error",
-                        type: "danger",
-                        DangerMode: true,
-                    });
-                    return;
+            if (esMenorODependiente) {
+
+                if (reserva_hora_representante_info_libre.trim() == '') {
+                    swal(
+                        "Error!",
+                        "Debe ingresar la información del representante legal o encargado de la reserva",
+                        "error"
+                    );
+                    return false;
                 }
-                if(reserva_representante_nuevo_exitente == '1')
-                {
-                    /** existente */
-                    if(reserva_representante_id == '')
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Información del Representante con problemas",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
 
-                        });
-                        return;
-                    }
-                    // if($('#reserva_representante_id_usuario').val() == '')
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Información del Representante con problemas",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
+                let textoRepresentante = reserva_hora_representante_info_libre.toLowerCase();
+                let representanteTieneCorreo = textoRepresentante.includes('@');
+                let representanteTieneTelefono = /\d{8,}/.test(textoRepresentante);
 
-                    //     });
-                    //     return;
-                    // }
+                if (!pacienteTieneContacto && !representanteTieneCorreo && !representanteTieneTelefono) {
+                    swal(
+                        "Error!",
+                        "Debe ingresar al menos un medio de contacto del paciente o indicarlo en la información del representante.",
+                        "error"
+                    );
+                    return false;
                 }
-                else
-                {
-                    /** nuevo */
-                    if( reserva_hora_representante_nombres_paciente == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Nombre del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
 
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_apellido_uno == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Paterno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
+            } else {
 
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_apellido_dos == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Materno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_fecha_nac == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Fecha Nacimiento del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_sexo == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Sexo del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_direccion == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Direccion del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    // if( reserva_hora_representante_numero_dir == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Numero del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    // if( reserva_hora_representante_region_agregar == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Region del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Ciudad del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-
-                    if( $('#paciente_dependiente').prop('checked') == true )
-                    {
-                        if (reserva_hora_representante_correo == '') {
-
-                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_result_codigo_validacion =='0')
-                                {
-                                    var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                    if (caract.test(reserva_hora_representante_correo) == false){
-                                        swal({
-                                            title: "Error!",
-                                            text: "Debe ingresar el email o teléfono del representante",
-                                            icon: "error",
-                                            type: "danger",
-                                            DangerMode: true,
-                                        });
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-
-                            if (reserva_hora_representante_telefono_uno == '')
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
-                                {
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe validar el teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                    }
-
+                if (!pacienteTieneContacto) {
+                    swal(
+                        "Error!",
+                        "Debe ingresar al menos un correo electrónico o un teléfono del paciente.",
+                        "error"
+                    );
+                    return false;
                 }
             }
 
@@ -2566,92 +2607,64 @@
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
 
-            console.log('ajax');
             $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    _token: _token,
+                    dependiente: dependiente,
+                    fecha_consulta: fecha_consulta,
+                    rut_paciente_reserva: rut_paciente_reserva,
+                    reserva_hora_nombre: reserva_hora_nombre,
+                    reserva_hora_primer_apellido: reserva_hora_primer_apellido,
+                    reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
+                    reserva_hora_fecha_nac: reserva_hora_fecha_nac,
+                    reserva_hora_sexo: reserva_hora_sexo,
+                    reserva_hora_convenio: reserva_hora_convenio,
+                    reserva_hora_direccion: reserva_hora_direccion,
+                    reserva_hora_numero_dir: reserva_hora_numero_dir,
+                    reserva_hora_comuna: reserva_hora_comuna,
+                    reserva_hora_email: reserva_hora_email,
+                    reserva_hora_telefono: reserva_hora_telefono_uno,
+                    reserva_result_codigo_validacion: reserva_result_codigo_validacion,
+                    reserva_hora_confirmacion: reserva_hora_confirmacion,
+                    reserva_hora_sms: reserva_hora_sms,
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
+                    tipo_hora_medica: tipo_agenda_text,
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        _token: _token,
-                        dependiente: dependiente,
-                        fecha_consulta: fecha_consulta,
-                        rut_paciente_reserva: rut_paciente_reserva,
-                        reserva_hora_nombre: reserva_hora_nombre,
-                        reserva_hora_primer_apellido: reserva_hora_primer_apellido,
-                        reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
-                        reserva_hora_fecha_nac: reserva_hora_fecha_nac,
-                        reserva_hora_sexo: reserva_hora_sexo,
-                        reserva_hora_convenio: reserva_hora_convenio,
-                        reserva_hora_direccion: reserva_hora_direccion,
-                        reserva_hora_numero_dir: reserva_hora_numero_dir,
-                        reserva_hora_comuna: reserva_hora_comuna,
-                        reserva_hora_email: reserva_hora_email,
-                        reserva_hora_telefono: reserva_hora_telefono_uno,
-                        reserva_result_codigo_validacion: reserva_result_codigo_validacion,
-                        reserva_hora_confirmacion: reserva_hora_confirmacion,
-                        reserva_hora_sms: reserva_hora_sms,
-                        id_profesional:id_profesional,
-                        id_lugar_atencion: id_lugar_atencion,
-                        tipo_hora_medica: tipo_agenda_text,
-                        /** representante */
-                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
-                        reserva_representante_id: reserva_representante_id,
-                        reserva_representante_id_usuario: reserva_representante_id_usuario,
-                        reserva_hora_representante_rut: reserva_hora_representante_rut,
-                        reserva_hora_representante_nombres_paciente: reserva_hora_representante_nombres_paciente,
-                        reserva_hora_representante_apellido_uno: reserva_hora_representante_apellido_uno,
-                        reserva_hora_representante_apellido_dos: reserva_hora_representante_apellido_dos,
-                        reserva_hora_representante_fecha_nac: reserva_hora_representante_fecha_nac,
-                        reserva_hora_representante_sexo: reserva_hora_representante_sexo,
-                        reserva_hora_representante_convenio: reserva_hora_representante_convenio,
-                        reserva_hora_representante_direccion: reserva_hora_representante_direccion,
-                        reserva_hora_representante_numero_dir: reserva_hora_representante_numero_dir,
-                        reserva_hora_representante_region_agregar: reserva_hora_representante_region_agregar,
-                        reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
-                        reserva_hora_representante_correo: reserva_hora_representante_correo,
-                        reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
-                        reserva_hora_representante_result_codigo_validacion: reserva_hora_representante_result_codigo_validacion,
-                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
-                    },
-                })
-                .done(function(data) {
-                    console.log(data);
-                    if (data != null) {
-                        // data = JSON.parse(data);
-                        // console.log(data);
-                        if (data.estado == 1) {
-                            swal({
-                                title: "Exito!",
-                                text: "Hora medica agendada correctamente",
-                                type: "success",
-                                confirmButtonText: "Cool"
-                            });
-                            $('#reservar_hora').modal('hide');
-                            $('#agenda_agregar_paciente').modal('hide');
-                            cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
-                        } else {
-                            swal({
-                                title: "Hora medica",
-                                text: data.msj,
-                                type: "error",
-                                confirmButtonText: "Cool"
-                            });
-                        }
-                    } else {
-                        swal({
-                            title: "Error!",
-                            text: "Paciente no encontrado en el sistema",
-                            type: "error",
-                            confirmButtonText: "Cool"
-                        });
-                        // alert('Paciente no encontrado en el sistema');
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log('error');
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-        };
+                    reserva_hora_representante_info_libre: reserva_hora_representante_info_libre
+                },
+            })
+            .done(function(data) {
+                console.log('Respuesta del servidor:', data);
+
+                if (data != null && data.estado == 1) {
+                    swal({
+                        title: "Exito!",
+                        text: "Hora medica agendada correctamente",
+                        type: "success",
+                        confirmButtonText: "Cool"
+                    });
+
+                    $('#reservar_hora').modal('hide');
+                    $('#agenda_agregar_paciente').modal('hide');
+                    cargarAgendaProfesional($('#id_tipo_agenda').val(), fecha_consulta);
+
+                } else {
+                    swal({
+                        title: "Error al agendar hora",
+                        text: data?.msj || "Ocurrió un error desconocido.",
+                        type: "error",
+                        confirmButtonText: "Entendido"
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log('Error en la petición AJAX:', jqXHR.responseText);
+                swal("Error", "No se pudo agendar la hora médica.", "error");
+            });
+        }
 
         function agendar_hora_paciente_nuevo_prereserva()
         {
@@ -2766,21 +2779,8 @@
 
             }
 
+            // Segundo apellido es opcional en prereserva
             let reserva_hora_segundo_apellido = $('#prereserva_hora_apellido_dos').val();
-            if (reserva_hora_segundo_apellido == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el segundo apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-
-            }
 
             let reserva_hora_email = $('#prereserva_hora_correo').val();
             let reserva_hora_telefono_uno = $('#prereserva_hora_telefono_uno').val();
@@ -2864,6 +2864,32 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         };
+
+        function enviar_validacion_telefono_bono() {
+            $('#btn_bono_paciente_telefono_validar').hide();
+            $('#div_codigo_validador_bono').show();
+            $('#bono_paciente_telefono_codigo_validador').val('');
+            $('#div_codigo_validador_mensaje_bono').html('');
+            $('#result_codigo_validacion_bono').val('0');
+        }
+
+        function validar_codigo_telefono_bono() {
+            var codigo = $('#bono_paciente_telefono_codigo_validador').val();
+            if (codigo.length >= 4) {
+                console.log(codigo);
+                if (codigo == '1234') {
+                    $('#div_codigo_validador_bono').hide();
+                    $('#div_codigo_validador_mensaje_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').html('<span style="color:green;">Teléfono validado correctamente</span>');
+                    $('#result_codigo_validacion_bono').val('1');
+                } else {
+                    $('#div_codigo_validador_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').html('<span style="color:red;">Código no válido, intente nuevamente</span>');
+                    $('#result_codigo_validacion_bono').val('0');
+                }
+            }
+        }
 
         {{--  GENERAR HORA USUARIO EXISTENTE  --}}
         function agendar_hora() {

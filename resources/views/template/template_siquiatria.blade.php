@@ -30,6 +30,9 @@
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
 
+	<!-- Select2 css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
 
@@ -134,12 +137,15 @@
     <!--Check-->
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- file-upload Js -->
     <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
 
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
+    <!--SELECT 2-->
+    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
 {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -164,6 +170,70 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+          $('#tipo_examen_d').change(function(e) {
+            e.preventDefault();
+            tipo_examen = $('#tipo_examen_d').val();
+
+            $("#sub_tipo_examen_d").empty();
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.sub_tipo_examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        tipo_examen: tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#sub_tipo_examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+
+                    /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                    if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                    else  $('#imagenologia_con_contraste').attr('disabled','disabled');
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+        {{--  buscar examenes por el sub tipo de examen  --}}
+        $('#sub_tipo_examen_d').change(function(e) {
+
+            e.preventDefault();
+            sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        sub_tipo_examen: sub_tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
     </script>
     <script>
         /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
@@ -309,7 +379,7 @@
                         let contacto = data.contacto;
                         $('#nombre_completo_contacto').text(contacto.nombres);
                         $('#apellidos_contacto').text(contacto.apellido_uno + ' ' + contacto.apellido_dos)
-
+                        $('#direccion_contacto').text(data.direccion.direccion.direccion);
                         $('#email_contacto_').text(contacto.email);
                         $('#telefono_contacto').text(contacto.telefono_uno);
                         $('#comuna_region_contacto').html(contacto.ciudad + '<br> ' + contacto.region);
@@ -359,7 +429,7 @@
             $('#info_paciente-edit').css('display', 'none');
         }
 
-        function guardarInformacionPaciente(){
+       function guardarInformacionPaciente(){
             let id_paciente = $('#id_paciente').val();
             let nombres = $('#paciente_nombre_edit').val();
             let apellido_uno = $('#paciente_apellido_uno_edit').val();
@@ -371,6 +441,7 @@
             let comuna = $('#paciente_comuna_edit').val();
             let email = $('#paciente_email_edit').val();
             let telefono = $('#paciente_telefono_edit').val();
+            let convenio = $('#paciente_convenio_edit').val();
 
             let data = {
                 id: id_paciente,
@@ -384,6 +455,7 @@
                 ciudad: comuna,
                 email: email,
                 telefono: telefono,
+                convenio: convenio,
                 _token: CSRF_TOKEN
             }
 
@@ -403,6 +475,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
+                        let direccion = data.direccion ? data.direccion.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {
@@ -411,9 +484,10 @@
                             $('#sexo_paciente').text('Femenino');
                         }
                         $('#email_paciente_').text(paciente.email);
-                        $('#telefono_paciente').text(paciente.telefono_uno);
+                        $('#telefono_paciente_').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-
+                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
+                        $('#direccion_paciente_').text(direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);
@@ -447,6 +521,253 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
                 });
         }
+
+        function buscar_ciudad_paciente(id_ciudad = 0) {
+
+            let region = $('#paciente_region_edit').val();
+            let url = "{{ route('profesional.buscar_ciudad_region') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        region: region,
+                    },
+                })
+                .done(function(data) {
+                    if (data != null) {
+                        data = JSON.parse(data);
+
+                        let ciudades = $('#paciente_comuna_edit');
+
+                        ciudades.find('option').remove();
+                        ciudades.append('<option value="0">seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                                '</option>');
+                        })
+
+                        if (id_ciudad != 0)
+                            ciudades.val(id_ciudad);
+
+                    } else {
+
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar las ciudades",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                        // alert('No se pudo Cargar las ciudades');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+
+        };
+
+        $('#tipo_examen_d').change(function(e) {
+                e.preventDefault();
+                tipo_examen = $('#tipo_examen_d').val();
+
+                $("#sub_tipo_examen_d").empty();
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.sub_tipo_examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            tipo_examen: tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#sub_tipo_examen_d').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+
+                        /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                        if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                        else  $('#imagenologia_con_contraste').attr('disabled','disabled');
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  buscar examenes por el sub tipo de examen  --}}
+            $('#sub_tipo_examen_d').change(function(e) {
+
+                e.preventDefault();
+                sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            sub_tipo_examen: sub_tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#examen_d').append(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+        function buscar_ciudad_contacto(id_ciudad = 0) {
+
+            let region = $('#contacto_region_edit').val();
+            let url = "{{ route('profesional.buscar_ciudad_region') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        region: region,
+                    },
+                })
+                .done(function(data) {
+                    if (data != null) {
+                        data = JSON.parse(data);
+
+                        let ciudades = $('#contacto_comuna_edit');
+
+                        ciudades.find('option').remove();
+                        ciudades.append('<option value="0">Seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                                '</option>');
+                        })
+
+                        if (id_ciudad != 0)
+                            ciudades.val(id_ciudad);
+
+                    } else {
+
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar las ciudades",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                        // alert('No se pudo Cargar las ciudades');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+
+        };
+	</script>
+    <script>
+        /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+        function  envio_indicaciones_pdf(id_modal){
+            let url = "{{ route('indicacion.medica.registro.envio') }}";
+            var id_tipo_documento = 1;
+            var id_paciente = $('#id_paciente_fc').val();
+            var id_profesional = $('#id_profesional_fc').val();
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
+            var observacion = '';
+            // var observacion = $('#observacion').val();
+            var documento = '';
+            var url_documento = '';
+            var cuerpo = '';
+            var otro = '';
+            var token = CSRF_TOKEN;
+
+            if(id_tipo_documento == 1)
+            {
+                documento = $('#'+id_modal+' embed').attr('data-documento');
+                url_documento = $('#'+id_modal+' embed').attr('data-url');
+            }
+            else
+            {
+                // cuerpo = $('#cuerpo').val();
+            }
+            var datos = {};
+            datos._token = token;
+            datos.id_tipo_documento = id_tipo_documento;
+            datos.id_paciente = id_paciente;
+            datos.id_profesional = id_profesional;
+            datos.id_ficha_atencion = id_ficha_atencion;
+            datos.id_lugar_atencion = id_lugar_atencion;
+            datos.observacion = observacion;
+            datos.documento = documento;
+            datos.url = url_documento;
+            datos.cuerpo = cuerpo;
+            datos.otro = otro;
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: "json",
+                data: datos,
+                success: function(data) {
+                    // console.log(data);
+                    if(data.estado == 1)
+                    {
+                        var mensaje = '';
+                        mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
+                        if(data.update_correo.estado == 1)
+                            mensaje = 'Documento enviado por correo al Paciente.\n';
+                        else
+                            mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
+
+                        swal({
+                            title: "Indicación Enviada al Paciente",
+                            text: mensaje,
+                            icon: "success",
+                        });
+                    }
+                    else
+                    {
+                        var texto_error = '';
+
+                        if(data.estado ==  0)
+                        {
+                            if('error' in data)
+                            {
+                                $.each(data.error, function (indexInArray, valueOfElement) {
+                                    texto_error += indexInArray+': '+valueOfElement+'\n';
+                                });
+                            }
+                        }
+                        swal({
+                            title: "Indicación Enviada al Paciente",
+                            text: data.msj+'\n'+texto_error,
+                            icon: "warning",
+                        });
+                    }
+                }
+            });
+        }
+        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
     </script>
     @yield('js_inferior')
     @yield('page-script')

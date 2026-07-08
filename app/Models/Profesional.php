@@ -29,6 +29,12 @@ class Profesional extends Model
             ->wherePivot('estado', 1);
     }
 
+    public function LugaresAtencionTodos()
+    {
+        return $this->belongsToMany(LugarAtencion::class, 'profesionales_lugares_atencion', 'id_profesional', 'id_lugar_atencion')
+            ->withPivot('estado');
+    }
+
     public function Licencias()
     {
         return $this->belongsToMany(Licencia::class, 'licencias_ppf', 'id_profesional', 'id_licencia');

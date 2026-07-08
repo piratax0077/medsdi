@@ -15,7 +15,8 @@
                         <div class="col-md-12">
                             <h6 class="mb-1 text-primary">Profesional</h6>
                             <ul>
-                                <li><strong>Rut :</strong> <span id="info_profesional_rut"></span></li>
+                                <li><strong>Nombre:</strong> <span id="info_profesional_rut"></span></li>
+                                <li><strong>Rut:</strong> <span id="info_profesional_rut"></span></li>
                             </ul>
                             <h6 class="mb-1 text-primary">Lugares de atención</h6>
                             <ul id="info_profesional_lugares_atencion">
@@ -35,9 +36,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div type="button" class="btn btn-info cerrar_modal_info_profesional">Cerrar</div>
             </div>
         </div>
     </div>

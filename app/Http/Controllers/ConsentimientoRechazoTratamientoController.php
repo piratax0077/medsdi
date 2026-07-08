@@ -358,7 +358,7 @@ class ConsentimientoRechazoTratamientoController extends Controller
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
 
-            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 1, $ficha_atencion->id);
             if($temp_token['estado'] == 1)
             {
                 $token_profesional = $temp_token['certificado'];
@@ -367,12 +367,11 @@ class ConsentimientoRechazoTratamientoController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), 1, 1, $ficha_atencion->id);
                 $token_profesional = $temp_token['certificado'];
                 $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                 $qr_profesional = GeneradorQrController::generar($url_documento);
             }
-
 
             $consentimiento = array(
                 'nombre' => 'Rechazo de tratamiento',
@@ -382,28 +381,35 @@ class ConsentimientoRechazoTratamientoController extends Controller
                 'fecha_sol' => $rechazoTrtt->fecha_sol,
             );
 
-
-            $array_ficha_atencion = array(
+            $array_ficha_atencion = [
                 'id' => $ficha_atencion->id,
                 'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
                 'token' => $token_receta,
                 'url' => $url_documento,
                 'qr' => $qr_documento,
-            );
-            $array_lugar_atencion = array(
-                'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
-            );
+            ];
 
-            $array_profesional = array(
+            $array_lugar_atencion = [
+                'id' => $lugar_atencion->id,
+                'nombre' => $lugar_atencion->nombre,
+                'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+            ];
+
+            $array_profesional = [
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_profesional,
-                'url' =>  $url_profesional,
-                'qr' =>  $qr_profesional,
-            );
+                'direccion' => $profesional->direccion->direccion.' '.$profesional->direccion->numero_dir.', '.$profesional->direccion->Ciudad()->first()->nombre,
+                'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+                'id_especialidad' => $profesional->id_especialidad,
+                'num_colegio' => $profesional->num_colegio,
+                'region' => $profesional->direccion->Ciudad()->first()->Region()->first()->nombre,
+                'token' => $token_profesional,
+                'url' => $url_profesional,
+                'qr' => $qr_profesional,
+            ];
+
             $array_paciente = array(
                 'id' => $paciente->id,
                 'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,

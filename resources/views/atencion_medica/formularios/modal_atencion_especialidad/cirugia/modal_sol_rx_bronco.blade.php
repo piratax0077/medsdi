@@ -125,6 +125,36 @@
 
     function sol_rx_bronco()
     {
+         $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 955
+                },
+        })
+        .done(function(response) {
+            $('#examen_rx').val(null).trigger('change');
+
+            // Limpiar las opciones existentes
+            $('#examen_rx').empty();
+
+            // Agregar opción por defecto
+            $('#examen_rx').append('<option value="">Seleccione...</option>');
+
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#examen_rx').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+
+            // Reinicializar el select2 si es necesario
+            $('#examen_rx').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
         $('#m_rx_brpul').modal('show');
     }
     function cerrarsol_rx_bronco() {
@@ -135,13 +165,7 @@
             let auto = 1; // o el valor real que quieras enviar
             let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
 
-            Fancybox.show(
-                [{
-                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
-                    type: "iframe",
-                    preload: false,
-                }, ]
-            );
+            ver_pdf_orden_examenes(id_ficha_atencion);
     }
 </script>
 {{--  <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">

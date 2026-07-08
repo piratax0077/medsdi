@@ -58,15 +58,25 @@
                             <input type="text" class="form-control form-control-sm" name="paciente_rut_trabajo_mayor"
                                 id="paciente_rut_trabajo_mayor" value="{{ $paciente->rut }}" disabled>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12">
+                        <div class="form-group col-sm-11 col-md-11">
                             <label class="floating-label-activo-sm">Laboratorios</label>
                             <select name="lab_trabajo_mayor" id="lab_trabajo_mayor" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
-                                @foreach ($laboratorios as $lab)
-                                    <option value="{{ $lab->id }}">{{ $lab->nombre }}</option>
-                                @endforeach
+                                @if(isset($laboratorios) && count($laboratorios) > 0)
+                                    @foreach ($laboratorios as $lab)
+                                        <option value="{{ $lab->id }}">{{ $lab->nombre }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="1">Laboratorio1</option>
+                                    <option value="2">Laboratorio2</option>
+                                    <option value="3">Laboratorio3</option>
+                                    <option value="4">Laboratorio4</option>
+                                @endif
 
                             </select>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-1">
+                            <button class="btn btn-success btn-icon" type="button" id="btn_agregar_laboratorio">+</button>
                         </div>
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Guia</label>
@@ -94,7 +104,7 @@
                     <div class="form-row">
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Trabajo a realizar</label>
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm prestacion-autocomplete"
                                 name="trabajo_realizar_trabajo_mayor" id="trabajo_realizar_trabajo_mayor">
 
                         </div>

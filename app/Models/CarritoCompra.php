@@ -15,6 +15,7 @@ class CarritoCompra extends Model
         'id_usuario',
         'id_profesional',
         'id_paciente',
+        'id_cliente',
         'id_ficha',
         'id_producto',
         'codigo_producto',
@@ -193,7 +194,7 @@ class CarritoCompra extends Model
     /**
      * Obtener total del carrito para un usuario o sesión
      */
-    public static function obtenerTotal($id_usuario = null, $session_id = null)
+    public static function obtenerTotal($id_usuario = null, $session_id = null, $id_cliente = null)
     {
         $query = static::activos()->noExpirados();
 
@@ -203,13 +204,17 @@ class CarritoCompra extends Model
             $query->porSesion($session_id);
         }
 
+        if ($id_cliente) {
+            $query->where('id_cliente', $id_cliente);
+        }
+
         return $query->sum('subtotal');
     }
 
     /**
      * Obtener cantidad de items en el carrito
      */
-    public static function contarItems($id_usuario = null, $session_id = null)
+    public static function contarItems($id_usuario = null, $session_id = null, $id_cliente = null)
     {
         $query = static::activos()->noExpirados();
 
@@ -217,6 +222,10 @@ class CarritoCompra extends Model
             $query->porUsuario($id_usuario);
         } elseif ($session_id) {
             $query->porSesion($session_id);
+        }
+
+        if ($id_cliente) {
+            $query->where('id_cliente', $id_cliente);
         }
 
         return $query->sum('cantidad');

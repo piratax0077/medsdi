@@ -37,7 +37,9 @@
             <input type="checkbox" id="btn-mas">
             <div class="redes">
                 <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
-                {{--  <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>  --}}
+                <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
+                <a id="boton_4" class="fas fa-bed fa-2x" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
+
                 {{--  @if($profesional->SubTipoEspecialidad()->first())
 
                     @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
@@ -101,10 +103,11 @@
         </div>
     </div>
 </div>
-
-
+<!--***************MODALS*******************-->
+@include('atencion_medica.sidebars.formularios_signos_vitales')
 @include('atencion_medica.sidebars.antecedentes_paciente')
-{{--  @include('atencion_medica.sidebars.formularios_atencion')  --}}
+@include('atencion_medica.sidebars.formularios_atencion')
+
 
 @section('js-sidebar')
     <script>
@@ -1216,6 +1219,9 @@
             });
         }
 
+
+
+
         function generar_pdf_historial(id_ficha_clinica){
             let url = "{{ route('profesional.generar_pdf_presupuesto_dental_hist') }}";
             let id_paciente = $('#id_paciente').val();
@@ -1263,7 +1269,7 @@
                         });
                     }
                 }
-            });
+            })
         }
 
         function buscar_receta_ficha(id) {

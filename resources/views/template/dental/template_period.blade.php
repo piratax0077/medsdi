@@ -198,6 +198,8 @@
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+        
+
         $(document).ready(function () {
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
@@ -243,6 +245,7 @@
 			@endif
 
             $('#table_antecedentes_unificada').DataTable();
+            
         });
 
 
@@ -723,6 +726,29 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
                 });
         }
+
+        function dame_correlativo(tipo){
+        console.log(tipo);
+        $.ajax({
+            type: "POST",
+            url: "{{ route('profesional.dame_correlativo') }}",
+            data: {
+                _token: CSRF_TOKEN,
+                tip_doc: tipo
+            },
+            success: function(response) {
+                console.log(response);
+                if(tipo == 'Orden Trabajo Menor'){
+                    $('#nro_orden_trabajo_menor').val(response.fila);
+                } else if(tipo == 'Orden Trabajo Mayor'){
+                    $('#nro_orden_trabajo_mayor').val(response.fila);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", error);
+            }
+        });
+    }
 
         function buscar_ciudad_paciente(id_ciudad = 0) {
 

@@ -5,7 +5,7 @@
 				<div class="main-menu-header">
 					<img class="img-radius" src="{{ asset('images/iconos/usuario_administrador.svg') }}" alt="Administrador centro médico">
 					<div class="user-details">
-						<div id="more-details">Nombre Centro Médico <i class="fa fa-caret-down"></i></div>
+						<div id="more-details">Nombre Centro Médico- <i class="fa fa-caret-down"></i></div>
 					</div>
 				</div>
 				<div id="nav-user-link">

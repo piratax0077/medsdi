@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_eval_hab_preart">HABILIDADES PRAGMÁTICAS</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#h_pragmati').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-row">
@@ -243,15 +243,18 @@
                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_generales" id="obs_generales"></textarea>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"onclick="$('#h_pragmati').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('h_pragmati');">Enviar al Paciente</button>
                 <button type="button" class="btn btn-info" onclick="registrar_h_pragatica();">Guardar</button>
             </div>
+               
         </div>
     </div>
 </div>
+
 <script>
     function pragma() {
         $('#h_pragmati').modal('show');

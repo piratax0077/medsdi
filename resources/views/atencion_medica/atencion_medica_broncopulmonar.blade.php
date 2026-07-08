@@ -1,5 +1,8 @@
 @extends('template.template_bronco')
+@section('style')
+    <link rel="stylesheet" href="{{ asset('summernote/summernote-lite.min.css') }}">
 
+@endsection
 @section('Content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -53,9 +56,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    {{--  <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
-                                    </li>  --}}
+                                    </li>
                                     {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
                                     </li>  --}}
@@ -104,6 +107,8 @@
         @include("atencion_medica.include.sidebar_derecho_broncopulmonar")
         @include("general.modal.modal_no_disponible")
 
+        @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+
         <!-- modales -->
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_broncoscopia')
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_espirometria')
@@ -115,5 +120,11 @@
     <!--Cierre: Container Completo-->
 	{{--  @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")  --}}
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection
+
+@section('page-script')
+    {{-- summernote --}}
+	<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
+
 @endsection
 

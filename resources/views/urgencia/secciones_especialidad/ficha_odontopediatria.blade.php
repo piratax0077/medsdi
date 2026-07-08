@@ -15,7 +15,7 @@
                         <a class="nav-secciones text-uppercase" id="periodontograma_tab" data-toggle="tab" href="#periodontograma" role="tab" aria-controls="periodontograma" aria-selected="false">PSR</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="eva_ped_tab" data-toggle="tab" href="#eva_ped" role="tab" aria-controls="eva_ped" aria-selected="false">Caras y cuadrantes</a>
+                        <a class="nav-secciones text-uppercase" id="eva_ped_tab" data-toggle="tab" href="#eva_ped" role="tab" aria-controls="eva_ped" aria-selected="false">Evaluación Pediátrica</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
@@ -543,15 +543,9 @@
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="form-row">
-                                                                                                            <div class="col-sm-12 col-md-12 col-lg-11 col-xl-11 mb-10 pb-10">
+                                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-10 pb-10">
                                                                                                                 <label class="floating-label-activo-sm">Comentarios Fotos</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Fotos" data-seccion=" Fotos" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_fotos_ven" id="obs_fotos_ven"></textarea>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-12 col-lg-1 col-xl-1 mb-10 pb-10">
-                                                                                                                <label class="floating-label-activo-sm">Acciones</label>
-                                                                                                                <div class="d-flex">
-                                                                                                                    <button type="button" class="btn btn-success btn-icon" onclick="guardarFoto('mis-imagenes-imagenes-uro-post')"><i class="fas fa-save"></i></button>
-                                                                                                                </div>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>

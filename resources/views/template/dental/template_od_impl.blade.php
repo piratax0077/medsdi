@@ -21,6 +21,8 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
 
+            <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <!-- data tables css -->
@@ -74,9 +76,10 @@
     @yield('styles')
 </head>
 <body>
-    @include('atencion_odontologica.generales.eval_periimplante')
+    
     @include('template.header')
     @include('template.menuProfesional')
+    @include('atencion_odontologica.generales.eval_periimplante')
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -121,6 +124,9 @@
     <script src="{{ asset('js/recetas_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/licencias_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
@@ -156,7 +162,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     {{--  @include('template.templateAutorizacion')  --}}
 
@@ -652,7 +659,7 @@
         function eliminar_odontograma(id) {
             swal({
                     title: "¿Estás seguro?",
-                    text: "Una vez eliminado, no podrás recuperar este odontograma!",
+                    text: "Una vez eliminado, no podrás recuperar esta información.",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -835,6 +842,7 @@
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_impl.row.add([
                                         pieza.pieza,
+                                        pieza.diagnostico,
                                         pieza.descripcion,
                                         formatoMoneda(formatoMoneda(pieza.valor)),
                                         '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
@@ -842,7 +850,7 @@
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
                                 }
-
+                                
                             });
 
                             let table = $('#presup_estado_pago').DataTable();
@@ -968,16 +976,14 @@
                         console.log(error);
                     }
                 });
-            } else {
-                swal("Operación cancelada");
-            }
+            } 
 
         }
 
         function eliminar_odontograma_rehab(id) {
             swal({
                     title: "¿Estás seguro?",
-                    text: "Una vez eliminado, no podrás recuperar este odontograma!",
+                    text: "Una vez eliminado, no podrás recuperar esta información.",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
@@ -995,7 +1001,7 @@
                     type: 'POST',
                     data: {
                         ids: [id],
-                        id_paciente: $('#id_paciente').val(),
+                        id_paciente: $('#id_paciente_fc').val(),
                         id_ficha_atencion: $('#id_fc').val(),
                         id_lugar_atencion: $('#id_lugar_atencion').val(),
                         rehab: 1,
@@ -1161,9 +1167,10 @@
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_impl.row.add([
                                         pieza.pieza,
+                                        pieza.diagnostico,
                                         pieza.descripcion,
                                         formatoMoneda(formatoMoneda(pieza.valor)),
-                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                        '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_rehab(' +
                                         pieza.id + ')"><i class="feather icon-x"> </i> </button>'
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
@@ -1299,9 +1306,7 @@
                         console.log(error);
                     }
                 });
-            } else {
-                swal("Operación cancelada");
-            }
+            } 
 
         }
     </script>

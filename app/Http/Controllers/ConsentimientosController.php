@@ -58,7 +58,7 @@ class ConsentimientosController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Registro';
                 $datos['registro'] = $registro;
-                $datos['profesional'] = Profesional::find($registro->id_profesional);
+                $datos['profesional'] = Profesional::find($request->id_profesional);
             }
             else
             {
@@ -534,6 +534,7 @@ class ConsentimientosController extends Controller
             $ficha_atencion = FichaAtencion::find($request->id_ficha_atencion);
             $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
             $profesional = Profesional::find($consentimientoPcte->id_profesional);
+
             $paciente = Paciente::find($consentimientoPcte->id_paciente);
 
             $token_firma = encrypt( $profesional->rut.'_'.$profesional->email.'_'.$lugar_atencion->id );
@@ -588,21 +589,21 @@ class ConsentimientosController extends Controller
                 'url' => $url_documento,
                 'qr' => $qr_documento,
             );
-             $array_lugar_atencion = array(
+
+            $array_lugar_atencion = array(
                 'id' => $lugar_atencion->id,
                 'nombre' => $lugar_atencion->nombre,
-                'direccion' => $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
-                'region' => $lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre
+                'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
             );
             $array_profesional = array(
                 'id' => $profesional->id,
                 'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                 'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
+                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
                 'id_especialidad' => $profesional->id_especialidad,
                 'num_colegio' => $profesional->num_colegio,
-                'direccion' => $profesional->Direccion()->first()->direccion.' '.$profesional->Direccion()->first()->numero_dir.', '.$profesional->Direccion()->first()->Ciudad()->first()->nombre,
-                'region' => $profesional->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre,
                 'token' =>  $token_profesional,
                 'url' =>  $url_profesional,
                 'qr' =>  $qr_profesional,
@@ -664,10 +665,13 @@ class ConsentimientosController extends Controller
 
             $consentimiento = ConConsentimientos::find($registro->id_consent);
 
+            $profesional = Profesional::find($registro->id_profesional);
+
             $texto_consentimiento = $consentimiento->texto;
             $texto_consentimiento = str_replace('{diagnostico}','<span style="font-size: 15px;font-weight: bold;">'.$registro->diagnostico_cons.'</span>', $texto_consentimiento);
             $texto_consentimiento = str_replace('{cirugia}','<span style="font-size: 15px;font-weight: bold;">'.$registro->cirugia_cons.'</span>', $texto_consentimiento);
             $texto_consentimiento = str_replace('{nombre_dependiente}','<span style="font-size: 15px;font-weight: bold;">'.$registro->Paciente->nombres.' '.$registro->Paciente->apellido_uno.' '.$registro->Paciente->apellido_dos.'</span>', $texto_consentimiento);
+            $texto_consentimiento = str_replace('{nombre_profesional}','<span style="font-size: 15px;font-weight: bold;">'.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.'</span>', $texto_consentimiento);
 
             if($registro)
             {
@@ -712,7 +716,7 @@ class ConsentimientosController extends Controller
                     $id_institucion = '';
 
                     $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-                    return $result_mail;
+
                     if($result_mail['estado'])
                     {
                         $datos['mail']['institucion']['estado'] = 1;
@@ -779,17 +783,161 @@ class ConsentimientosController extends Controller
 
     }
 
-      public function form_consentimiento(Request $request)
+    function enviar_revocacion(Request $request){
+
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_consentimiento_pcte))
+        {
+            $error['id_consentimiento_pcte'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->observaciones_rev))
+        {
+            $error['observaciones_rev'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $consenrimientoPcte = ConConsentimientosPcte::find($request->id_consentimiento_pcte);
+
+            if($consenrimientoPcte)
+            {
+                $consenrimientoPcte->revocacion = 1;
+                $consenrimientoPcte->observaciones_rev = $request->observaciones_rev;
+                if($consenrimientoPcte->save())
+                {
+                    // notificar por email al paciente
+                    $paciente = Paciente::find($consenrimientoPcte->id_paciente);
+                    $profesional = Profesional::find($consenrimientoPcte->id_profesional);
+                    $ficha_atencion = FichaAtencion::find($consenrimientoPcte->id_fc);
+                    $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
+                    $blade = 'consentimiento_revocado';
+                    $to = array(
+                            array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                        );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Consentimiento Revocado';
+                    $body = array(
+                        'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                        'fecha'=> date('d/m/Y'),
+                        'hora'=> date('H:i'),
+                        'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                        'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
+                        'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
+                        'profesional_sub_tipo_especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre ?? null, // Si no existe, no se muestra
+                        // 'institucion'=> $nombre_institucion,
+                        'lugar_atencion'=> $lugar_atencion->nombre,
+                        'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+                        'consentimiento_nombre'=> $consenrimientoPcte->Consentimiento->nombre,
+                        'consentimiento_diagnostico'=> $consenrimientoPcte->diagnostico_cons,
+                        'texto_consentimiento' => $consenrimientoPcte->Consentimiento->texto,
+                        'id_consentimiento' => $consenrimientoPcte->id,
+                        'id_ficha_atencion' => $consenrimientoPcte->id_fc,
+                        'id_paciente' => $consenrimientoPcte->id_paciente,
+                        'id_profesional' => $consenrimientoPcte->id_profesional,
+                        'token' => $request->token
+                    );
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+                    if(!$result_mail)
+                    {
+                        return redirect()->route('consentimiento.error');
+                    }
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Consentimiento revocado y notificado exitosamente.';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al revocar consentimiento.';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Consentimiento no encontrado.';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campo requerido';
+            $datos['error'] = $error;
+        }
+    }
+
+    public function form_consentimiento(Request $request)
     {
-        $paciente = Paciente::find($request->id_paciente);
+
+        $registro = ConConsentimientosPcte::find($request->id_consentimiento);
+
+        $consentimiento = ConConsentimientos::find($registro->id_consent);
+        $paciente = Paciente::find($registro->id_paciente);
+        $profesional = Profesional::find($registro->id_profesional);
+        $texto = $consentimiento->texto;
+        $texto = str_replace('{diagnostico}','<span style="font-size: 15px;font-weight: bold;">'.$registro->diagnostico_cons.'</span>', $texto);
+        $texto = str_replace('{cirugia}','<span style="font-size: 15px;font-weight: bold;">'.$registro->cirugia_cons.'</span>', $texto);
+        $texto = str_replace('{nombre_dependiente}','<span style="font-size: 15px;font-weight: bold;">'.$paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos.'</span>', $texto);
+        $texto = str_replace('{nombre_profesional}', '<span style="font-size: 15px;font-weight: bold;">' . $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos . '</span>', $texto);
+
+        // evaluamos el token
+        $log_users_devices = LogUsersDevices::where('token', $request->token)->first();
+        if(!$log_users_devices)
+        {
+            return redirect()->route('consentimiento.error');
+        }
+        // evaluamos si el token esta activo
+        if($log_users_devices->estado == 4) // 4 = token expirado
+        {
+            return redirect()->route('consentimiento.error');
+        }
+
         return view('app.mail.consentimiento_confirmar', [
-            'id_consentimiento' => $request->id_consentimiento,
-            'id_ficha_atencion' => $request->id_ficha_atencion,
-            'id_paciente' => $request->id_paciente,
+            'id_consentimiento' => $registro->id_consent,
+            'id_ficha_atencion' => $registro->id_ficha_atencion,
+            'id_paciente' => $registro->id_paciente,
             'paciente' => $paciente,
-            'profesional' => Profesional::find($request->id_profesional),
-            'id_profesional' => $request->id_profesional,
+            'profesional' => Profesional::find($registro->id_profesional),
+            'id_profesional' => $registro->id_profesional,
             'token' => $request->token,
+            'texto_consentimiento' => $texto,
+        ]);
+    }
+
+    public function form_revocacion_consentimiento(Request $request)
+    {
+        $registro = ConConsentimientosPcte::find($request->id_consentimiento);
+        if(!$registro)
+        {
+            return redirect()->route('consentimiento.error');
+        }
+        // evaluamos el token
+        $log_users_devices = LogUsersDevices::where('token', $request->token)->first();
+        if(!$log_users_devices)
+        {
+            return redirect()->route('consentimiento.error');
+        }
+        // evaluamos si el token esta activo
+        if($log_users_devices->estado == 4) // 4 = token expirado
+        {
+            return redirect()->route('consentimiento.error');
+        }
+
+        return view('app.mail.consentimiento_revocacion', [
+            'id_consentimiento' => $registro->id_consent,
+            'id_ficha_atencion' => $registro->id_fc,
+            'id_paciente' => $registro->id_paciente,
+            'paciente' => Paciente::find($registro->id_paciente),
+            'profesional' => Profesional::find($registro->id_profesional),
+            'id_profesional' => $registro->id_profesional,
+            'token' => $request->token,
+            'texto_consentimiento' => $registro->Consentimiento->texto,
         ]);
     }
 
@@ -811,14 +959,43 @@ class ConsentimientosController extends Controller
         return redirect()->route('consentimiento.error');
     }
 
+    public function confirmar_revocacion_consentimiento(Request $request)
+    {
+        $consentimientoPcte = ConConsentimientosPcte::find($request->id_consentimiento);
+        if($consentimientoPcte)
+        {
+            $consentimientoPcte->revocacion = 1;
+            $log_users_devices = LogUsersDevices::where('token', $request->token)->first();
+            if($log_users_devices){
+                $log_users_devices->estado = 1; // confirmado
+                $log_users_devices->save();
+            }
+            if($consentimientoPcte->save())
+            {
+                return redirect()->route('consentimiento.revocacion.exito');
+            }
+        }
+        return redirect()->route('consentimiento.revocacion.error');
+    }
+
     public function exito_consentimiento()
     {
         return view('app.mail.consentimiento_exito');
     }
 
+    public function exito_revocacion_consentimiento()
+    {
+        return view('app.mail.consentimiento_revocacion_exito');
+    }
+
     public function error_consentimiento()
     {
         return view('app.mail.consentimiento_error');
+    }
+
+    public function error_revocacion_consentimiento()
+    {
+        return view('app.mail.consentimiento_revocacion_error');
     }
 
     public function solicitar_autorizacion_revocacion(Request $request)
@@ -1037,34 +1214,41 @@ class ConsentimientosController extends Controller
                 'observacion_rev' => $consentimientoPcte->observaciones_rev,
             );
 
-            $array_ficha_atencion = array(
-                'id' => $ficha_atencion->id,
-                'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
-                'token' => $token_receta,
-                'url' => $url_documento,
-                'qr' => $qr_documento,
-            );
-            $array_lugar_atencion = array(
-                'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
-            );
-            $array_profesional = array(
-                'id' => $profesional->id,
-                'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
-                'rut' => $profesional->rut,
-                'especialidad' => $profesional->SubTipoEspecialidad()->first()->nombre,
-                'token' =>  $token_profesional,
-                'url' =>  $url_profesional,
-                'qr' =>  $qr_profesional,
-            );
-            $array_paciente = array(
-                'id' => $paciente->id,
-                'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
-                'fecha_nac' => $paciente->fecha_nac,
-                'rut' => $paciente->rut,
-                'sexo' => $paciente->sexo,
-                'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
-            );
+             $array_ficha_atencion = array(
+                    'id' => $ficha_atencion->id,
+                    'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                    'token' => $token_receta,
+                    'url' => $url_documento,
+                    'qr' => $qr_documento,
+                );
+
+                $array_lugar_atencion = array(
+                    'id' => $lugar_atencion->id,
+                    'nombre' => $lugar_atencion->nombre,
+                    'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                    'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                    'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
+                );
+                $array_profesional = array(
+                    'id' => $profesional->id,
+                    'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                    'rut' => $profesional->rut,
+                    'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                    'id_especialidad' => $profesional->id_especialidad,
+                    'num_colegio' => $profesional->num_colegio,
+                    'token' =>  $token_profesional,
+                    'url' =>  $url_profesional,
+                    'qr' =>  $qr_profesional,
+                );
+                $array_paciente = array(
+                    'id' => $paciente->id,
+                    'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                    'fecha_nac' => $paciente->fecha_nac,
+                    'rut' => $paciente->rut,
+                    'sexo' => $paciente->sexo,
+                    'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+                );
+
 
             $nombre_archivo = mb_strtolower('revocacion_consentimiento_'.$consentimientoPcte->consentimiento->nombre);
             $bad = array(" ", "ñ", "á", "é", "í", "ó","ú" );

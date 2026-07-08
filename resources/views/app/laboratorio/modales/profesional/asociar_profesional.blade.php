@@ -1,6 +1,20 @@
+{{-- <style>
+    /* Asegurar que el modal y su backdrop se muestren sobre los tabs */
+    #asociar_profesional_cm {
+        z-index: 1060 !important;
+    }
+    #asociar_profesional_cm + .modal-backdrop {
+        z-index: 1055 !important;
+    }
+    .modal-open #asociar_profesional_cm {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+</style> --}}
+
 <!--Modal Asociar Profesional-->
-<div id="asociar_profesional_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="asociar_profesional_cm" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered " role="document">
+<div id="asociar_profesional_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="asociar_profesional_cm" aria-hidden="true" data-backdrop="true" data-keyboard="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Asociar Profesional</h5>
@@ -33,6 +47,7 @@
                                         <label class="floating-label-activo-sm">Sucursal</label>
                                         <select class="form-control form-control-sm" name="agregar_profesional_int_id_lugar_atencion" id="agregar_profesional_int_id_lugar_atencion">
                                             <option value="{{ $institucion->id_lugar_atencion }}">Seleccione una opción</option>
+                                            <option value="{{ $institucion->id_lugar_atencion }}">{{ $institucion->nombre }}</option>
                                                 @if(isset($sucursales))
                                                     @foreach ($sucursales as $sucursal )
                                                         <option value="{{ $sucursal->id_lugar_atencion }}">{{ $sucursal->nombre }}</option>
@@ -45,14 +60,15 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">En el cargo de</label>
-                                        <select class="form-control form-control-sm" name="agregar_profesional_cargo_int" id="agregar_profesional_cargo_int" onchange="registrar_nuevo_servicio(event)">
+                                        <select class="form-control form-control-sm" name="agregar_profesional_cargo_int" id="agregar_profesional_cargo_int" onchange="registrar_nuevo_servicio(event)" disabled>
                                                 <option value="0">Seleccione una opción</option>
-                                                <option value="1">Profesional</option>
+                                                <option value="1" selected>Profesional</option>
                                                 <option value="2">Jefe de servicio</option>
                                                 <option value="3">Subjefe de servicio</option>
                                                 <option value="4">Director medico</option>
                                                 <option value="5">Tens</option>
                                                 <option value="6">Tons</option>
+                                                <option value="7">Enfermera</option>
                                         </select>
                                 </div>
                             </div>
@@ -119,7 +135,7 @@
                                 </div>
                             </div>
                             <div class="row mt-1">
-                                <div class="col-sm-4">Porcentaje por ventas</div>
+                                <div class="col-sm-4">Porcentaje por Ventas</div>
                                 <div class="col-sm-6">
                                     <input type="number" class="form-control form-control-sm" min="0" max="100" step="0.1" name="agregar_profesional_ventas" id="agregar_profesional_ventas" value="">
                                 </div>
@@ -284,6 +300,12 @@
                                 </div>
                             </div>
                             <div class="row mt-1">
+                                <div class="col-sm-4">Porcentaje por Ventas</div>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control form-control-sm" min="0" max="100" step="0.1" name="agregar_profesional_nuevo_ventas" id="agregar_profesional_nuevo_ventas" value="">
+                                </div>
+                            </div>
+                            <div class="row mt-1">
                                 <div class="col-sm-4">Cobro por Confirmaicon de Agenda</div>
                                 <div class="col-sm-6">
                                     <input type="number" class="form-control form-control-sm" min="0" step="1" name="agregar_profesional_nuevo_confirmacion_agenda" id="agregar_profesional_nuevo_confirmacion_agenda" value="">
@@ -368,13 +390,44 @@
         }
     }
 
-    function asociar_profesional() {
-        $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
-        $('#div_agregar_profesional_busqueda').show();
-        $('#div_agregar_profesional_ver_info_prof').hide();
-        $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+    function asociar_profesional(event) {
+        // Prevenir propagación de eventos para evitar conflictos con tabs
+        // if(event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // }
+
+        // $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
+        // $('#div_agregar_profesional_busqueda').show();
+        // $('#div_agregar_profesional_ver_info_prof').hide();
+        // $('#div_agregar_profesional_formulario_nuevo_prof').hide();
+
+        // Asegurar que el modal se muestre por encima de todo
         $('#asociar_profesional_cm').modal('show');
+
+        // Fix z-index después de que el modal se muestre
+        // setTimeout(function() {
+        //     $('#asociar_profesional_cm').css('z-index', 1060);
+        //     $('.modal-backdrop').last().css('z-index', 1055);
+        // }, 100);
     }
+
+    // Event listener para corregir z-index cuando se abre el modal
+    // $('#asociar_profesional_cm').on('show.bs.modal', function (e) {
+    //     // Asegurar que el modal tenga el z-index correcto
+    //     $(this).css('z-index', 1060);
+    //     setTimeout(function() {
+    //         $('.modal-backdrop').last().css('z-index', 1055);
+    //     }, 50);
+    // });
+
+    // Limpiar al cerrar el modal
+    // $('#asociar_profesional_cm').on('hidden.bs.modal', function (e) {
+    //     // Remover cualquier backdrop adicional que pueda quedar
+    //     $('.modal-backdrop').remove();
+    //     $('body').removeClass('modal-open');
+    //     $('body').css('padding-right', '');
+    // });
 
     function regresar_a_busqueda()
     {
@@ -476,6 +529,7 @@
                     },
                 })
                 .done(function(data3) {
+                    console.log(data3);
                     if (data3.estado == 1)
                     {
                         /** encontrado */
@@ -595,6 +649,7 @@
         let id_tipo_convenio_institucion = $('#agregar_profesional_id_tipo_convenio_institucion').val();
         let fijo = $('#agregar_profesional_fijo').val();
         let atencion = $('#agregar_profesional_atencion').val();
+        let ventas = $('#agregar_profesional_ventas').val();
         let confirmacion_agenda = $('#agregar_profesional_confirmacion_agenda').val();
         let ggcc = $('#agregar_profesional_ggcc').val();
         let box = $('#agregar_profesional_box').val();
@@ -611,6 +666,7 @@
                 id_tipo_convenio_institucion : id_tipo_convenio_institucion,
                 fijo : fijo,
                 atencion : atencion,
+                ventas : ventas,
                 confirmacion_agenda : confirmacion_agenda,
                 ggcc : ggcc,
                 box : box,
@@ -669,8 +725,8 @@
 
     function asociar_nuevo_profesional()
     {
-        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
 
+        let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
         let sexo = $('#agregar_profesional_sexo').val();
         let rut = $('#agregar_profesional_nuevo_rut').val();
         let nombre = $('#agregar_profesional_nuevo_nombre').val();
@@ -678,13 +734,12 @@
         let apellido_dos = $('#agregar_profesional_nuevo_apellido_dos').val();
         let correo = $('#agregar_profesional_nuevo_correo').val();
         let telefono_uno = $('#agregar_profesional_nuevo_telefono_uno').val();
-
         let profesion = $('#agregar_profesional_nuevo_profesion').val();
         let especialidad = $('#agregar_profesional_nuevo_especialidad').val();
         let sub_tipo_especialidad = $('#agregar_profesional_nuevo_sub_tipo_especialidad').val();
-
         let id_tipo_convenio_institucion = $('#agregar_profesional_nuevo_id_tipo_convenio_institucion').val();
         let fijo = $('#agregar_profesional_nuevo_fijo').val();
+        let ventas = $('#agregar_profesional_nuevo_ventas').val();
         let atencion = $('#agregar_profesional_nuevo_atencion').val();
         let confirmacion_agenda = $('#agregar_profesional_nuevo_confirmacion_agenda').val();
         let ggcc = $('#agregar_profesional_nuevo_ggcc').val();
@@ -725,42 +780,51 @@
             valido = 0;
             mensaje += '<li>Teléfono</li>';
         }
-        if (profesion == '') {
+        if (profesion == '' || profesion == '0') {
             valido = 0;
             mensaje += '<li>Profesión</li>';
         }
-        if (especialidad == '') {
+        if (especialidad == '' || especialidad == '0') {
             valido = 0;
             mensaje += '<li>Especialidad</li>';
         }
-        if (sub_tipo_especialidad == '') {
-            valido = 0;
-            mensaje += '<li>Sub tipo especialidad</li>';
-        }
+        // if (sub_tipo_especialidad == '' || sub_tipo_especialidad == '0') {
+        //     valido = 0;
+        //     mensaje += '<li>Sub tipo especialidad</li>';
+        // }
         if (id_tipo_convenio_institucion == '') {
             valido = 0;
             mensaje += '<li>Tipo de convenio con institución</li>';
         }
-        if (fijo == '') {
-            valido = 0;
-            mensaje += '<li>Valor fijo</li>';
+
+        // Validación dinámica según tipo de convenio
+        if (id_tipo_convenio_institucion == '1') { // Fijo
+            if (fijo === '' || fijo === null) {
+                valido = 0;
+                mensaje += '<li>Valor fijo</li>';
+            }
+        } else if (id_tipo_convenio_institucion == '2') { // Variable
+            if (atencion === '' || atencion === null) {
+                valido = 0;
+                mensaje += '<li>Porcentaje por atención</li>';
+            }
+            if (ventas === '' || ventas === null) {
+                valido = 0;
+                mensaje += '<li>Porcentaje por ventas</li>';
+            }
+            if (confirmacion_agenda === '' || confirmacion_agenda === null) {
+                valido = 0;
+                mensaje += '<li>Cobro por confirmación de agenda</li>';
+            }
+            if (ggcc === '' || ggcc === null) {
+                valido = 0;
+                mensaje += '<li>Cobro por GGCC</li>';
+            }
+            if (box === '' || box === null) {
+                valido = 0;
+                mensaje += '<li>Cobro arriendo BOX</li>';
+            }
         }
-        // if (atencion == '') {
-        //     valido = 0;
-        //     mensaje += '<li>Valor atención</li>';
-        // }
-        // if (confirmacion_agenda == '') {
-        //     valido = 0;
-        //     mensaje += '<li>Confirmación agenda</li>';
-        // }
-        // if (ggcc == '') {
-        //     valido = 0;
-        //     mensaje += '<li>GGCC</li>';
-        // }
-        // if (box == '') {
-        //     valido = 0;
-        //     mensaje += '<li>Box</li>';
-        // }
 
         if (valido == 0) {
             swal({
@@ -798,6 +862,7 @@
                 id_tipo_convenio_institucion : id_tipo_convenio_institucion,
                 fijo : fijo,
                 atencion : atencion,
+                ventas : ventas,
                 confirmacion_agenda : confirmacion_agenda,
                 ggcc : ggcc,
                 box : box,
@@ -855,6 +920,57 @@
             console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
+
+    function validar_email_agenda() {
+            if ($("#agregar_profesional_nuevo_correo").val().indexOf('@', 0) == -1 || $("#agregar_profesional_nuevo_correo")
+                .val().indexOf(
+                    '.', 0) == -1) {
+                swal({
+                    title: "El correo electrónico introducido no es correcto.",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+                // alert('El correo electrónico introducido no es correcto.');
+                $("#guardar_reserva_paciente").prop('disabled', true);
+                return false;
+            }
+
+            let email = $('#agregar_profesional_nuevo_correo').val();
+            let url = "#";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+
+                    email: email,
+
+                }
+
+            })
+            .done(function(data) {
+                if (data == 'fail') {
+
+                    // console.log(data);
+
+                    $('#mensaje_email_reserva').text('el email ya esta en nuestros registros');
+                    $('#mensaje_email_reserva').show();
+                    $('#agregar_profesional_nuevo_correo').focus();
+
+                    $("#guardar_reserva_paciente").prop('disabled', true);
+
+                } else {
+                    $('#mensaje_email_reserva').text('');
+                    $('#mensaje_email_reserva').hide();
+                    $("#guardar_reserva_paciente").prop('disabled', false);
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
 
     function buscar_ciudad(select_region, select_ciudad, id_ciudad=0) {
 

@@ -30,7 +30,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="bloqueo_crear" role="tabpanel" aria-labelledby="bloqueo_crear-tab">
                         <div class="form-row">
-                            <input type="hidden" name="bloqueo_id_profesional" id="bloqueo_id_profesional" value="{{ $profesional->id }}">
+                            <input type="hidden" name="bloqueo_id_profesional" id="bloqueo_id_profesional" value="{{ $profesional ? $profesional->id : '' }}">
                             <input type="hidden" name="bloqueo_id_lugar_atencion" id="bloqueo_id_lugar_atencion" value="">
                             <div class="form-group col-md-12">
                                 <label class="floating-label-activo-sm">Agenda</label>
@@ -119,7 +119,7 @@
 <script>
     function abrir_bloqueo_hora_atencion()
     {
-        $('#bloqueo_id_profesional').val('{{ $profesional->id }}');
+        $('#bloqueo_id_profesional').val('{{ $profesional ? $profesional->id : '' }}');
         $('#bloqueo_id_lugar_atencion').val('{{ $lugar_atencion }}');
 
         cargar_bloqueo_horas();

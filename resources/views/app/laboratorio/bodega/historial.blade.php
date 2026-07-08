@@ -13,8 +13,8 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Administracion del centro médico</a></li>
-                            <li class="breadcrumb-item"><a href="compras.php">Bodegas</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('bodegas.historial') }}">Bodegas</a></li>
                         </ul>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <ul class="nav nav-pills bg-white" id="personal_cm" role="tablist">
                         <li class="nav-item active">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="ingresos-tab" data-toggle="tab" href="#ingresos" role="tab" aria-controls="ingresos" aria-selected="false">Ingresos</a>
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="ingresos-tab" data-toggle="tab" href="#ingresos" role="tab" aria-controls="ingresos" aria-selected="false">Ingresos</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-outline-info btn-sm mr-1 my-1" id="salidas-tab" data-toggle="tab" href="#salidas" role="tab" aria-controls="salidas" aria-selected="false">Salidas</a>
@@ -113,16 +113,16 @@
                                             @foreach($pedidos as $producto)
                                             <tr>
                                                 <td>{{ $producto->created_at }}</td>
-                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+                                                <td><img src="{{asset($producto->producto->image_path) }}" alt="foto" style="width: 100px;"></td>
 
-                                                <td>{{ $producto->producto }}</td>
+                                                <td>{{ $producto->producto->nombre }}</td>
                                                 <td>{{ $producto->cantidad_entregada }}</td>
                                                 <td>{{ $producto->tipo_producto }}</td>
                                                 <td>{{ $producto->usuario }}</td>
                                                 <td>
-                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-primary btn-sm" onclick="ver_producto_inventario({{ $producto->id }})"><i class="fas fa-eye"></i></button>
                                                     <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->id }})"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto({{ $producto->id }})"><i class="fas fa-trash"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto_inventario({{ $producto->id }})"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -134,7 +134,7 @@
                         <div class="tab-pane fade" id="traslados" role="tabpanel" aria-labelledby="traslados-tab">
                             <div class="row">
                                 <div class="col-12">
-                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_traslados">
+                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_traslados">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Fecha</th>
@@ -162,9 +162,9 @@
                                                 <td>{{ $producto->producto->tipo_producto }}</td>
                                                 <td>{{ $producto->responsable->name }}</td>
                                                 <td>
-                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-primary btn-sm" onclick="ver_producto_inventario({{ $producto->producto->id }})"><i class="fas fa-eye"></i></button>
                                                     <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->producto->id }})"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto({{ $producto->producto->id }})"><i class="fas fa-trash"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto_inventario({{ $producto->producto->id }})"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -176,7 +176,7 @@
                         <div class="tab-pane fade" id="rechazados" role="tabpanel" aria-labelledby="rechazados-tab">
                             <div class="row">
                                 <div class="col-12">
-                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_traslados">
+                                    <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_rechazados">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Fecha</th>

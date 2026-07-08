@@ -29,6 +29,9 @@ class CorreoGenerico extends Mailable
      */
     public function build()
     {
+        // Preparar las variables del body para pasarlas a la vista
+        $viewData = is_array($this->detalle['body']) ? $this->detalle['body'] : [];
+
         if(!empty($this->detalle['url_archivo']))
         {
             if(is_array($this->detalle['url_archivo']))
@@ -43,7 +46,7 @@ class CorreoGenerico extends Mailable
                 $this->attach($this->detalle['url_archivo']);
             }
             $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-                    ->view('app.mail.'.$this->detalle['blade'])
+                    ->view('app.mail.'.$this->detalle['blade'], $viewData)
                     ->subject($this->detalle['asunto']);
 
             return $this;
@@ -51,7 +54,7 @@ class CorreoGenerico extends Mailable
         else
         {
             return $this->from(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'))
-                    ->view('app.mail.'.$this->detalle['blade'])
+                    ->view('app.mail.'.$this->detalle['blade'], $viewData)
                     ->subject($this->detalle['asunto']);
         }
 

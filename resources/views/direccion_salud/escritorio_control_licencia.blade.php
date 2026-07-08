@@ -10,11 +10,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Control de licencias</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('ministerio.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('ministerio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Control de Licencias</a>
                                 </li>
                             </ul>
                         </div>
@@ -23,123 +25,79 @@
             </div>
             <!--Cierre: Header-->
 
-
-            <div class="row m-b-10" >
+            <div class="row m-b-10">
                 <div class="col-sm-12">
-                    <div class="card-a">
-                        <div class="card-header-a mb-3" id="tabla-registros">
-                            <h5 class="font-weight-bold">Control de licencias</h5>
+                    <div class="card">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="font-weight-bold text-dark f-20">Control de Licencias</h6>
                         </div>
-                        <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
-
-                            <div class="card-body-aten-a shadow-none">
-
-                                <div class="row m-b-10 ml-3" >
-                                    <ul class="nav nav-pills mt-3 mb-4" id="pills-tab-licencias" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link-modal active" id="pills-tab-emitida-profesional" data-toggle="pill" href="#pills-emitida-profesional" role="tab" aria-controls="pills-emitida-profesional" aria-selected="true">Emitidas por profesionales</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link-modal" id="pills-tab-recibida-paciente" data-toggle="pill" href="#pills-recibida-paciente" role="tab" aria-controls="pills-recibida-paciente" aria-selected="false">Recibidas por Paciente</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="row">
-                                    {{-- filtros --}}
-                                    <div class="col-md-12 mb-3" >
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <input type="date" class="form-control form-control-sm" name="" id="">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input type="date" class="form-control form-control-sm" name="" id="">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-info-light-c btn-sm" onclick="filtrar_control_med();">Buscar</button>
-                                            </div>
-                                        </div>
+                        <div class="card-body">
+                            <!-- Buscador de pacientes por RUT -->
+                            <div class="form-group">
+                                <label for="rut_paciente">Buscar paciente por RUT:</label>
+                                <div class="input-group">
+                                    <input type="text" id="rut_paciente" class="form-control" placeholder="Ingrese RUT">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" id="buscar_paciente" onclick="buscar_paciente()">Buscar</button>
                                     </div>
-
-                                    {{--  tablas de registros --}}
-                                    <div class="col-md-12">
-                                        <div class="tab-content" id="pills-tabContent-licencias">
-                                            <div class="tab-pane fade show active" id="pills-emitida-profesional" role="tabpanel" aria-labelledby="pills-tab-emitida-profesional">
-                                                <div class="table-responsive">
-                                                    <table id="tabla_emitido_profesional"class="table dt-responsive table-xs" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Profesional</th>
-                                                                <th>Cantidad</th>
-                                                                <th>Detalle</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>jaime kriman<br>Otorrinolaringología</td>
-                                                                <td>20</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>jaime kriman<br>Otorrinolaringología</td>
-                                                                <td>20</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>jaime kriman<br>Otorrinolaringología</td>
-                                                                <td>20</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>jaime kriman<br>Otorrinolaringología</td>
-                                                                <td>20</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="pills-recibida-paciente" role="tabpanel" aria-labelledby="pills-tab-recibida-paciente">
-                                                <div class="table-responsive">
-                                                    <table id="tabla_recibida-paciente" class="table dt-responsive table-xs" style="width:100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Paciente</th>
-                                                                <th>Cantidad</th>
-                                                                <th>Detalle</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Johan Davila<br>6187674-k</td>
-                                                                <td>3</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Johan Davila<br>6187674-k</td>
-                                                                <td>3</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Johan Davila<br>6187674-k</td>
-                                                                <td>3</td>
-                                                                <td><button class="btn btn-info-light-c btn-sm">Ver</button></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
+                            <!-- Resultado de búsqueda -->
+                            <div id="resultado_paciente"></div>
+                            <!-- Mapa de geolocalización -->
+                            <div id="mapa_paciente" style="height: 400px; display:none;"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
         </div>
     </div>
 
+@endsection
+
+@section('page-script')
+<script>
+    function buscar_paciente(){
+        let rut = $('#rut_paciente').val();
+        if(!rut){
+            swal({
+                title: "Error",
+                text: "Por favor, ingrese un RUT válido.",
+                icon: "error",
+            });
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('lab.exa.asistente.buscar_paciente_rut') }}",
+            type: 'GET',
+            data: { rut: rut },
+            success: function(response) {
+                console.log(response);
+                if (response.estado === 1 && response.registro) {
+                    var paciente = response.registro;
+                    var html = `
+                        <div class="card mt-3">
+                            <div class="card-body">
+                                <h5>${paciente.nombres} ${paciente.apellido_uno} ${paciente.apellido_dos}</h5>
+                                <p><b>RUT:</b> ${paciente.rut}</p>
+                                <p><b>Email:</b> ${paciente.email}</p>
+                                <p><b>Teléfono:</b> ${paciente.telefono_uno || ''}</p>
+                                <button class="btn btn-success" id="seleccionar_paciente" data-id="${paciente.id}">Seleccionar y geolocalizar</button>
+                            </div>
+                        </div>
+                    `;
+                    $('#resultado_paciente').html(html);
+                } else {
+                    $('#resultado_paciente').html('<div class="alert alert-danger">Paciente no encontrado.</div>');
+                }
+            },
+            error: function() {
+                $('#resultado_paciente').html('<div class="alert alert-danger">Ocurrió un error al buscar el paciente.</div>');
+                $('#mapa_paciente').hide();
+            }
+        });
+    }
+</script>
 @endsection

@@ -72,6 +72,11 @@ Route::get('/documento/ver_registro_recetas', [DocumentoController::class, 'verR
 Route::get('/documento/ver_receta_pdf', [DocumentoController::class, 'verRecetaPDF']);
 Route::get('/documento/ver_registro_recetas/{id_paciente}', [DocumentoController::class, 'verRegistrosRecetas']);
 Route::get('/documento/ver_receta_pdf/{id}', [DocumentoController::class, 'verRecetaPDF']);
+Route::get('/documento/ver_examen_pdf/{id}', [DocumentoController::class, 'verExamenPDF']);
+Route::get('/documento/ver_resultado_examen_pdf/{id}', [DocumentoController::class, 'verResultadoExamenPDF']);
+Route::get('/documento/ver_resultado_octavo_par_pdf/{id}', [DocumentoController::class, 'verOctavoParPDF']);
+Route::get('/documento/ver_licencia_pdf/{id}', [DocumentoController::class, 'verLicenciaPDF']);
+Route::get('/documento/ver_certificado_pdf/{id}', [DocumentoController::class, 'verCertificadoPDF']);
 Route::get('/documento/ver_registro_recetas_rut', [DocumentoController::class, 'verRegistrosRecetasRut']);
 Route::get('/documento/ver_registro_recetas_rut/{rut}', [DocumentoController::class, 'verRegistrosRecetasRut']);
 Route::get('/documento/ver_registro_recetas_id', [DocumentoController::class, 'verRegistrosRecetasId']);
@@ -105,16 +110,13 @@ Route::post('/buscar_sub_especialidades_cm',[App\Http\Controllers\CentroMedicoCo
 Route::post('/buscar_profesionales_cm_todos',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesionales'])->name('api.buscar_profesionales_cm_todos');
 Route::get('/obtener_datos_paciente_por_rut_agenda',[App\Http\Controllers\CentroMedicoController::class, 'obtenerDatosPacientePorRut'])->name('api.obtener_datos_paciente_por_rut_agenda');
 Route::post('/confirmar_reserva', [App\Http\Controllers\CentroMedicoController::class, 'confirmarReserva'])->name('api.confirmar_reserva');
+Route::post('/agendar_hora_paciente_publico', [App\Http\Controllers\CentroMedicoController::class, 'agendarHoraPacientePublico'])->name('api.agendar_hora_paciente_publico');
+Route::get('/dame_previsiones', [App\Http\Controllers\CentroMedicoController::class, 'damePrevisiones'])->name('api.dame_previsiones');
 Route::post('/buscar_examenes_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarExamenes'])->name('api.buscar_examenes_cm');
 Route::post('/buscar_sucursales_laboratorio',[App\Http\Controllers\CentroMedicoController::class, 'buscarSucursalesLaboratorio'])->name('api.buscar_sucursales_laboratorio');
 Route::post('/buscar_profesionales_examen',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesionalesExamen'])->name('api.buscar_profesionales_examen');
 Route::get('/horas_examen_profesional_lugar_atencion', [App\Http\Controllers\CentroMedicoController::class, 'horasExamenProfesionalLugarAtencion'])->name('api.horas_examen_profesional_lugar_atencion');
 Route::post('/confirmar_reserva_examen', [App\Http\Controllers\CentroMedicoController::class, 'confirmarReservaExamen'])->name('api.confirmar_reserva_examen');
-/**jwt test */
-Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
-Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
-Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
-
 /**jwt test */
 Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
 Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
@@ -145,7 +147,6 @@ Route::get('/paciente/mis_licencias', [App\Http\Controllers\AppPacienteControlle
 Route::get('/paciente/mis_certificados', [App\Http\Controllers\AppPacienteController::class, 'getMisCertificados']);
 Route::get('/paciente/mis_documentos', [App\Http\Controllers\AppPacienteController::class, 'getMisDocumentos']);
 Route::get('/paciente/mis_controles', [App\Http\Controllers\AppPacienteController::class, 'getMisControles']);
-
 
 Route::get('/profesionales/mis_lugares_atencion', [App\Http\Controllers\AppPacienteController::class, 'getLugaresAtencionProfesional']);
 Route::get('/profesionales/dias_laborales_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getDiasLaboralesLugarAtencionProfesional']);
@@ -194,6 +195,9 @@ Route::get('/paciente/dame_ciudades', [App\Http\Controllers\AppPacienteControlle
 //// Funciones Vistas
 //Route::get('/getMisPacientes', [App\Http\Controllers\UtilsController::class, 'getPacientes']);
 
+// Rutas para aprobación/rechazo de rendición desde email (sin middleware de autenticación)
+Route::get('/laboratorio/aprobar-rendicion/{id_rendicion}/{email_encoded}', [App\Http\Controllers\LaboratorioController::class, 'aprobarRendicionEmail'])->name('laboratorio.aprobar-rendicion-email');
+Route::get('/laboratorio/rechazar-rendicion/{id_rendicion}/{email_encoded}', [App\Http\Controllers\LaboratorioController::class, 'rechazarRendicionEmail'])->name('laboratorio.rechazar-rendicion-email');
 
 Route::get('/Ficha_atencion_sub_tipo', [App\Http\Controllers\ficha_atencionController::class, 'get_sub_tipo_examen']);
 
@@ -245,27 +249,27 @@ Route::middleware(['auth:sanctum'])->get('/debug-con-auth-sanctum', function (Re
 Route::get('/debug-auth-paso-a-paso', function (Request $request) {
     try {
         $resultados = [];
-        
+
         // Paso 1: Headers
         $resultados['paso1_headers'] = [
             'authorization' => $request->header('Authorization'),
             'x_auth_token' => $request->header('X-Auth-Token'),
             'bearer_token' => $request->bearerToken(),
         ];
-        
+
         // Paso 2: Verificar guards
         try {
             $resultados['paso2_auth_api_check'] = auth('api')->check();
         } catch (\Exception $e) {
             $resultados['paso2_auth_api_check'] = 'ERROR: ' . $e->getMessage();
         }
-        
+
         try {
             $resultados['paso3_auth_sanctum_check'] = auth('sanctum')->check();
         } catch (\Exception $e) {
             $resultados['paso3_auth_sanctum_check'] = 'ERROR: ' . $e->getMessage();
         }
-        
+
         // Paso 4: Intentar obtener usuario
         try {
             $user = auth('api')->user();
@@ -273,13 +277,13 @@ Route::get('/debug-auth-paso-a-paso', function (Request $request) {
         } catch (\Exception $e) {
             $resultados['paso4_auth_api_user'] = 'ERROR: ' . $e->getMessage();
         }
-        
+
         return response()->json([
             'mensaje' => 'Debug auth paso a paso completado',
             'resultados' => $resultados,
             'timestamp' => now(),
         ]);
-        
+
     } catch (\Exception $e) {
         return response()->json([
             'error' => 'Error en debug paso a paso',
@@ -332,9 +336,9 @@ Route::post('/test-ficha-atencion-app', function (Request $request) {
 
         $controller = new App\Http\Controllers\FichaAtencionAppController();
         $requestTest = new Request($datosPrueba);
-        
+
         return $controller->store($requestTest);
-        
+
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,

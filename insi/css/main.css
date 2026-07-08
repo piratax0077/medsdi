@@ -4,13 +4,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #blanco{
-	#color: #fff!important;
+	color: #fff!important;
 }
 
 a, ul, li {
 	font-size: 14px;
 	font-family: 'Montserrat', sans-serif;
-	list-style:none
+	list-style:none;
 }
 
 
@@ -244,7 +244,7 @@ label {
 }
 
 
-iframe { max-width: 100%; height: 200% auto; }
+iframe { max-width: 100%; height: auto; }
 
 
 /* Modal */
@@ -269,7 +269,7 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
-.uneditable-input:focus {   
+.uneditable-input:focus {
   border-color: rgba(126, 239, 104, 0.0)!important;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(126, 239, 104, 0.0)!important;
   outline: 0 none!important;
@@ -330,9 +330,12 @@ button:focus {
 	background-color: #E46200;
 }
 
-.bg-footer{
+.bg-footer {
 	background-color: #063e60;
+}
 
+.bg-azul-osc {
+	background-color: #063e60;
 }
 nav-link-top {
 	font-size: 12px!important;
@@ -354,7 +357,7 @@ nav-link-top a{
 	z-index: 9999999;
 }
 
- 
+
 .btn-whatsapp {
   display:block;
   width:70px;

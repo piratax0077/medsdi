@@ -3,7 +3,9 @@
         <div class="navbar-content scroll-div">
             <div class="">
                 <div class="main-menu-header">
-                    <img class="img-radius" src="{{ asset('images/iconos/usuario_asistente.svg') }}" alt="Profesional">
+                    <img class="img-radius img-fluid wid-100" id="profile-image"
+                                                        src="{{ $asistente->foto_perfil ? asset('storage/' . $asistente->foto_perfil) : asset('images/iconos/usuario_asistente.svg') }}"
+                                                        alt="User image">
                     <div class="user-details">
                         <div id="more-details">{{ @Auth::user()->name }}
 							<i class="fa fa-caret-down"></i>

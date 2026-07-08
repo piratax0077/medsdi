@@ -14,6 +14,7 @@
 
 @section('css-btn-autorizacion')
     <style>
+
         .btn-agenda-autorizacion {
             display: block;
 			width: 182px;
@@ -29,9 +30,22 @@
 			transform: rotate(90deg);
         }
 
+        .btn-tons-autorizacion{
+            display: block;
+            width: 182px;
+            font-weight: 600;
+			font-size: 0.77rem;
+			position: fixed;
+			right: -79px;
+			top: 213px;
+			text-align: center;
+			/* z-index: 1000000000; */
+			transition: 0.3s;
+			cursor: pointer;
+			transform: rotate(90deg);
+        }
 
-
-        .btn-agenda-autorizacion:hover {
+        .btn-agenda-autorizacion:hover, .btn-tons-autorizacion:hover {
             color: #fff;
         }
 
@@ -58,7 +72,17 @@
 @endsection
 
         @if($profesional->id_especialidad == 2)
-            @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+            @php
+                $active = 0;
+                foreach ($tons_dental as $key => $value) {
+                    if(isset($value->estado) && $value->estado == 1){
+                        $active = 1;
+                        break;
+                    }
+                }
+            @endphp
+            @if($active == 1)
+                {{-- Si existe un profesional activo --}}
                 <button class="btn btn-tons-autorizacion btn-info btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
             @else
                 <button class="btn btn-tons-autorizacion btn-danger btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
@@ -68,7 +92,7 @@
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
 
-   @if ($profesional->id_especialidad == 1 || $profesional->id_especialidad == 2)
+   @if ($profesional->id_especialidad == 1 || $profesional->id_especialidad == 2 || $profesional->id_especialidad == 8)
 		@if(!empty(session('lic_token')) && session('lic_estado') == 1)
 			<button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
 		@else
@@ -224,9 +248,9 @@
                             <select name="region_tons" id="region_tons" class="form-control form-control-sm" disabled>
                                 @if(isset($region))
                                 @foreach ($region as $reg)
-                                    @if (isset($region))
+
                                         <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
-                                    @endif
+
                                 @endforeach
                                 @endif
                             </select>
@@ -293,6 +317,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_tons">
+                                    @if(isset($tons_dental))
                                     @foreach ($tons_dental as $tons)
                                         <tr>
                                             <td>{{ $tons->nombre_tons }}</td>
@@ -322,6 +347,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </
@@ -371,9 +397,12 @@
                 url: url,
                 type: "GET",
                 data: {
-                    id_lugar_atencion : id_lugar_atencion
+                    id_lugar_atencion : id_lugar_atencion,
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_paciente: $('#id_paciente').val()
                 },
                 success:function(data){
+                    console.log('data', data);
                     if (data !== 'null')
                     {
                         console.log(data);
@@ -409,7 +438,7 @@
                     token : token,
                 },
                 success:function(data){
-
+                    console.log(data);
                     $('#modal_autorizacion_mensaje').html('<h3>'+data.msj+'</h3>');
                     $('#r_lentes').attr('disabled', true);
 
@@ -1038,7 +1067,7 @@
                         $(rowNode).addClass('text-center align-middle');
                     });
                     actualizarEstadoSidebarTons(tons);
-
+                    $('.btn-tons-autorizacion').removeClass('btn-danger').addClass('btn-info');
                 }else{
                     $('#modal_tons_dental').modal('hide');
                     swal({

@@ -3,7 +3,9 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-danger">
 				<h5 class="modal-title text-white">Contactos de emergencia</h5>
-				<button type="button" class="btn btn-icon bg-light f-16" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close"  data-dismiss="modal"  aria-label="Close" onclick="$('#c_sos_fmu').modal('hide');">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 			</div>
 			<div class="modal-body">
                 <div class="row">

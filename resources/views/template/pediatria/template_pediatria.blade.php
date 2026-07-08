@@ -131,6 +131,9 @@
         <!-- file-upload Js -->
         <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 

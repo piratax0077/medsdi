@@ -83,6 +83,7 @@
 
                                     <!-- BOTÓN PARA CONFIRMAR CONSENTIMIENTO EN WEB -->
                                     <a href="{{ route('consentimiento.form', [
+                                        'id_consentimiento' => $detalle['body']['id_consentimiento'],
                                         'token' => $detalle['body']['token'] ?? ''
                                     ]) }}"
                                        style="display:inline-block; background:#3366cc; color:#fff; font-size:16px; font-weight:600; border-radius:6px; padding:10px 24px; text-decoration:none; margin-top:20px;"

@@ -14,7 +14,7 @@
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="escritorio.php">Mi escritorio</a>
+                                    <a href="#">Mi escritorio</a>
                                 </li>
                             </ul>
                         </div>
@@ -42,8 +42,9 @@
                     </div>
                 </div>
 				<div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card subir py-auto" style="min-height: 120px;">
-                        <a href="{{ ROUTE('laboratorio.area_comercial') }}">
+                    <div class="card subir py-auto" style="min-height: 120px;" onclick="en_construccion()">
+                        {{-- <a href="{{ ROUTE('laboratorio.area_comercial') }}"> --}}
+                        <a href="javascript:void(0)">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
                                 <h6 class="mt-2 mb-0">Administración comercial</h6>
@@ -51,6 +52,7 @@
                         </a>
                     </div>
                 </div>
+                @if($laboratorio->id_tipo_laboratorio == 4)
                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card subir py-auto" style="min-height: 120px;">
                         <a href="{{route('laboratorio.venta_audifonos')}}">
@@ -61,6 +63,18 @@
                         </a>
                     </div>
                 </div>
+                @elseif($laboratorio->id_tipo_laboratorio == 6)
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="card subir py-auto" style="min-height: 120px;">
+                        <a href="{{ route('laboratorio.radiologia') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/imagenologia.svg') }}">
+                                <h6 class="mt-2 mb-0">Radiología e Imagenología</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @endif
                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card subir py-auto" style="min-height: 120px;">
                         <a href="{{ ROUTE('laboratorio.prestaciones') }}">
@@ -101,9 +115,9 @@
                         </a>
                     </div>
                 </div>
-				 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3" onclick="en_construccion()">
+				 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card subir py-auto" style="min-height: 120px;">
-                        <a href="{{ ROUTE('laboratorio.personal') }}">
+                        <a href="{{ route('laboratorio.estadisticas', $institucion->id) }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-50 text-center"  src="{{ asset('images/iconos/estadisticas.png') }}">
                                 <h6 class="mt-2 mb-0">Estadísticas</h6>
@@ -111,6 +125,39 @@
                         </a>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="card subir py-auto" style="min-height: 120px;">
+                        <a href="{{ route('laboratorio.transcripcion_examenes') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/transcripcion.png') }}">
+                                <h6 class="mt-2 mb-0">Transcripcion de exámenes</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @if($laboratorio->id == 32)
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="card subir py-auto" style="min-height: 120px;" >
+                        <a href="{{ route('laboratorio.distribucion_mayor') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/distribuidor.png') }}">
+                                <h6 class="mt-2 mb-0">Ventas y distribución por mayor</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @else
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <div class="card subir py-auto" style="min-height: 120px;" onclick="en_construccion()" >
+                        <a href="#">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/estadisticas.png') }}">
+                                <h6 class="mt-2 mb-0">Renovar stock</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                @endif
                 <div class="col-md-12">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                         <a href="#">
@@ -168,7 +215,7 @@
                         </a>
                     </div>
                 </div>
-				
+
             </div>
         </div>
     </div>

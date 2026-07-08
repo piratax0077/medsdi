@@ -4,7 +4,7 @@
             <button
                 class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"
                 type="button" data-toggle="collapse" data-target="#exam_odurg_ped_c"
-                aria-expanded="false" aria-controls="exam_odurg_ped_c">
+                aria-expanded="false" aria-controls="exam_odurg_ped_c" onclick="$('#motivo_urg_odped').select2();">
                 Urgencia Odontológica
             </button>
         </div>
@@ -46,7 +46,7 @@
                                                     data-toggle="tab" href="#eval_urg_ped"
                                                     role="tab"
                                                     aria-controls="eval_urg_ped"
-                                                    aria-selected="false" onclick="$('#paciente_piezas_dentales_ex_odped_urg').select2(); $('#table_piezas_odonto_urg_ped').DataTable();">Eval. Diagnóstico
+                                                    aria-selected="false" onclick="$('#paciente_piezas_dentales_ex_odped_urg').select2(); $('#table_piezas_odonto_urg_ped').DataTable();">Eval. Diagnóstica
                                                     pediátrica</a>
                                                 <a class="nav-link-aten text-reset"
                                                     id="ind_urgencia_tab"
@@ -175,6 +175,7 @@
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th>Pieza ó Grupo</th>
+                                                                                            <th>Diagnostico</th>
                                                                                             <th>Tratamiento
                                                                                             </th>
                                                                                             <th>Valor
@@ -189,6 +190,7 @@
                                                                                                 <tr>
                                                                                                     <td>{{ $o->pieza }}
                                                                                                     </td>
+                                                                                                    <td>{{ $o->diagnostico }}</td>
                                                                                                     <td>{{ $o->descripcion }}
                                                                                                     </td>
                                                                                                     <td>${{ number_format($o->valor, 0, ',', '.') }}
@@ -448,6 +450,17 @@
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <div class="form-group">
+                                                                                        <label class="floating-label-activo-sm">Diagnostico</label>
+                                                                                        <select class="form-control form-control-sm" id="diagnostico_combo_g">
+                                                                                            <option value="0">Seleccione</option>
+                                                                                            @foreach ($diagnosticos as $d)
+                                                                                                <option value="{{ $d->id }}">{{ $d->descripcion }}</option>
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div
                                                                                     class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                     <div
@@ -610,6 +623,7 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>Pieza ó Grupo</th>
+                                                                                    <th>Diagnóstico</th>
                                                                                     <th>Tratamiento
                                                                                     </th>
                                                                                     <th>Valor
@@ -623,6 +637,8 @@
                                                                                     @if ($o->urgencia == 1)
                                                                                         <tr>
                                                                                             <td>{{ $o->pieza }}
+                                                                                            </td>
+                                                                                            <td>{{ $o->diagnostico }}
                                                                                             </td>
                                                                                             <td>{{ $o->descripcion }}
                                                                                             </td>
@@ -830,7 +846,7 @@
                                                                                     <div class="form-group">
                                                                                         <label class="floating-label-activo-sm">Diagnostico</label>
                                                                                         <select class="form-control form-control-sm" name="diag_presupuesto_diagnostico_odped_urg" id="diag_presupuesto_diagnostico_odped_urg">
-                                                                                            <option value="">SELECCIONE DIAGNOSTICO</option>
+                                                                                            <option value="">SELECCIONE DIAGNOSTICO ODPED</option>
                                                                                             @foreach ($diagnosticos as $d)
                                                                                                 <option
                                                                                                     value="{{ $d->id }}">
@@ -1724,10 +1740,27 @@
         </div>
     </div>
 </div>
+@include('atencion_odontologica.modals.odontograma.modal_insumos_urgencias')
 <!-- DATOS DE VITAL IMPORTANCIA -->
 <input type="hidden" name="id_insumo_editar" id="id_insumo_editar" value="">
 <script>
 
+    $(document).ready(function(){
+        $('#table_insumos_odped_urg').DataTable();
+        const cantidadInputUrg = document.getElementById("cantidad_urg");
+        const precioInputUrg = document.getElementById("precio_urg");
+        const totalInputUrg = document.getElementById("total_urg");
+
+        // Calcula el total automáticamente cuando se ingresan datos
+        function calcularTotalUrg() {
+            const cantidad = parseFloat(cantidadInputUrg.value) || 0;
+            const precio = parseFloat(precioInputUrg.value) || 0;
+            totalInputUrg.value = (cantidad * precio).toFixed(2);
+        }
+
+        cantidadInputUrg.addEventListener("input", calcularTotalUrg);
+        precioInputUrg.addEventListener("input", calcularTotalUrg);
+    })
     function actualizar_presupuesto_urgencia() {
         // Obtener valores del formulario
 
@@ -2294,7 +2327,7 @@
                         // Este Set sirve para verificar si ya existe una pieza (más rápido que indexOf)
                         let piezasAgregadas = new Set();
                         odontograma.forEach(function(odonto) {
-                            if (odonto.presupuesto == 1) {
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
                                 $('#contenedor_piezas_dentales_presupuesto').append(`
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-informacion">
@@ -2384,6 +2417,7 @@
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_urg.row.add([
                                         pieza.pieza,
+                                        pieza.diagnostico,
                                         pieza.descripcion,
                                         formatoMoneda(formatoMoneda(pieza.valor)),
                                         '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_urg(' +
@@ -2413,6 +2447,7 @@
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_urg_gral.row.add([
                                         pieza.pieza,
+                                        pieza.diagnostico,
                                         pieza.descripcion,
                                         formatoMoneda(formatoMoneda(pieza.valor)),
                                         '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_urg(' +
@@ -2549,6 +2584,8 @@
                 _token: CSRF_TOKEN
             }
 
+            console.log(data);
+
             let url = "{{ route('dental.guardarCambiosTratamientoUrgencia') }}";
             $.ajax({
                 type: 'POST',
@@ -2629,6 +2666,7 @@
                                 // Agregar una nueva fila a la tabla
                                 let rowNode = table_urg.row.add([
                                     pieza.pieza,
+                                    pieza.diagnostico,
                                     pieza.descripcion,
                                     formatoMoneda(formatoMoneda(pieza.valor)),
                                     '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_urg(' +
@@ -2659,6 +2697,7 @@
                             // Agregar una nueva fila a la tabla
                             let rowNode = table_odped.row.add([
                                 pieza.pieza,
+                                pieza.diagnostico,
                                 pieza.descripcion,
                                 formatoMoneda(formatoMoneda(pieza.valor)),
                                 '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_urg(' +
@@ -2680,6 +2719,7 @@
             // Obtener los valores seleccionados en el select
             var piezasSeleccionadas = $('#paciente_piezas_dentales_urg').val();
             var ttoPiezas = $('#diag_presupuesto_pieza_g_urg').val();
+            var diagnostico = $('#diagnostico_combo_g').val();
 
             let valido = 1;
             let mensaje = '';
@@ -2691,6 +2731,11 @@
             if (ttoPiezas == '') {
                 valido = 0;
                 mensaje += '<li>Tratamiento </li>';
+            }
+
+            if(diagnostico == 0){
+                valido = 0;
+                mensaje += '<li>Diagnostico </li>';
             }
 
             if (valido == 0) {
@@ -2713,6 +2758,7 @@
             let data = {
                 piezas: piezasSeleccionadas,
                 tto: ttoPiezas,
+                diagnostico: diagnostico,
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
@@ -2780,7 +2826,7 @@
                         // Este Set sirve para verificar si ya existe una pieza (más rápido que indexOf)
                         let piezasAgregadas = new Set();
                         odontograma.forEach(function(odonto) {
-                            if (odonto.presupuesto == 1) {
+                            if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
                                 $('#contenedor_piezas_dentales_presupuesto').append(`
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-informacion">
@@ -2870,6 +2916,7 @@
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_urg.row.add([
                                         pieza.pieza,
+                                        pieza.diagnostico,
                                         pieza.descripcion,
                                         formatoMoneda(formatoMoneda(pieza.valor)),
                                         '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma_urg(' +
@@ -3187,8 +3234,8 @@
                 return; // Salimos de la función
             }
             // Desmarcar los switches de maxilares
-            document.getElementById('max_inf_odped').checked = false;
-            document.getElementById('max_sup_odped').checked = false;
+            document.getElementById('max_inf_odped_urg').checked = false;
+            document.getElementById('max_sup_odped_urg').checked = false;
 
 
 
@@ -3330,13 +3377,13 @@
                     total: total,
                     id_paciente: $('#id_paciente_fc').val(),
                     id_ficha_atencion: $('#id_fc').val(),
-                    observaciones: $('#insumos_obs_tto').val(),
+                    observaciones: $('#insumos_obs_tto_urg').val(),
                     urgencia: 1,
                     _token: CSRF_TOKEN
                 }
 
                 console.log(data);
-                let url = '{{ ROUTE('dental.agregar_insumos_tto') }}';
+                let url = "{{ ROUTE('dental.agregar_insumos_tto') }}";
                 $.ajax({
                     url: url,
                     type: 'post',
@@ -3479,15 +3526,19 @@
                         let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_odon_gral').DataTable();
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
                         let table_urg = $('#table_insumos_urg').DataTable();
                         let table_odped = $('#table_insumos_odped_urg').DataTable();
                         let table_odped_ = $('#table_insumos_odped').DataTable();
+                        let table_period = $('#table_insumos_period').DataTable();
 
                         //Limpiar la tabla sin perder la configuración de DataTables
                         table.clear();
+                        table_endo.clear();
                         table_urg.clear();
                         table_odped.clear();
                         table_odped_.clear();
+                        table_period.clear();
 
                         //Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
@@ -3533,6 +3584,22 @@
                                     formatoMoneda(total),
                                     botones
                                 ]);
+                                table_endo.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    formatoMoneda(insumo.valor), // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                                table_period.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    formatoMoneda(insumo.valor), // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
                             } else {
                                 table_urg.row.add([
                                     `${insumo.insumos} ${insumo.nombre_marca}`,
@@ -3556,9 +3623,11 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+                        table_endo.draw();
                         table_urg.draw();
                         table_odped.draw();
                         table_odped_.draw();
+                        table_period.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -3738,14 +3807,19 @@
 
                         let insumos = resp.insumos;
                         let table = $('#table_insumos_odon_gral').DataTable();
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
                         let table_urg = $('#table_insumos_urg').DataTable();
                         let table_odped = $('#table_insumos_odped_urg').DataTable();
                         let table_odped_ = $('#table_insumos_odped').DataTable();
+                        let table_period = $('#table_insumos_period').DataTable();
+
                         //Limpiar la tabla sin perder la configuración de DataTables
                         table.clear();
+                        table_endo.clear();
                         table_urg.clear();
                         table_odped.clear();
                         table_odped_.clear();
+                        table_period.clear();
 
                         //Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
@@ -3791,6 +3865,22 @@
                                     formatoMoneda(total),
                                     botones
                                 ]);
+                                table_endo.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    formatoMoneda(insumo.valor), // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
+                                table_period.row.add([
+                                    `${insumo.insumos} ${insumo.nombre_marca}`,
+                                    insumo.observaciones,
+                                    insumo.cantidad, // Cantidad utilizada
+                                    formatoMoneda(insumo.valor), // Unidad de medida
+                                    formatoMoneda(total),
+                                    botones
+                                ]);
                             } else {
                                 table_urg.row.add([
                                     `${insumo.insumos} ${insumo.nombre_marca}`,
@@ -3814,9 +3904,11 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+                        table_endo.draw();
                         table_urg.draw();
                         table_odped.draw();
                         table_odped_.draw();
+                        table_period.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -3868,7 +3960,7 @@
 
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
-                            if (insumo.presupuesto == 1) {
+                            if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                                 if (insumo.estado_pago == 'ok') {
                                     var clase = 'bg-success';
                                 } else if (insumo.estado_pago == 'intermedio') {
@@ -4031,6 +4123,7 @@
             id_presupuesto: $('#id_presupuesto').val(),
             _token: CSRF_TOKEN
         }
+        console.log(data);
         let url = '{{ ROUTE("dental.editar_insumos_tto") }}';
         $.ajax({
             url: url,
@@ -4070,9 +4163,11 @@
                     let insumos = resp.insumos;
                     console.log(insumos);
                     let table = $('#table_insumos_preimplante').DataTable();
+                    let table_endo = $('#table_insumos_endodoncia').DataTable();
 
                     //Limpiar la tabla sin perder la configuración de DataTables
                     table.clear();
+                    table_endo.clear();
 
                     //Recorrer el array de insumos y agregarlos a la tabla
                     insumos.forEach(insumo => {
@@ -4101,18 +4196,32 @@
                                     </button>
                                 </td>`;
                         }
-                        table.row.add([
-                            insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
-                            insumo.observaciones,
-                            insumo.cantidad,       // Cantidad utilizada
-                            formatoMoneda(insumo.valor),         // Unidad de medida
-                            formatoMoneda(total),
-                            botones
-                        ]);
+                        if(insumo.urgencia == 0){
+                            table.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.observaciones,
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                            table_endo.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.observaciones,
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        }else{
+                            
+                        }
+                        
                     });
 
                     //Dibujar la tabla nuevamente con los nuevos datos
                     table.draw();
+                    table_endo.draw();
 
                     $('#contenedor_insumos').empty();
                     insumos.forEach(insumo => {
@@ -4163,7 +4272,7 @@
 
                     insumos.forEach(insumo => {
                         let total = insumo.cantidad * insumo.valor;
-                        if(insumo.presupuesto == 1){
+                        if(insumo.presupuesto == 1 && insumo.urgencia == 0){
                             if(insumo.estado_pago == 'ok'){
                                 var clase = 'bg-success';
                             }else if(insumo.estado_pago == 'intermedio'){
@@ -4283,7 +4392,6 @@
 
                     table_urg.draw();
                     table_odped.draw();
-                    dame_insumos_tratamiento();
                 }
             },
             error: function(error){
@@ -4441,7 +4549,7 @@
                             console.log(insumos);
                             insumos.forEach(insumo => {
                                 let total = insumo.cantidad * insumo.valor;
-                                if (insumo.presupuesto == 1) {
+                                if (insumo.presupuesto == 1 && insumo.urgencia == 0) {
                                     if (insumo.estado_pago == 'ok') {
                                         var clase = 'bg-success';
                                     } else if (insumo.estado_pago == 'intermedio') {

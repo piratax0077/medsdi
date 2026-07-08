@@ -42,8 +42,3 @@
         </div>
     </div>
 </div>
-<script>
-    function info_lab() {
-        $('#m_infolab').modal('show');
-    }
-</script>

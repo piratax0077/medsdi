@@ -22,10 +22,10 @@
         /* Estilo para campos de dirección de nistagmo con símbolos Unicode */
         .nistagmo-direction {
             font-family: "Arial Unicode MS", "Segoe UI Symbol", "DejaVu Sans", "Noto Sans Symbols", Arial, sans-serif;
-            font-size: 16px;
+            /* font-size: 35px; */
             font-weight: bold;
             text-align: center;
-            line-height: 1.4;
+            /* line-height: 1.1; */
             color: #000;
         }
 
@@ -134,7 +134,7 @@
         .table th,
         .table td {
             border: 1px solid #000;
-            padding: 4px;
+            /* padding: 4px; */
             text-align: center;
             font-size: 9px;
         }
@@ -179,6 +179,16 @@
             padding: 2px;
             min-width: 40px;
         }
+
+        .nistagmo_espontaneo_tabla{
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .ng_esp_img{
+            border: 1px solid #ccc;
+            padding: 3px;
+        }
     </style>
 </head>
 <body>
@@ -194,7 +204,7 @@
                 <strong>Nombre:</strong> {{ $paciente->nombres ?? '' }} {{ $paciente->apellido_uno ?? '' }}
             </div>
             <div>
-                <strong>Edad:</strong> {{ $paciente->edad ?? '' }}
+                <strong>Edad:</strong> {{ $edad ?? '' }}
             </div>
             <div>
                 <strong>Fecha: {{ $fecha_examen ?? date('d-m-Y') }}</strong>
@@ -206,7 +216,7 @@
                 <strong>Enviado por:</strong> {{ $derivado_por ?? '' }}
             </div>
             <div>
-                <strong>RUT:</strong> {{ $paciente->rut ?? '' }}
+                <strong>RUT:</strong> {{ $derivado_por_rut ?? '' }}
             </div>
         </div>
 
@@ -266,10 +276,7 @@
                             <label>• Temblor intencional</label>
                             <div class="value">{{ $temblor ?? '' }}</div>
                         </div>
-                        <div class="form-group">
-                            <label>• Prueba de coordinación</label>
-                            <div class="value">{{ $coordinacion ?? '' }}</div>
-                        </div>
+                        
                         <div class="form-group">
                             <label>• Dismetría</label>
                             <div class="value">{{ $dismetria ?? '' }}</div>
@@ -288,10 +295,78 @@
                         </div>
                     </div>
 
+                    
+                </div>
+            </div>
+            <div class="column" style="margin-top: 120px !important; padding-top: 20px !important;">
+                <div class="section">
+                    <div class="section-title">IV. NISTAGMO ESPONTÁNEO</div>
                     <!-- IV. NISTAGMO ESPONTÁNEO -->
                     <div>
                         <strong>IV. NISTAGMO ESPONTÁNEO</strong>
-                        <div class="text-area">{{ $nistagmo_espontaneo ?? '' }}</div>
+                        <div class="nistagmo_espontaneo_tabla">
+                            <table class="rounded" style="border: 1px solid #ced4da; padding-bottom: 10px;">
+                                <tr>
+                                    <td class="text_center" colspan="3">Sin Fijación Ocular</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_1 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="{{ $ng_2 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_3 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td class="text_left">
+                                        <img src="{{ $ng_4 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_5 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                            <table class="pb-2 rounded" style="border: 1px solid  #ced4da;">
+                                <tr>
+                                    <td class="text_center" colspan="3">Con fijación Ocular</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_6 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="{{ $ng_7 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_8 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td class="text_left">
+                                        <img src="{{ $ng_9 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td class="text_center">
+                                        <img src="{{ $ng_10 ?? '' }}" alt="" class="ng_esp_img">
+                                    </td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
 
                         <div style="margin-top: 10px;">
                             <div class="form-group">
@@ -304,15 +379,11 @@
                             </div>
                         </div>
 
-                        <div style="margin-top: 10px;">
-                            <strong>Head impulse test:</strong> {{ $head_impulse_test ?? '' }}
-                        </div>
                     </div>
                 </div>
             </div>
-
             <!-- COLUMNA DERECHA -->
-            <div class="column">
+            <div class="column" >
                 <!-- V. NISTAGMO PROVOCADO -->
                 <div class="section">
                     <div class="section-title">V. NISTAGMO PROVOCADO</div>
@@ -336,7 +407,7 @@
                             <tbody>
                                 <tr>
                                     <td>EaS</td>
-                                    <td class="nistagmo-direction">{{ $eas_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" ><img src="{{ $eas_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $eas_latencia ?? '' }}</td>
                                     <td>{{ $eas_paroxistico ?? '' }}</td>
                                     <td>{{ $eas_fatigable ?? '' }}</td>
@@ -347,8 +418,8 @@
                                 </tr>
                                 <tr>
                                     <td>SaD</td>
-                                    <td class="nistagmo-direction">{{ $sad_direccion ?? '' }}</td>
-                                    <td>{{ $sad_latencia ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $sad_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
+                                    <td >{{ $sad_latencia ?? '' }}</td>
                                     <td>{{ $sad_paroxistico ?? '' }}</td>
                                     <td>{{ $sad_fatigable ?? '' }}</td>
                                     <td>{{ $sad_duracion ?? '' }}</td>
@@ -358,7 +429,7 @@
                                 </tr>
                                 <tr>
                                     <td>DaS</td>
-                                    <td class="nistagmo-direction">{{ $das_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $das_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $das_latencia ?? '' }}</td>
                                     <td>{{ $das_paroxistico ?? '' }}</td>
                                     <td>{{ $das_fatigable ?? '' }}</td>
@@ -369,7 +440,7 @@
                                 </tr>
                                 <tr>
                                     <td>SaL</td>
-                                    <td class="nistagmo-direction">{{ $sal_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $sal_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $sal_latencia ?? '' }}</td>
                                     <td>{{ $sal_paroxistico ?? '' }}</td>
                                     <td>{{ $sal_fatigable ?? '' }}</td>
@@ -380,7 +451,7 @@
                                 </tr>
                                 <tr>
                                     <td>LaS</td>
-                                    <td class="nistagmo-direction">{{ $las_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $las_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $las_latencia ?? '' }}</td>
                                     <td>{{ $las_paroxistico ?? '' }}</td>
                                     <td>{{ $las_fatigable ?? '' }}</td>
@@ -391,7 +462,7 @@
                                 </tr>
                                 <tr>
                                     <td>SaE</td>
-                                    <td class="nistagmo-direction">{{ $sae_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $sae_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $sae_latencia ?? '' }}</td>
                                     <td>{{ $sae_paroxistico ?? '' }}</td>
                                     <td>{{ $sae_fatigable ?? '' }}</td>
@@ -402,7 +473,7 @@
                                 </tr>
                                 <tr>
                                     <td>EaCC</td>
-                                    <td class="nistagmo-direction">{{ $eacc_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $eacc_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $eacc_latencia ?? '' }}</td>
                                     <td>{{ $eacc_paroxistico ?? '' }}</td>
                                     <td>{{ $eacc_fatigable ?? '' }}</td>
@@ -413,7 +484,7 @@
                                 </tr>
                                 <tr>
                                     <td>CCaE</td>
-                                    <td class="nistagmo-direction">{{ $ccae_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $ccae_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $ccae_latencia ?? '' }}</td>
                                     <td>{{ $ccae_paroxistico ?? '' }}</td>
                                     <td>{{ $ccae_fatigable ?? '' }}</td>
@@ -424,7 +495,7 @@
                                 </tr>
                                 <tr>
                                     <td>EaCCd</td>
-                                    <td class="nistagmo-direction">{{ $eaccd_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $eaccd_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $eaccd_latencia ?? '' }}</td>
                                     <td>{{ $eaccd_paroxistico ?? '' }}</td>
                                     <td>{{ $eaccd_fatigable ?? '' }}</td>
@@ -435,7 +506,7 @@
                                 </tr>
                                 <tr>
                                     <td>CCdaE</td>
-                                    <td class="nistagmo-direction">{{ $ccdae_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $ccdae_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $ccdae_latencia ?? '' }}</td>
                                     <td>{{ $ccdae_paroxistico ?? '' }}</td>
                                     <td>{{ $ccdae_fatigable ?? '' }}</td>
@@ -446,7 +517,7 @@
                                 </tr>
                                 <tr>
                                     <td>EaCCi</td>
-                                    <td class="nistagmo-direction">{{ $eacci_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $eacci_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $eacci_latencia ?? '' }}</td>
                                     <td>{{ $eacci_paroxistico ?? '' }}</td>
                                     <td>{{ $eacci_fatigable ?? '' }}</td>
@@ -457,7 +528,7 @@
                                 </tr>
                                 <tr>
                                     <td>CCiaE</td>
-                                    <td class="nistagmo-direction">{{ $cciae_direccion ?? '' }}</td>
+                                    <td class="nistagmo-direction" style="font-size: 15px;"><img src="{{ $cciae_direccion ?? '' }}" alt="" style="width: 10px; height: 10px;"></td>
                                     <td>{{ $cciae_latencia ?? '' }}</td>
                                     <td>{{ $cciae_paroxistico ?? '' }}</td>
                                     <td>{{ $cciae_fatigable ?? '' }}</td>
@@ -487,7 +558,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td style="background-color: #e3f2fd;"><strong>OI a 30°C</strong></td>
+                                    <td style="color: #1A73E8;"><strong>OI a 30°C</strong></td>
                                     <td>{{ $io30_duracion ?? '' }}</td>
                                     <td>{{ $io30_frecuencia ?? '' }}</td>
                                     <td>{{ $io30_amplitud ?? '' }}</td>
@@ -497,7 +568,7 @@
                                     <td>{{ $io30_vcl ?? '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #ffebee;"><strong>OD a 30°C</strong></td>
+                                    <td style="color: #FF2C2C;"><strong>OD a 30°C</strong></td>
                                     <td>{{ $od30_duracion ?? '' }}</td>
                                     <td>{{ $od30_frecuencia ?? '' }}</td>
                                     <td>{{ $od30_amplitud ?? '' }}</td>
@@ -507,7 +578,7 @@
                                     <td>{{ $od30_vcl ?? '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #e3f2fd;"><strong>OI a 44°C</strong></td>
+                                    <td style="color: #1A73E8;"><strong>OI a 44°C</strong></td>
                                     <td>{{ $io44_duracion ?? '' }}</td>
                                     <td>{{ $io44_frecuencia ?? '' }}</td>
                                     <td>{{ $io44_amplitud ?? '' }}</td>
@@ -517,7 +588,7 @@
                                     <td>{{ $io44_vcl ?? '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #ffebee;"><strong>OD a 44°C</strong></td>
+                                    <td style="color: #FF2C2C;"><strong>OD a 44°C</strong></td>
                                     <td>{{ $od44_duracion ?? '' }}</td>
                                     <td>{{ $od44_frecuencia ?? '' }}</td>
                                     <td>{{ $od44_amplitud ?? '' }}</td>
@@ -527,7 +598,7 @@
                                     <td>{{ $od44_vcl ?? '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #e3f2fd;"><strong>OI a 18°C</strong></td>
+                                    <td style="color: #1A73E8;"><strong>OI a 18°C</strong></td>
                                     <td>{{ $oi18_duracion ?? '' }}</td>
                                     <td>{{ $oi18_frecuencia ?? '' }}</td>
                                     <td>{{ $oi18_amplitud ?? '' }}</td>
@@ -537,7 +608,7 @@
                                     <td>{{ $oi18_vcl ?? '' }}</td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #ffebee;"><strong>OD a 18°C</strong></td>
+                                    <td style="color: #FF2C2C;"><strong>OD a 18°C</strong></td>
                                     <td>{{ $od18_duracion ?? '' }}</td>
                                     <td>{{ $od18_frecuencia ?? '' }}</td>
                                     <td>{{ $od18_amplitud ?? '' }}</td>
@@ -562,7 +633,7 @@
         <!-- SIGNATURE SECTION -->
         <div class="signature-section">
             <div class="signature-line"></div>
-            <div><strong>{{ $profesional->nombres ?? '' }} {{ $profesional->apellidos ?? '' }}</strong></div>
+            <div><strong>{{ $profesional->nombre ?? '' }} {{ $profesional->apellido_uno ?? '' }}</strong></div>
             <div>RUT: {{ $profesional->rut ?? '' }}</div>
             <div>{{ $profesional->especialidad->nombre ?? 'FONOAUDIÓLOGO' }}</div>
             <div class="small-text">FONOAUDIÓLOGO</div>

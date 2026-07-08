@@ -1,5 +1,11 @@
 @extends('template.otros_profesionales.template_nutricion')
-
+@section('style')
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
+@endsection
 @section('Content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -11,7 +17,7 @@
                         <div class="col-md-6">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN NUTRICIONISTA</strong></h5>
-                                
+
                                 {{--  <p class="font-italic mt-0 mb-0 text-white">
                                     <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
                                     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">

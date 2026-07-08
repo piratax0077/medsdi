@@ -1,12 +1,12 @@
     <!--Sidebar 3 (KINESIOLOGIA)-->
     <div class="position-fixed w-100 h-100"></div>
     <div id="formularios_kine" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
-        <header class="bs-canvas-header p-3 bg-info overflow-auto">
-            <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Kinesiológicos</h5>
+        <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+             <button type="button" class="bs-canvas-close close" onclick="$('#formularios_kine').modal('hide')" aria-label="Close" data-dismiss="modal"> <span aria-hidden="true" class="text-white">&times;</span></button>
+             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Kinesiológicos</h5>
         </header>
         <div class="bs-canvas-content">
-            <div class="accordion" id="accordion_side_bar">
+            <div class="accordion" id="accordion_side_bar">    
                 {{--  <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_solicitud_examenes">
                         <h2 class="mb-0">
@@ -48,7 +48,22 @@
                     </div>
                 </div>
                 <!-- SECCION CONSENTIMIENTOS -->
-                @include('general.sidebar.seccion_consentimientos')
+                 <div class="card-sidebar">
+                <div class="card-header-sidebar" id="heading_consentimientos_informados">
+                    <h2 class="mb-0">
+                    <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        CONSENTIMIENTOS INFORMADOS
+                    </button>
+                    </h2>
+                </div>
+                <div id="collapse_consentimientos_informados" class="collapse" aria-labelledby="heading_consentimientos_informados" data-parent="#accordion_side_bar">
+                    <div class="card-body-sidebar">
+                        <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="conset_ttokine()";>+ Para tratamiento</button>
+                    </div>
+                    @include("atencion_otros_prof.secciones_especialidad.includes.kine.consentimiento_kine")
+                </div>
+               
+            </div>
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
                         <h2 class="mb-0">

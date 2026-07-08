@@ -933,9 +933,9 @@ class EnfermeriaController extends Controller
                                      ->join('users','users.id','=','curaciones_planas_servicio.id_responsable')
                                      ->where('id_paciente', $id_paciente)
                                      ->where('activa', 1)
-                                     ->first();
+                                     ->get();
 
-         if($curacion)
+         foreach($curacion as $curacion)
          {
              // convertir el atributo datos_procedimiento de longtext a array
              $curacion->datos_curacion_plana = json_decode($curacion->datos_curacion_plana);
@@ -947,6 +947,8 @@ class EnfermeriaController extends Controller
 
      return $curacion;
  }
+
+
 
  public function guardarCuracionLPPServicio(Request $req){
      try {

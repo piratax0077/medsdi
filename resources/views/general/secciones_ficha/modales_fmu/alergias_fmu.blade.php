@@ -3,7 +3,9 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white mt-1">Alergias</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<button type="button" class="close"  data-dismiss="modal"  aria-label="Close" onclick="$('#m_alergias_fmu').modal('hide');">
+				<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
 			<div class="modal-body">
                 <div class="row">

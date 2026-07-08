@@ -190,16 +190,21 @@
                 {
                     $.each(data.registros, function(index, value)
                     {
-                        var f_temp = (value.fecha).replace('T',' ').replace('Z','').replace('.000000','');
-                        var fecha = new Date(f_temp);
-                        fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
+                        var fecha = 'Sin fecha';
+
+                        if(value.fecha != null && value.fecha != undefined && value.fecha != '')
+                        {
+                            var f_temp = (value.fecha).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fechaObj = new Date(f_temp);
+                            fecha = fechaObj.getDate()+'-'+(fechaObj.getMonth()+1)+'-'+fechaObj.getFullYear()+' '+fechaObj.getHours()+':'+fechaObj.getMinutes();
+                        }
 
                         html += '<tr>';
                         html += '    <td class="text-center align-middle">'+fecha+'</td>';//Fecha //fecha
-                        html += '    <td class="text-center align-middle">'+value.motivo+'</td>';//Motivo //motivo
-                        html += '    <td class="text-center align-middle">'+value.tipo_examen+'</td>';//Tipo //tipo_examen
-                        html += '    <td class="text-center align-middle">'+value.resultado+'</td>';//Resultados //resultado
-                        html += '    <td class="text-center align-middle">'+value.otros_ant+'</td>';//Tratamientos //otros_ant
+                        html += '    <td class="text-center align-middle">'+(value.motivo || '')+'</td>';//Motivo //motivo
+                        html += '    <td class="text-center align-middle">'+(value.tipo_examen || '')+'</td>';//Tipo //tipo_examen
+                        html += '    <td class="text-center align-middle">'+(value.resultado || '')+'</td>';//Resultados //resultado
+                        html += '    <td class="text-center align-middle">'+(value.otros_ant || '')+'</td>';//Tratamientos //otros_ant
                         html += '</tr>';
                     });
 

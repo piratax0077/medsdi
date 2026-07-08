@@ -285,12 +285,9 @@ class JitsiController extends Controller
             $payload = [
                 "aud"=> "jitsi",
                 "iss"=> "chat",
-                // "iat"=> $inicio,
-                // "exp"=> $termino,
-                // "nbf"=> $inicio,
-                "iat"=> strtotime("2024-09-19 16:31:01"),
-                "exp"=> strtotime ( '+1 year' , strtotime("2024-09-19 16:31:01") ),
-                "nbf"=> strtotime("2024-09-19 16:31:01"),
+                "iat"=> $inicio,
+                "exp"=> $termino,
+                "nbf"=> $inicio,
                 "sub"=> $app_id,
                 "context"=> array(
                     "features"=> array(
@@ -394,7 +391,7 @@ class JitsiController extends Controller
             date('Y-m-d H:i:s', strtotime($hora_medica->fecha_consulta . ' ' . $hora_medica->hora_inicio . ' -5 minutes'))
         );
 
-         echo json_encode($token_paciente_temp);
+        // echo json_encode($token_paciente_temp);
         // echo $token_paciente_temp->estado;
 
         if($token_paciente_temp->estado == 1)
@@ -471,6 +468,66 @@ class JitsiController extends Controller
             $registro = JitsiVideo::find($request->id);
             if($registro)
             {
+                // Regenerar token siempre con la hora actual para evitar expiración
+                // independiente de cuándo fue agendada la consulta
+                $profesional = Profesional::find($registro->id_profesional);
+                $paciente    = Paciente::find($registro->id_paciente);
+                $hora_medica = HoraMedica::where('id_jitsi_video_consulta', $registro->id)->first();
+                $id_lugar    = $hora_medica ? $hora_medica->id_lugar_atencion : 1;
+
+                if ($profesional && $paciente) {
+                    $now     = time();
+                    $app_id  = env('JITSI_APP_ID');
+                    $api_key = env('JITSI_API_KEY');
+
+                    // Imagen profesional
+                    $array_rut   = explode('-', $profesional->rut);
+                    $imagen_prof = file_exists(public_path('images/img_perfil/'.$array_rut[0].'.png'))
+                        ? asset('images/img_perfil/'.$array_rut[0].'.png')
+                        : asset('images/iconos/usuario_profesional.svg');
+
+                    // Token moderador (profesional) — válido 2 horas desde ahora
+                    $payload_prof = [
+                        "aud" => "jitsi",
+                        "iss" => "chat",
+                        "iat" => $now,
+                        "exp" => $now + (120 * 60),
+                        "nbf" => $now,
+                        "sub" => $app_id,
+                        "context" => [
+                            "features" => [
+                                "livestreaming"      => true,
+                                "outbound-call"      => true,
+                                "sip-outbound-call"  => false,
+                                "transcription"      => true,
+                                "recording"          => true,
+                            ],
+                            "user" => [
+                                "hidden-from-recorder" => false,
+                                "id"        => $profesional->id_usuario.'-'.$id_lugar.uniqid('', true),
+                                "name"      => 'Dr. '.$profesional->apellido_uno,
+                                "avatar"    => $imagen_prof,
+                                "email"     => $profesional->email,
+                                "moderator" => true,
+                            ],
+                        ],
+                        "room" => $registro->nombre_grupo,
+                    ];
+                    $registro->token_moderator = JWT::encode($payload_prof, env('JITSI_PRIVATE_KEY'), 'RS256', $api_key);
+
+                    // Token invitado (paciente) — mismo tiempo
+                    $payload_pac = $payload_prof;
+                    $payload_pac["context"]["user"] = [
+                        "hidden-from-recorder" => false,
+                        "id"        => (empty($paciente->id_usuario) ? $paciente->id : $paciente->id_usuario).'-'.$id_lugar.uniqid('', true),
+                        "name"      => explode(' ', trim($paciente->nombres))[0].' '.$paciente->apellido_uno,
+                        "avatar"    => '',
+                        "email"     => $paciente->email,
+                        "moderator" => false,
+                    ];
+                    $registro->token_invitado = JWT::encode($payload_pac, env('JITSI_PRIVATE_KEY'), 'RS256', $api_key);
+                }
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'registo';
                 $datos['registro'] = $registro;
@@ -478,7 +535,7 @@ class JitsiController extends Controller
             else
             {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'campos requeridos';
+                $datos['msj'] = 'registro no encontrado';
                 $datos['error'] = $error;
             }
         }
@@ -495,8 +552,8 @@ class JitsiController extends Controller
     public function envioNotificacionLlamada()
     {
 
-        // $fecha = date('Y-m-d');
-        $fecha = '2025-05-05';
+        $fecha = date('Y-m-d');
+        // $fecha = '2025-05-05';
 
 
         // Obtener la hora actual

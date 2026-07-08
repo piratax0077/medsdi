@@ -11,9 +11,9 @@
                             <h5 class="m-b-10 font-weight-bold">Proveedores</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="escritorio_admin_general_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="administracion_cm.php">Administracion del centro médico</a></li>
-                            <li class="breadcrumb-item"><a href="proveedores_cm.php">Proveedores</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('administracion_cm') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ url('proveedores_cm') }}">Proveedores</a></li>
                         </ul>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                             @foreach($proveedores as $proveedor)
                             <tr>
                                 <td class="text-center align-middle">{{ $proveedor->nombre }}</td>
-                                <td class="text-center align-middle">{{ $proveedor->tipo_producto }}</td>
+                                <td class="text-center align-middle">{{ $proveedor->tipo_producto_nombre }}</td>
                                 <td class="text-center align-middle">{{ $proveedor->direccion }}</td>
                                 <td class="text-center align-middle">{{ $proveedor->telefono }}</td>
                                 <td class="text-center align-middle">{{ $proveedor->email }}</td>
@@ -75,7 +75,6 @@
                     </table>
                 </div>
             </div>
-            <button class="btn btn-danger btn-sm">Buscar proveedor</button>
         </div>
     </div>
 </div>
@@ -101,6 +100,7 @@
                 @endif
                 <form action="{{ ROUTE('guardarProveedor') }}" method="post">
                     @csrf
+                    <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group fill">
@@ -111,7 +111,7 @@
 						<div class="col-sm-12">
                             <div class="form-group fill">
                                 <label class="floating-label">Productos</label>
-                                <select name="prov_prod" id="prov_prod" class="form-control">
+                                <select name="prov_prod[]" id="prov_prod" class="form-control" multiple required>
                                     <option value="0">Seleccione</option>
                                     @foreach($tipo_producto as $producto)
                                         <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
@@ -222,7 +222,7 @@
                         <div class="col-sm-12">
                             <div class="form-group fill">
                                 <label class="floating-label">Productos</label>
-                                <select class="form-control form-control-sm" name="prov_prod_" id="prov_prod_">
+                                <select class="form-control form-control-sm" name="prov_prod_[]" id="prov_prod_" multiple required>
                                     <option value="0">Seleccione</option>
                                     @foreach($tipo_producto as $producto)
                                         <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
@@ -307,4 +307,22 @@
     </div>
 </div>
 
+@endsection
+
+@section('page-script')
+<script>
+    $(document).ready(function() {
+        $('#inventario_insumos').DataTable({
+            responsive: true,
+        });
+        $('#prov_prod').select2({
+            placeholder: "Seleccione productos",
+            width: '100%'
+        });
+         $('#prov_prod_').select2({
+            placeholder: "Seleccione productos",
+            width: '100%'
+         });
+    });
+</script>
 @endsection

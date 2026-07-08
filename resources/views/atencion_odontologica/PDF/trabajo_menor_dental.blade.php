@@ -34,43 +34,63 @@
     <table class="contenedor">
         <tr>
             <th>Doctor</th>
-            <td>{{ $datos['clinica_doctor'] }}</td>
+            <td>{{ $datos->clinica_doctor }}</td>
         </tr>
         <tr>
             <th>Paciente</th>
-            <td>{{ $datos['paciente_trabajo_menor'] }}</td>
+            <td>{{ $datos->paciente_nombre ?? 'N/A' }}</td>
         </tr>
         <tr>
             <th>RUT Profesional</th>
-            <td>{{ $datos['rut_profesional'] }}</td>
+            <td>{{ $datos->rut_profesional }}</td>
         </tr>
         <tr>
             <th>N° Orden Trabajo</th>
-            <td>{{ $datos['nro_orden_trabajo_menor'] }}</td>
+            <td>{{ $datos->nro_orden }}</td>
         </tr>
         <tr>
             <th>Trabajo a Realizar</th>
-            <td>{{ $datos['trabajo_realizar'] }}</td>
+            <td>{{ $datos->trabajo_realizar }}</td>
         </tr>
         <tr>
             <th>Material</th>
-            <td>{{ $datos['material'] }}</td>
+            <td>{{ $datos->material }}</td>
         </tr>
         <tr>
             <th>Color</th>
-            <td>{{ $datos['color'] }}</td>
+            <td>{{ $datos->color }}</td>
         </tr>
         <tr>
             <th>Guía</th>
-            <td>{{ $datos['guia'] }}</td>
+            <td>{{ $datos->guia }}</td>
         </tr>
         <tr>
             <th>Urgencia</th>
-            <td>{{ $datos['urgencia'] }}</td>
+            <td>{{ $datos->urgencia }}</td>
         </tr>
         <tr>
             <th>Comentarios</th>
-            <td>{{ $datos['comentarios_trabajo_menor'] }}</td>
+            <td>{{ $datos->comentarios }}</td>
+        </tr>
+        <tr>
+            <th>Fecha Envío</th>
+            <td>{{ $datos->fecha_envio ? \Carbon\Carbon::parse($datos->fecha_envio)->format('d/m/Y') : '' }}</td>
+        </tr>
+        <tr>
+            <th>Fecha Entrega</th>
+            <td>{{ $datos->fecha_entrega ? \Carbon\Carbon::parse($datos->fecha_entrega)->format('d/m/Y') : 'Pendiente' }}</td>
+        </tr>
+        <tr>
+            <th>Estado</th>
+            <td>{{ $datos->estado == 1 ? 'Activo' : 'Inactivo' }}</td>
+        </tr>
+        <tr>
+            <th>ID Presupuesto</th>
+            <td>{{ $datos->id_presupuesto }}</td>
+        </tr>
+        <tr>
+            <th>Laboratorio</th>
+            <td>{{ $datos->nombre_lab ?? 'N/A' }}</td>
         </tr>
     </table>
 </body>

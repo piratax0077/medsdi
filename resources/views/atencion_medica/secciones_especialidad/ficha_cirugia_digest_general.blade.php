@@ -608,7 +608,7 @@
                                         <!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
 										<!--cierre CIRUGIA GENERAL-->
-
+{{--  
                                         <!-- Hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
@@ -623,7 +623,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>  --}}
 
                                         <!-- control post qx -->
                                         @include('general.secciones_ficha.control_cirugia_gen')
@@ -633,8 +633,9 @@
                                         {{-- @include('general.secciones_ficha.signos_vitales') --}}
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
-                                        <!-- ges -->
-                                        @include('atencion_medica.generales.seccion_cronicos_ges_confidencial')
+                                       
+                                        <!--CRONICOS / GES / CONFIDENCIAL -->
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <!-- cierre ges -->
 
                                         <hr>
@@ -676,6 +677,7 @@
 @section('page-script-ficha-atencion')
     <script>
         function showContentTmcdg() {
+            console.log('probando');
             element = document.getElementById("contentTto_cdg");
             check = document.getElementById("tto_med_cdg");
             if (check.checked) {
@@ -688,8 +690,32 @@
 
 
         function showContentProc_cdg() {
+            console.log('probando2');
             element = document.getElementById("contentProc_cdg");
             check = document.getElementById("pr_cdg");
+            if (check.checked) {
+                element.style.display='block';
+            }
+            else {
+                element.style.display='none';
+            }
+        }
+
+        function showContentTmcda() {
+            element = document.getElementById("contentTto_cda");
+            check = document.getElementById("tto_med_cda");
+            if (check.checked) {
+                element.style.display='block';
+            }
+            else {
+                element.style.display='none';
+            }
+        }
+
+
+        function showContentProc_cda() {
+            element = document.getElementById("contentProc_cda");
+            check = document.getElementById("pr_cda");
             if (check.checked) {
                 element.style.display='block';
             }

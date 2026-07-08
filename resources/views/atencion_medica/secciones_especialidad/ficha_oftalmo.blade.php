@@ -657,7 +657,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             <hr>
-                                                                            <div class="row">
+                                                                            {{-- <div class="row">
                                                                                 <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4">
                                                                                     <div class="form-group">
                                                                                         <label class="floating-label-activo-sm">Carga ficha tipo</label>
@@ -677,7 +677,7 @@
                                                                                 <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4 mb-3">
                                                                                     <button type="button" class="btn btn-info-light-c btn-sm btn-block" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="feather icon-save"></i> Guardar nueva ficha tipo</button>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> --}}
                                                                         </div>
 
                                                                         <!--EXAMEN  BIOMICROSCOPIA-->
@@ -829,8 +829,8 @@
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm t-blue" for="camara_ant_oi">Camara Anterior</label>
                                                                                                         <select name="camara_ant_oi" data-titulo="Camara Anterior OI" data-seccion="Biomicroscopía" id="camara_ant_oi"class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('camara_ant_oi','div_camara_ant_oi','obs_camara_ant_oi',2);">
-                                                                                                            <option value="Normal" selected>Normal</option>
-                                                                                                            <option value="Anormal">Anormal</option>
+                                                                                                            <option value="1" selected>Normal</option>
+                                                                                                            <option value="2">Anormal</option>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                     <div class="form-group" id="div_camara_ant_oi" style="display:none;">
@@ -842,8 +842,8 @@
                                                                                                     <div class="form-group">
                                                                                                         <label class="floating-label-activo-sm t-blue" for="tyndall_oi">Tyndall</label>
                                                                                                         <select name="tyndall_oi"  data-titulo="Tyndall OI" data-seccion="Biomicroscopía" id="tyndall_oi" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tyndall_oi','div_tyndall_oi','obs_tyndall_oi',2);">
-                                                                                                            <option value="Negativo" selected>Negativo</option>
-                                                                                                            <option value="Positivo">Positivo</option>
+                                                                                                            <option value="1" selected>Negativo</option>
+                                                                                                            <option value="2">Positivo</option>
                                                                                                         </select>
                                                                                                     </div>
                                                                                                     <div class="form-group" id="div_tyndall_oi" style="display:none;">
@@ -875,7 +875,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
+                                                                            {{-- <div class="row">
                                                                                 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                     <div class="form-group">
                                                                                         <label class="floating-label-activo-sm">Carga ficha tipo</label>
@@ -895,7 +895,7 @@
                                                                                 <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
                                                                                     <button type="button" class="btn btn-info-light-c btn-sm btn-block" onclick="abrir_modal_guardar_tipo('form-bio','registro_f_t_oft_detalle','bio');"><i class="feather icon-save"></i> Guardar nueva biomicroscopía tipo</button>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> --}}
                                                                         </div>
 
                                                                         <!--EXAMEN  FONDO DE OJO-->
@@ -1120,7 +1120,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="row">
+                                                                            {{-- <div class="row">
                                                                                 <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4">
                                                                                     <div class="form-group">
                                                                                         <label class="floating-label-activo-sm">Carga ficha tipo</label>
@@ -1141,7 +1141,7 @@
                                                                                 <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4 mb-3">
                                                                                     <button type="button" class="btn btn-info-light-c btn-sm btn-block" onclick="abrir_modal_guardar_tipo('form-fo','registro_f_t_oft_detalle','fo');"><i class="feather icon-save"></i> Guardar nuevo fondo de ojo tipo</button>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> --}}
                                                                         </div>
 
                                                                         <!--PLAN DE TRATAMIENTO-->
@@ -1269,8 +1269,8 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row mb-3">
                             <div class="col-md-12 text-center">
-                                <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                             </div>
                         </div>
                     </div>

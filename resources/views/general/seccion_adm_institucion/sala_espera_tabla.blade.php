@@ -14,89 +14,91 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-12 col-md-12">
-                <table id="tabla_sala_espera" class="display table table-striped table-xs dt-responsive nowrap"
-                    style="width:100%">
-                    <thead>
-                        <tr>
-                            <th class="text-wrap align-middle">Nombre</th>
-                            <th class="text-wrap align-middle">Descripción</th>
-                            <th class="text-wrap align-middle">Piso</th>
-                            <th class="text-wrap align-middle">Alias</th>
-                            <th class="text-wrap align-middle">Token</th>
+                <div class="table-responsive">
+                    <table id="tabla_sala_espera" class="display table table-striped table-xs dt-responsive nowrap"
+                        style="width:100%">
+                        <thead>
+                            <tr>
+                                <th class="text-wrap align-middle">Nombre</th>
+                                <th class="text-wrap align-middle">Descripción</th>
+                                <th class="text-wrap align-middle">Piso</th>
+                                <th class="text-wrap align-middle">Alias</th>
+                                <th class="text-wrap align-middle">Token</th>
 
-                            <th class="text-wrap align-middle">Televisor</th>
-                            <th class="text-wrap align-middle">Box</th>
-                            <th class="text-wrap align-middle">Activo</th>
-                            <th class="text-wrap align-middle">Editar</th>
-                            <th class="text-wrap align-middle">Eliminar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (isset($sala_espera) && $sala_espera->count() > 0)
-                            @foreach ($sala_espera as $sala_e)
-                                <tr>
+                                <th class="text-wrap align-middle">Televisor</th>
+                                <th class="text-wrap align-middle">Box</th>
+                                <th class="text-wrap align-middle">Activo</th>
+                                <th class="text-wrap align-middle">Editar</th>
+                                <th class="text-wrap align-middle">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (isset($sala_espera) && $sala_espera->count() > 0)
+                                @foreach ($sala_espera as $sala_e)
+                                    <tr>
 
-                                    <td class="align-middle">{{ $sala_e->nombre }}</td>
-                                    <td class="align-middle">{{ $sala_e->descripcion }}</td>
-                                    <td class="align-middle">{{ $sala_e->piso }}</td>
-                                    <td class="align-middle">{{ $sala_e->alias }}</td>
-                                    <td class="align-middle">{{ $sala_e->token }}</td>
+                                        <td class="align-middle">{{ $sala_e->nombre }}</td>
+                                        <td class="align-middle">{{ $sala_e->descripcion }}</td>
+                                        <td class="align-middle">{{ $sala_e->piso }}</td>
+                                        <td class="align-middle">{{ $sala_e->alias }}</td>
+                                        <td class="align-middle">{{ $sala_e->token }}</td>
 
-                                    {{-- tv --}}
-                                    <td class="align-middle text-center">
-                                        <button type="button" class="btn btn-warning btn-icon"
-                                            onclick="abrir_modal_tv_sala({{ $sala_e->id }});"><i
-                                                class="feather icon-monitor"></i></button>
-                                    </td>
+                                        {{-- tv --}}
+                                        <td class="align-middle text-center">
+                                            <button type="button" class="btn btn-primary btn-icon"
+                                                onclick="abrir_modal_tv_sala({{ $sala_e->id }});"><i
+                                                    class="feather icon-monitor"></i></button>
+                                        </td>
 
-                                    {{-- Boxs --}}
-                                    <td class="align-middle text-center">
-                                        <button type="button" class="btn btn-warning btn-icon"
-                                            onclick="abrir_modal_box_sala({{ $sala_e->id }});"><i
-                                                class="feather icon-codepen"></i></button>
-                                    </td>
+                                        {{-- Boxs --}}
+                                        <td class="align-middle text-center">
+                                            <button type="button" class="btn btn-purple btn-icon"
+                                                onclick="abrir_modal_box_sala({{ $sala_e->id }});"><i
+                                                    class="feather icon-home"></i></button>
+                                        </td>
 
-                                    {{-- estado --}}
-                                    <td class="align-middle">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input"
-                                                id="esp-{{ $sala_e->id }}" onchange="checkSalaEsperaChanged(this)"
-                                                {{ $sala_e->estado == 1 ? 'checked' : '' }}>
-                                            <label class="custom-control-label" for="esp-{{ $sala_e->id }}"></label>
-                                        </div>
-                                    </td>
+                                        {{-- estado --}}
+                                        <td class="align-middle">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input"
+                                                    id="esp-{{ $sala_e->id }}" onchange="checkSalaEsperaChanged(this)"
+                                                    {{ $sala_e->estado == 1 ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="esp-{{ $sala_e->id }}"></label>
+                                            </div>
+                                        </td>
 
-                                    {{-- editar --}}
-                                    <td class="align-middle text-center">
-                                        <button type="button" class="btn btn-warning btn-icon"
-                                            onclick="abrir_modificar_sala_espera({{ $sala_e->id }});"><i
-                                                class="feather icon-edit"></i></button>
-                                    </td>
+                                        {{-- editar --}}
+                                        <td class="align-middle text-center">
+                                            <button type="button" class="btn btn-warning btn-icon"
+                                                onclick="abrir_modificar_sala_espera({{ $sala_e->id }});"><i
+                                                    class="feather icon-edit"></i></button>
+                                        </td>
 
-                                    {{-- eliminar --}}
-                                    <td class="align-middle text-center">
-                                        <button type="button" class="btn btn-danger btn-icon"
-                                            onclick="eliminar_sala_espera({{ $sala_e->id }})"><i
-                                                class="feather icon-x"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
+                                        {{-- eliminar --}}
+                                        <td class="align-middle text-center">
+                                            <button type="button" class="btn btn-danger btn-icon"
+                                                onclick="eliminar_sala_espera({{ $sala_e->id }})"><i
+                                                    class="feather icon-x"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 
-{{-- modal agregar --}}
+{{-- MODAL AÑADIR SALA DE ESPERAr --}}
 <div id="moda_agregar_sala_espera" class="modal fade " tabindex="-1" role="dialog"
     aria-labelledby="moda_agregar_sala_espera" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Agregar Sala Espera</h5>
+                <h5 class="modal-title text-white text-center">Añadir Sala Espera</h5>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
                     onclick="$('#moda_agregar_sala_espera').modal('hide');"><span
                         aria-hidden="true">&times;</span></button>

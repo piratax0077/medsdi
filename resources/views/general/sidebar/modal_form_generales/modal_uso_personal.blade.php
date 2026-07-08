@@ -8,6 +8,7 @@
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="id_uso_personal_email" name="id_uso_personal_email">
                 <form id="form_uso_personal">
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12">
@@ -15,24 +16,24 @@
                             <input type="text" class="form-control form-control-sm" name="uso_personal_dirigido_a" id="uso_personal_dirigido_a">
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
+                            <label class="floating-label-activo-sm">Email</label>
+                            <input type="email" class="form-control form-control-sm" name="uso_personal_email" id="uso_personal_email">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Cargo</label>
-                            <input type="person" class="form-control form-control-sm" name="uso_personal_cargo" id="uso_personal_cargo">
+                            <input type="text" class="form-control form-control-sm" name="uso_personal_cargo" id="uso_personal_cargo">
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Mensaje</label>
                             <textarea type="text" class="form-control form-control-sm" rows="12" name="uso_personal_mensaje" id="uso_personal_mensaje"></textarea>
                         </div>
                     </div>
-                    {{--  <div class="form-row">
-                        <div class="col-sm-12 col-md-12 text-center">
-                            <button type="button" class="btn btn-sm btn-primary">Ver documento en PDF</button>
-                        </div>
-                    </div>  --}}
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_uso_personal').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="button" onclick="registrar_uso_personal();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" onclick="enviar_uso_personal_email();" class="btn btn-warning btn-sm" id="btn_enviar_uso_personal_email"><i class="feather icon-send"></i> Enviar PDF</button>
+                <button type="button" onclick="registrar_uso_personal();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar y generar PDF</button>
             </div>
         </div>
     </div>

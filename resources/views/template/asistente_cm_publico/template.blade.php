@@ -51,6 +51,13 @@
     <!-- flatpickr -->
     <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
+            {{-- Pusher para Broadcasting en tiempo real --}}
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+
+     <!--boton azul-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
     <style>
         #loading {
             display: none;
@@ -134,10 +141,6 @@
         @case($user->hasRole('AsistenteManejoAgenda'))
             @include('template.asistente_cm_manejo_agenda.menu')
             @include('template.asistente_cm_manejo_agenda.header')
-
-        @case($user->hasRole('AsistenteLaboratorio'))
-            @include('template.asistente_laboratorio.menu')
-            @include('template.asistente_laboratorio.header')
         @break
 
         {{--
@@ -194,10 +197,110 @@
     <script src="{{ asset('js/toggle_asistentes.js') }}"></script>
 	<!-- tablas asistentes flujo caja -->
     <script src="{{ asset('js\tablas_asistentes.js') }}"></script>
-    <!--full calendar 5-->
+    
+    <script src="{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}"></script>
+	<script src="{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}"></script>
 
-    <script src='{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}'></script>
-	<script src='{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}'></script>
+    {{-- SCRIPT DE PUSHER ADAPTADO PARA SUSCRIPCIÓN DINÁMICA --}}
+    <script>
+        // Inicializar Pusher
+        var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+            cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            forceTLS: true
+        });
+
+        // Variables para gestionar el canal actual
+        var currentChannel = null;
+        var currentProfesionalId = null;
+
+        /**
+         * Suscribirse al canal de un profesional específico
+         * @param {string|number} id_profesional - ID del profesional al que suscribirse
+         */
+        function suscribirCanalProfesional(id_profesional) {
+            console.log('Intentando suscribirse al profesional ID:', id_profesional);
+            if (!id_profesional || id_profesional == '0') {
+                console.log('No se ha seleccionado un profesional válido');
+                return;
+            }
+
+            // Si ya estamos suscritos a un canal diferente, desuscribirse
+            if (currentChannel && currentProfesionalId !== id_profesional) {
+                console.log('Desuscribiendo del canal: horas-medicas.' + currentProfesionalId);
+                pusher.unsubscribe('horas-medicas.' + currentProfesionalId);
+            }
+
+            // Suscribirse al nuevo canal
+            currentProfesionalId = id_profesional;
+            var channelName = 'horas-medicas.' + id_profesional;
+            console.log('Suscribiendo al canal: ' + channelName);
+            currentChannel = pusher.subscribe(channelName);
+
+            // Escuchar el evento HoraMedicaUpdated
+            currentChannel.bind('HoraMedicaUpdated', function(data) {
+                console.log("Evento recibido de Pusher:", data);
+
+                var tipoAccion = '';
+                switch(data.tipo) {
+                    case 'create':
+                        tipoAccion = 'creado';
+                        break;
+                    case 'update':
+                        tipoAccion = 'actualizado';
+                        break;
+                    case 'cancelada':
+                        tipoAccion = 'cancelado';
+                        break;
+                    case 'delete':
+                        tipoAccion = 'eliminado';
+                        break;
+                    default:
+                        tipoAccion = data.tipo;
+                }
+
+                swal({
+                    title: "Hora Médica Actualizada",
+                    text: "Se ha " + tipoAccion + " una hora médica (ID: " + data.hora.id + ").",
+                    icon: "info",
+                    buttons: {
+                        cancel: "Cerrar",
+                        confirm: "Recargar Agenda"
+                    },
+                })
+                .then((recargar) => {
+                    if (recargar) {
+                        // Recargar la agenda actual si la función existe
+                        if (typeof cargarAgendaProfesional === 'function') {
+                            var tipoAgenda = $('#tipo_agenda_seleccionado').val() || 'semanal';
+                            var fecha = $('#fecha_agenda_actual').val() || new Date().toISOString().split('T')[0];
+                            cargarAgendaProfesional(tipoAgenda, fecha);
+                        } else {
+                            // Si no existe la función, recargar la página completa
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Inicializar suscripción cuando la página esté lista
+        $(document).ready(function() {
+            // Si existe el campo agenda_profesional_asistente (usado en la vista de asistente)
+            if ($('#agenda_profesional_asistente').length) {
+                // Suscribirse al profesional inicial si ya está seleccionado
+                var profesionalInicial = $('#agenda_profesional_asistente').val();
+                if (profesionalInicial && profesionalInicial != '0') {
+                    suscribirCanalProfesional(profesionalInicial);
+                }
+
+                // Detectar cambios en la selección del profesional
+                $('#agenda_profesional_asistente').on('change', function() {
+                    var nuevoProfesional = $(this).val();
+                    suscribirCanalProfesional(nuevoProfesional);
+                });
+            }
+        });
+    </script>
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
@@ -217,12 +320,14 @@
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
+
+
     <!-- select2 -->
     <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
-
+  
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
@@ -234,10 +339,10 @@
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
-
+	
 	<script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
 
-
+ 
 
     <script>
 

@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar datos de contrato Adm. Profesional</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar datos de contrato profesional funcionario</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -37,10 +37,13 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="edit_info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
                                 <div class="form-row">
+                                     <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="t-modal">Tipo de contrato</h6>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Profesi&oacute;n</label>
-                                            <select name="edit_profesion_nuevo_profesional" id="edit_profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
+                                            <select name="edit_profesion_nuevo_profesional" id="edit_profesion_nuevo_profesional" class="form-control form-control-sm" onchange="dame_tipo_especialidad()">
                                                 <option value="0">Seleccione opci&oacute;n</option>
                                                 @foreach($especialidades as $especialidad)
                                                     <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
@@ -51,15 +54,14 @@
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Especialidad</label>
-                                            <select name="edit_especialidad_nuevo_profesional" id="edit_especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
-
+                                            <select name="edit_especialidad_nuevo_profesional" id="edit_especialidad_nuevo_profesional" class="form-control form-control-sm" onchange="dame_subtipo_especialidad()">
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Sub-especialidad</label>
-                                            <select name="edit_sub_especialidad_nuevo_profesional" id="edit_sub_especialidad_nuevo_profesional" class="form-control">
+                                            <select name="edit_sub_especialidad_nuevo_profesional" id="edit_sub_especialidad_nuevo_profesional" class="form-control form-control-sm">
                                                 <option value="0">Seleccione opci&oacute;n</option>
                                             </select>
                                         </div>
@@ -69,6 +71,9 @@
 
                             <div class="tab-pane fade" id="edit_info_personal_cont" role="tabpanel" aria-labelledby="edit_info_personal_cont-tab">
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 mb-2">
+                                        <h6 class="t-modal">Información personal</h6>
+                                    </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Rut</label>
@@ -172,8 +177,8 @@
 
                             <div class="tab-pane fade" id="edit_info_contrato_pers" role="tabpanel" aria-labelledby="edit_info_contrato_pers-tab">
                                 <div class="form-row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="t-modal">Datos Bancarios Para Dep&oacute;sito</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                        <h6 class="t-modal">Datos bancarios para dep&oacute;sito</h6>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
@@ -330,7 +335,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                 <button type="button" class="btn btn-info btn-sm" onclick="modificar_registros_profesional();"><i class="feather icon-save"></i> Guardar cambios</button>
                 {{-- <button type="button" class="btn btn-primary">Ver formulario (PDF)</button> --}}
             </div>

@@ -136,7 +136,7 @@
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('laboratorio.lab_profesional.escritorio_profesional_laboratorio') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                                @if (isset($profesional) && $profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
                                     <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio Radiología</a></li>
                                 @else
                                     <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
@@ -153,7 +153,9 @@
                         <div class="card">
                             <div class="card-header bg-info">
                                     <h4 class="font-weight-bold d-inline f-20 text-white">Laboratorio:&nbsp;&nbsp;</h4><!--Nombre del Laboratorio--><span class=" f-20 d-inline text-white">Laboratorio Clínico</span> <!--Tipo de Laboratorio-->
-                                
+                                @include('general.info_simbologia.simbologia_agenda')
+                                @include('general.anular_hora.anular_hora')
+                                @include('general.bloqueo_hora.bloque_hora')
                             </div>
                             <div class="card-body">
                                 <div class="col-md-12">
@@ -196,11 +198,11 @@
         aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar horas</h5>
+                <div class="modal-header-sdi">
+                    <h5 class="modal-title-sdi"><i class="icono-agenda feather icon-calendar"></i>Tomar horas</h5>
                     <button id="cerrar_tomar_hora" type="button" class="close" data-bs-dismiss="modal" aria-label="Close" ><span aria-hidden="true">×</span>
                 </button>
-                   
+
                 </div>
                 <div class="modal-body">
                     {{--  BUSCADOR DE RUT  --}}
@@ -239,7 +241,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
 
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
+                                    <label class="text-uppercase f-16 text-c-blue font-weight-bold"><i class="icono-primary-light feather icon-activity mr-2"></i>PROCEDIMIENTO</label>
                                     <input type="hidden" name="total_bloques_procedimientos" id="total_bloques_procedimientos" value="">
                                     <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento" multiple="multiple">
 
@@ -255,10 +257,10 @@
                             </div>
                         {{-- @endif --}}
 
-                        <div id="reserva_datos_paciente" class="row mx-3">
+                        <div id="reserva_datos_paciente" class="row mx-2">
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <h6 class="text-c-blue f-16 d-inline">Información del paciente</h6>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 pl-2">
+                                <h6 class="text-c-blue f-16 d-inline"><i class="feather icon-user icono-primary-light text-uppercase"></i> INFORMACIÓN DEL PACIENTE</h6>
                                 <button type="button" onclick="editar_info_paciente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view">
                                     <i class="feather icon-edit"></i> Editar
                                 </button>
@@ -380,8 +382,8 @@
                                                             <label class="floating-label-activo-sm">Región</label>
                                                             <select id="input_reserva_direccion_region" onchange="buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', 0);" name="input_reserva_direccion_region" class="form-control form-control-sm">
                                                                 <option value="0">Seleccione</option>
-                                                                @if (isset($region))
-                                                                    @foreach ($region as $reg)
+                                                                @if (isset($regiones))
+                                                                    @foreach ($regiones as $reg)
                                                                         <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
                                                                     @endforeach
                                                                 @endif
@@ -434,7 +436,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                                   
+
                                    <!-- <tr class="paciente_edit" style="display: none;">
                                         <hr>
                                     </tr>-->
@@ -918,8 +920,8 @@
         aria-labelledby="Recepcion de bonos" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de pago atención</h5>
+                <div class="modal-header-sdi">
+                    <h5 class="modal-title-sdi" id="modal_pago_consulta_title"><i class="feather icon-credit-card icono-agenda"></i> Recepción de pago atención</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                         onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
                             aria-hidden="true">×</span></button>
@@ -1069,6 +1071,7 @@
     <script>
 
         var sumaBloques = 0;
+        var CalendarEl = null;
 
         $(document).ready(function () {
             $('.loader-bg').hide();
@@ -1221,6 +1224,7 @@
             var id_sucursal = $('#agenda_sucursal').val();
             var id_lugar_atencion = $('#agenda_sucursal option:selected').attr('data-id_lugar_atencion');
             var id_box = $('#agenda_box').val();
+            var id_profesional = '{{ $profesional->id }}';
 
             $.ajax({
 
@@ -1230,9 +1234,11 @@
                     id_sucursal: id_sucursal,
                     id_lugar_atencion: id_lugar_atencion,
                     id_box: id_box,
+                    id_profesional: id_profesional,
                 },
             })
             .done(function(data) {
+                console.log(data);
                 if (data.estado == 1)
                 {
                     if (data.estado == 1)
@@ -1317,6 +1323,12 @@
                 evaluacion =  true;
                 if(evaluacion)
                 {
+                    // Destruir instancia anterior para evitar conflicto de doble render
+                    if (CalendarEl !== null) {
+                        CalendarEl.destroy();
+                        CalendarEl = null;
+                    }
+
                     var calendarEl = document.getElementById('agenda');
                     CalendarEl = new FullCalendar.Calendar(calendarEl, {
                         droppable: false,
@@ -1444,7 +1456,7 @@
 
                         eventClick: function(info) {
                             $('#seccion_examenes').html('');
-                     
+
                             let id_hora_medica = info.event.id;
                             let url = "{{ route('agenda.buscar_hora_medica') }}"
 
@@ -1501,14 +1513,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1549,7 +1561,7 @@
                                             {
                                                 var total_valor = 0;
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1605,14 +1617,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente').text('Datos Del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1639,14 +1651,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente').text('Datos Del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1672,14 +1684,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente').text('Datos Del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1705,14 +1717,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente').text('Datos Del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -1738,14 +1750,14 @@
                                         $('#confirmar_anulacion_hora').hide();
                                         $('#confirmacion_hora').hide();
 
-                                        $('#cabecera_hora_medica').text('Datos Del Paciente');
+                                        $('#cabecera_hora_medica').html('<i class="icon-user icono-agenda"></i> Datos del Paciente').text('Datos del Paciente').text('Datos Del Paciente');
 
                                         if(data?.["procedimiento"] !== undefined)
                                         {
                                             if(data.procedimiento != '')
                                             {
                                                 // Generar la lista ordenada
-                                                var lista_examen = '<strong>Examenes</strong>';
+                                                var lista_examen = '<strong class=" text-uppercase">Exámenes</strong>';
                                                 lista_examen += '<ul class="lista-examenes">';
                                                 data.procedimiento.forEach(function(examen) {
                                                     lista_examen += `<li>${examen.nombre}</li>`;
@@ -3043,6 +3055,7 @@
                     }
                 })
                 .done(function(data) {
+                           console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
 
@@ -3751,7 +3764,7 @@
 
             $('#datos_hora_medica').hide();
             $('#cancelacion_hora_medica').hide();
-            $('#cabecera_hora_medica').text('Confirmar Hora Medica');
+            $('#cabecera_hora_medica').text('Confirmar Hora Médica');
             $('#hm_anular_hora').hide();
             $('#hm_atender_hora').hide();
             $('#hm_confirmar_hora').hide();
@@ -3766,7 +3779,7 @@
 
             $('#datos_hora_medica').hide();
             $('#cancelacion_hora_medica').show();
-            $('#cabecera_hora_medica').text('Cancelar Hora Medica');
+            $('#cabecera_hora_medica').text('Cancelar Hora Médica');
             $('#hm_anular_hora').hide();
             $('#hm_atender_hora').hide();
             $('#hm_confirmar_hora').hide();
@@ -3894,7 +3907,7 @@
                     console.log(data);
                     swal({
                         title: "Exito!",
-                        text: "Se ha confirmado su hora medica",
+                        text: "Se ha confirmado su hora médica",
                         type: "success",
                         // DangerMode: true,
                         confirmButtonText: "Cool"

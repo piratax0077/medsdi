@@ -1,4 +1,4 @@
-@extends('template.adm_cm.template')
+@extends('template.profesional.template')
 @section('content')
 <!--****Container Completo****-->
 <style>
@@ -38,33 +38,97 @@
                         <table id="tabla_convenios_profesional" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-wrap text-center align-middle">Convenio</th>
-                                    <th class="align-middle">Rut</th>
-                                    <th class="align-middle">Tipo</th>
-                                    <th class="align-middle">Fecha Inicial</th>
-                                    <th class="align-middle">Fecha Final</th>
-                                    <th class="align-middle">Descuento</th>
-                                    <th class="align-middle">Accion</th>
+                                    <th class="text-wrap text-center align-middle">Convenios</th>
+                                    <th class="align-middle">Tipo Atención</th>
+                                    <th class="align-middle">Porcentaje</th>
+                                    <th class="align-middle">Valor</th>
+                                    <th class="align-middle">Valor Garantía</th>
+                                    <th class="align-middle">Tpo. Espera</th>
+                                    {{-- <th class="align-middle">Copago Fonasa</th>
+                                    <th class="align-middle">Bono Fonasa</th> --}}
+                                    <th class="align-middle">Lugar Atención</th>
+                                    <th class="align-middle">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($convenios_empresas as $convenio)
+                                @if(isset($convenios_profesional) && count($convenios_profesional) > 0)
+                                    @foreach($convenios_profesional as $convenio)
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                @if(isset($convenio->convenios_array) && count($convenio->convenios_array) > 0)
+                                                    @foreach($convenio->convenios_array as $conv)
+                                                        <span class="badge badge-info mb-1">{{ $conv }}</span><br>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">Sin convenios</span>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle text-center">{{ $convenio->tipo_atencion }}</td>
+                                            <td class="align-middle text-center">{{ $convenio->porcentaje }}%</td>
+                                            <td class="align-middle text-right">${{ number_format($convenio->valor, 0, ',', '.') }}</td>
+                                            <td class="align-middle text-right">
+                                                @if($convenio->valor_garantia)
+                                                    ${{ number_format($convenio->valor_garantia, 0, ',', '.') }}
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @if(!is_null($convenio->tpo_espera) && $convenio->tpo_espera !== '')
+                                                    {{ $convenio->tpo_espera }} días
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            {{-- <td class="align-middle text-right">
+                                                @if($convenio->valor_copago_fonasa)
+                                                    ${{ number_format($convenio->valor_copago_fonasa, 0, ',', '.') }}
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle text-right">
+                                                @if($convenio->valor_bon_fonasa)
+                                                    ${{ number_format($convenio->valor_bon_fonasa, 0, ',', '.') }}
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
+                                            </td> --}}
+                                            <td class="align-middle text-center">{{ $convenio->lugar_atencion_nombre }}</td>
+                                            <td class="align-middle text-center">
+                                                <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                                <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                     <tr>
-                                        <td class="align-middle">{{ $convenio->nombre_convenio }}</td>
-                                        <td class="align-middle">{{ $convenio->rut_empresa }}</td>
-                                        <td class="align-middle">
-
-                                        </td>
-                                        <td class="align-middle">{{ $convenio->fecha_inicio }}</td>
-                                        <td class="align-middle">{{ $convenio->fecha_termino }}</td>
-
-                                        <td class="align-middle">{{ $convenio->porcentaje }}%</td>
-                                        <td class="align-middle">
-                                            <button class="btn btn-warning btn-icon" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_tipo_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
-                                        </td>
+                                        <td colspan="10" class="text-center text-muted">No hay convenios registrados</td>
                                     </tr>
-                                @endforeach
+                                @endif
+                                @if(isset($convenios_empresas) && count($convenios_empresas) > 0)
+                                    @foreach($convenios_empresas as $conv_emp)
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <span class="badge badge-secondary mb-1">{{ $conv_emp->nombre_convenio }}</span>
+                                                @if($conv_emp->nombre_empresa)
+                                                    <br><small class="text-muted">{{ $conv_emp->nombre_empresa }}</small>
+                                                @endif
+                                            </td>
+                                            <td class="align-middle text-center">{{ $conv_emp->tipo_atencion ?? '-' }}</td>
+                                            <td class="align-middle text-center">{{ $conv_emp->porcentaje }}%</td>
+                                            <td class="align-middle text-right"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-right"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-center"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-right"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-right"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-center"><span class="text-muted">-</span></td>
+                                            <td class="align-middle text-center">
+                                                <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio_empresa({{ $conv_emp->id }})"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -74,14 +138,18 @@
 </div>
 <!-- DATOS DE VITAL IMPORTANCIA -->
 <input type="hidden" name="id_convenio_profesional" id="id_convenio_profesional" value="">
+<input type="hidden" name="id_convenio_institucion" id="id_convenio_institucion" value="">
 @endsection
 
-@section('js-profesionales')
+@section('page-script')
 <script>
     $(document).ready(function() {
         $('#productos_convenio_').select2();
         $('#productos_convenio_edicion').select2();
+        $('#productos_convenio_especiales').select2();
         $('#tipo_convenio').select2();
+
+        $('#productos_convenio_especial_editar').select2();
     });
 
     function guardar_nuevo_convenio_profesional(){
@@ -161,12 +229,15 @@
                     $('#tabla_convenios_profesional tbody').empty();
                     convenios.forEach(convenio => {
                         let fila = '<tr>';
-                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">' + (convenio.nombre_convenio || '-') + '</td>';
+                        fila += '<td class="align-middle text-center">' + (convenio.tipo_convenio || convenio.tipo_atencion || '-') + '</td>';
+                        fila += '<td class="align-middle text-center">' + ((convenio.porcentaje ?? '-') === '-' ? '-' : (convenio.porcentaje + '%')) + '</td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-center"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-center"><span class="text-muted">-</span></td>';
                         fila += '<td class="align-middle text-center">';
                         fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                         fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
@@ -189,6 +260,119 @@
             }
         });
     }
+
+    function guardar_nuevo_convenio_institucion(){
+        console.log('Guardar nuevo convenio especial');
+
+        var nombre_convenio = $('#nombre_convenio_especiales').val();
+        var tipo_convenio = $('#tipo_convenio_especiales').val();
+        var porcentaje_dcto = $('#porcentaje_dcto_especiales').val();
+        var tipo_convenio_institucion = $('#tipo_convenio_institucion_especiales').val();
+        var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio_especiales').val();
+        var fecha_final_pago_convenio = $('#fecha_final_pago_convenio_especiales').val();
+        var productos_convenio = $('#productos_convenio_especiales').val();
+        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio_especiales').val();
+        var id_lugar_atencion = @if(isset($institucion)) "{{ $institucion->id_lugar_atencion }}" @else null @endif;
+        var id_empresa = $('#id_empresa').val() || 0;
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(nombre_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese nombre de convenio</li>';
+        }
+        if(tipo_convenio == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio</li>';
+        }
+        if(porcentaje_dcto == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese porcentaje de descuento</li>';
+        }
+        if(tipo_convenio_institucion == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio institución</li>';
+        }
+        if(fecha_inicial_pago_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione fecha inicial</li>';
+        }
+        if(fecha_final_pago_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione fecha final</li>';
+        }
+        if(productos_convenio == null){
+            valido = 0;
+            mensaje += '<li>Seleccione productos a convenir</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content: {
+                    element: 'div',
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        // Preparar datos en el mismo formato que guardar_tipo_convenio_ffa
+        var data = {
+            nombre_convenio: nombre_convenio,
+            tipo_convenio: tipo_convenio,
+            id_lugar_atencion: id_lugar_atencion,
+            porcentaje: porcentaje_dcto,
+            fecha_inicio: fecha_inicial_pago_convenio,
+            fecha_termino: fecha_final_pago_convenio,
+            observaciones: observaciones_nuevo_convenio,
+            convenios: 'Especial', // Identificador para convenios especiales
+            conveniosSeleccionados: [],
+            id_empresa: id_empresa,
+            productos_convenio: productos_convenio,
+            tipo_convenio_institucion: tipo_convenio_institucion,
+            _token: "{{ csrf_token() }}"
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: "{{ ROUTE('profesional.guardar_tipo_convenio') }}",
+            type: 'POST',
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.estado == 1){
+                    swal({
+                        title: 'Convenio registrado',
+                        text: response.mensaje,
+                        icon: 'success'
+                    });
+                    $('#nuevoConvenioInstitucion').modal('hide');
+                    location.reload();
+                }else{
+                    swal({
+                        title: 'Error',
+                        text: response.mensaje || 'Error al registrar convenio',
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function(xhr, status, error){
+                console.error('Error:', error);
+                swal({
+                    title: 'Error',
+                    text: 'Error al procesar la solicitud',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+
 
     function limpiar_formulario(){
         $('#nombre_convenio').val('');
@@ -265,12 +449,45 @@
                         title: 'Convenio eliminado',
                         text: response.msj,
                         icon: 'success'
+                    }).then(function(){
+                        location.reload();
                     });
-                    $('#card_body_convenios_profesional').empty();
-                    $('#card_body_convenios_profesional').html(response.v);
                 }else{
-                    alert('Error al eliminar convenio');
+                    swal({
+                        title: 'Error',
+                        text: response.msj || 'Error al eliminar convenio',
+                        icon: 'error'
+                    });
                 }
+            }
+        });
+    }
+
+    function eliminar_convenio_empresa(id){
+        swal({
+            title: 'Eliminar convenio empresa',
+            text: '¿Está seguro de eliminar este convenio?',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+        }).then((willDelete) => {
+            if(willDelete){
+                $.ajax({
+                    url: "{{ ROUTE('profesional.eliminar_tipo_convenio') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response){
+                        if(response.estado == 1){
+                            swal({ title: 'Eliminado', text: response.mensaje, icon: 'success' })
+                            .then(function(){ location.reload(); });
+                        } else {
+                            swal({ title: 'Error', text: response.mensaje, icon: 'error' });
+                        }
+                    }
+                });
             }
         });
     }
@@ -285,23 +502,179 @@
             },
             success: function(response){
                 $('#id_convenio_profesional').val(id);
+                $('#id_convenio_institucion').val(id);
                 console.log(response);
-                if(response.estado == 1){
-                    $('#nombre_convenio_prevision_editar').val(response.convenio.nombre_convenio_institucion);
-                    $('#tipo_convenio_edicion').val(response.convenio.id_tipo_convenio);
-                    $('#porcentaje_dcto_edicion').val(response.convenio.porcentaje_convenio_institucion);
-                    $('#tipo_convenio_institucion_edicion').val(response.convenio.id_tipo_convenio_institucion);
-                    $('#fecha_inicial_pago_convenio_edicion').val(response.convenio.fecha_inicio_convenio_institucion);
-                    $('#fecha_final_pago_convenio_edicion').val(response.convenio.fecha_fin_convenio_institucion);
-                    $('#productos_convenio_edicion').val(response.convenio.productos).trigger('change');
-                    $('#rut_representante_convenio_edicion').val(response.convenio.rut_representante_convenio_institucion);
-                    $('#nombre_representante_convenio_edicion').val(response.convenio.nombre_representante_convenio_institucion);
-                    $('#telefono_representante_convenio_edicion').val(response.convenio.telefono_representante_convenio_institucion);
-                    $('#email_representante_convenio_edicion').val(response.convenio.email_representante_convenio_institucion);
-                    $('#direccion_representante_convenio_edicion').val(response.convenio.direccion_representante_convenio_institucion);
-                    $('#observaciones_edicion_convenio').val(response.convenio.observaciones_convenio_institucion);
-                }else{
-                    alert('Error al cargar convenio');
+                if(response.estado != 1 || !response.convenio){
+                    swal({ title: 'Error', text: 'No se pudo cargar el convenio', icon: 'error' });
+                    return;
+                }
+
+                const convenio = response.convenio;
+
+                const convenioMap = {
+                    'Particular': 1,
+                    'Fonasa': 2,
+                    'Todas las Isapres': 3,
+                    'Banmédica': 4,
+                    'Banmedica': 4,
+                    'Colmena': 5,
+                    'Nueva Masvida': 6,
+                    'Consalud': 7,
+                    'Cruz Blanca': 8,
+                    'Cruz del Norte': 9,
+                    'Vida Tres': 10,
+                    'Fundación': 11,
+                    'Fundacion': 11,
+                    'Isalud': 12
+                };
+
+                const convenioFFAAMap = {
+                    'Ejército': 1,
+                    'Ejercito': 1,
+                    'Armada': 2,
+                    'Bomberos': 3,
+                    'Fuerza Aérea': 4,
+                    'Fuerza Aerea': 4,
+                    'Carabineros': 5,
+                    'PDI': 6,
+                    'Caja Los Andes': 7,
+                    'Caja La Araucana': 8,
+                    'Caja 18 de Septiembre': 9,
+                    'Caja Los Héroes': 10,
+                    'Caja Los Heroes': 10
+                };
+
+                const conveniosArray = (convenio.convenios || '')
+                    .split(',')
+                    .map(function(c) {
+                        return c.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                    })
+                    .filter(function(c) { return c.length > 0; });
+
+                for (let i = 1; i <= 12; i++) {
+                    $('#convenio_editar_' + i).prop('checked', false);
+                }
+                for (let i = 1; i <= 10; i++) {
+                    $('#convenio_editar_ffa' + i).prop('checked', false);
+                }
+
+                conveniosArray.forEach(function(nombreConv) {
+                    const idInst = convenioMap[nombreConv];
+                    if (idInst) {
+                        $('#convenio_editar_' + idInst).prop('checked', true);
+                    }
+                    const idFfaa = convenioFFAAMap[nombreConv];
+                    if (idFfaa) {
+                        $('#convenio_editar_ffa' + idFfaa).prop('checked', true);
+                    }
+                });
+
+                const fechaInicioGeneral = convenio.fecha_inicio || '';
+                const fechaFinGeneral = convenio.fecha_fin || '';
+
+                // Empresas
+                $('#nombre_convenio_prevision_editar').val(convenio.nombre_convenio_institucion || convenio.nombre_convenio || '');
+                $('#tipo_convenio_edicion').val(convenio.id_tipo_convenio || '0');
+                $('#porcentaje_dcto_edicion').val(convenio.porcentaje_convenio_institucion || convenio.porcentaje || '');
+                $('#lugar_atencion_edicion').val(convenio.id_lugar_atencion || '0');
+                $('#fecha_inicial_pago_convenio_edicion').val(convenio.fecha_inicio_convenio_institucion || fechaInicioGeneral);
+                $('#fecha_final_pago_convenio_edicion').val(convenio.fecha_fin_convenio_institucion || fechaFinGeneral);
+                $('#observaciones_edicion_convenio').val(convenio.observaciones_convenio_institucion || convenio.observaciones || '');
+                $('#convenio_infinito_edicion').prop('checked', !(convenio.fecha_fin_convenio_institucion || fechaFinGeneral));
+                $('#fecha_final_pago_convenio_edicion').prop('disabled', !(convenio.fecha_fin_convenio_institucion || fechaFinGeneral));
+
+                // Instituciones
+                $('#tipo_atencion_editar').val(convenio.tipo_atencion || '');
+                $('#valor_editar').val(convenio.valor || '');
+                $('#valor_garantia_editar').val(convenio.valor_garantia || '');
+                $('#porcentaje_editar').val(convenio.porcentaje || '');
+                $('#copago_fonasa_editar').val(convenio.valor_copago_fonasa || '');
+                $('#bono_fonasa_editar').val(convenio.valor_bon_fonasa || '');
+                $('#lugar_atencion_inst_edicion').val(convenio.id_lugar_atencion || '0');
+                $('#nivel_fonasa_editar').val(convenio.nivel_fonasa || '');
+                $('#tpo_espera_editar').val(convenio.tpo_espera || '');
+                $('#fecha_inicial_inst_edicion').val(fechaInicioGeneral);
+                $('#fecha_final_inst_edicion').val(fechaFinGeneral);
+                $('#convenio_infinito_inst_edicion').prop('checked', !fechaFinGeneral);
+                $('#fecha_final_inst_edicion').prop('disabled', !fechaFinGeneral);
+
+                const esFonasa = conveniosArray.some(function(c) {
+                    return c.toLowerCase().indexOf('fonasa') !== -1;
+                });
+                if (esFonasa) {
+                    $('#col_nivel_fonasa_editar, #col_copago_fonasa_editar, #col_bono_fonasa_editar, #col_tpo_espera_fonasa_editar').removeClass('d-none');
+                } else {
+                    $('#col_nivel_fonasa_editar, #col_copago_fonasa_editar, #col_bono_fonasa_editar, #col_tpo_espera_fonasa_editar').addClass('d-none');
+                }
+
+                // FFAA
+                $('#tipo_atencion_ffa_editar').val(convenio.tipo_atencion || '');
+                $('#valor_ffa_editar').val(convenio.valor || '');
+                $('#valor_garantia_ffa_editar').val(convenio.valor_garantia || '');
+                $('#porcentaje_ffa_editar').val(convenio.porcentaje || '');
+                $('#copago_fonasa_ffa_editar').val(convenio.valor_copago_fonasa || '');
+                $('#bono_fonasa_ffa_editar').val(convenio.valor_bon_fonasa || '');
+                $('#lugar_atencion_ffa_edicion').val(convenio.id_lugar_atencion || '0');
+                $('#fecha_inicial_ffa_edicion').val(fechaInicioGeneral);
+                $('#fecha_final_ffa_edicion').val(fechaFinGeneral);
+                $('#convenio_infinito_ffa_edicion').prop('checked', !fechaFinGeneral);
+                $('#fecha_final_ffa_edicion').prop('disabled', !fechaFinGeneral);
+
+                // Especiales
+                const esEspecial = conveniosArray.length === 1 &&
+                    ['especial', 'especialidad'].indexOf(conveniosArray[0].toLowerCase()) !== -1;
+
+                $('#nombre_convenio_especial_editar').val(convenio.nombre_convenio || convenio.tipo_atencion || '');
+                $('#tipo_convenio_especial_edicion').val(convenio.id_tipo_convenio || '0');
+                $('#porcentaje_dcto_especial_edicion').val(convenio.porcentaje || '');
+                $('#tipo_convenio_institucion_especial_edicion').val(convenio.id_tipo_convenio_institucion || '0');
+                $('#fecha_inicial_especial_edicion').val(fechaInicioGeneral);
+                $('#fecha_final_especial_edicion').val(fechaFinGeneral);
+                $('#observaciones_especial_edicion').val(convenio.observaciones || '');
+                $('#convenio_infinito_especial_edicion').prop('checked', !fechaFinGeneral);
+                $('#fecha_final_especial_edicion').prop('disabled', !fechaFinGeneral);
+
+                let productos = [];
+                const productosRaw = convenio.productos_convenio_institucion || convenio.productos_convenio || null;
+                if (productosRaw) {
+                    if (Array.isArray(productosRaw)) {
+                        productos = productosRaw;
+                    } else if (typeof productosRaw === 'string') {
+                        try {
+                            productos = JSON.parse(productosRaw);
+                        } catch (e) {
+                            productos = productosRaw.split(',').map(function(v) { return v.trim(); }).filter(Boolean);
+                        }
+                    }
+                }
+                $('#productos_convenio_especial_editar').val(productos).trigger('change');
+
+                let tieneConveniosInst = false;
+                let tieneConveniosFFAA = false;
+                conveniosArray.forEach(function(nombreConv) {
+                    if (convenioMap[nombreConv]) {
+                        tieneConveniosInst = true;
+                    }
+                    if (convenioFFAAMap[nombreConv]) {
+                        tieneConveniosFFAA = true;
+                    }
+                });
+
+                // Mostrar una sola vista según tipo para evitar cambio de tipo desde el modal
+                function mostrarSoloVistaConvenio(tabId, etiquetaTipo) {
+                    $('#editarConvenioInstitucion .tab-pane').removeClass('show active');
+                    $('#' + tabId).addClass('show active');
+                    $('#tipo_convenio_actual_edicion').text(etiquetaTipo);
+                }
+
+                if (esEspecial) {
+                    mostrarSoloVistaConvenio('pills-especiales-edicion', 'Especiales');
+                } else if (tieneConveniosFFAA) {
+                    mostrarSoloVistaConvenio('pills-ffaa-edicion', 'FFAA y Cajas de compensación');
+                } else if (tieneConveniosInst) {
+                    mostrarSoloVistaConvenio('pills-instituciones-edicion', 'Instituciones');
+                } else {
+                    mostrarSoloVistaConvenio('pills-empresas-edicion', 'Empresas');
                 }
             }
         });
@@ -446,12 +819,15 @@
                     $('#tabla_convenios_profesional tbody').empty();
                     convenios.forEach(convenio => {
                         let fila = '<tr>';
-                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">' + (convenio.nombre_convenio || '-') + '</td>';
+                        fila += '<td class="align-middle text-center">' + (convenio.tipo_convenio || convenio.tipo_atencion || '-') + '</td>';
+                        fila += '<td class="align-middle text-center">' + ((convenio.porcentaje ?? '-') === '-' ? '-' : (convenio.porcentaje + '%')) + '</td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-center"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-right"><span class="text-muted">-</span></td>';
+                        fila += '<td class="align-middle text-center"><span class="text-muted">-</span></td>';
                         fila += '<td class="align-middle text-center">';
                         fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                         fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';

@@ -1,19 +1,17 @@
 
 
     <div class="mt-0">
-        <div class="col-sm-12 col-md-12 py-0 px-1 shadow-none">
-
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-fmu">
-
+            <div class="col-sm-12 col-md-12 py-0 px-1 shadow-none">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card-informacion">
                         <h4 class="text-c-blue f-18 pt-2 text-center">Ficha Médica Única</h4>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-fmu">
+                    <div class="card-informacion">
                         <div class="card-header-fmu" id="enf-cron">
                                 @php
                                     $cantidad_ante_cronicos = 0;
@@ -76,7 +74,6 @@
                                 	</div>
                                 </div>
                         </div>
-
                         <div id="cabecera_info" class="collapse" aria-labelledby="enf-cron" data-parent="#cabecera_info">
                             <div class="card-body-aten-a" style="padding-top: 0px!important;">
                                 <div class="row">
@@ -182,7 +179,6 @@
 
                                             {{-- informacion de cirugias --}}
                                             <div class="tab-pane fade" id="seccion_ultimas_cirugia" role="tabpanel" aria-labelledby="seccion_ultimas_cirugia-tab">
-
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <table id="table_alergias" class="display table table-striped table-xs dt-responsive nowrap pb-4" style="width:100%">
@@ -254,8 +250,6 @@
                                                         </table>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -263,28 +257,27 @@
 
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                    {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button> --}}
-                    {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button> --}}
-                    <button type="button" class="btn btn-xs btn-primary mb-1" onclick="responsables_fmu();"><i class="feather icon-users"></i> Responsables</button>
-                    <button type="button" class="btn btn-xs btn-primary mb-1" onclick="confidencial_fmu();"><i class="feather icon-lock"></i> Confidencial</button>
-                    {{-- <button type="button" class="btn btn-xs btn-primary mb-1" onclick="trat_act_fmu();"><i class="feather icon-file-plus"></i> Tratamientos activos</button> --}}
-                    <button type="button" class="btn btn-xs btn-danger mb-1" onclick="c_sos_fmu();"><i class="feather icon-phone"></i> Contacto de emergencia</button>
+                    {{-- <button type="button" class="btn btn-xxs btn-primary mb-1" onclick="cirugias_fmu();">Cirugías</button> --}}
+                    {{-- <button type="button" class="btn btn-xxs btn-primary mb-1" onclick="alergias_fmu();">Alergias</button> --}}
+                    <button type="button" class="btn btn-xxs btn-primary mb-1" onclick="responsables_fmu();"><i class="feather icon-users"></i> Responsables</button>
+                    <button type="button" class="btn btn-xxs btn-primary mb-1" onclick="confidencial_fmu();"><i class="feather icon-lock"></i> Confidencial</button>
+                    {{-- <button type="button" class="btn btn-xxs btn-primary mb-1" onclick="trat_act_fmu();"><i class="feather icon-file-plus"></i> Tratamientos activos</button> --}}
+                    <button type="button" class="btn btn-xxs btn-danger mb-1" onclick="c_sos_fmu();"><i class="feather icon-phone"></i> Contacto de emergencia</button>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="form-row">
                 {{-- Tratamientos en curso --}}
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3">
-                    <div class="card border-card-primary h-100">
-                        <div class="card-body-aten-a">
+                    <div class="card-informacion border-card-purple h-100">
+                        <div class="card-body p-2">
                             <ul>
-                                <li><strong>Tratamientos en curso</strong></li>
+                                <li><h6 class="text-purple">Tratamientos en curso</h6></li>
                                 @if ($tratamiento_activo)
                                     @foreach ( $tratamiento_activo as $receta)
                                         @foreach ( $receta['detalle'] as $detalle)
@@ -302,10 +295,11 @@
 
                 {{-- Medicamentos crónicos --}}
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3">
-                    <div class="card border-card-primary h-100">
-                        <div class="card-body-aten-a">
+                    <div class="card-informacion border-card-danger h-100">
+                        <div class="card-body p-2">
                             <ul>
-                                <li><strong>Medicamentos crónicos</strong></li>
+                                <li><h6 class="text-danger">Medicamentos crónicos</h6></li>
+                                <li>No hay registros</li>
                             </ul>
                         </div>
                     </div>
@@ -313,10 +307,10 @@
 
                 {{-- Cirugías recientes --}}
                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3">
-                    <div class="card border-card-primary h-100">
-                        <div class="card-body-aten-a">
+                    <div class="card-informacion border-card-info h-100">
+                        <div class="card-body p-2">
                             <ul>
-                                <li><strong>Cirugías recientes</strong></li>
+                                <li><h6 class="text-info">Cirugías recientes</h6></li>
                                 @foreach ($antecedentes as $data)
                                     @if($data->id_tipo_antecedente==3)
                                         {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
@@ -332,7 +326,7 @@
 
                 {{-- Medicamentos recientes --}}
                 {{-- <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3"> --}}
-                    {{-- <div class="card border-card-primary h-100"> --}}
+                    {{-- <div class="card-informacion border-card-primary h-100"> --}}
                         {{-- <div class="card-body"> --}}
                             {{-- <ul> --}}
                                 {{-- <li><strong>Medicamentos recientes</strong></li> --}}
@@ -344,10 +338,10 @@
 
                 {{-- Prótesis y ortesis --}}
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6 mb-3">
-                    <div class="card border-card-primary h-100">
-                        <div class="card-body-aten-a">
+                    <div class="card-informacion border-card-primary h-100">
+                        <div class="card-body p-2">
                             <ul>
-                                <li><strong>Prótesis y ortesis</strong></li>
+                                <li><h6 class="text-c-blue">Prótesis y ortesis</h6></li>
                                 <li>No hay registros</li>
                             </ul>
                         </div>
@@ -362,7 +356,7 @@
                 </div>
                 <!--HISTORIAL - Últimos Examenes-->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-fmu">
+                    <div class="card-informacion">
                         <div class="card-header-fmu" id="ult_exam">
                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#ult_exam_c" aria-expanded="false" aria-controls="ult_exam_c">
                             Últimos exámenes
@@ -445,7 +439,7 @@
 
                 <!--HISTORIAL - Control de enfermedades cronicas -->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-a">
+                    <div class="card-informacion">
                         <div class="card-header-a" id="cont_enfer_cron">
                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#cont_enfer_cron_c" aria-expanded="false" aria-controls="cont_enfer_cron_c">
                             Control de enfermedades crónicas
@@ -497,7 +491,7 @@
 
                 <!--HISTORIAL - Historial odontologico -->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-a">
+                    <div class="card-informacion">
                         <div class="card-header-a" id="odonto">
                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#odonto_c" aria-expanded="false" aria-controls="odonto_c">
                             Historial odontológico
@@ -517,7 +511,7 @@
 
                 <!--HISTORIAL - Historial niño sano -->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-a">
+                    <div class="card-informacion">
                         <div class="card-header-a" id="nino_sano">
                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#nino_sano_c" aria-expanded="false" aria-controls="nino_sano_c">
                             Historial de niño sano
@@ -537,7 +531,7 @@
 
                 <!--HISTORIAL - Historial Médico-->
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card-a">
+                    <div class="card-informacion">
                         <div class="card-header-a" id="histo_medico">
                             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed"  type="button" data-toggle="collapse" data-target="#histo_medico_c" aria-expanded="false" aria-controls="histo_medico_c">
                             Historial Médico

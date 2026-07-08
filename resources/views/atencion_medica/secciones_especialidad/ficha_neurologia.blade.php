@@ -100,8 +100,8 @@
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row mb-3">
                             <div class="col-md-12 text-center">
-                                <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                <input type="submit" class="btn btn-success-light-c mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                <input type="submit" class="btn btn-info-light-c mt-1" onclick="$('#cerrarsession').val('1'); preparar_examenes_para_envio(); agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                <input type="submit" class="btn btn-success-light-c mt-1" onclick="preparar_examenes_para_envio(); agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
                             </div>
                         </div>
                     </div>
@@ -588,6 +588,101 @@
             else {
                 $('#'+div+'').hide();
                 $('#'+input+'').val('');
+            }
+        }
+
+        /**
+         * ========================================
+         * SISTEMA DE ACUMULACIÓN DE EXÁMENES
+         * ========================================
+         * Los exámenes se acumulan en memoria
+         * Al guardar la ficha, se envían todos juntos como JSON
+         */
+
+        // Objeto global para acumular datos de exámenes
+        let examenes_acumulados = {
+            fuerza_superior: {},
+            fuerza_inferior: {},
+            funcion_global: {},
+            tono: {},
+            metria: {},
+            pares_craneanos: {},
+            reflejos: {},
+            postura_neuro: {},
+            sensibilidad: {},
+            interconsulta_kine: {}
+        };
+
+        // Diccionario de exámenes con sus IDs de modal
+        const examen_info = {
+            'fuerza_superior': { modal_id: 'fuerza_sup', label: 'Fuerza Extremidad Superior' },
+            'fuerza_inferior': { modal_id: 'fuerza_inf', label: 'Fuerza Extremidad Inferior' },
+            'funcion_global': { modal_id: 'func_global', label: 'Función Global' },
+            'tono': { modal_id: 'tono', label: 'Tono Muscular' },
+            'metria': { modal_id: 'metria', label: 'Metría' },
+            'pares_craneanos': { modal_id: 'pares_craneanos', label: 'Pares Craneanos' },
+            'reflejos': { modal_id: 'reflejos', label: 'Reflejos' },
+            'postura_neuro': { modal_id: 'postura_mot_neuro', label: 'Postura y Marcha' },
+            'sensibilidad': { modal_id: 'sensibilidad', label: 'Sensibilidad' },
+            'interconsulta_kine': { modal_id: 'modal_interkine', label: 'Interconsulta' }
+        };
+
+        /**
+         * Recopia todos los campos de un examen específico
+         */
+        function recopilar_examen(tipo_examen) {
+            let selector_modal = '#' + examen_info[tipo_examen].modal_id;
+            let datos = {};
+
+            $(selector_modal + ' input, ' + selector_modal + ' textarea, ' + selector_modal + ' select').each(function() {
+                let nombre = $(this).attr('name');
+                if (nombre && nombre !== '_token') {
+                    datos[nombre] = $(this).val();
+                }
+            });
+
+            return datos;
+        }
+
+        /**
+         * Acumula los datos de un examen en memoria
+         * Se llama desde cada modal cuando presiona "Guardar"
+         */
+        function acumular_examen(tipo_examen) {
+            examenes_acumulados[tipo_examen] = recopilar_examen(tipo_examen);
+
+            // Agregar validación visual (puedes customizar esto)
+            let label_examen = examen_info[tipo_examen].label;
+            swal({
+                icon: 'success',
+                title: 'Examen Guardado',
+                text: label_examen + ' ha sido guardado y será incluido en la ficha.',
+                buttons: 'OK'
+            }).then(function() {
+                // Cerrar modal
+                $('#' + examen_info[tipo_examen].modal_id).modal('hide');
+            });
+
+            console.log('Examen acumulado:', tipo_examen, examenes_acumulados[tipo_examen]);
+        }
+
+        /**
+         * Prepara los exámenes acumulados para enviar
+         * Se llama antes de hacer submit del formulario
+         */
+        function preparar_examenes_para_envio() {
+            // Filtrar solo los exámenes que tienen datos
+            let examenes_con_datos = {};
+            for (let tipo in examenes_acumulados) {
+                if (Object.keys(examenes_acumulados[tipo]).length > 0) {
+                    examenes_con_datos[tipo] = examenes_acumulados[tipo];
+                }
+            }
+
+            // Si hay exámenes, ponerlos en el campo oculto
+            if (Object.keys(examenes_con_datos).length > 0) {
+                $('#examenes_esp').val(JSON.stringify(examenes_acumulados));
+                console.log('Exámenes preparados para envío:', examenes_acumulados);
             }
         }
 

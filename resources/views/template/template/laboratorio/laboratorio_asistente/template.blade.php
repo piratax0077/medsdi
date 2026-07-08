@@ -44,6 +44,10 @@
     <!--Bs-Canvas-->
     <link rel="stylesheet" href='{{ asset('css/bs_canvas.css') }}'/>
 
+<!--SELECT2 -->
+<script src="{{ asset('js/plugins/select2.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}"/>
+
 </head>
 
 <body>

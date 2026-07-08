@@ -107,14 +107,14 @@
 
         <!--Modals de especialidad -->
         @include("general.modal.modal_no_disponible")
-        @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+        {{-- @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia") --}}
 
     </div>
 
     <!--Modals formularios generales-->
     @include('atencion_medica.secciones_especialidad.ficha_uro_tipo')
-    {{-- @include("general.hospitalizacion.modals.in_solic_pabellon") --}}
-    {{-- @include("general.hospitalizacion.modals.ingreso_hosp") --}}
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 
     <!--Cierre: Container Completo-->
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')

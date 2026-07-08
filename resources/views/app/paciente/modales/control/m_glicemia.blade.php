@@ -184,7 +184,7 @@
                 else html += '    <td> </td>';
                 if(value.observacion != null) html += '    <td>'+value.observacion+'</td>';
                 else html += '    <td> </td>';
-                html += '    <td> <button type=\"button\" class=\"btn btn-xs btn-block btn-danger\" onclick=\"eliminar_c_glicemia(\\''+value.id+'\\');\">Eliminar</button> </td>';
+                html += '    <td> <button type="button" class="btn btn-xs btn-block btn-danger" onclick="eliminar_c_glicemia(\''+value.id+'\');">Eliminar</button> </td>';
                 html += '</tr>';
                 $('#'+tabla+' tbody').append(html);
             });

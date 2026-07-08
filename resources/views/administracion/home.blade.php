@@ -78,6 +78,16 @@
                         </a>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('administracion.ventas') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/instituciones.svg') }}">
+                                <h6 class="mt-2 mb-0">Administración Ventas</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -98,7 +108,7 @@
                               <div class="media-body">
                                 <h6 class="t-aten">Total suscripción</h6>
                                 <h5 class="mt-0">Pacientes</h5>
-                                <h4>0000</h4>
+                                <h4>{{ $total_paciente }}</h4>
                               </div>
                             </div>
                         </div>
@@ -112,7 +122,7 @@
                               <div class="media-body">
                                 <h6 class="t-aten">Total suscripción</h6>
                                 <h5 class="mt-0">Profesionales</h5>
-                                <h4>0000</h4>
+                                <h4>{{ $total_profesionales }}</h4>
                               </div>
                             </div>
                         </div>
@@ -126,7 +136,7 @@
                               <div class="media-body">
                                 <h6 class="t-aten">Total suscripción</h6>
                                 <h5 class="mt-0">Instituciones</h5>
-                                <h4>0000</h4>
+                                <h4>{{ $total_instituciones }}</h4>
                               </div>
                             </div>
                         </div>
@@ -140,7 +150,7 @@
                               <div class="media-body">
                                 <h6 class="t-aten">Total suscripción</h6>
                                 <h5 class="mt-0">Asistentes</h5>
-                                <h4>0000</h4>
+                                <h4>{{ $total_asistentes }}</h4>
                               </div>
                             </div>
                         </div>

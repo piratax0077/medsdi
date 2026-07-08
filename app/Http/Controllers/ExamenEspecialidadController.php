@@ -10,7 +10,10 @@ use App\Models\ExamenEspecialidadTipo;
 use App\Models\ExamenLaboratorioTemplate;
 use App\Models\ExamenLaboratorioTipo;
 use App\Models\FichaAtencion;
+use App\Models\FichaGinecoObstetrica;
+use App\Models\FichaOtrosProfesionales;
 use App\Models\LugarAtencion;
+use App\Models\OctavoPar;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
@@ -127,10 +130,17 @@ class ExamenEspecialidadController extends Controller
         if($valido)
         {
             $examen = ExamenEspecialidad::find($id_examen_especialidad);
+
             if($examen)
             {
                 /** CARGA DE INFORMACION BASE */
-                $ficha_atencion = FichaAtencion::find($examen->id_ficha_atencion);
+                $profesional = Profesional::find($examen->id_profesional);
+                if($profesional->id_especialidad == 1 && $profesional->id_tipo_especialidad == 3 && $profesional->id_sub_tipo_especialidad == 27){
+                    $ficha_atencion = FichaGinecoObstetrica::find($examen->id_ficha_especialidad);
+                }else{
+                    $ficha_atencion = FichaAtencion::find($examen->id_ficha_atencion);
+                }
+
                 $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
                 $tipo = ExamenEspecialidadTipo::find($examen->id_examen_tipo);
                 $template = ExamenEspecialidadTemplate::find($examen->id_template);
@@ -307,13 +317,18 @@ class ExamenEspecialidadController extends Controller
                 );
                 $array_lugar_atencion = array(
                     'id' => $lugar_atencion->id,
-                    'nombre' => $lugar_atencion->nombre
+                    'nombre' => $lugar_atencion->nombre,
+                    'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                    'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                    'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
                 );
                 $array_profesional = array(
                     'id' => $profesional->id,
                     'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
                     'rut' => $profesional->rut,
                     'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                    'id_especialidad' => $profesional->id_especialidad,
+                    'num_colegio' => $profesional->num_colegio,
                     'token' =>  $token_profesional,
                     'url' =>  $url_profesional,
                     'qr' =>  $qr_profesional,
@@ -348,6 +363,53 @@ class ExamenEspecialidadController extends Controller
         }
 
         return $datos;
+    }
+
+    public function generarPDF_octavo_par_r(Request $request){
+        return static::generarPDF_octavo_par($request->id_examen_octavo_par);
+    }
+
+    static function generarPDF_octavo_par($id_examen_octavo_par){
+        try {
+            if(empty($id_examen_octavo_par)) {
+                return [
+                    'estado' => 0,
+                    'msj' => 'Campo requerido',
+                    'error' => ['id_examen_octavo_par' => 'Campo requerido']
+                ];
+            }
+
+            $octavo_par = OctavoPar::find($id_examen_octavo_par);
+            if (!$octavo_par) {
+                return [
+                    'estado' => 0,
+                    'msj' => 'Examen no encontrado',
+                    'error' => ['id_examen_octavo_par' => 'No existe']
+                ];
+            }
+
+            // Obtener ficha de atención
+            $ficha_atencion = FichaOtrosProfesionales::find($octavo_par->id_otros_profesionales);
+
+            // Extraer todos los archivos del campo 'archivo'
+            $archivosArray = [];
+            if ($ficha_atencion && $ficha_atencion->archivo) {
+                $archivos = json_decode($ficha_atencion->archivo, true);
+                if (is_array($archivos) && count($archivos) > 0) {
+                    $archivosArray = $archivos;
+                }
+            }
+
+            // Devuelve todos los archivos en un array
+            return [
+                'success' => true,
+                'archivos' => $archivosArray
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => 'Error al generar el PDF: ' . $e->getMessage()
+            ];
+        }
     }
 
     public function visualizarGenerarPDF_r(Request $request)
@@ -631,6 +693,51 @@ class ExamenEspecialidadController extends Controller
         return $datos;
     }
 
+    public function ExamenOctavoParRevisado(Request $request){
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_examen))
+        {
+            $error['id_examen'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = OctavoPar::find($request->id_examen);
+
+            if($registro)
+            {
+                $registro->revisado = 1;
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Revisado';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al actualizar';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj']  = 'Registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj']  = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     public function VerRegistros(Request $request)
     {
         $datos = array();
@@ -676,9 +783,20 @@ class ExamenEspecialidadController extends Controller
 
         if($registros)
         {
+            $registros_array = $registros->toArray();
+
+            // Buscar exámenes de octavo par según los filtros de paciente
+            $octavo_par_examenes = [];
+            if(!empty($request->id_paciente)) {
+                $octavo_par_examenes = OctavoPar::where('id_paciente', $request->id_paciente)->with('HoraMedica')->get()->toArray();
+            }
+
+            // Unir ambos tipos de registros
+            $registros_combinados = array_merge($registros_array, $octavo_par_examenes);
+
             $datos['estado'] = 1;
             $datos['msj'] = 'registros';
-            $datos['registros'] = $registros;
+            $datos['registros'] = $registros_combinados;
         }
         else
         {

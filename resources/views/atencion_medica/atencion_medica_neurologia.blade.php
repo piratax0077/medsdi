@@ -25,45 +25,45 @@
             </div>
             <!--CIERRE: HEADER-->
 
-                        <!-- TAB ATENCIÓN -->
-                        <div class="user-profile user-card pt-0">
-                            <div class="card-body py-0">
-                                <div class="user-about-block m-0">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
-                                                </li>
-                                                {{--<li class="nav-item" id="nav-licencia">
-                                                    @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-                                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
-                                                    @else
-                                                        <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
-                                                    @endif
-                                                </li>--}}
-                                                {{--  <li class="nav-item" id="nav-fmu">
-                                                    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-                                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
-                                                    @else
-                                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
-                                                    @endif
-                                                </li>  --}}
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                                </li>
-                                                {{--  <li class="nav-item">
-                                                    <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
-                                                </li>  --}}
-                                                {{-- <li class="nav-item">
-                                                    <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
-                                                </li> --}}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+            <!-- TAB ATENCIÓN -->
+            <div class="user-profile user-card pt-0">
+                <div class="card-body py-0">
+                    <div class="user-about-block m-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
+                                    </li>
+                                    {{--<li class="nav-item" id="nav-licencia">
+                                        @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
+                                        @else
+                                            <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
+                                        @endif
+                                    </li>--}}
+                                    {{--  <li class="nav-item" id="nav-fmu">
+                                        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @else
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
+                                        @endif
+                                    </li>  --}}
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
+                                    </li>
+                                    {{--  <li class="nav-item">
+                                        <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
+                                    </li>  --}}
+                                    {{-- <li class="nav-item">
+                                        <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
+                                    </li> --}}
+                                </ul>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
             <!-- CIERRE TAB GENERAL-->
 
             <!--CONTENIDO DE TAB-->
@@ -110,7 +110,7 @@
 
     <!-- SIDE BAR ORL -->
     {{--  @include("atencion_medica.modales")  --}}
-    @include("atencion_medica.include.sidebar_derecho_gastroenterologia")
+    @include("atencion_medica.include.sidebar_derecho_neurologia")
     @include("general.modal.modal_no_disponible")
 
 

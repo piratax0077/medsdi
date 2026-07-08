@@ -10,7 +10,7 @@
                 <form>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <p class="fecha-sm"><strong>Fecha del examen</strong> 
+                            <p class="fecha-sm"><strong>Fecha del examen</strong>
                                 <script>
                                     var f = new Date();
                                     document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -45,7 +45,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_sensibilidad()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -53,5 +53,10 @@
 <script>
     function sensibilidad() {
         $('#sensibilidad').modal('show');
+    }
+
+    function guardar_sensibilidad() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('sensibilidad');
     }
 </script>

@@ -10,6 +10,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Profesional;
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -59,4 +61,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function profesional()
+    {
+        return $this->hasOne(Profesional::class, 'id_usuario', 'id');
+    }
 }

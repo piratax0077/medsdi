@@ -12,6 +12,8 @@ use App\Models\Especialidad;
 
 use App\Models\FichaAtencion;
 
+use App\Models\Instituciones;
+
 use App\Models\Paciente;
 
 use App\Models\Prevision;
@@ -854,12 +856,14 @@ class PacienteController extends Controller
 
     public function indicarProcedimientoSDI(Request $request){
 
+        $institucion = Instituciones::where('id_lugar_atencion',$request->id_lugar_atencion)->first();
 
         if(strval($request->ind_med) !== '0'){
 
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_fc;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
             // crear un array con los datos
@@ -877,8 +881,9 @@ class PacienteController extends Controller
         if(strval($request->ind_cc) !== "0"){
 
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_fc;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
 
@@ -898,8 +903,9 @@ class PacienteController extends Controller
 
         if(strval($request->ind_pp) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_fc;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
             // crear un array con los datos
@@ -916,8 +922,9 @@ class PacienteController extends Controller
 
         if(strval($request->ind_proc) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_fc;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
             // crear un array con los datos
@@ -934,8 +941,9 @@ class PacienteController extends Controller
 
         if(strval($request->ind_inmmed) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_fc;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
             // crear un array con los datos
@@ -951,9 +959,11 @@ class PacienteController extends Controller
         }
 
         if(strval($request->ind_cur) !== "0"){
+
             $procedimiento_servicio = new ProcedimientoServicio();
-            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_ficha_atencion = $request->id_ficha_atencion;
             $procedimiento_servicio->id_paciente = $request->id_paciente;
             $procedimiento_servicio->id_responsable = Auth::user()->id;
             // crear un array con los datos
@@ -965,9 +975,9 @@ class PacienteController extends Controller
             // Convertir el array a JSON
             $datos_json = json_encode($datos);
             $procedimiento_servicio->datos_procedimiento = $datos_json;
-            // $procedimiento_servicio->save();
+            $procedimiento_servicio->save();
 
-            $this->guardarCuracion($request->ind_cur, $request->id_paciente);
+            $this->guardarCuracion($request->ind_cur, $request->id_paciente, $request->id_lugar_atencion, $procedimiento_servicio->id);
         }
 
         $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
@@ -1018,16 +1028,18 @@ class PacienteController extends Controller
             return $curaciones;
     }
 
-    public function guardarCuracion($nombre_procedimiento, $id_paciente){
+    public function guardarCuracion($nombre_procedimiento, $id_paciente, $id_lugar_atencion, $id_procedimiento_servicio){
+
+        $institucion = Instituciones::where('id_lugar_atencion',$id_lugar_atencion)->first();
         // guardar curacion
         $nueva_curacion = new CuracionesServicio();
-        $nueva_curacion->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+        $nueva_curacion->id_institucion = $institucion->id; // Se debe cambiar por la institucion del profesional
         $nueva_curacion->id_servicio = 4; // Se debe cambiar por el servicio del profesional
         $nueva_curacion->id_paciente = $id_paciente;
         $nueva_curacion->id_responsable = Auth::user()->id;
         $nueva_curacion->otros = '';
         $nueva_curacion->otros_2 = '';
-
+        $nueva_curacion->id_procedimiento = $id_procedimiento_servicio;
         // crear un array con los datos
         $datos = [
             'nombre_procedimiento' => $nombre_procedimiento,
@@ -1044,7 +1056,14 @@ class PacienteController extends Controller
 
     public function eliminarCuracion(Request $req){
         try {
+
             $curacion = CuracionesServicio::where('id', $req->id)->first();
+            $id_procedimiento_servicio = $curacion->id_procedimiento;
+            // eliminamos el procedimiento asociado
+            $procedimiento = ProcedimientoServicio::where('id', $id_procedimiento_servicio)->first();
+            if(isset($procedimiento)){
+                $procedimiento->delete();
+            }
             $curacion->delete();
             $procedimientos = $this->dameTodosProcedimientosPaciente($req->id_paciente);
             $curaciones = $this->dameCuracionesPaciente($req->id_paciente);
@@ -1070,6 +1089,12 @@ class PacienteController extends Controller
         try {
 
             $procedimiento = ProcedimientoServicio::where('id', $request->id)->first();
+            $id_procedimiento_servicio = $procedimiento->id;
+            // verificamos si es una curacion
+            $curacion = CuracionesServicio::where('id_procedimiento', $id_procedimiento_servicio)->first();
+            if(isset($curacion)){
+                $curacion->delete();
+            }
             $procedimiento->delete();
             $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
             $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
@@ -1124,6 +1149,12 @@ class PacienteController extends Controller
     }
 	static public function generarEmailPacienteTemporal($nombre, $apellido_uno, $apellido_dos)
     {
+        // Usar un email temporal compartido para todos los pacientes sin email
+        // Esto permite agregar posteriormente un email real sin conflictos
+        return 'sintemporal@med-sdi.cl';
+
+        // Alternativa: Si se prefiere mantener emails únicos, descomentar el código siguiente
+        /*
         // Limpieza de caracteres especiales y espacios
         $nombre = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $nombre));
         $apellido_uno = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $apellido_uno));
@@ -1144,5 +1175,6 @@ class PacienteController extends Controller
 
         // Retornar el correo generado
         return $correo;
+        */
     }
 }

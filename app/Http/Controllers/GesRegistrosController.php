@@ -60,55 +60,57 @@ class GesRegistrosController extends Controller
             {
                 $token_profesional = $temp_token['certificado'];
                 $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
-                $qr_profesional = GeneradorQrController::generar($url_documento);
+                $qr_profesional = GeneradorQrController::generar($url_profesional);
             }
             else
             {
-                // $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
-                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $id, 11, $id);
+                // $temp_token = CertificadoController::certificadoProfesional(rand(100,999));
+                $temp_token = CertificadoController::certificadoProfesional(rand(100,999), $id, 11, $id);
                 $token_profesional = $temp_token['certificado'];
                 $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
-                $qr_profesional = GeneradorQrController::generar($url_documento);
+                $qr_profesional = GeneradorQrController::generar($url_profesional);
             }
 
-            $array_paciente = array(
-                'id' => $paciente->id,
-                'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
-                'fecha_nac' => $paciente->fecha_nac,
-                'rut' => $paciente->rut,
-                'sexo' => $paciente->sexo,
-                'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre,
-                'email' => $paciente->email,
-                'telefono_uno' => $paciente->telefono_uno,
-            );
+            $array_profesional = array(
+                    'id' => $profesional->id,
+                    'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                    'rut' => $profesional->rut,
+                    'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                    'id_especialidad' => $profesional->id_especialidad,
+                    'num_colegio' => $profesional->num_colegio,
+                    'token' =>  $token_profesional,
+                    'url' =>  $url_profesional,
+                    'qr' =>  $qr_profesional,
+                );
+                $array_paciente = array(
+                    'id' => $paciente->id,
+                    'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                    'fecha_nac' => $paciente->fecha_nac,
+                    'rut' => $paciente->rut,
+                    'sexo' => $paciente->sexo,
+                    'telefono_uno' => $paciente->telefono_uno,
+                    'email' => $paciente->email,
+                    'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+                );
 
 
-            $array_lugar_atencion = array(
-                'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
-            );
+
 
             // array solicitud
             $array_ficha_atencion = array(
-                'id' => $ficha_atencion->id,
-                'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
-                'token' => $token_receta,
-                'url' => $url_documento,
-                'qr' => $qr_documento,
-            );
+                    'id' => $ficha_atencion->id,
+                    'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                    'token' => $token_receta,
+                    'url' => $url_documento,
+                    'qr' => $qr_documento,
+                );
             $array_lugar_atencion = array(
-                'id' => $lugar_atencion->id,
-                'nombre' => $lugar_atencion->nombre
-            );
-            $array_profesional = array(
-                'id' => $profesional->id,
-                'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
-                'rut' => $profesional->rut,
-                'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
-                'token' =>  $token_profesional,
-                'url' =>  $url_profesional,
-                'qr' =>  $qr_profesional,
-            );
+                    'id' => $lugar_atencion->id,
+                    'nombre' => $lugar_atencion->nombre,
+                    'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                    'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                    'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
+                );
             $array = array(
                 'id' => $registros->id,
                 'nombre_institucion_ficha_ges' => $registros->nombre_institucion_ficha_ges,
@@ -164,57 +166,52 @@ class GesRegistrosController extends Controller
         {
             $token_profesional = $temp_token['certificado'];
             $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
-            $qr_profesional = GeneradorQrController::generar($url_documento);
+            $qr_profesional = GeneradorQrController::generar($url_profesional);
         }
         else
         {
-            $temp_token = CertificadoController::certificadoProfesional(rand(111111,999999), date('YmdHis'), 11, date('YmdHis'));
-
-            var_dump($temp_token);
+            $temp_token = CertificadoController::certificadoProfesional(rand(100,999), date('YmdHis'), 11, date('YmdHis'));
 
             $token_profesional = $temp_token['certificado'];
             $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
-            $qr_profesional = GeneradorQrController::generar($url_documento);
+            $qr_profesional = GeneradorQrController::generar($url_profesional);
         }
 
-        $array_paciente = array(
-            'id' => $paciente->id,
-            'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
-            'fecha_nac' => $paciente->fecha_nac,
-            'rut' => $paciente->rut,
-            'sexo' => $paciente->sexo,
-            'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre,
-            'email' => $paciente->email,
-            'telefono_uno' => $paciente->telefono_uno,
-        );
-
-
-        $array_lugar_atencion = array(
-            'id' => $lugar_atencion->id,
-            'nombre' => $lugar_atencion->nombre
-        );
-
-        // array solicitud
         $array_ficha_atencion = array(
-            'id' => $ficha_atencion->id,
-            'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
-            'token' => $token_receta,
-            'url' => $url_documento,
-            'qr' => $qr_documento,
-        );
-        $array_lugar_atencion = array(
-            'id' => $lugar_atencion->id,
-            'nombre' => $lugar_atencion->nombre
-        );
-        $array_profesional = array(
-            'id' => $profesional->id,
-            'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
-            'rut' => $profesional->rut,
-            'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
-            'token' =>  $token_profesional,
-            'url' =>  $url_profesional,
-            'qr' =>  $qr_profesional,
-        );
+                    'id' => $ficha_atencion->id,
+                    'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+                    'token' => $token_receta,
+                    'url' => $url_documento,
+                    'qr' => $qr_documento,
+                );
+                $array_lugar_atencion = array(
+                    'id' => $lugar_atencion->id,
+                    'nombre' => $lugar_atencion->nombre,
+                    'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+                    'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+                    'comuna' => $lugar_atencion->direccion->Ciudad()->first()->nombre
+                );
+                $array_profesional = array(
+                    'id' => $profesional->id,
+                    'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+                    'rut' => $profesional->rut,
+                    'especialidad' => ($profesional->SubTipoEspecialidad()->first()?$profesional->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                    'id_especialidad' => $profesional->id_especialidad,
+                    'num_colegio' => $profesional->num_colegio,
+                    'token' =>  $token_profesional,
+                    'url' =>  $url_profesional,
+                    'qr' =>  $qr_profesional,
+                );
+                $array_paciente = array(
+                    'id' => $paciente->id,
+                    'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+                    'telefono_uno' => $paciente->telefono_uno,
+                    'email' => $paciente->email,
+                    'fecha_nac' => $paciente->fecha_nac,
+                    'rut' => $paciente->rut,
+                    'sexo' => $paciente->sexo,
+                    'direccion' => $paciente->Direccion()->first()->direccion.' '.$paciente->Direccion()->first()->numero_dir.', '.$paciente->Direccion()->first()->Ciudad()->first()->nombre
+                );
         $array = array(
             'nombre_institucion_ficha_ges' => $nombre_institucion_ficha_ges,
             'direccion_institucion_ficha_ges' => $direccion_institucion_ficha_ges,

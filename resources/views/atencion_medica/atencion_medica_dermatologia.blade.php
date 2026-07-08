@@ -53,9 +53,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    {{--  <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam_tab" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
-                                    </li>  --}}
+                                    </li>
                                     {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
                                     </li>  --}}
@@ -107,12 +107,11 @@
         @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 		@include("general.modal.modal_no_disponible")
         <!--Modals de especialidad -->
-        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
+        @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+        @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 
         <!--Modals formularios generales-->
-        {{-- @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes") --}}
-        {{-- @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos") --}}
-        {{-- @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
+
 
 
     </div>

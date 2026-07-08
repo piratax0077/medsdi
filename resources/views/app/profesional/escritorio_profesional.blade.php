@@ -65,7 +65,7 @@
                             <a href="{{ route('profesional.index_transcripcion_examen') }}">
                                 <div class="card-body text-center px-2" style="cursor:pointer">
                                     <img class="wid-40 text-center" src="{{ asset('images/iconos/examenes-ro.svg') }}">
-                                    <h6 class="mt-1 f-13">Transcripción <br>examenes</h6>
+                                    <h6 class="mt-1 f-13">Informar <br>examenes</h6>
                                 </div>
                             </a>
                         </div>
@@ -81,7 +81,7 @@
                         <div class="card-header text-center bg-c-info">
                             <div class="row">
                                 <div class="col-sm-4 d-inline text-left">
-                                    <h5 class="text-white my-2" style="font-size: 1.1rem;">Mi agenda del día</h5>
+                                     <h6 class="text-white my-2 f-20"><i class="feather icon-calendar"></i> Mi agenda del día</h6>
                                 </div>
                                 <div class="col-md-4 d-inline text-right mt-1">
 									<select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm" onchange="buscar_hora_medica();">
@@ -94,61 +94,71 @@
                             </div>
                         </div>
                         <div class="card-body pb-0 pt-4">
-                            <div class="dt-responsive table-responsive align-middle pb-0">
+                            <div class="dt-responsive table-responsive" style="height:245px;">
                                 <table id="simpletable" class="table table-striped table-bordered nowrap table-sm"
                                     style="height: 100px">
                                     <thead>
                                         <tr>
-                                            <th class="text-center align-left">Hora</th>
-                                            <th class="text-center align-left">Paciente</th>
-                                            <th class="text-center align-left">Lugar Atención</th>
+                                            <th class="align-left">Hora</th>
+                                            <th class="align-left">Paciente</th>
+                                            <th class="align-left">Lugar Atención</th>
                                             <!--<th class="text-center align-middle">Acción</th>-->
                                         </tr>
                                     </thead>
                                    <tbody>
-                                        @if (isset($hora_dia))
-                                            @foreach ($hora_dia as $hd)
-                                                <tr>
-                                                    <td class="text-center align-left">{{ $hd->hora_inicio }}</td>
-                                                    <td class="text-center align-left bg-estado-light-amarillo">
-                                                        <strong>
-															<span>{{ $hd->paciente->nombres . ' ' . $hd->paciente->apellido_uno . ' ' . $hd->paciente->apellido_dos }}</span>
-														<strong>
-														<!--<br style="line-height: 1%;"><span>{{ $hd->paciente->rut }}</span>-->
-                                                    </td>
-                                                    <td class="text-center align-left">{{ $hd->lugar_atencion->nombre }}</td>
-                                                    <!--
-                                                    <td class="text-center align-middle">
-                                                        <button href="#!" class="btn btn-info btn-sm btn-icon"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="Atender Paciente"><i class="feather icon-check"></i>
-                                                        </button>
-                                                        <button href="#!" class="btn btn-danger btn-sm btn-icon"
-                                                            data-toggle="tooltip" data-placement="top"
-                                                            title="Anular Hora"><i class="feather icon-x"></i>
-                                                        </button>
-                                                    </td>
-                                                    -->
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                        @endif
+                                        @foreach ($hora_dia as $hd)
+                                            <tr>
+                                                <td>{{ $hd->hora_inicio }}</td>
+                                                <td class="bg-estado-light-amarillo">
+                                                    <strong>
+                                                        @if ($hd->paciente)
+                                                            <span>
+                                                                {{ $hd->paciente->nombres . ' ' . $hd->paciente->apellido_uno . ' ' . $hd->paciente->apellido_dos }}
+                                                            </span>
+                                                        @else
+                                                            <span class="text-danger">
+                                                                ⚠️ Paciente no encontrado (ID hora: {{ $hd->id }} - paciente_id: {{ $hd->paciente_id }})
+                                                            </span>
+                                                        @endif
+                                                    </strong>
+                                                </td>
+                                                <td class="text-center align-left">
+                                                    {{ $hd->lugar_atencion->nombre ?? '⚠️ Sin lugar de atención' }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                 <div class="col-md-4 mb-3">
-                    <div class="card subir text-center h-100">
-                        <img class="img-fluid card-img-top" src="{{ asset('images/iconos/inscripciones_1.svg') }}"
-                            alt="Farmacrónicos">
-                         <a href="http://cronicos.cl/registro.php" target="_blank" class="btn  btn-arrastre" type="button">
-                            <div class="card-body">
-                                <h5 style="font-size: 1.2rem;" class="card-title pt-2">Inscripción en Farmacrónicos</h5>
-                                <p class="card-text">Inscriba a sus Pacientes en crónicos.cl <br> Obtendrá Importantes Novedades en el Manejo de su Patología<br> y en el uso de sus Medicamentos</p>
+                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
+                    <div class="card h-100 profesional-card p-3">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="profesional-icon mr-4">
+                                    <img class="rounded-circle" src="{{ asset('images/iconos/profesional_no_inscrito.svg') }}">
+                                </div>
+                                <div class="media-body">
+
+                                    <h4 class="profesional-title mb-3">
+                                        Registro en Crónicos.cl
+                                    </h4>
+
+                                    <p class="profesional-text mb-0">
+                                        Registre a sus pacientes y manténgalos informados sobre su patología y tratamiento.
+                                    </p>
+
+                                </div>
                             </div>
-                        </a>
+                            <div class="profesional-divider"></div>
+                            <a href="http://cronicos.cl/registro.php" target="_blank" class="btn btn-block profesional-btn">
+                                Registrar paciente
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -195,7 +205,7 @@
                             <a href="{{ route('app.descarga') }}" class="btn" type="button" target="_blank">
                                 <div class="card-body">
                                     <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
-                                    <h5 class="my-auto text-white">SDIPASS</h5>
+                                    <h5 class="my-auto text-white">Descarga la App SDIPASS</h5>
                                 </div>
                             </a>
                         </div>

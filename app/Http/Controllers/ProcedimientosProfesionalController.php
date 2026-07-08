@@ -17,6 +17,7 @@ class ProcedimientosProfesionalController extends Controller
     public function index()
     {
         $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+
         $lugares = $profesional->LugaresAtencion()->get();
 
         $procedimientos = ProcedimientosCentroLugarAtencionProfesional::select(
@@ -33,6 +34,37 @@ class ProcedimientosProfesionalController extends Controller
             'profesional' => $profesional,
             'lugares' => $lugares,
             'procedimientos' => $procedimientos,
+        ]);
+    }
+
+    /**
+     * Actualizar un procedimiento propio (por ejemplo, para cambiar minutos o cantidad de bloques).
+     */
+    public function update(Request $request, ProcedimientosCentroLugarAtencionProfesional $procedimiento){
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+
+        if ($procedimiento->id_profesional !== $profesional->id) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No tienes permisos para actualizar este procedimiento.',
+            ], 403);
+        }
+
+        $request->validate([
+            'minutos_bloque' => 'required|integer|min:1',
+            'cantidad_bloques' => 'required|integer|min:1',
+            'otros' => 'nullable|string',
+        ]);
+
+        $procedimiento->minutos_bloque = $request->minutos_bloque;
+        $procedimiento->cantidad_bloques = $request->cantidad_bloques;
+        $procedimiento->otros = $request->otros;
+        $procedimiento->save();
+
+        return response()->json([
+            'estado' => 1,
+            'mensaje' => 'Procedimiento actualizado con éxito.',
+            'procedimiento' => $procedimiento,
         ]);
     }
 
@@ -102,12 +134,35 @@ class ProcedimientosProfesionalController extends Controller
             ], 403);
         }
 
-        $procedimiento->estado = 0;
-        $procedimiento->save();
+        $procedimiento->delete();
 
         return response()->json([
             'estado' => 1,
             'mensaje' => 'Procedimiento eliminado.',
+        ]);
+    }
+
+    /**
+     * Activar o desactivar un procedimiento propio.
+     */
+    public function toggleEstado(ProcedimientosCentroLugarAtencionProfesional $procedimiento)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->firstOrFail();
+
+        if ($procedimiento->id_profesional !== $profesional->id) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No tienes permisos para modificar este procedimiento.',
+            ], 403);
+        }
+
+        $procedimiento->estado = $procedimiento->estado == 1 ? 0 : 1;
+        $procedimiento->save();
+
+        return response()->json([
+            'estado'    => 1,
+            'nuevo_estado' => $procedimiento->estado,
+            'mensaje'   => $procedimiento->estado == 1 ? 'Procedimiento activado.' : 'Procedimiento desactivado.',
         ]);
     }
 }

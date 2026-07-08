@@ -3,7 +3,7 @@
         <div class="modal-content" >
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">LAMINAS PRAXIAS</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modal_lam_praxias').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -169,9 +169,9 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="submit" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+           <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"onclick="$('#modal_lam_praxias').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('modal_lam_praxias');">Enviar al Paciente</button>
             </div>
         </div>
     </div>

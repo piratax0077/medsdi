@@ -117,7 +117,6 @@
         </div>
         <div class="card-footer">
             <button type="button" class="btn btn-info btn-icon" onclick="guardar_nueva_pieza_ex_radio({{ $counter }})"><i class="feather icon-save"></i></button>
-            <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_nueva_pieza_dental_rx({{ $counter }})"><i class="feather icon-x"></i></button>
         </div>
     </div>
 </div>
@@ -154,26 +153,13 @@ function initDropzone() {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         },
-        paramName: function() { return "file[]"; },  // Función que retorna el nombre del parámetro
+        paramName: "file[]",  // Enviar los archivos como un array
         acceptedFiles: "image/*",
         maxFilesize: 4,  // Tamaño máximo en MB
         maxFiles: 12,
         addRemoveLinks: true,
         dictDefaultMessage: "Arrastra una imagen aquí o haz clic para subirla.",
         dictRemoveFile: "Eliminar archivo",
-        accept: function(file, done) {
-            // Validar que los campos requeridos existan ANTES de aceptar el archivo
-            const idPaciente = $('#id_paciente_fc').val();
-            const idLugarAtencion = $('#id_lugar_atencion').val();
-            const idEspecialidad = $('#id_especialidad').val();
-            const idProfesional = $('#id_profesional_fc').val();
-
-            if (!idPaciente || !idLugarAtencion || !idEspecialidad || !idProfesional) {
-                done("Faltan datos requeridos. Por favor, asegúrate de que todos los campos estén completos.");
-            } else {
-                done(); // Aceptar el archivo
-            }
-        },
         success: function (file, response) {
             console.log("Imagen subida con éxito:", response);
         },
@@ -185,28 +171,23 @@ function initDropzone() {
                 status: xhr ? xhr.status : 'N/A',
                 responseText: xhr ? xhr.responseText : 'N/A'
             });
-
+            
             // Mostrar mensaje de error más detallado
             let errorMsg = message;
             if (xhr && xhr.responseJSON && xhr.responseJSON.message) {
                 errorMsg = xhr.responseJSON.message;
-                if (xhr.responseJSON.errors) {
-                    errorMsg += "\n" + Object.values(xhr.responseJSON.errors).flat().join(', ');
-                }
             } else if (xhr && xhr.responseJSON && xhr.responseJSON.errors) {
                 errorMsg = Object.values(xhr.responseJSON.errors).flat().join(', ');
             }
-
-            swal({
-                title: "Error al subir imagen",
-                text: errorMsg,
-                icon: "error",
-                buttons: "Aceptar"
-            });
+            
+            // swal({
+            //     title: "Error al subir imagen",
+            //     text: errorMsg,
+            //     icon: "error",
+            //     buttons: "Aceptar"
+            // });
         },
         sending: function (file, xhr, formData) {
-            console.log("🚀 Evento sending disparado para:", file.name);
-
             // Verifica si formData es válido antes de agregar los datos
             if (formData) {
                 // Agregar parámetros adicionales a formData con validación
@@ -216,30 +197,27 @@ function initDropzone() {
                 const idProfesionalEl = document.getElementById('id_profesional_fc');
                 const idExamenRxEl = document.getElementById('id_examen_oral_rx');
 
-                const idPaciente = idPacienteEl ? idPacienteEl.value : null;
-                const idLugarAtencion = idLugarAtencionEl ? idLugarAtencionEl.value : null;
-                const idEspecialidad = idEspecialidadEl ? idEspecialidadEl.value : null;
-                const idProfesional = idProfesionalEl ? idProfesionalEl.value : null;
-                const idExamenRx = idExamenRxEl ? idExamenRxEl.value : null;
+                const idPaciente = idPacienteEl ? idPacienteEl.value : '';
+                const idLugarAtencion = idLugarAtencionEl ? idLugarAtencionEl.value : '';
+                const idEspecialidad = idEspecialidadEl ? idEspecialidadEl.value : '';
+                const idProfesional = idProfesionalEl ? idProfesionalEl.value : '';
+                const idExamenRx = idExamenRxEl ? idExamenRxEl.value : '';
 
-                console.log("📋 Valores obtenidos:", {
+                formData.append("id_paciente", idPaciente);
+                formData.append("id_lugar_atencion", idLugarAtencion);
+                formData.append("id_especialidad", idEspecialidad);
+                formData.append("id_profesional", idProfesional);
+                formData.append("id_examen", idExamenRx);
+
+                console.log("Datos adicionales enviados:", {
                     id_paciente: idPaciente,
                     id_lugar_atencion: idLugarAtencion,
                     id_especialidad: idEspecialidad,
                     id_profesional: idProfesional,
                     id_examen: idExamenRx
                 });
-
-                // Solo agregar si tienen valor
-                if (idPaciente) formData.append("id_paciente", idPaciente);
-                if (idLugarAtencion) formData.append("id_lugar_atencion", idLugarAtencion);
-                if (idEspecialidad) formData.append("id_especialidad", idEspecialidad);
-                if (idProfesional) formData.append("id_profesional", idProfesional);
-                if (idExamenRx) formData.append("id_examen", idExamenRx);
-
-                console.log("✅ FormData preparado para envío");
             } else {
-                console.error("❌ formData no está disponible");
+                console.error("formData no está disponible");
             }
         }
     });
@@ -310,6 +288,8 @@ function guardar_nueva_pieza_ex_radio(counter){
         id_fc: id_ficha_atencion
     };
 
+    console.log(data);
+
     let url = "{{ ROUTE('profesional.guardar_pieza_dental_examen_oral_rx') }}";
 
     $.ajax({
@@ -342,7 +322,7 @@ function guardar_nueva_pieza_ex_radio(counter){
             // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
             if (dropzone.getQueuedFiles().length > 0) {
                 console.log("Iniciando carga de imágenes...");
-
+                
                 // Validar que todos los campos requeridos existan antes de procesar
                 const requiredFields = {
                     id_paciente: $('#id_paciente_fc').val(),
@@ -351,23 +331,23 @@ function guardar_nueva_pieza_ex_radio(counter){
                     id_profesional: $('#id_profesional_fc').val(),
                     id_examen: resp.rx.id
                 };
-
+                
                 console.log("Validando campos requeridos:", requiredFields);
-
+                
                 // Verificar si algún campo está vacío
                 const camposVacios = Object.entries(requiredFields).filter(([key, value]) => !value || value === '');
-
-                if (camposVacios.length > 0) {
-                    console.error("Campos vacíos detectados:", camposVacios);
-                    swal({
-                        title: "Error",
-                        text: "Faltan datos requeridos para subir las imágenes: " + camposVacios.map(([key]) => key).join(', '),
-                        icon: "error",
-                        buttons: "Aceptar"
-                    });
-                    return;
-                }
-
+                
+                // if (camposVacios.length > 0) {
+                //     console.error("Campos vacíos detectados:", camposVacios);
+                //     swal({
+                //         title: "Error",
+                //         text: "Faltan datos requeridos para subir las imágenes: " + camposVacios.map(([key]) => key).join(', '),
+                //         icon: "error",
+                //         buttons: "Aceptar"
+                //     });
+                //     return;
+                // }
+                
                 // Desvinculamos el evento "queuecomplete" antes de procesar la cola
                 dropzone.off("queuecomplete");
 
@@ -404,7 +384,7 @@ function guardar_nueva_pieza_ex_radio(counter){
                 //initDropzone();  // Asegúrate de que la función initDropzone esté disponible
 
             }
-            mostrar_nueva_pieza_ex_radio(1000)
+            mostrar_nueva_pieza_ex_radio(1000);
         },
         error: function(error){
             console.log(error);
@@ -416,8 +396,31 @@ function recargar_imagenes_od_gral() {
     // Aquí puedes implementar la lógica para recargar las imágenes de odontología general
     console.log("Recargando imágenes de odontología general...");
     // Por ejemplo, podrías hacer una llamada AJAX para obtener las imágenes actualizadas
+    $.ajax({
+        url: '{{ route("profesional.recargar_imagenes_dental_general_paciente") }}',
+        type: 'POST',
+        data:{
+            id_paciente: $('#id_paciente_fc').val(),
+            seccion: "gral",
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            console.log(response);
+            console.log("Imágenes recargadas correctamente.");
+            // Aquí podrías actualizar el DOM si es necesario
+            $('#pieza_dentalrx').html(response.v);
+            // Si estás usando select2, asegúrate de re-inicializarlo
+            $('#rx_numero_pieza').select2({
+                width: '100%',
+                placeholder: 'Seleccionar pieza(s)',
+                allowClear: true
+            });
+        },
+        error: function(error) {
+            console.error("Error al recargar imágenes:", error);
+        }
+    })
 }
-
 
 function ocultar_nueva_pieza_dental_rx(){
     $('#contenedor_examenes_oral_rx').empty();

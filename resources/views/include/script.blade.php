@@ -31,4 +31,3 @@
 <!--Botón cards-->
 <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
-

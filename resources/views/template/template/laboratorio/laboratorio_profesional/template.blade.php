@@ -72,6 +72,10 @@
     <script src="{{ asset('js/pages/data-responsive-custom.js') }}"></script>
     <script src="{{ asset('js/modals_dental.js') }}"></script>
 
+    <!-- SELECT2 -->
+    <script src="{{ asset('js/plugins/select2.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}"/>
+
     <!-- bootstrap-tagsinput-latest Js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="{{ asset('js/plugins/bootstrap-tagsinput.min.js') }}"></script>

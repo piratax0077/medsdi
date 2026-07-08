@@ -9,6 +9,8 @@ use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AdminLugarAtencion;
 use App\Models\AsistenteTipo;
+use App\Models\Contador;
+use App\Models\ContadorLugarAtencion;
 use App\Models\ContratoDependiente;
 use App\Models\ContratoDependienteProfesional;
 use App\Models\ContratoConvenioProfesional;
@@ -20,6 +22,8 @@ use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\MantencionLugarAtencion;
+use App\Models\Vendedor;
+use App\Models\VendedorLugarAtencion;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\Servicios;
 use App\Models\TipoProfesional;
@@ -30,6 +34,7 @@ use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use PDF;
 
 use Carbon\Carbon;
 
@@ -1033,6 +1038,7 @@ class ManejoContratoController extends Controller
             $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO');
             $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO','CONTADOR','ENCARGADO DE BODEGA');
             $lista_tipo_mantencion = array('GASFITERÍA', 'ELECTRICIDAD', 'CARPINTERÍA', 'PINTURA', 'JARDINERÍA', 'LIMPIEZA', 'MANTENCIÓN');
+            $lista_tipo_venta = array('VENDEDOR', 'VENDEDORA', 'VENDEDOR ONLINE', 'VENDEDORA ONLINE');
 
             /** registro asistente */
             if(in_array($request->tipo_contrato, $lista_tipo_asitente))
@@ -1165,6 +1171,60 @@ class ManejoContratoController extends Controller
                             $datos['asignacion']['estado'] = 0;
                             $datos['asignacion']['msj'] = 'Asignacion de administrativo fallida';
                         }
+
+                        // Si el tipo de contrato es CONTADOR, crear también registro en contadores
+                        if(strtoupper($request->tipo_contrato) == 'CONTADOR')
+                        {
+                            // Obtener el registro administrativo para acceder a id_direccion
+                            $admin_registro = AdminInstServ::find($id_admin);
+
+                            // Crear registro en tabla contadores
+                            $contador = new Contador();
+                            $contador->rut = $request->rut;
+                            $contador->nombres = $request->nombre;
+                            $contador->apellido_uno = $request->apellido_uno;
+                            $contador->apellido_dos = $request->apellido_dos;
+                            $contador->telefono_uno = $request->telefono;
+                            $contador->sexo = $request->sexo ?? null;
+                            $contador->email = $request->email;
+                            $contador->fecha_nac = $request->fecha_nacimiento ?? null;
+                            $contador->id_direccion = $admin_registro->id_direccion ?? null;
+                            $contador->id_usuario = $id_admin_user ?? null;
+                            $contador->bienvenido = '0';
+
+                            if($contador->save())
+                            {
+                                $datos['contador']['estado'] = 1;
+                                $datos['contador']['msj'] = 'Contador registrado exitosamente';
+                                $datos['contador']['id'] = $contador->id;
+
+                                // Crear relación contador_lugar_atencion
+                                $contador_lugar_atencion = new ContadorLugarAtencion();
+                                $contador_lugar_atencion->id_contador = $contador->id;
+                                $contador_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                                $contador_lugar_atencion->token = $request->clave_ingreso;
+                                $contador_lugar_atencion->id_profesional = NULL;
+                                $contador_lugar_atencion->id_institucion = $request->id_institucion;
+                                $contador_lugar_atencion->examen = 0;
+                                $contador_lugar_atencion->estado = 1;
+
+                                if($contador_lugar_atencion->save())
+                                {
+                                    $datos['contador_asignacion']['estado'] = 1;
+                                    $datos['contador_asignacion']['msj'] = 'Asignación de contador a lugar de atención exitosa';
+                                }
+                                else
+                                {
+                                    $datos['contador_asignacion']['estado'] = 0;
+                                    $datos['contador_asignacion']['msj'] = 'Asignación de contador a lugar de atención fallida';
+                                }
+                            }
+                            else
+                            {
+                                $datos['contador']['estado'] = 0;
+                                $datos['contador']['msj'] = 'Error al registrar contador';
+                            }
+                        }
                     }
                     else
                     {
@@ -1249,6 +1309,75 @@ class ManejoContratoController extends Controller
                 }
 
 
+            }
+            else if(in_array((strtoupper($request->tipo_contrato)), $lista_tipo_venta))
+            {
+                $result_registro_perfil_vendedor = static::registroPerfilVendedor($request);
+                $datos['result_registro_perfil'] = $result_registro_perfil_vendedor;
+
+                if($result_registro_perfil_vendedor['estado'] == 1){
+                    $id_vendedor = $result_registro_perfil_vendedor['result']->id_vendedor;
+                    $id_vendedor_user = $result_registro_perfil_vendedor['result']->id_vendedor_usuario;
+
+                    /** CREAR CONTRATO */
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                    {
+                        $lista_roles .= $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+
+                    /**
+                     * # TIPOS DE CONTRATOS DEPENDIENTES
+                     * 1. CONTRATO INDEFINIDO
+                     * 2. CONTRATO DEFINIDO
+                     * */
+                    $tipo_contrato = 1;
+                    if(!empty($request->fecha_termino))
+                        $tipo_contrato = 2;
+
+                    $id_empleado = $id_vendedor;
+
+                    $registro_contrato = static::registrarContrato( $request->tipo_contrato, $request->tipo_mantenedor, $id_empleado, $request->rut, $request->nombre, $request->apellido_uno, $request->apellido_dos, $request->telefono, $request->email, $request->id_institucion, $request->id_lugar_atencion, $tipo_contrato, $request->fecha_inicio, $request->fecha_termino, $request->monto_imponible, $request->locomocion, $request->locomocion_porcentaje, $request->colacion, $request->colacion_porcentaje, $request->asignacion_familiar, $request->asignacion_familiar_cantidad, $request->caja_compensacion, $request->caja_compensacion_porcentaje, $request->otro, implode(',', $request->dias_laborales), $request->hora_entrada, $request->hora_salida, $request->hora_entrada_colacion, $request->hora_salida_colacion, date('Y-m-d'), Auth::user()->id, $lista_roles, '', '', 0, 0, 0, $request->otro_2, 2);
+                    $datos['registro_contrato'] = $registro_contrato;
+
+                    if($registro_contrato->estado == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Contrato generado';
+
+                        // relacion de vendedor con institucion
+                        $vendedor_lugar_atencion = new VendedorLugarAtencion();
+                        $vendedor_lugar_atencion->id_vendedor = $id_vendedor;
+                        $vendedor_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
+                        $vendedor_lugar_atencion->token = $request->clave_ingreso;
+                        $vendedor_lugar_atencion->id_profesional = NULL;
+                        $vendedor_lugar_atencion->id_institucion = $request->id_institucion;
+                        $vendedor_lugar_atencion->estado = 1;
+
+                        if($vendedor_lugar_atencion->save())
+                        {
+                            $datos['asignacion']['estado'] = 1;
+                            $datos['asignacion']['msj'] = 'Asignacion de vendedor exitosa';
+                        }
+                        else
+                        {
+                            $datos['asignacion']['estado'] = 0;
+                            $datos['asignacion']['msj'] = 'Asignacion de vendedor fallida';
+                        }
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Problema al generar contrato';
+                    }
+
+                }else{
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema con el perfil del Vendedor';
+                }
             }
             else
             {
@@ -1374,6 +1503,7 @@ class ManejoContratoController extends Controller
 
         /** CARGA DE ASISTENTES */
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+
         $lista_asistente = array();
         if($LugarAtencion)
         {
@@ -1383,7 +1513,6 @@ class ManejoContratoController extends Controller
             {
                 foreach ($lista_asistente as $key => $value)
                 {
-
                     /** roles */
                     $usuario = User::where('id', $value->id_usuario)->first();
 
@@ -1435,10 +1564,12 @@ class ManejoContratoController extends Controller
             $valido = 0;
         }
 
+
         if($valido)
         {
-            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO');
-            $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO','CONTADOR','ENCARGADO DE BODEGA');
+
+            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO','ASISTENTE DENTAL TECNICA');
+            $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO','CONTADOR','ENCARGADO DE BODEGA','ADMINISTRACIÓN TÉCNICA',"ADMINISTRACIóN TéCNICA");
             $lista_tipo_mantencion = array('GASFITERÍA', 'ELECTRICIDAD', 'CARPINTERÍA', 'PINTURA', 'JARDINERÍA', 'LIMPIEZA', 'MANTENCIÓN');
 
             /** registro asistente */
@@ -1559,7 +1690,7 @@ class ManejoContratoController extends Controller
                         $administrativo_lugar_atencion = new AdminLugarAtencion();
                         $administrativo_lugar_atencion->id_admin = $id_admin;
                         $administrativo_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
-                        $administrativo_lugar_atencion->token = $request->clave_ingreso;
+                        $administrativo_lugar_atencion->token = $request->clave_ingreso ? $request->clave_ingreso : '';
                         $administrativo_lugar_atencion->id_profesional = NULL;
                         $administrativo_lugar_atencion->id_institucion = $request->id_institucion;
                         $administrativo_lugar_atencion->estado = 1;
@@ -2400,8 +2531,92 @@ class ManejoContratoController extends Controller
                 }
                 else
                 {
-                    $datos['estado'] = 0;
-                    $datos['msj'] = 'Contrato no encontrado';
+
+
+                    // Entonces profesional por convenio sin contrato
+                                        $filtro = array();
+                    $filtro[] = array('id_profesional',$request->id_prof);
+                    $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+                    $filtro[] = array('estado',1);
+                    $registro_prof_lugar = ProfesionalesLugaresAtencion::where($filtro)->first();
+
+                    $registro_profesional->rut = $request->rut;
+                    $registro_profesional->nombre = $request->nombre;
+                    $registro_profesional->apellido_uno = $request->apellido1;
+                    $registro_profesional->apellido_dos = $request->apellido2;
+                    $registro_profesional->telefono_uno = $request->telefono1;
+                    if(!empty($request->telefono2))
+                        $registro_profesional->telefono_dos = $request->telefono2;
+                    $registro_profesional->sexo = $request->sexo;
+                    $registro_profesional->email = $request->email;
+                    $registro_profesional->fecha_nacimiento = $request->fecha_nacimiento;
+
+                    if($registro_profesional->save())
+                    {
+                        $datos['update_profesionales']['estado'] = 1;
+                        $datos['update_profesionales']['msj'] = 'Datos Profesional Actualizados';
+
+                        /** MODIFICAR DIRECCION */
+                        // $registro_asistente->id_direccion = $request->id_direccion;
+                        $registro_direccion = Direccion::find($registro_profesional->id_direccion);
+                        if($registro_direccion)
+                        {
+                            /** update de direccion */
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_profesional->save())
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 1;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Actualizados';
+                            }
+                            else
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 0;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Actualizacion con falla';
+                            }
+
+                        }
+                        else
+                        {
+                            /** registro direccion */
+                            $registro_direccion = new Direccion();
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_direccion->save())
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 1;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Registrada';
+
+                                $registro_profesional->id_direccion = $registro_direccion->id;
+                                if($registro_profesional->save())
+                                {
+                                    $datos['update_profesionales']['direccion']['registro']['estado'] = 1;
+                                    $datos['update_profesionales']['direccion']['registro']['msj'] = 'Datos Profesional Direccion Actualizado';
+                                }
+                                else
+                                {
+                                    $datos['update_profesionales']['direccion']['registro']['estado'] = 0;
+                                    $datos['update_profesionales']['direccion']['registro']['msj'] = 'Datos Profesional Direccon con Falla';
+                                }
+
+                            }
+                            else
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 0;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Registro con Falla';
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        $datos['update_profesionales']['estado'] = 0;
+                        $datos['update_profesionales']['msj'] = 'Datos Profesional Actualizacion con falla';
+                    }
                 }
 
             }
@@ -2863,6 +3078,7 @@ class ManejoContratoController extends Controller
             $valido = 0;
         }
 
+
         if($valido)
         {
             // $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA');
@@ -3080,6 +3296,7 @@ class ManejoContratoController extends Controller
 
     public function registroPerfilProfesional($registros)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -3233,6 +3450,43 @@ class ManejoContratoController extends Controller
                             $registro_profesional->id_usuario = $id_profesional_user;
                             $registro_profesional->save();
 
+                            /** GENERAR PDF DEL CONTRATO */
+                            $pdf_path = '';
+                            try {
+                                // Obtener información del lugar de atención si está disponible
+                                $lugar_atencion = null;
+                                if (!empty($registros->id_lugar_atencion)) {
+                                    $lugar_atencion = LugarAtencion::find($registros->id_lugar_atencion);
+                                }
+
+                                // Datos para el PDF
+                                $pdf_data = [
+                                    'profesional' => $registro_profesional,
+                                    'lugar_atencion' => $lugar_atencion,
+                                    'contrato' => null // El contrato se crea después, pero incluimos la estructura
+                                ];
+
+                                // Generar PDF
+                                $pdf = PDF::loadView('pdf.contrato_profesional', $pdf_data);
+
+                                // Crear directorio si no existe
+                                $contrato_dir = storage_path('app/contratos');
+                                if (!file_exists($contrato_dir)) {
+                                    mkdir($contrato_dir, 0755, true);
+                                }
+
+                                $pdf_filename = 'contrato_profesional_' . $registro_profesional->id . '_' . time() . '.pdf';
+                                $pdf_path = $contrato_dir . '/' . $pdf_filename;
+                                $pdf->save($pdf_path);
+
+                                $datos['pdf']['estado'] = 1;
+                                $datos['pdf']['msj'] = 'PDF generado exitosamente';
+                                $datos['pdf']['path'] = $pdf_path;
+                            } catch (\Exception $e) {
+                                $datos['pdf']['estado'] = 0;
+                                $datos['pdf']['msj'] = 'Error al generar PDF: ' . $e->getMessage();
+                            }
+
                             /** envio de correo de confirmacion  */
                             $blade = 'bienvenida_asistente_usuario';
                             $to = array(
@@ -3240,14 +3494,26 @@ class ManejoContratoController extends Controller
                                 );
                             $cc = array();
                             $bcc = array();
-                            $asunto = 'MED-SDI - Bienvenido!';
+                            $asunto = 'MED-SDI - Bienvenido! - Información de Contrato';
                             $body = array(
                                 'nombre' => $profesional_user->name,
                                 'user' => $profesional_user->email,
                                 'pass' => $pass_temp,
+                                'mensaje_contrato' => 'Adjunto encontrarás tu contrato profesional en formato PDF. Por favor revísalo detenidamente y devuélvelo firmado a la brevedad.'
                             );
-                            $archivo = '';/** pendiente */
-                            $id_institucion = '';
+
+                            // Adjuntar PDF si se generó correctamente
+                            $archivo = '';
+                            if (!empty($pdf_path) && file_exists($pdf_path)) {
+                                $archivo = array(
+                                    array(
+                                        'url' => $pdf_path,
+                                        'mime' => 'application/pdf'
+                                    )
+                                );
+                            }
+
+                            $id_institucion = $registros->id_institucion ?? '';
 
                             $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
 
@@ -3444,6 +3710,36 @@ class ManejoContratoController extends Controller
 
                     $id_administrativo = $registro_administrativo->id;
 
+                    // creamos un profesional para el administrativo
+                    $nuevo_prof = new Profesional();
+                    $nuevo_prof->nombre = $registro_administrativo->nombres;
+                    $nuevo_prof->apellido_uno = $registro_administrativo->apellido_uno;
+                    $nuevo_prof->apellido_dos = $registro_administrativo->apellido_dos;
+                    $nuevo_prof->sexo = $registro_administrativo->sexo;
+                    $nuevo_prof->rut = $registro_administrativo->rut;
+                    $nuevo_prof->fecha_nacimiento = $registro_administrativo->fecha_nac;
+                    $nuevo_prof->email = $registro_administrativo->email;
+                    $nuevo_prof->bienvenida = 0;
+                    $nuevo_prof->telefono_uno = $registro_administrativo->telefono_uno;
+                    $nuevo_prof->telefono_dos = $registro_administrativo->telefono_dos;
+                    $nuevo_prof->estado = 1;
+                    $nuevo_prof->certificado = 1;
+                    $nuevo_prof->id_usuario = (empty($id_admin_user))?0:$id_admin_user;
+
+
+                    $nuevo_prof->id_direccion = $registro_administrativo->id_direccion;
+
+                    if($nuevo_prof->save())
+                    {
+                        $datos['registro_profesional']['estado'] = 1;
+                        $datos['registro_profesional']['msj'] = 'registro';
+
+                        $id_profesional_user = 0;
+                    }else{
+                        $datos['registro_profesional']['estado'] = 0;
+                        $datos['registro_profesional']['msj'] = 'Problema al crear perfil';
+                    }
+
                     if(!empty($id_administrativo))
                     {
                         $administrativo_user = new User();
@@ -3455,6 +3751,10 @@ class ManejoContratoController extends Controller
                         {
                             $datos['user']['estado'] = 1;
                             $datos['user']['result'] = $administrativo_user;
+
+                            $nuevo_prof->id_usuario = $administrativo_user->id;
+                            $nuevo_prof->save();
+
                             // buscamos el rol
                             $rol = Roles::where('alias','like', '%'.$registros->tipo_contrato)->first();
 
@@ -3520,6 +3820,192 @@ class ManejoContratoController extends Controller
                         {
                             $datos['registro_administrativo']['update']['estado'] = 0;
                             $datos['registro_administrativo']['update']['msj'] = 'fallo registro';
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function registroPerfilVendedor($registros){
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($registros->rut))
+        {
+            $error['rut'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->nombre))
+        {
+            $error['nombre'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->apellido_uno))
+        {
+            $error['apellido_uno'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->apellido_dos))
+        {
+            $error['apellido_dos'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->sexo))
+        {
+            $error['sexo'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->email))
+        {
+            $error['email'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->telefono))
+        {
+            $error['telefono'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->direccion))
+        {
+            $error['direccion'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->ciudad))
+        {
+            $error['ciudad'] = 'Campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $validar_vendedor = Vendedor::where('email', $registros->email)->first();
+
+            if($validar_vendedor)
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Vendedor ya registrado';
+                $datos['result'] = $validar_vendedor;
+            }
+            else
+            {
+                $id_vendedor_user = 0;
+                $validarUsuarios = Paciente::where('email', $registros->email)->first();
+                if(!$validarUsuarios)
+                {
+                    $validarUsuarios = Profesional::where('email', $registros->email)->first();
+                }
+                else
+                {
+                    $id_vendedor_user = $validarUsuarios->id_usuario;
+                }
+
+                $registro_vendedor = new Vendedor();
+                $registro_vendedor->empresa = $registros->tipo_mantenedor ?? 0;
+                $registro_vendedor->nombre = $registros->nombre;
+                $registro_vendedor->apellido_paterno = $registros->apellido_uno;
+                $registro_vendedor->apellido_materno = $registros->apellido_dos;
+                $registro_vendedor->sexo = $registros->sexo;
+                $registro_vendedor->rut = $registros->rut;
+                $registro_vendedor->email = $registros->email;
+                $registro_vendedor->bienvenido = 0;
+                $registro_vendedor->telefono_uno = $registros->telefono;
+                $registro_vendedor->telefono_dos = '';
+                $registro_vendedor->estado = 1;
+                $registro_vendedor->id_admin = $id_vendedor_user;
+
+                $direccion = new Direccion();
+                $direccion->direccion = $registros->direccion;
+                $direccion->numero_dir = 123;
+                $direccion->id_ciudad = $registros->ciudad;
+
+                if($direccion->save())
+                {
+                    $registro_vendedor->id_direccion = $direccion->id;
+                    $datos['registro']['direccion']['estado'] = 1;
+                    $datos['registro']['direccion']['msj'] = 'registro exitoso';
+                }
+                else
+                {
+                    $registro_vendedor->id_direccion = 0;
+                    $datos['registro']['direccion']['estado'] = 0;
+                    $datos['registro']['direccion']['msj'] = 'falla al registrar';
+                }
+
+                if($registro_vendedor->save())
+                {
+                    $datos['registro_vendedor']['estado'] = 1;
+                    $datos['registro_vendedor']['msj'] = 'registro';
+
+                    $id_vendedor = $registro_vendedor->id;
+
+                    if(!empty($id_vendedor))
+                    {
+                        $vendedor_user = new User();
+                        $vendedor_user->email = $registro_vendedor->email;
+                        $pass_temp = rand(11111, 99999);
+                        $vendedor_user->password = Hash::make($pass_temp);
+                        $vendedor_user->name = $registro_vendedor->nombre.' '.$registro_vendedor->apellido_paterno.' '.$registro_vendedor->apellido_materno;
+
+                        if($vendedor_user->save())
+                        {
+                            $datos['user']['estado'] = 1;
+                            $datos['user']['result'] = $vendedor_user;
+
+                            $rol = Roles::where('alias', 'like', '%'.$registros->tipo_contrato)->first();
+                            if($rol)
+                                $vendedor_user->assignRole($rol->id);
+
+                            $id_vendedor_user = $vendedor_user->id;
+                            $registro_vendedor->id_admin = $id_vendedor_user;
+
+                            /** envio de correo de bienvenida */
+                            $blade = 'bienvenida_asistente_usuario';
+                            $to = array(
+                                array('email' => $vendedor_user->email, 'name' => $vendedor_user->name),
+                            );
+                            $asunto = 'MED-SDI - Bienvenido!';
+                            $body = array(
+                                'nombre' => $vendedor_user->name,
+                                'user'   => $vendedor_user->email,
+                                'pass'   => $pass_temp,
+                            );
+                            $result_mail = SendMailController::envioCorreo($blade, $to, [], [], $asunto, $body, '', '');
+                            $datos['mail']['estado'] = $result_mail['estado'] ? 1 : 0;
+                            $datos['mail']['msj']    = $result_mail['estado'] ? 'Notificacion de bienvenida enviada' : 'Falla en envio de notificacion';
+                        }
+                        else
+                        {
+                            $datos['user']['estado'] = 0;
+                            $datos['user']['result'] = $vendedor_user;
+                        }
+
+                        $registro_vendedor->id_admin = (empty($id_vendedor_user)) ? 0 : $id_vendedor_user;
+
+                        if($registro_vendedor->save())
+                        {
+                            $datos['registro_vendedor']['update']['estado'] = 1;
+                            $datos['registro_vendedor']['update']['msj'] = 'registro';
+                            $datos['estado'] = 1;
+                            $datos['msj'] = 'perfil creado';
+                            $datos['result'] = (object)array(
+                                'id_vendedor'         => $registro_vendedor->id,
+                                'id_vendedor_usuario' => $registro_vendedor->id_admin,
+                            );
+                        }
+                        else
+                        {
+                            $datos['registro_vendedor']['update']['estado'] = 0;
+                            $datos['registro_vendedor']['update']['msj'] = 'fallo registro';
                         }
                     }
                 }
@@ -4548,6 +5034,7 @@ class ManejoContratoController extends Controller
     /* MANEJOR CONTRATOS PROFESIONALES */
     public function registrarProfesional(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;

@@ -16,4 +16,5 @@ $('#buscar_clientes').click(function(){
 
 $('#recepcion_programa').click(function(){
     $('#sesiones_programa').toggle();
+
 });

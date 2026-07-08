@@ -1,11 +1,11 @@
 <div id="indicar_examen_fono" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_examen_fono" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
+
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Exámenes</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                </button>
-            </div>
+				<h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Exámenes</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#indicar_examen_fono').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
+			</div>
             <div class="modal-body">
                 <form>
                     <div class="form-row">
@@ -78,10 +78,10 @@
                     </div>
                 </form>
             </div>
+           
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">
-                Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"onclick="$('#indicar_examen_fono').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('indicar_examen_fono');">Enviar al Paciente</button>
             </div>
         </div>
     </div>

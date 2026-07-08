@@ -47,6 +47,7 @@ class EscritorioDependientesController extends Controller
                                                     // ->with('Relacion')
                                                     ->with('Tipodependencia')
                                                     ->where('id_responsable',$paciente->id)
+                                                    ->where('estado', 1)
                                                     ->get();
 
                 foreach ($registros as $key_2 => $value_2)
@@ -111,6 +112,7 @@ class EscritorioDependientesController extends Controller
                                                     // ->with('Relacion')
                                                     ->with('Tipodependencia')
                                                     ->where('id_responsable',$paciente->id)
+                                                    ->where('estado', 1)
                                                     ->get();
                 $prevision = Prevision::all();
                 $region = Region::all();

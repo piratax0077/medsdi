@@ -111,7 +111,8 @@
             @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_examenes_com')
             @include('general.hospitalizacion.modals.in_solic_pabellon')
 	        @include("general.modal.modal_no_disponible")
-
+            @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+            @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 
 
         </div>

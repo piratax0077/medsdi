@@ -16,6 +16,9 @@ class ListaEsperaController extends Controller
 {
     public function buscarListaPorProfesional(Request $request)
     {
+        // Debug: Log los parámetros recibidos
+        \Log::info('Parámetros recibidos en buscarListaPorProfesional:', $request->all());
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -31,16 +34,6 @@ class ListaEsperaController extends Controller
             $error['id_profesional'] = 'campo requerido';
             $valido = 0;
         }
-        // if(empty($request->id_institucion))
-        // {
-        //     $error['id_institucion'] = 'campo requerido';
-        //     $valido = 0;
-        // }
-        // if(empty($request->id_paciente))
-        // {
-        //     $error['id_paciente'] = 'campo requerido';
-        //     $valido = 0;
-        // }
 
         if($valido)
         {
@@ -54,25 +47,54 @@ class ListaEsperaController extends Controller
             $filtros[] = array('id_lugar_atencion', $request->id_lugar_atencion);
             $filtros[] = array('id_profesional', $request->id_profesional);
 
-            $registros = ListaEspera::with('Institucion')
-                                    ->with('LugarAtencion')
-                                    ->with('Asistente')
-                                    ->with('Profesional')
-                                    ->with('Paciente')
-                                    ->where($filtros)
-                                    ->get();
+            // Debug: Log los filtros aplicados
+            \Log::info('Filtros aplicados:', $filtros);
 
+            try {
+                $registros = ListaEspera::with(['Institucion', 'LugarAtencion', 'Asistente', 'Profesional', 'Paciente'])
+                                        ->where($filtros)
+                                        ->get();
 
-            if($registros)
-            {
-                $datos['estado'] = 1;
-                $datos['msj'] = 'registros';
-                $datos['registros'] = $registros;
-            }
-            else
-            {
+                // Debug: Log información de los registros
+                \Log::info('Número de registros encontrados: ' . $registros->count());
+                \Log::info('Registros encontrados:', $registros->toArray());
+
+                if($registros->count() > 0)
+                {
+                    // Verificar que cada registro tenga los datos necesarios
+                    $registros_validos = $registros->filter(function($registro) {
+                        $valido = $registro && property_exists($registro, 'id') && $registro->id && $registro->Paciente;
+                        if (!$valido) {
+                            \Log::warning('Registro inválido encontrado:', $registro ? $registro->toArray() : 'null');
+                        }
+                        return $valido;
+                    });
+
+                    \Log::info('Número de registros válidos: ' . $registros_validos->count());
+
+                    if($registros_validos->count() > 0) {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'registros';
+                        $datos['registros'] = $registros_validos->values(); // Reindexar array
+                    } else {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'sin registros válidos';
+                        $datos['registros'] = [];
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'sin registros';
+                    $datos['registros'] = [];
+                }
+            } catch (\Exception $e) {
+                \Log::error('Error en buscarListaPorProfesional: ' . $e->getMessage());
+                \Log::error('Stack trace: ' . $e->getTraceAsString());
+
                 $datos['estado'] = 0;
-                $datos['msj'] = 'sin registros';
+                $datos['msj'] = 'Error en consulta: ' . $e->getMessage();
+                $datos['registros'] = [];
             }
         }
         else
@@ -81,6 +103,10 @@ class ListaEsperaController extends Controller
             $datos['msj'] = 'campos requeridos';
             $datos['error'] = $error;
         }
+
+        // Debug: Log la respuesta final
+        \Log::info('Respuesta final:', $datos);
+
         return $datos;
     }
 

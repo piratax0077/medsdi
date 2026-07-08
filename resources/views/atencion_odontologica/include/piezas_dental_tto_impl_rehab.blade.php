@@ -1,350 +1,356 @@
-<div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <ul class="nav nav-tabs-aten nav-fill mb-10" id="coloc_impl" role="tablist">
+<div class="form-row">
+    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-1">
+        <ul class="nav flex-column nav-pills mb-3" id="coloc_impl" role="tablist">
             <li class="nav-item">
-                <a class="nav-link-aten text-reset active" id="pieza_dental_impl_rehab_tab" data-toggle="tab" href="#pieza_dental_impl_rehab" role="tab" aria-controls="pieza_dental_impl_rehab" aria-selected="true">Pieza dental</a>
+                <a class="nav-link-aten text-reset active" id="pieza_dental_impl_rehab_tab"  data-toggle="tab" href="#pieza_dental_impl_rehab" role="tab" aria-controls="pieza_dental_impl_rehab" aria-selected="true">Pieza dental</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link-aten text-reset" id="grupo_dental_impl_rehab_tab" data-toggle="tab" href="#grupo_dental_impl_rehab" role="tab" aria-controls="grupo_dental_impl_rehab" aria-selected="true">Grupo dental</a>
+                <a class="nav-link-aten text-reset" id="grupo_dental_impl_rehab_tab" data-toggle="tab" href="#grupo_dental_impl_rehab" onclick="$('#numero_pieza_tto_rehab_impl_grupo1000').select2();" role="tab" aria-controls="grupo_dental_impl_rehab" aria-selected="true">Grupo dental</a>
             </li>
         </ul>
     </div>
-</div>
-<div class="row">
-    <div class="tab-content">
-        <div class="tab-pane fade show active" id="pieza_dental_impl_rehab" role="tabpanel" aria-labelledby="pieza_dental_impl_rehab_tab">
-            <div class="form-row container-fluid">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-row">
-                                @php
-                                    $piezasUnicas = [];
-                                @endphp
+    <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-11">
+        <div class="tab-content">
+            <!--PIEZA DENTAL-->
+            <div class="tab-pane fade show active" id="pieza_dental_impl_rehab" role="tabpanel" aria-labelledby="pieza_dental_impl_rehab_tab">
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card-informacion">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    @php
+                                        $piezasUnicas = [];
+                                    @endphp
 
-                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <label class="floating-label-activo-sm">Pieza Nº</label>
-                                    <select name="numero_pieza_tto_impl{{ $counter }}" id="numero_pieza_tto_impl{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl(this.value, {{ $counter }}, 'pieza')">
-                                        <option value="0">Seleccione</option>
-                                        @foreach ($odontograma as $o)
-                                            @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                @php
-                                                    $piezasUnicas[] = $o->pieza;
-                                                @endphp
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select name="tto_impl{{ $counter }}" id="tto_impl{{ $counter }}" class="form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
-
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 col-xxl-6">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
-                                        <select name="tpo_proc_imp{{ $counter }}" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp{{ $counter }}','div_tpo_proc_imp{{ $counter }}','obs_tpo_proc_impo{{ $counter }}',10);">
-                                            @foreach ($tratamientos_implantologia as $t)
-                                                <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-2 col-xxl-2">
+                                        <label class="floating-label-activo-sm">Pieza Nº</label>
+                                        <select name="numero_pieza_tto_rehab_impl{{ $counter }}" id="numero_pieza_tto_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl_rehab(this.value, {{ $counter }}, 'pieza')">
+                                            <option value="0">Seleccione</option>
+                                            @foreach ($odontograma as $o)
+                                                @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
+                                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                                    @php
+                                                        $piezasUnicas[] = $o->pieza;
+                                                    @endphp
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="div_tpo_proc_imp{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}"></textarea>
-                                        <div class="form-group mt-3">
-                                            <label class="floating-label-activo-sm">¿UCO?</label>
-                                            <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
+                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-10 col-xxl-5">
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
+                                        <select name="tto_rehab_impl{{ $counter }}" id="tto_rehab_impl{{ $counter }}" class="form-control form-control-sm">
+                                            <option value="0">Seleccione</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-5">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
+                                            <select name="tpo_proc_rehab_imp{{ $counter }}" data-titulo="tpo_proc_rehab_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_rehab_imp{{ $counter }}','div_tpo_proc_rehab_imp{{ $counter }}','obs_tpo_proc_rehab_impl{{ $counter }}',10);">
+                                                @foreach ($tratamientos_implantologia as $t)
+                                                    <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <label class="floating-label-activo-sm">Laboratorio</label>
-                                            <input type="text"class="form-control form-control-sm" id="lab_tto{{ $counter }}">
+                                        <div class="form-group" id="div_tpo_proc_rehab_imp{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_rehab_imp{{ $counter }}" id="obs_tpo_proc_rehab_imp{{ $counter }}"></textarea>
+                                            <div class="form-group mt-3">
+                                                <label class="floating-label-activo-sm">¿UCO?</label>
+                                                <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label class="floating-label-activo-sm">Laboratorio</label>
+                                                <input type="text"class="form-control form-control-sm" id="lab_tto{{ $counter }}">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-5 col-lg-3 col-xl-3 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Anestesia</label>
-                                        <select name="anestesia_impl{{ $counter }}" data-titulo="anestesia_impl" data-seccion="anestesia_impl{{ $counter }}"  id="anestesia_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesia_impl{{ $counter }}','div_anestesia_impl{{ $counter }}','obs_anestesia_impl{{ $counter }}',4);">
-                                            <option selected  value="1">Local</option>
-                                            <option value="2">Local mas sedación consciente</option>
-                                            <option value="3">Anestesia General</option>
-                                            <option value="4">Otro (Describir)</option>
-                                        </select>
+                                    <div class="col-sm-12 col-md-8 col-lg-4 col-xl-4 col-xxl-3">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Anestesia</label>
+                                            <select name="anestesia_rehab_impl{{ $counter }}" data-titulo="anestesia_rehab_impl" data-seccion="anestesia_rehab_impl{{ $counter }}"  id="anestesia_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesia_rehab_impl{{ $counter }}','div_anestesia_rehab_impl{{ $counter }}','obs_anestesia_rehab_impl{{ $counter }}',4);">
+                                                <option selected  value="1">Local</option>
+                                                <option value="2">Local mas sedación consciente</option>
+                                                <option value="3">Anestesia General</option>
+                                                <option value="4">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_anestesia_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otra anestesia</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_rehab_impl{{ $counter }}" id="obs_anestesia_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group" id="div_anestesia_impl{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otra anestesia</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2 col-xxl-3">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">N° de tubos</label>
+                                            <input type="text" class="form-control form-control-sm" name="numero_tubos_rehab_impl{{ $counter }}" id="numero_tubos_rehab_impl{{ $counter }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">N° de tubos</label>
-                                        <input type="text" class="form-control form-control-sm" name="numero_tubos_impl{{ $counter }}" id="numero_tubos_impl{{ $counter }}">
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-5 col-xxl-3">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">Técnica de anestesia</label>
+                                            <select name="tec_anestesia_rehab_impl{{ $counter }}" data-titulo="tec_anestesia_rehab_impl{{ $counter }}" data-seccion="tec_anestesia_rehab_impl{{ $counter }}"  id="tec_anestesia_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tec_anestesia_rehab_impl{{ $counter }}','div_tec_anestesia_rehab_impl{{ $counter }}','obs_tec_anestesia_rehab_impl{{ $counter }}',10);">
+                                                <option selected  value="1">Infiltrativa vestibular </option>
+                                                <option value="2">Infiltrativa palatina/lingual</option>
+                                                <option value="3">Spix indirecta</option>
+                                                <option value="4">Spix directa</option>
+                                                <option value="5">Técnica de tuberosidad</option>
+                                                <option value="6">Técnica infraorbitaria</option>
+                                                <option value="7">Técnica carrea</option>
+                                                <option value="8">Técnica akinosi</option>
+                                                <option value="9">Técnica gowgates</option>
+                                                <option value="10">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_tec_anestesia_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otra anestesia</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_rehab_impl{{ $counter }}" id="obs_tec_anestesia_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">Técnica de anestesia</label>
-                                        <select name="tec_anestesia_impl{{ $counter }}" data-titulo="tec_anestesia_impl{{ $counter }}" data-seccion="tec_anestesia_impl{{ $counter }}"  id="tec_anestesia_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tec_anestesia_impl{{ $counter }}','div_tec_anestesia_impl{{ $counter }}','obs_tec_anestesia_impl{{ $counter }}',10);">
-                                            <option selected  value="1">Infiltrativa vestibular </option>
-                                            <option value="2">Infiltrativa palatina/lingual</option>
-                                            <option value="3">Spix indirecta</option>
-                                            <option value="4">Spix directa</option>
-                                            <option value="5">Técnica de tuberosidad</option>
-                                            <option value="6">Técnica infraorbitaria</option>
-                                            <option value="7">Técnica carrea</option>
-                                            <option value="8">Técnica akinosi</option>
-                                            <option value="9">Técnica gowgates</option>
-                                            <option value="10">Otro (Describir)</option>
-                                        </select>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-5 col-xxl-3">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">Anestésico</label>
+                                            <select name="anestesico_rehab_impl{{ $counter }}" data-titulo="anestesico_rehab_impl{{ $counter }}" data-seccion="anestesico_rehab_impl"  id="anestesico_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesico_rehab_impl{{ $counter }}','div_anestesico_rehab_impl{{ $counter }}','obs_anestesico_rehab_impl{{ $counter }}',6);">
+                                                <option selected  value="1">Lidocaína 2% </option>
+                                                <option value="2">Mepivacaína 3%</option>
+                                                <option value="3">Articaína 4%</option>
+                                                <option value="4">Benzocaína 7.5%</option>
+                                                <option value="5">Bupivacaína 7.5%</option>
+                                                <option value="6">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_anestesico_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otro anestésico</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_rehab_impl{{ $counter }}" id="obs_anestesico_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otra anestesia</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-4">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">Anestésico</label>
-                                        <select name="anestesico_impl{{ $counter }}" data-titulo="anestesico_impl{{ $counter }}" data-seccion="anestesico_impl"  id="anestesico_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesico_impl{{ $counter }}','div_anestesico_impl{{ $counter }}','obs_anestesico_impl{{ $counter }}',6);">
-                                            <option selected  value="1">Lidocaína 2% </option>
-                                            <option value="2">Mepivacaína 3%</option>
-                                            <option value="3">Articaína 4%</option>
-                                            <option value="4">Benzocaína 7.5%</option>
-                                            <option value="5">Bupivacaína 7.5%</option>
-                                            <option value="6">Otro (Describir)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_anestesico_impl{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otro anestésico</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Incidentes</label>
-                                        <select name="incid_col_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl{{ $counter }}','div_incid_col_impl{{ $counter }}','obs_incid_col_impl{{ $counter }}',2);">
-                                            <option selected  value="1">Sin incidentes</option>
-                                            <option value="2">Con Incidentes</option>
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Incidentes</label>
+                                            <select name="incid_col_rehab_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_rehab_impl{{ $counter }}','div_incid_col_rehab_impl{{ $counter }}','obs_incid_col_rehab_impl{{ $counter }}',2);">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Sin incidentes</option>
+                                                <option value="2">Con Incidentes</option>
 
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_incid_col_impl{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}"></textarea>
-                                    </div>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_incid_col_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_rehab_impl{{ $counter }}" id="obs_incid_col_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
 
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Material de restauración</label>
-                                        <select name="mat_restau{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_restau{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_restau{{ $counter }}','div_mat_restau{{ $counter }}','obs_mat_restau{{ $counter }}',6);">
-                                            <option selected  value="1">Silicato de litio</option>
-                                            <option value="2">Zirconio</option>
-                                            <option value="3">Resina</option>
-                                            <option value="4">Compomero</option>
-                                            <option value="5">Recubrimiento feldespático</option>
-                                            <option value="6">Otro (Describir)</option>
-                                        </select>
                                     </div>
-                                    <div class="form-group" id="div_mat_restau{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_restau{{ $counter }}" id="obs_mat_restau{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-8 col-lg-4 col-xl-4 col-xxl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Material de restauración</label>
+                                            <select name="mat_restau_rehab_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_restau_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_restau_rehab_impl{{ $counter }}','div_mat_restau_rehab_impl{{ $counter }}','obs_mat_restau_rehab_impl{{ $counter }}',6);">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Silicato de litio</option>
+                                                <option value="2">Zirconio</option>
+                                                <option value="3">Resina</option>
+                                                <option value="4">Compomero</option>
+                                                <option value="5">Recubrimiento feldespático</option>
+                                                <option value="6">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_mat_restau_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_restau_rehab_impl{{ $counter }}" id="obs_mat_restau_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo de anclaje</label>
-                                        <select name="tipo_anclaje{{ $counter }}" data-titulo="tipo_anclaje" data-seccion="Cuello"  id="tipo_anclaje{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anclaje{{ $counter }}','div_tipo_anclaje{{ $counter }}','obs_tipo_anclaje{{ $counter }}',3);">
-                                            <option selected  value="1">Atornillado</option>
-                                            <option value="2">Cementado</option>
-                                            <option value="3">Otro (Describir)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_tipo_anclaje{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_anclaje{{ $counter }}" id="obs_tipo_anclaje{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo de anclaje</label>
+                                            <select name="tipo_anclaje_rehab_impl{{ $counter }}" data-titulo="tipo_anclaje" data-seccion="Cuello"  id="tipo_anclaje_rehab_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anclaje_rehab_impl{{ $counter }}','div_tipo_anclaje_rehab_impl{{ $counter }}','obs_tipo_anclaje_rehab_impl{{ $counter }}',3);">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Atornillado</option>
+                                                <option value="2">Cementado</option>
+                                                <option value="3">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_tipo_anclaje_rehab_impl{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_anclaje_rehab_impl{{ $counter }}" id="obs_tipo_anclaje_rehab_impl{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="float-right">
-                                {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button> --}}
-                                <button type="button" class="btn btn-sm btn-success-light-c" onclick="guardar_pieza_dental_tto_impl_rehab({{ $counter }})"><i class="feather icon-check"></i> Prestación Terminada</button>
+                            <div class="card-footer">
+                                <div class="float-right">
+                                    {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-"></i> </button> --}}
+                                    <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="guardar_pieza_dental_tto_impl_rehab({{ $counter }})"><i class="fas fa-check"></i> Presione para finalizar prestación en curso</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="tab-pane fade" id="grupo_dental_impl_rehab" role="tabpanel" aria-labelledby="grupo_dental_impl_rehab_tab">
-            <div class="form-row container-fluid">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="form-row">
-                                @php
-                                    $piezasUnicas = [];
-                                @endphp
+            <!--GRUPO DENTAL-->
+            <div class="tab-pane fade" id="grupo_dental_impl_rehab" role="tabpanel" aria-labelledby="grupo_dental_impl_rehab_tab">
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-row">
+                                    @php
+                                        $piezasUnicas = [];
+                                    @endphp
 
-                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <label class="floating-label-activo-sm">Piezas Nº</label>
-                                    <select name="numero_pieza_tto_impl_grupo{{ $counter }}" id="numero_pieza_tto_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl(this.value, {{ $counter }},'grupo')" multiple>
-                                        <option value="0">Seleccione</option>
-                                        @foreach ($odontograma as $o)
-                                            @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
-                                                <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                                @php
-                                                    $piezasUnicas[] = $o->pieza;
-                                                @endphp
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select name="tto_impl_grupo{{ $counter }}" id="tto_impl_grupo{{ $counter }}" class="form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
-
-                                    </select>
-                                </div>
-                                <div class="col-sm-12 col-md-7 col-lg-3 col-xl-3 col-xxl-3">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
-                                        <select name="tpo_proc_imp_grupo{{ $counter }}" data-titulo="tpo_proc_imp_grupo" data-seccion="Implante"  id="tpo_proc_imp_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp_grupo{{ $counter }}','div_tpo_proc_imp_grupo{{ $counter }}','obs_tpo_proc_impo_grupo{{ $counter }}',10);">
-                                            @foreach ($tratamientos_implantologia as $t)
-                                                <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                        <label class="floating-label-activo-sm">Piezas Nº</label>
+                                        <select name="numero_pieza_tto_rehab_impl_grupo{{ $counter }}" id="numero_pieza_tto_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_impl_rehab(this.value, {{ $counter }},'grupo')" multiple>
+                                            <option value="0">Seleccione</option>
+                                            @foreach ($odontograma as $o)
+                                                @if ($o->presupuesto == 1 && !in_array($o->pieza, $piezasUnicas))
+                                                    <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                                    @php
+                                                        $piezasUnicas[] = $o->pieza;
+                                                    @endphp
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="div_tpo_proc_imp_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp_grupo{{ $counter }}" id="obs_tpo_proc_imp_grupo{{ $counter }}"></textarea>
-                                        <div class="form-group mt-3">
-                                            <label class="floating-label-activo-sm">¿UCO?</label>
-                                            <input type="text"class="form-control form-control-sm" id="uco_tto_grupo{{ $counter }}">
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <label class="floating-label-activo-sm">Laboratorio</label>
-                                            <input type="text"class="form-control form-control-sm" id="lab_tto_grupo{{ $counter }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-5 col-lg-3 col-xl-3 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Anestesia</label>
-                                        <select name="anestesia_impl{{ $counter }}" data-titulo="anestesia_impl_grupo{{ $counter }}" data-seccion="anestesia_impl_grupo{{ $counter }}"  id="anestesia_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesia_impl_grupo{{ $counter }}','div_anestesia_impl_grupo{{ $counter }}','obs_anestesia_impl_grupo{{ $counter }}',4);">
-                                            <option selected  value="1">Local</option>
-                                            <option value="2">Local mas sedación consciente</option>
-                                            <option value="3">Anestesia General</option>
-                                            <option value="4">Otro (Describir)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_anestesia_impl_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otra anestesia</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl_grupo{{ $counter }}" id="obs_anestesia_impl_grupo{{ $counter }}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">N° de tubos</label>
-                                        <input type="text" class="form-control form-control-sm" name="numero_tubos_impl_grupo{{ $counter }}" id="numero_tubos_impl_grupo{{ $counter }}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">Técnica de anestesia</label>
-                                        <select name="tec_anestesia_impl_grupo{{ $counter }}" data-titulo="tec_anestesia_impl_grupo{{ $counter }}" data-seccion="tec_anestesia_impl_grupo{{ $counter }}"  id="tec_anestesia_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tec_anestesia_impl_grupo{{ $counter }}','div_tec_anestesia_impl_grupo{{ $counter }}','obs_tec_anestesia_impl_grupo{{ $counter }}',10);">
-                                            <option selected  value="1">Infiltrativa vestibular </option>
-                                            <option value="2">Infiltrativa palatina/lingual</option>
-                                            <option value="3">Spix indirecta</option>
-                                            <option value="4">Spix directa</option>
-                                            <option value="5">Técnica de tuberosidad</option>
-                                            <option value="6">Técnica infraorbitaria</option>
-                                            <option value="7">Técnica carrea</option>
-                                            <option value="8">Técnica akinosi</option>
-                                            <option value="9">Técnica gowgates</option>
-                                            <option value="10">Otro (Describir)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_tec_anestesia_impl_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otra anestesia</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl_grupo{{ $counter }}" id="obs_tec_anestesia_impl_grupo{{ $counter }}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-4">
-                                    <div class="form-group">
-                                        <label for="" class="floating-label-activo-sm">Anestésico</label>
-                                        <select name="anestesico_impl_grupo{{ $counter }}" data-titulo="anestesico_impl_grupo{{ $counter }}" data-seccion="anestesico_impl_grupo{{ $counter }}"  id="anestesico_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesico_impl_grupo{{ $counter }}','div_anestesico_impl_grupo{{ $counter }}','obs_anestesico_impl_grupo{{ $counter }}',6);">
-                                            <option selected  value="1">Lidocaína 2% </option>
-                                            <option value="2">Mepivacaína 3%</option>
-                                            <option value="3">Articaína 4%</option>
-                                            <option value="4">Benzocaína 7.5%</option>
-                                            <option value="5">Bupivacaína 7.5%</option>
-                                            <option value="6">Otro (Describir)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="div_anestesico_impl_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Otro anestésico</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl_grupo{{ $counter }}" id="obs_anestesico_impl_grupo{{ $counter }}"></textarea>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Incidentes</label>
-                                        <select name="incid_col_impl_grupo{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl_grupo{{ $counter }}','div_incid_col_impl_grupo{{ $counter }}','obs_incid_col_impl_grupo{{ $counter }}',2);">
-                                            <option selected  value="1">Sin incidentes</option>
-                                            <option value="2">Con Incidentes</option>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-4">
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
+                                        <select name="tto_rehab_impl_grupo{{ $counter }}" id="tto_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm">
+                                            <option value="0">Seleccione</option>
 
                                         </select>
                                     </div>
-                                    <div class="form-group" id="div_incid_col_impl_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl_grupo{{ $counter }}" id="obs_incid_col_impl_grupo{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
+                                            <select name="tpo_proc_rehab_impl_grupo{{ $counter }}" data-titulo="tpo_proc_rehab_impl_grupo" data-seccion="Implante"  id="tpo_proc_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_rehab_impl_grupo{{ $counter }}','div_tpo_proc_rehab_impl_grupo{{ $counter }}','obs_tpo_proc_rehab_impl_grupo{{ $counter }}',10);">
+                                                @foreach ($tratamientos_implantologia as $t)
+                                                    <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_tpo_proc_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_rehab_impl_grupo{{ $counter }}" id="obs_tpo_proc_rehab_impl_grupo{{ $counter }}"></textarea>
+                                            <div class="form-group mt-3">
+                                                <label class="floating-label-activo-sm">¿UCO?</label>
+                                                <input type="text"class="form-control form-control-sm" id="uco_tto_grupo{{ $counter }}">
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label class="floating-label-activo-sm">Laboratorio</label>
+                                                <input type="text"class="form-control form-control-sm" id="lab_tto_grupo{{ $counter }}">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Material de restauración</label>
-                                        <select name="mat_restau_grupo{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_restau_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_restau_grupo{{ $counter }}','div_mat_restau_grupo{{ $counter }}','obs_mat_restau_grupo{{ $counter }}',6);">
-                                            <option selected  value="1">Silicato de litio</option>
-                                            <option value="2">Zirconio</option>
-                                            <option value="3">Resina</option>
-                                            <option value="4">Compomero</option>
-                                            <option value="5">Recubrimiento feldespático</option>
-                                            <option value="6">Otro (Describir)</option>
-                                        </select>
+                                    <div class="col-sm-12 col-md-8 col-lg-4 col-xl-5 col-xxl-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Anestesia</label>
+                                            <select name="anestesia_rehab_impl_grupo{{ $counter }}" data-titulo="anestesia_rehab_impl_grupo{{ $counter }}" data-seccion="anestesia_rehab_impl_grupo{{ $counter }}"  id="anestesia_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesia_rehab_impl_grupo{{ $counter }}','div_anestesia_rehab_impl_grupo{{ $counter }}','obs_anestesia_rehab_impl_grupo{{ $counter }}',4);">
+                                                <option selected  value="1">Local</option>
+                                                <option value="2">Local mas sedación consciente</option>
+                                                <option value="3">Anestesia General</option>
+                                                <option value="4">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_anestesia_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otra anestesia</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_rehab_impl_grupo{{ $counter }}" id="obs_anestesia_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group" id="div_mat_restau_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_restau_grupo{{ $counter }}" id="obs_mat_restau_grupo{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-2 col-xxl-2">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">N° de tubos</label>
+                                            <input type="text" class="form-control form-control-sm" name="numero_tubos_rehab_impl_grupo{{ $counter }}" id="numero_tubos_rehab_impl_grupo{{ $counter }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo de anclaje</label>
-                                        <select name="tipo_anclaje_grupo{{ $counter }}" data-titulo="tipo_anclaje_grupo" data-seccion="Cuello"  id="tipo_anclaje_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anclaje_grupo{{ $counter }}','div_tipo_anclaje_grupo{{ $counter }}','obs_tipo_anclaje_grupo{{ $counter }}',3);">
-                                            <option selected  value="1">Atornillado</option>
-                                            <option value="2">Cementado</option>
-                                            <option value="3">Otro (Describir)</option>
-                                        </select>
+                                    <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 col-xxl-3">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">Técnica de anestesia</label>
+                                            <select name="tec_anestesia_rehab_impl_grupo{{ $counter }}" data-titulo="tec_anestesia_rehab_impl_grupo{{ $counter }}" data-seccion="tec_anestesia_rehab_impl_grupo{{ $counter }}"  id="tec_anestesia_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tec_anestesia_rehab_impl_grupo{{ $counter }}','div_tec_anestesia_rehab_impl_grupo{{ $counter }}','obs_tec_anestesia_rehab_impl_grupo{{ $counter }}',10);">
+                                                <option selected  value="1">Infiltrativa vestibular </option>
+                                                <option value="2">Infiltrativa palatina/lingual</option>
+                                                <option value="3">Spix indirecta</option>
+                                                <option value="4">Spix directa</option>
+                                                <option value="5">Técnica de tuberosidad</option>
+                                                <option value="6">Técnica infraorbitaria</option>
+                                                <option value="7">Técnica carrea</option>
+                                                <option value="8">Técnica akinosi</option>
+                                                <option value="9">Técnica gowgates</option>
+                                                <option value="10">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_tec_anestesia_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otra anestesia</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_rehab_impl_grupo{{ $counter }}" id="obs_tec_anestesia_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
-                                    <div class="form-group" id="div_tipo_anclaje_grupo{{ $counter }}" style="display:none;">
-                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_anclaje_grupo{{ $counter }}" id="obs_tipo_anclaje_grupo{{ $counter }}"></textarea>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-2">
+                                        <div class="form-group">
+                                            <label for="" class="floating-label-activo-sm">Anestésico</label>
+                                            <select name="anestesico_rehab_impl_grupo{{ $counter }}" data-titulo="anestesico_rehab_impl_grupo{{ $counter }}" data-seccion="anestesico_rehab_impl_grupo{{ $counter }}"  id="anestesico_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesico_rehab_impl_grupo{{ $counter }}','div_anestesico_rehab_impl_grupo{{ $counter }}','obs_anestesico_rehab_impl_grupo{{ $counter }}',6);">
+                                                <option selected  value="1">Lidocaína 2% </option>
+                                                <option value="2">Mepivacaína 3%</option>
+                                                <option value="3">Articaína 4%</option>
+                                                <option value="4">Benzocaína 7.5%</option>
+                                                <option value="5">Bupivacaína 7.5%</option>
+                                                <option value="6">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_anestesico_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Otro anestésico</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_rehab_impl_grupo{{ $counter }}" id="obs_anestesico_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Incidentes</label>
+                                            <select name="incid_col_rehab_impl_grupo{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_rehab_impl_grupo{{ $counter }}','div_incid_col_rehab_impl_grupo{{ $counter }}','obs_incid_col_rehab_impl_grupo{{ $counter }}',2);">
+                                                <option selected  value="1">Sin incidentes</option>
+                                                <option value="2">Con Incidentes</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_incid_col_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_rehab_impl_grupo{{ $counter }}" id="obs_incid_col_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Material de restauración</label>
+                                            <select name="mat_restau_rehab_impl_grupo{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_restau_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_restau_rehab_impl_grupo{{ $counter }}','div_mat_restau_rehab_impl_grupo{{ $counter }}','obs_mat_restau_rehab_impl_grupo{{ $counter }}',6);">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Silicato de litio</option>
+                                                <option value="2">Zirconio</option>
+                                                <option value="3">Resina</option>
+                                                <option value="4">Compomero</option>
+                                                <option value="5">Recubrimiento feldespático</option>
+                                                <option value="6">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_mat_restau_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_restau_rehab_impl_grupo{{ $counter }}" id="obs_mat_restau_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo de anclaje</label>
+                                            <select name="tipo_anclaje_rehab_impl_grupo{{ $counter }}" data-titulo="tipo_anclaje_grupo" data-seccion="Cuello"  id="tipo_anclaje_rehab_impl_grupo{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anclaje_rehab_impl_grupo{{ $counter }}','div_tipo_anclaje_rehab_impl_grupo{{ $counter }}','obs_tipo_anclaje_rehab_impl_grupo{{ $counter }}',3);">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Atornillado</option>
+                                                <option value="2">Cementado</option>
+                                                <option value="3">Otro (Describir)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_tipo_anclaje_rehab_impl_grupo{{ $counter }}" style="display:none;">
+                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_anclaje_rehab_impl_grupo{{ $counter }}" id="obs_tipo_anclaje_rehab_impl_grupo{{ $counter }}"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="float-right">
-                                {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button> --}}
-                                <button type="button" class="btn btn-sm btn-success-light-c" onclick="guardar_pieza_dental_tto_impl_rehab_grupo({{ $counter }})"><i class="feather icon-check"></i> Prestación Terminada</button>
+                            <div class="card-footer">
+                                <div class="float-right">
+                                    {{-- <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button> --}}
+                                    <button type="button" class="btn btn-xxs btn-warning-light-c" onclick="guardar_pieza_dental_tto_impl_rehab_grupo({{ $counter }})"><i class="fas fa-check"></i>  Presione para finalizar prestación en curso</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -362,7 +368,7 @@
         $('#numero_pieza_tto_impl_grupo1000').select2();
     });
 
-    function dame_tratamientos_pieza_impl(pieza, counter, tipo) {
+    function dame_tratamientos_pieza_impl_rehab(pieza, counter, tipo) {
         let id_paciente = $('#id_paciente_fc').val();
         if(id_paciente == '' || id_paciente == null){
             id_paciente = $('#id_paciente').val();
@@ -388,18 +394,18 @@
                     return false;
                 }
                 if(tipo == 'grupo'){
-                    $('#tto_impl_grupo' + counter).val(0);
-                    $('#tto_impl_grupo' + counter).empty();
-                    $('#tto_impl_grupo' + counter).append('<option value="0">Seleccione</option>');
+                    $('#tto_rehab_impl_grupo' + counter).val(0);
+                    $('#tto_rehab_impl_grupo' + counter).empty();
+                    $('#tto_rehab_impl_grupo' + counter).append('<option value="0">Seleccione</option>');
                     $.each(resp.tratamientos, function(index, value) {
-                        $('#tto_impl_grupo' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
+                        $('#tto_rehab_impl_grupo' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                     });
                 } else {
-                    $('#tto_impl' + counter).val(0);
-                    $('#tto_impl' + counter).empty();
-                    $('#tto_impl' + counter).append('<option value="0">Seleccione</option>');
+                    $('#tto_rehab_impl' + counter).val(0);
+                    $('#tto_rehab_impl' + counter).empty();
+                    $('#tto_rehab_impl' + counter).append('<option value="0">Seleccione</option>');
                     $.each(resp.tratamientos, function(index, value) {
-                        $('#tto_impl' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
+                        $('#tto_rehab_impl' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                     });
                 }
             }
@@ -412,51 +418,51 @@
 
     function guardar_pieza_dental_tto_impl_rehab(counter){
 
-        let numero_pieza = $('#numero_pieza_tto_impl'+counter).val();
-        let tto = $('#tto_impl'+counter).val();
+        let numero_pieza = $('#numero_pieza_tto_rehab_impl'+counter).val();
+        let tto = $('#tto_rehab_impl'+counter).val();
 
-        let tipo_tto = $('#tpo_proc_imp'+counter).val();
-        let tipo_tto_text = $('#tpo_proc_imp' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
+        let tipo_tto = $('#tpo_proc_rehab_impl'+counter).val();
+        let tipo_tto_text = $('#tpo_proc_rehab_impl' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
 
 
         if(tipo_tto == 10){
-            tipo_tto_text = $('#obs_tpo_proc_imp'+counter).val();
+            tipo_tto_text = $('#obs_tpo_proc_rehab_impl'+counter).val();
         }
-        let anestesia_tto = $('#anestesia_impl'+counter).val();
-        let anestesia_tto_text = $('#anestesia_impl' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
+        let anestesia_tto = $('#anestesia_rehab_impl'+counter).val();
+        let anestesia_tto_text = $('#anestesia_rehab_impl' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
         if(anestesia_tto == 4){
-            anestesia_tto_text = $('#obs_anestesia_impl'+counter).val();
+            anestesia_tto_text = $('#obs_anestesia_rehab_impl'+counter).val();
         }
 
-        let numero_tubos = $('#numero_tubos_impl'+counter).val();
-        let tecnica_anestesia = $('#tec_anestesia_impl'+counter).val();
-        let tecnica_anestesia_text = $('#tec_anestesia_impl'+counter +' option:selected').text();
+        let numero_tubos = $('#numero_tubos_rehab_impl'+counter).val();
+        let tecnica_anestesia = $('#tec_anestesia_rehab_impl'+counter).val();
+        let tecnica_anestesia_text = $('#tec_anestesia_rehab_impl'+counter +' option:selected').text();
         if(tecnica_anestesia == 10){
-            tecnica_anestesia_text = $('#obs_tec_anestesia_impl'+counter).val();
+            tecnica_anestesia_text = $('#obs_tec_anestesia_rehab_impl'+counter).val();
         }
 
-        let anestesico_tto = $('#anestesico_impl'+counter).val();
-        let anestesico_tto_text = $('#anestesico_impl'+counter+' option:selected').text();
+        let anestesico_tto = $('#anestesico_rehab_impl'+counter).val();
+        let anestesico_tto_text = $('#anestesico_rehab_impl'+counter+' option:selected').text();
         if(anestesico_tto == 6){
-            anestesico_tto_text = $('#obs_anestesico_impl'+counter).val();
+            anestesico_tto_text = $('#obs_anestesico_rehab_impl'+counter).val();
         }
 
-        let incidente_tto = $('#incid_col_impl'+counter).val();
-        let incidente_tto_text = $('#incid_col_impl'+counter+' option:selected').text();
+        let incidente_tto = $('#incid_col_rehab_impl'+counter).val();
+        let incidente_tto_text = $('#incid_col_rehab_impl'+counter+' option:selected').text();
         if(incidente_tto == 2){
-            incidente_tto_text = $('#obs_incid_col_impl'+counter).val();
+            incidente_tto_text = $('#obs_incid_col_rehab_impl'+counter).val();
         }
 
-        let material_rest = $('#mat_restau'+counter).val();
-        let material_rest_text = $('#mat_restau'+counter+' option:selected').text();
+        let material_rest = $('#mat_restau_rehab_impl'+counter).val();
+        let material_rest_text = $('#mat_restau_rehab_impl'+counter+' option:selected').text();
         if(material_rest == 6){
-            material_rest_text = $('#obs_mat_restau'+counter).val();
+            material_rest_text = $('#obs_mat_restau_rehab_impl'+counter).val();
         }
 
-        let tipo_anclaje = $('#tipo_anclaje'+counter).val();
-        let tipo_anclaje_text = $('#tipo_anclaje'+counter+' option:selected').text();
+        let tipo_anclaje = $('#tipo_anclaje_rehab_impl'+counter).val();
+        let tipo_anclaje_text = $('#tipo_anclaje_rehab_impl'+counter+' option:selected').text();
         if(tipo_anclaje == 3){
-            tipo_anclaje_text = $('#obs_tipo_anclaje'+counter).val();
+            tipo_anclaje_text = $('#obs_tipo_anclaje_rehab_impl'+counter).val();
         }
 
         let valido = 1;
@@ -607,6 +613,7 @@
                                     $(rowNode).addClass('text-center align-middle status-circle');
                                 }
                             });
+                            mostrar_nueva_pieza_dental_tto_rehab_impl(999);
                     } else {
                         $('#det_cir').val('No hay detalles de cirugía disponibles.');
                     }
@@ -640,38 +647,50 @@
 
     function guardar_pieza_dental_tto_impl_rehab_grupo(counter){
 
-        let piezas = $('#numero_pieza_tto_impl_grupo'+counter).val();
-        let tto = $('#tto_impl_grupo'+counter).val();
+        let piezas = $('#numero_pieza_tto_rehab_impl_grupo'+counter).val();
+        let tto = $('#tto_rehab_impl_grupo'+counter).val();
 
-        let tipo_tto = $('#tpo_proc_imp_grupo'+counter).val();
-        let tipo_tto_text = $('#tpo_proc_imp_grupo' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
+        let tipo_tto = $('#tpo_proc_rehab_impl_grupo'+counter).val();
+        let tipo_tto_text = $('#tpo_proc_rehab_impl_grupo' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
 
         if(tipo_tto == 10){
-            tipo_tto_text = $('#obs_tpo_proc_imp_grupo'+counter).val();
+            tipo_tto_text = $('#obs_tpo_proc_rehab_impl_grupo'+counter).val();
         }
-        let anestesia_tto = $('#anestesia_impl_grupo'+counter).val();
-        let anestesia_tto_text = $('#anestesia_impl_grupo' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
+        let anestesia_tto = $('#anestesia_rehab_impl_grupo'+counter).val();
+        let anestesia_tto_text = $('#anestesia_rehab_impl_grupo' + counter + ' option:selected').text(); // Obtiene el texto de la opción seleccionada
         if(anestesia_tto == 4){
-            anestesia_tto_text = $('#obs_anestesia_impl_grupo'+counter).val();
+            anestesia_tto_text = $('#obs_anestesia_rehab_impl_grupo'+counter).val();
         }
 
-        let numero_tubos = $('#numero_tubos_impl_grupo'+counter).val();
-        let tecnica_anestesia = $('#tec_anestesia_impl_grupo'+counter).val();
-        let tecnica_anestesia_text = $('#tec_anestesia_impl_grupo'+counter +' option:selected').text();
+        let numero_tubos = $('#numero_tubos_rehab_impl_grupo'+counter).val();
+        let tecnica_anestesia = $('#tec_anestesia_rehab_impl_grupo'+counter).val();
+        let tecnica_anestesia_text = $('#tec_anestesia_rehab_impl_grupo'+counter +' option:selected').text();
         if(tecnica_anestesia == 10){
-            tecnica_anestesia_text = $('#obs_tec_anestesia_impl_grupo'+counter).val();
+            tecnica_anestesia_text = $('#obs_tec_anestesia_rehab_impl_grupo'+counter).val();
         }
 
-        let anestesico_tto = $('#anestesico_impl_grupo'+counter).val();
-        let anestesico_tto_text = $('#anestesico_impl_grupo'+counter+' option:selected').text();
+        let anestesico_tto = $('#anestesico_rehab_impl_grupo'+counter).val();
+        let anestesico_tto_text = $('#anestesico_rehab_impl_grupo'+counter+' option:selected').text();
         if(anestesico_tto == 6){
-            anestesico_tto_text = $('#obs_anestesico_impl_grupo'+counter).val();
+            anestesico_tto_text = $('#obs_anestesico_rehab_impl_grupo'+counter).val();
         }
 
-        let incidente_tto = $('#incid_col_impl_grupo'+counter).val();
-        let incidente_tto_text = $('#incid_col_impl_grupo'+counter+' option:selected').text();
+        let incidente_tto = $('#incid_col_rehab_impl_grupo'+counter).val();
+        let incidente_tto_text = $('#incid_col_rehab_impl_grupo'+counter+' option:selected').text();
         if(incidente_tto == 2){
-            incidente_tto_text = $('#obs_incid_col_impl_grupo'+counter).val();
+            incidente_tto_text = $('#obs_incid_col_rehab_impl_grupo'+counter).val();
+        }
+
+        let material_rest = $('#mat_restau_rehab_impl_grupo'+counter).val();
+        let material_rest_text = $('#mat_restau_rehab_impl_grupo'+counter+' option:selected').text();
+        if(material_rest == 6){
+            material_rest_text = $('#obs_mat_restau_rehab_impl_grupo'+counter).val();
+        }
+
+        let tipo_anclaje = $('#tipo_anclaje_rehab_impl_grupo'+counter).val();
+        let tipo_anclaje_text = $('#tipo_anclaje_rehab_impl_grupo'+counter+' option:selected').text();
+        if(tipo_anclaje == 3){
+            tipo_anclaje_text = $('#obs_tipo_anclaje_rehab_impl_grupo'+counter).val();
         }
 
         let valido = 1;
@@ -691,6 +710,16 @@
         if(numero_tubos == ''){
             valido = 0;
             mensaje += '<li>Campo requerido N° Tubos </li>';
+        }
+
+        if(material_rest == '' || material_rest == 0){
+            valido = 0;
+            mensaje += '<li>Campo requerido Material de Restauración </li>';
+        }
+
+        if(tipo_anclaje == '' || tipo_anclaje == 0){
+            valido = 0;
+            mensaje += '<li>Campo requerido Tipo de Anclaje </li>';
         }
 
         if(valido == 0){
@@ -723,13 +752,17 @@
             anestesico_tto_text: anestesico_tto_text,
             incidente_tto: incidente_tto,
             incidente_tto_text: incidente_tto_text,
+            material_rest: material_rest,
+            material_rest_text: material_rest_text,
+            tipo_anclaje: tipo_anclaje,
+            tipo_anclaje_text: tipo_anclaje_text,
             id_paciente: $('#id_paciente_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_ficha_atencion: $('#id_fc').val(),
             _token: CSRF_TOKEN
         }
 
-        return console.log(data);
+        console.log(data);
 
         let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_tto_impl_rehab') }}";
 
@@ -746,9 +779,9 @@
                         icon: "success",
                         button: "Aceptar",
                     });
-                    $('#contenedor_tto_implantologia').empty();
-                    $('#contenedor_tto_implantologia').append(resp.v);
-                    $('#pieza_dental_tto_impl').empty();
+                    $('#contenedor_tto_rehab_implantologia').empty();
+                    $('#contenedor_tto_rehab_implantologia').append(resp.v);
+                    $('#pieza_dental_tto_rehab_impl').empty();
                     // Verificar si existen exámenes en la respuesta
                     if (resp.examenes && resp.examenes.length > 0) {
                         let detalleCirugia = resp.examenes.map(examen =>

@@ -435,6 +435,8 @@
                             //$('#form_control_obesidad').trigger("reset");
                             $('#mensaje').text('Se ha creado la interconsulta de forma correcta');
                             $('#mensaje').show();
+                            $('#formulario_vac li#interconsulta').removeClass('d-none');
+                            $('#formulario_vac li#interconsulta').html('<i class="fas fa-check text-info"></i> Se añadio Interconsulta');
                             $('#modal_interconsulta').modal('hide');
                             ver_pdf_interconsulta(response.id_last);
                         }

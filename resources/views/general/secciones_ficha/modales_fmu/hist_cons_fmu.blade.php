@@ -3,9 +3,9 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white" id="m_consultaant_fmuLabel" onclick="('#m_consultaant_fmu').modal('hide'); ">Datos de consulta de: </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                </button>
+               <button type="button" class="close"  data-dismiss="modal"  aria-label="Close" onclick="$('#m_consultaant_fmu').modal('hide');">
+				<span aria-hidden="true">&times;</span>
+				</button>
             </div>
             <div class="modal-body">
 

@@ -63,7 +63,6 @@
                                                 <th>Rut</th>
                                                 <th>Nombre</th>
                                                 <th>Contacto</th>
-                                                <th>Contacto Emergencia</th>
                                                 <th>Dirección</th>
                                                 <th>Desasociar</th>
                                             </tr>
@@ -80,13 +79,8 @@
                                                             {{ $a->nombres . ' ' . $a->apellido_uno . ' ' . $a->apellido_dos }}
                                                         </td>
                                                         <td>
-                                                            <span>{{ $a->email }}</span><br>
-                                                            <span>{{ $a->telefono_uno }}</span>
-                                                        </td>
-                                                        <td>
-                                                            <span></span><br>
-                                                            <span></span><br>
-                                                            <span></span>
+                                                            <span><i class="feather icon-mail icono-tabla"><i>{{ $a->email }}</span><br>
+                                                            <span><i class="feather icon-phone icono-tabla"><i>{{ $a->telefono_uno }}</span>
                                                         </td>
                                                         <td>
                                                             @if(issset($a->id_direccion))

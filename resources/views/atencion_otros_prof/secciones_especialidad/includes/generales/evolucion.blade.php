@@ -5,13 +5,13 @@
     </div>
 </div>
 <!--FORMULARIOS-->
-<div class="row">
+<div class="row" id="evoluciones">
     <!--MOTIVO CONSULTA-->
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="card-a">
             <div class="card-header-a" id="mot-consulta-ev">
                 <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#mot-consulta-ev-c" aria-expanded="false" aria-controls="mot-consulta-ev-c">
-                Motivo de la consulta
+                    Motivo de la consulta
                 </button>
             </div>
             <div id="mot-consulta-ev-c" class="collapse show" aria-labelledby="mot-consulta-ev" data-parent="#mot-consulta-ev">
@@ -19,8 +19,8 @@
 
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <label class="floating-label-activo-sm" for="dg_ingreso">Diagnóstico de Ingreso</label>
-                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="dg_ingreso" id="dg_ingreso"></textarea>
+                            <label class="floating-label-activo-sm" for="historia_ingreso_sico">Historia de ingreso</label>
+                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="historia_ingreso_sico" id="historia_ingreso_sico"></textarea>
                         </div>
                     </div>
 
@@ -109,15 +109,39 @@
                 <div class="card-body-aten-a">
 
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                            <label class="floating-label-activo-sm" for="prox_control" >Próximo Control</label>
-                            <input type="date" class="form-control form-control-sm" name="prox_control" id="prox_control">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-outline-primary btn-block" onclick="hora_medica_pedir({{ $profesional->id }}, {{ $id_lugar_atencion }}); dame_plan_tratamiento({{ $id_ficha_atencion }})"><i class="feather icon-calendar"></i> Agendar hora</button>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-8 mx-auto">
+                            <div class="card-informacion" style="border: 1px solid #6c9bd5;">
+                                <div class="card-top text-center">
+                                    <h5 class="text-c-blue">PRÓXIMO CONTROL</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div  class="form-row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                            <h5 class="text-c-blue"><i class="fas fa-calendar"></i> Fecha:</h5><h5 id="proxima_fecha_atencion" class="font-weight-bold">{{ isset($proxima_fecha_atencion) ? $proxima_fecha_atencion : '' }}</h5>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                                            <h5 class="text-c-blue"><i class="fas fa-clock"></i> Horario:</h5><p>  <strong id="proxima_hora_atencion_inicio">{{ isset($hora_inicio_atencion) ? $hora_inicio_atencion : '--:--' }}</strong> a <strong id="proxima_hora_atencion_fin">{{ isset($hora_fin_atencion) ? $hora_fin_atencion : '--:--' }}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo-sm" for="evol_indicaciones">Indicaciones</label>
                             <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=10" onblur="this.rows=1;" name="evol_indicaciones" id="evol_indicaciones"></textarea>
+                        </div>
+                        <div class="form-group col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="objetivo_logrado" name="objetivo_logrado" checked>
+                                <label class="form-check-label" for="objetivo_logrado">¿Objetivo logrado?</label>
+                            </div>
                         </div>
                     </div>
 
@@ -126,6 +150,58 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-        <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar evolución</button>
+        <button type="button" class="btn btn-info" onclick="guardar_evolucion()"><i class="feather icon-save"></i> Guardar evolución</button>
     </div>
 </div>
+<script>
+function guardar_evolucion() {
+    let datos_control = {};
+
+    $('#evoluciones').find('input, select, textarea').each(function() {
+        let name = $(this).attr('name');
+        if (!name) return;
+
+        if ($(this).is(':checkbox')) {
+            datos_control[name] = $(this).is(':checked') ? 1 : 0;
+        } else if ($(this).is(':radio')) {
+            if ($(this).is(':checked')) {
+                datos_control[name] = $(this).val();
+            }
+        } else {
+            datos_control[name] = $(this).val();
+        }
+    });
+
+    // Agrega los identificadores adicionales
+    const payload = {
+        id_ficha_atencion: $('#id_fc').val(),
+        id_paciente: $('#id_paciente').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        objetivo_logrado: $('#objetivo_logrado').is(':checked') ? 1 : 0,
+        datos_control: datos_control,
+        _token: CSRF_TOKEN
+    };
+
+    console.log(payload);
+
+    // Enviar vía AJAX
+    $.ajax({
+        url: '{{ route("profesional.guardar_control_nutricional") }}',
+        method: 'POST',
+         data: payload,
+        success: function (response) {
+            console.log(response);
+                swal({
+                    title: 'Éxito',
+                    text: response.detalle || 'Evaluación psicologica guardada correctamente.',
+                    icon: 'success'
+                });
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            alert('Hubo un error al guardar la evolución.');
+        }
+    });
+}
+</script>

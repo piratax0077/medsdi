@@ -1,4 +1,4 @@
-<table class="display table table-striped table-hover dt-responsive nowrap w-100" id="tabla_curaciones_lpp_servicio">
+{{-- <table class="display table table-striped table-hover dt-responsive nowrap w-100" id="tabla_curaciones_lpp_servicio">
     <thead>
         <tr>
             <th class="text-center align-middle">Fecha y Hora</th>
@@ -10,12 +10,15 @@
         </tr>
     </thead>
     <tbody>
-        @if($curaciones_lpp->count() > 0)
+        @if(isset($curaciones_lpp) && $curaciones_lpp->count() > 0)
         @foreach($curaciones_lpp as $cl)
+        @php
+            $datos_val = is_string($cl->datos_valoracion) ? json_decode($cl->datos_valoracion, true) : (array)$cl->datos_valoracion;
+        @endphp
         <tr>
             <td class="text-center align-middle">{{ $cl->fecha}} {{ $cl->hora }} <br> {{ $cl->responsable }} </td>
-            <td class="text-center align-middle">{{ $cl->datos_curacion_lpp->upp_gr_eval }}</td>
-            <td class="text-center align-middle">{{ $cl->datos_curacion_lpp->upp_local_eval }}</td>
+            <td class="text-center align-middle">{{ $datos_val['upp_gr_eval'] ?? 'N/A' }}</td>
+            <td class="text-center align-middle">{{ $datos_val['upp_local_eval'] ?? 'N/A' }}</td>
             <td class="text-center align-middle"><div class="switch switch-success d-inline">
                 <input type="checkbox" id="curacion_lpp_servicio_listo{{ $cl->id }}">
                 <label for="curacion_lpp_servicio_listo{{ $cl->id }}" class="cr"></label>
@@ -25,27 +28,27 @@
         @endforeach
         @endif
     </tbody>
-</table>
+</table> --}}
 <div class="form-row">
     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
         <div class="form-group">
-            <label class="floating-label-activo-sm t-red" for="cp_cult">Toma de Cultivo</label>
-            <select name="cp_cult" id="cp_cult" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_cult','div_cp_cult','obs_cp_cult',6);">
+            <label class="floating-label-activo-sm t-red" for="cp_cult_curac_lpp">Toma de Cultivo</label>
+            <select name="cp_cult_curac_lpp" id="cp_cult_curac_lpp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_cult_curac_lpp','div_cp_cult_curac_lpp','obs_cp_cult_curac_lpp',6);">
                 <option selected value="0">Seleccione</option>
                 <option value="1">No</option>
                 <option value="2">Si</option>
                 <option value="6">Observaciones</option>
             </select>
         </div>
-        <div class="form-group" id="div_cp_cult" style="display:none;">
-            <label class="floating-label-activo-sm t-red" for="obs_cp_cult">Observaciones <i>(Describir)</i></label>
-            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_cult" id="obs_cp_cult"></textarea>
+        <div class="form-group" id="div_cp_cult_curac_lpp" style="display:none;">
+            <label class="floating-label-activo-sm t-red" for="obs_cp_cult_curac_lpp">Observaciones <i>(Describir)</i></label>
+            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_cult_curac_lpp" id="obs_cp_cult_curac_lpp"></textarea>
         </div>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
         <div class="form-group">
-            <label class="floating-label-activo-sm t-red" for="cp_td">Tipos de debridamiento</label>
-            <select name="cp_td" id="cp_td" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_td','div_cp_td','obs_cp_td',8);">
+            <label class="floating-label-activo-sm t-red" for="cp_td_curac_lpp">Tipos de debridamiento</label>
+            <select name="cp_td_curac_lpp" id="cp_td_curac_lpp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_td_curac_lpp','div_cp_td_curac_lpp','obs_cp_td_curac_lpp',8);">
                 <option selected value="0">Seleccione</option>
                 <option value="1">Quirúrgico </option>
                 <option value="2">Cortante</option>
@@ -57,24 +60,24 @@
                 <option value="8">Otros</option>
             </select>
         </div>
-        <div class="form-group" id="div_cp_td" style="display:none;">
-            <label class="floating-label-activo-sm t-red" for="obs_cp_td">Otras <i>(Describir)</i></label>
-            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_td" id="obs_cp_td"></textarea>
+        <div class="form-group" id="div_cp_td_curac_lpp" style="display:none;">
+            <label class="floating-label-activo-sm t-red" for="obs_cp_td_curac_lpp">Otras <i>(Describir)</i></label>
+            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_td_curac_lpp" id="obs_cp_td_curac_lpp"></textarea>
         </div>
     </div>
     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
         <div class="form-group">
-            <label class="floating-label-activo-sm t-red" for="cp_duch">Duchoterapia</label>
-            <select name="cp_duch" id="cp_duch" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_duch','div_cp_duch','obs_cp_duch',3);">
+            <label class="floating-label-activo-sm t-red" for="cp_duch_curac_lpp">Duchoterapia</label>
+            <select name="cp_duch_curac_lpp" id="cp_duch_curac_lpp" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cp_duch_curac_lpp','div_cp_duch_curac_lpp','obs_cp_duch_curac_lpp',3);">
                 <option selected value="0">Seleccione</option>
                 <option value="1">Si</option>
                 <option value="2">No</option>
                 <option value="3">Observaciones</option>
             </select>
         </div>
-        <div class="form-group" id="div_cp_duch" style="display:none;">
-            <label class="floating-label-activo-sm t-red" for="obs_cp_duch">Observaciones <i>(Describir)</i></label>
-            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_duch" id="obs_cp_duch"></textarea>
+        <div class="form-group" id="div_cp_duch_curac_lpp" style="display:none;">
+            <label class="floating-label-activo-sm t-red" for="obs_cp_duch_curac_lpp">Observaciones <i>(Describir)</i></label>
+            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cp_duch_curac_lpp" id="obs_cp_duch_curac_lpp"></textarea>
         </div>
     </div>
 </div>
@@ -85,36 +88,76 @@
                 <h6 class="t-aten">Tipo de Antisépticos y materiales usados</h6>
             </div>
         </div>
+        @php
+            $curacionHeridasBase = null;
+            if (isset($curaciones_lpp) && method_exists($curaciones_lpp, 'first')) {
+                $curacionHeridasBase = $curaciones_lpp->first();
+            }
+
+            $antisepSeleccionados = [];
+            if (isset($curacionHeridasBase) && isset($curacionHeridasBase->datos_curacion_lpp->antisep)) {
+                $antisepRaw = $curacionHeridasBase->datos_curacion_lpp->antisep;
+                if (is_string($antisepRaw)) {
+                    $decoded = json_decode($antisepRaw, true);
+                    $antisepSeleccionados = json_last_error() === JSON_ERROR_NONE ? (array) $decoded : array_filter(explode(',', $antisepRaw), 'strlen');
+                } elseif (is_array($antisepRaw)) {
+                    $antisepSeleccionados = $antisepRaw;
+                } elseif (is_object($antisepRaw)) {
+                    $antisepSeleccionados = (array) $antisepRaw;
+                }
+            }
+
+            $tpoAposSeleccionados = [];
+            if (isset($curacionHeridasBase) && isset($curacionHeridasBase->datos_curacion_lpp->tpo_apos)) {
+                $tpoAposRaw = $curacionHeridasBase->datos_curacion_lpp->tpo_apos;
+                if (is_string($tpoAposRaw)) {
+                    $decoded = json_decode($tpoAposRaw, true);
+                    $tpoAposSeleccionados = json_last_error() === JSON_ERROR_NONE ? (array) $decoded : array_filter(explode(',', $tpoAposRaw), 'strlen');
+                } elseif (is_array($tpoAposRaw)) {
+                    $tpoAposSeleccionados = $tpoAposRaw;
+                } elseif (is_object($tpoAposRaw)) {
+                    $tpoAposSeleccionados = (array) $tpoAposRaw;
+                }
+            }
+        @endphp
         <div class="form-row mt-1">
             <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <label class="floating-label-activo-sm" for="antisep">Seleccionar tipo de antisepticos</label>
-                <select class="form-control form-control-sm" name="antisep" id="antisep" multiple="multiple">
-                    <option value="1">Solución fisiológica</option>
-                    <option value="2">Bialcohol</option>
+                <label class="floating-label-activo-sm" for="antisep_curac_lpp">Seleccionar tipo de antisepticos</label>
+                <select class="form-control form-control-sm" name="antisep_curac_lpp" id="antisep_curac_lpp" multiple="multiple">
+                    <option {{ in_array('1', $antisepSeleccionados) || in_array(1, $antisepSeleccionados) ? 'selected' : '' }} value="1">Solución fisiológica</option>
+                    <option {{ in_array('2', $antisepSeleccionados) || in_array(2, $antisepSeleccionados) ? 'selected' : '' }} value="2">Bialcohol</option>
                 </select>
             </div>
             <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <label class="floating-label-activo-sm" for="tpo_apos">Seleccionar tipo de apósitos y materiales</label>
-                <select class="form-control form-control-sm" name="tpo_apos" id="tpo_apos" multiple="multiple">
-                    <option value="1">Apósitos Pasivos</option>
-                    <option value="2">Apósito Interactivo (Espuma Hidrofílica)</option>
-                    <option value="3">Apósito Bioactivo (Alginato)</option>
-                    <option value="4">Apósitos Mixtos</option>
-                    <option value="5">Vasocontrictores</option>
-                    <option value="6">Otros</option>
+                <label class="floating-label-activo-sm" for="tpo_apos_curac_lpp">Seleccionar tipo de apósitos y materiales</label>
+                <select class="form-control form-control-sm" name="tpo_apos_curac_lpp" id="tpo_apos_curac_lpp" multiple="multiple">
+                    <option {{ in_array('1', $tpoAposSeleccionados) || in_array(1, $tpoAposSeleccionados) ? 'selected' : '' }} value="1">Apósitos Pasivos</option>
+                    <option {{ in_array('2', $tpoAposSeleccionados) || in_array(2, $tpoAposSeleccionados) ? 'selected' : '' }} value="2">Apósito Interactivo (Espuma Hidrofílica)</option>
+                    <option {{ in_array('3', $tpoAposSeleccionados) || in_array(3, $tpoAposSeleccionados) ? 'selected' : '' }} value="3">Apósito Bioactivo (Alginato)</option>
+                    <option {{ in_array('4', $tpoAposSeleccionados) || in_array(4, $tpoAposSeleccionados) ? 'selected' : '' }} value="4">Apósitos Mixtos</option>
+                    <option {{ in_array('5', $tpoAposSeleccionados) || in_array(5, $tpoAposSeleccionados) ? 'selected' : '' }} value="5">Vasocontrictores</option>
+                    <option {{ in_array('6', $tpoAposSeleccionados) || in_array(6, $tpoAposSeleccionados) ? 'selected' : '' }} value="6">Otros</option>
                 </select>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <label class="floating-label-activo-sm" for="antisep">Observaciones</label>
-                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act" id="ot_pat_act"></textarea>
+                <label class="floating-label-activo-sm" for="ot_pat_act_curac_lpp">Observaciones</label>
+                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act_curac_lpp" id="ot_pat_act_curac_lpp"></textarea>
             </div>
         </div>
+        @if(isset($enfermera))
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 text-right mb-3">
+                <button type="button" class="btn btn-success btn-sm" onclick="guardar_curacion_lpp()">
+                    <i class="fas fa-save"></i> Guardar Curación LPP
+                </button>
+            </div>
+        </div>
+        @endif
 
     </div>
 </div>
-<button class="btn btn-outline-primary btn-sm w-100 my-2">Guardar</button>
 <script>
     /** MENSAJE*/
     /** CARGAR mensaje */
@@ -126,8 +169,8 @@
         /** cronico */
     $(document).ready(function() {
         $('#pat_pat').select2();
-        $('#antisep').select2();
-        $('#tpo_apos').select2();
+        $('#antisep_curac_lpp').select2();
+        $('#tpo_apos_curac_lpp').select2();
         $('#pat_prop').select2();
         $('#sint_act').select2();
         $('#gin_obt').select2();
@@ -142,6 +185,9 @@
         $('#select_13').select2();
         $('#select_14').select2();
         $('#select_15').select2();
+
+        $('#antisep_curac_lpp').val(@json($antisepSeleccionados)).trigger('change');
+        $('#tpo_apos_curac_lpp').val(@json($tpoAposSeleccionados)).trigger('change');
     });
 
 
@@ -177,8 +223,6 @@
         .then((willDelete) => {
             if (willDelete) {
                 confirmar_eliminacion_curacion_lpp_servicio(id);
-            } else {
-                swal("Operación cancelada!");
             }
         });
     }
@@ -188,32 +232,32 @@
         var url = "{{ route('enfermeria.eliminar_curacion_lpp_servicio', 'id') }}";
         url = url.replace('id', id);
         $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function(response) {
-                        let mensaje = response.mensaje;
-                        if(mensaje == "OK"){
-                            let curaciones_lpp = response.curaciones_lpp;
-                            $('#tabla_curaciones_lpp_servicio tbody').empty();
-                            $.each(curaciones_lpp, function(index, value){
-                                let fila = '<tr>';
-                                fila += '<td class="text-center align-middle">'+value.fecha+' '+value.hora+'<br>'+value.responsable+'</td>';
-                                fila += '<td class="text-center align-middle">'+value.datos_curacion_lpp.upp_gr_eval+'</td>';
-                                fila += '<td class="text-center align-middle">'+value.datos_curacion_lpp.upp_local_eval+'</td>';
-                                fila += '<td class="text-center align-middle"><div class="switch switch-success d-inline"><input type="checkbox" id="curacion_lpp_servicio_listo'+value.id+'"><label for="curacion_lpp_servicio_listo'+value.id+'" class="cr"></label></div></td>';
-                                fila += '<td class="text-center align-middle"><button type="button" class="btn btn-outline-primary btn-sm" data-target="#modalAgregarInsumo" data-toggle="modal">Insumos</button></td>';
-                                fila += '<td class="text-center align-middle"><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_curacion_lpp_servicio('+value.id+')"><i class="fas fa-trash"></i> </button></td>';
-                                $('#tabla_curaciones_lpp_servicio tbody').append(fila);
-                            });
-                        }else{
-                            swal({
-                                title: "Error",
-                                text: mensaje,
-                                icon: "error",
-                                button: "Aceptar",
-                            });
-                        }
-                    }
-    });
+            url: url,
+            type: 'GET',
+            success: function(response) {
+                let mensaje = response.mensaje;
+                if(mensaje == "OK"){
+                    let curaciones_lpp = response.curaciones_lpp;
+                    $('#tabla_curaciones_lpp_servicio tbody').empty();
+                    $.each(curaciones_lpp, function(index, value){
+                        let fila = '<tr>';
+                        fila += '<td class="text-center align-middle">'+value.fecha+' '+value.hora+'<br>'+value.responsable+'</td>';
+                        fila += '<td class="text-center align-middle">'+value.datos_curacion_lpp.upp_gr_eval+'</td>';
+                        fila += '<td class="text-center align-middle">'+value.datos_curacion_lpp.upp_local_eval+'</td>';
+                        fila += '<td class="text-center align-middle"><div class="switch switch-success d-inline"><input type="checkbox" id="curacion_lpp_servicio_listo'+value.id+'"><label for="curacion_lpp_servicio_listo'+value.id+'" class="cr"></label></div></td>';
+                        fila += '<td class="text-center align-middle"><button type="button" class="btn btn-outline-primary btn-sm" data-target="#modalAgregarInsumo" data-toggle="modal">Insumos</button></td>';
+                        fila += '<td class="text-center align-middle"><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_curacion_lpp_servicio('+value.id+')"><i class="fas fa-trash"></i> </button></td>';
+                        $('#tabla_curaciones_lpp_servicio tbody').append(fila);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: mensaje,
+                        icon: "error",
+                        button: "Aceptar",
+                    });
+                }
+            }
+        });
     }
 </script>

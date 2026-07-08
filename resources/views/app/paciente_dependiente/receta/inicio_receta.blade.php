@@ -33,7 +33,7 @@
                     <div class="card subir py-5">
                         <a href="{{ ROUTE('paciente.dependiente.receta.receta', ['id_dependiente_activo' => $id_dependiente_activo]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/recetas.svg') }}"
+                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/recetas-ro.svg') }}"
                                     alt="Mis Recetas">
                                 <h4 class="titulos_tarjetas">
                                     Mis Recetas
@@ -44,7 +44,7 @@
                     <div class="card subir py-5">
                         <a href="{{ ROUTE('paciente.dependiente.receta.examen', ['id_dependiente_activo' => $id_dependiente_activo]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/examen.svg') }}"
+                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/examenes-ro.svg') }}"
                                     alt="Mis Examenes">
                                 <h4 class="titulos_tarjetas">
                                     Mis Exámenes
@@ -63,7 +63,7 @@
                     <div class="card subir py-5">
                         <a href="{{ ROUTE('paciente.dependiente.receta.certificado',['id_dependiente_activo' => $id_dependiente_activo]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/certificado.svg') }}"
+                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/certificados-ro.svg') }}"
                                     alt="Mis Certificados">
                                 <h4 class="titulos_tarjetas">
                                     Mis Certificados
@@ -74,7 +74,7 @@
                     <div class="card subir py-5">
                         <a href="{{ ROUTE('paciente.dependiente.receta.licencia',['id_dependiente_activo' => $id_dependiente_activo]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/licencia.svg') }}"
+                                <img class="wid-100 text-center mb-3" src="{{ asset('images/iconos/licencia-ro.svg') }}"
                                     alt="Mis Licencias">
                                 <h4 class="titulos_tarjetas">
                                     Mis Licencias

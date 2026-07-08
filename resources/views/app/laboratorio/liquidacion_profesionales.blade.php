@@ -281,6 +281,7 @@
         function cuenta_corriente (){
             $('#dat_bancarios').modal('show');
         }
+        
 
         function contacto ()
         {
@@ -389,6 +390,18 @@
         }
 		function liquidacion_prof_cm(id) {
         $('#liquid_prof_institucion').modal('show');
+        // limpiar campos
+        $('#edit_empleado_fecha_inicio').val('');
+        $('#edit_empleado_fecha_termino').val('');
+        $('#numero_bonos_fisico').val('');
+        $('#valores_isapre_liquidacion').val('');
+        $('#valor_pagar_institucion_liquidacion').val('');
+        $('#bonificacion_cobrar_liquidacion').val('');
+        $('#valor_recibidos_liquidacion').val('');
+        $('#total_pagar_liquidacion_profesional').val(0);
+        $('#total_valor_pagar').val(0);
+        $('#valores_fonasa_liquidacion').val(0);
+        $('#monto_imponible_liquidacion_profesional').val(0);
         dame_info_liquidacion(id);
 		}
 		function cerrarModal() {
@@ -415,10 +428,12 @@
                     $('#nombre_profesional_liquidacion').html(profesional.nombre + ' ' + profesional.apellido_uno);
                     if(data.contrato){
                         /** encontrado */
-                        $('#liquidacion_numero').html(data.registro.numero_liquidacion);
-                        $('#liquidacion_fecha').html(data.registro.fecha_emision);
-                        $('#liquidacion_profesional').html(data.registro.profesional.nombre + ' ' + data.registro.profesional.apellido_uno);
-                        $('#liquidacion_total').html(data.registro.total);
+                        $('#valor_fijo').val(data.contrato.monto_imponible);
+                        $('#monto_imponible_liquidacion_profesional').val(data.contrato.monto_imponible);
+                        // $('#liquidacion_numero').html(data.registro.numero_liquidacion);
+                        // $('#liquidacion_fecha').html(data.registro.fecha_emision);
+                        // $('#liquidacion_profesional').html(data.registro.profesional.nombre + ' ' + data.registro.profesional.apellido_uno);
+                        // $('#liquidacion_total').html(data.registro.total);
                     }
 
                     if(data.convenio){
@@ -430,29 +445,31 @@
                         $('#total_variable_profesional').val(data.total_valor_productos);
 
                         $('#valor_total_prof').val(data.total_valor_convenio);
-                        $('#numero_bonos_mes').val(data.total_bonos);
-                        $('#total_copago_mes').val(data.total_valor_convenio);
-                        $('#total_seguros_mes').val(data.total_valor_seguros);
-                        $('#bonificacion_cobrar_mes').val(data.bonificacion_cobrar);
-
-                        let bonos_isapres = 0;
-                        data.bonos_utilizados.forEach(bono => {
-                            if(bono.id_tipo_convenio == 2){
-                                bonos_isapres++;
-                            }
-                        });
-
-                        $('#numero_bonos_isapre_mes').val(bonos_isapres);
-                        $('#total_copago_isapre_mes').val(data.total_copago_isapres);
-                        $('#total_seguros_isapre_mes').val(data.total_seguros_isapres);
-                        $('#bonificacion_cobrar_isapre_mes').val(data.bonificacion_cobrar_isapre);
-
-                        $('#numero_atenciones_particulares').val(data.horas_medicas.length);
-                        $('#valor_particulares_mes').val(data.total_particulares);
-                        $('#copagos_recibidos_mes').val(data.total_copagos_particulares);
-                        let efectivo_recibido = data.total_particulares + data.total_copagos_particulares;
-                        $('#efectivo_recibido_mes').val(efectivo_recibido);
+                      
                     }
+
+                    $('#numero_bonos_mes').val(data.total_bonos);
+                    $('#total_copago_mes').val(data.total_valor_convenio);
+                    $('#total_seguros_mes').val(data.total_valor_seguros);
+                    $('#bonificacion_cobrar_mes').val(data.bonificacion_cobrar);
+
+                    let bonos_isapres = 0;
+                    // data.bonos_utilizados.forEach(bono => {
+                    //     if(bono.id_tipo_convenio == 2){
+                    //         bonos_isapres++;
+                    //     }
+                    // });
+
+                    $('#numero_bonos_isapre_mes').val(bonos_isapres);
+                    $('#total_copago_isapre_mes').val(data.total_copago_isapres);
+                    $('#total_seguros_isapre_mes').val(data.total_seguros_isapres);
+                    $('#bonificacion_cobrar_isapre_mes').val(data.bonificacion_cobrar_isapre);
+
+                    $('#numero_atenciones_particulares').val(data.horas_medicas.length);
+                    $('#valor_particulares_mes').val(data.total_particulares);
+                    $('#copagos_recibidos_mes').val(data.total_copagos_particulares);
+                    let efectivo_recibido = data.total_particulares + data.total_copagos_particulares;
+                    $('#efectivo_recibido_mes').val(efectivo_recibido);
 
                 }
                 else

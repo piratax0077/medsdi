@@ -374,10 +374,22 @@ class CierreDiarioController extends Controller
             $array_rendiciones = explode('|',$lista_rendiciones);
 
             /** SOLICITAR AUTORIZACION POR APP */
-            $msj = array(
-                'id_rendicion' => $cierreDiario->id,
-                'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
-                'fecha_rendicion' => $fecha_rendicion,
+            // $msj = array(
+            //     'id_rendicion' => $cierreDiario->id,
+            //     'nombre_asistente' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+            //     'fecha_rendicion' => $fecha_rendicion,
+            //     'tipo' => 'rendicion',
+            //     // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
+            // );
+
+             $msj = array(
+                'id' => $cierreDiario->id,
+                'nombre' => $asistenteRendicion->nombres.' '.$asistenteRendicion->apellido_uno.' '.$asistenteRendicion->apellido_dos,
+                'evento' => 'Extensión de validación de cierre diario',
+                'fecha' => $fecha_rendicion,
+                'hora' => date('H:i:s'),
+                'lugar_atencion' => $asistenteRendicion->LugarAtencion ? $asistenteRendicion->LugarAtencion->nombre_lugar : '',
+                'profesional' => $asistenteRendicion->Profesional ? $asistenteRendicion->Profesional->titulo.' '.$asistenteRendicion->Profesional->nombres.' '.$asistenteRendicion->Profesional->apellido_uno.' '.$asistenteRendicion->Profesional->apellido_dos : '',
                 'tipo' => 'rendicion',
                 // 'mensaje' => 'Recibe conforme Rendición de Caja N°{id_rendicion} de la Asistente {nombre_asistente} de fecha {fecha_rendicion}'
             );

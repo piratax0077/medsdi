@@ -1,4 +1,4 @@
-@extends('template.asistente_cm_publico.template')
+@extends('template.asistente_laboratorio.template')
 
 
 @section('page-styles')

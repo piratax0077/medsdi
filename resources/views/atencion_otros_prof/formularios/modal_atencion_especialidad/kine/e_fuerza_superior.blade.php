@@ -45,7 +45,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulaciones Cintura Escapular</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -57,48 +57,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_flex_d">Derecha</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_flex_d" id="ace_flex_d"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_flex_d" id="ace_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_flex_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_flex_i" id="ace_flex_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_flex_i" id="ace_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="ace_exten_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_exten_d" id="ace_exten_d"></textarea>
-                                    </div>   
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">                                
+                                        <input type="text" class="form-control form-control-sm" name="ace_exten_d" id="ace_exten_d">
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_exten_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_exten_i" id="ace_exten_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_exten_i" id="ace_exten_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Abducción</h6>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">                                    
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_abd_d">Derecha</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_abd_d" id="ace_abd_d"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_abd_d" id="ace_abd_d">
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">                                    
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_abd_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_abd_i" id="ace_abd_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_abd_i" id="ace_abd_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Aducción</h6>
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">                                    
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_aduc_d" >Derecha</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_aduc_d" id="ace_aduc_d"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_aduc_d" id="ace_aduc_d">
                                     </div>
-                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">                                    
+                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ace_aduc_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_aduc_i" id="ace_aduc_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_aduc_i" id="ace_aduc_i">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                        <label class="floating-label-activo-sm" for="ace_obs">Obs. Articulación</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ace_obs" id="ace_obs"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ace_obs" id="ace_obs">
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulaciones Hombro</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -119,48 +119,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ah_flex_d">Derecha</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_flex_d" id="ah_flex_d"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ah_flex_d" id="ah_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ah_flex_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_flex_i" id="ah_flex_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ah_flex_i" id="ah_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm"  for="ah_ext_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_ext_d" id="ah_ext_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="ah_ext_d" id="ah_ext_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="ah_ext_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_ext_i" id="ah_ext_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="ah_ext_i" id="ah_ext_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Abducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm"  for="ah_abd_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_abd_d" id="ah_abd_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="ah_abd_d" id="ah_abd_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ah_abd_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_abd_i" id="ah_abd_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ah_abd_i" id="ah_abd_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Aducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ah_aduc_d">Derecha</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_aduc_d" id="ah_aduc_d"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ah_aduc_d" id="ah_aduc_d">
                                     </div>
                                    <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                        <label class="floating-label-activo-sm" for="ah_aduc_i">Izquierda</label>
-                                       <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_aduc_i" id="ah_aduc_i"></textarea>
+                                       <input type="text" class="form-control form-control-sm" name="ah_aduc_i" id="ah_aduc_i">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="ah_obs">Obs. Articulación</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ah_obs" id="ah_obs"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="ah_obs" id="ah_obs">
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +169,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulaciones Codo</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -181,48 +181,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_flex_d">Derecha</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_flex_d" id="ac_flex_d"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_flex_d" id="ac_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_flex_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_flex_i" id="ac_flex_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_flex_i" id="ac_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_ext_d">Derecha</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_ext_d" id="ac_ext_d"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_ext_d" id="ac_ext_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_ext_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_ext_i" id="ac_ext_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_ext_i" id="ac_ext_i">
                                     </div>
                                    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Abducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_abd_d">Derecha</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_abd_d" id="ac_abd_d"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_abd_d" id="ac_abd_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_abd_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_abd_i" id="ac_abd_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_abd_i" id="ac_abd_i">
                                     </div>
                                    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Aducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_aduc_d">Derecha</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_aduc_d" id="ac_aduc_d"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_aduc_d" id="ac_aduc_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="ac_aduc_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_aduc_i" id="ac_aduc_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_aduc_i" id="ac_aduc_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                            <label class="floating-label-activo-sm" for="ac_obs">Obs. Articulación</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="ac_obs" id="ac_obs"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="ac_obs" id="ac_obs">
                                     </div>
                                 </div>
                             </div>
@@ -231,7 +231,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulaciones Radio-Cubital DIstal</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -243,48 +243,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_flex_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_flex_d" id="arcd_flex_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_flex_d" id="arcd_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_flex_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_flex_i" id="arcd_flex_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_flex_i" id="arcd_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_ext_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_ext_d" id="arcd_ext_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_ext_d" id="arcd_ext_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_ext_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_ext_i" id="arcd_ext_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_ext_i" id="arcd_ext_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Abducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_abd_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_abd_d" id="arcd_abd_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_abd_d" id="arcd_abd_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_abd_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_abd_i" id="arcd_abd_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_abd_i" id="arcd_abd_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Aducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_aduc_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_aduc_d" id="arcd_aduc_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_aduc_d" id="arcd_aduc_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="arcd_aduc_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_aduc_i" id="arcd_aduc_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_aduc_i" id="arcd_aduc_i">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="arcd_obs">Obs. Articulación</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="arcd_obs" id="arcd_obs"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="arcd_obs" id="arcd_obs">
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +293,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulaciones Muñeca</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -305,48 +305,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_flex_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_flex_d" id="amu_flex_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_flex_d" id="amu_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_flex_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_flex_i" id="amu_flex_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_flex_i" id="amu_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_ext_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_ext_d" id="amu_ext_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_ext_d" id="amu_ext_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                            <label class="floating-label-activo-sm" for="amu_ext_i">Izquierda</label>
-                                           <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_ext_i" id="amu_ext_i"></textarea>
+                                           <input type="text" class="form-control form-control-sm" name="amu_ext_i" id="amu_ext_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Abducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_abd_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_abd_d" id="amu_abd_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_abd_d" id="amu_abd_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_abd_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_abd_i" id="amu_abd_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_abd_i" id="amu_abd_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Aducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_aduc_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_aduc_d" id="amu_aduc_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_aduc_d" id="amu_aduc_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="amu_aduc_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_aduc_i" id="amu_aduc_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_aduc_i" id="amu_aduc_i">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="amu_obs">Obs. Articulación</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="amu_obs" id="amu_obs"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="amu_obs" id="amu_obs">
                                     </div>
                                 </div>
                             </div>
@@ -355,7 +355,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Articulacion del dedo</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -367,48 +367,48 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_flex_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_flex_d" id="aded_flex_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_flex_d" id="aded_flex_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_flex_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_flex_i" id="aded_flex_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_flex_i" id="aded_flex_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Extensión</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_ext_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_ext_d" id="aded_ext_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_ext_d" id="aded_ext_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_ext_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_ext_i" id="aded_ext_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_ext_i" id="aded_ext_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14">Abducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_abd_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_abd_d" id="aded_abd_d"></textarea>                                    
+                                        <input type="text" class="form-control form-control-sm" name="aded_abd_d" id="aded_abd_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_abd_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_abd_i" id="aded_abd_i"></textarea>                                    
+                                        <input type="text" class="form-control form-control-sm" name="aded_abd_i" id="aded_abd_i">
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                         <h6 class="mt-2 mb-2 f-14"> Aducción</h6>
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_aduc_d">Derecha</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_aduc_d" id="aded_aduc_d"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_aduc_d" id="aded_aduc_d">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                         <label class="floating-label-activo-sm" for="aded_aduc_i">Izquierda</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_aduc_i" id="aded_aduc_i"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_aduc_i" id="aded_aduc_i">
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="aded_obs">Obs. Articulación</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="aded_obs" id="aded_obs"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="aded_obs" id="aded_obs">
                                     </div>
                                 </div>
                             </div>
@@ -417,7 +417,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> PRUEBA DE MINGAZZINI</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -426,7 +426,7 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="minga">Prueba de Mingazzini</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="minga" id="minga"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="minga" id="minga">
                                     </div>
                                 </div>
                             </div>
@@ -435,7 +435,7 @@
                                 <div class="form-row">
                                      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> OBSERVACIONES Y CONCLUSIONES</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -444,7 +444,7 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <label class="floating-label-activo-sm" for="extsup_coment">Comentarios</label>
-                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="extsup_coment" id="extsup_coment"></textarea>
+                                        <input type="text" class="form-control form-control-sm" name="extsup_coment" id="extsup_coment">
                                     </div>
                                 </div>
                             </div>
@@ -454,7 +454,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_fuerza_superior()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -462,5 +462,10 @@
 <script>
     function fuerza_sup() {
         $('#fuerza_sup').modal('show');
+    }
+
+    function guardar_fuerza_superior() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('fuerza_superior');
     }
 </script>

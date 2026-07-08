@@ -17,7 +17,7 @@
 								<img src="{{ asset('images/logo_pais_vertical.png') }}" width="80" alt="Medichile">
 							</div>
 						</div>
-                        @if($paciente)
+                        @if(isset($paciente) && $paciente)
 						<div class="row">
 							<div class="col-md-6 text-center mx-auto mb-2 t-azul"><h5>Sr./Sra. {{ $paciente }}</h5></div>
 						</div>

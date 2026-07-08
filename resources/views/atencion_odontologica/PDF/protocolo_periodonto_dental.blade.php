@@ -25,7 +25,7 @@
 
     <p><strong>Detalles de Cirugía:</strong> {{ $det_cir }}</p>
     <p><strong>Material de Toma de Impresión:</strong> {{ $nombre_tons }}</p>
-    <p><strong>Piezas Implantadas:</strong></p>
+    <p><strong>Piezas en Tratamiento:</strong></p>
     <div>
         @foreach ($prot_pieza_imp as $pieza)
             <span style="margin-right: 10px;">{{ $pieza }}</span>

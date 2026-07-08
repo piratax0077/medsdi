@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExamenAudicion;
+use App\Models\ExamenEspecialidad;
 use App\Models\FichaAtencion;
+use App\Models\FichaAtencionEnfermeria;
+use App\Models\FichaEnfermeriaDocumentoNutricion;
+use App\Models\CuracionesPlanasServicio;
+use App\Models\CuracionesLppServicio;
+use App\Models\CuracionesPieDiabetico;
+use App\Models\CuracionesQuemados;
 use App\Models\FichaOtrosProfesionales;
 use App\Models\FichaOtProfControl;
+use App\Models\FichaGinecoObstetrica;
 use App\Models\FichaKinesiologia;
 use App\Models\FichaKineNeurologia;
 use App\Models\FichaKineTorax;
@@ -23,6 +31,7 @@ use App\Models\FichaSicosocial;
 use App\Models\FichaSicoTestRorshchach;
 use App\Models\FichaSiqui;
 use App\Models\FonoInforme;
+use App\Models\FonoValoracionEquilibrio;
 use App\Models\HoraMedica;
 use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
@@ -36,6 +45,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Carbon\Carbon;
 
@@ -125,25 +135,35 @@ class FichaAtencionOtrosProfController extends Controller
         // buscar plan activo
         $plan = PlanTratamientoOtrosProfesionales::where('id_paciente', $request->id_paciente_fc)
             ->where('id_profesional', $request->id_profesional_fc)
-            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            // ->where('id_lugar_atencion', $request->id_lugar_atencion)
             ->where('estado', 1)
             ->first();
+
 
         if (!$plan) {
             $campos_requeridos = 0;
             $mensaje .= 'No se encontró un plan de tratamiento psicológico activo para este paciente.<br>';
         }
+
+        // Corregir sesion_actual = 0 de planes antiguos
+        if ($plan && ($plan->sesion_actual == 0 || $plan->sesion_actual == null)) {
+            $plan->sesion_actual = 1;
+            $plan->save();
+        }
+
         if(empty( trim($request->hipotesis)))
         {
             $campos_requeridos = 0;
             $mensaje .= 'El Diagnóstico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún. <br> Si es solo Control, indicar Control de Patología.';
         }
 
-        if ($plan && $plan->numero_sesiones != $plan->sesion_actual) {
-            if ($request->hora_agendada == 0 || $request->hora_agendada == '') {
+        // Validar agendamiento solo si no es la última sesión y no es la primera sesión recién creada
+        if ($plan && $plan->numero_sesiones > $plan->sesion_actual) {
+            // Permitir guardar la primera sesión sin hora agendada inicialmente
+            // Las sesiones posteriores sí requieren hora agendada
+            if ($plan->sesion_actual > 1 && ($request->hora_agendada == 0 || $request->hora_agendada == '')) {
                 $campos_requeridos = 0;
-                $sesion_actual = $plan->sesion_actual + 1;
-                $mensaje = 'Debe seleccionar una hora médica para continuar el plan con la sesión '. $sesion_actual;
+                $mensaje = 'Está en la sesión '. $plan->sesion_actual .' de '. $plan->numero_sesiones .'. Debe seleccionar una hora médica para agendar la próxima sesión.';
             }
         }
 
@@ -151,60 +171,99 @@ class FichaAtencionOtrosProfController extends Controller
         {
 
             if($plan->sesion_actual == 1){
-                /** FICHA ATENCION  */
+                /** FICHA OTROS PROFESIONALES - PSICOLOGÍA */
 
-                $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+                $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
                 if($ficha){
                     $id_profesional = $request->id_profesional_fc;
                     $id_paciente = $request->id_paciente_fc;
-                    $ficha->motivo = $request->dg_ingreso;
-                    // $ficha->antecedentes = $request->cond_fis_ingreso;
-                    $ficha->hipotesis_diagnostico = $request->hipotesis;
-                    $ficha->id_paciente = $id_paciente;
+                    $profesional = Profesional::find($id_profesional);
+
+                    // Actualizar campos de la ficha existente
+                    $ficha->id_especialidad = $profesional->id_especialidad;
+                    $ficha->id_tipo_especialidad = $profesional->id_tipo_especialidad;
                     $ficha->id_profesional = $id_profesional;
+                    $ficha->id_paciente = $id_paciente;
+                    $ficha->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha->tipo_consulta_d = $request->tipo_consulta_d;
+                    $ficha->der_por = $request->der_por;
+                    $ficha->cond_fis_ingreso = $request->cond_fis_ingreso;
+                    $ficha->num_sesiones = $request->num_sesiones;
+                    $ficha->dg_ingreso = $request->dg_ingreso;
+                    $ficha->solicitud_prof = $request->solicitud_prof;
+                    $ficha->espect_pcte = $request->espect_pcte;
+                    $ficha->hipotesis = $request->hipotesis;
+                    $ficha->indicaciones = $request->indicaciones;
+                    $ficha->datos = json_encode($request->all());
+                    $ficha->estado = 1;
                     $ficha->finalizada = 1;
-                    $ficha->confidencial = 1; // siempre es confidencial para psicología
                 }
 
 
                 if (!$ficha->save())
                 {
-                    //return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+                    return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
                 }
                 else
                 {
-                    // Guardar datos de otros profesionales
-                $store_ot = $this->store_ot_prof($request, $ficha);
-                if ($store_ot->estado == 1) {
-                    $mensaje .= $store_ot->msj;
+                    $mensaje = 'Se ha Iniciado el plan de psicología del paciente\n';
+                    $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+                    $id_profesional = $profesional->id;
+                    $tipo_mensaje = 'success';
                     $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
-                } else {
-                    $mensaje .= $store_ot->msj;
                 }
 
+                // Incrementar sesión si se agendó próxima hora
+                $sesion_completada = $plan->sesion_actual;
+                $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
 
-
-                $mensaje = 'Se ha Iniciado el plan de profesión del paciente\n' . $mensaje;
-                //$profesional = Profesional::find($id_profesional);
-                $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-                $id_profesional = $profesional->id;
-                $tipo_mensaje = 'success';
-                $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
-
+                // Incrementar a próxima sesión si se agendó hora y no es la última
+                if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
+                    $plan->sesion_actual += 1;
+                    $plan->save();
+                    $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
                 }
+                else if ($plan->sesion_actual >= $plan->numero_sesiones) {
+                    $plan->estado = 0;
+                    $plan->save();
+                    $mensaje .= " Plan de tratamiento finalizado.";
+                }
+
                 $hora_medica->id_estado = 6;
                 $hora_medica->save();
-                 return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
-            }else {
+
+                return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+            }
+            // Sesiones posteriores (controles)
+            else {
+                // Registrar control/evolución
                 if ($request->finalizando_sesiones == 1) {
                     $plan->estado = 0; // Finalizar plan si es la última sesión
                     $plan->save();
                     $tipo_mensaje = 'info';
-                    $mensaje = 'Ha finalizado el plan de tratamiento.';
+                    $mensaje = 'Ha finalizado el plan de tratamiento psicológico.';
                 } else {
                     $tipo_mensaje = 'success';
-                    $mensaje = 'Sesión registrada.';
+                    $mensaje = 'Sesión de control registrada correctamente.';
                 }
+
+                // Incrementar sesión si se agendó próxima hora
+                $sesion_completada = $plan->sesion_actual;
+                $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
+
+                // Incrementar sesión para sesiones posteriores si se agendó próxima hora
+                if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
+                    $plan->sesion_actual += 1;
+                    $plan->save();
+                    $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
+                }
+                else if ($plan->sesion_actual >= $plan->numero_sesiones) {
+                    $plan->estado = 0;
+                    $plan->save();
+                    $mensaje .= " Plan de tratamiento finalizado.";
+                }
+
                 $hora_medica->id_estado = 6;
                 $hora_medica->save();
 
@@ -230,6 +289,268 @@ class FichaAtencionOtrosProfController extends Controller
         {
             return back()->with('error', $mensaje)->withInput();
         }
+    }
+
+    public function store_laboratorio_clinico(Request $request){
+        return $request;
+        $diagnostico = "Examen de Laboratorio Clínico: " . $request->examen_solicitado . ". Resultado: " . $request->resultado_examen;
+
+    }
+
+    public function store_enfermeria(Request $request)
+    {
+
+        $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+        $id_profesional = $request->id_profesional_fc;
+        $id_paciente = $request->id_paciente_fc;
+        $profesional = Profesional::find($id_profesional);
+
+        // Validamos que al menos tenga un motivo
+        if (empty(trim($request->motivo)) || $request->motivo == 'Seleccione' || $request->motivo == '0') {
+            return back()->with('error', 'El motivo de la atención es requerido para guardar la ficha de enfermería.')->withInput();
+        }
+
+        // Recuperar o crear la ficha de otros profesionales asociada a la hora médica
+        $ficha = null;
+        if ($hora_medica) {
+            $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+        }
+        if (!$ficha) {
+            $ficha = new FichaOtrosProfesionales();
+        }
+
+
+        // Guardar en FichaOtrosProfesionales usando los campos correctos de la tabla
+        $ficha->id_especialidad = $profesional ? $profesional->id_especialidad : null;
+        $ficha->id_tipo_especialidad = $profesional ? $profesional->id_tipo_especialidad : null;
+        $ficha->id_profesional = $id_profesional;
+        $ficha->id_paciente = $id_paciente;
+        $ficha->id_lugar_atencion = $request->id_lugar_atencion;
+        $ficha->tipo_consulta_d = $request->tipo_consulta_d ?: null;
+        $ficha->der_por = $request->der_por ?: null;
+        $ficha->cond_fis_ingreso = $request->anamnesis; // Anamnesis va aquí
+        $ficha->num_sesiones = $request->num_sesiones ?: null;
+        $ficha->dg_ingreso = 'ATENCIÓN DE ENFERMERÍA'; // Diagnóstico de ingreso
+        $ficha->solicitud_prof = $request->solicitud_prof ?: null;
+        $ficha->espect_pcte = $request->espect_pcte ?: null;
+        $ficha->hipotesis = 'ATENCIÓN DE ENFERMERÍA'; // Hipótesis diagnóstica
+        $ficha->indicaciones = $request->indicaciones;
+        $ficha->datos = json_encode($request->all()); // Guardar toda la data en JSON
+        $ficha->estado = 1;
+        $ficha->finalizada = 1;
+
+        if (!$ficha->save()) {
+            return back()->with('error', 'Ficha de Enfermería con problema al guardar')->withInput();
+        }
+
+        $tipo_mensaje = 'success';
+        $mensaje = 'Ficha de Enfermería guardada de forma correcta\n';
+
+        // Registro de la ficha de enfermería con todos los datos de la atención
+        // Verificar si existe una ficha de enfermería para actualizar o crear nueva
+        if ($request->id_ficha_enfermeria) {
+            $ficha_enfermeria = FichaAtencionEnfermeria::find($request->id_ficha_enfermeria);
+            if (!$ficha_enfermeria) {
+                $ficha_enfermeria = new FichaAtencionEnfermeria();
+            }
+        } else {
+            $ficha_enfermeria = new FichaAtencionEnfermeria();
+        }
+
+        $ficha_enfermeria->id_ficha_atencion = $ficha->id;
+        $ficha_enfermeria->id_paciente = $id_paciente;
+        $ficha_enfermeria->id_profesional = $id_profesional;
+        $ficha_enfermeria->id_lugar_atencion = $request->id_lugar_atencion;
+        $ficha_enfermeria->id_hora_medica = $request->hora_medica;
+        $ficha_enfermeria->motivo = $request->motivo;
+        $ficha_enfermeria->anamnesis = $request->anamnesis;
+        $ficha_enfermeria->temperatura = $request->temperatura;
+        $ficha_enfermeria->pulso = $request->pulso;
+        $ficha_enfermeria->frecuencia_reposo = $request->frecuencia_reposo;
+        $ficha_enfermeria->peso = $request->peso;
+        $ficha_enfermeria->talla = $request->talla;
+        $ficha_enfermeria->imc = $request->imc;
+        $ficha_enfermeria->estado_nutricional = $request->estado_nutricional;
+        $ficha_enfermeria->pas = $request->pas;
+        $ficha_enfermeria->pad = $request->pad;
+        $ficha_enfermeria->pam = $request->pam;
+        $ficha_enfermeria->presion_bi = $request->presion_bi;
+        $ficha_enfermeria->presion_bd = $request->presion_bd;
+        $ficha_enfermeria->presion_de_pie = $request->presion_de_pie;
+        $ficha_enfermeria->presion_sentado = $request->presion_sentado;
+        $ficha_enfermeria->ct_estado_conciencia = $request->ct_estado_conciencia;
+        $ficha_enfermeria->ct_lenguaje = $request->ct_lenguaje;
+        $ficha_enfermeria->ct_traslado = $request->ct_traslado;
+        $ficha_enfermeria->nutricionista_evaluacion = $request->nutricionista_evaluacion ?: null;
+        $ficha_enfermeria->nutricionista_pauta = $request->nutricionista_pauta ?: null;
+        $ficha_enfermeria->examenes = $request->examenes;
+        $ficha_enfermeria->examenes_esp = $request->examenes_esp;
+        $ficha_enfermeria->medicamentos = $request->medicamentos;
+        $ficha_enfermeria->estado = 1;
+
+        if ($ficha_enfermeria->save()) {
+            $mensaje .= 'Datos de la atención registrados correctamente\n';
+        } else {
+            $mensaje .= 'Problema al registrar los datos de la atención\n';
+        }
+
+        // Guardar documentos de nutrición adjuntos (referenciados a un nutricionista)
+        $paciente = Paciente::find($id_paciente);
+        $documentos_nutricion = array(
+            'evaluacion' => $request->docs_nutricion_evaluacion,
+            'pauta'      => $request->docs_nutricion_pauta,
+        );
+
+        foreach ($documentos_nutricion as $tipo_doc => $json_docs) {
+            if (empty($json_docs)) {
+                continue;
+            }
+
+            $lista_docs = json_decode($json_docs, true);
+            if (!is_array($lista_docs)) {
+                continue;
+            }
+
+            // Si estamos actualizando, eliminar solo los documentos del tipo específico
+            if ($request->id_ficha_enfermeria) {
+                FichaEnfermeriaDocumentoNutricion::where('id_ficha_enfermeria', $ficha_enfermeria->id)
+                    ->where('tipo', $tipo_doc)
+                    ->delete();
+            }
+
+            foreach ($lista_docs as $doc) {
+                // Estructura: [url, nombre_original, nombre_img, extension, id_nutricionista]
+                $nombre_temp = $doc[2] ?? null;
+                $extension = $doc[3] ?? '';
+                $id_nutricionista = !empty($doc[4]) ? $doc[4] : null;
+
+                if (empty($nombre_temp)) {
+                    continue;
+                }
+
+                $rut_paciente = $paciente ? $paciente->rut : $id_paciente;
+                $nombre_final = $rut_paciente . '_nutricion_' . $tipo_doc . '_' . date('YmdHis') . '_' . uniqid() . '.' . $extension;
+
+                $resultado_mov = CargaImagenController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+                $url_final = $resultado_mov['estado'] == 1 ? $resultado_mov['proceso']['url'] : ($doc[0] ?? '');
+
+                $documento = new FichaEnfermeriaDocumentoNutricion();
+                $documento->id_ficha_enfermeria = $ficha_enfermeria->id;
+                $documento->id_ficha_atencion = $ficha->id;
+                $documento->id_paciente = $id_paciente;
+                $documento->id_nutricionista = $id_nutricionista;
+                $documento->tipo = $tipo_doc;
+                $documento->url = $url_final;
+                $documento->nombre_original = $doc[1] ?? '';
+                $documento->nombre_archivo = $nombre_final;
+                $documento->extension = $extension;
+                $documento->estado = 1;
+                $documento->save();
+            }
+        }
+
+        // Finalizar hora médica
+        if ($hora_medica) {
+            $hora_medica->id_estado = 6;
+            if (!$hora_medica->save()) {
+                $mensaje .= 'Hora Medica con Problemas para finalizar.\n';
+            } else {
+                $mensaje .= 'Hora medica Finalizada con Exito.\n';
+            }
+        }
+
+        // =========================================================
+        // Guardar curaciones si se enviaron datos desde el formulario
+        // =========================================================
+        $now = now();
+
+        // Curación Plana
+        if (!empty($request->curacion_plana_data)) {
+            $datos_cp = json_decode($request->curacion_plana_data, true);
+            if ($datos_cp) {
+                $cp = new CuracionesPlanasServicio();
+                $cp->id_paciente = $id_paciente;
+                $cp->id_responsable = auth()->id();
+                $cp->id_ficha_atencion = $ficha->id;
+                $cp->fecha = $now->format('Y-m-d');
+                $cp->hora = $now->format('H:i:s');
+                $cp->datos_curacion_plana = json_encode($datos_cp);
+                $cp->otros = $datos_cp['obs_cur_plana'] ?? null;
+                $cp->activo = 1;
+                $cp->save();
+                $mensaje .= 'Curación plana guardada.\n';
+            }
+        }
+
+        // Curación LPP
+        if (!empty($request->curacion_lpp_data)) {
+            $datos_lpp = json_decode($request->curacion_lpp_data, true);
+            if ($datos_lpp) {
+                $lpp = new CuracionesLppServicio();
+                $lpp->id_paciente = $id_paciente;
+                $lpp->id_responsable = auth()->id();
+                $lpp->id_ficha_atencion = $ficha->id;
+                $lpp->fecha = $now->format('Y-m-d');
+                $lpp->hora = $now->format('H:i:s');
+                $lpp->datos_curacion_lpp = json_encode($datos_lpp);
+                $lpp->activo = 1;
+                $lpp->save();
+                $mensaje .= 'Curación LPP guardada.\n';
+            }
+        }
+
+        // Pie Diabético
+        if (!empty($request->curacion_pie_diabetico_data)) {
+            $datos_pie = json_decode($request->curacion_pie_diabetico_data, true);
+            if ($datos_pie) {
+                $pie = new CuracionesPieDiabetico();
+                $pie->id_paciente = $id_paciente;
+                $pie->id_responsable = auth()->id();
+                $pie->id_ficha_atencion = $ficha->id;
+                $pie->fecha = $now->format('Y-m-d');
+                $pie->hora = $now->format('H:i:s');
+                $pie->datos_valoracion_pie_diabetico = json_encode($datos_pie['valoracion'] ?? $datos_pie);
+                $pie->datos_curacion_pie_diabetico = json_encode($datos_pie['curacion'] ?? []);
+                $pie->estado = 'completado';
+                $pie->activo = 1;
+                $pie->save();
+                $mensaje .= 'Curación pie diabético guardada.\n';
+            }
+        }
+
+        // Quemados
+        if (!empty($request->curacion_quemados_data)) {
+            $datos_qm = json_decode($request->curacion_quemados_data, true);
+            if ($datos_qm) {
+                $qm = new CuracionesQuemados();
+                $qm->id_paciente = $id_paciente;
+                $qm->id_responsable = auth()->id();
+                $qm->id_ficha_atencion = $ficha->id;
+                $qm->fecha = $now->format('Y-m-d');
+                $qm->hora = $now->format('H:i:s');
+                $qm->datos_valoracion_quemados = json_encode($datos_qm['valoracion'] ?? $datos_qm);
+                $qm->datos_curacion_quemados = json_encode($datos_qm['curacion'] ?? []);
+                $qm->activo = 1;
+                $qm->save();
+                $mensaje .= 'Curación quemados guardada.\n';
+            }
+        }
+
+        if ($request->cerrarsession == 1) {
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return \Redirect::route('home.ingreso');
+        }
+
+        $array_tem = array(
+            'lugares_atencion' => $request->id_lugar_atencion,
+            'pdf' => $request->mostrarpdf,
+            'tipo' => $request->tipopdf,
+            'id_examen' => 0,
+        );
+
+        return \Redirect::route('profesional.mi_agenda', $array_tem)->with($tipo_mensaje, $mensaje);
     }
 
     public function store_siqui(Request $request)//listo - revisado
@@ -773,115 +1094,234 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
+     public function guardar_planificacion(Request $request)
+    {
+
+        $ficha = FichaOtrosProfesionales::find($request->id_ficha_atencion);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if (!$ficha) {
+            return response()->json([
+                'mensaje' => 'error',
+                'detalle' => 'Ficha de atención no encontrada'
+            ], 404);
+        }
+
+        // Verificar si hay un plan existente activo
+        $planExistente = PlanTratamientoOtrosProfesionales::where('id_paciente', $ficha->id_paciente)
+            ->where('id_profesional', $profesional->id)
+            ->where('estado', 1) // solo activos
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($planExistente) {
+            // Si existe un plan activo, actualizarlo
+            $plan = $planExistente;
+
+            // Actualizar los datos del plan existente
+            $plan->diagnostico = $request->diagnostico;
+            $plan->tratamiento = json_encode($request->tratamiento);
+            $plan->numero_sesiones = $request->numero_sesiones;
+            $plan->tipo_sesiones = $request->tipo_sesiones;
+            $plan->objetivos = $request->objetivos;
+            $plan->peso_inicial = $request->peso_inicial;
+
+            $accion = 'actualizado';
+        } else {
+            // Si no existe plan activo, crear uno nuevo
+            $plan = new PlanTratamientoOtrosProfesionales();
+
+            $plan->id_ficha_atencion = $request->id_ficha_atencion;
+            $plan->id_profesional = $profesional->id;
+            $plan->id_paciente = $ficha->id_paciente;
+            $plan->id_lugar_atencion = $ficha->id_lugar_atencion;
+            // $plan->fecha_inicio = Carbon::now()->format('Y-m-d');
+            $plan->fecha = Carbon::now()->format('Y-m-d');
+            $plan->diagnostico = $request->diagnostico;
+            $plan->tratamiento = json_encode($request->tratamiento);
+            $plan->numero_sesiones = $request->numero_sesiones;
+            $plan->sesion_actual = 0; // Empezar desde sesión 0 para un nuevo plan
+            $plan->tipo_sesiones = $request->tipo_sesiones;
+            $plan->objetivos = $request->objetivos;
+            $plan->peso_inicial = $request->peso_inicial;
+            $plan->estado = 1; // Activo
+
+            $accion = 'creado';
+        }
+
+        if ($plan->save()) {
+            return response()->json([
+                'mensaje' => 'ok',
+                'detalle' => "Plan de tratamiento nutricional {$accion} correctamente",
+                'plan_id' => $plan->id
+            ]);
+        } else {
+            return response()->json([
+                'mensaje' => 'error',
+                'detalle' => 'Error al guardar el plan de tratamiento nutricional'
+            ], 500);
+        }
+    }
 
     public function store_nutri(Request $request)
     {
 
         $campos_requeridos = 1;
         $mensaje = '';
+        $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
         // buscar plan activo
         $plan = PlanTratamientoOtrosProfesionales::where('id_paciente', $request->id_paciente_fc)
             ->where('id_profesional', $request->id_profesional_fc)
-            ->where('id_lugar_atencion', $request->id_lugar_atencion)
             ->where('estado', 1)
             ->first();
 
         if (!$plan) {
-            return back()->with('error', 'No se encontró un plan de nutrición activo para este paciente.')->withInput();
+            $campos_requeridos = 0;
+            $mensaje .= 'No se encontró un plan de nutrición activo para este paciente.<br>';
+        }
+
+        // Corregir sesion_actual = 0 de planes antiguos
+        if ($plan && ($plan->sesion_actual == 0 || $plan->sesion_actual == null)) {
+            $plan->sesion_actual = 1;
+            $plan->save();
         }
 
         if (empty(trim($request->hipotesis))) {
             $campos_requeridos = 0;
-            $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+            $mensaje .= 'El Diagnóstico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún. <br> Si es solo Control, indicar Control de Patología.';
         }
 
-        $completada = 0;
-        if($plan->numero_sesiones == $plan->sesion_actual){
-            $completada = 1;
-        }
-
-        if ($completada == 0) {
-            // if($request->hora_agendada == 0 || $request->hora_agendada == ''){
-            //     $campos_requeridos = 0;
-            //     $sesion_actual = $plan->sesion_actual + 1;
-            //     $mensaje = 'Debe seleccionar una hora médica para continuar el plan con la sesión '. $sesion_actual;
-            // }
-
-        }
-
-        if (!$plan->numero_sesiones == $plan->sesion_actual) {
-            if ($request->hora_agendada == 0 || $request->hora_agendada == '') {
+        // Validar agendamiento solo si no es la última sesión y no es la primera sesión recién creada
+        if ($plan && $plan->numero_sesiones > $plan->sesion_actual) {
+            // Permitir guardar la primera sesión sin hora agendada inicialmente
+            // Las sesiones posteriores sí requieren hora agendada
+            if ($plan->sesion_actual > 1 && ($request->hora_agendada == 0 || $request->hora_agendada == '')) {
                 $campos_requeridos = 0;
-                $sesion_actual = $plan->sesion_actual + 1;
-                $mensaje = 'Debe seleccionar una hora médica para continuar el plan con la sesión '. $sesion_actual;
+                $mensaje = 'Está en la sesión '. $plan->sesion_actual .' de '. $plan->numero_sesiones .'. Debe seleccionar una hora médica para agendar la próxima sesión.';
             }
         }
 
-        if($request->finalizando_sesiones == 1){
-            $plan->estado = 0;
-            $plan->save();
-        }
+        if($campos_requeridos)
+        {
 
-        if (!$campos_requeridos) {
+            if($plan->sesion_actual == 1){
+                /** FICHA OTROS PROFESIONALES - NUTRICIÓN */
+
+                $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
+                if($ficha){
+                    $id_profesional = $request->id_profesional_fc;
+                    $id_paciente = $request->id_paciente_fc;
+                    $profesional = Profesional::find($id_profesional);
+
+                    // Actualizar campos de la ficha existente
+                    $ficha->id_especialidad = $profesional->id_especialidad;
+                    $ficha->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                    $ficha->id_profesional = $id_profesional;
+                    $ficha->id_paciente = $id_paciente;
+                    $ficha->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha->tipo_consulta_d = $request->tipo_consulta_d;
+                    $ficha->der_por = $request->der_por;
+                    $ficha->cond_fis_ingreso = $request->cond_fis_ingreso;
+                    $ficha->num_sesiones = $request->num_sesiones;
+                    $ficha->dg_ingreso = $request->dg_ingreso;
+                    $ficha->solicitud_prof = $request->solicitud_prof;
+                    $ficha->espect_pcte = $request->espect_pcte;
+                    $ficha->hipotesis = $request->hipotesis;
+                    $ficha->indicaciones = $request->indicaciones;
+                    $ficha->datos = json_encode($request->all());
+                    $ficha->estado = 1;
+                    $ficha->finalizada = 1;
+                }
+
+
+                if (!$ficha->save())
+                {
+                    return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+                }
+                else
+                {
+                    $mensaje = 'Se ha Iniciado el plan de nutrición del paciente\n';
+                    $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+                    $id_profesional = $profesional->id;
+                    $tipo_mensaje = 'success';
+                    $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
+                }
+
+                // Incrementar sesión si se agendó próxima hora
+                $sesion_completada = $plan->sesion_actual;
+                $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
+
+                // Incrementar a próxima sesión si se agendó hora y no es la última
+                if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
+                    $plan->sesion_actual += 1;
+                    $plan->save();
+                    $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
+                }
+                else if ($plan->sesion_actual >= $plan->numero_sesiones) {
+                    $plan->estado = 0;
+                    $plan->save();
+                    $mensaje .= " Plan de tratamiento finalizado.";
+                }
+
+                $hora_medica->id_estado = 6;
+                $hora_medica->save();
+
+                return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+            }
+            // Sesiones posteriores (controles)
+            else {
+                // Registrar control/evolución
+                if ($request->finalizando_sesiones == 1) {
+                    $plan->estado = 0; // Finalizar plan si es la última sesión
+                    $plan->save();
+                    $tipo_mensaje = 'info';
+                    $mensaje = 'Ha finalizado el plan de tratamiento nutricional.';
+                } else {
+                    $tipo_mensaje = 'success';
+                    $mensaje = 'Sesión de control registrada correctamente.';
+                }
+
+                // Incrementar sesión si se agendó próxima hora
+                $sesion_completada = $plan->sesion_actual;
+                $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
+
+                // Incrementar sesión para sesiones posteriores si se agendó próxima hora
+                if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
+                    $plan->sesion_actual += 1;
+                    $plan->save();
+                    $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
+                }
+                else if ($plan->sesion_actual >= $plan->numero_sesiones) {
+                    $plan->estado = 0;
+                    $plan->save();
+                    $mensaje .= " Plan de tratamiento finalizado.";
+                }
+
+                $hora_medica->id_estado = 6;
+                $hora_medica->save();
+
+                if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                {
+                    /** redireccion Redirect funciona correcto */
+                    return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                }
+                else if($request->cerrarsession == 1)
+                {
+                    //si funciona
+                    // $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+                    return \Redirect::route('home.ingreso');
+
+                }
+            }
+
+
+
+        }
+        else
+        {
             return back()->with('error', $mensaje)->withInput();
         }
-
-        $tipo_mensaje = 'success';
-        $mensaje = '';
-        $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-
-        // Si es la primera sesión, guardamos la ficha de atención
-        if ($plan->sesion_actual == 1) {
-
-            $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
-
-            $ficha->motivo = $request->dg_ingreso;
-            $ficha->hipotesis_diagnostico = $request->hipotesis;
-            $ficha->id_paciente = $request->id_paciente_fc;
-            $ficha->id_profesional = $request->id_profesional_fc;
-            $ficha->id_lugar_atencion = $request->id_lugar_atencion;
-            $ficha->finalizada = 1;
-
-            if (!$ficha->save()) {
-                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
-            }
-
-            // Guardar datos de otros profesionales
-            $store_ot = $this->store_ot_prof($request, $ficha);
-            if ($store_ot->estado == 1) {
-                $mensaje .= $store_ot->msj;
-                $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
-            } else {
-                $mensaje .= $store_ot->msj;
-            }
-
-
-
-            $mensaje = 'Se ha Iniciado el plan de nutrición del paciente\n' . $mensaje;
-        }
-        // Si NO es la primera sesión...
-        else {
-            if ($plan->numero_sesiones == $plan->sesion_actual) {
-                $plan->estado = 0; // Finalizar plan si es la última sesión
-                //$plan->save();
-                //$mensaje = 'Le queda la ultima sesión';
-            } else {
-                $mensaje = 'Sesión registrada.';
-            }
-        }
-        // Finalizar hora médica
-        $hora_medica->id_estado = 6;
-        if (!$hora_medica->save()) {
-            $mensaje .= 'Hora Médica con Problemas para finalizar.\n';
-        } else {
-            $mensaje .= 'Hora Médica Finalizada con Éxito.\n';
-        }
-
-        $array_tem = [
-            'lugares_atencion' => $request->id_lugar_atencion,
-        ];
-
-        return \Redirect::route('profesional.mi_agenda', $array_tem)->with($tipo_mensaje, $mensaje);
     }
 
 
@@ -2771,6 +3211,21 @@ class FichaAtencionOtrosProfController extends Controller
                     {
                         $tipo_mensaje = 'success';
                         $mensaje .= 'Ficha Examen Audición registrada con exito\n';
+
+                        /** REGISTRO EN EXAMEN ESPECIALIDAD */
+                        $examen_esp = new ExamenEspecialidad();
+                        $examen_esp->id_ficha_atencion   = $hora_medica->id_ficha_atencion ?? null;
+                        $examen_esp->id_ficha_otros_prof = $ficha->id;
+                        $examen_esp->id_paciente         = $request->id_paciente_fc;
+                        $examen_esp->id_profesional      = $request->id_profesional_fc;
+                        $examen_esp->nombre              = 'Examen Audición';
+                        $examen_esp->cuerpo              = json_encode([
+                            'examenes'    => $request->examenes,
+                            'archivos'    => $archivos_finales,  // array PHP, no double-encoded
+                            'hora_medica' => $request->hora_medica,
+                        ]);
+                        $examen_esp->estado              = 1;
+                        $examen_esp->save();
                     }
                     else
                     {
@@ -3092,5 +3547,1036 @@ class FichaAtencionOtrosProfController extends Controller
         {
             return back()->with('error', $mensaje)->withInput();
         }
+    }
+
+    public function get_fono_valoracion_equilibrio(Request $request)
+    {
+        $query = FonoValoracionEquilibrio::where('id_paciente', $request->id_paciente)
+                    ->where('estado', 1);
+
+        if ($request->filled('id_hora_medica')) {
+            $query->where('id_hora_medica', $request->id_hora_medica);
+        }
+
+        $registros = $query->orderBy('created_at', 'desc')->get()->map(function ($item) {
+            $item->datos_parsed = json_decode($item->datos, true) ?? [];
+            return $item;
+        });
+
+        return response()->json([
+            'success'   => true,
+            'registros' => $registros,
+            'total'     => $registros->count(),
+        ]);
+    }
+
+    public function store_fono_valoracion_equilibrio(Request $request)
+    {
+
+        $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+        if (!$hora_medica) {
+            return response()->json(['success' => false, 'mensaje' => 'Hora médica no encontrada']);
+        }
+
+        FonoValoracionEquilibrio::updateOrCreate(
+            ['id_hora_medica' => $hora_medica->id],
+            [
+                'id_ficha_otros_prof' => $hora_medica->id_ficha_otros_prof ?? null,
+                'id_profesional'      => $request->id_profesional_fc,
+                'id_paciente'         => $request->id_paciente_fc,
+                'datos'               => $request->datos,
+            ]
+        );
+
+        return response()->json(['success' => true, 'mensaje' => 'Valoración guardada correctamente']);
+    }
+
+    public function generar_pdf_valoracion_equilibrio(Request $request)
+    {
+        try {
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+            $paciente    = Paciente::find($request->id_paciente_fc);
+            $profesional = Profesional::find($request->id_profesional_fc);
+
+            $edad = '';
+            if ($paciente && $paciente->fecha_nac) {
+                $edad = \Carbon\Carbon::parse($paciente->fecha_nac)->age . ' años';
+            }
+
+            $datos = json_decode($request->datos, true) ?? [];
+
+            // Mapas de leyenda IMD
+            $leyendasIMD = [
+                '0' => 'No puede caminar sin ayuda, desviaciones severas de la marcha o equilibrio',
+                '1' => 'Velocidad lenta, patrón de marcha anormal, evidencia de desequilibrio',
+                '2' => 'Utiliza dispositivos de asistencia, velocidad lenta, desviaciones leves',
+                '3' => 'Camina sin dispositivos de asistencia, buena velocidad, patrón normal',
+            ];
+
+            $data = [
+                'paciente'     => $paciente,
+                'profesional'  => $profesional,
+                'hora_medica'  => $hora_medica,
+                'edad'         => $edad,
+                'fecha'        => now()->format('d/m/Y'),
+                'datos'        => $datos,
+                'leyendasIMD'  => $leyendasIMD,
+            ];
+
+            $pdf = Pdf::loadView('PDF.pdf_valoracion_equilibrio', $data);
+            $pdf->setPaper('A4', 'portrait');
+
+            $reportesPath = public_path('reportes');
+            if (!file_exists($reportesPath)) {
+                mkdir($reportesPath, 0777, true);
+            }
+
+            $rut = $paciente ? str_replace(['.', '-'], '', $paciente->rut) : 'paciente';
+            $filename = 'valoracion_equilibrio_' . $rut . '_' . date('YmdHis') . '.pdf';
+            file_put_contents($reportesPath . '/' . $filename, $pdf->output());
+
+            return response()->json([
+                'success'  => true,
+                'ruta'     => asset('reportes/' . $filename),
+                'filename' => $filename,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al generar el PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function generar_pdf_informe_rehab_vestibular(Request $request)
+    {
+        try {
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+            $paciente    = Paciente::find($request->id_paciente_fc);
+            $profesional = Profesional::find($request->id_profesional_fc);
+
+            $edad = '';
+            if ($paciente && $paciente->fecha_nac) {
+                $edad = \Carbon\Carbon::parse($paciente->fecha_nac)->age . ' años';
+            }
+
+            $datos = json_decode($request->datos, true) ?? [];
+
+            $data = [
+                'paciente'    => $paciente,
+                'profesional' => $profesional,
+                'hora_medica' => $hora_medica,
+                'edad'        => $edad,
+                'fecha'       => now()->format('d/m/Y'),
+                'datos'       => $datos,
+            ];
+
+            $pdf = Pdf::loadView('PDF.pdf_informe_rehab_vestibular', $data);
+            $pdf->setPaper('A4', 'portrait');
+
+            $reportesPath = public_path('reportes');
+            if (!file_exists($reportesPath)) {
+                mkdir($reportesPath, 0777, true);
+            }
+
+            $rut      = $paciente ? str_replace(['.', '-'], '', $paciente->rut) : 'paciente';
+            $filename = 'informe_rehab_vestibular_' . $rut . '_' . date('YmdHis') . '.pdf';
+            file_put_contents($reportesPath . '/' . $filename, $pdf->output());
+
+            return response()->json([
+                'success'  => true,
+                'ruta'     => asset('reportes/' . $filename),
+                'filename' => $filename,
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al generar el PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Guardar ficha de ecotomografía (laboratorio)
+     * POST: Ficha_Atencion/crear/laboratorio/ecotomografia
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|array
+     */
+    public function store_lab_eco(Request $request)
+    {
+
+        $campos_requeridos = 1;
+        $tipo_mensaje = 'success';
+        $mensaje = '';
+
+        // Validar campos requeridos
+        if (empty(trim($request->informe_radio ?? ''))) {
+            $campos_requeridos = 0;
+            $mensaje = 'El informe radiológico es requerido.\n Su Ficha Clínica NO ha sido Guardada aún.';
+        }
+
+        if ($campos_requeridos) {
+            try {
+                // Obtener datos básicos
+                $id_profesional = $request->id_profesional_fc;
+                $id_paciente = $request->id_paciente_fc;
+                $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+                if (!$hora_medica) {
+                    return [
+                        'success' => false,
+                        'estado' => 0,
+                        'msj' => 'No se encontró la hora médica registrada.'
+                    ];
+                }
+
+                // Obtener ficha de otros profesionales
+                $ficha = FichaGinecoObstetrica::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
+                if (!$ficha) {
+                    return [
+                        'success' => false,
+                        'estado' => 0,
+                        'msj' => 'No se encontró la ficha de atención.'
+                    ];
+                }
+
+                // Actualizar ficha con datos de ecotomografía
+                // $ficha->dg_ingreso = $request->dg_ingreso ?? 'Ecotomografía';
+                $ficha->hipotesis_diagnostico = 'Realizado';
+                $ficha->diagnostico_html = $request->informe_radio ?? '';
+                $ficha->id_paciente = $id_paciente;
+                $ficha->id_profesional = $id_profesional;
+                // $ficha->finalizada = 1;
+
+                // Procesar archivos cargados
+                $registro_archivo = [];
+                $paciente = Paciente::find($id_paciente);
+
+                if (!empty($request->input_lista_archivo)) {
+                    $array_archivo = json_decode($request->input_lista_archivo, true);
+
+                    foreach ($array_archivo as $key => $archivo_info) {
+                        if (!is_array($archivo_info)) {
+                            Log::warning('Estructura de archivo no reconocida en store_lab_eco', [
+                                'key' => $key,
+                                'tipo' => gettype($archivo_info)
+                            ]);
+                            continue;
+                        }
+
+                        // Manejar estructura de datos del JavaScript
+                        if (isset($archivo_info['url']) || isset($archivo_info['nombre_original'])) {
+                            $nombre_temp = $archivo_info['nombre_archivo'] ?? '';
+                            $file_extension = $archivo_info['file_extension'] ?? '';
+                            $nombre_real = $archivo_info['nombre_original'] ?? '';
+                        } else {
+                            // Estructura legacy
+                            $nombre_temp = $archivo_info[2] ?? '';
+                            $file_extension = $archivo_info[3] ?? '';
+                            $nombre_real = $archivo_info[1] ?? '';
+                        }
+
+                        if (empty($nombre_temp) || empty($file_extension)) {
+                            continue;
+                        }
+
+                        // Generar nombre final
+                        $nombre_final = $paciente->rut . '_eco_' . date('YmdHis') . '_' . uniqid() . '.' . $file_extension;
+
+                        // Mover archivo
+                        $resultado_mover = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+                        if ($resultado_mover['estado'] == 1) {
+                            $url = $resultado_mover['proceso']['url'];
+
+                            array_push($registro_archivo, [
+                                'nombre' => $nombre_final,
+                                'url' => $url,
+                                'tipo_dropzone' => $archivo_info['tipo_dropzone'] ?? 'general',
+                                'nombre_original' => $nombre_real
+                            ]);
+
+                            Log::info('Archivo ecotomografía guardado exitosamente', [
+                                'nombre_final' => $nombre_final,
+                                'url' => $url
+                            ]);
+                        } else {
+                            Log::error('Error al mover archivo en ecotomografía', [
+                                'nombre_temp' => $nombre_temp,
+                                'resultado' => $resultado_mover
+                            ]);
+                        }
+                    }
+                }
+
+                // Guardar archivos en ficha
+                if (!empty($registro_archivo)) {
+                    $ficha->estado_archivo = 1;
+                    $ficha->archivo = json_encode($registro_archivo);
+                } else {
+                    $ficha->estado_archivo = 0;
+                    $ficha->archivo = json_encode([]);
+                }
+
+                $ficha->estado = 6; // Estado 6 para finalizada
+
+                // Guardar ficha
+                if (!$ficha->save()) {
+                    return [
+                        'success' => false,
+                        'estado' => 0,
+                        'msj' => 'Error al guardar la ficha de ecotomografía'
+                    ];
+                }
+
+                $mensaje = 'Ficha de ecotomografía guardada correctamente.\n';
+
+                // Finalizar hora médica
+                $hora_medica->id_estado = 6;
+                if ($hora_medica->save()) {
+                    $mensaje .= 'Hora médica finalizada.\n';
+                } else {
+                    $mensaje .= 'Advertencia: No se pudo finalizar la hora médica.\n';
+                }
+
+                // Registrar examen de especialidad (gineco-obstetricia, sub_tipo 27)
+                $examen_esp = new ExamenEspecialidad();
+                $examen_esp->id_ficha_atencion      = $hora_medica->id_ficha_atencion ?? null;
+                $examen_esp->id_ficha_especialidad  = $ficha->id;
+                $examen_esp->id_tipo = 1; // Tipo 1 para gineco-obstetricia
+                $examen_esp->id_template = 9; // Template 9 para ecotomografía
+                $examen_esp->id_examen_tipo = 8; // Examen tipo 8 para ecotomografía
+                $examen_esp->id_sub_tipo_especialidad = 27;
+                $examen_esp->id_paciente            = $id_paciente;
+                $examen_esp->id_profesional         = $id_profesional;
+                $examen_esp->nombre                 = 'Ecotomografía';
+                $examen_esp->cuerpo                 = json_encode([
+                    'informe'    => $request->informe_radio ?? '',
+                    'dg_ingreso' => $request->dg_ingreso ?? '',
+                    'hora_medica'=> $request->hora_medica,
+                ]);
+                $examen_esp->revisado               = 0;
+                $examen_esp->estado                 = 1;
+                $examen_esp->save();
+
+                // Redireccionamiento (respuesta JSON para AJAX)
+                if ($request->cerrarsession == 0 || $request->cerrarsession == '') {
+                    return ['success' => true, 'estado' => 1, 'msj' => $mensaje, 'redirect' => route('profesional.mi_agenda', 'lugares_atencion='.$request->id_lugar_atencion)];
+                } else if ($request->cerrarsession == 1) {
+                    return ['success' => true, 'estado' => 1, 'msj' => $mensaje, 'redirect' => route('home.ingreso')];
+                }
+
+            } catch (\Exception $e) {
+                Log::error('Error en store_lab_eco', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+
+                return [
+                    'success' => false,
+                    'estado' => 0,
+                    'msj' => 'Error al procesar la ficha: ' . $e->getMessage()
+                ];
+            }
+        } else {
+            return [
+                'success' => false,
+                'estado' => 0,
+                'msj' => $mensaje
+            ];
+        }
+    }
+
+    public function generarPdfEcotomografia(Request $request)
+    {
+        if (empty($request->id_ficha)) {
+            return response()->json(['estado' => 0, 'msj' => 'ID de ficha requerido']);
+        }
+
+        try {
+            // Obtener ficha gineco obstetrica
+            $ficha = FichaGinecoObstetrica::find($request->id_ficha);
+
+            if (!$ficha) {
+                return response()->json(['estado' => 0, 'msj' => 'Ficha no encontrada']);
+            }
+
+            $paciente    = Paciente::find($ficha->id_paciente);
+            $profesional = Profesional::find($ficha->id_profesional);
+
+            if (!$paciente || !$profesional) {
+                return response()->json(['estado' => 0, 'msj' => 'Paciente o profesional no encontrado']);
+            }
+
+            // Buscar HoraMedica para obtener id_ficha_atencion (es obligatoria para validar firma)
+            $hora_medica = HoraMedica::where('id_ficha_otros_prof', $ficha->id)->first();
+
+            if (!$hora_medica) {
+                Log::warning('No se encontró HoraMedica para ficha gineco', [
+                    'id_ficha_gineco' => $ficha->id,
+                    'id_paciente' => $ficha->id_paciente,
+                    'id_profesional' => $ficha->id_profesional
+                ]);
+                return response()->json(['estado' => 0, 'msj' => 'No se encontró la hora médica asociada a la ficha']);
+            }
+
+            // El documento certificado ES la ficha gineco — siempre usar su propio ID.
+            // id_ficha_atencion pertenece al médico general, no al ginecólogo, por eso no se usa.
+            $doc_id = $ficha->id;
+
+            $lugar_atencion = \App\Models\LugarAtencion::find($hora_medica->id_lugar_atencion);
+
+            Log::info('Generando PDF ecotomografía', [
+                'id_ficha_gineco' => $ficha->id,
+                'id_hora_medica' => $hora_medica->id,
+                'doc_id' => $doc_id,
+                'id_profesional' => $profesional->id
+            ]);
+
+            // Generar certificados QR — tipo 4 para documento, tipo 1 para profesional, sub_tipo 26 para ecotomografía
+            $temp_token = CertificadoController::certificadoDocumento($doc_id, $profesional->id, $paciente->id, 4);
+
+            if ($temp_token['estado'] != 1) {
+                return response()->json(['estado' => 0, 'msj' => 'No se pudo generar el certificado QR del documento']);
+            }
+            $token_receta  = $temp_token['certificado'];
+            $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+
+            $qr_documento  = GeneradorQrController::generar($url_documento);
+
+            $temp_token2 = CertificadoController::certificadoProfesional($profesional->id, 1, 4, $doc_id);
+
+            if ($temp_token2['estado'] != 1) {
+                return response()->json(['estado' => 0, 'msj' => 'No se pudo generar el certificado QR del profesional']);
+            }
+            $token_profesional = $temp_token2['certificado'];
+            $url_profesional   = CertificadoController::generarUrlProfesional($token_profesional);
+
+            $qr_profesional    = GeneradorQrController::generar($url_profesional);
+
+            $array_ficha_atencion = [
+                'id'         => $ficha->id,
+                'created_at' => \Carbon\Carbon::parse($ficha->created_at)->format('d/m/Y'),
+                'token'      => $token_receta,
+                'url'        => $url_documento,
+                'qr'         => $qr_documento,
+            ];
+
+            $array_lugar_atencion = [
+                'id'     => $lugar_atencion ? $lugar_atencion->id : '',
+                'nombre' => $lugar_atencion ? $lugar_atencion->nombre : '',
+            ];
+
+            $array_profesional = [
+                'id'          => $profesional->id,
+                'nombre'      => $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                'rut'         => $profesional->rut,
+                'especialidad'=> optional($profesional->SubTipoEspecialidad()->first())->nombre,
+                'token'       => $token_profesional,
+                'url'         => $url_profesional,
+                'qr'          => $qr_profesional,
+            ];
+
+            $direccion_pac = $paciente->Direccion()->first();
+            $array_paciente = [
+                'id'        => $paciente->id,
+                'nombre'    => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                'fecha_nac' => $paciente->fecha_nac,
+                'rut'       => $paciente->rut,
+                'sexo'      => $paciente->sexo,
+                'direccion' => $direccion_pac
+                    ? $direccion_pac->direccion . ' ' . $direccion_pac->numero_dir . ', ' . optional($direccion_pac->Ciudad()->first())->nombre
+                    : 'No informada',
+            ];
+
+            $fichaEco = [
+                'id'      => $ficha->id,
+                'informe' => !empty($request->informe_texto)
+                    ? $request->informe_texto
+                    : ($ficha->diagnostico_html ?? $ficha->hipotesis_diagnostico ?? ''),
+            ];
+
+            $cuerpo = [
+                'array_ficha_atencion' => $array_ficha_atencion,
+                'array_lugar_atencion' => $array_lugar_atencion,
+                'array_profesional'    => $array_profesional,
+                'array_paciente'       => $array_paciente,
+                'fichaEco'             => $fichaEco,
+            ];
+
+            $titulo         = 'Informe Ecotomografía';
+            $nombre_archivo = 'InformeEco_' . $paciente->rut;
+
+            $resultado = PdfController::generarPDF(
+                $titulo,
+                compact('fichaEco', 'array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente', 'cuerpo'),
+                $nombre_archivo,
+                'pdf_informe_eco',
+                'G'
+            );
+
+            if ($resultado->estado == 1) {
+                return response()->json([
+                    'estado'  => 1,
+                    'msj'     => 'PDF generado correctamente',
+                    'pdf_url' => $resultado->pdf_url,
+                ]);
+            }
+
+            return response()->json(['estado' => 0, 'msj' => 'Error al generar el PDF']);
+
+        } catch (\Exception $e) {
+            Log::error('Error en generarPdfEcotomografia', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['estado' => 0, 'msj' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Enviar PDF de ecotomografía por email al paciente
+     * @param Request $request - Contiene id_ficha, informe_texto, enviar_email
+     * @return JSON
+     */
+    public function enviarPdfEcotomografia(Request $request)
+    {
+        if (empty($request->id_ficha)) {
+            return response()->json(['estado' => 0, 'msj' => 'ID de ficha requerido']);
+        }
+
+        try {
+            // Generar PDF primero
+            $pdf_response = $this->generarPdfEcotomografia($request);
+            $pdf_data = json_decode($pdf_response->getContent(), true);
+
+            if ($pdf_data['estado'] != 1) {
+                return response()->json($pdf_data);
+            }
+
+            // Obtener ficha y paciente para enviar email
+            $ficha = FichaGinecoObstetrica::find($request->id_ficha);
+            if (!$ficha) {
+                return response()->json(['estado' => 0, 'msj' => 'Ficha no encontrada']);
+            }
+
+            $paciente = Paciente::find($ficha->id_paciente);
+            if (!$paciente || !$paciente->email) {
+                return response()->json([
+                    'estado' => 1,
+                    'msj' => 'PDF generado correctamente. (Advertencia: El paciente no tiene email registrado)',
+                    'pdf_url' => $pdf_data['pdf_url'],
+                    'email_enviado' => false
+                ]);
+            }
+
+            // Extraer nombre del PDF de la URL
+            $pdf_url = $pdf_data['pdf_url'];
+            $filename = basename($pdf_url);
+
+            // Intentar encontrar el archivo PDF
+            $pdf_path = null;
+
+            // Intento 1: Ruta principal public/storage/pdf/ (donde PdfController guarda los PDFs)
+            $pdf_path_primary = public_path('storage' . DIRECTORY_SEPARATOR . 'pdf' . DIRECTORY_SEPARATOR . $filename);
+            if (file_exists($pdf_path_primary)) {
+                $pdf_path = $pdf_path_primary;
+            }
+
+            // Intento 2: Ruta alternativa storage/app/pdf/
+            if (!$pdf_path) {
+                $pdf_path_secondary = storage_path('app' . DIRECTORY_SEPARATOR . 'pdf' . DIRECTORY_SEPARATOR . $filename);
+                if (file_exists($pdf_path_secondary)) {
+                    $pdf_path = $pdf_path_secondary;
+                }
+            }
+
+            // Intento 3: Búsqueda con glob pattern en ambas ubicaciones
+            if (!$pdf_path) {
+                $rut_limpio = str_replace(['.', '-'], '', $paciente->rut);
+
+                // Buscar en public/storage/pdf/
+                $pdf_dir_1 = public_path('storage' . DIRECTORY_SEPARATOR . 'pdf') . DIRECTORY_SEPARATOR;
+                $files_1 = glob($pdf_dir_1 . '*' . $rut_limpio . '*.pdf');
+
+                // Buscar en storage/app/pdf/
+                $pdf_dir_2 = storage_path('app' . DIRECTORY_SEPARATOR . 'pdf') . DIRECTORY_SEPARATOR;
+                $files_2 = glob($pdf_dir_2 . '*' . $rut_limpio . '*.pdf');
+
+                $all_files = array_merge($files_1 ?: [], $files_2 ?: []);
+
+                if (!empty($all_files)) {
+                    usort($all_files, function($a, $b) {
+                        return filemtime($b) - filemtime($a);
+                    });
+                    $pdf_path = $all_files[0];
+                }
+            }
+
+            $email_enviado = false;
+            $msj_email = '';
+
+            if ($pdf_path && file_exists($pdf_path)) {
+                try {
+                    $contenido_email = "Estimado(a) {$paciente->nombres},\n\n";
+                    $contenido_email .= "Le enviamos el informe de su ecotomografía realizada.\n\n";
+                    $contenido_email .= "Datos del paciente:\n";
+                    $contenido_email .= "- Nombres: {$paciente->nombres} {$paciente->apellido_uno} {$paciente->apellido_dos}\n";
+                    $contenido_email .= "- RUT: {$paciente->rut}\n";
+                    $contenido_email .= "- Fecha: " . date('d/m/Y') . "\n\n";
+                    $contenido_email .= "Por favor, revise el PDF adjunto con los detalles del informe.\n\n";
+                    $contenido_email .= "Saludos cordiales,\n";
+                    $contenido_email .= "Sistema MediChile\n";
+
+                    \Illuminate\Support\Facades\Mail::raw($contenido_email, function($message) use ($paciente, $pdf_path, $filename) {
+                        $message->to($paciente->email, $paciente->nombres)
+                                ->subject('Informe de Ecotomografía - MediChile')
+                                ->from(config('mail.from.address'), config('app.name'))
+                                ->attach($pdf_path, [
+                                    'as' => 'Informe_Ecotomografia_' . $paciente->rut . '.pdf',
+                                    'mime' => 'application/pdf',
+                                ]);
+                    });
+
+                    $email_enviado = true;
+                    $msj_email = ' Email enviado al paciente correctamente.';
+
+                    Log::info('Email de ecotomografía enviado', [
+                        'id_paciente' => $paciente->id,
+                        'email_destino' => $paciente->email,
+                        'pdf_path' => $pdf_path
+                    ]);
+                } catch (\Exception $mailError) {
+                    $msj_email = ' (Advertencia: Error al enviar email: ' . $mailError->getMessage() . ')';
+                    Log::error('Error al enviar email de ecotomografía', [
+                        'id_paciente' => $paciente->id,
+                        'error' => $mailError->getMessage(),
+                        'trace' => $mailError->getTraceAsString()
+                    ]);
+                }
+            } else {
+                $msj_email = ' (Advertencia: No se pudo ubicar el PDF para adjuntar)';
+                Log::warning('No se pudo encontrar el PDF para adjuntar', [
+                    'pdf_url_original' => $pdf_url,
+                    'filename_extraido' => $filename,
+                    'rutas_intentadas' => [
+                        'public_storage_pdf' => public_path('storage' . DIRECTORY_SEPARATOR . 'pdf'),
+                        'storage_app_pdf' => storage_path('app' . DIRECTORY_SEPARATOR . 'pdf'),
+                    ],
+                    'archivo_encontrado' => $pdf_path ? 'sí' : 'no',
+                    'rut_paciente' => $paciente->rut
+                ]);
+            }
+
+            return response()->json([
+                'estado'  => 1,
+                'msj'     => 'PDF generado correctamente.' . $msj_email,
+                'pdf_url' => $pdf_url,
+                'email_enviado' => $email_enviado,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error en enviarPdfEcotomografia', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return response()->json(['estado' => 0, 'msj' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    public function guardar_pares_craneanos(Request $request)
+    {
+
+        $ficha = FichaAtencion::find($request->id_ficha_atencion);
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$ficha) {
+            return response()->json(['estado' => 0, 'msj' => 'Ficha de atención no encontrada'], 404);
+        }
+
+        $cuerpo = [
+            'pc_uno'         => $request->pc_uno,
+            'pc_dos'         => $request->pc_dos,
+            'pc_tres'        => $request->pc_tres,
+            'pc_cuatro'      => $request->pc_cuatro,
+            'pc_cinco'       => $request->pc_cinco,
+            'pc_seis'        => $request->pc_seis,
+            'pc_siete'       => $request->pc_siete,
+            'pc_ocho'        => $request->pc_ocho,
+            'pc_nueve'       => $request->pc_nueve,
+            'pc_diez'        => $request->pc_diez,
+            'pc_once'        => $request->pc_once,
+            'pc_doce'        => $request->pc_doce,
+            'pc_conclusiones' => $request->pc_conclusiones,
+        ];
+
+        $examen = ExamenEspecialidad::updateOrCreate(
+            [
+                'id_ficha_atencion' => $ficha->id,
+                'nombre'            => 'Evaluación Pares Craneanos',
+            ],
+            [
+                'id_tipo'                  => '1',
+                'id_template'              => '1',
+                'id_examen_tipo'           => '1',
+                'id_sub_tipo_especialidad' => $profesional->id_sub_tipo_especialidada,
+                'id_paciente'              => $ficha->id_paciente,
+                'id_profesional'           => $profesional->id,
+                'cuerpo'                   => json_encode($cuerpo),
+                'estado'                   => 1,
+            ]
+        );
+
+        if ($examen) {
+            $msj = $examen->wasRecentlyCreated ? 'Evaluación guardada correctamente' : 'Evaluación actualizada correctamente';
+
+            // Generar PDF
+            $paciente       = Paciente::find($ficha->id_paciente);
+            $nombre_archivo = 'ParesCraneanos_' . str_replace(['.', '-'], '', $paciente->rut ?? $ficha->id_paciente) . '_' . date('YmdHis');
+
+            $resultado_pdf = PdfController::generarPDF(
+                'Evaluación Pares Craneanos',
+                [
+                    'paciente'    => $paciente,
+                    'profesional' => $profesional,
+                    'datos'       => $cuerpo,
+                    'fecha'       => now()->format('d/m/Y'),
+                ],
+                $nombre_archivo,
+                'pdf_pares_craneanos',
+                'G'
+            );
+
+            $pdf_url = (is_object($resultado_pdf) && ($resultado_pdf->estado ?? 0) == 1)
+                ? $resultado_pdf->pdf_url
+                : null;
+
+            return response()->json([
+                'estado'  => 1,
+                'msj'     => $msj,
+                'id'      => $examen->id,
+                'pdf_url' => $pdf_url,
+            ]);
+        }
+
+        return response()->json(['estado' => 0, 'msj' => 'Error al guardar la evaluación'], 500);
+    }
+
+    public function guardar_reflejos(Request $request)
+    {
+        $ficha = FichaAtencion::find($request->id_ficha_atencion);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$ficha) {
+            return response()->json(['estado' => 0, 'msj' => 'Ficha de atención no encontrada'], 404);
+        }
+
+        $cuerpo = [
+            'ref_bicip'    => $request->ref_bicip,
+            'ref_tricip'   => $request->ref_tricip,
+            'ref_est_rad'  => $request->ref_est_rad,
+            'ref_rot'      => $request->ref_rot,
+            'ref_aquil'    => $request->ref_aquil,
+            'ref_cut'      => $request->ref_cut,
+            'ref_cut_abd'  => $request->ref_cut_abd,
+            'ref_cremast'  => $request->ref_cremast,
+            'ref_plant'    => $request->ref_plant,
+            'ref_pat'      => $request->ref_pat,
+            'ref_concl'    => $request->ref_concl,
+        ];
+
+        $examen = ExamenEspecialidad::updateOrCreate(
+            [
+                'id_ficha_atencion' => $ficha->id,
+                'nombre'            => 'Evaluación Reflejos Osteotendineos',
+            ],
+            [
+                'id_tipo'                  => '1',
+                'id_template'              => '1',
+                'id_examen_tipo'           => '1',
+                'id_sub_tipo_especialidad' => $profesional->id_sub_tipo_especialidada,
+                'id_paciente'              => $ficha->id_paciente,
+                'id_profesional'           => $profesional->id,
+                'cuerpo'                   => json_encode($cuerpo),
+                'estado'                   => 1,
+            ]
+        );
+
+        if ($examen) {
+            $msj = $examen->wasRecentlyCreated ? 'Evaluación guardada correctamente' : 'Evaluación actualizada correctamente';
+
+            $paciente       = Paciente::find($ficha->id_paciente);
+            $nombre_archivo = 'Reflejos_' . str_replace(['.', '-'], '', $paciente->rut ?? $ficha->id_paciente) . '_' . date('YmdHis');
+
+            $resultado_pdf = PdfController::generarPDF(
+                'Evaluación Reflejos Osteotendineos',
+                [
+                    'paciente'    => $paciente,
+                    'profesional' => $profesional,
+                    'datos'       => $cuerpo,
+                    'fecha'       => now()->format('d/m/Y'),
+                ],
+                $nombre_archivo,
+                'pdf_reflejos',
+                'G'
+            );
+
+            $pdf_url = (is_object($resultado_pdf) && ($resultado_pdf->estado ?? 0) == 1)
+                ? $resultado_pdf->pdf_url
+                : null;
+
+            return response()->json([
+                'estado'  => 1,
+                'msj'     => $msj,
+                'id'      => $examen->id,
+                'pdf_url' => $pdf_url,
+            ]);
+        }
+
+        return response()->json(['estado' => 0, 'msj' => 'Error al guardar la evaluación'], 500);
+    }
+
+    public function guardar_fuerza_superior(Request $request)
+    {
+        $ficha = FichaAtencion::find($request->id_ficha_atencion);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$ficha) {
+            return response()->json(['estado' => 0, 'msj' => 'Ficha de atención no encontrada'], 404);
+        }
+
+        $cuerpo = [
+            // Cintura Escapular
+            'ace_flex_d'   => $request->ace_flex_d,
+            'ace_flex_i'   => $request->ace_flex_i,
+            'ace_exten_d'  => $request->ace_exten_d,
+            'ace_exten_i'  => $request->ace_exten_i,
+            'ace_abd_d'    => $request->ace_abd_d,
+            'ace_abd_i'    => $request->ace_abd_i,
+            'ace_aduc_d'   => $request->ace_aduc_d,
+            'ace_aduc_i'   => $request->ace_aduc_i,
+            'ace_obs'      => $request->ace_obs,
+            // Hombro
+            'ah_flex_d'    => $request->ah_flex_d,
+            'ah_flex_i'    => $request->ah_flex_i,
+            'ah_ext_d'     => $request->ah_ext_d,
+            'ah_ext_i'     => $request->ah_ext_i,
+            'ah_abd_d'     => $request->ah_abd_d,
+            'ah_abd_i'     => $request->ah_abd_i,
+            'ah_aduc_d'    => $request->ah_aduc_d,
+            'ah_aduc_i'    => $request->ah_aduc_i,
+            'ah_obs'       => $request->ah_obs,
+            // Codo
+            'ac_flex_d'    => $request->ac_flex_d,
+            'ac_flex_i'    => $request->ac_flex_i,
+            'ac_ext_d'     => $request->ac_ext_d,
+            'ac_ext_i'     => $request->ac_ext_i,
+            'ac_abd_d'     => $request->ac_abd_d,
+            'ac_abd_i'     => $request->ac_abd_i,
+            'ac_aduc_d'    => $request->ac_aduc_d,
+            'ac_aduc_i'    => $request->ac_aduc_i,
+            'ac_obs'       => $request->ac_obs,
+            // Radio-Cubital Distal
+            'arcd_flex_d'  => $request->arcd_flex_d,
+            'arcd_flex_i'  => $request->arcd_flex_i,
+            'arcd_ext_d'   => $request->arcd_ext_d,
+            'arcd_ext_i'   => $request->arcd_ext_i,
+            'arcd_abd_d'   => $request->arcd_abd_d,
+            'arcd_abd_i'   => $request->arcd_abd_i,
+            'arcd_aduc_d'  => $request->arcd_aduc_d,
+            'arcd_aduc_i'  => $request->arcd_aduc_i,
+            'arcd_obs'     => $request->arcd_obs,
+            // Muñeca
+            'amu_flex_d'   => $request->amu_flex_d,
+            'amu_flex_i'   => $request->amu_flex_i,
+            'amu_ext_d'    => $request->amu_ext_d,
+            'amu_ext_i'    => $request->amu_ext_i,
+            'amu_abd_d'    => $request->amu_abd_d,
+            'amu_abd_i'    => $request->amu_abd_i,
+            'amu_aduc_d'   => $request->amu_aduc_d,
+            'amu_aduc_i'   => $request->amu_aduc_i,
+            'amu_obs'      => $request->amu_obs,
+            // Dedos
+            'aded_flex_d'  => $request->aded_flex_d,
+            'aded_flex_i'  => $request->aded_flex_i,
+            'aded_ext_d'   => $request->aded_ext_d,
+            'aded_ext_i'   => $request->aded_ext_i,
+            'aded_abd_d'   => $request->aded_abd_d,
+            'aded_abd_i'   => $request->aded_abd_i,
+            'aded_aduc_d'  => $request->aded_aduc_d,
+            'aded_aduc_i'  => $request->aded_aduc_i,
+            'aded_obs'     => $request->aded_obs,
+            // Prueba de Mingazzini
+            'minga'        => $request->minga,
+            // Observaciones y Conclusiones
+            'extsup_coment' => $request->extsup_coment,
+        ];
+
+        $examen = ExamenEspecialidad::updateOrCreate(
+            [
+                'id_ficha_atencion' => $ficha->id,
+                'nombre'            => 'Evaluación Fuerza Extremidad Superior',
+            ],
+            [
+                'id_tipo'                  => '1',
+                'id_template'              => '1',
+                'id_examen_tipo'           => '1',
+                'id_sub_tipo_especialidad' => $profesional->id_sub_tipo_especialidada,
+                'id_paciente'              => $ficha->id_paciente,
+                'id_profesional'           => $profesional->id,
+                'cuerpo'                   => json_encode($cuerpo),
+                'estado'                   => 1,
+            ]
+        );
+
+        if ($examen) {
+            $msj = $examen->wasRecentlyCreated ? 'Evaluación guardada correctamente' : 'Evaluación actualizada correctamente';
+
+            $paciente       = Paciente::find($ficha->id_paciente);
+            $nombre_archivo = 'FuerzaSuperior_' . str_replace(['.', '-'], '', $paciente->rut ?? $ficha->id_paciente) . '_' . date('YmdHis');
+
+            $resultado_pdf = PdfController::generarPDF(
+                'Evaluación Fuerza Extremidad Superior',
+                [
+                    'paciente'    => $paciente,
+                    'profesional' => $profesional,
+                    'datos'       => $cuerpo,
+                    'fecha'       => now()->format('d/m/Y'),
+                ],
+                $nombre_archivo,
+                'pdf_fuerza_superior',
+                'G'
+            );
+
+            $pdf_url = (is_object($resultado_pdf) && ($resultado_pdf->estado ?? 0) == 1)
+                ? $resultado_pdf->pdf_url
+                : null;
+
+            return response()->json([
+                'estado'  => 1,
+                'msj'     => $msj,
+                'id'      => $examen->id,
+                'pdf_url' => $pdf_url,
+            ]);
+        }
+
+        return response()->json(['estado' => 0, 'msj' => 'Error al guardar la evaluación'], 500);
+    }
+
+    public function guardar_fuerza_inferior(Request $request)
+    {
+        $ficha = FichaAtencion::find($request->id_ficha_atencion);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$ficha) {
+            return response()->json(['estado' => 0, 'msj' => 'Ficha de atención no encontrada'], 404);
+        }
+
+        $cuerpo = [
+            // Cadera
+            'acad_flex_d'   => $request->acad_flex_d,
+            'acad_flex_i'   => $request->acad_flex_i,
+            'acad_exten_d'  => $request->acad_exten_d,
+            'acad_exten_i'  => $request->acad_exten_i,
+            'acad_abd_d'    => $request->acad_abd_d,
+            'acad_abd_i'    => $request->acad_abd_i,
+            'acad_aduc_d'   => $request->acad_aduc_d,
+            'acad_aduc_i'   => $request->acad_aduc_i,
+            'acad_obs'      => $request->acad_obs,
+            // Rodilla
+            'arod_flex_d'   => $request->arod_flex_d,
+            'arod_flex_i'   => $request->arod_flex_i,
+            'arod_exten_d'  => $request->arod_exten_d,
+            'arod_exten_i'  => $request->arod_exten_i,
+            'arod_abd_d'    => $request->arod_abd_d,
+            'arod_abd_i'    => $request->arod_abd_i,
+            'arod_aduc_d'   => $request->arod_aduc_d,
+            'arod_aduc_i'   => $request->arod_aduc_i,
+            'arod_obs'      => $request->arod_obs,
+            // Tobillo
+            'atob_flex_d'   => $request->atob_flex_d,
+            'atob_flex_i'   => $request->atob_flex_i,
+            'atob_exten_d'  => $request->atob_exten_d,
+            'atob_exten_i'  => $request->atob_exten_i,
+            'atob_abd_d'    => $request->atob_abd_d,
+            'atob_abd_i'    => $request->atob_abd_i,
+            'atob_aduc_d'   => $request->atob_aduc_d,
+            'atob_aduc_i'   => $request->atob_aduc_i,
+            'atob_obs'      => $request->atob_obs,
+            // Pie
+            'apie_flex_d'   => $request->apie_flex_d,
+            'apie_flex_i'   => $request->apie_flex_i,
+            'apie_exten_d'  => $request->apie_exten_d,
+            'apie_exten_i'  => $request->apie_exten_i,
+            'apie_abd_d'    => $request->apie_abd_d,
+            'apie_abd_i'    => $request->apie_abd_i,
+            'apie_aduc_d'   => $request->apie_aduc_d,
+            'apie_aduc_i'   => $request->apie_aduc_i,
+            'apie_obs'      => $request->apie_obs,
+            // Dedos
+            'aded_flex_d'   => $request->aded_flex_d,
+            'aded_flex_i'   => $request->aded_flex_i,
+            'aded_exten_d'  => $request->aded_exten_d,
+            'aded_exten_i'  => $request->aded_exten_i,
+            'aded_abd_d'    => $request->aded_abd_d,
+            'aded_abd_i'    => $request->aded_abd_i,
+            'aded_aduc_d'   => $request->aded_aduc_d,
+            'aded_aduc_i'   => $request->aded_aduc_i,
+            'aded_obs'      => $request->aded_obs,
+            // Prueba de Barré
+            'extinf_barre'  => $request->extinf_barre,
+            // Observaciones y Conclusiones
+            'extinf_coment' => $request->extinf_coment,
+        ];
+
+        $examen = ExamenEspecialidad::updateOrCreate(
+            [
+                'id_ficha_atencion' => $ficha->id,
+                'nombre'            => 'Evaluación Fuerza Extremidad Inferior',
+            ],
+            [
+                'id_tipo'                  => '1',
+                'id_template'              => '1',
+                'id_examen_tipo'           => '1',
+                'id_sub_tipo_especialidad' => $profesional->id_sub_tipo_especialidada,
+                'id_paciente'              => $ficha->id_paciente,
+                'id_profesional'           => $profesional->id,
+                'cuerpo'                   => json_encode($cuerpo),
+                'estado'                   => 1,
+            ]
+        );
+
+        if ($examen) {
+            $msj = $examen->wasRecentlyCreated ? 'Evaluación guardada correctamente' : 'Evaluación actualizada correctamente';
+
+            $paciente       = Paciente::find($ficha->id_paciente);
+            $nombre_archivo = 'FuerzaInferior_' . str_replace(['.', '-'], '', $paciente->rut ?? $ficha->id_paciente) . '_' . date('YmdHis');
+
+            $resultado_pdf = PdfController::generarPDF(
+                'Evaluación Fuerza Extremidad Inferior',
+                [
+                    'paciente'    => $paciente,
+                    'profesional' => $profesional,
+                    'datos'       => $cuerpo,
+                    'fecha'       => now()->format('d/m/Y'),
+                ],
+                $nombre_archivo,
+                'pdf_fuerza_inferior',
+                'G'
+            );
+
+            $pdf_url = (is_object($resultado_pdf) && ($resultado_pdf->estado ?? 0) == 1)
+                ? $resultado_pdf->pdf_url
+                : null;
+
+            return response()->json([
+                'estado'  => 1,
+                'msj'     => $msj,
+                'id'      => $examen->id,
+                'pdf_url' => $pdf_url,
+            ]);
+        }
+
+        return response()->json(['estado' => 0, 'msj' => 'Error al guardar la evaluación'], 500);
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Invitacion;
 use App\Models\LugarAtencion;
 use App\Models\Mensajes;
 use App\Models\Paciente;
+use App\Models\SolicitudSoporte;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\Servicios;
@@ -95,6 +96,7 @@ class EscritorioGeneral extends Controller
      */
     public function buscarProfesionalBuscador(Request $request)
     {
+
         $datos = array();
         $filtro = array();
         if(!empty($request->nombre))
@@ -111,6 +113,9 @@ class EscritorioGeneral extends Controller
             $filtro[] = array('id_tipo_especialidad', $request->id_tipo_especialidad);
         if(!empty($request->id_sub_tipo_especialidad))
             $filtro[] = array('id_sub_tipo_especialidad', $request->id_sub_tipo_especialidad);
+
+        // El filtro por lugar de atención se aplicará solo si viene en el request
+        // y se aplicará en el SQL más abajo
 
         // if(Auth::user()->hasRole('Profesional'))
         // {
@@ -138,7 +143,6 @@ class EscritorioGeneral extends Controller
             $sql .= "    profesionales.dv_certiicado profesional_dv_certiicado , ";
             $sql .= "    profesionales.id_direccion profesional_id_direccion, ";
             $sql .= "    profesionales.foto_perfil profesionales_foto_perfil, ";
-
             $sql .= "    profesionales.id_especialidad profesional_id_especialidad, ";
             $sql .= "    especialidades.nombre especialidades_nombre, ";
 
@@ -156,6 +160,9 @@ class EscritorioGeneral extends Controller
             $sql .= "    ciudades.id_region ciudades_id_region, ";
 
             $sql .= "    regiones.nombre  regiones_nombre ";
+
+            $sql .= "    , (SELECT GROUP_CONCAT(id_lugar_atencion) FROM profesionales_lugares_atencion WHERE profesionales_lugares_atencion.id_profesional = profesionales.id and estado=1) lugares_atencion_profesional ";
+
             $sql .= " FROM profesionales ";
 
             $sql .= " INNER JOIN direcciones ON (direcciones.id = profesionales.id_direccion ) ";
@@ -189,14 +196,30 @@ class EscritorioGeneral extends Controller
 
             if(!empty($request->nombre_rut))
             {
-                $sql .= " AND (profesionales.nombre LIKE '".$request->nombre_rut."%'";
-                $sql .= " OR profesionales.apellido_uno LIKE '".$request->nombre_rut."%'";
-                $sql .= " OR profesionales.apellido_dos LIKE '".$request->nombre_rut."%'";
-                $sql .= " OR profesionales.rut = '".$request->nombre_rut."')";
+                $nombre_rut = trim($request->nombre_rut);
+                $nombre_rut_sql = addslashes($nombre_rut);
+
+                $rut_limpio = str_replace(['.', '-', ' '], '', $nombre_rut);
+                $rut_limpio_sql = addslashes($rut_limpio);
+
+                $sql .= " AND (";
+                $sql .= " profesionales.nombre LIKE '".$nombre_rut_sql."%'";
+                $sql .= " OR profesionales.apellido_uno LIKE '".$nombre_rut_sql."%'";
+                $sql .= " OR profesionales.apellido_dos LIKE '".$nombre_rut_sql."%'";
+                $sql .= " OR CONCAT_WS(' ', profesionales.nombre, profesionales.apellido_uno, profesionales.apellido_dos) LIKE '%".$nombre_rut_sql."%'";
+                $sql .= " OR profesionales.rut LIKE '%".$nombre_rut_sql."%'";
+                $sql .= " OR REPLACE(REPLACE(REPLACE(profesionales.rut, '.', ''), '-', ''), ' ', '') LIKE '%".$rut_limpio_sql."%'";
+                $sql .= " )";
             }
+
 
             if(!empty($request->id_institucion))
                 $sql .= " AND profesionales.id in (SELECT id_profesional FROM profesionales_lugares_atencion WHERE id_lugar_atencion = (SELECT id_lugar_atencion FROM instituciones WHERE id = ".$request->id_institucion.") and estado=1 )";
+
+            // Filtro opcional por lugar de atención
+            if(!empty($request->id_lugar_atencion)) {
+                $sql .= " AND profesionales.id IN (SELECT id_profesional FROM profesionales_lugares_atencion WHERE id_lugar_atencion = ".$request->id_lugar_atencion." AND estado=1)";
+            }
 
             // 1 -> Atención General
             // 2 -> Atención Dental
@@ -300,8 +323,82 @@ class EscritorioGeneral extends Controller
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'sin registros';
+            $datos['registros'] = array();
+             $datos['cant'] = 0;
         }
         return $datos;
+    }
+
+    /**
+     * BUSQUEDA DE ASISTENTE buscador
+     *
+     * @param Request $request
+     * @return array (Asistente)
+     */
+    public function buscarAsistenteBuscador(Request $request)
+    {
+        $query = Asistente::query()
+                    ->select([
+                        'asistentes.id as asistentes_id',
+                        'asistentes.nombres as asistentes_nombres',
+                        'asistentes.apellido_uno as asistentes_apellido_uno',
+                        'asistentes.apellido_dos as asistentes_apellido_dos',
+                        'asistentes.rut as asistentes_rut',
+                        'asistentes.telefono_uno as asistente_telefono_uno',
+                        'asistentes.email as asistente_email',
+                        'asistentes.id_direccion as asistente_id_direccion',
+                        'direcciones.id as direcciones_id',
+                        'direcciones.direccion as direcciones_direccion',
+                        'direcciones.id_ciudad as direcciones_id_ciudad',
+                        'ciudades.nombre as ciudades_nombre',
+                        'ciudades.id_region as ciudades_id_region',
+                        'regiones.nombre as regiones_nombre',
+                        DB::raw("(SELECT GROUP_CONCAT(id_lugar_atencion) FROM asistentes_lugar_atencion WHERE asistentes_lugar_atencion.id_asistente = asistentes.id AND estado = 1) as lugares_atencion_asistente"),
+                    ])
+                    ->leftJoin('direcciones', 'direcciones.id', '=', 'asistentes.id_direccion')
+                    ->leftJoin('ciudades', 'ciudades.id', '=', 'direcciones.id_ciudad')
+                    ->leftJoin('regiones', 'regiones.id', '=', 'ciudades.id_region');
+
+        if(!empty($request->rut)) {
+            $query->where('asistentes.rut', $request->rut);
+        }
+
+        if(!empty($request->id_lugar_atencion)) {
+            $query->whereIn('asistentes.id', function($subquery) use ($request) {
+                $subquery->select('id_asistente')
+                         ->from('asistentes_lugar_atencion')
+                         ->where('estado', 1)
+                         ->where('id_lugar_atencion', $request->id_lugar_atencion);
+            });
+        }
+
+        if(!empty($request->nombre_rut)) {
+            $query->where(function($q) use ($request) {
+                $q->where('asistentes.nombres', 'like', $request->nombre_rut.'%')
+                  ->orWhere('asistentes.apellido_uno', 'like', $request->nombre_rut.'%')
+                  ->orWhere('asistentes.apellido_dos', 'like', $request->nombre_rut.'%')
+                  ->orWhere('asistentes.rut', $request->nombre_rut);
+            });
+        }
+
+        $registros = $query->get();
+
+        if($registros->count() > 0)
+        {
+            return [
+                'estado' => 1,
+                'msj' => 'registros',
+                'registros' => $registros,
+                'cant' => $registros->count(),
+            ];
+        }
+
+        return [
+            'estado' => 0,
+            'msj' => 'sin registros',
+            'registros' => [],
+            'cant' => 0,
+        ];
     }
 
     public function cargarFechaMasProxima($id_profesional, $tipo_agenda)
@@ -615,10 +712,10 @@ class EscritorioGeneral extends Controller
      * @return array()
      */
     public function lugaresAtencionProfesionalBuscador(Request $request){
-
         $datos = array();
 
         $profesional = Profesional::where('id', $request->id_profesional)->first();
+
         $lugares_atencion = $profesional->LugaresAtencion()->where('estado',1)->get();
 
         if($lugares_atencion)
@@ -712,49 +809,53 @@ class EscritorioGeneral extends Controller
                                                 ->where('id_lugar_atencion',$request->id_lugar_atencion)
                                                 ->where('dia','like','%'.$dia_semana.'%')
                                                 ->tipoAgenda($request->tipo_agenda)
-                                                ->orderBy('dia', 'ASC')
-                                                ->first();
-        if($profesional_horarios)
+                                                ->orderBy('hora_inicio', 'ASC')
+                                                ->get();
+        if($profesional_horarios->count() > 0)
         {
             $array_bloques = array();
 
-            $hora_inicio_turno  = $request->dia.' '.$profesional_horarios->hora_inicio;
-            $hora_termino_turno  = $request->dia.' '.$profesional_horarios->hora_termino;
-
-            /** duracion de consulta en minutos */
-            $duracion =  $profesional_horarios->duracion_consulta;
-            $array_duracion = explode(':', $duracion);
-            $duracion_total = 0;
-
-            if((int)$array_duracion[0]>0)
-                $duracion_total += (int)$array_duracion[0]*60;
-            if((int)$array_duracion[1]>0)
-                $duracion_total += (int)$array_duracion[1];
-
-            for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora) )
+            // Procesar cada horario del día
+            foreach ($profesional_horarios as $profesional_horario)
             {
-                // $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
-                $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))
-                                            ->where('id_profesional', $request->id_profesional)
-                                            ->where('id_lugar_atencion', $request->id_lugar_atencion)
-                                            ->whereRaw("'".date('H:i:s',strtotime( '+1 second', $hora))."' BETWEEN hora_inicio and hora_termino")
-                                            ->first();
+                $hora_inicio_turno  = $request->dia.' '.$profesional_horario->hora_inicio;
+                $hora_termino_turno  = $request->dia.' '.$profesional_horario->hora_termino;
 
-                $datos['hora'][strtotime( '+1 second', $hora)] = date('H:i:s',strtotime( '+1 second', $hora));
-                $datos['hora_medica'][strtotime( '+1 second', $hora)] = $hora_medica;
+                /** duracion de consulta en minutos */
+                $duracion =  $profesional_horario->duracion_consulta;
+                $array_duracion = explode(':', $duracion);
+                $duracion_total = 0;
 
-                if($hora_medica)
+                if((int)$array_duracion[0]>0)
+                    $duracion_total += (int)$array_duracion[0]*60;
+                if((int)$array_duracion[1]>0)
+                    $duracion_total += (int)$array_duracion[1];
+
+                for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora) )
                 {
-                    // con reserva
-                }
-                else
-                {
-                    // sin reserva
-                    $array_bloques[] = array(
-                                            'dia' => date('Y-m-d',$hora),
-                                            'hora' => date('H:i:s',$hora),
-                                            'fecha_hora' => date('Y-m-d H:i:s',$hora)
-                                        );
+                    // $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
+                    $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))
+                                                ->where('id_profesional', $request->id_profesional)
+                                                ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                                                ->whereRaw("'".date('H:i:s',strtotime( '+1 second', $hora))."' BETWEEN hora_inicio and hora_termino")
+                                                ->first();
+
+                    $datos['hora'][strtotime( '+1 second', $hora)] = date('H:i:s',strtotime( '+1 second', $hora));
+                    $datos['hora_medica'][strtotime( '+1 second', $hora)] = $hora_medica;
+
+                    if($hora_medica)
+                    {
+                        // con reserva
+                    }
+                    else
+                    {
+                        // sin reserva
+                        $array_bloques[] = array(
+                                                'dia' => date('Y-m-d',$hora),
+                                                'hora' => date('H:i:s',$hora),
+                                                'fecha_hora' => date('Y-m-d H:i:s',$hora)
+                                            );
+                    }
                 }
             }
 
@@ -768,7 +869,7 @@ class EscritorioGeneral extends Controller
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'sin registros';
-            $datos['profesional_horario'] = $profesional_horarios;
+            $datos['profesional_horario'] = null;
         }
 
         return $datos;
@@ -795,54 +896,58 @@ class EscritorioGeneral extends Controller
         $profesional_horarios = ProfesionalHorario::where('id_profesional',$request->id_profesional)
                                                 ->where('id_lugar_atencion',$request->id_lugar_atencion)
                                                 ->where('dia','like','%'.$dia_semana.'%')
-                                                ->orderBy('dia', 'ASC')
-                                                ->first();
-        if($profesional_horarios)
+                                                ->orderBy('hora_inicio', 'ASC')
+                                                ->get();
+        if($profesional_horarios->count() > 0)
         {
             $array_bloques = array();
 
-            $hora_inicio_turno  = $request->dia.' '.$profesional_horarios->hora_inicio;
-            $hora_termino_turno  = $request->dia.' '.$profesional_horarios->hora_termino;
-
-            /** duracion de consulta en minutos */
-            $duracion =  $profesional_horarios->duracion_consulta;
-            $array_duracion = explode(':', $duracion);
-            $duracion_total = 0;
-
-            if((int)$array_duracion[0]>0)
-                $duracion_total += (int)$array_duracion[0]*60;
-            if((int)$array_duracion[1]>0)
-                $duracion_total += (int)$array_duracion[1];
-
-            for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora))
+            // Procesar cada horario del día
+            foreach ($profesional_horarios as $profesional_horario)
             {
-                $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
-                if($hora_medica)
-                {
-                    $cantidad_hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->count();
-                    $reserva = 0;
-                    if($cantidad_hora_medica > 1)
-                    {
-                        $reserva = 1;
-                    }
+                $hora_inicio_turno  = $request->dia.' '.$profesional_horario->hora_inicio;
+                $hora_termino_turno  = $request->dia.' '.$profesional_horario->hora_termino;
 
-                    // con reserva
-                    $array_bloques[] = array(
-                                            'dia' => date('Y-m-d',$hora),
-                                            'hora' => date('H:i:s',$hora),
-                                            'fecha_hora' => date('Y-m-d H:i:s',$hora),
-                                            'reserva' => $reserva
-                                        );
-                }
-                else
+                /** duracion de consulta en minutos */
+                $duracion =  $profesional_horario->duracion_consulta;
+                $array_duracion = explode(':', $duracion);
+                $duracion_total = 0;
+
+                if((int)$array_duracion[0]>0)
+                    $duracion_total += (int)$array_duracion[0]*60;
+                if((int)$array_duracion[1]>0)
+                    $duracion_total += (int)$array_duracion[1];
+
+                for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora))
                 {
-                    // sin reserva
-                    $array_bloques[] = array(
-                                            'dia' => date('Y-m-d',$hora),
-                                            'hora' => date('H:i:s',$hora),
-                                            'fecha_hora' => date('Y-m-d H:i:s',$hora),
-                                            'reserva' => '0'
-                                        );
+                    $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
+                    if($hora_medica)
+                    {
+                        $cantidad_hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->count();
+                        $reserva = 0;
+                        if($cantidad_hora_medica > 1)
+                        {
+                            $reserva = 1;
+                        }
+
+                        // con reserva
+                        $array_bloques[] = array(
+                                                'dia' => date('Y-m-d',$hora),
+                                                'hora' => date('H:i:s',$hora),
+                                                'fecha_hora' => date('Y-m-d H:i:s',$hora),
+                                                'reserva' => $reserva
+                                            );
+                    }
+                    else
+                    {
+                        // sin reserva
+                        $array_bloques[] = array(
+                                                'dia' => date('Y-m-d',$hora),
+                                                'hora' => date('H:i:s',$hora),
+                                                'fecha_hora' => date('Y-m-d H:i:s',$hora),
+                                                'reserva' => '0'
+                                            );
+                    }
                 }
             }
 
@@ -856,7 +961,7 @@ class EscritorioGeneral extends Controller
         {
             $datos['estado'] = 0;
             $datos['msj'] = 'sin registros';
-            $datos['profesional_horario'] = $profesional_horarios;
+            $datos['profesional_horario'] = null;
         }
 
         return $datos;
@@ -988,12 +1093,12 @@ class EscritorioGeneral extends Controller
 
                                     if($result_mail['estado'])
                                     {
-                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Usuario creado con éxito.<br/>';
                                         $mensaje .= 'Recibirá un correo de Bienvenida con la información de acceso al sistema. <br/>';
                                     }
                                     else
                                     {
-                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Usuario creado con éxito.<br/>';
                                         $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
                                     }
                                 }
@@ -1043,12 +1148,12 @@ class EscritorioGeneral extends Controller
 
                                         if($result_mail['estado'])
                                         {
-                                            $mensaje .= 'Usuario creado con exito.<br/>';
+                                            $mensaje .= 'Usuario creado con éxito.<br/>';
                                             $mensaje .= 'Recibirá un correo de Bienvenida con la información de acceso al sistema. <br/>';
                                         }
                                         else
                                         {
-                                            $mensaje .= 'Usuario creado con exito.<br/>';
+                                            $mensaje .= 'Usuario creado con éxito.<br/>';
                                             $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
                                         }
 
@@ -1057,7 +1162,7 @@ class EscritorioGeneral extends Controller
                                     else
                                     {
                                         $mensaje .= 'Profesional '.$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
-                                        $mensaje .= 'Usuario creado con exito.<br/>';
+                                        $mensaje .= 'Usuario creado con éxito.<br/>';
                                         $mensaje .= 'Recibirá un correo con la información de acceso al sistema. <br/>';
                                         $mensaje .= 'Deberá completar su perfil en el escritorio asignado. <br/>';
                                         $mensaje .= 'Invitacion no actualizada. <br/>';
@@ -1113,6 +1218,7 @@ class EscritorioGeneral extends Controller
 
     public function invitacionConvenioProfesionalConfirmacionRechazo(Request $request)
     {
+
         // var_dump($request->all);
         $mensaje ='';
         $valido = 1;
@@ -1130,9 +1236,11 @@ class EscritorioGeneral extends Controller
         {
             $token = $request->inv;
             $tipo_proceso = $request->tpi;
+            $id_profesional = $request->id_profesional;
 
             $invitacion = Invitacion::where('token',$token)->first();
 
+            // $invitacion->procesado = 0;
             if($invitacion->procesado == 0)
             {
                 switch ($tipo_proceso) {
@@ -1140,6 +1248,7 @@ class EscritorioGeneral extends Controller
                         if($invitacion->id_user_invitado)
                         {
                             $profesional = Profesional::where('id_usuario',$invitacion->id_user_invitado)->first();
+
                             if($profesional)
                             {
                                 $buscar_prof_lugar = ProfesionalesLugaresAtencion::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$invitacion->id_lugar_atencion)->first();
@@ -1290,6 +1399,45 @@ class EscritorioGeneral extends Controller
                                         $mensaje .= 'Correo de Bienvenida con la información de acceso al sistema con problema para envío. <br/>';
                                     }
 
+                                    // asociamos el usuario al profesional
+                                    $profesional_temp = Profesional::where('id',$id_profesional)->first();
+
+                                    if($profesional_temp)                                    {
+                                        $profesional_temp->id_usuario = $invitacion->id_user_invitado;
+
+                                        if($profesional_temp->save())                                        {
+                                            $mensaje .= 'Profesional '.$profesional_temp->nombre.' '.$profesional_temp->apellido_uno.' '.$profesional_temp->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                        }
+                                        else                                        {
+                                            $mensaje .= 'Profesional '.$profesional_temp->nombre.' '.$profesional_temp->apellido_uno.' '.$profesional_temp->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                            $mensaje .= 'Problema al asociar el usuario al profesional, intente nuevamente. <br/>';
+                                        }
+                                    }
+
+                                    // LO ASIGNAMOS AL LUGAR DE ATENCION
+                                    $reg_prof_lugar = new ProfesionalesLugaresAtencion();
+                                    $reg_prof_lugar->id_profesional = $id_profesional;
+                                    $reg_prof_lugar->id_lugar_atencion = $invitacion->id_lugar_atencion;
+                                    $reg_prof_lugar->estado = 1;
+                                    if($reg_prof_lugar->save())
+                                    {
+                                        $invitacion->procesado = 1;
+                                        $invitacion->fecha_procesado = date('Y-m-d H:i:s');
+                                        $invitacion->fecha_aprobacion = date('Y-m-d H:i:s');
+                                        $invitacion->estado = 1;
+                                        if($invitacion->save())
+                                        {
+                                            $mensaje .= 'Profesional '.$profesional_temp->nombre.' '.$profesional_temp->apellido_uno.' '.$profesional_temp->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                        }
+                                        else                                        {
+                                            $mensaje .= 'Profesional '.$profesional_temp->nombre.' '.$profesional_temp->apellido_uno.' '.$profesional_temp->apellido_dos.', ha sido confirmado como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                            $mensaje .= 'Invitacion no actualizada. <br/>';
+                                        }
+                                    }
+                                    else{
+                                        $mensaje .= 'Profesional '.$profesional_temp->nombre.' '.$profesional_temp->apellido_uno.' '.$profesional_temp->apellido_dos.', se ha presentado un problema al confirmar como integrante de la Intitucion '.$invitacion->LugarAtencion()->first()->nombre.'. <br/>';
+                                    }
+
                                     /** CONFIRMAR CONVENIO */
                                     $filtro_cov = array();
                                     $filtro_cov[] = array('id_invitacion', $invitacion->id);
@@ -1368,6 +1516,35 @@ class EscritorioGeneral extends Controller
                                         $id_institucion = '';
 
                                         $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                        // al profesional le asignamos el id de usuario creado
+                                        $profesional_temp = Profesional::where('id',$id_profesional)->first();
+                                        if($profesional_temp)
+                                        {
+                                            $profesional_temp->id_usuario = $invitacion->id_user_invitado;
+                                            if($profesional_temp->save())
+                                            {
+                                                // Usuario asociado correctamente
+                                            }
+                                            else
+                                            {
+                                                $mensaje .= 'Problema al asociar el usuario al profesional, intente nuevamente. <br/>';
+                                            }
+                                        }
+
+                                        // asignamos el profesional al lugar de atencion
+                                        $reg_prof_lugar = new ProfesionalesLugaresAtencion();
+                                        $reg_prof_lugar->id_profesional = $id_profesional;
+                                        $reg_prof_lugar->id_lugar_atencion = $invitacion->id_lugar_atencion;
+                                        $reg_prof_lugar->estado = 1;
+                                        if($reg_prof_lugar->save())
+                                        {
+                                            // Profesional asociado al lugar de atencion
+                                        }
+                                        else
+                                        {
+                                            $mensaje .= 'Problema al asociar el profesional al lugar de atencion, intente nuevamente. <br/>';
+                                        }
 
                                         if($result_mail['estado'])
                                         {
@@ -1575,35 +1752,186 @@ class EscritorioGeneral extends Controller
         return $datos;
     }
 
-    public function mensaje($id){
-        $mensaje = Mensajes::find($id);
-        $mensaje->estado = 0;
-        $mensaje->update();
-        $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
-        $pc = new EscritorioProfesional;
-        $mensajes = $pc->dame_mensajes($mensaje->id_receptor);
-        $mensaje->datos_mensaje->emisor = Profesional::find($mensaje->id_usuario);
-        $mensaje->datos_mensaje->receptor = Profesional::find($mensaje->id_receptor);
-        foreach($mensajes as $m){
-            $m->emisor = User::find($m->id_usuario);
+    public function mensaje($id = null)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::id())->first();
+
+        if (!$profesional) {
+            return redirect()->back()->with('error', 'No se pudo identificar el profesional');
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mensajes recibidos
+        |--------------------------------------------------------------------------
+        */
+        $mensajes = Mensajes::where('id_receptor', $profesional->id)
+            ->with('profesionalEmisor')
+            ->orderBy('fecha_envio', 'DESC')
+            ->get();
+
+        foreach ($mensajes as $m) {
+            $m->datos_mensaje = json_decode($m->datos_mensaje);
+            $m->destinatarios = json_decode($m->destinatarios);
+
+            if ($m->profesionalEmisor) {
+                $m->emisor = $m->profesionalEmisor;
+            } elseif (!empty($m->id_usuario)) {
+                $prof_emisor = Profesional::where('id_usuario', $m->id_usuario)->first();
+                $m->emisor = $prof_emisor ?? User::find($m->id_usuario);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mensajes enviados
+        |--------------------------------------------------------------------------
+        */
+        $mensajes_enviados = Mensajes::where('id_usuario', Auth::id())
+            ->orderBy('fecha_envio', 'DESC')
+            ->get();
+
+        foreach ($mensajes_enviados as $m) {
+            $m->datos_mensaje = json_decode($m->datos_mensaje);
+            $m->destinatarios = json_decode($m->destinatarios);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mensaje seleccionado
+        |--------------------------------------------------------------------------
+        */
+        if (!$id) {
+            $primerMensaje = Mensajes::where('id_receptor', $profesional->id)
+                ->orderBy('estado', 'ASC') // estado 0 primero = no leído
+                ->orderBy('fecha_envio', 'DESC')
+                ->first();
+
+            if (!$primerMensaje) {
+                $tickets = SolicitudSoporte::where('usuario_id', Auth::id())
+                    ->withCount('respuestas')
+                    ->latest()
+                    ->get();
+
+                return view('app.general.mensajes.profesional')->with([
+                    'mensaje' => null,
+                    'mensajes' => $mensajes,
+                    'mensajes_enviados' => $mensajes_enviados,
+                    'mensajes_no_leidos' => 0,
+                    'tickets' => $tickets,
+                    'profesional' => $profesional,
+                ]);
+            }
+
+            $id = $primerMensaje->id;
+        }
+
+        $mensaje = Mensajes::with('profesionalEmisor')->find($id);
+
+        if (!$mensaje) {
+            return redirect()->back()->with('error', 'Mensaje no encontrado');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Seguridad: validar que el mensaje pertenezca al profesional
+        |--------------------------------------------------------------------------
+        */
+        $esRecibido = $mensaje->id_receptor == $profesional->id;
+        $esEnviado  = $mensaje->id_usuario == Auth::id();
+
+        if (!$esRecibido && !$esEnviado) {
+            return redirect()->back()->with('error', 'No tiene permiso para ver este mensaje');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Marcar leído solo si es recibido
+        |--------------------------------------------------------------------------
+        */
+        if ($esRecibido && $mensaje->estado == 0) {
+            $mensaje->estado = 1;
+            $mensaje->save();
+        }
+
+        $datosMensaje = json_decode($mensaje->datos_mensaje);
+        $mensaje->destinatarios = json_decode($mensaje->destinatarios);
+
+        if ($mensaje->profesionalEmisor) {
+            $datosMensaje->emisor = $mensaje->profesionalEmisor;
+        } else {
+            $prof_emisor = Profesional::where('id_usuario', $mensaje->id_usuario)->first();
+            $datosMensaje->emisor = $prof_emisor ?? User::find($mensaje->id_usuario);
+        }
+
+        $datosMensaje->receptor = Profesional::find($mensaje->id_receptor);
+        $datosMensaje->destinatarios = $mensaje->destinatarios;
+        $datosMensaje->fecha_envio = $mensaje->fecha_envio;
+        $datosMensaje->estado = $mensaje->estado;
+
+        $mensajes_no_leidos = Mensajes::where('id_receptor', $profesional->id)
+            ->where('estado', 0)
+            ->count();
+
+        $tickets = SolicitudSoporte::where('usuario_id', Auth::id())
+            ->withCount('respuestas')
+            ->latest()
+            ->get();
+
         return view('app.general.mensajes.profesional')->with([
-            'mensaje' => $mensaje->datos_mensaje,
+            'mensaje' => $datosMensaje,
             'mensajes' => $mensajes,
+            'mensajes_enviados' => $mensajes_enviados,
+            'mensajes_no_leidos' => $mensajes_no_leidos,
+            'tickets' => $tickets,
+            'profesional' => $profesional,
         ]);
     }
 
     public function mensajeJson($id)
     {
-        $mensaje = Mensajes::findOrFail($id);
-        $mensaje->estado = 0;
+
+        $mensaje = Mensajes::with('profesionalEmisor')->findOrFail($id);
+        $mensaje->estado = 1;
+
         $mensaje->update();
 
         $datos = json_decode($mensaje->datos_mensaje);
-        $datos->emisor = User::find($mensaje->id_usuario);
+
+        // Asignar emisor desde la relación profesionalEmisor
+        if($mensaje->profesionalEmisor){
+            $datos->emisor = $mensaje->profesionalEmisor;
+        } else {
+            // Intentar buscar profesional por id_usuario
+            $prof = Profesional::where('id_usuario', $mensaje->id_usuario)->first();
+            $datos->emisor = $prof ?? User::find($mensaje->id_usuario);
+        }
+
         $datos->receptor = Profesional::find($mensaje->id_receptor);
+        $datos->fecha_envio = $mensaje->fecha_envio;
 
         return response()->json($datos);
+    }
+
+    public function ticketJson($id)
+    {
+        $ticket = SolicitudSoporte::with(['respuestas.usuario', 'respuestas.archivos'])
+                    ->where('usuario_id', Auth::user()->id)
+                    ->findOrFail($id);
+
+        return response()->json([
+            'id'              => $ticket->id,
+            'numero_ticket'   => $ticket->numero_ticket,
+            'asunto'          => $ticket->asunto,
+            'descripcion'     => $ticket->descripcion,
+            'tipo_solicitud'  => $ticket->tipo_solicitud,
+            'prioridad'       => $ticket->prioridad,
+            'estado'          => $ticket->estado,
+            'created_at'      => $ticket->created_at,
+            'respuestas_count'=> $ticket->respuestas->count(),
+            'ultima_respuesta'=> optional($ticket->respuestas->last())->created_at,
+            'url_detalle'     => route('administracion.ticket_show', $ticket->id),
+        ]);
     }
 
 

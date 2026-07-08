@@ -83,19 +83,19 @@
                         </div>
                         <div class="col-sm-12 col-md-12 px-3">
                             <ul>
-                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió vacuna programa MINSAL</li>
+                                <li class="font-weight-bold d-none" id="vacuna_minsal"><i class="fas fa-check text-info"></i> Se añadió vacuna programa MINSAL</li>
                             </ul>
                             <ul>
-                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió otras vacunas</li>
+                                <li class="font-weight-bold d-none" id="otras_vacunas"><i class="fas fa-check text-info"></i> Se añadió otras vacunas</li>
                             </ul>
                             <ul>
-                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se modificó carne vacunas generales</li>
+                                <li class="font-weight-bold d-none" id="carne_vacunas_generales"><i class="fas fa-check text-info"></i> Se modificó carne vacunas generales</li>
                             </ul>
                             <ul>
-                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se modificó carne vacunas especiales</li>
+                                <li class="font-weight-bold d-none" id="carne_vacunas_especiales"><i class="fas fa-check text-info"></i> Se modificó carne vacunas especiales</li>
                             </ul>
                             <ul>
-                                <li class="font-weight-bold"><i class="fas fa-check text-info"></i> Se añadió Interconsulta</li>
+                                <li class="font-weight-bold d-none" id="interconsulta"><i class="fas fa-check text-info"></i> Se añadió Interconsulta</li>
                             </ul>
                         </div>
                     </div>
@@ -110,10 +110,10 @@
                     <div class="row">
                         <div class="col-md-9 d-inline">
                             <h6 class="text-c-blue d-inline f-16">Estado de Vacunación</h6>
-                            
+
                         </div>
 						<div class="col-md-3 d-inline">
-                            
+
                             <button type="button" class="btn btn-sm btn-purple float-right mr-2" onclick="carnet_pdf();"><i class="fas fa-syringe"></i> VER CARNE DE VACUNACIÓN</button>
                         </div>
                     </div>
@@ -183,6 +183,9 @@
         $('#pediatria_vacunas_generales').dataTable({
             responsive: true,
         });
+        $('#formulario_vac li#vacuna_minsal').addClass('d-none');
+        $('#formulario_vac li#otras_vacunas').addClass('d-none');
+        $('#formulario_vac li#interconsulta').addClass('d-none');
         cargar_vacunas_generales();
     });
 

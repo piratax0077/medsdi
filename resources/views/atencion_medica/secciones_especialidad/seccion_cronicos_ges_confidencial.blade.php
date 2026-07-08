@@ -180,9 +180,7 @@
                             <option value="cdiabet">Diabetes</option>
                             <option value="cinsufren">Insuficiencia renal</option>
                             <option value="epoc">Enfermedad pulmonar obstructiva crónica</option>
-                            <option value="cmtumorales">Marcadores tumorales</option>
-                            <option value="creumato">Reumatología</option>
-                            <option value="clitemia">Litemia</option>
+
                         </select>
                     </div>
                 </div>
@@ -1280,7 +1278,7 @@
                             </div>
                             <div class="col-md-12 mt-3">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-xs" id="tabla_antecedentes">
+                                    <table class="table table-bordered table-xs" id="tabla_antecedentes_modal">
                                         <thead>
                                             <tr>
                                                 <th>Procedimiento</th>
@@ -3020,7 +3018,7 @@
 
     function cambiar_antecedente()
     {
-
+        console.log('cambiando');
         if($('#nuevo_antecedente').val() != 'n_C')
         {
             var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
@@ -3493,8 +3491,8 @@
 
                     });
 
-                    $('#tabla_antecedentes thead').html(head_);
-                    $('#tabla_antecedentes tbody').html(html_);
+                    $('#tabla_antecedentes_modal thead').html(head_);
+                    $('#tabla_antecedentes_modal tbody').html(html_);
                     if(tipo == 1){
                         $('#listado_patologias_paciente').html(html_patologias);
                     }

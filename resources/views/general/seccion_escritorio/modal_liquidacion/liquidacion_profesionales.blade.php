@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine">Detalle Liquidación Profesionales Institución: <span id="nombre_profesional_liquidacion"></span></h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine">Detalle Liquidación Profesionales Institución <span id="nombre_profesional_liquidacion"></span></h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span onclick="cerrarModal()"; aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -49,9 +49,12 @@
                                         <div class="tab-pane fade show active" id="edit_info-tipo_contrato_liqinst" role="tabpanel" aria-labelledby="edit_info-tipo_contrato_liqinst-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
+                                                    <div class="card-lineal">
+                                                        <div class="card-header-lineal">
+                                                            Información de contrato
+                                                        </div>
+                                                        <div class="card-body-lineal">
+                                                            <div class="form-row">
                                                                 <div class="col-sm-2">
                                                                     <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                                         <a class="nav-link-aten text-reset active" id="exam-rn-traumato-tab" data-toggle="tab" href="#info_liq_inst_fijo" role="tab" aria-controls="info_liq_inst_fijo" aria-selected="true">Valor Fijo</a>
@@ -62,29 +65,29 @@
                                                                     <div class="tab-content" id="v-pills-tabContent">
                                                                         <div class="tab-pane fade show active" id="info_liq_inst_fijo" role="tabpanel" aria-labelledby="info_liq_inst_fijo-tab">
                                                                             <div class="col-sm-12 col-md-12">
-                                                                                <h6 class="mb-3 text-muted">Información de Contrato</h6>
+                                                                                <h6 class="mb-3">Valor Fijo</h6>
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-6 col-md-6">
                                                                                         <div class="form-group">
                                                                                             <label for="valor_fijo" class="floating-label-activo-sm font-weight-semibold">Valor Fijo Mensual ($)</label>
                                                                                             <input type="text" class="form-control form-control-sm bg-light" id="valor_fijo" readonly placeholder="Valor fijo según contrato">
-                                                                                            <small class="form-text text-muted">Este valor está definido en el contrato del profesional</small>
+                                                                                            <small class="text-muted">Este valor está definido en el contrato del profesional</small>
                                                                                         </div>
 
                                                                                     </div>
                                                                                     <div class="col-sm-6 col-md-6">
-                                                                                            <div class="form-group">
-                                                                                                <label for="valor_bonificacion" class="floating-label-activo-sm font-weight-semibold">Bonificacion</label>
-                                                                                                <input type="text" class="form-control form-control-sm bg-light" id="valor_bonificacion" placeholder="Bonificación según contrato" onblur="calcular_remuneracion_total()">
-                                                                                                <small class="form-text text-muted">Este valor no está definido en el contrato del profesional</small>
-                                                                                            </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="valor_bonificacion" class="floating-label-activo-sm font-weight-semibold">Bonificación</label>
+                                                                                            <input type="text" class="form-control form-control-sm bg-light" id="valor_bonificacion" placeholder="Bonificación según contrato" onblur="calcular_remuneracion_total()">
+                                                                                            <small class="text-muted">Este valor no está definido en el contrato del profesional</small>
                                                                                         </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane fade " id="info_liq_inst_variable" role="tabpanel" aria-labelledby="info_liq_inst_variable-tab">
                                                                             <div class="col-sm-12 col-md-12">
-                                                                                <h6 class="mb-3 text-muted">Parámetros del Convenio</h6>
+                                                                                <h6 class="mb-3">Parámetros del Convenio</h6>
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-4 col-md-4">
                                                                                         <div class="form-group">
@@ -108,7 +111,7 @@
                                                                             </div>
                                                                             <div class="col-sm-12 col-md-12">
                                                                                 <hr class="my-3">
-                                                                                <h6 class="mb-3 text-muted">Resumen de Valores</h6>
+                                                                                <h6 class="mb-3">Resumen de Valores</h6>
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-12">
                                                                                         <div class="form-group">
@@ -123,16 +126,16 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <hr> <br>
-                                                            <div class="col-sm-12 col-md-12">
-                                                                <h6 class="mb-3 text-primary font-weight-bold">Total General del Contrato</h6>
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12">
-                                                                        <div class="form-group">
-                                                                            <label for="valor_total_prof" class="floating-label-activo-sm font-weight-semibold">Valor Total a Liquidar ($)</label>
-                                                                            <input type="text" id="valor_total_prof" class="form-control form-control-lg bg-light border-primary font-weight-bold text-primary" readonly placeholder="Total calculado">
-                                                                            <small class="form-text text-muted">Suma de todos los valores según tipo de contrato (fijo o variable)</small>
-                                                                        </div>
+                                                            <hr> <br>                                                              
+                                                            <div class="form-row">
+                                                                <div class="col-12">
+                                                                      <h6 class="mb-3 text-c-blue">Total General del Contrato</h6>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="valor_total_prof" class="floating-label-activo-sm font-weight-semibold">Valor Total a Liquidar ($)</label>
+                                                                        <input type="text" id="valor_total_prof" class="form-control form-control-lg bg-light border-primary font-weight-bold text-primary" readonly placeholder="Total calculado">
+                                                                        <small class="form-text">Suma de todos los valores según tipo de contrato (fijo o variable)</small>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -143,254 +146,287 @@
                                         </div>
                                         <!--INFO FONASA-->
                                         <div class="tab-pane fade show" id="fonasa_liq_inst" role="tabpanel" aria-labelledby="fonasa_liq_inst-tab">
-                                            <form>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Total del Mes</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos mes</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="numero_bonos_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Total Copago</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="total_copago_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Total Seguros</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="total_seguros_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">bonificación a Cobrar</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="bonificacion_cobrar_mes">
-                                                                </div>
-                                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card-lineal">
+                                                        <div class="card-header-lineal">
+                                                            Fonasa
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Desglose recibidos Por el Profesional</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                        <div class="card-body-lineal">
+                                                            <form>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6> Total del Mes</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos mes</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="numero_bonos_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Total Copago</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="total_copago_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Total Seguros</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="total_seguros_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Bonificación a Cobrar</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="bonificacion_cobrar_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copago Recibidos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6>Desglose recibidos por el Profesional</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copago Recibidos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Desglose pendiente</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copago pendiente</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6>Desglose pendiente</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copago pendiente</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
 
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Valor Enviado a Cobro (bonif+seguros)</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Valor Enviado a Cobro (Bonif + Seguros)</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                         <!--INFO ISAPRES-->
                                         <div class="tab-pane fade show" id="isapre_liq_inst" role="tabpanel" aria-labelledby="isapre_liq_inst-tab">
-                                            <form>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Total del Mes</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos mes</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="numero_bonos_isapre_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Total Copago</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="total_copago_isapre_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Total Seguros</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="total_seguros_isapre_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">bonificación a Cobrar</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="bonificacion_cobrar_isapre_mes">
-                                                                </div>
-                                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card-lineal">
+                                                        <div class="card-header-lineal">
+                                                            Isapre
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Desglose recibidos Por el Profesional</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos Recibidos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                        <div class="card-body-lineal">
+                                                            <form>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6> Total del Mes</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos mes</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="numero_bonos_isapre_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Total Copago</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="total_copago_isapre_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Total Seguros</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="total_seguros_isapre_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Bonificación a Cobrar</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="bonificacion_cobrar_isapre_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copago Recibidos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6> Desglose recibidos Por el Profesional</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos Recibidos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copago Recibidos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Desglose pendiente</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Bonos Pendientes</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copago pendiente</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6>Desglose pendiente</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12 mt-2">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Bonos Pendientes</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copago pendiente</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
 
-                                                            <div class="col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Valor Enviado a Cobro (bonif+seguros)</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Valor Enviado a Cobro (Bonif + Seguros)</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                         <!--INFO PARTICULAR-->
                                         <div class="tab-pane fade show" id="particular_liq_inst" role="tabpanel" aria-labelledby="particular_liq_inst-tab">
-                                            <form>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Total Recibidos</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">N° Atenciones</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="numero_atenciones_particulares">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="card-lineal">
+                                                        <div class="card-header-lineal">
+                                                            Particulares y Efectivo
+                                                        </div>
+                                                        <div class="card-body-lineal">
+                                                            <form>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6>Total Recibidos</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">N° Atenciones</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="numero_atenciones_particulares">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Valor Particulares</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="valor_particulares_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copagos recibidos</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="copagos_recibidos_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Efectivo Recibido</label>
+                                                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" type="text" id="efectivo_recibido_mes">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Valor Particulares</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="valor_particulares_mes">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12">
+                                                                        <h6>Total Pendiente</h6>
+                                                                    </div>
+                                                                    <div class="col-sm-12 col-md-12">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-3 col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm"> Particulares Pendientes</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Copagos Pendientes</label>
+                                                                                    <input class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Total Efectivo Pendiente</label>
+                                                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" type="text" id="">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copagos recibidos</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="copagos_recibidos_mes">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-3">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Efectivo Recibido</label>
-                                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" type="text" id="efectivo_recibido_mes">
-                                                                </div>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                    <h6> Total Pendiente</h6>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-12">
-                                                        <div class="form-row">
-                                                            <div class="col-sm-3 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm"> Particulares Pendientes</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Copagos Pendientes</label>
-                                                                    <input class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-sm-3 col-md-4">
-                                                                <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Total Efectivo Pendiente</label>
-                                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" type="text" id="">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
                                         <!--INFO LIQUIDACION-->
                                         <div class="tab-pane fade show" id="a_pagar_prof" role="tabpanel" aria-labelledby="a_pagar_prof-tab">
                                             <form>
                                                 <!-- Sección de Fechas y Total -->
-                                                <div class="card mb-3">
-                                                    <div class="card-header bg-info text-white">
-                                                        <h6 class="mb-0"><i class="feather icon-calendar"></i> Período de Liquidación</h6>
+                                                <div class="card-lineal mb-3">
+                                                    <div class="card-header-lineal">
+                                                        <i class="feather icon-calendar"></i> Período de Liquidación
                                                     </div>
-                                                    <div class="card-body">
+                                                    <div class="card-body-lineal">
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                                 <label for="edit_empleado_fecha_inicio" class="floating-label-activo-sm font-weight-semibold">Fecha Inicio</label>
@@ -409,11 +445,11 @@
                                                 </div>
 
                                                 <!-- Sección de Haberes -->
-                                                <div class="card mb-3">
-                                                    <div class="card-header bg-success text-white">
-                                                        <h6 class="mb-0" style="color: white !important"><i class="fas fa-plus-circle"></i> Haberes (Ingresos)</h6>
+                                                <div class="card-lineal mb-3">
+                                                    <div class="card-header-lineal">
+                                                        <i class="fas fa-plus-circle"></i> Haberes (Ingresos)
                                                     </div>
-                                                    <div class="card-body">
+                                                    <div class="card-body-lineal">
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                                 <label for="numero_bonos_fisico" class="floating-label-activo-sm font-weight-semibold">N° Bonos Físico</label>
@@ -436,46 +472,46 @@
                                                 </div>
 
                                                 <!-- Sección de Descuentos -->
-                                                <div class="card mb-3">
-                                                    <div class="card-header bg-danger text-white">
-                                                        <h6 class="mb-0" style="color: white !important"><i class="fas fa-minus-circle"></i> Descuentos</h6>
+                                                <div class="card-lineal mb-3">
+                                                    <div class="card-header-lineal text-danger">
+                                                        <i class="fas fa-minus-circle"></i> Descuentos
                                                     </div>
-                                                    <div class="card-body">
+                                                    <div class="card-body-lineal">
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                                 <label for="valor_pagar_institucion_liquidacion" class="floating-label-activo-sm font-weight-semibold">Valor a pagar a Institución ($)</label>
                                                                 <input type="text" class="form-control form-control-sm bg-light" name="valor_pagar_institucion_liquidacion" id="valor_pagar_institucion_liquidacion" readonly placeholder="$0">
-                                                                <small class="form-text text-muted">Descuentos por gastos institucionales</small>
+                                                                <small class="form-text">Descuentos por gastos institucionales</small>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                                 <label for="valor_recibidos_liquidacion" class="floating-label-activo-sm font-weight-semibold">Valores Recibidos ($)</label>
                                                                 <input type="text" class="form-control form-control-sm bg-light" name="valor_recibidos_liquidacion" id="valor_recibidos_liquidacion" readonly placeholder="$0">
-                                                                <small class="form-text text-muted">Anticipos o pagos ya recibidos</small>
+                                                                <small class="form-text">Anticipos o pagos ya recibidos</small>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- Total Líquido a Pagar -->
-                                                <div class="card border-primary">
-                                                    <div class="card-header bg-primary text-white">
-                                                        <h5 class="mb-0" style="color: white !important"><i class="fas fa-dollar-sign"></i> Total Bonificación</h5>
+                                                <div class="card-lineal border-primary">
+                                                    <div class="card-header-lineal bg-primary text-white border-primary">
+                                                        <i class="fas fa-dollar-sign"></i> Total Bonificación
                                                     </div>
-                                                    <div class="card-body bg-light">
+                                                    <div class="card-body-lineal border-primary">
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-12">
                                                                 <label for="total_pagar_liquidacion_profesional" class="floating-label-activo-sm font-weight-bold">Monto Final ($)</label>
                                                                 <input type="text" name="total_pagar_liquidacion_profesional" id="total_pagar_liquidacion_profesional" class="form-control form-control-lg bg-white border-primary font-weight-bold text-primary text-center" readonly placeholder="$0" style="font-size: 1.5rem;">
-                                                                <small class="form-text text-muted text-center">Este es el valor neto que recibirá el profesional</small>
+                                                                <small class="form-text text-center">Este es el valor neto que recibirá el profesional</small>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- Total Monto Imponible -->
-                                                <div class="card border-secondary mb-3">
-                                                    <div class="card-header bg-secondary text-white">
-                                                        <h5 class="mb-0" style="color: white !important"><i class="fas fa-calculator"></i> Total Monto Imponible</h5>
+                                                <div class="card-lineal border-info mb-3">
+                                                    <div class="card-header-lineal bg-info border-info text-white">
+                                                        <i class="fas fa-calculator"></i> Total Monto Imponible
                                                     </div>
-                                                    <div class="card-body bg-light">
+                                                    <div class="card-body-lineal border-info">
                                                         <div class="form-row">
                                                             <div class="form-group col-sm-12 col-md-12">
                                                                 <label for="monto_imponible_liquidacion_profesional" class="floating-label-activo-sm font-weight-bold">Monto Imponible ($)</label>
@@ -485,8 +521,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                             </form>
                                         </div>
                                     </div>
@@ -496,70 +530,74 @@
                     </div>
                     <!--VENTAS PRODUCTOS-->
                     <div class="tab-pane fade show" id="ventas_productos_liq_inst" role="tabpanel" aria-labelledby="ventas_productos_liq_inst-tab">
-                        <form>
-                            <!-- Sección de Período -->
-                            <div class="card mb-3">
-                                <div class="card-header bg-info text-white">
-                                    <h6 class="mb-0"><i class="feather icon-calendar"></i> Período de Liquidación - Ventas de Productos</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                            <label for="fecha_inicio_liq" class="floating-label-activo-sm font-weight-semibold">Fecha Inicio</label>
-                                            <input type="date" class="form-control form-control-sm" name="fecha_inicio_liq" id="fecha_inicio_liq">
+                        <div class="row">
+                            <div class="col-12">
+                                <form>
+                                    <!-- Sección de Período -->
+                                    <div class="card-lineal mb-3">
+                                        <div class="card-header-lineal">
+                                            <i class="feather icon-calendar"></i> Período de Liquidación - Ventas de Productos
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                            <label for="fecha_termino_liq" class="floating-label-activo-sm font-weight-semibold">Fecha Término</label>
-                                            <input type="date" class="form-control form-control-sm" name="fecha_termino_liq" id="fecha_termino_liq" onchange="dame_valor_pagar_venta_prod()">
+                                        <div class="card-body-lineal">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                    <label for="fecha_inicio_liq" class="floating-label-activo-sm font-weight-semibold">Fecha Inicio</label>
+                                                    <input type="date" class="form-control form-control-sm" name="fecha_inicio_liq" id="fecha_inicio_liq">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                    <label for="fecha_termino_liq" class="floating-label-activo-sm font-weight-semibold">Fecha Término</label>
+                                                    <input type="date" class="form-control form-control-sm" name="fecha_termino_liq" id="fecha_termino_liq" onchange="dame_valor_pagar_venta_prod()">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <!-- Sección de Cálculos -->
-                            <div class="card mb-3">
-                                <div class="card-header bg-success text-white">
-                                    <h6 class="mb-0" style="color: white !important"><i class="fas fa-shopping-cart"></i> Información de Ventas</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                            <label for="total_valor_pagar_venta_prod" class="floating-label-activo-sm font-weight-semibold">Valor Total Vendido ($)</label>
-                                            <input type="text" name="total_valor_pagar_venta_prod" id="total_valor_pagar_venta_prod" class="form-control form-control-sm bg-light font-weight-bold" readonly placeholder="$0">
-                                            <small class="form-text text-muted">Total de productos vendidos en el período</small>
+                                    <!-- Sección de Cálculos -->
+                                    <div class="card-lineal mb-3">
+                                        <div class="card-header-lineal">
+                                            <i class="fas fa-shopping-cart"></i> Información de Ventas
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                            <label for="porcentaje_a_pagar" class="floating-label-activo-sm font-weight-semibold">Porcentaje de Comisión (%)</label>
-                                            <input type="text" class="form-control form-control-sm bg-light font-weight-bold" name="porcentaje_a_pagar" id="porcentaje_a_pagar" readonly placeholder="0%">
-                                            <small class="form-text text-muted">Porcentaje según convenio del profesional</small>
+                                        <div class="card-body-lineal">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                    <label for="total_valor_pagar_venta_prod" class="floating-label-activo-sm font-weight-semibold">Valor Total Vendido ($)</label>
+                                                    <input type="text" name="total_valor_pagar_venta_prod" id="total_valor_pagar_venta_prod" class="form-control form-control-sm bg-light font-weight-bold" readonly placeholder="$0">
+                                                    <small class="form-text">Total de productos vendidos en el período</small>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                    <label for="porcentaje_a_pagar" class="floating-label-activo-sm font-weight-semibold">Porcentaje de Comisión (%)</label>
+                                                    <input type="text" class="form-control form-control-sm bg-light font-weight-bold" name="porcentaje_a_pagar" id="porcentaje_a_pagar" readonly placeholder="0%">
+                                                    <small class="form-text">Porcentaje según convenio del profesional</small>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <!-- Total a Pagar -->
-                            <div class="card border-primary">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="mb-0" style="color: white !important"><i class="fas fa-dollar-sign"></i> Total Comisión por Ventas</h5>
-                                </div>
-                                <div class="card-body bg-light">
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-12 col-md-12">
-                                            <label for="total_a_pagar_profesional_venta_prod" class="floating-label-activo-sm font-weight-bold">Monto a Pagar al Profesional ($)</label>
-                                            <input type="text" name="total_a_pagar_profesional_venta_prod" id="total_a_pagar_profesional_venta_prod" class="form-control form-control-lg bg-white border-primary font-weight-bold text-success text-center" readonly placeholder="$0" style="font-size: 1.5rem;">
-                                            <small class="form-text text-muted text-center">Este es el valor de comisión por ventas de productos que recibirá el profesional</small>
+                                    <!-- Total a Pagar -->
+                                    <div class="card-lineal border-primary">
+                                        <div class="card-header-lineal bg-primary text-white">
+                                            <i class="fas fa-dollar-sign"></i> Total Comisión por Ventas
+                                        </div>
+                                        <div class="card-body-lineal">
+                                            <div class="form-row">
+                                                <div class="form-group col-sm-12 col-md-12">
+                                                    <label for="total_a_pagar_profesional_venta_prod" class="floating-label-activo-sm font-weight-bold">Monto a Pagar al Profesional ($)</label>
+                                                    <input type="text" name="total_a_pagar_profesional_venta_prod" id="total_a_pagar_profesional_venta_prod" class="form-control form-control-lg bg-white border-primary font-weight-bold text-success text-center" readonly placeholder="$0" style="font-size: 1.5rem;">
+                                                    <small class="form-text text-center">Este es el valor de comisión por ventas de productos que recibirá el profesional</small>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info">Guardar </button>
-                <button type="button" class="btn btn-primary" onclick="generarPdf()" style="color: #3268bf;background-color: #cde0f6;border-color: #cde0f6;"><i class="feather icon-file"></i>Generar PDF</button>
+                <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar </button>
+                <button type="button" class="btn btn-danger" onclick="generarPdf()"><i class="fas fa-file-pdf"></i> Generar PDF</button>
             </div>
         </div>
     </div>

@@ -12,9 +12,15 @@
 
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Administracion del centro médico</a></li>
+                            @if($institucion->id_tipo_institucion == 3)
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
                             <li class="breadcrumb-item"><a href="#">Bodegas</a></li>
+                            @else
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="#">Bodegas</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>

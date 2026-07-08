@@ -92,7 +92,7 @@
     <!-- SIDE BAR FONO -->
     @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
     @include("atencion_otros_prof.include.sidebar_derecho_fono"){{-- modales y data de sidebar especialidad --}}
-
+@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
  @endsection
 
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+

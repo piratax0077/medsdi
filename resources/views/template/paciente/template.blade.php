@@ -134,8 +134,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-	<!-- flatpickr -->
+    <!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+    <script>
+        // Wrapper jQuery para flatpickr - debe ir después de vendor-all.min.js
+        if (typeof jQuery !== 'undefined' && typeof flatpickr !== 'undefined') {
+            jQuery.fn.flatpickr = function(options) {
+                return this.each(function() {
+                    flatpickr(this, options);
+                });
+            };
+        }
+    </script>
 
     <!-- file-upload Js -->
     <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>

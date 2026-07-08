@@ -16,6 +16,7 @@
         <h2>{{ $detalle['body']['asunto'] ?? 'Campaña Promocional' }}</h2>
         <div class="mensaje">
             {!! $detalle['body']['mensaje'] ?? '' !!}
+            <img src="{{ $detalle['body']['imagen_url'] ?? '' }}" alt="Imagen de la campaña" style="max-width: 100%; height: auto;">
         </div>
         <div class="footer">
             <strong>Remitente:</strong> {{ $detalle['body']['remitente'] ?? '' }}<br>

@@ -60,8 +60,8 @@
                                 <i class="feather icon-clock"></i> Prestado
                             </span>
                         `;
-                        
-                        
+
+
                     }else{
                             botones = `
                             <!-- Botones de acción -->
@@ -172,7 +172,7 @@
                                     </div>
 
                                     ${botones}
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -438,7 +438,7 @@
             $('#prestamo_paciente_sel_nombre').text(nombre);
             $('#prestamo_paciente_sel_email').text(email);
             $('#prestamo_paciente_sel_telefono').text(telefono);
-            
+
             $('#card_paciente_seleccionado_prestamo').show();
             $('#card_busqueda_paciente_prestamo').hide();
 
@@ -452,7 +452,7 @@
             $('#recepcion_paciente_sel_nombre').text(nombre);
             $('#recepcion_paciente_sel_email').text(email);
             $('#recepcion_paciente_sel_telefono').text(telefono);
-            
+
             $('#card_paciente_seleccionado_recepcion').show();
             $('#card_busqueda_paciente_recepcion').hide();
 
@@ -476,6 +476,9 @@
         }
         if (typeof mis_audifonos === 'function') {
             mis_audifonos(id);
+        }
+        if (typeof productosParaDevolver === 'function') {
+            productosParaDevolver();
         }
 
         // Mensaje de éxito
@@ -574,7 +577,7 @@
             } else {
                 $('#productos-lista').append('<p>No se encontraron productos.</p>');
             }
-            
+
         })
         .fail(function(jqXHR) {
             console.error('Error al obtener productos:', jqXHR);
@@ -940,6 +943,226 @@
                 $('#tipo_busqueda_paciente_prestamo').val('rut');
             }
         }
+
+        function mostrarCalificacionEstrellas(satisfaccion) {
+            const container = $('#detalle-calificacion');
+
+            // Si no hay calificación
+            if (!satisfaccion || satisfaccion === null || satisfaccion === 0) {
+                container.html('<span class="text-muted">Sin calificar</span>');
+                return;
+            }
+
+            // Textos descriptivos por nivel
+            const textos = {
+                1: 'Muy insatisfecho',
+                2: 'Insatisfecho',
+                3: 'Neutral',
+                4: 'Satisfecho',
+                5: 'Muy satisfecho'
+            };
+
+            // Generar estrellas
+            let estrellasHTML = '<div class="rating-display">';
+            estrellasHTML += '<div class="rating-stars">';
+
+            for (let i = 1; i <= 5; i++) {
+                if (i <= satisfaccion) {
+                    // Estrella llena
+                    estrellasHTML += `<i class="fas fa-star rating-${satisfaccion}"></i>`;
+                } else {
+                    // Estrella vacía
+                    estrellasHTML += '<i class="far fa-star star-empty"></i>';
+                }
+            }
+
+            estrellasHTML += '</div>';
+            estrellasHTML += `<span class="rating-text">(<span class="rating-value">${satisfaccion}/5</span> - ${textos[satisfaccion]})</span>`;
+            estrellasHTML += '</div>';
+
+            container.html(estrellasHTML);
+        }
+
+        function guardar_evaluacion_producto(){
+            let id_producto = $('#id_producto_seleccionado').val();
+            let id_paciente = $('#id_paciente_fc').val();
+            let satisfaccion = $('#nivel_satisfaccion').val();
+            let observaciones = $('#observaciones_satisfaccion').val();
+            if(!id_producto){
+                swal('Error', 'No se ha seleccionado ningún producto', 'error');
+                return;
+            }
+            if(!satisfaccion || satisfaccion < 1 || satisfaccion > 5){
+                swal('Error', 'Debe seleccionar una valoración válida', 'error');
+                return;
+            }
+
+            let url = "{{ route('laboratorio.paciente.producto.evaluar') }}";
+            let data = {
+                id_producto: id_producto,
+                id_paciente: id_paciente,
+                satisfaccion: satisfaccion,
+                observaciones: observaciones,
+                _token: CSRF_TOKEN
+            };
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+            })
+            .done(function(response) {
+                console.log(response);
+                if(response.estado === 1){
+                    // Actualizar visualización de estrellas
+                    mostrarCalificacionEstrellas(satisfaccion);
+
+                    swal({
+                        icon: 'success',
+                        title: '¡Gracias por su evaluación!',
+                        text: response.mensaje || 'Su valoración ha sido registrada.',
+                        buttons: false,
+                        timer: 2000
+                    });
+
+                    // Limpiar formulario
+                    $('#nivel_satisfaccion').val('');
+                    $('#observaciones_satisfaccion').val('');
+
+                    // Opcional: recargar lista de productos
+                    // cargar_productos_paciente();
+                } else {
+                    swal('Error', response.mensaje || 'No se pudo guardar la evaluación', 'error');
+                }
+            })
+            .fail(function(jqXHR) {
+                console.error('Error al guardar evaluación:', jqXHR);
+                swal('Error', 'No se pudo comunicar con el servidor', 'error');
+            });
+        }
+
+    /**
+     * Cargar productos del paciente para devolver a proveedor
+     */
+    function productosParaDevolver() {
+        let id_paciente = $('#paciente_seleccionado_id').val();
+
+        if(!id_paciente || id_paciente === '') {
+            $('#mensaje_seleccionar_paciente_devolver').removeClass('d-none');
+            $('#contenedor_productos_devolver').addClass('d-none');
+            return;
+        }
+
+        // Mostrar contenedor y ocultar mensaje
+        $('#contenedor_productos_devolver').removeClass('d-none');
+        $('#mensaje_seleccionar_paciente_devolver').addClass('d-none');
+
+        // Mostrar estado de carga
+        $('#tabla_productos_devolver tbody').html(`
+            <tr>
+                <td colspan="6" class="text-center">
+                    <i class="feather icon-loader"></i> Cargando productos...
+                </td>
+            </tr>
+        `);
+
+        let url = "{{ route('laboratorio.profesional.audifono.productos_para_devolver') }}";
+        let data = {
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        };
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: data,
+        })
+        .done(function(response) {
+            console.log('Productos para devolver:', response);
+
+            if(response.estado === 0) {
+                $('#tabla_productos_devolver tbody').html(`
+                    <tr>
+                        <td colspan="6" class="text-center text-danger">
+                            ${response.mensaje || 'Error al cargar productos'}
+                        </td>
+                    </tr>
+                `);
+                return;
+            }
+
+            let productos = response.productos || [];
+
+            if(productos.length === 0) {
+                $('#mensaje_sin_productos_devolver').removeClass('d-none');
+                $('#tabla_productos_devolver tbody').html('');
+                return;
+            }
+
+            $('#mensaje_sin_productos_devolver').addClass('d-none');
+            let html = '';
+
+            productos.forEach(function(producto) {
+                let imagenUrl = producto.image_path || '';
+                if (imagenUrl && !imagenUrl.startsWith('http')) {
+                    imagenUrl = '/' + imagenUrl;
+                }
+
+                let fechaCompra = producto.fecha_compra ? new Date(producto.fecha_compra).toLocaleDateString('es-ES') : 'N/A';
+
+                html += `
+                    <tr>
+                        <td class="text-center">
+                            <img src="${imagenUrl}" alt="${producto.nombre}" class="img-thumbnail" style="max-width: 50px; max-height: 50px;" onerror="this.src='/images/no-image.png'">
+                        </td>
+                        <td><strong>${producto.nombre}</strong></td>
+                        <td>${producto.tipo_producto || 'N/A'}</td>
+                        <td><small>${producto.codigo_interno || 'N/A'}</small></td>
+                        <td>${fechaCompra}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-warning" onclick="registrarDevolucion(${producto.id_producto}, '${producto.nombre}')">
+                                <i class="feather icon-arrow-left-circle"></i> Devolver
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $('#tabla_productos_devolver tbody').html(html);
+        })
+        .fail(function(jqXHR) {
+            console.error('Error al obtener productos:', jqXHR);
+            $('#tabla_productos_devolver tbody').html(`
+                <tr>
+                    <td colspan="6" class="text-center text-danger">
+                        Error al conectar con el servidor
+                    </td>
+                </tr>
+            `);
+        });
+    }
+
+    /**
+     * Registrar devolución de producto
+     */
+    function registrarDevolucion(id_producto, nombre_producto) {
+        swal({
+            title: '¿Devolver producto?',
+            text: `¿Está seguro de devolver "${nombre_producto}" a proveedor?`,
+            icon: 'warning',
+            buttons: {
+                cancel: 'Cancelar',
+                confirm: 'Sí, devolver'
+            },
+            dangerMode: true,
+        })
+        .then(function(value) {
+            if(value) {
+                // Aquí iría la lógica para registrar la devolución
+                swal('Información', 'Funcionalidad de devolución aún en desarrollo', 'info');
+            }
+        });
+    }
 </script>
 @endsection
 @section('content')
@@ -963,14 +1186,14 @@
             </div>
             <!--Cierre: Header-->
             <!-- Paciente Seleccionado para POST VENTA (oculto inicialmente) -->
-       
-        
+
+
         @if($profesional->id_tipo_institucion == 3)
             <h5 class="text-c-blue f-18 mb-3">
                 <i class="feather icon-inbox mr-2"></i>
                 Buscar Paciente para Control Post Venta de Audífonos
             </h5>
-            
+
             <div class="row d-none" id="card_paciente_seleccionado_post_venta">
                 <div class="col-12">
                     <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -1069,7 +1292,7 @@
                 </div>
             </div>
 
-    
+
         @endif
         <div class="card">
             <div class="card-body">
@@ -1082,6 +1305,9 @@
                             <li class="nav-item-secciones">
                                 <a class="nav-secciones text-uppercase" id="control-mis-productos-tab" data-toggle="tab" href="#control-mis-productos" role="tab" aria-controls="control-mis-productos" aria-selected="false">Control de productos del paciente</a>
                             </li>
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones text-uppercase" id="control-devolver-proveedor-tab" data-toggle="tab" href="#control-devolver-proveedor" role="tab" aria-controls="control-devolver-proveedor" aria-selected="false">Devolver a proveedor</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -1091,7 +1317,7 @@
                             <i class="feather icon-inbox mr-2"></i>
                             Buscar Paciente para Control Post Venta de Audífonos
                         </h5>
-         
+
                         <div class="row d-none" id="card_paciente_seleccionado_post_venta">
                             <div class="col-12">
                                 <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -1640,7 +1866,54 @@
                                     </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade" id="control-devolver-proveedor" data-toggle="tab" href="#control-devolver-proveedor" role="tab" aria-labelledby="control-devolver-proveedor-tab">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <!-- Card Devolver a Proveedor -->
+                            <div class="card border-danger mt-4">
+                                <div class="card-header bg-danger">
+                                    <h5 class="text-white mb-0">
+                                        <i class="feather icon-rotate-ccw mr-2"></i>
+                                        Devolver a Proveedor
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Mensaje de seleccionar paciente -->
+                                    <div id="mensaje_seleccionar_paciente_devolver" class="alert alert-info text-center">
+                                        <i class="feather icon-info mr-2"></i>
+                                        Seleccione un paciente en la sección superior para ver los productos disponibles para devolver.
+                                    </div>
 
+                                    <!-- Tabla de productos -->
+                                    <div id="contenedor_productos_devolver" class="d-none">
+                                        <h6 class="mb-3 font-weight-bold">
+                                            <i class="feather icon-box mr-2"></i>
+                                            Productos del Paciente
+                                        </h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover table-sm" id="tabla_productos_devolver">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="text-center">Imagen</th>
+                                                        <th>Nombre</th>
+                                                        <th>Tipo</th>
+                                                        <th>Código</th>
+                                                        <th>Fecha Compra</th>
+                                                        <th class="text-center">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_productos_devolver">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div id="mensaje_sin_productos_devolver" class="alert alert-warning text-center d-none">
+                                            <i class="feather icon-alert-circle mr-2"></i>
+                                            Este paciente no tiene productos para devolver.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

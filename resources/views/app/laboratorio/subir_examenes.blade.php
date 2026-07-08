@@ -1,4 +1,4 @@
-@extends('template.laboratorio.laboratorio_asistente.template')
+@extends('template.laboratorio.laboratorio_profesional.template')
 
 @section('content')
 
@@ -11,13 +11,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Carga de examentes</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Carga de examentes</a></li>
+                                <li class="breadcrumb-item"><a href="#">Carga de exámenes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -32,42 +32,73 @@
                         <div class="card-header text-center bg-c-info">
                             <div class="row">
                                 <div class="col-sm-4 d-inline text-left">
-                                    <h5 class="text-white my-2" style="font-size: 1.1rem;">Carga Examenes</h5>
+                                    <h5 class="text-white my-2" style="font-size: 1.2rem;">Carga Exámenes</h5>
                                     <input type="hidden" name="lista_id_lugares" id="lista_id_lugares" value="{{ $array_lugares }}">
                                 </div>
                             </div>
                         </div>
                         <div class="card-body pb-0 pt-4">
-                            <div class="row pb-5">
-                                <div class="col-md-3">
+                            <div class="form-row pb-5">
+                                <div class="form-group col-sm-12 col-md-3">
                                     <label class="floating-label-activo-sm">RUT Paciente</label>
                                     <input type="text" class="form-control form-control-sm" name="buscar_rut" id="buscar_rut" oninput="formatoRut(this)">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="form-group col-sm-12 col-md-3">
                                     <label class="floating-label-activo-sm">Nombre Paciente</label>
                                     <input type="text" class="form-control form-control-sm" name="buscar_nombre" id="buscar_nombre">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="form-group col-sm-12 col-md-3">
                                     <label class="floating-label-activo-sm">Apellido Paciente</label>
                                     <input type="text" class="form-control form-control-sm" name="buscar_apellido" id="buscar_apellido">
                                 </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-success btn-sm has-ripple" onclick="buscar_pacientes();"> Buscar</button>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <button type="button" class="btn btn-info btn-sm btn-block" onclick="buscar_pacientes();"><i class="feather icon-search"></i> Buscar</button>
                                 </div>
                             </div>
                             <div class="dt-responsive table-responsive align-middle pb-0">
-                                <table id="table_examenes_transcritos" class="table table-striped table-bordered nowrap table-sm" style="height: 100px">
+                                <table id="table_examenes_transcritos" class="table table-striped table-bordered nowrap table-xs" style="height: 100px">
                                     <thead>
                                         <tr>
-                                            <th class="text-center align-left">Fecha Atención</th>
-                                            <th class="text-center align-left">Paciente</th>
-                                            <th class="text-center align-left">Examen</th>
-                                            <th class="text-center align-middle">Accion</th>
+                                            <th class="align-middle">Fecha Atención</th>
+                                            <th class="align-middle">Paciente</th>
+                                            <th class="align-middle">Examen</th>
+                                            <th class="align-middle">Acción</th>
                                         </tr>
                                     </thead>
                                    <tbody>
                                         @if (isset($horas_medicas))
                                             @foreach ($horas_medicas as $ex_t)
+                                                @php
+                                                    // Determinar qué tipo de ficha tiene
+                                                    $ficha_id = null;
+                                                    $ficha_paciente_id = null;
+                                                    $ficha_profesional_id = null;
+                                                    $tipo_ficha = null;
+
+                                                    if ($ex_t->fichaotrosprofesionales) {
+                                                        $ficha_id = $ex_t->fichaotrosprofesionales->id;
+                                                        $ficha_paciente_id = $ex_t->fichaotrosprofesionales->id_paciente;
+                                                        $ficha_profesional_id = $ex_t->fichaotrosprofesionales->id_profesional;
+                                                        $tipo_ficha = 'otros_prof';
+                                                    } elseif ($ex_t->fichaatencion) {
+                                                        $ficha_id = $ex_t->fichaatencion->id;
+                                                        $ficha_paciente_id = $ex_t->fichaatencion->id_paciente;
+                                                        $ficha_profesional_id = $ex_t->fichaatencion->id_profesional;
+                                                        $tipo_ficha = 'ficha_atencion';
+                                                    } elseif ($ex_t->id_ficha_atencion) {
+                                                        $ficha_id = $ex_t->id_ficha_atencion;
+                                                        $ficha_paciente_id = $ex_t->id_paciente;
+                                                        $ficha_profesional_id = $ex_t->id_profesional;
+                                                        $tipo_ficha = 'ficha_atencion';
+                                                    } elseif ($ex_t->id_ficha_otros_prof) {
+                                                        $ficha_id = $ex_t->id_ficha_otros_prof;
+                                                        $ficha_paciente_id = $ex_t->id_paciente;
+                                                        $ficha_profesional_id = $ex_t->id_profesional;
+                                                        $tipo_ficha = 'otros_prof';
+                                                    }
+                                                @endphp
+
+                                                @if($ficha_id)
                                                 <tr>
                                                     <td class="text-center align-left">
                                                         {{ date('d-m-Y', strtotime($ex_t->fecha_realizacion_consulta)) }}
@@ -80,9 +111,10 @@
                                                         {{ $ex_t->procedimientocentro->nombre }}
                                                     </td>
                                                     <td class="text-center align-left bg-estado-light-amarillo">
-                                                        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="cargar archivo" onclick="abrir_subir_archivo('{{ $ex_t->id }}', '{{ $ex_t->fichaotrosprofesionales->id }}', '{{ $ex_t->fichaotrosprofesionales->id_paciente }}','{{ $ex_t->paciente->nombres.' '.$ex_t->paciente->apellido_uno }}', '{{ $ex_t->paciente->rut }}', '{{ $ex_t->fichaotrosprofesionales->id_profesional }}', '{{ $ex_t->procedimientocentro->nombre }}');"><i class="feather icon-upload"></i> CARGAR ARCHIVO</button>
+                                                        <button type="button" class="btn btn-info-light-c btn-xxs" data-toggle="tooltip" data-placement="top" title="cargar archivo" onclick="abrir_subir_archivo('{{ $ex_t->id }}', '{{ $ficha_id }}', '{{ $ficha_paciente_id }}','{{ $ex_t->paciente->nombres.' '.$ex_t->paciente->apellido_uno }}', '{{ $ex_t->paciente->rut }}', '{{ $ficha_profesional_id }}', '{{ $ex_t->procedimientocentro->nombre }}', '{{ $tipo_ficha }}');"><i class="feather icon-upload"></i> Cargar archivo</button>
                                                     </td>
                                                 </tr>
+                                                @endif
                                             @endforeach
                                         @endif
                                     </tbody>
@@ -109,6 +141,7 @@
                     <input type="hidden" name="m_subir_examen_id_ficha_otros_profesionales" id="m_subir_examen_id_ficha_otros_profesionales" value="">
                     <input type="hidden" name="m_subir_examen_id_paciente" id="m_subir_examen_id_paciente" value="">
                     <input type="hidden" name="m_subir_examen_id_profesional" id="m_subir_examen_id_profesional" value="">
+                    <input type="hidden" name="m_subir_examen_tipo_ficha" id="m_subir_examen_tipo_ficha" value="">
 
                     <div id="m_subir_examen_contenido">
                         <div class="row ml-0 mr-0">
@@ -138,26 +171,27 @@
 
 @section('page-script')
     <script>
-        function abrir_subir_archivo(id_hora, id_ficha_otros_profesionales, id_paciente, paciente_nombre, paciente_rut, id_profesional, procedimiento)
+        function abrir_subir_archivo(id_hora, id_ficha_otros_profesionales, id_paciente, paciente_nombre, paciente_rut, id_profesional, procedimiento, tipo_ficha)
         {
             $('#m_subir_examen_id_hora').val('');
             $('#m_subir_examen_id_ficha_otros_profesionales').val('');
             $('#m_subir_examen_id_paciente').val('');
             $('#m_subir_examen_id_profesional').val('');
+            $('#m_subir_examen_tipo_ficha').val('');
 
             $('#m_subir_examen_paciente_nombre').html('');
             $('#m_subir_examen_paciente_rut').html('');
             $('#m_subir_examen_procedimiento').html('');
 
-            myDropzone_Archivo.removeAllFiles()
-            // myDropzone_Archivo.destroy();
-            // myDropzone_Archivo.init();
+            myDropzone_Archivo.removeAllFiles(true);
+            $('#input_lista_archivo').val('');
 
 
             $('#m_subir_examen_id_hora').val(id_hora);
             $('#m_subir_examen_id_ficha_otros_profesionales').val(id_ficha_otros_profesionales);
             $('#m_subir_examen_id_paciente').val(id_paciente);
             $('#m_subir_examen_id_profesional').val(id_profesional);
+            $('#m_subir_examen_tipo_ficha').val(tipo_ficha || 'otros_prof'); // por defecto otros_prof para compatibilidad
 
             $('#m_subir_examen_paciente_nombre').html(paciente_nombre);
             $('#m_subir_examen_paciente_rut').html(paciente_rut);
@@ -170,10 +204,40 @@
         {
             var _token = $('#_token').val();
             var id_hora = $('#m_subir_examen_id_hora').val();
+            // NOTA: Este campo puede contener el ID de cualquier tipo de ficha (otros_prof o ficha_atencion)
             var id_ficha_otros_profesionales = $('#m_subir_examen_id_ficha_otros_profesionales').val();
             var id_paciente = $('#m_subir_examen_id_paciente').val();
             var id_profesional = $('#m_subir_examen_id_profesional').val();
+            var tipo_ficha = $('#m_subir_examen_tipo_ficha').val();
             var lista_archivos = $('#input_lista_archivo').val();
+
+            // Validar que se hayan seleccionado archivos
+            if(!lista_archivos || lista_archivos === '[]' || lista_archivos === '') {
+                swal({
+                    title: "Advertencia",
+                    text: "Debe seleccionar al menos un archivo para cargar",
+                    icon: "warning",
+                });
+                return;
+            }
+
+            // Validar que exista el tipo de ficha
+            if(!tipo_ficha) {
+                console.error('❌ Error: tipo_ficha no definido');
+                swal({
+                    title: "Error",
+                    text: "No se pudo determinar el tipo de ficha. Intente nuevamente.",
+                    icon: "error",
+                });
+                return;
+            }
+
+            console.log('📤 Subiendo archivos para:', {
+                tipo_ficha: tipo_ficha,
+                id_ficha: id_ficha_otros_profesionales,
+                id_paciente: id_paciente,
+                cantidad_archivos: JSON.parse(lista_archivos).length
+            });
 
             url = "{{ route('laboratorio.subir.examen') }}";
             $.ajax({
@@ -183,17 +247,16 @@
                 data: {
                     _token:_token,
                     id_hora:id_hora,
-                    id_ficha_otros_profesionales:id_ficha_otros_profesionales,
+                    id_ficha_otros_profesionales:id_ficha_otros_profesionales, // Contiene el ID de la ficha (cualquier tipo)
                     id_paciente:id_paciente,
                     id_profesional:id_profesional,
+                    tipo_ficha:tipo_ficha, // Indica el tipo: 'otros_prof' o 'ficha_atencion'
                     lista_archivos:lista_archivos,
                 },
             })
             .done(function(data)
             {
-                // console.log('-----------------------');
-                // console.log(data);
-                // console.log('-----------------------');
+                console.log('✅ Respuesta del servidor:', data);
                 if(data.estado == 1)
                 {
                     $('#m_subir_examen').modal('hide');
@@ -202,13 +265,14 @@
                     $('#m_subir_examen_id_ficha_otros_profesionales').val('');
                     $('#m_subir_examen_id_paciente').val('');
                     $('#m_subir_examen_id_profesional').val('');
+                    $('#m_subir_examen_tipo_ficha').val('');
 
                     $('#m_subir_examen_paciente_nombre').html('');
                     $('#m_subir_examen_paciente_rut').html('');
                     $('#m_subir_examen_procedimiento').html('');
 
-                    myDropzone_Archivo.destroy();
-                    myDropzone_Archivo.init();
+                    myDropzone_Archivo.removeAllFiles(true);
+                    $('#input_lista_archivo').val('');
 
                     var rut = $('#buscar_rut').val();
                     var nombre = $('#buscar_nombre').val();
@@ -275,20 +339,63 @@
                     $('#table_examenes_transcritos tbody').html('');
                     $.each(data.registros, function (index, value)
                     {
+                        // Determinar si es ficha de otros profesionales o ficha de atención
+                        var ficha_id, ficha_paciente_id, ficha_profesional_id, tipo_ficha;
+
+                        // Verificar ficha de otros profesionales
+                        if(value.ficha_otros_profesionales && value.ficha_otros_profesionales.id) {
+                            // Es una ficha de otros profesionales (fonoaudiología, etc)
+                            ficha_id = value.ficha_otros_profesionales.id;
+                            ficha_paciente_id = value.ficha_otros_profesionales.id_paciente;
+                            ficha_profesional_id = value.ficha_otros_profesionales.id_profesional;
+                            tipo_ficha = 'otros_prof';
+                        }
+                        // Verificar ficha_atencion con relación cargada
+                        else if(value.ficha_atencion && value.ficha_atencion.id) {
+                            // Es una ficha de atención (laboratorio, rayos X, etc)
+                            ficha_id = value.ficha_atencion.id;
+                            ficha_paciente_id = value.ficha_atencion.id_paciente;
+                            ficha_profesional_id = value.ficha_atencion.id_profesional;
+                            tipo_ficha = 'ficha_atencion';
+                        }
+                        // Verificar si existe id_ficha_atencion aunque la relación no esté cargada
+                        else if(value.id_ficha_atencion && value.id_ficha_atencion !== null) {
+                            // Usar los IDs directamente de la hora médica
+                            ficha_id = value.id_ficha_atencion;
+                            ficha_paciente_id = value.id_paciente;
+                            ficha_profesional_id = value.id_profesional;
+                            tipo_ficha = 'ficha_atencion';
+                            console.log('✅ Usando id_ficha_atencion directamente:', ficha_id);
+                        }
+                        // Verificar si existe id_ficha_otros_prof aunque la relación no esté cargada
+                        else if(value.id_ficha_otros_prof && value.id_ficha_otros_prof !== null) {
+                            // Usar los IDs directamente de la hora médica
+                            ficha_id = value.id_ficha_otros_prof;
+                            ficha_paciente_id = value.id_paciente;
+                            ficha_profesional_id = value.id_profesional;
+                            tipo_ficha = 'otros_prof';
+                            console.log('✅ Usando id_ficha_otros_prof directamente:', ficha_id);
+                        }
+                        else {
+                            // No hay ficha válida, saltar este registro
+                            console.warn('⚠️ Registro sin ficha válida:', value);
+                            return true; // continuar con el siguiente
+                        }
+
                         var html = '';
                         html += '<tr>';
-                        html += '    <td class="text-center align-left">';
+                        html += '    <td class="align-middle">';
                         html +=         value.fecha_realizacion_consulta;
                         html += '    </td>';
-                        html += '    <td class="text-center align-left">';
+                        html += '    <td class="align-middle">';
                         html +=         value.paciente.nombres+' '+value.paciente.apellido_uno+'<br/>';
                         html +=         value.paciente.rut;
                         html += '    </td>';
-                        html += '    <td class="text-center align-left bg-estado-light-amarillo">';
+                        html += '    <td class="align-middle bg-estado-light-amarillo">';
                         html +=         value.procedimiento_centro.nombre;
                         html += '    </td>';
-                        html += '    <td class="text-center align-left bg-estado-light-amarillo">';
-                        html += '        <button type="button" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="cargar archivo" onclick="abrir_subir_archivo(\''+value.id+'\', \''+value.ficha_otros_profesionales.id+'\', \''+value.ficha_otros_profesionales.id_paciente+'\',\''+value.paciente.nombres+' '+value.paciente.apellido_uno+'\', \''+value.paciente.rut+'\', \''+value.ficha_otros_profesionales.id_profesional+'\', \''+value.procedimiento_centro.nombre+'\');"><i class="feather icon-upload"></i> CARGAR ARCHIVO</button>';
+                        html += '    <td class="text-center align-middle bg-estado-light-amarillo">';
+                        html += '        <button type="button" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="cargar archivo" onclick="abrir_subir_archivo(\''+value.id+'\', \''+ficha_id+'\', \''+ficha_paciente_id+'\',\''+value.paciente.nombres+' '+value.paciente.apellido_uno+'\', \''+value.paciente.rut+'\', \''+ficha_profesional_id+'\', \''+value.procedimiento_centro.nombre+'\', \''+tipo_ficha+'\');"><i class="feather icon-upload"></i> CARGAR ARCHIVO</button>';
                         html += '    </td>';
                         html += '</tr>';
                         $('#table_examenes_transcritos tbody').append(html);

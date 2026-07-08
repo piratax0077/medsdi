@@ -52,9 +52,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    {{--  <li class="nav-item">
+                                    <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
-                                    </li>  --}}
+                                    </li>
                                     {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
                                     </li>  --}}
@@ -107,12 +107,14 @@
     <!-- MODALES DE LA VISTA -->
     @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
-	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+	{{-- @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia') --}}
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_endosc')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_func')
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_rx')
      @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_examenes_com')
     @include('general.hospitalizacion.modals.in_solic_pabellon')
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 	
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection

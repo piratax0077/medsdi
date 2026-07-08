@@ -1,9 +1,9 @@
     <!--Sidebar 3 (FONOAUDIOLOGIA)-->
     <div class="position-fixed w-100 h-100"></div>
     <div id="formularios_fonoaudiologia" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100 shadow-lg" data-width="370px" data-offset="true">
-        <header class="bs-canvas-header p-3 bg-info overflow-auto">
-            <button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-white">&times;</span></button>
-            <h5 class="d-inline-block text-light mb-0 float-right">Formularios Fonoaudiológicos</h5>
+       <header class="bs-canvas-header p-3 bg-info overflow-auto d-flex justify-content-between">
+             <button type="button" class="bs-canvas-close close" onclick="$('#formularios_fonoaudiologia').modal('hide')" aria-label="Close" data-dismiss="modal"> <span aria-hidden="true" class="text-white">&times;</span></button>
+             <h5 class="d-inline-block text-light mb-0 float-right">Formularios Fonoaudiológicos</h5>
         </header>
         <div class="bs-canvas-content">
             <div class="accordion" id="accordion_side_bar">
@@ -41,9 +41,27 @@
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="e_espasmo();"><i class="fa fa-plus"></i> Espasmofémia</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="l_praxias() ;"><i class="fa fa-plus"></i> Laminas Praxias</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="l_ling() ;"><i class="fa fa-plus"></i> Test de Ling</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tede();"><i class="fa fa-plus"></i> Test TEDE</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="tede_1();"><i class="fa fa-plus"></i> Test TEDE</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="pragma();"><i class="fa fa-plus"></i> Habilidades Pragmáticas</button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="informefono() ;"><i class="fa fa-plus"></i> Informe Fonoaudiología</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="informefono();"><i class="fa fa-plus"></i> Informe Fonoaudiología</button>
+                         </div>
+                    </div>
+                </div>
+                <div class="card-sidebar">
+                    <div class="card-header-sidebar" id="heading_evaluaciones1">
+                        <h2 class="mb-0">
+                            <button class="btn btn-light btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_evaluaciones1" aria-expanded="true" aria-controls="collapse_evaluaciones1"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            OTRAS EVALUACIONES
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapse_evaluaciones1" class="collapse" aria-labelledby="heading_evaluaciones1" data-parent="#accordion_side_bar">
+                         <div class="card-body-sidebar">
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="val_equilibrio();"><i class="fa fa-plus"></i> VALORACIÓN FUNCIONAL DEL EQUILIBRIO</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="informeRehabilitacionVest();"><i class="fa fa-plus"></i> INFORME REHABILITACION VESTIBULAR</button>
+
+
+
                          </div>
                     </div>
                 </div>
@@ -63,8 +81,16 @@
                     </div>
                     @include("atencion_medica.sidebars.modals_generales.m_acprocedimientos")
                 </div>  --}}
-                <!-- SECCION CONSENTIMIENTOS -->
-                @include('general.sidebar.seccion_consentimientos')
+
+                <div class="card-header-sidebar" id="heading_consentimientos_informados">
+                    <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse_consentimientos_informados" aria-expanded="false" aria-controls="collapse_consentimientos_informados"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            CONSENTIMIENTOS INFORMADOS
+                        </button>
+                    </h2>
+                </div>
+                    @include('general.sidebar.seccion_consentimientos')
+                    <!-- SECCION CONSENTIMIENTOS -->
 
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_utilidades">
@@ -101,26 +127,33 @@
                             @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.recom_ejerc_vocales")
                         </div>
                     </div>
-
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.ofa")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.test_ling")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede_1")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_fono")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.indicar_examen_esp")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_rehab_vestibular")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.eval_hab_pre")
-                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_espasmofemia") --}}
-                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_voz") --}}
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_espasmofemia")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_voz")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_p")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_r")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habilidades_pragmaticas")
-                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habla_leng") --}}
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.indicar_examen_esp")
+                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habla_leng")
+
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.interconsulta_fono")
-                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.ofa") --}}
+
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.planificacion")
-                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias") --}}
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam")
+
+
 
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.sopaletras")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede_1")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.test_ling")
+
+                    {{--  @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede")  --}}
+
+                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.valoracion_func_equil")
                 </div>
                 <div class="card-sidebar">
                     <div class="card-header-sidebar" id="heading_sugerencias">

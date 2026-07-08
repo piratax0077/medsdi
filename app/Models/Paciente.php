@@ -229,4 +229,9 @@ class Paciente extends Model
                 });
         }
     }
+
+    public function estadosPaciente()
+    {
+        return $this->hasMany(PacienteEstado::class, 'id_paciente');
+    }
 }

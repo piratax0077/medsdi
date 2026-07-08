@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Interconsulta Siquiatríafff</h5>
+                <h5 class="modal-title text-white text-center">Interconsulta Psiquiatría</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body mb-0">
@@ -48,7 +48,7 @@
                             </div>
 
                             <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                                <label class="floating-label-activo-sm">Tipo de especialidad</label>
                                 <select class="form-control form-control-sm" id="sub_tipo_especialidad_sq" name="sub_tipo_especialidad_sq" onchange="buscar_profesional_sq();">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
@@ -62,8 +62,8 @@
                                     <option>-</option>
                                 </select>
                             </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 nombre_profesional_inter_sq" style="display: none;">
-                                <label class="floating-label-activo-sm">Profesional Nombre</label>
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 nombre_profesional_inter_sq" style="display: none;">
+                                <label class="floating-label-activo-sm">Nombre del profesional</label>
                                 <input type="text" class="form-control form-control-sm" name="nombre_profesional_inter_sq" id="nombre_profesional_inter_sq">
                             </div>
 
@@ -262,7 +262,7 @@
                     var text_actual  = $('#profesional_inter_sq option:selected').text();
                     if(id_actual == 'OTRO'){
                         $('.nombre_profesional_inter_sq').show();
-                        $('#nombre_profesional_inter_sq').val('Ingrese nombre del profesional');
+                        $('#nombre_profesional_inter_sq').val('Nombre y Apellidos');
                     }
                     else
                     {

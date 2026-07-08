@@ -15,19 +15,19 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group fill">
-                            <label class="floating-label">Sospecha</label>
+                            <label class="floating-label-activo-sm">Sospecha</label>
                             <input type="text" class="form-control form-control-sm" name="m_toma_pap_sospecha" id="m_toma_pap_sospecha" value="">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group fill">
-                            <label class="floating-label">Patólogo o Laboratorio</label>
+                            <label class="floating-label-activo-sm">Patólogo o Laboratorio</label>
                             <input type="text" class="form-control form-control-sm" name="m_toma_pap_patologo_lab" id="m_toma_pap_patologo_lab" value="">
                         </div>
                     </div>
                     <div class="col-sm-6 ">
                         <div class="form-group fill">
-                            <label class="floating-label">Prioridad</label>
+                            <label class="floating-label-activo-sm">Prioridad</label>
                             <select class="form-control form-control-sm" id="m_toma_pap_prioridad" name="m_toma_pap_prioridad">
                                 <option value="0">Seleccione</option>
                                 <option value="1">Baja</option>
@@ -47,13 +47,13 @@
                         <div class="row toma_pap_item toma_pap_item_1">
                             <div class="col-sm-4">
                                 <div class="form-group fill">
-                                    <label class="label">Lamina 1</label>
+                                    <label class="label text-dark f-16">Lamina 1</label>
                                     <input type="hidden"  name="m_toma_pap_id_tipo_embase_1" id="m_toma_pap_id_tipo_embase_1" value="1"/>
                                 </div>
                             </div>
                             <div class="col-sm-8">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Zona 1 de toma de muestra</label>
+                                    <label class="floating-label-activo-sm">Zona 1 de toma de muestra</label>
                                     <input type="text" class="form-control form-control-sm" name="m_toma_pap_observacion_1" id="m_toma_pap_observacion_1" value="">
                                 </div>
                             </div>
@@ -68,13 +68,13 @@
                 <div class="form-row">
                     <div class="col-sm-12">
                         <div class="form-group fill">
-                            <label class="floating-label">Observaciones</label>
+                            <label class="floating-label-activo-sm">Observaciones</label>
                             <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="m_toma_pap_obs_general" id="m_toma_pap_obs_general"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-success btn-sm float-right" onclick="registrar_toma_pap();">
-                        <i class="fa fa-plus"></i> Agregar examen</button>
+                        <button type="button" class="btn btn-ingo btn-sm float-right" onclick="registrar_toma_pap();">
+                        <i class="feather icon-plus"></i> Agregar examen</button>
                     </div>
                 </div>
 

@@ -6,11 +6,10 @@
     @endif
    <div style="overflow-x:auto;"></div>
         <div class="table-responsive">
-            <table id="table_atenciones_profesional_" class="display table dt-responsive nowrap table-xs"
+            <table id="table_atenciones_profesional" class="display table dt-responsive nowrap table-xs"
                 style="width:100%">
                 <thead>
                     <tr>
-                        <th class="d-none">ID</th>
                         <th>Fecha</th>
                         <th>Diagnóstico</th>
                         <th>Ficha clínica</th>
@@ -23,9 +22,6 @@
                     @if (isset($fichas) && $fichas->count() > 0)
                         @foreach ($fichas as $f)
                             <tr>
-                                <td class="d-none">
-                                    {{ $f->id }}
-                                </td>
                                 <td>
                                     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
                                 </td>
@@ -61,7 +57,7 @@
     @include('general.secciones_ficha.modal_atencion_previa.hist_cons_examen')
     @include('general.secciones_ficha.modal_atencion_previa.hist_cons_archivo')
     @include('general.secciones_ficha.modal_atencion_previa.hist_cons')
+     
 
-
-
+  
 

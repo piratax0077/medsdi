@@ -7,6 +7,7 @@ use App\Models\AsistenteContactoEmergencia;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
 use App\Models\Bodega;
+use App\Models\BoxesCm;
 use App\Models\Categoria;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
@@ -14,6 +15,7 @@ use App\Models\ContratoDependiente;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\HoraMedica;
+use App\Models\Instituciones;
 use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
@@ -55,9 +57,10 @@ class EscritorioAsistenteCmJefe extends Controller
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
-
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
 
+			$id_institucion = $contrato->id_institucion;
+            $institucion = Instituciones::where('id', $id_institucion)->first();
             $profesionales = $lugares_atencion->profesionales()->get();
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
@@ -78,6 +81,12 @@ class EscritorioAsistenteCmJefe extends Controller
 				}
             }
 
+			// box de institucion
+            $filtro_box = array();
+            $filtro_box[] = array('estado',1);
+            $filtro_box[] = array('id_lugar_atencion',$id_lugar_atencion);
+            $boxes = BoxesCm::where($filtro_box)->get();
+
             $array_data = array(
                 'asistente' => $asistente,
                 'prevision' => $prevision,
@@ -87,6 +96,8 @@ class EscritorioAsistenteCmJefe extends Controller
                 'region' => $region,
                 'profesion_oficio' => $profesion_oficio,
                 'tipo_bonos' => $tipo_bonos,
+                'boxes' => $boxes,
+                'institucion' => $institucion,
             );
 
 

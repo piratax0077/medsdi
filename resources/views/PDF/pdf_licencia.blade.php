@@ -246,8 +246,8 @@
         </head>
         <body>
 
-            @include('PDF.header_licencia')
-            @include('PDF.footer_licencia')
+            @include('PDF.header')
+    @include('PDF.footer')
 
             <main>
                 {{-- <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador {{ $receta->qr->token }}</div> --}}

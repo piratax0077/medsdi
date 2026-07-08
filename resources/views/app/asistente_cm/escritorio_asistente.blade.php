@@ -46,12 +46,12 @@
 
                         <div class="card subir px-4 py-2">
                             <a href="{{ ROUTE('asistentejcm.buscar_paciente') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
+                                <div class="row d-inline my-auto">
+                                    <div class="col-sm-4 d-inline">
                                         <img class="wid-40 mt-0 " src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left d-inline">Buscar Pacientes</h5>
+                                    <div class="col-sm-8 d-inline">
+                                        <h5 class="text-left d-inline">Buscar pacientes</h5>
                                     </div>
                                 </div>
                             </a>
@@ -74,12 +74,12 @@
 
                         <div class="card subir px-4 py-2">
                             <a href="{{ ROUTE('asistentejcm.mis_profesionales') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
+                                <div class="row d-inline my-auto">
+                                    <div class="col-sm-4 d-inline">
                                         <img class="wid-40 mt-0 " src="{{ asset('images/iconos/agenda.svg') }}">
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Profesionales</h5>
+                                    <div class="col-sm-8 d-inline">
+                                        <h5 class="text-left d-inline">Agenda</h5>
                                     </div>
                                 </div>
                             </a>
@@ -100,12 +100,12 @@
 
                         <div class="card subir px-4 py-2">
                             <a href="{{ ROUTE('asistentejcm.rendir') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                <div class="row d-inline my-auto">
+                                    <div class="col-sm-4 d-inline">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja.svg') }}">
                                     </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="text-left">Manejo de Caja</h5>
+                                    <div class="col-sm-8 d-inline">
+                                        <h5 class="text-left d-inline">Manejo de caja</h5>
                                     </div>
                                 </div>
                             </a>
@@ -134,20 +134,37 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        <div id="convenios_profesional_container" class="mt-2" style="display:none;">
+                                            <small class="d-block text-muted mb-1">Convenios del profesional en este lugar:</small>
+                                            <div id="convenios_profesional_lista"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 f-12 pb-0" id="tabla_info_profesional" style="display: none;">
-                                     <div class="align-middle m-b-25">
-                                        <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
-                                        <div class="d-inline-block f-11">
-                                            <span>
-                                                <strong id="nombre_profesional_agenda"></strong>
-                                            </span><br>
-                                            <span id="especialidad_porfesional_agenda"></span>
-                                            <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
-                                            @include('general.bloqueo_hora.bloque_hora_asistente')
-                                            @include('general.anular_hora.anular_hora_asistente')
-                                            <span class="status active"></span>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="align-middle m-b-25">
+                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
+                                                <div class="d-inline-block f-11">
+                                                    <span>
+                                                        <strong id="nombre_profesional_agenda"></strong>
+                                                    </span><br>
+                                                    <span id="especialidad_porfesional_agenda"></span>
+                                                    <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
+                                                    @include('general.bloqueo_hora.bloque_hora_asistente')
+                                                    @include('general.anular_hora.anular_hora_asistente')
+                                                    <span class="status active"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4" {{ $boxes->count() > 0 ? '' : 'style=display:none' }}>
+                                            <div class="align-middle m-b-25">
+                                                <div class="d-inline-block f-11">
+                                                    <span><strong>BOX</strong></span> <button type="button" class="btn btn-warning-light-c btn-xxxs" id="btn_ver_modificar_box_prof"  onclick=""><i class="feather icon-edit"></i></button><br>
+                                                    <span><strong id="profesional_box" style="font-size: 16px;"></strong></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +184,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 class="text-c-blue my-1" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    <h5 class="text-c-blue my-1 d-inline" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    @include('general.info_simbologia.simbologia_agenda')
                                 </div>
                             </div>
                             <div id='agenda'></div>
@@ -198,6 +216,9 @@
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
+
+    {{-- lugar atencion box profesional --}}
+    @include('general.asignacion_box_prof.asignacion_box_prof')
 
 @endsection
 
@@ -550,13 +571,124 @@
 
         {{--  CARGA AGENDE DEL PROFESIONAL  --}}
         var activeDaysInRange = [];
+        var _bonoPrevisionOptionsBase = null;
+
+        function normalizarNombreConvenio(valor)
+        {
+            if(valor === null || valor === undefined)
+                return '';
+
+            return valor.toString().trim().toLowerCase();
+        }
+
+        function escapeHtml(texto)
+        {
+            return $('<div>').text(texto || '').html();
+        }
+
+        function actualizarConveniosProfesionalVisual(conveniosPermitidos)
+        {
+            var $container = $('#convenios_profesional_container');
+            var $lista = $('#convenios_profesional_lista');
+
+            if($container.length === 0 || $lista.length === 0)
+                return;
+
+            $lista.empty();
+
+            if(!Array.isArray(conveniosPermitidos) || conveniosPermitidos.length === 0)
+            {
+                $lista.html('<span class="badge badge-light border text-muted mr-1 mb-1">Sin convenios configurados</span>');
+                $container.show();
+                return;
+            }
+
+            conveniosPermitidos.forEach(function(convenio)
+            {
+                var convenioSeguro = escapeHtml(convenio);
+                if(convenioSeguro !== '')
+                {
+                    $lista.append('<span class="badge badge-info mr-1 mb-1">'+convenioSeguro+'</span>');
+                }
+            });
+
+            if($lista.children().length === 0)
+            {
+                $lista.html('<span class="badge badge-light border text-muted mr-1 mb-1">Sin convenios configurados</span>');
+            }
+
+            $container.show();
+        }
+
+        function actualizarConveniosProfesionalEnBono(conveniosPermitidos)
+        {
+            var $bonoPrevision = $('#bono_prevision');
+            var $bonoPrevisionTxt = $('#bono_prevision_txt');
+
+            if($bonoPrevision.length == 0)
+                return;
+
+            if(_bonoPrevisionOptionsBase === null)
+            {
+                _bonoPrevisionOptionsBase = $bonoPrevision.find('option').clone();
+            }
+
+            var permitidosNormalizados = [];
+            if(Array.isArray(conveniosPermitidos))
+            {
+                conveniosPermitidos.forEach(function(item)
+                {
+                    var convenio = normalizarNombreConvenio(item);
+                    if(convenio !== '' && permitidosNormalizados.indexOf(convenio) === -1)
+                    {
+                        permitidosNormalizados.push(convenio);
+                    }
+                });
+            }
+
+            var htmlOptions = '<option value="0">Selecione una opción</option>';
+
+            _bonoPrevisionOptionsBase.each(function()
+            {
+                var value = $(this).val();
+                var text = $(this).text();
+
+                if(value == '0')
+                    return;
+
+                if(permitidosNormalizados.length == 0)
+                {
+                    htmlOptions += '<option value="'+value+'">'+text+'</option>';
+                    return;
+                }
+
+                var textNormalizado = normalizarNombreConvenio(text);
+                if(permitidosNormalizados.indexOf(textNormalizado) !== -1)
+                {
+                    htmlOptions += '<option value="'+value+'">'+text+'</option>';
+                }
+            });
+
+            $bonoPrevision.html(htmlOptions);
+            $bonoPrevision.val('0');
+            $bonoPrevision.hide();
+
+            if($bonoPrevisionTxt.length > 0)
+            {
+                $bonoPrevisionTxt.val('');
+                $bonoPrevisionTxt.show();
+            }
+        }
+
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
             var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
 
             if(tipo_agenda_temp != 0)
-                tipo_agenda = tipo_agenda;
-                console.log('asistente_cm/escritorio_asistente');
+				tipo_agenda = tipo_agenda_temp;
+                //tipo_agenda = tipo_agenda;
+			console.log('asistente_cm/escritorio_asistente');
+
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -606,6 +738,8 @@
                                 }
 
                                 $('#id_profesional').val(data.profesional.id);
+                                actualizarConveniosProfesionalVisual(data.convenios_profesional_lugar || []);
+                                actualizarConveniosProfesionalEnBono(data.convenios_profesional_lugar || []);
 
                                 switch (parseInt(tipo_agenda)) {
                                     case 1://consulta
@@ -644,6 +778,19 @@
                                         $('.btn-agenda-'+value).show();
                                     });
                                 }
+
+                                // informacion de box
+                                if (data.lug_prof_box !== null && data.lug_prof_box !== undefined)
+                                {
+                                    $('#profesional_box').html(data.lug_prof_box.box.tipo_box+' '+data.lug_prof_box.box.numero_box);
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_editar_box_prof(\''+data.lug_prof_box.id+'\')');
+                                }
+                                else
+                                {
+                                    $('#profesional_box').html('');
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_agregar_box_prof('+data.profesional.id+')');
+                                }
+
                             }
 
                             if(data.estado == 1 && data.horario.length!=0)
@@ -745,7 +892,8 @@
                                                 url: url,
                                                 type: "GET",
                                                 data: {
-                                                    id_profesional: id_profesional
+                                                    id_profesional: id_profesional,
+                                                    id_lugar_atencion: id_lugar_atencion,
                                                 },
                                                 success:function(data){
                                                             if (data !== 'null')
@@ -797,7 +945,6 @@
                                                                             });
                                                                         }
                                                                     });
-                                                                    console.log(arrayTemp);
                                                                     console.log('aqui');
                                                                     end(arrayTemp);
                                                                 }
@@ -863,7 +1010,9 @@
                                                             $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
                                                             $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
                                                             $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
+															console.log(data.paciente.direccion);
                                                             buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
+															//buscar_ciudad_general('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
                                                             // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
                                                         }
                                                         else
@@ -1357,6 +1506,8 @@
                                 $('#tabla_info_profesional').hide();
                                 $('#seccion_agenda_botones').hide();
                                 $('#seccion_agenda_agendas').hide();
+                                $('#convenios_profesional_container').hide();
+                                actualizarConveniosProfesionalEnBono([]);
                             }
                         }
                         else
@@ -1366,6 +1517,8 @@
                             $('#tabla_info_profesional').hide();
                             $('#seccion_agenda_botones').hide();
                             $('#seccion_agenda_agendas').hide();
+                            $('#convenios_profesional_container').hide();
+                            actualizarConveniosProfesionalEnBono([]);
                         }
                     }
                 });
@@ -1377,6 +1530,8 @@
                 $('#tabla_info_profesional').hide();
                 $('#seccion_agenda_botones').hide();
                 $('#seccion_agenda_agendas').hide();
+                $('#convenios_profesional_container').hide();
+                actualizarConveniosProfesionalEnBono([]);
             }
         }
 
@@ -1581,6 +1736,7 @@
                         valor_seguro: bono_valor_aporte,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
+                        id_lugar_atencion: $('#agenda_lugar_atencion_asistente').val(),
                         id_asistente: '{{ $asistente->id }}',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,
@@ -1697,26 +1853,9 @@
             $('#reserva_hora_correo').val('');
             $('#reserva_hora_telefono_uno').val('');
             $('#reserva_hora_confirmacion').val('');
-            $('#reserva_representante_nuevo_exitente').val('');
-            $('#reserva_representante_id').val('');
-            $('#reserva_representante_id_usuario').val('');
-            $('#reserva_hora_representante_rut').val('');
-            $('#reserva_hora_representante_nombres_paciente').val('');
-            $('#reserva_hora_representante_apellido_uno').val('');
-            $('#reserva_hora_representante_apellido_dos').val('');
-            $('#reserva_hora_representante_fecha_nac').val('');
-            $('#reserva_hora_representante_sexo').val('');
-            $('#reserva_hora_representante_convenio').val('');
-            $('#reserva_hora_representante_direccion').val('');
-            $('#reserva_hora_representante_numero_dir').val('');
-            $('#reserva_hora_representante_region_agregar').val('');
-            $('#reserva_hora_representante_ciudad_agregar').val('');
-            $('#reserva_hora_representante_correo').val('');
-            $('#reserva_hora_representante_telefono_uno').val('');
-            $('#reserva_hora_representante_agregar_relacion').val('');
+            // Limpiar solo el textarea del representante
+            $('#reserva_hora_representante_info_libre').val('');
             evaluar_edad();
-            $('.div_representante_nuevo').hide();
-            $('.div_representante_existente').hide();
 
             $('#prereserva_hora_nombres_paciente').val('');
             $('#prereserva_hora_apellido_uno').val('');
@@ -1819,12 +1958,11 @@
 
                             $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
                             $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir ? data.direccion.numero_dir : '');
 
                             $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
                             // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-                            console.log('editando region');
-                            buscar_ciudad_general('input_reserva_direccion_ciudad', 'input_reserva_direccion_region', data.direccion.ciudad.id);
+                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
 
                             $('#rut_paciente_reserva').val('');
                             $('.div_rut_buscar').hide();
@@ -2025,16 +2163,16 @@
             let reserva_hora_segundo_apellido = $('#reserva_hora_apellido_dos').val();
             if (reserva_hora_segundo_apellido == '') {
 
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el segundo apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
+                // swal({
+                //     title: "Error!",
+                //     text: "Debe ingresar el segundo apellido",
+                //     icon: "error",
+                //     type: "danger",
+                //     DangerMode: true,
 
-                });
+                // });
 
-                return;
+                // return;
 
             }
             let reserva_hora_fecha_nac = $('#reserva_hora_fecha_nac').val();
@@ -2206,24 +2344,8 @@
                 }
             }
 
-            var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
-            var reserva_representante_id = $('#reserva_representante_id').val();
-            var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
-            var reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
-            var reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
-            var reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
-            var reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
-            var reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
-            var reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
-            var reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
-            var reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
-            var reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
-            var reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
-            var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
-            var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
-            var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
-            var reserva_hora_representante_result_codigo_validacion = $('#result_representante_codigo_validacion').val();
-            var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
+            // Solo necesitamos la información libre del representante
+            var reserva_hora_representante_info_libre = $('#reserva_hora_representante_info_libre').val();
 
 
             var dependiente = 0;
@@ -2232,224 +2354,19 @@
             else if($('#paciente_dependiente').prop('checked')  == false)
                 dependiente = 0;
 
+            // Validar información del representante si es paciente dependiente o menor de 18
             if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
             {
-                if(reserva_hora_representante_agregar_relacion == '')
+                if(reserva_hora_representante_info_libre == '' || reserva_hora_representante_info_libre.trim() == '')
                 {
                     swal({
                         title: "Error!",
-                        text: "Debe seleccionar Relación",
+                        text: "Debe ingresar la información del representante (Nombre, RUT, Teléfono, etc.)",
                         icon: "error",
                         type: "danger",
                         DangerMode: true,
                     });
                     return;
-                }
-                if(reserva_representante_nuevo_exitente == '1')
-                {
-                    /** existente */
-                    if(reserva_representante_id == '')
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Información del Representante con problemas",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    // if($('#reserva_representante_id_usuario').val() == '')
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Información del Representante con problemas",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                }
-                else
-                {
-                    /** nuevo */
-                    if( reserva_hora_representante_nombres_paciente == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Nombre del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_apellido_uno == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Paterno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_apellido_dos == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Materno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_fecha_nac == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Fecha Nacimiento del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
-                    }
-                    if( reserva_hora_representante_sexo == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Sexo del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_direccion == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Direccion del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    // if( reserva_hora_representante_numero_dir == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Numero del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    // if( reserva_hora_representante_region_agregar == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Region del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Ciudad del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-
-                    if( $('#paciente_dependiente').prop('checked') == true )
-                    {
-                        if (reserva_hora_representante_correo == '') {
-
-                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                if (caract.test(reserva_hora_representante_correo) == false){
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe ingresar el email o teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                        else
-                        {
-
-                            if (reserva_hora_representante_telefono_uno == '')
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
-                                {
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe validar el teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                    }
-
                 }
             }
 
@@ -2485,25 +2402,8 @@
                         id_profesional:id_profesional,
                         id_lugar_atencion: id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
-                        /** representante */
-                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
-                        reserva_representante_id: reserva_representante_id,
-                        reserva_representante_id_usuario: reserva_representante_id_usuario,
-                        reserva_hora_representante_rut: reserva_hora_representante_rut,
-                        reserva_hora_representante_nombres_paciente: reserva_hora_representante_nombres_paciente,
-                        reserva_hora_representante_apellido_uno: reserva_hora_representante_apellido_uno,
-                        reserva_hora_representante_apellido_dos: reserva_hora_representante_apellido_dos,
-                        reserva_hora_representante_fecha_nac: reserva_hora_representante_fecha_nac,
-                        reserva_hora_representante_sexo: reserva_hora_representante_sexo,
-                        reserva_hora_representante_convenio: reserva_hora_representante_convenio,
-                        reserva_hora_representante_direccion: reserva_hora_representante_direccion,
-                        reserva_hora_representante_numero_dir: reserva_hora_representante_numero_dir,
-                        reserva_hora_representante_region_agregar: reserva_hora_representante_region_agregar,
-                        reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
-                        reserva_hora_representante_correo: reserva_hora_representante_correo,
-                        reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
-                        reserva_hora_representante_result_codigo_validacion: reserva_hora_representante_result_codigo_validacion,
-                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
+                        /** representante - solo información libre */
+                        reserva_hora_representante_info_libre: reserva_hora_representante_info_libre
                     },
                 })
                 .done(function(data) {
@@ -2864,8 +2764,8 @@
             buscar_ciudad(id_ciudad);
         }
 
-         // Función para actualizar el input de valor total
-         function updateTotalValue() {
+           // Función para actualizar el input de valor total
+        function updateTotalValue() {
             const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
             let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
             let id_presupuesto = selectedOption.val();
@@ -2875,23 +2775,14 @@
                 url: url,
                 data:{
                     id: id_presupuesto,
+                    id_profesional: $('#id_profesional').val(),
                     _token: CSRF_TOKEN
                 },
                 success: function(resp){
+                    $('#n_presupuesto_dental').val(id_presupuesto);
                     console.log(resp);
                     let tratamientos = resp.tratamientos;
-                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
-                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
-                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
-                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
-                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
-                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
-                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
-                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
-                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
-                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
-                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
-                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                    let todos = resp.todos;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
                     var bloques = resp.bloques;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
@@ -2910,7 +2801,7 @@
 
 
                     });
-                    maxilar_superior_gral_diagnosticos.forEach(t => {
+                    todos.forEach(t => {
                         if(t.presupuesto == 1){
                         var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
@@ -2919,90 +2810,6 @@
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
                             }
                     });

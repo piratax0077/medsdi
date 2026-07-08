@@ -64,26 +64,26 @@
                                 <input type="text" class="form-control form-control-sm" placeholder="MODELO" id="model_audif" name="model_audif" value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo">N° de serie</label>
                                 <input type="text" class="form-control form-control-sm" placeholder="N° SERIE" id="n_serie_aud" name="n_serie_aud" value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        {{-- <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                             <div class="form-group">
                                 <label class="floating-label-activo">Fecha de entrega</label>
                                 <input type="date" class="form-control form-control-sm" placeholder="Fecha de entrega" id="fecha_ent_aud" name="fecha_ent_aud" value="">
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm t-blue" for="av_pris_oi">Acciones de calibrado</label>
                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="acciones_calib" id="acciones_calib"></textarea>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm t-blue" for="av_pris_oi">Opinión del paciente</label>
                                 <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="opinion_calibrado" id="opinion_calibrado"></textarea>
@@ -97,6 +97,7 @@
                             <table class="table table-striped table-sm" id="tabla_historial_calibraciones_audifono">
                                 <thead class="thead-light sticky-top">
                                     <tr>
+                                         <th style="min-width: 120px;">Fecha</th>
                                         <th style="min-width: 120px;">Motivo Control</th>
                                         <th style="min-width: 120px;">Estado de audífono</th>
                                         <th style="min-width: 150px;">Producto</th>
@@ -126,24 +127,24 @@
     #tabla_historial_calibraciones_audifono {
         font-size: 0.85rem;
     }
-
+    
     #tabla_historial_calibraciones_audifono th {
         border-top: none;
         font-weight: 600;
         background-color: #f8f9fa;
     }
-
+    
     #tabla_historial_calibraciones_audifono td {
         vertical-align: middle;
         word-wrap: break-word;
         max-width: 200px;
     }
-
+    
     .table-responsive {
         border: 1px solid #dee2e6;
         border-radius: 0.375rem;
     }
-
+    
     /* Mantener el header fijo mientras se hace scroll */
     .sticky-top {
         position: sticky;
@@ -169,41 +170,75 @@
         function registrar_calibracion(){
             var id_hora_medica = '{{ isset($hora_medica->id) ? $hora_medica->id : 0 }}';
             var mot_cont_audif = $('#mot_cont_audif').val();
-            var obs_mot_cont_audif = $('#obs_mot_cont_audif').val();
+            var mot_cont_audif_text = $('#mot_cont_audif option:selected').text();
+            if(mot_cont_audif == 0){
+                swal('Error', 'Debe seleccionar el motivo del control.', 'error');
+                return;
+            }
+            if(mot_cont_audif == 3){
+                var obs_mot = $('#obs_mot_cont_audif').val();
+                if(obs_mot.trim() == ''){
+                    swal('Error', 'Debe especificar el motivo del control.', 'error');
+                    return;
+                }
+                mot_cont_audif_text = obs_mot;
+            }
             var est_audifono = $('#est_audifono').val();
-            var obs_est_audifono = $('#obs_est_audifono').val();
+            var est_audifono_text = $('#est_audifono option:selected').text();
+           if(est_audifono == 0){
+                swal('Error', 'Debe seleccionar el estado del audífono.', 'error');
+                return;
+            }
+            if(est_audifono == 3){
+                var obs_est = $('#obs_mot_cont_audif').val();
+                if(obs_est.trim() == ''){
+                    swal('Error', 'Debe especificar el estado del audífono.', 'error');
+                    return;
+                }
+                est_audifono_text = obs_est;
+            }
+            
+            
             var marca_audif = $('#marca_audif').val();
             var model_audif = $('#model_audif').val();
             var n_serie_aud = $('#n_serie_aud').val();
-            var fecha_ent_aud = $('#fecha_ent_aud').val();
+            var fecha_ent_aud = Date.now(); //$('#fecha_ent_aud').val();
             var acciones_calib = $('#acciones_calib').val();
+            if(acciones_calib.trim() == ''){
+                swal('Error', 'Debe ingresar las acciones de calibrado.', 'error');
+                return;
+            }
             var opinion_calibrado = $('#opinion_calibrado').val();
             var id_producto = $('#id_producto').val();
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             var id_profesional = $('#id_profesional_fc').val();
             var id_paciente = $('#id_paciente_fc').val();
 
+            var data = {
+                id_hora_medica: id_hora_medica,
+                mot_cont_audif: mot_cont_audif,
+                mot_cont_audif_text: mot_cont_audif_text,
+                est_audifono: est_audifono,
+                est_audifono_text: est_audifono_text,
+                marca_audif: marca_audif,
+                model_audif: model_audif,
+                n_serie_aud: n_serie_aud,
+                fecha_ent_aud: fecha_ent_aud,
+                acciones_calib: acciones_calib,
+                opinion_calibrado: opinion_calibrado,
+                id_producto: id_producto,
+                id_lugar_atencion: id_lugar_atencion,
+                id_profesional: id_profesional,
+                id_paciente: id_paciente,
+                _token: '{{ csrf_token() }}'
+            }
+
+            console.log(data);
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('laboratorio.profesional.registrar_calibracion_audifono') }}",
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    id_hora_medica: id_hora_medica,
-                    mot_cont_audif: mot_cont_audif,
-                    obs_mot_cont_audif: obs_mot_cont_audif,
-                    est_audifono: est_audifono,
-                    obs_est_audifono: obs_est_audifono,
-                    marca_audif: marca_audif,
-                    model_audif: model_audif,
-                    n_serie_aud: n_serie_aud,
-                    fecha_ent_aud: fecha_ent_aud,
-                    acciones_calib: acciones_calib,
-                    opinion_calibrado: opinion_calibrado,
-                    id_producto: id_producto,
-                    id_lugar_atencion: id_lugar_atencion,
-                    id_profesional: id_profesional,
-                    id_paciente: id_paciente,
-                },
+                data: data,
                 success: function (response) {
                     console.log(response);
                     if(response.estado == 1){
@@ -224,6 +259,7 @@
                         $('#fecha_ent_aud').val('');
                         $('#acciones_calib').val('');
                         $('#opinion_calibrado').val('');
+                        dame_audifono(data.id_producto,'calibracion');
                     }else{
                         swal({
                             title: 'Error',
@@ -238,24 +274,11 @@
             });
         }
 
-        function dame_historial_calibraciones_audifono(){
-            var id_paciente = $('#paciente_seleccionado_id').val();
-            if(id_paciente === ''){
-                $('#cuerpo_historial_calibraciones_audifono').html(`
-                    <tr>
-                        <td colspan="5" class="text-center">
-                            <div class="alert alert-warning mb-0">
-                                <i class="feather icon-alert-circle"></i>
-                                Por favor seleccione un paciente para ver su historial de calibraciones.
-                            </div>
-                        </td>
-                    </tr>
-                `);
-                return;
-            }
+          function dame_historial_calibraciones_audifono(){
+            var id_paciente = $('#id_paciente_fc').val();
             $.ajax({
                 type: "POST",
-                url: "{{ route('laboratorio.profesional.dame_historial_calibraciones_audifono') }}",
+               url: "{{ route('laboratorio.profesional.dame_historial_calibraciones_audifono') }}",
                 data: {
                     _token: '{{ csrf_token() }}',
                     id_paciente: id_paciente
@@ -266,14 +289,18 @@
                         var historial = response.data;
                         var tbody = $('#cuerpo_historial_calibraciones_audifono');
                         tbody.empty();
-
+                        
                         if(historial.length > 0){
                             historial.forEach(function(calibracion) {
+                                var fecha = new Date(calibracion.created_at);
+                                var opcionesFecha = { year: 'numeric', month: '2-digit', day: '2-digit' };
+                                var fechaFormateada = fecha.toLocaleDateString('es-CL', opcionesFecha);
                                 var fila = `
                                     <tr>
-                                        <td>${calibracion.motivo_control || 'N/A'}</td>
-                                        <td>${calibracion.estado_audifono || 'N/A'}</td>
-                                        <td>${calibracion.nombre_producto || 'N/A'} - ${calibracion.marca_producto || 'N/A'}</td>
+                                        <td>${fechaFormateada}</td>
+                                        <td>${calibracion.motivo_control_text || 'N/A'}</td>
+                                        <td>${calibracion.estado_audifono_text || 'N/A'}</td>
+                                        <td>${calibracion.marca || 'N/A'} - ${calibracion.modelo || 'N/A'}</td>
                                         <td>${calibracion.acciones_calibrado || 'N/A'}</td>
                                         <td>${calibracion.opinion_paciente || 'N/A'}</td>
                                     </tr>

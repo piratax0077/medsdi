@@ -35,6 +35,14 @@ class HoraMedicaUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+        // Canal específico para el profesional de esta hora médica
+        $id_profesional = $this->horaMedica->id_profesional ?? 3;
+
+        if ($id_profesional) {
+            return new Channel('horas-medicas.' . $id_profesional);
+        }
+
+        // Fallback al canal general si no hay id_profesional
         return new Channel('horas-medicas');
     }
 

@@ -23,7 +23,9 @@
 		<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
         <!-- fileupload-custom css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        <!-- Dropzone CSS (opcional, para que se vea bonito) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
+
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -33,6 +35,9 @@
 
         <!--Pills Modals-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/pills_modals.css') }}?t={{ time() }}">
+
+         <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
         <!--Tab wizard_formularios-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/tab_wizard_formularios.css') }}?t=<?= time() ?>">
@@ -72,7 +77,7 @@
     </head>
     <body>
         @include('template.profesional.header')
-        @include('template.profesional.menu')
+        @include('template.menuProfesional')
 
         @yield('Content')
 
@@ -81,7 +86,7 @@
         @yield('Modals-med-exa')
         @yield('Modals-med-exa-esp')
         @yield('modal-ficha-general-espc')
-        @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo')
+        {{-- @include('atencion_pediatrica.secciones_especialidad.ficha_pediatria_tipo') --}}
         <!-- Modal de la vista fin -->
 
 
@@ -137,7 +142,9 @@
         <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <!-- file-upload Js -->
-        <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
+        {{-- <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script> --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
 
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
@@ -166,6 +173,10 @@
 
         <!--Apgar-->
         <script src="{{ asset('js/aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+            <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+
 
         <!--Botón cards-->
         <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
@@ -477,5 +488,6 @@
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
         @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
+
     </body>
 </html>

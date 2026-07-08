@@ -21,6 +21,7 @@ class ExamenBiopsia extends Model
         'patologo',
         'observaciones',
         'id_ficha_atencion',
+        'pdf_url',
     ];
 }
 

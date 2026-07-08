@@ -1,16 +1,18 @@
 <div class="user-profile user-card mt-0" style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 py-0 px-3 shadow-none">
+    <div class="col-md-12 py-0 px-4 shadow-none">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
                 <h6 class="f-20 text-c-blue d-inline">Protocolo operatorio</h6>
-                <div class=" d-inline">
-                     <script>
-                        var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-                            "Octubre", "Noviembre", "Diciembre");
+                <div class=" d-inline float-md-right text-c-blue">
+                    <h6 class="text-c-blue">
+                         <script>
+                            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                                "Octubre", "Noviembre", "Diciembre");
 
-                        var f = new Date();
-                        document.write(f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                    </script>
+                            var f = new Date();
+                            document.write(f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
+                        </script>
+                    </h6>
                 </div>
             </div>
         </div>
@@ -125,6 +127,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--EQUIPO-->
                             <div class="tab-pane fade show" id="cirugia-equipo-pab" role="tabpanel"  aria-labelledby="cirugia-equipo-pab-tab">
@@ -136,23 +139,24 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Cirujano</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=2;" name="cirujano_protocolo_operatorio" id="cirujano_protocolo_operatorio"></textarea>
+                                            <label class="floating-label-activo-sm">Cirujano</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="cirujano_protocolo_operatorio" id="cirujano_protocolo_operatorio"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Ayudantes</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=2;" name="ayudantes_protocolo_operatorio" id="ayudantes_protocolo_operatorio"></textarea>
+                                            <label class="floating-label-activo-sm">Ayudantes</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="ayudantes_protocolo_operatorio" id="ayudantes_protocolo_operatorio"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Anestesistas y ayudantes de anestesia</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=2;" name="anestesias_ayudantes_protocolo_operatorio_dental" id="anestesias_ayudantes_protocolo_operatorio_dental"></textarea>
+                                            <label class="floating-label-activo-sm">Anestesistas y ayudantes de anestesia</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;" name="anestesias_ayudantes_protocolo_operatorio_dental" id="anestesias_ayudantes_protocolo_operatorio_dental"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Arsenalería</label>
-                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=2;"  name="arsenaleria_protocolo_operatorio_dental" id="arsenaleria_protocolo_operatorio_dental"></textarea>
+                                            <label class="floating-label-activo-sm">Arsenalería</label>
+                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=5" onblur="this.rows=1;"  name="arsenaleria_protocolo_operatorio_dental" id="arsenaleria_protocolo_operatorio_dental"></textarea>
                                         </div>
                                     </div>
                                 </form>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--BIOPSIA-->
                             <div class="tab-pane fade show" id="biopsia-pab" role="tabpanel"aria-labelledby="biopsia-pab-tab">
@@ -162,19 +166,19 @@
                                             <h6 class="t-aten">Biopsia</h6>
                                         </div>
                                         <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Rápida</label>
+                                            <label class="floating-label-activo-sm">Rápida</label>
                                             <input type="text" class="form-control form-control-sm" name="biopsia_rapida_protocolo_operatorio_dental"  id="biopsia_rapida_protocolo_operatorio_dental">
                                         </div>
                                         <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Diferida</label>
+                                            <label class="floating-label-activo-sm">Diferida</label>
                                             <input type="text" class="form-control form-control-sm" name="biopsia_diferida_protocolo_operatorio_dental" id="biopsia_diferida_protocolo_operatorio_dental">
                                         </div>
                                         <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Nº de muestras</label>
+                                            <label class="floating-label-activo-sm">Nº de muestras</label>
                                             <input type="number" class="form-control form-control-sm"name="biopsia_nro_muestra_protocolo_operatorio_dental" id="biopsia_nro_muestra_protocolo_operatorio_dental">
                                         </div>
                                         <div class="form-group col-md-6 col-lg-6 col-xl-6">
-                                            <label class="floating-label">Patólogo</label>
+                                            <label class="floating-label-activo-sm">Patólogo</label>
                                             <input type="text" class="form-control form-control-sm" name="biopsia_patologo_protocolo_operatorio_dental" id="biopsia_patologo_protocolo_operatorio_dental">
                                         </div>
                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -183,10 +187,14 @@
                                         </div>
                                     </div>
                                 </form>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--OPERACION-->
                             <div class="tab-pane fade show" id="operacion-pab" role="tabpanel"aria-labelledby="operacion-pab-tab">
                                 <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="t-aten">Operación</h6>
+                                    </div>
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <label class="floating-label-activo-sm">Carga ficha tipo</label>
                                         <select class="form-control form-control-sm" id="select_ficha_tipo_cirugia-prof" onchange="cargar_info_ficha_tipo_ped_gen('select_ficha_tipo_cirugia-prof','descripcion_ficha_tipo_cirugia-prof');">
@@ -234,9 +242,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--ANESTESIA-->
                             <div class="tab-pane fade show" id="anestesia-protocolo-pab" role="tabpanel"aria-labelledby="anestesia-protocolo-pab-tab">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="t-aten">Anestesia</h6>
+                                </div>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <label class="floating-label-activo-sm">Carga ficha tipo</label>
@@ -279,6 +291,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--CONSENTIMIENTOS-->
                             <div class="tab-pane fade show" id="consentimientos-pab" role="tabpanel"aria-labelledby="consentimientos-pab-tab">
@@ -295,6 +308,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <button class="btn btn-primary btn-sm float-right" type="button" role="button">Generar PDF</button>
                             </div>
                             <!--IND POST-OP-->
                             <div class="tab-pane fade show" id="destino-pos-op-pab" role="tabpanel"aria-labelledby="destino-pos-op-pab-tab">
@@ -310,6 +324,7 @@
                                     </div>
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </div>

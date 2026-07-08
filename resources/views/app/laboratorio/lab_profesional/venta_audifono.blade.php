@@ -656,7 +656,8 @@
 
                     let datos = {
                         metodo_pago: metodo_pago,
-                        observaciones: observaciones
+                        observaciones: observaciones,
+                        id_lugar_atencion: "{{ $id_lugar_atencion }}"
                     };
 
                     finalizarVenta(datos);
@@ -822,6 +823,7 @@
                     id_ficha: $('#id_fc').val(),
                     metodo_pago: datos.metodo_pago,
                     observaciones: datos.observaciones,
+                    id_lugar_atencion: datos.id_lugar_atencion,
                     _token: CSRF_TOKEN
                 },
             })
@@ -1585,14 +1587,14 @@
                         <div class="col-md-12">
                             <div class="page-header-title">
                             </div>
-                            <ul class="breadcrumb mb-2">
+                            <ul class="breadcrumb mb-2 pt-3">
                                 @if($profesional->id_tipo_institucion == 3)
                                     <li class="breadcrumb-item"><a href="{{ route('laboratorio.adm_general.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 @else
                                     <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 @endif
 
-                                <li class="breadcrumb-item"><a href="#">Ventas de audífonos</a></li>
+                                <li class="breadcrumb-item"><a href="#">Ventas de audífonosaa</a></li>
                             </ul>
                         </div>
                     </div>
@@ -1602,72 +1604,77 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body card-body pt-0 pb-2">
                            <style>
-    .badge-prestado {
-            background: #f6ad55;
-            color: #fff;
-            font-weight: bold;
-            padding: 6px 12px;
-            border-radius: 8px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 10;
-        }
-</style>
-<div class="col-12 pl-0 mt-3">
-    <ul class="nav nav-tabs-secciones mb-3" id="orl" role="tablist">
-        @if(isset($permiso_profesional) && $permiso_profesional->permiso_vender_audifonos)
-        <li class="nav-item-secciones">
-            <a class="nav-secciones active text-uppercase" id="venta_audif-tab" data-toggle="tab" href="#venta_audif" role="tab" aria-controls="venta_audif" aria-selected="true">
-                Venta de audífonos y repuestos
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-        @if(isset($permiso_profesional) && $permiso_profesional->permiso_control_post_venta)
-        <li class="nav-item-secciones">
-            <a class="nav-secciones text-uppercase" id="cont_post_venta-tab" data-toggle="tab" href="#cont_post_venta" role="tab" onclick="cargar_datos_post_venta();" aria-controls="cont_post_venta" aria-selected="false">
-                Control de audífonos post venta
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-        @if(isset($permiso_profesional) && $permiso_profesional->permiso_cotizar)
-        <li class="nav-item-secciones">
-            <a class="nav-secciones text-uppercase" id="cotizacion_audif-tab" data-toggle="tab" href="#cotizacion_audif" role="tab" onclick="cargar_datos_cotizacion();" aria-controls="cotizacion_audif" aria-selected="false">
-                Cotización de audífonos
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-        @if(isset($permiso_profesional) && $permiso_profesional->permiso_prestamo_audifonos)
-        <li class="nav-item-secciones">
-            <a class="nav-secciones text-uppercase" id="prestamo_audif-tab" data-toggle="tab" href="#prestamo_audif" role="tab" onclick="cargar_datos_prestamo();" aria-controls="prestamo_audif" aria-selected="false">
-                Préstamo de audífonos
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-        @if(isset($permisos_profesional) && in_array('recepcion_audifonos', $permisos_profesional))
-        <li class="nav-item-secciones">
-            <a class="nav-secciones text-uppercase" id="recepcion_audif-tab" data-toggle="tab" href="#recepcion_audif" role="tab" onclick="dame_historial_productos_prestados();" aria-controls="recepcion_audif" aria-selected="false">
-                Recepción de audífonos
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-        @if(isset($permiso_profesional) && $permiso_profesional->permiso_campanas_promocionales)
-        <li class="nav-item-secciones">
-            <a class="nav-secciones text-uppercase" id="campanas_promocionales-tab" data-toggle="tab" href="#campanas_promocionales" role="tab" onclick="historial_campanas_publicitarias()" aria-controls="campanas_promocionales" aria-selected="false">
-                Campañas promocionales
-                <span class="badge badge-success ml-1">Permiso</span>
-            </a>
-        </li>
-        @endif
-    </ul>
-</div>
+                                .badge-prestado {
+                                        background: #f6ad55;
+                                        color: #fff;
+                                        font-weight: bold;
+                                        padding: 6px 12px;
+                                        border-radius: 8px;
+                                        position: absolute;
+                                        top: 10px;
+                                        right: 10px;
+                                        z-index: 10;
+                                    }
+                            </style>
+                            <div class="col-12 pl-0 mt-3">
+                                <ul class="nav nav-tabs-secciones mb-3" id="orl" role="tablist">
+                                    @if(isset($permiso_profesional) && $permiso_profesional->permiso_vender_audifonos)
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones active text-uppercase" id="venta_audif-tab" data-toggle="tab" href="#venta_audif" role="tab" aria-controls="venta_audif" aria-selected="true">
+                                            Venta de audífonos y repuestos
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if(isset($permiso_profesional) && $permiso_profesional->permiso_control_post_venta)
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="cont_post_venta-tab" data-toggle="tab" href="#cont_post_venta" role="tab" onclick="cargar_datos_post_venta();" aria-controls="cont_post_venta" aria-selected="false">
+                                            Control de audífonos post venta
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if(isset($permiso_profesional) && $permiso_profesional->permiso_cotizar)
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="cotizacion_audif-tab" data-toggle="tab" href="#cotizacion_audif" role="tab" onclick="cargar_datos_cotizacion();" aria-controls="cotizacion_audif" aria-selected="false">
+                                            Cotización de audífonos
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if(isset($permiso_profesional) && $permiso_profesional->permiso_prestamo_audifonos)
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="prestamo_audif-tab" data-toggle="tab" href="#prestamo_audif" role="tab" onclick="cargar_datos_prestamo();" aria-controls="prestamo_audif" aria-selected="false">
+                                            Préstamo de audífonos
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if(isset($permisos_profesional) && in_array('recepcion_audifonos', $permisos_profesional))
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="recepcion_audif-tab" data-toggle="tab" href="#recepcion_audif" role="tab" onclick="dame_historial_productos_prestados();" aria-controls="recepcion_audif" aria-selected="false">
+                                            Recepción de audífonos
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if(isset($permiso_profesional) && $permiso_profesional->permiso_campanas_promocionales)
+                                    <li class="nav-item-secciones">
+                                        <a class="nav-secciones text-uppercase" id="campanas_promocionales-tab" data-toggle="tab" href="#campanas_promocionales" role="tab" onclick="historial_campanas_publicitarias()" aria-controls="campanas_promocionales" aria-selected="false">
+                                            Campañas promocionales
+                                            <span class="badge badge-success ml-1">Permiso</span>
+                                        </a>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+           <div class="col-sm-12">        
 <div class="tab-content" id="tecn-orl-contenido">
     @if(isset($permiso_profesional) && $permiso_profesional->permiso_vender_audifonos)
     {{-- Venta de audifonos y repuestos --}}
@@ -1675,7 +1682,7 @@
         <div class="div_form_examen_ocho_par">
             <div class="row">
                 <div class="col-12">
-                    <h6 class="tit-gen mb-2 mt-2">Información venta de audífonos</h6>
+                    <h6 class="tit-gen mb-2 mt-2">Información venta de audífonosx</h6>
                 </div>
             </div>
             <div class="row">
@@ -1690,12 +1697,12 @@
 
                                     <div class="row d-none" id="card_paciente_seleccionado">
                                         <div class="col-12">
-                                            <div class="card border-success mb-3" style="background-color: #d4edda;">
-                                                <div class="card-body py-2">
-                                                    <div class="row align-items-center">
-                                                        <div class="col-auto">
-                                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                                <i class="feather icon-check text-white" style="font-size: 24px;"></i>
+                                            <div class="card mb-3 borde-verde">
+                                                <div class="card-body  pb-4 pt-3">
+                                                    <div class="row align-items-center mb-4">
+                                                        <div class="col-auto pr-0">
+                                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center p-2">
+                                                                <i class="feather icon-check text-white f-24"></i>
                                                             </div>
                                                         </div>
                                                         <div class="col">
@@ -1733,16 +1740,16 @@
                                             <input type="hidden" id="paciente_seleccionado_id_post_venta" name="paciente_seleccionado_id_post_venta" value="">
                                         </div>
                                     </div>
-                                    <div class="alert alert-warning mb-3" role="alert">
-                                        <i class="feather icon-alert-triangle mr-2"></i> Para registrar una venta de audífonos, primero debe asociar un paciente o cliente a esta atención.
+                                    <div class="alert alert-warning-b mb-3 py-3" role="alert">
+                                        <i class="feather icon-alert-triangle mr-2"></i> Para registrar una venta de audífonos, primero debe asociar un paciente o cliente a esta atenciónx.
                                     </div>
                                     <!-- Buscador de Paciente -->
                                     <div class="card border-primary" id="card_busqueda_paciente">
-                                        <div class="card-header bg-primary">
-                                            <h6 class="text-white mb-0">
+                                        <div class="card-header-new">
+                                           
                                                 <i class="feather icon-search mr-2"></i>
                                                 Buscar Paciente
-                                            </h6>
+                                      
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
@@ -1865,7 +1872,7 @@
 
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Region</label>
+                                                                    <label class="floating-label-activo-sm">Región</label>
                                                                     <select id="region_agregar_venta" onchange="buscar_ciudad_venta();" name="region_agregar_venta" class="form-control" required>
                                                                         <option value="0">Seleccione Regi&oacute;n</option>
                                                                         @if (isset($regiones))
@@ -3666,7 +3673,8 @@
                                             </div>
                                             <div class="form-group col-md-6" id="div_destinatarios_custom" style="display:none;">
                                                 <label class="font-weight-bold">Correos manuales (separados por coma)</label>
-                                                <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com">
+                                                <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com" onkeyup="actualizarVistaPrevia()">
+                                                <small class="form-text text-muted">Ingrese los correos separados por comas. Ejemplo: juan@mail.com, maria@mail.com</small>
                                             </div>
                                         </div>
 
@@ -6447,7 +6455,7 @@ function enter_buscar_productos_audifono(event) {
             let html = '';
             console.log('Productos encontrados para préstamo:', productos);
             if (productos.length > 0) {
-                html += '<div class="alert alert-info mb-3">';
+                html += '<div class="alert alert-primary py-2 mb-3">';
                 html += '<i class="feather icon-info"></i> Se encontraron <strong>' + productos.length + '</strong> productos.';
                 html += '</div>';
 
@@ -7039,7 +7047,7 @@ function enter_buscar_productos_audifono(event) {
                             prestamo.producto.nombre + ' - ' + prestamo.producto.marca_producto,
                             prestamo.estado_prestamo_text ? prestamo.estado_prestamo_text : 'N/A',
                             prestamo.observaciones ? prestamo.observaciones : 'N/A',
-                            '<button class="btn btn-sm btn-danger" onclick="DevolverProducto('
+                           '<button class="btn btn-sm btn-danger" onclick="DevolverProducto('
                                 + prestamo.id + ', '
                                 + (tiene_garantia ? `'${tipo_garantia}', ${valor_garantia}` : `'Sin garantía', 0`)
                                 + ')">Devolver</button>'];
@@ -7187,14 +7195,28 @@ function enter_buscar_productos_audifono(event) {
 
     function DevolverProducto(id_mis_producto, tipo_garantia = null, valor_garantia = null) {
         let texto = '¿Está seguro que desea devolver este producto?';
+        let content = null;
         if (tipo_garantia && valor_garantia && tipo_garantia !== 'Sin garantía' && valor_garantia > 0) {
-            texto += `\nGarantía: ${tipo_garantia} - Valor: $${parseFloat(valor_garantia).toLocaleString('es-CL')}`;
+            texto += `<br>Garantía: ${tipo_garantia} - Valor: $${parseFloat(valor_garantia).toLocaleString('es-CL')}`;
+            content = {
+                element: "input",
+                attributes: {
+                    type: "number",
+                    min: 0,
+                    max: valor_garantia,
+                    value: valor_garantia,
+                    id: "input_valor_garantia",
+                    class: "swal-content__input",
+                    style: "margin-top:10px;width:100%;"
+                }
+            };
         } else if (tipo_garantia === 'Sin garantía' || !tipo_garantia) {
-            texto += '\nSin garantía asociada.';
+            texto += '<br>Sin garantía asociada.';
         }
         swal({
             title: '¿Devolver producto?',
             text: texto,
+            content: content,
             icon: 'warning',
             buttons: {
                 cancel: {
@@ -7217,11 +7239,18 @@ function enter_buscar_productos_audifono(event) {
                 let url = "{{ route('laboratorio.paciente.producto.devolver') }}";
                 let data = {
                     id_mis_producto: id_mis_producto,
+                    valor_garantia: valor_garantia,
                     _token: CSRF_TOKEN
                 };
                 if (tipo_garantia) data.tipo_garantia = tipo_garantia;
-                if (valor_garantia) data.valor_garantia = valor_garantia;
-
+                if (valor_garantia && tipo_garantia && tipo_garantia !== 'Sin garantía') {
+                    let inputValor = document.getElementById('input_valor_garantia');
+                    if (inputValor) {
+                        data.valor_garantia = inputValor.value;
+                    } else {
+                        data.valor_garantia = valor_garantia;
+                    }
+                }
                 $.ajax({
                     url: url,
                     type: "POST",
@@ -7229,6 +7258,7 @@ function enter_buscar_productos_audifono(event) {
                 })
                 .done(function(response) {
                     console.log(response);
+                    // ...existing code...
                     if(response.estado === 1){
                         swal({
                             icon: 'success',
@@ -7238,10 +7268,8 @@ function enter_buscar_productos_audifono(event) {
                             timer: 2000
                         })
                         .then(() => {
-                            // Recargar historial de productos prestados
                             dame_historial_productos_prestados();
                         });
-
                     } else {
                         swal('Error', response.mensaje || 'No se pudo devolver el producto', 'error');
                     }
@@ -7624,12 +7652,73 @@ function enter_buscar_productos_audifono(event) {
         }
 
         function actualizar_lista_destinatarios() {
-            var tipo = $('#campana_destinatarios').val();
-            if (tipo === 'custom') {
-                $('#div_destinatarios_custom').show();
+            console.log('Función actualizar_lista_destinatarios ejecutada');
+
+            // Verificar si el checkbox de "Seleccionar manualmente" está marcado
+            const checkCustom = document.getElementById('check_custom');
+            const divCustom = document.getElementById('div_destinatarios_custom');
+
+            console.log('Checkbox custom:', checkCustom);
+            console.log('¿Está marcado?', checkCustom ? checkCustom.checked : 'elemento no encontrado');
+
+            if (checkCustom && checkCustom.checked) {
+                console.log('Mostrando campo de correos personalizados');
+                divCustom.style.display = 'block';
             } else {
-                $('#div_destinatarios_custom').hide();
+                console.log('Ocultando campo de correos personalizados');
+                if (divCustom) {
+                    divCustom.style.display = 'none';
+                }
+                const inputCustom = document.getElementById('campana_destinatarios_custom');
+                if (inputCustom) {
+                    inputCustom.value = ''; // Limpiar el campo si se desmarca
+                }
             }
+
+            // Actualizar la vista previa de destinatarios
+            actualizarVistaPrevia();
+        }
+
+        function actualizarVistaPrevia() {
+            console.log('Actualizando vista previa de destinatarios');
+            let destinatarios = [];
+
+            // Recopilar destinatarios seleccionados
+            const checkPacientes = document.getElementById('check_pacientes');
+            const checkProfesionales = document.getElementById('check_profesionales');
+            const checkPersonal = document.getElementById('check_personal');
+            const checkCustom = document.getElementById('check_custom');
+
+            if (checkPacientes && checkPacientes.checked) {
+                destinatarios.push('Todos los Pacientes');
+            }
+            if (checkProfesionales && checkProfesionales.checked) {
+                destinatarios.push('Todos los Profesionales');
+            }
+            if (checkPersonal && checkPersonal.checked) {
+                destinatarios.push('Personal del Centro');
+            }
+            if (checkCustom && checkCustom.checked) {
+                const customEmailsInput = document.getElementById('campana_destinatarios_custom');
+                const customEmails = customEmailsInput ? customEmailsInput.value : '';
+                if (customEmails.trim()) {
+                    destinatarios.push('Correos personalizados: ' + customEmails);
+                } else {
+                    destinatarios.push('Correos personalizados: (pendiente de ingresar)');
+                }
+            }
+
+            // Mostrar en la vista previa
+            const preview = document.getElementById('lista_destinatarios_preview');
+            if (preview) {
+                if (destinatarios.length > 0) {
+                    preview.innerHTML = destinatarios.join('<br>');
+                } else {
+                    preview.innerHTML = '<span class="text-muted">Ningún destinatario seleccionado.</span>';
+                }
+            }
+
+            console.log('Destinatarios seleccionados:', destinatarios);
         }
 
         function historial_campanas_publicitarias(){

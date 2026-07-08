@@ -604,10 +604,15 @@
                                 <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
                                         $fecha = \Carbon\Carbon::parse(now());
+
                                         $mes = $meses[($fecha->format('n')) - 1];
-                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+
+                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y') .
+                                                  ' • ' . $fecha->format('H:i');
                                     @endphp
+
                                     {{ $fecha }}
                                 </p>
                             </div>
@@ -633,7 +638,19 @@
                                         <a class="nav-link text-reset" id="equilibrio-tab" data-toggle="tab" href="#equilibrio" role="tab" aria-controls="equilibrio" aria-selected="false">Equilibrio</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="audif-tab" data-toggle="tab" href="#audif" role="tab"  aria-controls="audif" aria-selected="false">Audífonos</a>
+                                        @php
+                                            $sin_permiso = isset($permisos_profesional) && $permisos_profesional->permiso_vender_audifonos == 1 ? false : true;
+                                        @endphp
+                                        <a class="nav-link text-reset{{ $sin_permiso ? ' disabled' : '' }}"
+                                                         id="audif-tab"
+                                                         data-toggle="tab"
+                                                         href="{{ $sin_permiso ? '#' : '#audif' }}"
+                                                         role="tab"
+                                                         aria-controls="audif"
+                                                         aria-selected="false"
+                                                         @if($sin_permiso) tabindex="-1" aria-disabled="true" title="No tiene permisos" data-toggle="tooltip" @endif
+                                                         onclick="@if($sin_permiso) return false; @endif"
+                                                     >Audífonos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" onclick="dame_atenciones_previas_lab()" aria-selected="false">Historial de visitas</a>
@@ -1193,12 +1210,35 @@
 
                                 {{-- Equilibrio --}}
                                 <div class="tab-pane fade show" id="equilibrio" role="tabpanel" aria-labelledby="equilibrio-tab">
-                                    <!-- FORMULARIO EXAMENES EQUILIOBRIO-->
-                                    <div class="row mt-3">
+                                    <!-- FORMULARIO EXAMENES EQUILIBRIO-->
+                                    <div class="row mt-3 mb-n3">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-
-                                            @include('app.laboratorio.atencion_fono_octavopar')
-
+                                            <ul class="nav nav-tabs-subtema  nav-fill mb-3" id="pills-equilibrio" role="tablist">
+                                                <li class="nav-subtema text-uppercase" role="presentation">
+                                                    <a class="nav-link-dos fade show active " id="pill-octavopar-tab" data-toggle="pill" href="#pill-octavopar" role="tab" aria-controls="pill-octavopar" aria-selected="true">Examen 8° Par</a>
+                                                </li>
+                                                <li class="nav-subtema text-uppercase" role="presentation">
+                                                    <a class="nav-link-dos" id="pill-equilibrio2-tab" data-toggle="pill" href="#pill-equilibrio2" role="tab" aria-controls="pill-equilibrio2" aria-selected="false">
+                                                        Valoración Funcional del Equilibrio
+                                                    </a>
+                                                </li>
+                                                <li class="nav-subtema text-uppercase" role="presentation">
+                                                    <a class="nav-link-dos" id="pill-equilibrio3-tab" onclick="dameUltimosPuntosEquilibrio_irv_lab()" data-toggle="pill" href="#pill-equilibrio3" role="tab" aria-controls="pill-equilibrio3" aria-selected="false">
+                                                        Informe Rehabilitación Vestibular
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content" id="pills-equilibrio-content">
+                                                <div class="tab-pane fade show active" id="pill-octavopar" role="tabpanel" aria-labelledby="pill-octavopar-tab">
+                                                    @include('app.laboratorio.atencion_fono_octavopar')
+                                                </div>
+                                                <div class="tab-pane fade" id="pill-equilibrio2" role="tabpanel" aria-labelledby="pill-equilibrio2-tab">
+                                                    @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono._valoracion_func_equil_content')
+                                                </div>
+                                                <div class="tab-pane fade" id="pill-equilibrio3" role="tabpanel" aria-labelledby="pill-equilibrio3-tab">
+                                                    @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono._informe_rehab_vestibular_content', ['irv_prefix' => 'irv_lab'])
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mt-5">
@@ -1254,7 +1294,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
         </div>
     </div>
     <!-- SIDE BAR FONO -->
@@ -2848,7 +2888,7 @@
             });
         }
 
-       
+
 
         // Seleccionar producto
         function dame_producto(id_producto) {
@@ -2927,6 +2967,32 @@
 
         // Ver detalle del producto
         function ver_detalle_producto_audifono(id_producto) {
+            console.log('Ver detalle del producto ID:', id_producto);
+
+            // Hacer petición AJAX para obtener detalles completos
+            let url = "{{ route('laboratorio.profesional.detalle_producto_audifono', '') }}/" + id_producto;
+
+            $.ajax({
+                url: url,
+                type: "GET",
+            })
+            .done(function(data) {
+                console.log('Detalle del producto:', data);
+                if (data.producto) {
+                    mostrar_modal_detalle_producto(data.producto);
+                }
+            })
+            .fail(function() {
+                swal({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo cargar el detalle del producto.'
+                });
+            });
+        }
+
+        // Ver detalle del producto
+        function ver_detalle_producto_audifono_prestamo(id_producto) {
             console.log('Ver detalle del producto ID:', id_producto);
 
             // Hacer petición AJAX para obtener detalles completos
@@ -4691,7 +4757,7 @@
                                     <div class="flex-shrink-0 ml-3">
                                         ${archivo.url ? `
                                             <a href="${archivo.url}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                <i class="feather icon-download"></i> Descargar
+                                                <i class="feather icon-download"></i> Visualizar
                                             </a>
                                         ` : `
                                             <span class="text-muted">No disponible</span>
@@ -5111,7 +5177,7 @@
             data: data,
         })
         .done(function(response) {
-         
+
             if(response.estado === 1){
                 // Procesar las calibraciones de audífono
                 let table = $('#tabla_historial_calibraciones_audifono').DataTable();
@@ -5341,7 +5407,7 @@
                 });
 
                 // Opcional: Mostrar botón para ver carrito
-                mostrarBotonVerCarritoPrestamo();
+                // mostrarBotonVerCarritoPrestamo();
             } else {
                 swal({
                     icon: 'error',
@@ -5395,17 +5461,29 @@
                 totalHeader.hide();
             }
 
+        }
+
+        /**
+         * Mostrar botón flotante del carrito de préstamos
+         */
+        function mostrarBotonVerCarritoPrestamo() {
+            // Verificar si el botón ya existe
             if ($('#btn-ver-carrito-prestamo').length === 0) {
                 let boton = `
-                    <button id="btn-ver-carrito-prestamo" class="btn btn-success btn-lg"
-                            style="position:fixed; bottom:20px; right:20px; z-index:9999; border-radius:50%; width:60px; height:60px;"
-                            onclick="obtenerCarrito()" title="Ver carrito">
-                        <i class="feather icon-shopping-cart"></i>
+                    <button id="btn-ver-carrito-prestamo" class="btn btn-warning btn-lg"
+                            style="position:fixed; bottom:90px; right:20px; z-index:9998; border-radius:50%; width:60px; height:60px;"
+                            onclick="obtenerCarritoPrestamo()" title="Ver carrito de préstamos">
+                        <i class="feather icon-package"></i>
                         <span id="badge-carrito-prestamo" class="badge badge-danger"
                             style="position:absolute; top:-5px; right:-5px; display:none;">0</span>
                     </button>
                 `;
-                //$('body').append(boton);
+                $('body').append(boton);
+                console.log('✅ Botón flotante de carrito de préstamos creado');
+            } else {
+                // Si ya existe, asegurarse de que esté visible
+                $('#btn-ver-carrito-prestamo').show();
+                console.log('ℹ️ Botón flotante de carrito de préstamos ya existe');
             }
         }
 
@@ -5447,7 +5525,7 @@
                     }else{
                         var nombre_paciente = response.nombre_paciente || '';
                     }
-                    
+
 
                     mostrarModalCarritoPrestamo(nombre_paciente);
                     actualizarBadgeCarritoPrestamo();
@@ -5471,7 +5549,7 @@
             html += '<div class="mb-2 text-left">';
             html += '<strong>Paciente:</strong> ' + (nombrePaciente || 'No seleccionado');
             html += '</div>';
-        
+
             if (carritoData.items.length === 0) {
                 html += '<p class="text-center py-4">El carrito de préstamos está vacío</p>';
             } else {
@@ -5483,7 +5561,7 @@
                 html += '<th>Observaciones</th>';
                 html += '<th>Acciones</th>';
                 html += '</tr></thead><tbody>';
-        
+
                 carritoData.items.forEach(function(item) {
                     html += '<tr>';
                     html += '<td>';
@@ -5505,7 +5583,7 @@
                     html += '</td>';
                     html += '</tr>';
                 });
-        
+
                 html += '</tbody>';
                 html += '<tfoot>';
                 html += '<tr class="bg-light">';
@@ -5641,7 +5719,7 @@
         }
 
         /**
-         * Procesar préstamo 
+         * Procesar préstamo
          */
 
         function procesarPrestamo() {
@@ -5655,6 +5733,22 @@
                             <div class="form-group text-left">
                                 <label class="font-weight-bold">Observaciones:</label>
                                 <textarea id="swal-obs-prestamo" class="form-control" rows="3" placeholder="Ingrese observaciones adicionales (opcional)"></textarea>
+                            </div>
+                            <div class="form-group mb-3 text-left">
+                            <input type="checkbox" id="garantiaPrestamo" name="garantiaPrestamo" onchange="toggleGarantiaDiv()">
+                            <label for="garantiaPrestamo" class="ml-2">¿Se deja garantía?</label>
+                            </div>
+                            <div id="divGarantia" style="display:none; margin-bottom:15px;">
+                            <label for="tipoGarantia">Tipo de garantía:</label>
+                            <select id="tipoGarantia" class="form-control mb-2">
+                            <option value="">Seleccione tipo</option>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="cheque">Cheque</option>
+                            <option value="documento">Documento</option>
+                            <option value="otro">Otro</option>
+                            </select>
+                            <label for="valorGarantia">Valor de la garantía:</label>
+                            <input type="text" id="valorGarantia" class="form-control" placeholder="Ingrese valor">
                             </div>
                         `
                     }
@@ -5678,23 +5772,58 @@
             }).then((willProcess) => {
                 if (willProcess) {
                     let observaciones = document.getElementById('swal-obs-prestamo').value;
-
+                    let tiene_garantia = $('#garantiaPrestamo').is(':checked') ? 1 : 0;
+                    console.log('tiene_garantia 2', tiene_garantia);
+                    if(tiene_garantia){
+                        var tipo_garantia = $('#tipoGarantia').val();
+                        if(tipo_garantia == '' || tipo_garantia == 0){
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Debe seleccionar un tipo de garantía'
+                            });
+                            return;
+                        }
+                        var valor_garantia = parseFloat($('#valorGarantia').val());
+                    }
                     // Validar observaciones
-                    if (!observaciones) {
-                        swal("Error", "Debe ingresar observaciones", "error");
-                        return;
+                    // if (!observaciones) {
+                    //     swal("Error", "Debe ingresar observaciones", "error");
+                    //     return;
+                    // }
+
+                    // validar garantía
+                    if(tiene_garantia){
+                        if(!tipo_garantia || tipo_garantia == 0){
+                            swal("Error", "Debe seleccionar un tipo de garantía", "error");
+                            return;
+                        }
+                        if(!valor_garantia || isNaN(valor_garantia) || valor_garantia <= 0){
+                            swal("Error", "Debe ingresar un valor válido para la garantía", "error");
+                            return;
+                        }
                     }
 
                     // Cerrar modal y procesar
                     swal.close();
 
                     let datos = {
-                        observaciones: observaciones
+                        observaciones: observaciones,
+                        tiene_garantia: tiene_garantia,
+                        tipo_garantia: tipo_garantia || '',
+                        valor_garantia: valor_garantia || 0
                     };
+
+                    console.log('datos', datos);
 
                     finalizarPrestamo(datos);
                 }
             });
+        }
+
+         function toggleGarantiaDiv() {
+            var checked = document.getElementById('garantiaPrestamo').checked;
+            document.getElementById('divGarantia').style.display = checked ? 'block' : 'none';
         }
 
         function finalizarPrestamo(datos) {
@@ -5715,6 +5844,9 @@
                     id_paciente: $('#id_paciente_fc').val(),
                     id_ficha: $('#id_fc').val(),
                     id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    tiene_garantia: datos.tiene_garantia,
+                    tipo_garantia: datos.tipo_garantia,
+                    valor_garantia: datos.valor_garantia,
                     observaciones: datos.observaciones,
                     _token: CSRF_TOKEN
                 },
@@ -5740,6 +5872,7 @@
                         `,
                         confirmButtonText: 'Aceptar'
                     });
+                    buscar_productos_audifonos_prestamo();
                 } else {
                     swal({
                         icon: 'error',
@@ -5755,6 +5888,104 @@
                     title: 'Error',
                     text: 'No se pudo procesar el préstamo'
                 });
+            });
+        }
+
+        /**
+         * Vaciar carrito de préstamos completo
+         */
+        function vaciarCarritoPrestamoCompleto() {
+            swal({
+                title: '¿Vaciar carrito de préstamos?',
+                text: 'Se eliminarán todos los productos del carrito de préstamos. Esta acción no se puede deshacer.',
+                icon: 'warning',
+                buttons: {
+                    cancel: {
+                        text: 'No, cancelar',
+                        value: null,
+                        visible: true,
+                        className: 'btn-secondary',
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: 'Sí, vaciar carrito',
+                        value: true,
+                        visible: true,
+                        className: 'btn-danger',
+                        closeModal: false
+                    }
+                },
+                dangerMode: true
+            }).then((willEmpty) => {
+                if (willEmpty) {
+                    let url = "{{ route('laboratorio.carrito_prestamos.vaciar') }}";
+                    let id_paciente = $('#id_paciente_fc').val();
+
+                    swal({
+                        title: 'Vaciando carrito...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        data: {
+                            id_paciente: id_paciente,
+                            _token: CSRF_TOKEN
+                        },
+                    })
+                    .done(function(response) {
+                        console.log('Carrito vaciado:', response);
+
+                        if (response.estado === 1) {
+                            // Actualizar datos del carrito
+                            carritoData = {
+                                items: [],
+                                total: 0,
+                                cantidad_items: 0
+                            };
+
+                            // Actualizar UI
+                            actualizarBadgeCarritoPrestamo();
+
+                            swal({
+                                icon: 'success',
+                                title: '¡Carrito vaciado!',
+                                text: response.mensaje,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            // Ocultar botón flotante si no hay items
+                            if (carritoData.cantidad_items === 0) {
+                                $('#btn-ver-carrito-prestamo').hide();
+                            }
+                        } else {
+                            swal({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.mensaje
+                            });
+                        }
+                    })
+                    .fail(function(jqXHR) {
+                        console.error('Error al vaciar carrito:', jqXHR);
+
+                        let mensaje = 'Error al vaciar el carrito de préstamos';
+                        if (jqXHR.responseJSON && jqXHR.responseJSON.mensaje) {
+                            mensaje = jqXHR.responseJSON.mensaje;
+                        }
+
+                        swal({
+                            icon: 'error',
+                            title: 'Error',
+                            text: mensaje
+                        });
+                    });
+                }
             });
         }
 

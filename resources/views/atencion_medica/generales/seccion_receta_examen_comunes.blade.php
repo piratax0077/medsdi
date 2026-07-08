@@ -697,12 +697,12 @@
 
         {{--  METODOS DE EXAMENES  --}}
         function mostrar_modal_examen_cirguria() {
-
+            dame_examenes();
             {{--  $("#indicar_examenes").modal("show");  --}}
             ver_examenes_ficha_medica();
             ver_examenes_ficha_medica_esp();
             $('#indicar_examenes').modal({backdrop: 'static', keyboard: false});
-
+            
         }
 
         function cerrarModalExamenesFicha()
@@ -842,7 +842,7 @@
 
         }
 
-
+        
 
         function eliminar_examen_contraste(id_row)
         {

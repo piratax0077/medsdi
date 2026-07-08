@@ -1,4 +1,4 @@
-@php $count = 1; @endphp
+@php $count = 123; @endphp
 @foreach ($examenes as $examen)
 <div class="card">
     <div class="card-body">

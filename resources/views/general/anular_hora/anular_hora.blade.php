@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-agenda btn-danger d-inline float-right mb-2 mt-0 ml-2 mr-3" onclick="abrir_anular_hora();" data-toggle="tooltip" data-placement="top" title="Anular horas"><i class="fas fa-calendar-times"></i> </button>
+<button type="button" class="btn btn-agenda btn-danger d-inline float-right mb-2 mt-0 ml-2 mr-1" onclick="abrir_anular_hora();" data-toggle="tooltip" data-placement="top" title="Anular horas"><i class="fas fa-calendar-times"></i> </button>
 
 <div class="modal fade" id="modal_anular_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_anular_hora" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -76,8 +76,12 @@
 <script>
     function abrir_anular_hora()
     {
-        $('#anular_id_profesional').val('{{ $profesional->id }}');
-        $('#anular_id_lugar_atencion').val('{{ $lugar_atencion }}');
+        $('#anular_id_profesional').val('{{ $profesional ? $profesional->id : "" }}');
+        @if(!empty($lugar_atencion))
+		$('#anular_id_lugar_atencion').val('{{ $lugar_atencion }}');
+		@else
+		$('#anular_id_lugar_atencion').val($('#id_lugar_atencion').val());
+		@endif
 
         $('#anular_agenda option:first').prop('selected', true);
         carga_calendario_anular();
@@ -110,6 +114,13 @@
         let id_profesional = $('#anular_id_profesional').val();
         let tipo_agenda = $('#anular_agenda').val();
         let id_lugar_atencion = $('#anular_id_lugar_atencion').val();
+
+        // Si no hay profesional, no puede continuar
+        if (!id_profesional || id_profesional === '') {
+            console.warn('No hay profesional asociado');
+            return;
+        }
+
         let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
 
         $.ajax({
@@ -187,8 +198,9 @@
     function cargar_anular_horas()
     {
         let url = "{{ route('agenda.dia.horas.ver') }}";
-        let id_profesional = $('#bloqueo_id_profesional').val();
-        let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+        let id_profesional = $('#anular_id_profesional').val();
+		// let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+        let id_lugar_atencion = $('#anular_id_lugar_atencion').val();
         let fecha_consulta = $('#anular_fecha_consulta').val();
         $('#horas_medicas_lista').html('');
         $.ajax({

@@ -13,8 +13,8 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Administracion del centro médico</a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Reportes</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('bodegas.reportes') }}">Reportes</a></li>
                         </ul>
                     </div>
                 </div>

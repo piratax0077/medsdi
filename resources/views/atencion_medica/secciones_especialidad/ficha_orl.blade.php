@@ -167,13 +167,13 @@
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="obs_ex_audicion">Audición</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Audición" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="audicion" id="audicion" placeholder="USO DE AUDÍFONOS, APRECIACIÓN SUBJETIVA DE AUDICIÓN"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Audición" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="audicion" id="audicion" placeholder="USO DE AUDÍFONOS, APRECIACIÓN SUBJETIVA DE AUDICIÓN">{{ old('audicion') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="ex_oido">Examen Físico de oídos</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Físico de oídos" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="ex_oido" id="ex_oido"placeholder="EXAMEN CLÍNICO DE OÍDOS" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Físico de oídos" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="ex_oido" id="ex_oido"placeholder="EXAMEN CLÍNICO DE OÍDOS" >{{ old('ex_oido') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -181,13 +181,13 @@
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="biomicroscopia">Biomicroscopía</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Biomicroscopía" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="biomicroscopia" id="biomicroscopia" placeholder="BIOMICROSCOPÍA"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Biomicroscopía" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="biomicroscopia" id="biomicroscopia" placeholder="BIOMICROSCOPÍA">{{ old('biomicroscopia') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="vestibular">Examen Vestibular</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Vestibular" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="vestibular" id="vestibular" placeholder="EXAMEN VESTIBULAR" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Vestibular" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="vestibular" id="vestibular" placeholder="EXAMEN VESTIBULAR" >{{ old('vestibular') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -195,7 +195,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="o_resultado_ex"> Resultado Exámenes</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Exámenes" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="o_resultado_ex" id="o_resultado_ex" placeholder="RESULTADO DE EXAMENES"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Exámenes" data-seccion="Oídos" data-tipo="oido" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="o_resultado_ex" id="o_resultado_ex" placeholder="RESULTADO DE EXAMENES">{{ old('o_resultado_ex') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -242,13 +242,13 @@
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="nariz_ext"> Examen Externo</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Externo" data-seccion="Nariz" data-tipo="nariz" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="nariz_ext" id="nariz_ext" placeholder="FORMA, PIÉL DESVIACIONES, APRECIACIÓN RESPIRATORIA"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Externo" data-seccion="Nariz" data-tipo="nariz" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="nariz_ext" id="nariz_ext" placeholder="FORMA, PIÉL DESVIACIONES, APRECIACIÓN RESPIRATORIA">{{ old('nariz_ext') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="f_nasales">Examen Fosas Nasales</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosas Nasales" data-seccion="Nariz" data-tipo="nariz"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="f_nasales" id="f_nasales"placeholder="EXAMEN CLÍNICO DE FOSAS NASALES" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Fosas Nasales" data-seccion="Nariz" data-tipo="nariz"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="f_nasales" id="f_nasales"placeholder="EXAMEN CLÍNICO DE FOSAS NASALES" >{{ old('f_nasales') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -256,7 +256,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="n_resultado_ex"> Resultado Examenes</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Examenes" data-seccion="Nariz" data-tipo="nariz"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="n_resultado_ex" id="n_resultado_ex" placeholder="RESULTADO DE EXAMENES"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Examenes" data-seccion="Nariz" data-tipo="nariz"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="n_resultado_ex" id="n_resultado_ex" placeholder="RESULTADO DE EXAMENES">{{ old('n_resultado_ex') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -302,19 +302,19 @@
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="boca"> Boca en general</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Boca" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="boca" id="boca" placeholder="BOCA,LENGUA DENTADURA ENCIAS,ETC"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Boca" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="boca" id="boca" placeholder="BOCA,LENGUA DENTADURA ENCIAS,ETC">{{ old('boca') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="faringe"> Examen Faríngeo</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Faríngeo" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="faringe" id="faringe"placeholder="EXAMEN CLÍNICO DE FOSAS FARINGE" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Faríngeo" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="faringe" id="faringe"placeholder="EXAMEN CLÍNICO DE FOSAS FARINGE" >{{ old('faringe') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="laringe">Examen Laríngeo</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Laríngeo" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe"rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="laringe" id="laringe"placeholder="EXAMEN CLÍNICO DE LARIGE DISFONÍA" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Laríngeo" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe"rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="laringe" id="laringe"placeholder="EXAMEN CLÍNICO DE LARIGE DISFONÍA" >{{ old('laringe') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -322,7 +322,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="fl_resultado_ex">Resultado Exámenes</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Examenes" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="fl_resultado_ex" id="fl_resultado_ex" placeholder="RESULTADO DE EXAMENES"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Examenes" data-seccion="Boca-Faringo-laringe" data-tipo="boca_far_laringe" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="fl_resultado_ex" id="fl_resultado_ex" placeholder="RESULTADO DE EXAMENES">{{ old('fl_resultado_ex') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -369,19 +369,19 @@
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="cuello_grl"> Examen general del cuello</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen general del cuello" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="cuello_grl" id="cuello_grl" placeholder="PIÉL ADENOPATÍAS PUNTOS DOLOROSOS COL CERVICAL"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen general del cuello" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="cuello_grl" id="cuello_grl" placeholder="PIÉL ADENOPATÍAS PUNTOS DOLOROSOS COL CERVICAL">{{ old('cuello_grl') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="masas"> Examen Masas </label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Masas" data-seccion="Cuello" data-tipo="cuello"rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="masas" id="masas"placeholder="EXAMEN CLÍNICO DE MASAS CERVICALES" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Masas" data-seccion="Cuello" data-tipo="cuello"rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="masas" id="masas"placeholder="EXAMEN CLÍNICO DE MASAS CERVICALES" >{{ old('masas') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm" for="glandulas">Examen Glándulas Anexas</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Glándulas Anexas" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="glandulas" id="glandulas"placeholder="EXAMEN CLÍNICO DE GLANDULAS" ></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Examen Glándulas Anexas" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="glandulas" id="glandulas"placeholder="EXAMEN CLÍNICO DE GLANDULAS" >{{ old('glandulas') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -389,7 +389,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm"for="c_resultado_ex"> Resultado Exámenes</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Exámenes" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="c_resultado_ex" id="c_resultado_ex" placeholder="RESULTADO DE EXAMENES"></textarea>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Exámenes" data-seccion="Cuello" data-tipo="cuello" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="c_resultado_ex" id="c_resultado_ex" placeholder="RESULTADO DE EXAMENES">{{ old('c_resultado_ex') }}</textarea>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -491,6 +491,7 @@
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                                                     @include('general.secciones_ficha.seccion_receta_examen_comunes')
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+
 
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
                                                     @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
@@ -1922,6 +1923,7 @@
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
+            $('#motivo').focus();
                      /** MENSAJE*/
        /** CARGAR mensaje */
             $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
@@ -1930,7 +1932,7 @@
                 $('#mensaje_ficha').hide();
             }, 5000);
 
-            @if($fichas->count()>0)
+            @if(count($fichas) > 0)
                 $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
             @else
                 $('#mensaje_historias').html(' Primera consulta del paciente. ');
@@ -1996,9 +1998,9 @@
                     return false;
                 }
             });
-			
 
-           
+
+
 
 
 

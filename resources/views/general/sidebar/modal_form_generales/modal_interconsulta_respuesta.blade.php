@@ -45,7 +45,7 @@
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
                                     @if(isset($interconsulta) )
-                                        <input class="form-control form-control-sm">{{ $interconsulta->hipotesis }}>
+                                        <input class="form-control form-control-sm" value="{{ $interconsulta->hipotesis }}">
                                     @else
                                         <input class="form-control form-control-sm">
                                     @endif
@@ -53,7 +53,7 @@
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label class="floating-label-activo-sm">Se desea saber</label>
                                     @if(isset($interconsulta) )
-                                        <input class="form-control form-control-sm" >{{ $interconsulta->comentarios }}>
+                                        <input class="form-control form-control-sm" value="{{ $interconsulta->comentarios }}">
                                     @else
                                         <input class="form-control form-control-sm">
                                     @endif

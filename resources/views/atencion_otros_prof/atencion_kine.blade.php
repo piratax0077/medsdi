@@ -42,7 +42,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         @if (request('token') && request('fmu') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
@@ -51,13 +51,13 @@
                                             @endphp
                                             <a class="nav-link text-reset" id="fmu-tab" href="{{ ROUTE('check_sdi', ['id_recept' => $paciente->id_usuario,'urla'=> $url_temp.'&fmu=0','urln' => $url_temp.'&fmu=1', 'id_tipo' => 2]) }}">FMU</a>
                                         @endif
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                    </li>  --}}
                                 </ul>
                             </div>
                         </div>
@@ -110,6 +110,7 @@
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.pares_craneanos")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.postura")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.reflejos")
+     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.equilibrio")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.kine.sensibilidad")
 
 

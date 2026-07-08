@@ -35,7 +35,7 @@
                     <div class="card subir">
                         <a href="{{ ROUTE('paciente.dependiente.mis_profesionales', ['id_dependiente_activo'=> $paciente->id]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/profesionales.svg') }}">
                                 <h5 class="mt-2"> Mis Profesionales </h5>
                             </div>
                         </a>
@@ -61,7 +61,7 @@
                     <div class="card subir">
                         <a href="{{ ROUTE('paciente.dependiente.receta', ['id_dependiente_activo'=> $paciente->id]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/ficha_2.svg') }}">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/receta_online.svg') }}">
                                 <h5 class="mt-2">Receta Online </h5>
                             </div>
                         </a>

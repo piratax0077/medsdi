@@ -89,7 +89,6 @@
                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="peticion_pcte" id="peticion_pcte"></textarea>
                             </div>
                         </div>
-
                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm t-blue" for="entrega_audifono">¿Audífono de reemplazo?</label>
@@ -154,7 +153,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                                
                                                 <!-- Área de resultados -->
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div id="lista_audifonos_reparo" class="resultado-busqueda"></div>
@@ -205,24 +204,24 @@
     #tabla_historial_reparaciones_audifono {
         font-size: 0.85rem;
     }
-
+    
     #tabla_historial_reparaciones_audifono th {
         border-top: none;
         font-weight: 600;
         background-color: #f8f9fa;
     }
-
+    
     #tabla_historial_reparaciones_audifono td {
         vertical-align: middle;
         word-wrap: break-word;
         max-width: 200px;
     }
-
+    
     .table-responsive {
         border: 1px solid #dee2e6;
         border-radius: 0.375rem;
     }
-
+    
     /* Mantener el header fijo mientras se hace scroll */
     .sticky-top {
         position: sticky;
@@ -386,9 +385,15 @@
 
     function registrar_reparacion(){
         var mot_rep_audif = $('#mot_rep_audif').val();
-        var obs_mot_rep_audif = $('#obs_mot_rep_audif').val();
+        var mot_rep_audif_text = $('#mot_rep_audif option:selected').text();
+        if( mot_rep_audif == 3 ){
+            mot_rep_audif_text = $('#obs_mot_rep_audif').val();
+        }
         var est_audifono_rep = $('#est_audifono_rep').val();
-        var obs_est_audifono_rep = $('#obs_est_audifono_rep').val();
+        var est_audifono_rep_text = $('#est_audifono_rep option:selected').text();
+        if( est_audifono_rep == 3 ){
+            est_audifono_rep_text = $('#obs_est_audifono_rep').val();
+        }
         var marca_rep = $('#marca_rep').val();
         var modelo_rep = $('#modelo_rep').val();
         var n_serie_aud_rep = $('#n_serie_aud_rep').val();
@@ -423,9 +428,9 @@
             data: {
                 _token: '{{ csrf_token() }}',
                 mot_rep_audif: mot_rep_audif,
-                obs_mot_rep_audif: obs_mot_rep_audif,
+                mot_rep_audif_text: mot_rep_audif_text,
                 est_audifono_rep: est_audifono_rep,
-                obs_est_audifono_rep: obs_est_audifono_rep,
+                est_audifono_rep_text: est_audifono_rep_text,
                 marca_rep: marca_rep,
                 modelo_rep: modelo_rep,
                 n_serie_aud_rep: n_serie_aud_rep,
@@ -596,7 +601,7 @@
             else
             {
                 $('#tipo_producto_busqueda_reparo').html('<option value="">No hay registros</option>');
-
+               
                 swal({
                     icon: 'error',
                     title: 'Error',
@@ -610,13 +615,13 @@
         // Lógica para seleccionar el producto de audífono para reparación
         console.log('Producto seleccionado para reparación:', id, precio);
         $('#id_producto_reparo').val(id);
-
+        
         // Remover clase de seleccionado de todos los productos
         $('.resultado-busqueda .card').removeClass('producto-seleccionado border-success');
-
+        
         // Agregar clase de seleccionado al producto actual
         $(event.target).closest('.card').addClass('producto-seleccionado border-success');
-
+        
         // Mostrar mensaje de confirmación
         swal({
             title: 'Producto seleccionado',
@@ -633,7 +638,7 @@
         $('#buscar_producto_reparo').val('');
         $('#lista_audifonos_reparo').html('');
         $('#id_producto_reparo').val('0');
-
+        
         // Remover clases de selección
         $('.resultado-busqueda .card').removeClass('producto-seleccionado border-success');
     }

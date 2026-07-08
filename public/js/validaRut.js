@@ -29,6 +29,9 @@ $("#rut_paciente_reserva").blur(function(){
 			icon: "error",
 			buttons: "Aceptar",
 			DangerMode: true,
+		}).then(function() {
+			$('#rut_paciente_reserva').val('');
+			$('#rut_paciente_reserva').focus();
 		});
 		$("#msgerror").html("El Rut no es válido :'( ");
 	}
@@ -43,6 +46,9 @@ $("#rut_asistente").blur(function(){
 			icon: "error",
 			buttons: "Aceptar",
 			DangerMode: true,
+		}).then(function() {
+			$('#rut_asistente').val('');
+			$('#rut_asistente').focus();
 		});
 		$("#msgerror").html("El Rut no es válido :'( ");
         $('#button-addon2').prop('disabled',true);
@@ -57,6 +63,9 @@ $("#rut_nuevo_profesional").blur(function(){
 			icon: "error",
 			buttons: "Aceptar",
 			DangerMode: true,
+		}).then(function() {
+			$('#rut_nuevo_profesional').val('');
+			$('#rut_nuevo_profesional').focus();
 		});
 		$("#msgerror").html("El Rut no es válido :'( ");
 	}
@@ -66,12 +75,15 @@ $("#agregar_profesional_int_rut").blur(function(){
 		$("#msgerror").html("El rut ingresado es válido :D");
 	} else {
 		 swal({
-			title: "Ingrese un rut valido",
-			icon: "error",
-			buttons: "Aceptar",
-			DangerMode: true,
-		});
-		$("#msgerror").html("El Rut no es válido :'( ");
+            title: "Ingrese un rut valido",
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        }).then(function() {
+            $('#agregar_profesional_int_rut').val('');
+            $('#agregar_profesional_int_rut').focus();
+        });
+        $("#msgerror").html("El Rut no es válido :'( ");
 	}
 });
 

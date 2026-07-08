@@ -49,9 +49,11 @@
                                 <!---->
                                 <div class="tab-pane fade show active" id="info-tipo_contrato_administrativo" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
                                     <div class="form-row">
+                                         <div class="col-sm-12 col-md-12">
+                                            <h6 class="t-modal">Tipo de contrato</h6>
+                                        </div>
                                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <label class="floating-label-activo-sm">Tipo de contrato</label>
-                                            <select class="form-control" name="_administrativo" id="add_empleado_tipo_contrato_administrativo">
+                                            <select class="form-control form-control-sm" name="_administrativo" id="add_empleado_tipo_contrato_administrativo">
                                                 <option value="">Seleccione</option>
                                                 @if ($lista_tipo_administrativo)
                                                     @foreach ($lista_tipo_administrativo as $item)

@@ -7,25 +7,25 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script>
+            // Establecer CSRF_TOKEN en window para compatibilidad con scripts antiguos
+            window.CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        </script>
 
         <!-- Links del REG-->
         <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/card_estilo.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}?t={{ time() }}">
-        <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
-
-        <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-        <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
 
 
@@ -53,18 +53,29 @@
         <!--Estilo tab secciones -->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
 
+
+
         <!--formulario sm-->
         <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
 
         <!-- select2 -->
         <link rel="stylesheet" type="text/css" href='{{ asset('css/plugins/select2.min.css') }}'/>
 
+    <!-- datepicker js -->
+    <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
+    <script src="{{ asset('js/pages/ac-datepicker.js') }}"></script>
+
+            <!-- file-upload Js -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+
         {{--  /** agregar css */  --}}
 
         <style>
             .ui-front {
                 position: absolute;
-                z-index: 2006;
+        <!--Accordion-->
                 overflow: auto;
             }
         </style>
@@ -136,10 +147,19 @@
         <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
         <script src="{{ asset('js/formularios_wizard.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+        <!-- Gijgo datepicker css -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.14/gijgo.min.css" />
+
+        <!-- daterangepicker css -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
         <!-- datepicker js -->
         <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
         <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
         <script src="{{ asset('js/pages/ac-datepicker.js') }}"></script>
+
+        <!-- Gijgo datepicker js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gijgo/1.9.14/gijgo.min.js"></script>
 
         <!--Tooltips-->
         <script src="{{ asset('js/tooltip_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>

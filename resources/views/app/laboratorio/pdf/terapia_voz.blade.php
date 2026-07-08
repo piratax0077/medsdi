@@ -106,7 +106,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>INFORME DE TERAPIA DE VOZ</h1>
+        <h1>{{ $titulo }}</h1>
         <h2>Médico Tratante</h2>
     </div>
 
@@ -127,6 +127,37 @@
         <h3>Observaciones y Recomendaciones</h3>
         <div class="content-box">
             {!! $observaciones !!}
+        </div>
+    </div>
+
+    <!-- Sección de Sesiones -->
+    <div class="content-section">
+        <h3>Detalle de Sesiones de Terapia de Voz</h3>
+        <div class="content-box">
+            @if($sesiones->isEmpty())
+                <p>No se registraron sesiones de terapia de voz.</p>
+            @else
+                <table width="100%" border="1" cellspacing="0" cellpadding="5">
+                    <thead>
+                        <tr style="background-color: #f2f2f2;">
+                            <th>Número de Sesión</th>
+                            <th>Fecha</th>
+                            <th>Tipo Terapia</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($sesiones as $sesion)
+                            <tr>
+                                <td align="center">{{ $sesion->numero_sesion }}</td>
+                                <td align="center">{{ date('d/m/Y', strtotime($sesion->created_at)) }}</td>
+                                <td align="center">{{ $sesion->tipo_terapia }}</td>
+                                <td>{{ $sesion->comentarios }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     </div>
 

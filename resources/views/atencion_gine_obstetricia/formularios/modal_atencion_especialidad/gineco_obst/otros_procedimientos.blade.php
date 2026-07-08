@@ -30,7 +30,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <button type="button" class="btn btn-info btn-sm btn-block" onclick="agregar_otro_proc();">Añadir Procedimiento</button>
+                                    <button type="button" class="btn btn-info btn-sm btn-block" onclick="agregar_otro_proc();"><i class="feather icon-save"></i> Añadir Procedimiento</button>
                                 </div>
                             </div>
                         </form>

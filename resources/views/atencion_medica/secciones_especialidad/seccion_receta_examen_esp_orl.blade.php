@@ -146,6 +146,21 @@
 
             let especificacion_general = $('#modal_audifono_especificacion_general').val();
 
+            if(tipo == 5){
+                tipo_otro = $('#obs_modal_audifono_tipo').val();
+                if(tipo_otro == '')
+                {
+                    swal({
+                        title: "Receta Audífono.",
+                        text: 'Debe especificar el tipo de audífono.',
+                        icon: "error",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
+                    return false;
+                }
+            }
+
             var _token = CSRF_TOKEN;
 
             var mensaje = '';
@@ -169,6 +184,7 @@
                             id_paciente: id_paciente,
                             id_profesional: id_profesional,
                             tipo: tipo,
+                            tipo_otro: tipo_otro,
                             od: od,
                             especificacion_od: especificacion_od,
                             oi: oi,

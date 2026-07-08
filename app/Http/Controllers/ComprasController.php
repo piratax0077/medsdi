@@ -111,6 +111,7 @@ class ComprasController extends Controller
         $unidades_medidas = $productos_controller->dameMedidas();
         $bodegas = Bodega::where('id_institucion', $institucion->id)->get();
         $tipos_almacenamiento = TipoAlmacenamientoProductos::all();
+
         return view('app.bodega.compras', [
             'proveedores' => $proveedores,
             'tipos_producto' => $tipos_producto,
@@ -302,12 +303,12 @@ class ComprasController extends Controller
 
     public function guardarItemFactura(Request $req){
         try {
-         
+
             // guardar el nuevo producto
             $producto_controlador = new ProductosController();
             if ($req->nuevo == "SI") {
                 $id_producto = $producto_controlador->guardarProducto($req);
-              
+
                 if($id_producto == false){
                     return ['mensaje' => 'El producto ya existe'];
                 }

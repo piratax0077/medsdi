@@ -3,8 +3,8 @@
 <div class="modal fade" id="indicar_terapia" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="indicar_terapia" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-light">
-                <h6 class="modal-title text-primary f-18">Plan de tratamiento</h6>
+            <div class="modal-header bg-info">
+                <h6 class="modal-title text-white f-18">Plan de tratamiento</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#indicar_terapia').modal('hide');">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,8 +15,8 @@
                 <form id="form_plan_nutri">
                     <div id="planificacion" class="form-row">
                         <div class="col-sm-12 mt-2">
-                            <div class="form-group fill d-flex justify-content-between">
-                                <h6 class="form_fono">INDICACIONES AL PACIENTE</h6>
+                            <div class="d-flex justify-content-between">
+                                <h6 class="tit-gen">INDICACIONES AL PACIENTE</h6>
                                 <span id="numero_sesion" class="badge badge-warning" style="font-size: 15px;"></span>
                             </div><br>
                             <span id="consulta" class="badge badge-warning float-right mb-4" style="font-size: 15px;"></span>
@@ -27,23 +27,21 @@
                             <label class="floating-label-activo-sm">Fecha Inicio Tratamiento</label>
                             <input type="date" class="form-control form-control-sm" name="fecha_inicio_tratamiento" id="fecha_inicio_tratamiento">
                         </div> --}}
-                        <div class="col-sm-6 mt-2">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                             <label class="floating-label-activo-sm">Diagnóstico</label>
                             <input type="text" class="form-control form-control-sm" data-input_igual="hipotesis" name="diagnostico_tratamiento" id="diagnostico_tratamiento" onchange="cargarIgual('diagnostico_tratamiento')">
                         </div>
-                        <div class="col-sm-6 mt-2">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                             <label class="floating-label-activo-sm">Tratamiento a seguir</label>
                             <input type="text" class="form-control form-control-sm" name="tratamiento_seguir" id="tratamiento_seguir">
                         </div>
                     </div>
-                    <br>
-                    <hr>
                     <div class="form-row">
-                        <div class="col-sm-3 mt-2">
-                            <label class="floating-label-activo-sm">Número de Sesiones</label>
+                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                            <label class="floating-label-activo-sm">Nº de Sesiones</label>
                             <input type="number" class="form-control form-control-sm" name="numero_sesiones" id="numero_sesiones">
                         </div>
-                        <div class="col-sm-3 mt-2">
+                        <div class="form-group col-sm-12 col-md-6 col-lg-6">
                             <label class="floating-label-activo-sm">Tipo de sesiones</label>
                             <select name="tipo_sesiones" id="tipo_sesiones" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
@@ -52,15 +50,11 @@
                                 <option value="3">Terapia grupal</option>
                             </select>
                         </div>
-                        <div class="col-sm-6 mt-2">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <label class="floating-label-activo-sm">Objetivos</label>
                             <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="objetivos" id="objetivos"></textarea>
                         </div>
-                        <br>
-                    </div>
-
-                    <div class="form-row mt-4">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm" for="obs_plan_tratamiento">Obs. Plan de tratamiento</label>
                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_tratamiento" id="obs_plan_tratamiento"></textarea>
@@ -82,7 +76,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="mt-4">Usted atiende los dias <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
+                            <label class="mt-4">Usted atiende los días <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
                             {{--  <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
                                 </div>
@@ -92,7 +86,7 @@
                         <div class="col-md-12">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
-                                    <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
+                                    <label class="floating-label-active-sm mb-0">Fecha</label>
                                     {{-- <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/> --}}
                                     <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
                                 </div>
@@ -215,11 +209,11 @@
                         $('#select_4_psi_autoestima_1').val('');
                         $('#obs_ind_terapia_psi_1').val('');
 
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 1, registrado con exito. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 1, registrado con exito. \n';
                     }
                     else
                     {
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 1, registrado con falla. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 1, registrado con falla. \n';
                         error_en_proceso++;
                     }
                 })
@@ -262,11 +256,11 @@
                         $('#select_4_psi_autoestima_2').val('');
                         $('#obs_ind_terapia_psi_2').val('');
 
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 2, registrado con exito. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 2, registrado con exito. \n';
                     }
                     else
                     {
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 2, registrado con falla. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 2, registrado con falla. \n';
                         error_en_proceso++;
                     }
                 })
@@ -309,11 +303,11 @@
                         $('#select_4_psi_autoestima_3').val('');
                         $('#obs_ind_terapia_psi_3').val('');
 
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 3, registrado con exito. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 3, registrado con exito. \n';
                     }
                     else
                     {
-                        mensaje_registros += 'Plan de tratamiento terapia sicológica 3, registrado con falla. \n';
+                        mensaje_registros += 'Plan de tratamiento terapia psicológica 3, registrado con falla. \n';
                         error_en_proceso++;
                     }
                 })
@@ -335,7 +329,7 @@
 
 
         swal({
-            title: "Registro de Plan de tratamiento terapia sicológica",
+            title: "Registro de Plan de tratamiento terapia psicológica",
             text: mensaje_registros,
             icon: "info",
         });

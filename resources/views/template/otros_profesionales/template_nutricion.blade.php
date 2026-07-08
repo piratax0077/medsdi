@@ -60,6 +60,9 @@
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+         {{-- summernote --}}
+    <link rel="stylesheet" href="{{ asset('summernote/summernote-lite.min.css') }}">
+
 
         {{--  /** agregar css */  --}}
         <style>
@@ -69,6 +72,7 @@
                 overflow: auto;
             }
         </style>
+        @yield('style')
     </head>
     <body>
         @include('template.profesional.header')
@@ -122,6 +126,8 @@
         <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
         <!--Form wizard-->
         <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -163,6 +169,9 @@
 
         {{--  @include('template.templateAutorizacion')  --}}
 
+
+    {{-- summernote --}}
+	<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
 
         <!-- form-advance custom js -->
         {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}

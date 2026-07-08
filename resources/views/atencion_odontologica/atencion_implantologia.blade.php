@@ -174,7 +174,7 @@
         @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
 
         @include('general.hospitalizacion.modals.in_solic_pabellon')
-
+        @include("atencion_medica.formularios.modal_atencion_general.modal_indicar_examenes")
     </div>
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">

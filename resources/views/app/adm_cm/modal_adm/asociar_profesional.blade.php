@@ -10,7 +10,7 @@
                 <div class="row">
                     {{--  DIV PARA BUSQUEDA DE PROFESIONAL  --}}
                     <div id="div_agregar_profesional_busqueda" style="display:;" class="col-sm-12 mb-3">
-                        <div class="row">
+                        <div class="form-row">
                             <div class="col-sm-12 mb-3">
                                 <h6 class="text-c-blue">Escriba rut y seleccione la sucursal</h6>
                             </div>
@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-5">
-                                <button type="button" class="btn btn-info btn-sm "  id="agregar_profesional_btn_buscar_rut" onclick="buscar_profesional();">Buscar Profesional</button>
+                                <button type="button" class="btn btn-info btn-sm "  id="agregar_profesional_btn_buscar_rut" onclick="buscar_profesional();"><i class="feather icon-search"></i> Buscar Profesional</button>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
@@ -50,6 +50,7 @@
                                                 <option value="4">Director medico</option>
                                                 <option value="5">Tens</option>
                                                 <option value="6">Tons</option>
+                                                <option value="7">Enfermera</option>
                                         </select>
                                 </div>
                             </div>
@@ -59,8 +60,10 @@
                                     <input type="text" class="form-control form-control-sm" name="agregar_profesional_servicio_int" id="agregar_profesional_servicio_int">
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <button class="btn btn-outline-success btn-sm"><i class="fas fa-save"></i> Guardar</button>
+                          
+                            <div class="col-sm-12 text-center">
+                                  <hr>
+                                <button class="btn btn-info"><i class="feather icon-save"></i> Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -135,14 +138,14 @@
                             </div>
                         </div>
 
-                        <hr/>
+                        <hr>
 
-                        <div class="row m-t-15">
-                            <div class="col-sm-6 text-center">
-                                <button type="button" class="btn btn-info" onclick="regresar_a_busqueda();">Regresar a Busqueda</button>
+                        <div class="form-row mt-3">
+                            <div class="col-sm-6 text-center btn-block pt-2">
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="regresar_a_busqueda();"><i class="feather icon-arrow-left"></i> Regresar a Busqueda</button>
                             </div>
-                            <div class="col-sm-6 text-center">
-                                <button type="button" class="btn btn-success" onclick="asociar_profesional_existente();">Enviar invitación</button>
+                            <div class="col-sm-6 text-center btn-block">
+                                <button type="button" class="btn btn-info btn-sm" onclick="asociar_profesional_existente();"><i class="feather icon-check"></i> Enviar invitación</button>
                             </div>
                         </div>
 
@@ -152,7 +155,7 @@
                     {{--  DIV PARA CARGAR PROFESIONAL NUEVO  --}}
                     <div id="div_agregar_profesional_formulario_nuevo_prof" style="display:none;" class="col-sm-12 mb-3">
                         {{--  --}}
-                        <div class="row">
+                        <div class="form-row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">RUT<span style="color: red; font-size: 10px;">*</span></label>
@@ -297,11 +300,11 @@
                         <hr/>
 
                         <div class="row m-t-15">
-                            <div class="col-sm-6 text-center">
-                                <button type="button" class="btn btn-info" onclick="regresar_a_busqueda();">Regresar a Busqueda</button>
+                            <div class="col-sm-6 text-center pt-2">
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="regresar_a_busqueda();"><i class="feather icon-arrow-left"></i> Regresar a Busqueda</button>
                             </div>
                             <div class="col-sm-6 text-center">
-                                <button type="button" class="btn btn-success" onclick="asociar_nuevo_profesional();" >Enviar invitación</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="asociar_nuevo_profesional();" >Enviar invitación</button>
                             </div>
                         </div>
                     </div>

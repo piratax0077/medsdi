@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ExamenEspecialidad;
 use App\Models\ExamenEspecialidadImg;
 use App\Models\ExamenEspecialidadTemplate;
+use App\Models\ExamenSolicitudServicio;
 use App\Models\FichaGinecoContObstetrico;
 use App\Models\FichaGinecoContPuerpCir;
 use App\Models\FichaGinecologia;
@@ -36,6 +37,7 @@ class FichaGinecoObstetricoController extends Controller
     /** ginecoOstetricia */
     public function store(Request $request)
     {
+
         if(!empty( trim($request->descripcion_hipotesis)))
         {
             $id_profesional = $request->id_profesional_fc;
@@ -1037,19 +1039,53 @@ class FichaGinecoObstetricoController extends Controller
                 $gine_modal_mamas_examen->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
                 $gine_modal_mamas_examen->id_paciente = $request->id_paciente;
                 $gine_modal_mamas_examen->id_profesional = $request->id_profesional;
-                // $gine_modal_mamas_examen->id_ficha_gine = $request->id_ficha_gine;
                 $gine_modal_mamas_examen->fecha = date('Y-m-d');
                 $gine_modal_mamas_examen->lado_1 = $request->lado_1;
                 $gine_modal_mamas_examen->des_ex_mamas_1 = $request->des_ex_mamas_1;
                 $gine_modal_mamas_examen->lado_2 = $request->lado_2;
                 $gine_modal_mamas_examen->des_ex_mamas_2 = $request->des_ex_mamas_2;
                 $gine_modal_mamas_examen->des_ex_mamasgen = $request->des_ex_mamasgen;
-                // $gine_modal_mamas_examen->sol_ex_lado = $request->sol_ex_lado;
-                // $gine_modal_mamas_examen->sol_ex_tipo = $request->sol_ex_tipo;
-                // $gine_modal_mamas_examen->enf_cuadrante = $request->enf_cuadrante;
-                // $gine_modal_mamas_examen->sosp_dg = $request->sosp_dg;
-                // $gine_modal_mamas_examen->sol_ex_mamas_esp = $request->sol_ex_mamas_esp;
 
+                // También guardar en ExamenSolicitudServicio para consistencia
+                $examen_sol_servicio = ExamenSolicitudServicio::where('id_ficha_atencion', $request->id_ficha_gineco_obstetrica)
+                                      ->where('id_paciente', $request->id_paciente)
+                                      ->where('id_profesional', $request->id_profesional)
+                                      ->where(function($query) {
+                                          $query->whereRaw("JSON_EXTRACT(datos_examen, '$.id_examen') = 368")
+                                                ->orWhereRaw("JSON_EXTRACT(datos_examen, '$.tipo_examen') = 'MAMAS'");
+                                      })
+                                      ->first();
+
+                if($examen_sol_servicio) {
+                    $examen_sol_servicio->datos_examen = json_encode([
+                        'id_examen' => 368,
+                        'tipo_examen' => 'MAMOGRAFIA BILATERAL',
+                        'lado_1' => $request->lado_1,
+                        'des_ex_mamas_1' => $request->des_ex_mamas_1,
+                        'lado_2' => $request->lado_2,
+                        'des_ex_mamas_2' => $request->des_ex_mamas_2,
+                        'des_ex_mamasgen' => $request->des_ex_mamasgen
+                    ]);
+                    $examen_sol_servicio->estado = 1;
+                    $examen_sol_servicio->save();
+                } else {
+                    $examen_sol_servicio = new ExamenSolicitudServicio();
+                    $examen_sol_servicio->id_paciente = $request->id_paciente;
+                    $examen_sol_servicio->id_responsable = $request->id_profesional;
+                    $examen_sol_servicio->id_profesional = $request->id_profesional;
+                    $examen_sol_servicio->id_ficha_atencion = $request->id_ficha_gineco_obstetrica;
+                    $examen_sol_servicio->datos_examen = json_encode([
+                        'id_examen' => 368,
+                        'tipo_examen' => 'MAMOGRAFIA BILATERAL',
+                        'lado_1' => $request->lado_1,
+                        'des_ex_mamas_1' => $request->des_ex_mamas_1,
+                        'lado_2' => $request->lado_2,
+                        'des_ex_mamas_2' => $request->des_ex_mamas_2,
+                        'des_ex_mamasgen' => $request->des_ex_mamasgen
+                    ]);
+                    $examen_sol_servicio->estado = 1;
+                    $examen_sol_servicio->save();
+                }
             }
             else
             {
@@ -1057,21 +1093,33 @@ class FichaGinecoObstetricoController extends Controller
                 $gine_modal_mamas_examen->id_ficha_gineco_obstetrica = $request->id_ficha_gineco_obstetrica;
                 $gine_modal_mamas_examen->id_paciente = $request->id_paciente;
                 $gine_modal_mamas_examen->id_profesional = $request->id_profesional;
-                // $gine_modal_mamas_examen->id_ficha_gine = $request->id_ficha_gine;
                 $gine_modal_mamas_examen->fecha = date('Y-m-d');
                 $gine_modal_mamas_examen->lado_1 = $request->lado_1;
                 $gine_modal_mamas_examen->des_ex_mamas_1 = $request->des_ex_mamas_1;
                 $gine_modal_mamas_examen->lado_2 = $request->lado_2;
                 $gine_modal_mamas_examen->des_ex_mamas_2 = $request->des_ex_mamas_2;
                 $gine_modal_mamas_examen->des_ex_mamasgen = $request->des_ex_mamasgen;
-                // $gine_modal_mamas_examen->sol_ex_lado = $request->sol_ex_lado;
-                // $gine_modal_mamas_examen->sol_ex_tipo = $request->sol_ex_tipo;
-                // $gine_modal_mamas_examen->enf_cuadrante = $request->enf_cuadrante;
-                // $gine_modal_mamas_examen->sosp_dg = $request->sosp_dg;
-                // $gine_modal_mamas_examen->sol_ex_mamas_esp = $request->sol_ex_mamas_esp;
                 $gine_modal_mamas_examen->otro = '';
                 $gine_modal_mamas_examen->otro1 = '';
                 $gine_modal_mamas_examen->estado = 1;
+
+                // También guardar en ExamenSolicitudServicio para consistencia
+                $examen_sol_servicio = new ExamenSolicitudServicio();
+                $examen_sol_servicio->id_paciente = $request->id_paciente;
+                $examen_sol_servicio->id_responsable = $request->id_profesional;
+                $examen_sol_servicio->id_profesional = $request->id_profesional;
+                $examen_sol_servicio->id_ficha_atencion = $request->id_ficha_gineco_obstetrica;
+                $examen_sol_servicio->datos_examen = json_encode([
+                    'id_examen' => 368,
+                    'tipo_examen' => 'MAMOGRAFIA BILATERAL',
+                    'lado_1' => $request->lado_1,
+                    'des_ex_mamas_1' => $request->des_ex_mamas_1,
+                    'lado_2' => $request->lado_2,
+                    'des_ex_mamas_2' => $request->des_ex_mamas_2,
+                    'des_ex_mamasgen' => $request->des_ex_mamasgen
+                ]);
+                $examen_sol_servicio->estado = 1;
+                $examen_sol_servicio->save();
             }
 
             if($gine_modal_mamas_examen->save())
@@ -1144,6 +1192,160 @@ class FichaGinecoObstetricoController extends Controller
         return $datos;
     }
     /** FIN MODAL Examen clínico de mamas Solicitud Examen */
+
+    /** INICIO MODAL Examen Citología PAP */
+    public function AgregarExamenCliniPap(Request $request)
+    {
+
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->sospecha))
+        {
+            $error['SOSPECHA'] = "Campo requerido";
+            $valido = 0;
+        }
+        if(empty($request->prioridad))
+        {
+            $error['PRIORIDAD'] = "Campo requerido";
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            // Buscar si ya existe un PAP guardado verificando en el JSON datos_examen
+            // Busca por id_examen O tipo_examen = 'PAP'
+            $buscar_registro = ExamenSolicitudServicio::where('id_ficha_atencion', $request->id_ficha_gineco_obstetrica)
+                              ->where('id_paciente', $request->id_paciente)
+                              ->where('id_responsable', $request->id_profesional)
+                              ->where(function($query) {
+                                  $query->whereRaw("JSON_EXTRACT(datos_examen, '$.id_examen') = 553")
+                                        ->orWhereRaw("JSON_EXTRACT(datos_examen, '$.tipo_examen') = 'PAP'");
+                              })
+                              ->first();
+
+            if($buscar_registro)
+            {
+                $examen = ExamenSolicitudServicio::find($buscar_registro->id);
+                $examen->id_paciente = $request->id_paciente;
+                $examen->id_responsable = $request->id_profesional;
+                $examen->id_ficha_atencion = $request->id_ficha_gineco_obstetrica;
+
+                $examen->datos_examen = json_encode([
+                    'id_examen' => 553,
+                    'sospecha' => $request->sospecha,
+                    'observacion' => $request->observacion,
+                    'prioridad' => $request->prioridad,
+                    'tipo_examen' => 'PAP'
+                ]);
+                $examen->estado = 1;
+            }
+            else
+            {
+                $examen = new ExamenSolicitudServicio();
+                $examen->id_paciente = $request->id_paciente;
+                $examen->id_responsable = $request->id_profesional;
+                $examen->id_ficha_atencion = $request->id_ficha_gineco_obstetrica;
+                $examen->datos_examen = json_encode([
+                    'id_examen' => 553,
+                    'sospecha' => $request->sospecha,
+                    'observacion' => $request->observacion,
+                    'prioridad' => $request->prioridad,
+                    'tipo_examen' => 'PAP'
+                ]);
+                $examen->estado = 1;
+            }
+
+            if($examen->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'éxito';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla al guardar';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
+    public function VerExamenCliniPap(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_ficha_gineco_obstetrica))
+        {
+            $error['ID FICHA'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_paciente))
+        {
+            $error['PACIENTE'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_profesional))
+        {
+            $error['PROFESIONAL'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            // Buscar PAP buscando id_examen O tipo_examen dentro del JSON datos_examen
+            $registro = ExamenSolicitudServicio::where('id_ficha_atencion', $request->id_ficha_gineco_obstetrica)
+                        ->where('id_paciente', $request->id_paciente)
+                        ->where('id_profesional', $request->id_profesional)
+                        ->where(function($query) {
+                            $query->whereRaw("JSON_EXTRACT(datos_examen, '$.id_examen') = 553")
+                                  ->orWhereRaw("JSON_EXTRACT(datos_examen, '$.tipo_examen') = 'PAP'");
+                        })
+                        ->first();
+            if($registro)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $registro;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registros';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+    /** FIN MODAL Examen citología PAP */
 
     /**  INICIO MODAL Antecedentes Abortos */
     public function AgregarAntAborto(Request $request)

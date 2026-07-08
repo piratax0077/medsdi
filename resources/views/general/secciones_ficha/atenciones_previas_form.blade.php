@@ -7,7 +7,7 @@
                         @else
                     </div>
                     @endif
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                         <h4 class="text-c-blue mt-3 f-20">Historial de atenciones</h4>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -45,13 +45,18 @@
                                                 </thead>
                                                 <tbody>
 
-                                                    @if (isset($fichas) && $fichas->count() > 0)
+                                                    @if (isset($fichas) && count($fichas) > 0)
                                                         @foreach ($fichas as $f)
+                                                            @php
+                                                                $btnFichaClass = $f->btn_class_ficha ?? ($btn_class_ficha_atencion_previa ?? 'btn-info-light-c');
+                                                                $btnEvalClass = $f->btn_class_evaluacion_especialidad ?? ($btn_class_eval_especialidad ?? 'btn-primary-light-c');
+                                                                $btnRecetaClass = $f->btn_class_receta ?? 'btn-warning-light-c';
+                                                            @endphp
                                                             <tr>
                                                                 <td class="d-none">
                                                                     {{ $f->id }}
                                                                 </td>
-                                                                <td>
+                                                                <td data-sort="{{ \Carbon\Carbon::parse($f->created_at)->format('Y-m-d') }}">
                                                                     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
                                                                 </td>
 
@@ -59,17 +64,19 @@
 
                                                                 <td>
                                                                     <button type="button"
-                                                                        class="btn btn-xxs btn-info-light-c"
+                                                                        class="btn btn-xxs {{ $btnFichaClass }}"
                                                                         @if (isset($f->id)) onclick="buscar_ficha_atencion_atencion_previa({{ $f->id }});" @endif><i
                                                                             class="feather icon-file-text"></i>
                                                                         Ver</button>
                                                                 </td>
                                                                 @if($profesional->id_tipo_especialidad != 8 && $profesional->id_especialidad != 16 && $profesional->id_sub_tipo_especialidad != 121)
                                                                 <td><button type="button"
-                                                                            class="btn btn-xxs btn-primary-light-c"
+                                                                            class="btn btn-xxs {{ $btnEvalClass }}"
                                                                             @if (isset($f->id)) onclick="buscar_evaluaciones_especialidad({{ $f->id }});" @endif><i
                                                                                 class="feather icon-folder"></i>
                                                                             Ver</button></td>
+                                                                @else
+                                                                <td>---</td>
                                                                 @endif
                                                                 <td>
                                                                     <button type="button"
@@ -80,7 +87,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <button type="button"
-                                                                        class="btn btn-xxs btn-warning-light-c"
+                                                                        class="btn btn-xxs {{ $btnRecetaClass }}"
                                                                         @if (isset($f->id)) onclick="buscar_receta({{ $f->id }});" @endif><i
                                                                             class="feather icon-file-plus"></i>
                                                                         Ver</button>
@@ -133,11 +140,19 @@
         @include('general.secciones_ficha.modal_atencion_previa.hist_evoluciones_dental')
         @include('general.secciones_ficha.modal_atencion_previa.hist_cons')
         @include('general.secciones_ficha.modal_atencion_previa.evaluaciones_especialidad')
-        <script>
-            $(document).ready(function() {
-                $('#table_atenciones_profesional').DataTable({
-                    responsive: true,
-                    order: [[0, 'desc']]
-                });
+
+<script>
+    $(document).ready(function() {
+              $('#table_atenciones_profesional').DataTable({
+                responsive: true,
+                "bPaginate": false,
+                "order": [[1, "desc"]],
+                "columnDefs": [
+                    {
+                        "targets": 1,
+                        "type": "string"
+                    }
+                ]
             });
-        </script>
+    });
+</script>

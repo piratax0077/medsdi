@@ -14,11 +14,19 @@
                                 <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                                        $fecha = \Carbon\Carbon::parse(now());
-                                        $mes = $meses[($fecha->format('n')) - 1];
-                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+
+                                        $fechaActual = \Carbon\Carbon::now();
+
+                                        $mes = $meses[($fechaActual->format('n')) - 1];
+
+                                        $fecha = $fechaActual->format('d') . ' de ' . $mes . ' de ' . $fechaActual->format('Y');
+
+                                        $hora = $fechaActual->format('h:i A');
+
+                                        $fechaCompleta = $fecha . ' - ' . strtolower($hora);
                                     @endphp
-                                    {{ $fecha }}
+
+                                    {{ $fechaCompleta }}
                                 </p>
                             </div>
                         </div>
@@ -43,7 +51,7 @@
                                             <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
                                         @endif
                                     </li>
-                                    <li class="nav-item" id="nav-fmu">
+                                    <li class="nav-item " id="nav-fmu">
                                         @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
@@ -106,6 +114,10 @@
     </div>
     <!--Cierre: Container Completo-->
     @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('atencion_medica.formularios.modal_atencion_especialidad.otorrino.indicar_audifono')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
+
+
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 
 @endsection

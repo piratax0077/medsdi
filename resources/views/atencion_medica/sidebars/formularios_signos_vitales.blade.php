@@ -401,7 +401,7 @@
         });
     }
 
-    function guardar_comunicacion_conciencia(){
+     function guardar_comunicacion_conciencia(){
         let conciencia = $('#conciencia_sidebar').val();
         let lenguaje = $('#lenguaje_sidebar').val();
         let traslado = $('#traslado_sidebar').val();

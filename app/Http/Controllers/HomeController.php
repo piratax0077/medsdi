@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AdminInstServ;
 use App\Models\Asistente;
 use App\Models\Ciudad;
+use App\Models\UsuarioPotencial;
+use App\Services\WhatsAppService;
 use App\Models\Direccion;
 use App\Models\Instituciones;
 use App\Models\Invitacion;
@@ -26,7 +28,7 @@ use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
-    public function ingreso()
+    public function ingreso(Request $request)
     {
 
         if (!isset(Auth::user()->id)) {
@@ -34,6 +36,8 @@ class HomeController extends Controller
         }
 
         $usuario = User::where('id', Auth::user()->id)->first();
+
+
         $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
 
 		if(Auth::user()->id == 3)
@@ -78,11 +82,25 @@ class HomeController extends Controller
             case 'AsistenteCargaExamenExterno': // asistente externo caga de examen (usuario para lab - temporal)
                 return redirect()->route('lab.exa.asistente.home');
                 break;
+            case 'AsistenteEnfermeria': // asistente de enfermeria (institucion)
+                return redirect()->route('asistente.enfermeria.home');
+                break;
             case 'Paciente':
                 return redirect()->route('paciente.home');
                 break;
+            case 'Vendedor':
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return response()
+                    ->view('auth.redireccion_vendedor', ['url_destino' => 'https://ventas.med-sdi.cl'])
+                    ->header('Cache-Control', 'no-store, no-cache, must-revalidate')
+                    ->header('Pragma', 'no-cache')
+                    ->header('Expires', '0');
+                break;
             case 'Profesional':
                 $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+
                 /** laboratorio */
                 if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
                 {
@@ -125,6 +143,32 @@ class HomeController extends Controller
             case 'Contador':
                 return redirect()->route('contabilidad.home');
                 break;
+            case 'Compin':
+                return redirect()->route('compin.home');
+                break;
+            case 'AdministradorTecnico':
+                $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+
+                /** laboratorio */
+                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                /** laboratorio Rayo */
+                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                else
+                {
+                    return redirect()->route('laboratorio.administrador_tecnico.home');
+                }
+                break;
+            case 'Chofer':
+                return redirect()->route('chofer.home');
+                break;
             default:
                 return redirect('/Acceso');
                 break;
@@ -134,6 +178,7 @@ class HomeController extends Controller
     public function index()
     {
         $usuario = User::where('id', Auth::user()->id)->first();
+
         $roles = $usuario->roles()->get();
         // if (count($roles) > 1) {
         //     return redirect('/Acceso');
@@ -1298,6 +1343,101 @@ class HomeController extends Controller
         {
             return back()->withErrors(['captcha' => 'Verifica que no eres un robot.']);
         }
+    }
+
+    /** REGISTRO DE USUARIO POTENCIAL (lead/contacto de venta) */
+    public function registrar_potencial(Request $request)
+    {
+        // Validar reCAPTCHA
+        $recaptcha_token = $request->input('g-recaptcha-response');
+
+        if (!$recaptcha_token) {
+            return back()->withErrors(['g-recaptcha-response' => 'Por favor, verifica que no eres un robot.'], 'registro')->withInput();
+        }
+
+        // Verificar el token de reCAPTCHA con Google
+        $recaptcha_secret = config('services.recaptcha.secret_key');
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+            'secret' => $recaptcha_secret,
+            'response' => $recaptcha_token
+        ]));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $response_data = json_decode($response, true);
+
+        // Verificar que la respuesta sea válida y tenga un score mínimo
+        if (!$response_data['success'] || ($response_data['score'] ?? 0) < 0.5) {
+            return back()->withErrors(['g-recaptcha-response' => 'La verificación de reCAPTCHA falló. Por favor, intenta de nuevo.'], 'registro')->withInput();
+        }
+
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'nombre'   => 'required|string|max:150',
+            'rut'      => 'nullable|string|max:12',
+            'telefono' => 'nullable|string|max:20',
+            'email'    => 'nullable|email|max:150',
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'email.email'     => 'El correo ingresado no es válido.',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator, 'registro')->withInput();
+        }
+
+        UsuarioPotencial::create([
+            'rut'      => $request->rut,
+            'nombre'   => $request->nombre,
+            'telefono' => $request->telefono,
+            'email'    => $request->email,
+            'estado'   => 'pendiente',
+        ]);
+
+        // Enviar correo de bienvenida si proporcionó email
+        if (!empty($request->email)) {
+            try {
+                SendMailController::envioCorreo(
+                    'bienvenida_usuario_potencial',
+                    [['email' => $request->email, 'name' => $request->nombre]],
+                    [],
+                    [],
+                    'Medichile – ¡Gracias por tu interés!',
+                    ['nombre' => $request->nombre],
+                    '',
+                    ''
+                );
+            } catch (\Exception $e) {
+                Log::warning('No se pudo enviar correo a usuario potencial: ' . $e->getMessage());
+            }
+        }
+
+        // Enviar WhatsApp de saludo si proporcionó teléfono
+        if (!empty($request->telefono)) {
+            try {
+                $mensaje_wa = "¡Hola {$request->nombre}! 👋\n\n"
+                    . "Gracias por tu interés en *Medichile – SDI*, el sistema de gestión clínica más completo de Chile.\n\n"
+                    . "Pronto uno de nuestros asesores se comunicará contigo para contarte todo sobre nuestra plataforma. 😊\n\n"
+                    . "_Equipo Medichile_";
+
+                $resultado_wa = WhatsAppService::enviar($request->telefono, $mensaje_wa);
+                Log::info('WhatsApp usuario potencial', [
+                    'telefono' => $request->telefono,
+                    'estado'   => $resultado_wa['estado'],
+                    'msj'      => $resultado_wa['msj'],
+                    'sid'      => $resultado_wa['sid'] ?? null,
+                ]);
+            } catch (\Exception $e) {
+                Log::warning('No se pudo enviar WhatsApp a usuario potencial: ' . $e->getMessage());
+            }
+        }
+
+        return back()->with('mensaje', '¡Gracias! Pronto nos comunicaremos contigo.');
     }
 
     static public function validarEmail($email)

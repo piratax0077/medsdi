@@ -32,9 +32,14 @@ use App\Models\Region;
 use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
 use App\Models\ResultadoExamen;
+use App\Models\Licencia;
+use App\Models\CertificadoReposo;
+use App\Models\ExamenPPF;
+use App\Models\DocumentoFcPaciente;
 use App\Models\SubTipoEspecialidad;
 use App\Models\TipoEspecialidad;
 use App\Models\ContactoEmergencia;
+use App\Models\ExamenesBocaGeneral;
 use Illuminate\Http\Request;
 
 use ArrayObject;
@@ -1383,38 +1388,38 @@ class AppPacienteController extends Controller
     }
 
     //RECETAS ONLINE
-    public function getMisExamenes(Request $request) {
-        $datos = array();
-        $error = array();
+    public function getMisExamenes(Request $request)
+    {
+        $datos = [];
+        $error = [];
         $campos_requeridos = 0;
 
-        if(empty($request->id_paciente)||(int)$request->id_paciente==0) // id_paciente id_usuario
-        {
+        if (empty($request->id_paciente) || (int) $request->id_paciente == 0) { // id_paciente = id_usuario
             $error['id_paciente'] = 'campo requerido';
             $campos_requeridos = 1;
         }
 
-        if($campos_requeridos==0)
-        {
-            $paciente = Paciente::where('id_usuario',$request->id_paciente)->first();
+        if ($campos_requeridos == 0) {
 
-            $registros = FichaAtencion::select('fichas_atenciones.id as id','detalles_receta.posologia as posologia','fichas_atenciones.hipotesis_diagnostico as hipotesis_diagnostico','fichas_atenciones.created_at as created_at','fichas_atenciones.id as id_ficha' )
-										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')
-                                        ->where('fichas_atenciones.id_paciente',$paciente->id)
-										->orderBy('fichas_atenciones.id','desc')
-                                        ->get();
+            $paciente = Paciente::where('id_usuario', $request->id_paciente)->first();
 
-			$id_fichas = array();
-			$registro_limpios = array();
-            foreach($registros as $key => $value)
-			{
-				if(in_array($value->id,$id_fichas)==false)
-				{
-					$registro_limpios[] = $value;
-					$id_fichas[] = $value->id;
-				}
+            if (!$paciente) {
+                $datos['estado'] = 0;
+                $datos['mensaje'] = 'Paciente no encontrado';
+                return response()->json($datos);
+            }
 
-			}
+            // AHORA USANDO LA TABLA examenes_ppf
+            $registros = ExamenPPF::where('id_paciente', $paciente->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            $datos['estado'] = 1;
+            $datos['registros'] = $registros;
+
+        } else {
+            $datos['estado'] = 0;
+            $datos['errores'] = $error;
         }
 
         return response($datos)->header('Content-Type', 'application/json');
@@ -1436,11 +1441,11 @@ class AppPacienteController extends Controller
             $paciente = Paciente::where('id_usuario',$request->id_paciente)->first();
 
             $registros = FichaAtencion::select('fichas_atenciones.id as id','detalles_receta.posologia as posologia','fichas_atenciones.hipotesis_diagnostico as hipotesis_diagnostico','fichas_atenciones.created_at as created_at','fichas_atenciones.id as id_ficha' )
-										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')
+										->leftjoin('detalles_receta', 'fichas_atenciones.id', '=', 'detalles_receta.id_ficha')										
                                         ->where('fichas_atenciones.id_paciente',$paciente->id)
-										->orderBy('fichas_atenciones.id','desc')
+										->orderBy('fichas_atenciones.id','desc')										
                                         ->get();
-
+										
 			$id_fichas = array();
 			$registro_limpios = array();
             foreach($registros as $key => $value)
@@ -1450,8 +1455,8 @@ class AppPacienteController extends Controller
 					$registro_limpios[] = $value;
 					$id_fichas[] = $value->id;
 				}
-
-			}
+				
+			}		
             $recomendaciones = [];
             $id_recomendaciones = [];
             foreach($id_fichas as $i){
@@ -1526,14 +1531,147 @@ class AppPacienteController extends Controller
         return response($datos)->header('Content-Type', 'application/json');
     }
     public function getMisLicencias(Request $request) {
-        return $request;
+
+        $datos = [];
+        $error = [];
+        $campos_requeridos = 0;
+
+        // Validación mínima
+        if (empty($request->id_paciente) || (int)$request->id_paciente == 0) {
+            $error['id_paciente'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
+        if ($campos_requeridos == 0) {
+
+            // Buscar paciente en base al id_usuario recibido
+            $paciente = Paciente::where('id_usuario', $request->id_paciente)->first();
+
+            if (!$paciente) {
+                return response([
+                    'estado' => 0,
+                    'msg' => 'Paciente no encontrado',
+                    'request' => $request->all()
+                ])->header('Content-Type', 'application/json');
+            }
+
+            // ⚡ NUEVO: obtener todas las licencias del paciente
+            $licencias = Licencia::where('id_paciente', $paciente->id)
+                                ->orderBy('id', 'desc')
+                                ->get();
+
+            // Si tiene licencias
+            $datos['estado'] = 1;
+            $datos['licencias'] = $licencias;
+            $datos['total'] = $licencias->count();
+            $datos['request'] = $request->all();
+
+        } else {
+
+            // Error por falta de campos
+            $datos['estado'] = 0;
+            $datos['msg'] = 'Campos requeridos';
+            $datos['error'] = $error;
+            $datos['request'] = $request->all();
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
     }
+
     public function getMisCertificados(Request $request) {
-        return $request;
+
+        $datos = [];
+        $error = [];
+        $campos_requeridos = 0;
+
+        // Validación mínima
+        if (empty($request->id_paciente) || (int)$request->id_paciente == 0) {
+            $error['id_paciente'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
+        if ($campos_requeridos == 0) {
+
+            // Buscar paciente por id_usuario
+            $paciente = Paciente::where('id_usuario', $request->id_paciente)->first();
+
+            if (!$paciente) {
+                return response([
+                    'estado' => 0,
+                    'msg' => 'Paciente no encontrado',
+                    'request' => $request->all()
+                ])->header('Content-Type', 'application/json');
+            }
+
+            // ⚡ NUEVO: obtener certificados de reposo
+            $certificados = CertificadoReposo::where('id_paciente', $paciente->id)
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+
+            // Respuesta final
+            $datos['estado'] = 1;
+            $datos['certificados'] = $certificados;
+            $datos['total'] = $certificados->count();
+            $datos['request'] = $request->all();
+
+        } else {
+            // Error por falta de campos
+            $datos['estado'] = 0;
+            $datos['msg'] = 'Campos requeridos';
+            $datos['error'] = $error;
+            $datos['request'] = $request->all();
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
     }
+
     public function getMisDocumentos(Request $request) {
-        return $request;
+
+        $datos = [];
+        $error = [];
+        $campos_requeridos = 0;
+
+        // Validación mínima
+        if (empty($request->id_paciente) || (int)$request->id_paciente == 0) {
+            $error['id_paciente'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
+
+        if ($campos_requeridos == 0) {
+
+            // Buscar paciente por id_usuario
+            $paciente = Paciente::where('id_usuario', $request->id_paciente)->first();
+
+            if (!$paciente) {
+                return response([
+                    'estado' => 0,
+                    'msg' => 'Paciente no encontrado',
+                    'request' => $request->all()
+                ])->header('Content-Type', 'application/json');
+            }
+
+            // 🔥 NUEVO: obtener documentos del paciente
+            $documentos = DocumentoFcPaciente::where('id_paciente', $paciente->id)
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+
+            // Respuesta final
+            $datos['estado'] = 1;
+            $datos['documentos'] = $documentos;
+            $datos['total'] = $documentos->count();
+            $datos['request'] = $request->all();
+
+        } else {
+            // Error por falta de campos
+            $datos['estado'] = 0;
+            $datos['msg'] = 'Campos requeridos';
+            $datos['error'] = $error;
+            $datos['request'] = $request->all();
+        }
+
+        return response($datos)->header('Content-Type', 'application/json');
     }
+
     public function getMisControles(Request $request) {
         return $request;
     }

@@ -3,7 +3,7 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white mt-1">INTERCONSULTA </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modal_interfono').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body mb-0">
                 <div class="form-row">
@@ -110,8 +110,8 @@
                 </div>
             </div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-				<button type="button" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"onclick="$('#modal_interfono').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('modal_interfono');">Enviar al Paciente</button>
 			</div>
 		</div>
 	</div>
@@ -120,4 +120,87 @@
     function interfono() {
         $('#modal_interfono').modal('show');
     }
+     /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+        function  envio_indicaciones_pdf(id_modal){
+            let url = "{{ route('indicacion.medica.registro.envio') }}";
+            var id_tipo_documento = 1;
+            var id_paciente = $('#id_paciente_fc').val();
+            var id_profesional = $('#id_profesional_fc').val();
+            var id_ficha_atencion = $('#id_fc').val();
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
+            var observacion = '';
+            // var observacion = $('#observacion').val();
+            var documento = '';
+            var url_documento = '';
+            var cuerpo = '';
+            var otro = '';
+            var token = CSRF_TOKEN;
+
+            if(id_tipo_documento == 1)
+            {
+                documento = $('#'+id_modal+' embed').attr('data-documento');
+                url_documento = $('#'+id_modal+' embed').attr('data-url');
+            }
+            else
+            {
+                // cuerpo = $('#cuerpo').val();
+            }
+            var datos = {};
+            datos._token = token;
+            datos.id_tipo_documento = id_tipo_documento;
+            datos.id_paciente = id_paciente;
+            datos.id_profesional = id_profesional;
+            datos.id_ficha_atencion = id_ficha_atencion;
+            datos.id_lugar_atencion = id_lugar_atencion;
+            datos.observacion = observacion;
+            datos.documento = documento;
+            datos.url = url_documento;
+            datos.cuerpo = cuerpo;
+            datos.otro = otro;
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: "json",
+                data: datos,
+                success: function(data) {
+                    // console.log(data);
+                    if(data.estado == 1)
+                    {
+                        var mensaje = '';
+                        mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
+                        if(data.update_correo.estado == 1)
+                            mensaje = 'Documento enviado por correo al Paciente.\n';
+                        else
+                            mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
+
+                        swal({
+                            title: "Indicación Enviada al Paciente",
+                            text: mensaje,
+                            icon: "success",
+                        });
+                    }
+                    else
+                    {
+                        var texto_error = '';
+
+                        if(data.estado ==  0)
+                        {
+                            if('error' in data)
+                            {
+                                $.each(data.error, function (indexInArray, valueOfElement) {
+                                    texto_error += indexInArray+': '+valueOfElement+'\n';
+                                });
+                            }
+                        }
+                        swal({
+                            title: "Indicación Enviada al Paciente",
+                            text: data.msj+'\n'+texto_error,
+                            icon: "warning",
+                        });
+                    }
+                }
+            });
+        }
+        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
 </script>

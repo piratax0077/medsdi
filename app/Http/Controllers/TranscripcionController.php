@@ -454,6 +454,7 @@ class TranscripcionController extends Controller
             return view('app.profesional.examen_transcripcion',
                             [
                                 'examenes_transcritos' => $examenes_transcritos,
+                                'profesional' => $profesional,
                             ]
                         );
         }
@@ -463,6 +464,50 @@ class TranscripcionController extends Controller
             return redirect()->back()->with('mensaje', $mensaje);
         }
 
+    }
+
+    public function CargarExamenLaboratorio(Request $request)
+    {
+        $datos = [];
+
+        if (empty($request->id_hora_medica)) {
+            return ['estado' => 0, 'msj' => 'Campo requerido'];
+        }
+
+        $hora_medica = HoraMedica::find($request->id_hora_medica);
+        if (!$hora_medica) {
+            return ['estado' => 0, 'msj' => 'Hora no encontrada'];
+        }
+
+        $tipo_examen = ExamenEspecialidadTipo::where('nombre', $hora_medica->alias_examen)->first();
+        if (!$tipo_examen) {
+            return ['estado' => 0, 'msj' => 'Tipo Examen no encontrado'];
+        }
+
+        $tipo_examen_especialidad = ExamenEspecialidadTemplate::find($tipo_examen->id_template);
+        $datos['tipo_examen'] = [
+            'id'         => $tipo_examen_especialidad->id,
+            'nombre'     => $tipo_examen_especialidad->nombre,
+            'formulario' => $tipo_examen_especialidad->cuerpo,
+            'estructura' => $tipo_examen_especialidad->estructura,
+            'alias'      => $tipo_examen_especialidad->alias,
+        ];
+
+        $examen_resultado = ExamenEspecialidad::with('ExamenEspecialidadImg')
+            ->where('id_ficha_atencion', $hora_medica->id_ficha_atencion)
+            ->where('nombre', $tipo_examen_especialidad->nombre)
+            ->first();
+
+        if ($examen_resultado) {
+            $datos['ficha_examen'] = $examen_resultado;
+            $datos['estado'] = 1;
+            $datos['msj']    = 'registro';
+        } else {
+            $datos['estado'] = 0;
+            $datos['msj']    = 'Examen a cargar no encontrado';
+        }
+
+        return $datos;
     }
 
     public function CargarExamenProfesional(Request $request)

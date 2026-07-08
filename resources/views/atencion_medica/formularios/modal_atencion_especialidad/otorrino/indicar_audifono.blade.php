@@ -3,32 +3,39 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1">Receta Audífonos</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                <button type="button" class="close" data-dismiss="modal" onclick="$('#indicar_audif').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span>
                 </button>
             </div>
 			<div class="modal-body">
 				<form>
 					<div class="form- row">
 						<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-1">
-							<h6 class="label" type="label">Tipo de Audífono</h6>
+							<h6 class="f-16 text-dark pt-2" type="label">Tipo de Audífono</h6>
 						</div>
 						<div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 mb-1">
-							<select class="form-control form-control-sm" tabindex="-1" aria-hidden="true" id="modal_audifono_tipo">
+							<select class="form-control form-control-sm" tabindex="-1" aria-hidden="true" id="modal_audifono_tipo" onchange="evaluar_para_carga_detalle('modal_audifono_tipo','div_modal_audifono_tipo','obs_modal_audifono_tipo',5);">
                                 <option value="">Seleccione</option>
-                                <option value="1">Intracanal</option>
-                                <option value="2">Retroauricular</option>
-                                <option value="3">Audigafas</option>
-                                <option value="4">Implante</option>
+                                <option value="1">Audífono Intracanal</option>
+                                <option value="2">Audífono Retroauricular</option>
+                                <option value="3">Audífono Tipo Audigafas</option>
+                                <option value="4">Audífono Implante</option>
                                 <option value="5">Otro Tipo</option>
 							</select>
+							<div id="div_modal_audifono_tipo" class="mt-4" style="display:none;">
+								<div class="form-group">
+									<label class="floating-label-activo-sm">Especifique otro tipo</label>
+									<input type="text" class="form-control form-control-sm" id="obs_modal_audifono_tipo" value="Audífono Tipo: ">
+								</div>
+							</div>
 						</div>
+						
 					</div>
 					<hr class="mt-2">
 					<div class="form-row">
 						<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" value="" id="modal_audifono_od">
-								<label class="form-check-label font-weight-bold" for="modal_audifono_od">Oído Derecho</label>
+								<label class="form-check-label font-weight-bold ml-2 pt-1 f-16" for="modal_audifono_od"> Oído Derecho</label>
 							</div>
 						</div>
 						<div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -42,13 +49,13 @@
 						<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" value="" id="modal_audifono_oi">
-								<label class="form-check-label font-weight-bold" for="modal_audifono_oi">Oído Izquierdo</label>
+								<label class="form-check-label font-weight-bold ml-2 pt-1 f-16" for="modal_audifono_oi"> Oído Izquierdo</label>
 							</div>
 						</div>
 						<div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
 							<div class="form-group" id = "div_modal_audifono_especificacion_oi" style="display:none;">
 								<label class="floating-label-activo-sm">Especificaciones para OI</label>
-								<input type="text" class="form-control form-control-sm" id="modal_audifono_especificacion_oi" >
+								<input type="text" class="form-control form-control-sm mr-2" id="modal_audifono_especificacion_oi" >
 							</div>
 						</div>
 					</div>
@@ -56,7 +63,7 @@
 						<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" value="" id="modal_audifono_bi">
-								<label class="form-check-label font-weight-bold" for="modal_audifono_bi">Bilateral</label>
+								<label class="form-check-label font-weight-bold ml-2 pt-1 f-16" for="modal_audifono_bi"> Bilateral</label>
 							</div>
 						</div>
 						<div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -76,8 +83,8 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-				<button type="button" class="btn btn-sm btn-info-light-c" onclick="registrar_audifono();"><i class="feather icon-save"></i> Guardar</button>
+				{{--<button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>--}}
+				<button type="button" class="btn btn-sm btn-info" onclick="registrar_audifono();"><i class="feather icon-save"></i> Guardar receta</button>
 			</div>
 		</div>
 	</div>

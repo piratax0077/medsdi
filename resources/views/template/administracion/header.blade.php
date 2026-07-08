@@ -10,7 +10,14 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav ml-auto">
-			</li>
+                <li>
+                    <a href="{{ route('profesional.mensaje') }}" class="nav-link" title="Solicitudes de Soporte" data-placement="button">
+                        <i class="feather icon-life-buoy" style="font-size: 1.2rem!important;"></i>
+                        @if(isset($solicitudes_pendientes) && count($solicitudes_pendientes) > 0)
+                            <span class="badge badge-warning badge-pill">{{ count($solicitudes_pendientes) }}</span>
+                        @endif
+                    </a>
+			    </li>
 			<li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

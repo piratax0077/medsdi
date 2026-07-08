@@ -30,4 +30,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'twilio' => [
+        'sid'           => env('TWILIO_SID'),
+        'token'         => env('TWILIO_AUTH_TOKEN'),
+        'from_whatsapp' => env('TWILIO_WHATSAPP_FROM', 'whatsapp:+14155238886'), // Sandbox Twilio
+    ],
+
+    'recaptcha' => [
+        'site_key'   => env('RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY'),
+    ],
+
 ];

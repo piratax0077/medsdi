@@ -252,7 +252,8 @@
                                                 if (data != null)
                                                 {
                                                     console.log('hola2');
-                                                    
+                                                    console.log(data.paciente);
+                                                    $('#id_paciente').val(data.paciente.id);
                                                     $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
                                                         $('#datos_consulta_rut').text(data.paciente.rut);
                                                         $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
@@ -276,7 +277,7 @@
 														if(data.paciente.fecha_ultima_atencion != null && data.paciente.fecha_ultima_atencion != '')
                                                             $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
                                                         else
-                                                            $('#datos_consulta_fecha_ultima').text('No registra atenciones previas');													 
+                                                            $('#datos_consulta_fecha_ultima').text('No registra atenciones previas');
                                                         $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
 
                                                         if (data.paciente.sexo == 'M') {
@@ -451,6 +452,29 @@
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
+                                                    }
+
+                                                    // Mostrar exámenes para cualquier estado
+                                                    if(data?.["procedimiento"] !== undefined)
+                                                    {
+                                                        if(data.procedimiento != '' && data.procedimiento != null)
+                                                        {
+                                                            var lista_examen = '<strong>Examenes</strong>';
+                                                            lista_examen += '<ul class="lista-examenes">';
+                                                            data.procedimiento.forEach(function(examen) {
+                                                                lista_examen += `<li>${examen.nombre}</li>`;
+                                                            });
+                                                            lista_examen += '</ul>';
+                                                            $('#seccion_examenes').html(lista_examen);
+                                                        }
+                                                        else
+                                                        {
+                                                            $('#seccion_examenes').html('');
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        $('#seccion_examenes').html('');
                                                     }
 
                                                 }
@@ -709,6 +733,7 @@
                 success: function(resp){
                     console.log(resp);
                     $('#n_presupuesto_dental').val(id_presupuesto);
+                    $('#id_presupuesto').val(id_presupuesto);
                     let tratamientos = resp.tratamientos;
                     let todos = resp.todos;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
@@ -816,6 +841,7 @@
                         _token: CSRF_TOKEN
                     },
                     success: function(data) {
+                        console.log(data);
                         if (data.estado == 1) {
                             swal({
                                 title: "Llamado Paciente",
@@ -827,7 +853,7 @@
                         {
                             swal({
                                 title: "Error",
-                                text: data.message,
+                                text: data.msj,
                                 icon: "error"
                             });
                         }

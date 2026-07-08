@@ -5,21 +5,26 @@
             <input type="hidden" name="estado_id_profesional" id="estado_id_profesional" value="">
             <input type="hidden" name="estado_id_paciente" id="estado_id_paciente" value="">
             <input type="hidden" name="id_hora_medica" id="id_hora_medica" value="">
-            <div class="modal-header bg-info pt-3 pb-3">
-                <h6 id="cabecera_hora_medica" class="text-white f-16 mb-0 mt-0">Información del paciente</h6>
+            <div class="modal-header pt-3">
+                <h5 id="cabecera_hora_medica" class="text-white f-20 mb-0 mt-0"><i class="feather icon-user icono-agenda"></i> Información del paciente</h5>
+                 <button type="button" onclick="editar_info_paciente_asistente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view_asistente">
+                                <i class="feather icon-edit"></i> Editar datos
+                            <span class="ripple ripple-animate"></span></button>
             </div>
             <div class="modal-body">
-
                 <form id="datos_hora_medica">
                     <div class="row">
                         <div class="col-12">
-                            <button type="button" onclick="editar_info_paciente_asistente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view_asistente has-ripple" style="">
+                            <!--<button type="button" onclick="editar_info_paciente_asistente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view_asistente has-ripple" style="">
                                 <i class="feather icon-edit"></i> Editar
-                            <span class="ripple ripple-animate"></span></button>
+                            <span class="ripple ripple-animate"></span></button>-->
                         </div>
                         <input type="hidden" name="modificando_paciente_asistente" id="modificando_paciente_asistente" value="0">
                     </div>
                     <div class="row">
+                         <div class="col-sm-6 col-md-6" id="seccion_examenes">
+                        </div>
+
                         <div class="col-sm-12 col-md-12">
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
@@ -236,7 +241,7 @@
                                     </tr>
                                     <tr>
                                         <th scope="row">
-                                            <strong>Fecha última consulta</strong>
+                                            <strong>Fecha última atención</strong>
                                         <td>
                                             <span id="datos_consulta_fecha_ultima"></span>
                                         </td>
@@ -287,14 +292,20 @@
             </div>
             <div class="modal-footer">
 
+               
+                 <!--<div>
+                    <select class="form-control form-control-sm">
+                        <option>Seleccione vía de confirmación</option>
+                    </select>
+                </div>-->
                 <div>
-                    <button type="button" onclick="opcion_cancelar_hora();" id="hm_anular_hora"
-                        class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>  Anular
+                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
                         Hora
                     </button>
                 </div>
-                <div>
-                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
+                 <div>
+                    <button type="button" onclick="opcion_cancelar_hora();" id="hm_anular_hora"
+                        class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>  Anular
                         Hora
                     </button>
                 </div>
@@ -303,15 +314,31 @@
                 </div>
 
                 <div>
-                    <form method="get" action="{{ ($lugar_atencion==87)?route('profesional.realizar_consulta_sdi'):route('profesional.realizar_consulta') }}">
+
+                    <form method="get" action="@if(isset($institucion) && $institucion && is_object($institucion) && isset($institucion->id_tipo_institucion) && ($institucion->id_tipo_institucion == 2 || $institucion->id_tipo_institucion == 4))
+                                {{ route('profesional.realizar_consulta_hospital_amb') }}
+                            @elseif(isset($institucion) && $institucion && is_object($institucion) && isset($institucion->id_tipo_institucion) && $institucion->id_tipo_institucion == 7)
+                                {{ route('profesional.realizar_consulta_sdi') }}
+                            @else
+                                {{ route('profesional.realizar_consulta') }}
+                            @endif">
                         @csrf
                         <input type="hidden" name="id_hora_realizar" id="id_hora_realizar" val="">
                         <input type="hidden" name="lugar_atencion_id" id="lugar_atencion_id" value="{{ $lugar_atencion }}">
+                        <input type="hidden" name="id_paciente" id="id_paciente" value="">
 
                         <button type="submit" id="hm_atender_hora" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Atender</button>
                     </form>
                 </div>
 
+
+                @if ($institucion)
+                    @if($institucion->sala_espera == 1)
+                        <div>
+                            <button type="button" style="display: none" id="hm_llamar_paciente" class="btn btn-success btn-sm" onclick=""><i class="feather icon-user-plus"></i> Llamar Paciente</button>
+                        </div>
+                    @endif
+                @endif
                 <div>
                     <form method="get" action="#">
                         @csrf
@@ -353,8 +380,13 @@
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtener el token CSRF
 
+        // Elegir la ruta correcta según el lugar de atención
+        let basePath = (parseInt(id_lugar_atencion) === 87)
+            ? '/Profesional/Paciente/Ficha_consulta/sdi'
+            : '/Profesional/Paciente/Ficha_consulta';
+
         // Construir la URL con los parámetros
-        let url = `/Profesional/Paciente/Ficha_consulta?_token=${csrfToken}&id_hora_realizar=${id_hora_medica}&lugar_atencion_id=${id_lugar_atencion}`;
+        let url = `${basePath}?_token=${csrfToken}&id_hora_realizar=${id_hora_medica}&lugar_atencion_id=${id_lugar_atencion}`;
 
         // Redirigir a la URL
         window.location.href = url;

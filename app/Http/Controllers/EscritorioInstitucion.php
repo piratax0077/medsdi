@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instituciones;
+use App\Models\Laboratorio;
 use App\Models\Region;
 use App\Models\TipoInstitucion;
 use App\Models\TipoServicio;
@@ -12,13 +13,21 @@ class EscritorioInstitucion extends Controller
 {
     public function index()
     {
+       $adminMed = false;
         $servicio = Instituciones::where('id_usuario', Auth::user()->id)->first();
+        if(!$servicio){
+            $servicio = Instituciones::where('id_director_medico', Auth::user()->id)->first();
+            $adminMed = true;
+        }
+
         $region = Region::all();
         $tipo_servicio = TipoServicio::all();
         $tipo_institucion = TipoInstitucion::all();
         // preguntar si el usuario tiene rol de AdministradorLaboratorio
         $user = Auth::user();
+
         $adminLab = false;
+
         foreach ($user->roles as $rol) {
             if ($rol->name == 'AdministradorLaboratorio') {
                 $adminLab = true;
@@ -28,15 +37,31 @@ class EscritorioInstitucion extends Controller
 
         if (isset($servicio))
         {
+
             if($servicio->bienvenido == 0)
                 return view('bienvenida.inicio_instituciones')->with(['regiones' => $region ]);
             else{
-                if($adminLab)
-                    return view('app.laboratorio.adm_general.home',['institucion' => $servicio]);
+                if($adminLab){
+
+                    // prguntamos si administra un laboratorio
+                    $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
+
+                    return view('app.laboratorio.adm_general.home',['institucion' => $servicio, 'laboratorio' => $laboratorio]);
+
+                }
+                elseif($adminMed){
+                    return view('app.adm_cm.adm_medico_id')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
+                }
+                    // return view('app.adm_medico.home',['institucion' => $servicio])->render();
                 elseif($servicio->id_tipo_institucion == 2)
                     return view('app.adm_hospital.home',['institucion' => $servicio])->render();
                 elseif($servicio->id_tipo_institucion == 4)
                     return view('app.adm_hospital.home')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
+                elseif($servicio->id_tipo_institucion == 8){
+                    return view('app.vacunatorio.home',['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
+                }elseif($servicio->id_tipo_institucion == 9){
+                    return view('app.centro_enfermeria_integral.home',['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
+                }
                 else
                     return view('app.adm_cm.home')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
             }
@@ -47,12 +72,20 @@ class EscritorioInstitucion extends Controller
         }
         else
         {
-            return view('auth.Registros.registro_institucion')->with([
-                'region' => $region,
-                'tipo_servicio' => $tipo_servicio,
-                'tipo_institucion' => $tipo_institucion,
+            // prguntamos si administra un laboratorio
+            $laboratorio = Laboratorio::where('id_usuario', Auth::user()->id)->first();
 
-            ]);
+            if($laboratorio){
+                return view('app.laboratorio.adm_general.home',['institucion' => $laboratorio,'laboratorio' => $laboratorio]);
+            }else{
+                return view('auth.Registros.registro_institucion')->with([
+                    'region' => $region,
+                    'tipo_servicio' => $tipo_servicio,
+                    'tipo_institucion' => $tipo_institucion,
+
+                ]);
+            }
+
         }
     }
 }

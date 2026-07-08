@@ -70,10 +70,9 @@
         @yield('css-btn-autorizacion')
     </head>
     <body>
-        @include('template.medicina.header')
-        @include('template.profesional.menu')
-
-        @yield('Content')
+  @include('template.profesional.header')
+    @include('template.menuProfesional')
+    @yield('Content')
 
         <!-- Modal de la vista -->
         @yield('Modals')
@@ -471,7 +470,7 @@
                         $('#email_paciente_').text(paciente.email);
                         $('#telefono_paciente').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-
+                        $('#direccion_paciente_').text(data.direccion.direccion.direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);

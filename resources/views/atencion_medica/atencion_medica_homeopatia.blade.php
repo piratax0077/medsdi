@@ -1,6 +1,12 @@
 @extends('template.template_homeopatia')
 @section('Content')
+<style>
 
+        .ui-autocomplete {
+            z-index: 9999999 !important;
+            position: absolute;
+        }
+    </style>
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">

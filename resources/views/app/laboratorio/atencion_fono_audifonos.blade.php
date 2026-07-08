@@ -11,7 +11,7 @@
             z-index: 10;
         }
 </style>
-<div class="col-12 pl-0 mt-3">
+<div class="col-12">
     <ul class="nav nav-tabs-secciones mb-3" id="orl" role="tablist">
         <li class="nav-item-secciones">
             <a class="nav-secciones active text-uppercase" id="venta_audif-tab" data-toggle="tab" href="#venta_audif" role="tab" aria-controls="venta_audif" aria-selected="true">Venta de audífonos y repuestos</a>
@@ -41,13 +41,14 @@
         @endif
     </ul>
 </div>
+<div class="col-12">
 <div class="tab-content" id="tecn-orl-contenido">
     {{-- Venta de audifonos y repuestos --}}
     <div class="tab-pane fade show active" id="venta_audif" role="tabpanel" aria-labelledby="venta_audif-tab">
         <div class="div_form_examen_ocho_par">
             <div class="row">
                 <div class="col-12">
-                    <h6 class="tit-gen mb-2 mt-2">Información venta de audífonos</h6>
+                    <h6 class="text-c-blue f-20 mb-3 mt-3">Información venta de audífonos</h6>
                 </div>
             </div>
             <div class="row">
@@ -75,43 +76,43 @@
                             </div>
                             @else
                                 <div class="pb-1">
-                                    
+
                                     <!-- Paciente Seleccionado (oculto inicialmente) -->
-                                   
+
                                     <div class="row d-none" id="card_paciente_seleccionado">
                                         <div class="col-12">
-                                            <div class="card border-success mb-3" style="background-color: #d4edda;">
+                                            <div class="card borde-verde mb-3">
                                                 <div class="card-body py-2">
                                                     <div class="row align-items-center">
-                                                        <div class="col-auto">
-                                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                                <i class="feather icon-check text-white" style="font-size: 24px;"></i>
+                                                        <div class="col-auto pr-0">
+                                                            <div class="bg-success rounded-circle d-flex align-items-center justify-content-center p-2">
+                                                                <i class="feather icon-check text-white f-20 mr-0"></i>
                                                             </div>
                                                         </div>
-                                                        <div class="col">
-                                                            <h6 class="mb-0 text-success font-weight-bold">
+                                                        <div class="col mb-3">
+                                                            <h6 class="mb-0 text-success f-18 font-weight-bold">
                                                                 Paciente Seleccionado
                                                             </h6>
                                                         </div>
                                                     </div>
                                                     <div class="row mt-2">
-                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                                             <small class="text-muted d-block mb-0">RUT:</small>
                                                             <strong id="paciente_sel_rut" class="d-block">-</strong>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                             <small class="text-muted d-block mb-0">Nombre:</small>
                                                             <strong id="paciente_sel_nombre" class="d-block">-</strong>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                                             <small class="text-muted d-block mb-0">Email:</small>
                                                             <strong id="paciente_sel_email" class="d-block">-</strong>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                             <small class="text-muted d-block mb-0">Teléfono:</small>
                                                             <strong id="paciente_sel_telefono" class="d-block">-</strong>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-right">
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 text-right">
                                                             <button type="button" class="btn btn-sm btn-warning" onclick="deseleccionar_paciente()" title="Cambiar paciente">
                                                                 <i class="feather icon-refresh-cw"></i> Cambiar
                                                             </button>
@@ -123,15 +124,14 @@
                                             <input type="hidden" id="paciente_seleccionado_id_post_venta" name="paciente_seleccionado_id_post_venta" value="">
                                         </div>
                                     </div>
-                                    <div class="alert alert-warning mb-3" role="alert">
+                                    <div class="alert alert-warning-b mb-3" role="alert">
                                         <i class="feather icon-alert-triangle mr-2"></i> Para registrar una venta de audífonos, primero debe asociar un paciente o cliente a esta atención.
                                     </div>
                                     <!-- Buscador de Paciente -->
-                                    <div class="card border-primary" id="card_busqueda_paciente">
-                                        <div class="card-header bg-primary">
-                                            <h6 class="text-white mb-0">
-                                                <i class="feather icon-search mr-2"></i>
-                                                Buscar Paciente
+                                    <div class="card" id="card_busqueda_paciente">
+                                        <div class="card-header-new-md">
+                                                <h5><i class="feather icon-search icono-primary"></i>
+                                                Buscar paciente</h5>
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -165,7 +165,7 @@
                                                 <!-- Botón limpiar -->
                                                 <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                     <label class="font-weight-bold d-block">&nbsp;</label>
-                                                    <button class="btn btn-secondary btn-sm btn-block" type="button" onclick="limpiar_busqueda_paciente()">
+                                                    <button class="btn btn-outline-secondary btn-xs btn-block" type="button" onclick="limpiar_busqueda_paciente()">
                                                         <i class="feather icon-x"></i> Limpiar
                                                     </button>
                                                 </div>
@@ -176,7 +176,7 @@
                                                 <div class="col-12">
                                                     <div id="resultados_busqueda_paciente"></div>
                                                     <div id="reserva_agregar_paciente_hora" style="display: none;">
-                                                        
+
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-group">
@@ -255,7 +255,7 @@
 
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-group">
-                                                                    <label class="floating-label-activo-sm">Region</label>
+                                                                    <label class="floating-label-activo-sm">Región</label>
                                                                     <select id="region_agregar_venta" onchange="buscar_ciudad_venta();" name="region_agregar_venta" class="form-control" required>
                                                                         <option value="0">Seleccione Regi&oacute;n</option>
                                                                         @if (isset($regiones))
@@ -358,10 +358,10 @@
                                                         </div>
                                                         <!-- Botón del Carrito -->
                                                         <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                            <label class="font-weight-bolder ml-0 mb-0">Carrito de Compras</label>
+                                                            <label class="font-weight-bolder ml-0 mb-0"></label>
                                                             <div>
-                                                                <button type="button" class="btn btn-success btn-block" onclick="obtenerCarrito()" id="btn-abrir-carrito">
-                                                                    <i class="feather icon-shopping-cart"></i> Ver Carrito
+                                                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="obtenerCarrito()" id="btn-abrir-carrito">
+                                                                    <i class="feather icon-shopping-cart"></i> Ver carrito de compras
                                                                     <span class="badge badge-light ml-1" id="badge-carrito-header" style="display:none;">0</span>
                                                                 </button>
                                                                 <small class="form-text text-muted text-center">
@@ -591,14 +591,12 @@
     {{-- Control de audífonos post venta --}}
     <div class="tab-pane fade show" id="cont_post_venta" role="tabpanel" aria-labelledby="cont_post_venta-tab">
         <!-- Paciente Seleccionado para POST VENTA (oculto inicialmente) -->
-       
-        
+
         @if($profesional->id_tipo_institucion == 3)
-        <h5 class="text-c-blue f-18 mb-3">
-            <i class="feather icon-inbox mr-2"></i>
+        <h5 class="text-c-blue f-20 mb-3 mt-3">
             Buscar Paciente para Control Post Venta de Audífonos
         </h5>
-         
+
         <div class="row d-none" id="card_paciente_seleccionado_post_venta">
             <div class="col-12">
                 <div class="card border-success mb-3" style="background-color: #d4edda;">
@@ -644,11 +642,8 @@
         </div>
         <!-- Buscador de Paciente -->
         <div class="card border-primary" id="card_busqueda_paciente_post_venta">
-            <div class="card-header bg-primary">
-                <h6 class="text-white mb-0">
-                    <i class="feather icon-search mr-2"></i>
-                    Buscar Paciente
-                </h6>
+            <div class="card-header-new-md">
+                <h5><i class="feather icon-search icono-primary"></i>Buscar paciente</h5>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -692,7 +687,7 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div id="resultados_busqueda_paciente_post_venta"></div>
-                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">            
+                        <div id="reserva_agregar_paciente_hora_post_venta" style="display: none;">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
@@ -818,15 +813,15 @@
             </div>
         </div>
 
-        
+
           @endif
-     
+
                 <div class="row">
                     <div class="col-12 pl-0 mt-1 px-3">
                            <div class="card">
                             <ul class="nav nav-tabs profile-tabs nav-fill mt-1" id="control-aud" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="control-calibracion-tab" onclick="mis_audifonos()" data-toggle="tab" href="#control-calibracion" role="tab" aria-controls="control-calibracion" aria-selected="true">Control y calibración de audifonos</a>
+                                    <a class="nav-link active" id="control-calibracion-tab" onclick="mis_audifonos()" data-toggle="tab" href="#control-calibracion" role="tab" aria-controls="control-calibracion" aria-selected="true">Control y calibración de audífonos</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="control-mis-productos-tab" data-toggle="tab" href="#control-mis-productos" role="tab" aria-controls="control-mis-productos" aria-selected="false">Control de productos del paciente</a>
@@ -848,7 +843,7 @@
                                         <div class="card-body">
                                             <div class="form-row">
                                                 <div class="form-group col-12">
-                                                    <label class="floating-label-activo-sm">Control de Audifono</label>
+                                                    <label class="floating-label-activo-sm">Control de Audífono</label>
                                                     <select class="form-control form-control-sm" name="tipo_control_audifono" id="tipo_control_audifono" onchange="evaluar_tipo_control()">
                                                         <option selected>Seleccione</option>
                                                         <option>Propio</option>
@@ -1292,21 +1287,19 @@
 
                     </div>
                 </div>
-            
+
 
     </div>
 
     {{-- Cotización de audífonos y accesorios --}}
     <div class="tab-pane fade show" id="cotizacion_audif" role="tabpanel" aria-labelledby="cotizacion_audif-tab">
-      
             <div class="mx-2">
                 @if(isset($paciente))
                 <input type="hidden" id="id_paciente" name="id_paciente" value="{{ $paciente->id }}">
                 @endif
                 <div class="row">
                     <div class="col-12">
-                        <h5 class="text-c-blue f-18 mb-3">
-                            <i class="feather icon-file-text mr-2"></i>
+                        <h5 class="text-c-blue f-20 mb-3 mt-3">
                             Cotización de Productos - Audífonos y Accesorios
                         </h5>
                     </div>
@@ -1317,14 +1310,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card border-primary">
-                            <div class="card-header bg-primary">
-                                <h6 class="text-white mb-0">
-                                    <i class="feather icon-user mr-2"></i>
-                                    Información del Cliente
-                                </h6>
+                            <div class="card-header-new-md">
+                                <h5><i class="feather icon-user icono-primary"></i>
+                                    Buscar paciente / cliente</h5>
                             </div>
                             <div class="card-body">
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                         <label class="floating-label-activo-sm">RUT Paciente</label>
                                         <input type="text" class="form-control form-control-sm" id="cotiz_rut_paciente" name="cotiz_rut_paciente" value="{{ $paciente->rut }}" readonly>
@@ -1338,7 +1329,7 @@
                                         <input type="date" class="form-control form-control-sm" id="cotiz_fecha" name="cotiz_fecha" value="<?php echo date('Y-m-d') ?>">
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <label class="floating-label-activo-sm">Teléfono Contacto</label>
                                         <input type="text" class="form-control form-control-sm" id="cotiz_telefono" name="cotiz_telefono" placeholder="Ej: +56 9 1234 5678" value="{{ $paciente->telefono_uno }}">
@@ -1377,12 +1368,10 @@
 
                                 <!-- Buscador -->
                                 <div class="card border-primary" id="card_busqueda_paciente_cotiz">
-                                    <div class="card-header bg-primary">
-                                        <h6 class="text-white mb-0">
-                                            <i class="feather icon-search mr-2"></i>
-                                            Buscar Paciente / Cliente
-                                        </h6>
-                                    </div>
+                                      <div class="card-header-new-md">
+                                            <h5><i class="feather icon-search icono-primary"></i>
+                                                Buscar paciente</h5>
+                                        </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Tipo de búsqueda -->
@@ -1425,7 +1414,7 @@
                                             <div class="col-12">
                                                 <div id="resultados_busqueda_paciente_cotiz"></div>
                                                 <div id="reserva_agregar_paciente_hora_cotiz" style="display: none;">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12">
                                                             <div class="form-group">
@@ -1599,7 +1588,7 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 text-right">
-                                        
+
                                         <button type="button" class="btn btn-sm btn-warning" onclick="deseleccionar_paciente()" title="Cambiar paciente">
                                             <i class="feather icon-refresh-cw"></i> Cambiar
                                         </button>
@@ -1617,23 +1606,21 @@
                 </div>
                 @endif
 
-                
+
 
                 <!-- Búsqueda de Productos -->
                 <div class="row mt-3">
                     <div class="col-12">
-                        <div class="card border-success">
-                            <div class="card-header bg-success">
-                                <h6 class="text-white mb-0">
-                                    <i class="feather icon-search mr-2"></i>
-                                    Búsqueda de Productos
-                                </h6>
+                        <div class="card ">
+                            <div class="card-header-new-md">
+                                <h5><i class="feather icon-search icono-primary"></i>
+                                    Buscador de productos</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
+                            <div class="card-body pt-4">
+                                <div class="form-row mt-2">
                                     <!-- Tipo de producto -->
                                     <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <label class="font-weight-bolder ml-0 mb-0">Tipo de Producto</label>
+                                        <label class="floating-label-activo">Tipo de Producto</label>
                                         <select class="form-control form-control-sm" id="cotiz_tipo_producto" name="cotiz_tipo_producto">
                                             <option value="">Todos</option>
                                             <option value="1" selected>Audífonos</option>
@@ -1645,11 +1632,11 @@
 
                                     <!-- Campo de búsqueda -->
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                        <label class="font-weight-bolder ml-0 mb-0">Buscar Producto</label>
+                                        <label class="floating-label-activo">Buscar Producto</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control form-control-sm" id="cotiz_buscar_producto" name="cotiz_buscar_producto" placeholder="Código, marca, modelo o nombre del producto">
                                             <div class="input-group-append">
-                                                <button class="btn btn-success btn-sm" type="button" onclick="buscar_productos_cotizacion()">
+                                                <button class="btn btn-info btn-sm" type="button" onclick="buscar_productos_cotizacion()">
                                                     <i class="feather icon-search"></i> Buscar
                                                 </button>
                                             </div>
@@ -1657,16 +1644,16 @@
                                     </div>
 
                                     <!-- Resumen -->
-                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                        <label class="font-weight-bolder ml-0 mb-0">Productos en Cotización</label>
-                                        <div class="alert alert-info mb-0 py-2 text-center">
-                                            <strong id="cotiz_cantidad_items" class="f-16">0</strong> productos
+                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-n3">
+                                        <label class="font-weight-bolder ml-0 mb-0 text-c-blue">Productos en Cotización</label>
+                                        <div class="alert alert-info mb-0 py-1 text-center">
+                                            <strong id="cotiz_cantidad_items" class="f-16">0</strong> Productos.
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Resultados de búsqueda -->
-                                <div class="row mt-2">
+                                <div class="row mt-3">
                                     <div class="col-12">
                                         <div id="cotiz_lista_productos_busqueda"></div>
                                     </div>
@@ -1680,11 +1667,9 @@
                 <div class="row mt-3">
                     <div class="col-12">
                         <div class="card border-info">
-                            <div class="card-header bg-info">
-                                <h6 class="text-white mb-0">
-                                    <i class="feather icon-shopping-bag mr-2"></i>
-                                    Productos Cotizados
-                                </h6>
+                            <div class="card-header-new-md">
+                              <h5><i class="feather icon-file icono-primary"></i>
+                                    Productos cotizados</h5>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -1826,23 +1811,28 @@
                 </div>
 
             </div>
-       
+
     </div>
 
     {{-- Prestamo de audifonos --}}
     <div class="tab-pane fade show" id="prestamo_audif" role="tabpanel" aria-labelledby="prestamo_audif-tab">
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-c-blue f-20 mb-3 mt-3">
+                    Préstamo de audífonos
+                </h5>
+            </div>
+        </div>
         @if(isset($paciente))
         <div class="row">
             <div class="col-12">
                 <div class="card border-primary">
-                    <div class="card-header bg-primary">
-                        <h6 class="text-white mb-0">
-                            <i class="feather icon-user mr-2"></i>
-                            Información del Cliente
-                        </h6>
+                    <div class="card-header-new-md">
+                        <h5><i class="feather icon-user icono-primary"></i>
+                            Información paciente / cliente</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row">
+                        <div class="form-row">
                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                 <label class="floating-label-activo-sm">RUT Paciente</label>
                                 <input type="text" class="form-control form-control-sm" id="cotiz_rut_paciente" name="cotiz_rut_paciente" value="{{ $paciente->rut }}" readonly>
@@ -1856,7 +1846,7 @@
                                 <input type="date" class="form-control form-control-sm" id="cotiz_fecha" name="cotiz_fecha" value="<?php echo date('Y-m-d') ?>">
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="form-row">
                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                 <label class="floating-label-activo-sm">Teléfono Contacto</label>
                                 <input type="text" class="form-control form-control-sm" id="cotiz_telefono" name="cotiz_telefono" placeholder="Ej: +56 9 1234 5678" value="{{ $paciente->telefono_uno }}">
@@ -1889,16 +1879,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="mt-1" id="card_advertencia_paciente_prestamo">
-                    
+
                     <div class="mt-1">
 
                         <!-- Buscador -->
                         <div class="card border-primary" id="card_busqueda_paciente_prestamo">
-                            <div class="card-header bg-primary">
-                                <h6 class="text-white mb-0">
-                                    <i class="feather icon-search mr-2"></i>
-                                    Buscar Paciente / Cliente
-                                </h6>
+                            <div class="card-header-new-md">
+                                <h5><i class="feather icon-user icono-primary"></i>Buscar paciente / cliente</h5>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -1941,7 +1928,7 @@
                                 <div class="row mt-3">
                                     <div class="col-12">
                                         <div id="resultados_busqueda_paciente_prestamo"></div>
-                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">   
+                                        <div id="reserva_agregar_paciente_hora_prestamo" style="display: none;">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12">
                                                     <div class="form-group">
@@ -2120,14 +2107,14 @@
             </div>
         </div>
         @endif
-        
+
         <!-- Contenido del préstamo de audífonos aquí -->
         <!-- Card busqueda de audifonos -->
         <div class="card px-3 pb-0 pt-2">
             <div class="row">
 
                 <div class="card-body busqueda_audifono collapse show pt-0" id="busqueda_audifono-1">
-                    <form>
+                
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-row">
@@ -2148,7 +2135,7 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control form-control-sm" name="buscar_producto_prestamo" id="buscar_producto_prestamo" onkeyup="enter_buscar_productos_audifono_prestamo(event)" placeholder="Ingrese código, marca, modelo o nombre del producto">
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary btn-sm" type="button" onclick="buscar_productos_audifonos_prestamo()">
+                                                <button role="button" class="btn btn-primary btn-sm" type="button" onclick="buscar_productos_audifonos_prestamo()">
                                                     <i class="feather icon-search"></i> Buscar
                                                 </button>
                                             </div>
@@ -2177,7 +2164,7 @@
                                 <div id="lista_audifonos_prestamo"></div>
                             </div>
                         </div>
-                    </form>
+               
                 </div>
             </div>
         </div>
@@ -2185,6 +2172,13 @@
 
     {{-- Recepcion de audifonos --}}
     <div class="tab-pane fade show" id="recepcion_audif" role="tabpanel" aria-labelledby="recepcion_audif-tab">
+        <div class="row">
+            <div class="col-12">
+                <h5 class="text-c-blue f-20 mb-3 mt-3">
+                    Recepción de Préstamo de Audífonos
+                </h5>
+            </div>
+        </div>
         @if(isset($paciente))
 
         @else
@@ -2192,10 +2186,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="mt-1">
-                        <h5 class="text-c-blue f-18 mb-3">
-                            <i class="feather icon-inbox mr-2"></i>
-                            Recepción de Audífonos en Préstamo
-                        </h5>
                         <!-- Tarjeta de Paciente Seleccionado (siempre presente, mostrar/ocultar con JS) -->
                         <div class="row" id="card_paciente_seleccionado_recepcion" style="display: none;">
                             <div class="col-12">
@@ -2250,16 +2240,13 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mt-1" id="card_advertencia_paciente_recepcion">
-                                    
+
                                     <div class="mt-1">
 
                                         <!-- Buscador -->
                                         <div class="card border-primary" id="card_busqueda_paciente_recepcion">
-                                            <div class="card-header bg-primary">
-                                                <h6 class="text-white mb-0">
-                                                    <i class="feather icon-search mr-2"></i>
-                                                    Buscar Paciente / Cliente
-                                                </h6>
+                                            <div class="card-header-new-md">
+                                                <h5><i class="feather icon-user icono-primary"></i>Buscar paciente / cliente</h5>
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
@@ -2302,8 +2289,8 @@
                                                 <div class="row mt-3">
                                                     <div class="col-12">
                                                         <div id="resultados_busqueda_paciente_recepcion"></div>
-                                                        
-                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">   
+
+                                                        <div id="reserva_agregar_paciente_hora_recepcion" style="display: none;">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12">
                                                                     <div class="form-group">
@@ -2431,7 +2418,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                 </div>
             </div>
         </div>
@@ -2439,27 +2426,31 @@
         <!-- Agrega más contenido según sea necesario -->
         <div class="row">
             <div class="col-12">
-                <table class="table table-bordered" id="tabla_historial_productos_prestados">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Fecha inicio</th>
-                            <th>Fecha fin</th>
-                            <th>Producto</th>
-                            <th>Estado</th>
-                            <th>Observaciones</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody_historial_productos_prestados">
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-3">
-                                <i class="feather icon-inbox f-18 d-block mb-2"></i>
-                                No hay productos en préstamo
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered" id="tabla_historial_productos_prestados">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Fecha inicio</th>
+                                    <th>Fecha fin</th>
+                                    <th>Producto</th>
+                                    <th>Estado</th>
+                                    <th>Observaciones</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_historial_productos_prestados">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-3">
+                                        <i class="feather icon-inbox f-18 d-block mb-2"></i>
+                                        No hay productos en préstamo
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2471,8 +2462,7 @@
                 <div class="mt-1">
                     <div class="row">
                         <div class="col-12">
-                            <h5 class="text-c-blue f-18 mb-3">
-                                <i class="feather icon-megaphone mr-2"></i>
+                            <h5 class="text-c-blue f-20 mb-3">
                                 Campañas Promocionales
                             </h5>
                         </div>
@@ -2482,15 +2472,12 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <div class="card border-info">
-                                <div class="card-header bg-info">
-                                    <h6 class="text-white mb-0">
-                                        <i class="feather icon-mail mr-2"></i>
-                                        Nueva Campaña de Email
-                                    </h6>
+                                <div class="card-header-new-md">
+                                <h5><i class="feather icon-mail icono-primary"></i>Crear campañas promocionales de email</h5>
                                 </div>
                                 <div class="card-body">
                                     <form id="form_campana_promocional" onsubmit="enviar_campana_promocional(); return false;" enctype="multipart/form-data">
-                                    
+
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label class="font-weight-bold">Título de la Campaña</label>
@@ -2514,19 +2501,19 @@
                                                 <div id="campana_destinatarios_checks">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="campana_destinatarios[]" id="check_pacientes" value="pacientes" checked onclick="actualizar_lista_destinatarios()">
-                                                        <label class="form-check-label" for="check_pacientes">Todos los Pacientes</label>
+                                                        <label class="form-check-label" for="check_pacientes"> Todos los Pacientes</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="campana_destinatarios[]" id="check_profesionales" value="profesionales" onclick="actualizar_lista_destinatarios()">
-                                                        <label class="form-check-label" for="check_profesionales">Todos los Profesionales</label>
+                                                        <label class="form-check-label" for="check_profesionales"> Todos los Profesionales</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="campana_destinatarios[]" id="check_personal" value="personal" onclick="actualizar_lista_destinatarios()">
-                                                        <label class="form-check-label" for="check_personal">Personal del Centro</label>
+                                                        <label class="form-check-label" for="check_personal"> Personal del Centro</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" name="campana_destinatarios[]" id="check_custom" value="custom" onclick="actualizar_lista_destinatarios()">
-                                                        <label class="form-check-label" for="check_custom">Seleccionar manualmente</label>
+                                                        <label class="form-check-label" for="check_custom"> Seleccionar manualmente</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2535,28 +2522,29 @@
                                                 <div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="filtro_sexo_m" name="filtro_sexo[]" value="M">
-                                                        <label class="form-check-label" for="filtro_sexo_m">Masculino</label>
+                                                        <label class="form-check-label" for="filtro_sexo_m"> Masculino</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="filtro_sexo_f" name="filtro_sexo[]" value="F">
-                                                        <label class="form-check-label" for="filtro_sexo_f">Femenino</label>
+                                                        <label class="form-check-label" for="filtro_sexo_f"> Femenino</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="filtro_tercera_edad" name="filtro_tercera_edad" value="1">
-                                                        <label class="form-check-label" for="filtro_tercera_edad">Tercera Edad (+65)</label>
+                                                        <label class="form-check-label" for="filtro_tercera_edad"> Tercera Edad (+65)</label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox" id="filtro_pacientes_audifonos" name="filtro_pacientes_audifonos" value="1">
-                                                        <label class="form-check-label" for="filtro_pacientes_audifonos">Pacientes con Audífonos</label>
+                                                        <label class="form-check-label" for="filtro_pacientes_audifonos"> Pacientes con Audífonos</label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-6" id="div_destinatarios_custom" style="display:none;">
                                                 <label class="font-weight-bold">Correos manuales (separados por coma)</label>
-                                                <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com">
+                                                <input type="text" class="form-control" id="campana_destinatarios_custom" name="campana_destinatarios_custom" placeholder="correo1@dominio.com, correo2@dominio.com" onkeyup="actualizarVistaPrevia()">
+                                                <small class="form-text text-muted">Ingrese los correos separados por comas. Ejemplo: juan@mail.com, maria@mail.com</small>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label class="font-weight-bold">Vista Previa de Destinatarios</label>
@@ -2596,12 +2584,9 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card border-secondary">
-                                <div class="card-header bg-secondary">
-                                    <h6 class="text-white mb-0">
-                                        <i class="feather icon-list mr-2"></i>
-                                        Historial de Campañas
-                                    </h6>
-                                </div>
+                                <div class="card-header-new-md">
+                                <h5><i class="feather icon-list icono-primary"></i>Historial de campañas</h5>
+                            </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-hover table-sm" id="tabla_historial_campanas">
@@ -2633,6 +2618,7 @@
             </div>
         </div>
     @endif
+</div>
 </div>
 
 <!-- MODAL MODAL_DETALLE_CAMPANA -->
@@ -2938,12 +2924,12 @@ function buscar_paciente_prestamo(){
     function buscar_paciente_recepcion(){
         const tipoBusqueda = $('#tipo_busqueda_paciente_recepcion').val();
         const termino = $('#termino_busqueda_paciente_recepcion').val().trim();
-    
+
         if (!termino || termino === '') {
             swal('Atención', 'Por favor ingrese un término de búsqueda', 'warning');
             return;
         }
-    
+
         // Mostrar loader
         $('#resultados_busqueda_paciente_recepcion').html(`
             <div class="text-center py-4">
@@ -2953,7 +2939,7 @@ function buscar_paciente_prestamo(){
                 <p class="mt-2">Buscando pacientes...</p>
             </div>
         `);
-    
+
         // Petición AJAX (ajusta la ruta según tu configuración)
         $.ajax({
             url: "{{ route('profesional.buscar_rut_paciente') }}",
@@ -2969,7 +2955,7 @@ function buscar_paciente_prestamo(){
             success: function(response) {
                 console.log('Respuesta recibida:', response);
                 console.log('Tipo de respuesta:', typeof response);
-    
+
                 // Si la respuesta es un objeto paciente directamente
                 if (response && response.id) {
                     mostrar_resultado_paciente_recepcion(response);
@@ -2988,14 +2974,14 @@ function buscar_paciente_prestamo(){
                 console.error('Error en búsqueda:', xhr);
                 console.error('Status:', status);
                 console.error('Error:', error);
-    
+
                 let mensajeError = 'Error al buscar pacientes. Por favor intente nuevamente.';
-    
+
                 // Si hay una respuesta JSON del servidor con mensaje de error
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     mensajeError = xhr.responseJSON.message;
                 }
-    
+
                 $('#resultados_busqueda_paciente_recepcion').html(`
                     <div class="alert alert-danger">
                         <i class="feather icon-alert-circle mr-2"></i>
@@ -3051,8 +3037,8 @@ function mostrar_resultado_paciente(paciente) {
     const prevision = paciente.prevision?.nombre || 'Sin previsión';
 
     let html = `
-        <div class="card border-success mb-3">
-            <div class="card-body">
+        <div class="card-lineal mb-3">
+            <div class="card-body-lineal">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="mb-2">
@@ -3115,8 +3101,8 @@ function mostrar_resultado_paciente_post_venta(paciente) {
     const prevision = paciente.prevision?.nombre || 'Sin previsión';
 
     let html = `
-        <div class="card border-success mb-3">
-            <div class="card-body">
+        <div class="card-body-lineal mb-3">
+            <div class="card-body-lineal">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="mb-2">
@@ -3167,7 +3153,7 @@ function mostrar_resultado_paciente_post_venta(paciente) {
 }
 
 
-/** 
+/**
  * MOSTRAR RESULTADO DE BÚSQUEDA DE UN SOLO PACIENTE (POR RUT) PARA PRÉSTAMO DE AUDÍFONOS
  */
 
@@ -3180,8 +3166,8 @@ function mostrar_resultado_paciente_prestamo(paciente) {
     const prevision = paciente.prevision?.nombre || 'Sin previsión';
 
      let html = `
-        <div class="card border-success mb-3">
-            <div class="card-body">
+        <div class="card-lineal  mb-3">
+            <div class="card-body-lineal">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="mb-2">
@@ -3294,8 +3280,8 @@ function validar_email_venta(){
     const prevision = paciente.prevision?.nombre || 'Sin previsión';
 
     let html = `
-        <div class="card border-success mb-3">
-            <div class="card-body">
+        <div class="card-lineal mb-3">
+            <div class="card-body-lineal">
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="mb-2">
@@ -3395,7 +3381,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -3409,7 +3395,7 @@ function seleccionar_paciente_venta(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
 
@@ -4770,7 +4756,7 @@ function mostrar_resultado_paciente_cotiz(paciente) {
     const prevision = paciente.prevision?.nombre || 'Sin previsión';
 
     let html = `
-        <div class="card border-success mb-3">
+        <div class="card-lineal mb-3">
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
@@ -4871,7 +4857,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
     }
@@ -4882,7 +4868,7 @@ function seleccionar_paciente_cotizacion(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -4973,7 +4959,7 @@ function seleccionar_paciente_prestamo(id, rut, nombre, telefono, email) {
         $('#recepcion_paciente_sel_nombre').text(nombre);
         $('#recepcion_paciente_sel_email').text(email);
         $('#recepcion_paciente_sel_telefono').text(telefono || 'No registrado');
-        
+
         $('#card_paciente_seleccionado_recepcion').show();
         $('#card_busqueda_paciente_recepcion').hide();
     }
@@ -5048,7 +5034,7 @@ function seleccionar_paciente_recepcion(id, rut, nombre, telefono, email) {
         $('#prestamo_paciente_sel_nombre').text(nombre);
         $('#prestamo_paciente_sel_email').text(email);
         $('#prestamo_paciente_sel_telefono').text(telefono);
-        
+
         $('#card_paciente_seleccionado_prestamo').show();
         $('#card_busqueda_paciente_prestamo').hide();
 
@@ -5206,7 +5192,7 @@ function cargar_datos_post_venta() {
             </div>
         `);
     }
-} 
+}
 
 /**
  * Cargar datos de préstamo cuando se activa la pestaña
@@ -5351,20 +5337,22 @@ function enter_buscar_productos_audifono(event) {
 
                     // Card de producto
                     html += '<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">';
-                    html += '    <div class="card h-100 shadow-sm hover-shadow">';
-                    html += '        <div class="card-body p-2">';
-
-                    // Imagen del producto
-                    html += '            <div class="text-center mb-2">';
-                    html += '                <img src="' + (imagenUrl || '/images/no-image.png') + '" ';
-                    html += '                     alt="' + (producto.nombre || 'Producto') + '" ';
-                    html += '                     class="img-fluid rounded" ';
-                    html += '                     style="max-height: 150px; object-fit: contain;" ';
-                    html += '                     onerror="this.src=\'/images/no-image.png\'">';
-                    html += '            </div>';
-
+                    html += '    <div class="card shadow hover-shadow ">';
+                    html += '        <div class="card-body">';
+                     html += '            <div class="row">';
+                      html += '            <div class="col-sm-6">';
+                        // Imagen del producto
+                        html += '            <div class="text-center mb-2">';
+                        html += '                <img src="' + (imagenUrl || '/images/no-image.png') + '" ';
+                        html += '                     alt="' + (producto.nombre || 'Producto') + '" ';
+                        html += '                     class="img-fluid rounded-xl" ';
+                        html += '                     style="height: 130px; width:180px; object-fit: contain;" ';
+                        html += '                     onerror="this.src=\'/images/no-image.png\'">';
+                        html += '            </div>';
+                        html += '            </div>';
+                        html += '            <div class="col-sm-6">';
                     // Información del producto
-                    html += '            <h6 class="mb-1 font-weight-bold text-truncate" title="' + (producto.nombre || 'Sin nombre') + '">';
+                    html += '            <h6 class="mb-1 font-weight-bold text-capitalize text-c-blue" title="' + (producto.nombre || 'Sin nombre') + '">';
                     html += '                ' + (producto.nombre || 'Sin nombre');
                     html += '            </h6>';
 
@@ -5383,22 +5371,25 @@ function enter_buscar_productos_audifono(event) {
                     // Stock
                     let stockClass = producto.stock_actual > producto.stock_minimo ? 'text-success' : 'text-danger';
                     html += '            <small class="d-block mb-2 ' + stockClass + '">';
-                    html += '                <strong>Stock:</strong> ' + (producto.stock_actual || 0) + ' unidades';
+                    html += '                <strong><i class="feather icon-box"></i> Stock:</strong> ' + (producto.stock_actual || 0) + ' unidades';
                     html += '            </small>';
+
+                    html += '            </div>';
 
                     // Botones de acción
                     html += '            <div class="btn-group btn-group-sm w-100">';
                     html += '                <button type="button" class="btn btn-primary btn-sm" onclick="seleccionar_producto_audifono(' + producto.id + ', ' + producto.precio_venta + ')" title="Seleccionar producto">';
                     html += '                    <i class="feather icon-check"></i> Seleccionar';
                     html += '                </button>';
-                    html += '                <button type="button" class="btn btn-info btn-sm" onclick="ver_detalle_producto_audifono(' + producto.id + ')" title="Ver detalles">';
-                    html += '                    <i class="feather icon-eye"></i>';
+                    html += '                <button type="button" class="btn btn-primary-light-c btn-sm" onclick="ver_detalle_producto_audifono(' + producto.id + ')" title="Ver detalles">';
+                    html += '                    <i class="feather icon-eye"></i> Ver detalles';
                     html += '                </button>';
                     html += '            </div>';
 
                     html += '        </div>';
                     html += '    </div>';
                     html += '</div>';
+                     html += '</div>'
                 });
 
                 html += '</div>';
@@ -5485,7 +5476,7 @@ function enter_buscar_productos_audifono(event) {
 
                 html += '</div>';
             } else {
-                html += '<div class="alert alert-warning text-center">';    
+                html += '<div class="alert alert-warning text-center">';
                 html += '    <i class="feather icon-search"></i> ';
                 html += '    <strong>No se encontraron productos</strong><br>';
                 html += '    <small>Intente con otros términos de búsqueda</small>';
@@ -5559,7 +5550,7 @@ function enter_buscar_productos_audifono(event) {
                 } else {
                     $('#productos-lista').append('<p>No se encontraron productos.</p>');
                 }
-               
+
             })
             .fail(function(jqXHR) {
                 console.error('Error al obtener productos:', jqXHR);
@@ -5619,8 +5610,8 @@ function enter_buscar_productos_audifono(event) {
                                     <i class="feather icon-clock"></i> Prestado
                                 </span>
                             `;
-                           
-                            
+
+
                         }else{
                              botones = `
                                 <!-- Botones de acción -->
@@ -5731,7 +5722,7 @@ function enter_buscar_productos_audifono(event) {
                                         </div>
 
                                         ${botones}
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -6172,7 +6163,7 @@ function enter_buscar_productos_audifono(event) {
                 }
             };
         } else if (tipo_garantia === 'Sin garantía' || !tipo_garantia) {
-            texto += '<br>Sin garantía asociada.';
+            texto += 'Sin garantía asociada.';
         }
         swal({
             title: '¿Devolver producto?',
@@ -6532,7 +6523,7 @@ function enter_buscar_productos_audifono(event) {
             var destinatarios_custom = $('#campana_destinatarios_custom').val().trim();
             var id_lugar_atencion = $('#id_lugar_atencion').val();
             var id_institucion = '{{ $profesional->id }}';
-        
+
             // Validación básica
             if (!titulo || !remitente || !mensaje) {
                 swal({ icon: 'warning', title: 'Faltan datos', text: 'Completa todos los campos obligatorios.' });
@@ -6542,7 +6533,7 @@ function enter_buscar_productos_audifono(event) {
                 swal({ icon: 'warning', title: 'Faltan correos', text: 'Debes ingresar al menos un correo manual.' });
                 return;
             }
-        
+
             // Mostrar loader
             swal({
                 title: 'Enviando campaña...',
@@ -6550,7 +6541,7 @@ function enter_buscar_productos_audifono(event) {
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
-        
+
             // Preparar FormData
             var formData = new FormData();
             formData.append('_token', '{{ csrf_token() }}');
@@ -6570,7 +6561,7 @@ function enter_buscar_productos_audifono(event) {
             formData.append('filtro_tercera_edad', $("#filtro_tercera_edad").is(":checked") ? 1 : 0);
             formData.append('filtro_pacientes_audifonos', $("#filtro_pacientes_audifonos").is(":checked") ? 1 : 0);
             formData.append('campana_destinatarios_custom', $("#campana_destinatarios_custom").val());
-        
+
             // Adjuntar archivos (input tipo file, múltiple)
             var archivos = $('#archivos')[0]?.files;
             if (archivos && archivos.length > 0) {
@@ -6585,7 +6576,7 @@ function enter_buscar_productos_audifono(event) {
                     formData.append('imagenes[]', imagenes[i]);
                 }
             }
-        
+
             $.ajax({
                 url: '{{ route("laboratorio.registrar_campania_publicitaria") }}',
                 type: 'POST',
@@ -6613,12 +6604,73 @@ function enter_buscar_productos_audifono(event) {
         }
 
         function actualizar_lista_destinatarios() {
-            var tipo = $('#campana_destinatarios').val();
-            if (tipo === 'custom') {
-                $('#div_destinatarios_custom').show();
+            console.log('Función actualizar_lista_destinatarios ejecutada');
+
+            // Verificar si el checkbox de "Seleccionar manualmente" está marcado
+            const checkCustom = document.getElementById('check_custom');
+            const divCustom = document.getElementById('div_destinatarios_custom');
+
+            console.log('Checkbox custom:', checkCustom);
+            console.log('¿Está marcado?', checkCustom ? checkCustom.checked : 'elemento no encontrado');
+
+            if (checkCustom && checkCustom.checked) {
+                console.log('Mostrando campo de correos personalizados');
+                divCustom.style.display = 'block';
             } else {
-                $('#div_destinatarios_custom').hide();
+                console.log('Ocultando campo de correos personalizados');
+                if (divCustom) {
+                    divCustom.style.display = 'none';
+                }
+                const inputCustom = document.getElementById('campana_destinatarios_custom');
+                if (inputCustom) {
+                    inputCustom.value = ''; // Limpiar el campo si se desmarca
+                }
             }
+
+            // Actualizar la vista previa de destinatarios
+            actualizarVistaPrevia();
+        }
+
+        function actualizarVistaPrevia() {
+            console.log('Actualizando vista previa de destinatarios');
+            let destinatarios = [];
+
+            // Recopilar destinatarios seleccionados
+            const checkPacientes = document.getElementById('check_pacientes');
+            const checkProfesionales = document.getElementById('check_profesionales');
+            const checkPersonal = document.getElementById('check_personal');
+            const checkCustom = document.getElementById('check_custom');
+
+            if (checkPacientes && checkPacientes.checked) {
+                destinatarios.push('Todos los Pacientes');
+            }
+            if (checkProfesionales && checkProfesionales.checked) {
+                destinatarios.push('Todos los Profesionales');
+            }
+            if (checkPersonal && checkPersonal.checked) {
+                destinatarios.push('Personal del Centro');
+            }
+            if (checkCustom && checkCustom.checked) {
+                const customEmailsInput = document.getElementById('campana_destinatarios_custom');
+                const customEmails = customEmailsInput ? customEmailsInput.value : '';
+                if (customEmails.trim()) {
+                    destinatarios.push('Correos personalizados: ' + customEmails);
+                } else {
+                    destinatarios.push('Correos personalizados: (pendiente de ingresar)');
+                }
+            }
+
+            // Mostrar en la vista previa
+            const preview = document.getElementById('lista_destinatarios_preview');
+            if (preview) {
+                if (destinatarios.length > 0) {
+                    preview.innerHTML = destinatarios.join('<br>');
+                } else {
+                    preview.innerHTML = '<span class="text-muted">Ningún destinatario seleccionado.</span>';
+                }
+            }
+
+            console.log('Destinatarios seleccionados:', destinatarios);
         }
 
         function historial_campanas_publicitarias(){
@@ -6860,7 +6912,7 @@ function enter_buscar_productos_audifono(event) {
                         });
                     });
                 }
-            }); 
+            });
         }
 
 /**

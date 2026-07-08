@@ -13,7 +13,7 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
                             <li class="breadcrumb-item"><a href="#">Bodegas</a></li>
                         </ul>
                     </div>
@@ -63,7 +63,10 @@
                                             <td class="align-middle text-center">{{ $producto->cantidad }}</td>
                                             <td class="align-middle text-center">{{ $producto->observaciones }}</td>
                                             <td class="align-middle text-center">
-                                                <button class="btn btn-info btn-sm" onclick="ver_solicitud({{ $producto->id }})">Ver detalle</button>
+                                                <button class="btn btn-success btn-sm" onclick="aprobar_solicitud({{ $producto->id }})" title="Aprobar"><i class="fas fa-check"></i></button>
+                                                <button class="btn btn-danger btn-sm" onclick="rechazar_solicitud({{ $producto->id }})" title="Rechazar"><i class="fas fa-times"></i></button>
+                                                <button class="btn btn-info btn-sm" onclick="editar_solicitud({{ $producto->id }})" title="Editar"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-warning btn-sm" onclick="suspender_solicitud({{ $producto->id }})" title="Suspender"><i class="fas fa-ban"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -80,10 +83,10 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Detalle de solicitud</h5>
+                <h5 class="modal-title text-white text-center">Nueva Solicitud de Producto</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
             </div>
-            <div class="modal-body" id="detalle_pedido_body">
+            <div class="modal-body" id="nueva_solicitud_body">
                 <form id="formNuevaSolicitudProducto">
                     <div class="form-group">
                         <label for="nombre_producto" class="font-weight-bold">Nombre del producto <span class="text-danger">*</span></label>
@@ -112,10 +115,65 @@
         </div>
     </div>
 </div>
+<!-- FIN MODAL nueva solicitud -->
+
+<!-- MODAL SUSPENDER SOLICITUD -->
+<div id="modalSuspenderSolicitud" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalSuspenderSolicitudLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title text-white text-center">Suspender Solicitud</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id_solicitud_suspender">
+                <div class="form-group">
+                    <label for="motivo_suspension" class="font-weight-bold">Motivo de la suspensión <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="motivo_suspension" name="motivo_suspension" rows="3" required placeholder="Describa el motivo por el cual suspende esta solicitud"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-warning" onclick="confirmar_suspension()">Confirmar Suspensión</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FIN MODAL SUSPENDER SOLICITUD -->
+
+<!-- MODAL RECHAZAR SOLICITUD -->
+<div id="modalRechazarSolicitud" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalRechazarSolicitudLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white text-center">Rechazar Solicitud</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id_solicitud_rechazar">
+                <div class="form-group">
+                    <label for="motivo_rechazo" class="font-weight-bold">Motivo del rechazo <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="motivo_rechazo" name="motivo_rechazo" rows="3" required placeholder="Describa el motivo por el cual rechaza esta solicitud"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-danger" onclick="confirmar_rechazo()">Confirmar Rechazo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FIN MODAL RECHAZAR SOLICITUD -->
+    </div>
+</div>
+
 @endsection
 
 @section('page-script')
 <script>
+    $(document).ready(function() {
+        $('#tab_productos_solicitados').DataTable();
+    });
     function ver_solicitud(id) {
         $.ajax({
             url: "{{ route('adm_cm.ver_solicitud') }}",
@@ -163,13 +221,272 @@
                 "observaciones": observaciones
             },
             success: function(response) {
-                return console.log(response);
-                alert('Solicitud enviada con éxito.');
-                location.reload();
+                console.log(response);
+                swal({
+                    title: 'Éxito',
+                    text: 'La solicitud ha sido enviada correctamente.',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                })
             },
             error: function(error) {
                 console.log(error);
-                alert('Error al enviar la solicitud. Intente nuevamente.');
+                swal({
+                    title: 'Error',
+                    text: 'Ha ocurrido un error al enviar la solicitud. Por favor, inténtelo de nuevo.',
+                    icon: 'error'
+                })
+            }
+        });
+    }
+
+    function cancelar() {
+        $('#modalNuevaSolicitud').modal('hide');
+        $('#formNuevaSolicitudProducto')[0].reset();
+    }
+
+    function editar_solicitud(id) {
+        // Función para editar solicitud - implementar según necesidad
+        console.log('Editar solicitud:', id);
+    }
+
+    function suspender_solicitud(id) {
+        swal({
+            title: '¿Está seguro?',
+            text: 'Está a punto de suspender esta solicitud. Esta acción requiere que indique un motivo.',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    value: null,
+                    visible: true,
+                    className: 'btn-secondary',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Continuar',
+                    value: true,
+                    visible: true,
+                    className: 'btn-warning',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then((willSuspend) => {
+            if (willSuspend) {
+                // Abrir modal para pedir motivo
+                $('#id_solicitud_suspender').val(id);
+                $('#motivo_suspension').val('');
+                $('#modalSuspenderSolicitud').modal('show');
+            }
+        });
+    }
+
+    function confirmar_suspension() {
+        let id = $('#id_solicitud_suspender').val();
+        let motivo = $('#motivo_suspension').val();
+
+        if(!motivo || motivo.trim() === '') {
+            swal('Error', 'Debe indicar un motivo para suspender la solicitud.', 'error');
+            return;
+        }
+
+        swal({
+            title: '¿Confirmar suspensión?',
+            text: 'Se suspenderá la solicitud con el motivo indicado.',
+            icon: 'warning',
+            buttons: {
+                cancel: 'No, volver',
+                confirm: {
+                    text: 'Sí, suspender',
+                    value: true,
+                    className: 'btn-warning'
+                }
+            },
+        }).then((confirmado) => {
+            if (confirmado) {
+                ejecutar_suspension(id, motivo);
+            }
+        });
+    }
+
+    function ejecutar_suspension(id, motivo) {
+        $.ajax({
+            url: "{{ route('adm_cm.suspender_solicitud') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "motivo": motivo
+            },
+            success: function(response) {
+                console.log(response);
+                $('#modalSuspenderSolicitud').modal('hide');
+                swal({
+                    title: 'Solicitud Suspendida',
+                    text: 'La solicitud ha sido suspendida correctamente.',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: 'Error',
+                    text: 'Ha ocurrido un error al suspender la solicitud. Por favor, inténtelo de nuevo.',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+
+    function aprobar_solicitud(id) {
+        swal({
+            title: '¿Aprobar solicitud?',
+            text: 'Está a punto de aprobar esta solicitud. Una vez aprobada, se procesará el pedido.',
+            icon: 'info',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    value: null,
+                    visible: true,
+                    className: 'btn-secondary',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Sí, aprobar',
+                    value: true,
+                    visible: true,
+                    className: 'btn-success',
+                    closeModal: true
+                }
+            },
+        }).then((willApprove) => {
+            if (willApprove) {
+                ejecutar_aprobacion(id);
+            }
+        });
+    }
+
+    function ejecutar_aprobacion(id) {
+        $.ajax({
+            url: "{{ route('adm_cm.aprobar_solicitud') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id
+            },
+            success: function(response) {
+                console.log(response);
+                swal({
+                    title: 'Solicitud Aprobada',
+                    text: 'La solicitud ha sido aprobada correctamente.',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: 'Error',
+                    text: 'Ha ocurrido un error al aprobar la solicitud. Por favor, inténtelo de nuevo.',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+
+    function rechazar_solicitud(id) {
+        swal({
+            title: '¿Está seguro?',
+            text: 'Está a punto de rechazar esta solicitud. Esta acción requiere que indique un motivo.',
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    value: null,
+                    visible: true,
+                    className: 'btn-secondary',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Continuar',
+                    value: true,
+                    visible: true,
+                    className: 'btn-danger',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then((willReject) => {
+            if (willReject) {
+                // Abrir modal para pedir motivo
+                $('#id_solicitud_rechazar').val(id);
+                $('#motivo_rechazo').val('');
+                $('#modalRechazarSolicitud').modal('show');
+            }
+        });
+    }
+
+    function confirmar_rechazo() {
+        let id = $('#id_solicitud_rechazar').val();
+        let motivo = $('#motivo_rechazo').val();
+
+        if(!motivo || motivo.trim() === '') {
+            swal('Error', 'Debe indicar un motivo para rechazar la solicitud.', 'error');
+            return;
+        }
+
+        swal({
+            title: '¿Confirmar rechazo?',
+            text: 'Se rechazará la solicitud con el motivo indicado.',
+            icon: 'warning',
+            buttons: {
+                cancel: 'No, volver',
+                confirm: {
+                    text: 'Sí, rechazar',
+                    value: true,
+                    className: 'btn-danger'
+                }
+            },
+            dangerMode: true,
+        }).then((confirmado) => {
+            if (confirmado) {
+                ejecutar_rechazo(id, motivo);
+            }
+        });
+    }
+
+    function ejecutar_rechazo(id, motivo) {
+        $.ajax({
+            url: "{{ route('adm_cm.rechazar_solicitud') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "motivo": motivo
+            },
+            success: function(response) {
+                console.log(response);
+                $('#modalRechazarSolicitud').modal('hide');
+                swal({
+                    title: 'Solicitud Rechazada',
+                    text: 'La solicitud ha sido rechazada correctamente.',
+                    icon: 'success'
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: 'Error',
+                    text: 'Ha ocurrido un error al rechazar la solicitud. Por favor, inténtelo de nuevo.',
+                    icon: 'error'
+                });
             }
         });
     }

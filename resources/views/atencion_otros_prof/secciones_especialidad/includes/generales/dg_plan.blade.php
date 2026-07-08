@@ -21,7 +21,7 @@
                         <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="espect_pcte" id="espect_pcte"></textarea>
                     </div>
                     <div class="form-group col-md-3">
-                        <button type="button" class="btn btn-primary-light-c btn-block btn-sm " onclick="e_plan();"><i class="feather icon-plus"></i> Plan de tratamiento</button>
+                        <button type="button" class="btn btn-primary-light-c btn-block btn-sm " onclick="e_plan();"><i class="feather icon-edit-1"></i> Plan de tratamiento</button>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="alert alert-warning" role="alert">

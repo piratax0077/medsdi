@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            {{-- <div class="col-md-4">
                 <div class="card mb-3 subir">
                     <a href="{{ ROUTE('administrador_comercial.configuracion') }}">
                         <div class="card-body text-center" style="cursor:pointer">
@@ -38,8 +38,8 @@
                         </div>
                     </a>
                 </div>
-            </div>
-            <div class="col-md-4">
+            </div> --}}
+            {{-- <div class="col-md-4">
                 <div class="card mb-3 subir">
                     <a href="{{ ROUTE('adm_cm.area_contabilidad') }}">
                         <div class="card-body text-center" style="cursor:pointer">
@@ -48,8 +48,8 @@
                         </div>
                     </a>
                 </div>
-            </div>
-              <div class="col-md-4">
+            </div> --}}
+              <div class="col-md-3">
                 <div class="card mb-3 subir">
                     <a href="{{ ROUTE('adm_cm.estadisticas') }}">
                     <div class="card-body text-center" style="cursor:pointer">
@@ -102,7 +102,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+            {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                 <div class="card mb-3 subir">
                     <a href="{{ ROUTE('asistente_adm.liquidacion_profesionales') }}">
                         <div class="card-body text-center" style="cursor:pointer">
@@ -111,7 +111,7 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div> --}}
 
 
 			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
@@ -144,7 +144,7 @@
                     </a>
 				</div>
 			</div>
-            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+            {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
 				<div class="card mb-3 subir" onclick="en_construccion();">
 				   <a href="#">
 						<div class="card-body text-center" style="cursor:pointer">
@@ -153,7 +153,7 @@
 						</div>
                     </a>
 				</div>
-			</div>
+			</div> --}}
         </div>
         <!--CIERRE: MODULOS-->
     </div>

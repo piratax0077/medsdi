@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Confirmar Hora</h5>
+                                <h5 class="m-b-10 font-weight-bold"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -18,7 +18,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">Confirmar Hora Institución</a>
+                                    <a href="{{ ROUTE('asistentecm.ma.confirmar_hora') }}">Confirmación de horas Institución</a>
                                 </li>
                             </ul>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="card-header bg-info">
                             <div class="row">
                                 <div class="col-md-12 align-botton">
-                                    <h4 class="text-white f-20 d-inline ml-4 mt-3">Confirmar Hora</h4>
+                                    <h4 class="text-white f-22 d-inline ml-4 mt-3">Confirmar Hora</h4>
                                 </div>
                             </div>
                         </div>
@@ -45,42 +45,42 @@
                                     <thead>
                                         <tr>
                                             <!-- <th class="text-center align-middle">id</th> -->
-                                            <th class="text-center align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Hora</th>
-                                            <th class="text-center align-middle">Prof./Lab.</th>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Teléfono</th>
-                                            <th class="text-center align-middle">Notificado</th>
-                                            <th class="text-center align-middle">F.Notificado</th>
-                                            <th class="text-center align-middle">Aciones</th>
+                                            <th class="align-middle">Fecha</th>
+                                            <th class="align-middle">Hora</th>
+                                            <th class="align-middle">Prof./Lab.</th>
+                                            <th class="align-middle">Paciente</th>
+                                            <th class="align-middle">Teléfono</th>
+                                            <th class="align-middle">Notificado</th>
+                                            <th class="align-middle">F.Notificado</th>
+                                            <th class="align-middle">Aciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($horas as $hm )
                                             <tr>
-                                                <!-- <td class="text-center align-middle">
+                                                <!-- <td class="align-middle">
                                                     {{ $hm->id }}
                                                 </td> -->
-                                                <td class="text-center align-middle">
+                                                <td class="align-middle">
                                                     {{ \Carbon\Carbon::parse($hm->fecha_consulta)->format('d-m-Y') }}
                                                 </td>
-                                                <td class="text-center align-middle">
+                                                <td class="align-middle">
                                                     {{ \Carbon\Carbon::parse($hm->hora_inicio)->format('H:i') }}
                                                 </td>
-                                                <td class="text-center align-middle">
-                                                    {{ $hm->profesional->apellido_uno }}
+                                                <td class="align-middle">
+                                                   {{ $hm->profesional->nombre }} {{ $hm->profesional->apellido_uno }}
                                                 </td>
-                                                <td class="text-center align-middle">
+                                                <td class="align-middle">
                                                     {{ $hm->paciente->nombres }} {{ $hm->paciente->apellido_uno }}
                                                 </td>
-                                                <td class="text-center align-middle">
+                                                <td class="align-middle">
                                                     {{ $hm->paciente->telefono_uno }}
                                                     @if(!empty($hm->paciente->telefono_dos))
                                                         <br>{{ $hm->paciente->telefono_dos }}
                                                     @endif
                                                 </td>
                                                 @if(!empty($hm->notificacionesconfirmacion))
-                                                    <td class="align-middle text-center">
+                                                    <td class="align-middle ">
                                                             @php
                                                                 $medio_notificacion_array = json_decode($hm->notificacionesconfirmacion->medio_notificacion);
                                                                 // var_dump($medio_notificacion_array);
@@ -102,22 +102,22 @@
                                                             @endforeach
 
                                                     </td>
-                                                    <td class="text-center align-middle">
+                                                    <td class=" align-middle">
                                                     {{ \Carbon\Carbon::parse($hm->notificacionesconfirmacion->fecha_notificacion)->format('d-m-Y H:i') }}
                                                     </td>
                                                 @else
-                                                    <td class="align-middle text-center">
+                                                    <td class="align-middle ">
                                                         Sin notificar
                                                     </td>
-                                                    <td class="align-middle text-center">
+                                                    <td class="align-middle ">
                                                         N/A
                                                     </td>
                                                 @endif
 
                                                 <td>
-                                                    <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora('{{ $hm->id }}','Telefonica');">
+                                                    <div class="btn btn-xxs btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora('{{ $hm->id }}','Telefonica');">
                                                         <!-- <i class="feather icon-activity"></i> -->
-                                                        C
+                                                        Confirmar
                                                     </div>
                                                     <div class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip"data-placement="top" title="Cancelar" onclick="cancelar_hora('{{ $hm->id }}','Telefonica');">
                                                         <!-- <i class="feather icon-edit"></i> -->
@@ -279,12 +279,12 @@
 
                         var fila = '';
                         fila += '<tr>';
-                        fila += '    <!-- <td class="text-center align-middle">'+data.registros[i].id+'</td> -->';
-                        fila += '    <td class="text-center align-middle">'+moment(data.registros[i].fecha_consulta).format('DD-MM-YYYY') +'</td>';
-                        fila += '    <td class="text-center align-middle">'+data.registros[i].hora_inicio +'</td>';
-                        fila += '    <td class="text-center align-middle">'+data.registros[i].profesional.apellido_uno+'</td>';
-                        fila += '    <td class="text-center align-middle">'+data.registros[i].paciente.nombres+' '+data.registros[i].paciente.apellido_uno+'</td>';
-                        fila += '    <td class="text-center align-middle">';
+                        fila += '    <!-- <td class="align-middle">'+data.registros[i].id+'</td> -->';
+                        fila += '    <td class="align-middle">'+moment(data.registros[i].fecha_consulta).format('DD-MM-YYYY') +'</td>';
+                        fila += '    <td class="align-middle">'+data.registros[i].hora_inicio +'</td>';
+                        fila += '    <td class="align-middle">'+data.registros[i].profesional.apellido_uno+'</td>';
+                        fila += '    <td class="align-middle">'+data.registros[i].paciente.nombres+' '+data.registros[i].paciente.apellido_uno+'</td>';
+                        fila += '    <td class="align-middle">';
                         fila += '        '+data.registros[i].paciente.telefono_uno;
                         if(data.registros[i].paciente.telefono_dos != '' && data.registros[i].paciente.telefono_dos != 'null' && data.registros[i].paciente.telefono_dos != null)
                             fila += '            <br>'+data.registros[i].paciente.telefono_dos;
@@ -295,7 +295,7 @@
 
                             var medio_notificacion_array = JSON.parse(data.registros[i].notificacionesconfirmacion.medio_notificacion);
 
-                            fila += '        <td class="align-middle text-center">';
+                            fila += '        <td class="align-middle">';
                             medio_notificacion_array.forEach((paso,key) => {
                                 if(key == 0)
                                 {
@@ -314,14 +314,14 @@
                             });
                             fila += '        </td>';
 
-                            fila += '        <td class="text-center align-middle">';
+                            fila += '        <td class="align-middle">';
                             fila += '        '+data.registros[i].notificacionesconfirmacion.fecha_notificacion+'';
                             fila += '        </td>';
                         }
                         else
                         {
-                            fila += '        <td class="align-middle text-center">Sin notificar</td>';
-                            fila += '        <td class="align-middle text-center">N/A</td>';
+                            fila += '        <td class="align-middle">Sin notificar</td>';
+                            fila += '        <td class="align-middle">N/A</td>';
                         }
                         fila += '    <td>';
                         fila += '        <div class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top" title="Confirmar" onclick="confirmar_hora(\''+data.registros[i].id+'\',\'Telefonica\');">';

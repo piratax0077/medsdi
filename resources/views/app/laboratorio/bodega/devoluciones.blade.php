@@ -271,7 +271,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="modalRechazarProductoLabel">Rechazar Producto</h5>
+                <h5 class="modal-title text-white" id="modalRechazarProductoLabel">Rechazo / Devolución</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar" onclick="$('#modalRechazarProducto').modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -285,7 +285,7 @@
                     <input type="number" id="cantidad_rechazo" class="form-control" min="1" value="1">
                 </div>
                 <div class="form-group">
-                    <label for="observaciones">Observaciones</label>
+                    <label for="observaciones">Observaciones / Motivo</label>
                     <textarea id="observaciones" class="form-control" rows="3"></textarea>
                 </div>
 

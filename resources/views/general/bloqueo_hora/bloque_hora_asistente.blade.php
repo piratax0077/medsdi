@@ -56,7 +56,7 @@
                                 <input type="time" class="form-control form-control-sm" name="bloqueo_hora_inicio" id="bloqueo_hora_inicio">
                             </div>
                             <div class="form-group col-md-6">
-                                <label class="floating-label-activo-sm">Hora de termino</label>
+                                <label class="floating-label-activo-sm">Hora de término</label>
                                 <input type="time" class="form-control form-control-sm" name="bloqueo_hora_termino" id="bloqueo_hora_termino">
                             </div>
 
@@ -68,8 +68,8 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-success-light btn-sm" onclick="registrar_bloqueo_hora();">Guardar</button>
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-info btn-sm" onclick="registrar_bloqueo_hora();"><i class="feather icon-save"></i> Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -105,11 +105,6 @@
             </div>
         </div>
       </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger-light btn-sm" onclick="$('#modal_bloqueo_hora').modal('hide');">Cerrar</button>
-      </div>
-
 
     </div>
   </div>

@@ -23,6 +23,10 @@
             border: 1px solid black;
             padding: 8px;
         }
+
+        .contenedor th{
+            text-align: left
+        }
         .contenedor th {
             background-color: #f2f2f2;
         }
@@ -45,8 +49,12 @@
             <td>{{ $datos->rut_profesional }}</td>
         </tr>
         <tr>
+            <th>Laboratorio</th>
+            <td>{{ $datos->laboratorio->nombre }}</td>
+        </tr>
+        <tr>
             <th>N° Orden Trabajo</th>
-            <td>{{ $datos->nro_orden_trabajo_menor }}</td>
+            <td>{{ $datos->nro_orden }}</td>
         </tr>
         <tr>
             <th>Trabajo a Realizar</th>

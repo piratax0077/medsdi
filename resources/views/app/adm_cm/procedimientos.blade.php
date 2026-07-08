@@ -37,46 +37,31 @@
                     </div>
                     <table id="lista_examenes_laboratorio" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                         <thead>
-                            <tr>
-                                <th class="text-center align-middle">Código</th>
-                                <th class="text-center align-middle">Nombre</th>
-                                <th class="text-center align-middle">Plazo de entrega</th>
-                                <th class="text-center align-middle">Preparación del paciente</th>
-                                <th class="text-center align-middle">Toma de muestras</th>
-                                <th class="text-center align-middle">Análisis de examen</th>
-                                <th class="text-center align-middle">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="align-middle text-center">
-                                    <span>302056</span><br>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>Magnesio en sangre</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>1 día</span><br>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span>Ayuno 8 hrs</span><!--Texto como link para descargar instructivo-->
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón Modal-->
-                                    <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="toma_muestras();" data-toggle="tooltip" data-placement="top" title="Ver lugares"><i class="feather icon-settings"></i></button>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <!--Botón Modal-->
-                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="analisis_muestra();" data-toggle="tooltip" data-placement="top" title="Ver lugares"><i class="feather icon-settings"></i></button>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_datos();">
-                                    <i class="feather icon-edit"></i> Editar</button>
-                                    <button type="button" class="btn btn-danger btn-sm">
-                                    <i class="feather icon-x-circle"></i> Eliminar</button>
-                                </td>
-                            </tr>
-                        </tbody>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Descripcion</th>
+                                    <th>Cantidad bloques</th>
+                                    <th>Valor</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($prestaciones))
+                                @foreach ($prestaciones as $mi_trabajo)
+                                    <tr>
+                                        <td>{{ $mi_trabajo->nombre }}</td>
+                                        <td>{{ $mi_trabajo->descripcion }}</td>
+                                        <td>{{ $mi_trabajo->cantidad_bloques }}</td>
+                                        <td>${{ number_format($mi_trabajo->valor,0,',','.') }}</td>
+
+                                        <td>
+                                            <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @endif
+                            </tbody>
                     </table>
                 </div>
             </div>

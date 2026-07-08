@@ -130,6 +130,7 @@
 
     function registrar_vacuna_minsal(id_tipo, tipo)
     {
+        console.log(id_tipo, tipo);
         var id_ficha_atencion = $('#id_fc').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
         var id_paciente = $('#id_paciente_fc').val();
@@ -192,6 +193,9 @@
                         text: "Registro Exitoso.",
                         icon: "success",
                     });
+
+                    $('#formulario_vac li#vacuna_minsal').removeClass('d-none');
+                    $('#formulario_vac li#vacuna_minsal').html('<i class="fas fa-check text-info"></i> Se añadio vacuna programa MINSAL');
 
                     cargar_vacunas_minsal();
 

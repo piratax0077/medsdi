@@ -100,6 +100,7 @@
             @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_rx')
             @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_examenes_com')
             @include('general.hospitalizacion.modals.in_solic_pabellon')
+            @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 	        @include("general.modal.modal_no_disponible")
 
 

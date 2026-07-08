@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Desactivar vacaciones expiradas todos los días a las 00:01
+        $schedule->command('vacaciones:desactivar-expiradas')->dailyAt('00:01');
     }
 
     /**

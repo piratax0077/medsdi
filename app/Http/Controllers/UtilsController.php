@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Models\Articulo;
+use App\Models\ArticuloHomeopatia;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
 use App\Models\DiagnosticoCie;
@@ -14,6 +15,7 @@ use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\RecetaDosis;
 use App\Models\RecetaPresentacion;
+use App\Models\RecetaRecomendacionHomeopatia;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -277,5 +279,20 @@ class UtilsController extends Controller
     {
         $cant_comp = RecetaPresentacion::where('tipo_presentacion', $request->cant_comp)->get();
         return json_encode($cant_comp);
+    }
+
+    public function getCantCompHomeo(Request $request)
+    {
+
+        $cant_comp = RecetaPresentacion::where('tipo_presentacion', $request->cant_comp)->get();
+        return json_encode($cant_comp);
+    }
+
+    public function getRecomendacionesHomeo(Request $request)
+    {
+
+        $articulo = ArticuloHomeopatia::where('id', $request->id_medicamento)->first();
+        $recomendaciones = RecetaRecomendacionHomeopatia::where('id', $articulo->droga)->get();
+        return json_encode($recomendaciones);
     }
 }

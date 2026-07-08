@@ -104,7 +104,7 @@
                     <div class="form-row">
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Trabajo a realizar</label>
-                            <input type="text" class="form-control form-control-sm"
+                            <input type="text" class="form-control form-control-sm prestacion-autocomplete"
                                 name="trabajo_realizar_trabajo_mayor" id="trabajo_realizar_trabajo_mayor">
 
                         </div>

@@ -1,4 +1,4 @@
-    <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+    <div class="user-profile user-card mt-3"style="background-color: #ecf0f5!important;">
         <div class="col-md-12 py-0 px-2 shadow-none">
             <div class="row mx-0">
                 <div class="col-md-12">

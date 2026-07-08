@@ -13,7 +13,11 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('comercial') }}">Administracion del centro médico</a></li>
+                            @if($institucion->id_tipo_institucion == 3)
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
+                            @else
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_comercial') }}">Administracion del centro médico</a></li>
+                            @endif
                             <li class="breadcrumb-item"><a href="#">Bodegas</a></li>
                         </ul>
                     </div>
@@ -59,7 +63,7 @@
                                         <td class="align-middle text-center">{{ $p->descripcion }}</td>
                                         <td class="align-middle text-center">{{ $p->tipo_almacenamiento }}</td>
                                         <td class="align-middle text-center">
-                                            <button class="btn btn-info btn-sm has-ripple" onclick="ver_producto_almacenado({{ $p->id }})" data-toggle="modal" data-target="#verSolicitud"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                            <button class="btn btn-info btn-sm has-ripple" onclick="ver_producto_almacenado({{ $p->id }})"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
                                         </td>
                                     </tr>
@@ -87,7 +91,7 @@
             success: function(response){
                 console.log(response);
                 $('#verSolicitud').modal('show');
-                $('#detalle_pedido_body').html(response);
+                $('#detalle_pedido_almacenado_body').html(response);
             },
             error: function(error){
                 console.log(error);
@@ -106,7 +110,7 @@
                 <h5 class="modal-title text-white text-center">Detalle de producto almacenado</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
             </div>
-            <div class="modal-body" id="detalle_pedido_body">
+            <div class="modal-body" id="detalle_pedido_almacenado_body">
 
             </div>
             <div class="modal-footer">

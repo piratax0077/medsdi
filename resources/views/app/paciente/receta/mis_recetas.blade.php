@@ -44,14 +44,18 @@
                                                     {{ date('d-m-Y', strtotime($receta['created_at'])) }}
                                                 </td>
                                                 <td class="align-middle">
-                                                    <strong>{{ $receta['profesional']['nombre'] }} {{ $receta['profesional']['apellido_uno'] }} {{ $receta['profesional']['apellido_dos'] }} </strong>
-                                                    <br>
-                                                    <span style="font-size:9px;">
-                                                        {{ $receta['profesional']['TipoEspecialidad']['nombre'] }}
-                                                        @if($receta['profesional']['SubTipoEspecialidad']['nombre'])
-                                                            - {{ $receta['profesional']['SubTipoEspecialidad']['nombre'] }}
-                                                        @endif
-                                                    </span>
+                                                    @if($receta['profesional'])
+                                                        <strong>{{ $receta['profesional']['nombre'] }} {{ $receta['profesional']['apellido_uno'] }} {{ $receta['profesional']['apellido_dos'] }} </strong>
+                                                        <br>
+                                                        <span style="font-size:9px;">
+                                                            {{ $receta['profesional']['TipoEspecialidad'] ? $receta['profesional']['TipoEspecialidad']['nombre'] : '' }}
+                                                            @if($receta['profesional']['SubTipoEspecialidad'] && $receta['profesional']['SubTipoEspecialidad']['nombre'])
+                                                                - {{ $receta['profesional']['SubTipoEspecialidad']['nombre'] }}
+                                                            @endif
+                                                        </span>
+                                                    @else
+                                                        <span class="text-muted">Profesional no disponible</span>
+                                                    @endif
                                                 </td>
                                                 <td class="text-center align-middle">
                                                     <div onclick="ver_pdf_receta_retenido({{ $receta['id_ficha_atencion'] }}, {{ $receta['id'] }})" class="btn btn-warning-light-c btn-xxs"><i class="feather icon-activity"></i> Ver Receta</div>
@@ -80,14 +84,36 @@
 
         function ver_pdf_receta_retenido(id_ficha_atencion, id_receta)
         {
+            const pdfUrl = "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion=" + id_ficha_atencion + '&id_receta=' + id_receta;
+
             Fancybox.show(
-                [
-                    {
-                        src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion+'&id_receta='+id_receta,
-                        type: "iframe",
-                        preload: false,
-                    },
-                ]
+                [{ src: pdfUrl, type: "iframe", preload: false }],
+                {
+                    Toolbar: {
+                        display: [
+                            { id: "prev",     position: "center" },
+                            { id: "title",    position: "center" },
+                            { id: "next",     position: "center" },
+                            { id: "imprimir", position: "right"  },
+                            { id: "close",    position: "right"  },
+                        ],
+                        items: {
+                            imprimir: {
+                                tpl: '<button class="carousel__button" title="Imprimir receta" style="width:auto;padding:0 14px;font-size:12px;gap:6px;display:flex;align-items:center;">'
+                                   + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="flex-shrink:0"><path fill="currentColor" d="M18 3H6v4H5a3 3 0 0 0-3 3v6h4v4h12v-4h4V10a3 3 0 0 0-3-3h-1V3zm-2 2v2H8V5h8zm-8 14v-4h8v4H8zm10-6H6v-2h12v2zm1-3a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>'
+                                   + '<span>Imprimir</span></button>',
+                                click: function() {
+                                    const win = window.open(pdfUrl, '_blank');
+                                    if (win) {
+                                        setTimeout(function() {
+                                            try { win.print(); } catch(e) {}
+                                        }, 1500);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             );
         }
     </script>

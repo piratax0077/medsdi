@@ -199,11 +199,12 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 col-xxl-9">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                                                                         @include('atencion_odontologica.generales.odontograma_adulto_grupos_rehab')
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3 col-xxl-3 mt-2">
-                                                                                        <div class="form-row">
+                                                                                </div>
+                                                                       
+                                                                                        <div class="form-row mt-2">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
                                                                                                     <label for="" class="floating-label-activo-sm">Grupos</label>
@@ -243,9 +244,9 @@
                                                                                                     </select>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
                                                                                                 <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Diagnostico</label>
+                                                                                                    <label class="floating-label-activo-sm">Diagnóstico</label>
                                                                                                     <select class="form-control form-control-sm" id="diagnostico_combo_g_rehab">
                                                                                                         <option value="0">Seleccione</option>
                                                                                                         @foreach ($diagnosticos as $d)
@@ -256,19 +257,17 @@
                                                                                                     </select>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-6 col-xxl-6">
                                                                                                 <div class="form-group">
                                                                                                     <label class="floating-label-activo-sm">Tratamiento</label>
                                                                                                     <input type="text" name="diag_presupuesto_pieza_g_rehab_impl" id="diag_presupuesto_pieza_g_rehab_impl" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-rehab-autocomplete ui-autocomplete-input" autocomplete="off">
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-4 col-xl-2 col-xxl-2">
                                                                                                 <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_rehab_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-
-                                                                                </div>
+                                                                               
 
                                                                                 <!--<div class="form-row my-2">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
@@ -427,7 +426,7 @@
                                                                                                 <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
                                                                                                 <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp_rehab_edit{{ $counter }}" id="obs_tpo_proc_imp_rehab_edit{{ $counter }}">{{ $e->tipo_procedimiento }}</textarea>
                                                                                                 <div class="form-group mt-3">
-                                                                                                    <label class="floating-label-activo-sm">UCO?</label>
+                                                                                                    <label class="floating-label-activo-sm">¿UCO?</label>
                                                                                                     <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
                                                                                                 </div>
                                                                                                 <div class="form-group mt-3">

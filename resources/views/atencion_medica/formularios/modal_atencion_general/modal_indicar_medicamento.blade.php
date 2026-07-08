@@ -14,7 +14,7 @@
                 <div class="form-row">
                     <div class="col-sm-12  col-md-6 mt-2">
                         <div class="form-group fill">
-                            <label class="floating-label">Medicamento</label>
+                            <label class="floating-label-activo-sm">Medicamento</label>
                             <select class="form-control form-control-sm" data-live-search="true" id="id_medicamento"
                                 name="id_medicamento">
                                 <option value="0">Seleccione</option>

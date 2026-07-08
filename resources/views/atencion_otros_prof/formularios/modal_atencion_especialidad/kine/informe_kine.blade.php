@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white mt-1">Informe kinesiológico</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+				<button type="button" class="close text-white" data-dismiss="modal" onclick="$('#informe_kine').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
                 <form>
@@ -49,7 +49,7 @@
             </div>
 			<div class="modal-footer">
                 <button type="button" class="btn btn-primary-light-c btn-sm"><i class="feather icon-file-text"></i> Ver PDF</button>
-				<button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
+				 <button type="button" class="btn btn-danger btn-sm" onclick="$('#informe_kine').modal('hide')" data-bs-dismiss="modal"> <i class="feather icon-x"></i> Cerrar</button>
 				<button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
 			</div>
 		</div>

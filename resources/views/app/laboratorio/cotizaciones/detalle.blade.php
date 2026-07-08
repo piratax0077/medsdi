@@ -456,7 +456,7 @@
                         </button>
 
                         @if($cotizacion->pdf_path)
-                        <a href="{{ url('laboratorio/cotizaciones/descargar-pdf/' . $cotizacion->id) }}"
+                        <a href="{{ url('Laboratorio/Cotizaciones/' . $cotizacion->id . '/pdf') }}"
                            class="btn btn-primary btn-custom" target="_blank">
                             <i class="fas fa-download"></i> Descargar PDF
                         </a>
@@ -507,19 +507,35 @@
                         return;
                     }
 
+                    // Mostrar loading
+                    swal({
+                        title: 'Enviando...',
+                        text: 'Por favor espere',
+                        buttons: false,
+                        closeOnClickOutside: false,
+                        closeOnEsc: false
+                    });
+
                     $.ajax({
-                        url: "{{ url('laboratorio/cotizaciones/enviar-email') }}",
+                        url: "{{ url('Laboratorio/Cotizaciones/enviar-existente/' . $cotizacion->id) }}",
                         method: 'POST',
                         data: {
-                            cotizacion_id: {{ $cotizacion->id }},
                             email_destino: email,
                             _token: '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            swal('Enviado', 'Email enviado exitosamente a ' + email, 'success');
+                            if (response.success) {
+                                swal('Enviado', 'Email enviado exitosamente a ' + email, 'success');
+                            } else {
+                                swal('Error', response.message || 'No se pudo enviar el email', 'error');
+                            }
                         },
-                        error: function() {
-                            swal('Error', 'No se pudo enviar el email', 'error');
+                        error: function(xhr) {
+                            let mensaje = 'No se pudo enviar el email';
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                mensaje = xhr.responseJSON.message;
+                            }
+                            swal('Error', mensaje, 'error');
                         }
                     });
                 }

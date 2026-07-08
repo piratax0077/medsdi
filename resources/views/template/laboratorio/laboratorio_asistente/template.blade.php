@@ -20,6 +20,7 @@
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Styles -->
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon" />
@@ -36,7 +37,6 @@
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
     <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}">
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}">
@@ -232,6 +232,93 @@
         }
         function convenio_profesional_cm() {
             $('#convenio_usuario').modal('show');
+        }
+
+        function cargar_profesional(rut, input_nombre, input_id, div_solicitar,input_telefono)
+        {
+            rut = $(rut).val();
+
+            // console.log('------------------------------------');
+            // console.log(rut.length);
+            // console.log(rut);
+            // console.log('------------------------------------');
+
+            if(rut.length>5)
+            {
+                url = "{{ route('profesional.buscar') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        rut : rut,
+                    },
+                })
+                .done(function(data)
+                {
+                    // console.log('-----------------------');
+                    // console.log(data);
+                    // console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+
+                        if(data.registros.length>0)
+                        {
+                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
+                            var id = data.registros[0].id;
+                            // $('#'+input_nombre).attr('readonly', true);
+                            $('#'+input_nombre).val(nombre);
+                            $('#'+input_id).val(id);
+                            if(input_telefono != undefined)
+                            {
+                                $('#'+input_telefono).val(data.registros[0].telefono_uno);
+                            }
+                            // console.log('-----------------------');
+                            $('#'+div_solicitar).hide();
+                            mensaje = '';
+                            $('#div_mensaje').hide();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_nombre_oct_par').val('');
+                            $('#solicitado_apellido_oct_par').val('');
+                            $('#solicitado_telefono_oct_par').val('');
+                            $('#solicitado_email_oct_par').val('');
+                        }
+                        else
+                        {
+                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
+                            $('#'+input_nombre).val('');
+                            $('#'+input_id).val('');
+                            $('#'+div_solicitar).show();
+                            $('#div_mensaje').show();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_nombre_oct_par').val('');
+                            $('#solicitado_apellido_oct_par').val('');
+                            $('#solicitado_telefono_oct_par').val('');
+                            $('#solicitado_email_oct_par').val('');
+                            $('#'+input_nombre).attr('readonly', true);
+                        }
+                    }
+                    else
+                    {
+                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
+                        $('#div_mensaje').show();
+                        $('#mensaje_solicitado_por').html(mensaje);
+                        $('#'+input_nombre).attr('readonly', false);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else if(rut.length==0)
+            {
+                $('#'+input_nombre).val('');
+                // $('#'+input_nombre).attr('readonly', true);
+                $('#'+input_id).val('');
+                $('#'+div_solicitar).hide();
+                $('#div_mensaje').hide();
+                $('#mensaje_solicitado_por').html('');
+            }
         }
 
     </script>

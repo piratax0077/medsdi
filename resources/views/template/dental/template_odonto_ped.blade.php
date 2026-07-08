@@ -17,6 +17,14 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+        <!-- select2 selectbonito css -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+            <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -55,6 +63,7 @@
     {{--  /** agregar css */  --}}
     <!--cara dental-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
+
     <style>
         .ui-front {
             position: absolute;
@@ -64,12 +73,13 @@
 
     </style>
     @yield('css-btn-autorizacion')
+    @yield('styles')
 </head>
 <body>
+    
     @include('template.header')
     @include('template.menuProfesional')
-
-
+    @include('atencion_odontologica.generales.eval_periimplante')
     @yield('Content')
 
     <!-- Modal de la vista -->
@@ -114,12 +124,17 @@
     <script src="{{ asset('js/recetas_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/licencias_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
 
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -147,7 +162,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
     {{--  @include('template.templateAutorizacion')  --}}
 
@@ -169,9 +185,187 @@
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <script>
+        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
+        // window.getTratamientoDentalImplantologiaUrl = "{{ route('dental.getTratamientoImplantologia') }}";
+    </script>
+    @routes
+    <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
+    <script>
+        const GUARDAR_PIEZA_URL = "{{ route('dental.guardar_pieza_periodonto') }}";
+    </script>
+    <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+        $(document).ready(function() {
+        $("#nombre_medicamento_ficha_dental").autocomplete({
+            source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('medicamentos.get') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if (data.length == 0) {
+                            $('#rec1 .medicamento_activo').hide();
+                            $('#rec1 .medicamento_inactivo').show();
+                            $('#dosis_medicamento_ficha_dental_2').val('');
+                            $('#frecuencia_medicamento_ficha_dental_2').val('');
+                            $('#id_medicamento_ficha_dental').val('');
+                            $('#id_medicamento_tipo_control').val('');
+                            $('#mensaje_med_control').val('');
+                        } else {
+                            $('#rec1 .medicamento_activo').show();
+                            $('#rec1 .medicamento_inactivo').hide();
+                            $('#dosis_medicamento_ficha_dental_2').val('');
+                            $('#frecuencia_medicamento_ficha_dental_2').val('');
+                            // $('#id_medicamento_ficha_dental').val('');
+                            $('#id_medicamento_tipo_control').val('');
+                            $('#mensaje_med_control').val('');
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                console.log(ui.item);
+                // Set selection
+                $('#nombre_medicamento_ficha_dental').val(ui.item
+                .label); // display the selected text
+                $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
+                $('#nombre_composicion_farmaco').html(ui.item.droga); // save selected id to input
+                $('#id_medicamento_tipo_control').val(ui.item.control); // save selected id to input
+                if (ui.item.control == 1 || ui.item.control == 1 || ui.item.control == 2 || ui.item
+                    .control == 3 || ui.item.control == 4 || ui.item.control == 5)
+                    $('#mensaje_med_control').html(
+                        'Este Paciente ha tenido 3 Recetas retenidas este año<br>Consulte en "Ranking de recetas controladas del paciente"'
+                        );
+                else
+                    $('#mensaje_med_control').html('');
+
+                return false;
+            }
+        });
+        $('#tipo_examen').change(function(e) {
+            console.log('tipo examen examen comun');
+            e.preventDefault();
+            tipo_examen = $('#tipo_examen').val();
+
+            $("#sub_tipo_examen").empty();
+            $("#examen").empty();
+            $.ajax({
+                    url: 'https://med-sdi.cl/api/Ficha_atencion_sub_tipo',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        tipo_examen: tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#sub_tipo_examen').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#sub_tipo_examen').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                    }
+
+                    /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                    if ($('#tipo_examen').val() == 354) $('#imagenologia_con_contraste').removeAttr(
+                        'disabled');
+                    else $('#imagenologia_con_contraste').attr('disabled', 'disabled');
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+
+        $('#sub_tipo_examen').change(function(e) {
+
+            e.preventDefault();
+            sub_tipo_examen = $('#sub_tipo_examen').val();
+
+            $("#examen").empty();
+            $.ajax({
+                    url: "{{ route('examen.medico.get') }}",
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        sub_tipo_examen: sub_tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#examen').append(`<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+
+        $('#imagenologia_con_contraste').change(function() {
+            if ($('#imagenologia_con_contraste').is(':checked')) {
+                $('#mensaje_imagenologia_con_contraste').show();
+            } else {
+                $('#mensaje_imagenologia_con_contraste').hide();
+            }
+
+        });
+    });
         $(document).ready(function () {
+            $('#selectDestinatarios').select2({
+                tags: true,
+                width: '100%',
+                placeholder: 'Selecciona o ingresa correos',
+                dropdownParent: $('#modalEnviarPresupuesto')
+            });
+            $('.tratamiento-urg-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getDiagnosticoDentalUrg') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $(this).next('input[type="hidden"]').val(ui.item
+                    .value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -214,6 +408,9 @@
 					//SuccessMode: true,
 				});
 			@endif
+            
+$('#motivo_urg_odped').select2();
+            
         });
 
         function abrir_modal_clasificacion_colon(){
@@ -222,8 +419,61 @@
         function mostrar_modal_ex_rx_cirugia(){
             $('#modal_indicar_examen_rx').modal('show');
         }
+        var formatoMoneda = (valor) => {
+            return valor.toLocaleString('es-CL', {
+                style: 'currency',
+                currency: 'CLP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).replace(/\./g, ',').replace(/,/g, '.');
+        };
+        function anestesia_local_dental() {
+
+            $('#procedimiento_anestesia_ficha_atencion').val('');
+            $('#lugar_anestesia_ficha_atencion').val('');
+            $('#rut_anestesia_ficha_atencion').val('');
+            $('#tratamiento_anestesia_ficha_atencion').val('');
+            $('#form_antecedente_anestesia').trigger("reset");
+
+            //$('#modal_anestesia').modal('show');
+            $('#anestesia_local_modal').modal('show');
+        }
+
+        function hemorragia_dental() {
+
+            $('#form_antecedente_hemorragia').trigger("reset");
+            $('#procedimiento_hemorragia_ficha_atencion').val('');
+            $('#lugar_hemorragia_ficha_atencion').val('');
+            $('#rut_hemorragia_ficha_atencion').val('');
+            $('#tratamiento_hemorragia_ficha_atencion').val('');
+            $('#hemorragias_modal').modal('show');
+        }
+
+        function fractura_dental() {
+
+            $('#form_antecedente_fractura').trigger("reset");
+            $('#procedimiento_fractura_ficha_atencion').val('');
+            $('#lugar_fractura_ficha_atencion').val('');
+            $('#rut_fractura_ficha_atencion').val('');
+            $('#tratamiento_fractura_ficha_atencion').val('');
+            $('#fracturas_modal').modal('show');
+        }
 	</script>
     <script>
+        $('#paciente_piezas_dentales_ex_odped').on('change', function () {
+                const piezasSeleccionadas = $(this).val() || [];
+                console.log(piezasSeleccionadas);
+                // Recorre todas las piezas visuales
+                $('.pieza_odped').each(function () {
+                    const piezaNumero = $(this).data('pieza_odpediat').toString();
+                    console.log(piezaNumero);
+                    if (piezasSeleccionadas.includes(piezaNumero)) {
+                        $(this).addClass('seleccionada');
+                    } else {
+                        $(this).removeClass('seleccionada');
+                    }
+                });
+            });
         /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
         function  envio_indicaciones_pdf(id_modal){
             let url = "{{ route('indicacion.medica.registro.envio') }}";
@@ -307,6 +557,342 @@
             });
         }
         /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+         function eliminar_odontograma(id) {
+            swal({
+                    title: "¿Estás seguro?",
+                    text: "Una vez eliminado, no podrás recuperar esta información.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    confirmar_eliminar_odontograma(willDelete, id);
+                })
+        }
+
+        function confirmar_eliminar_odontograma(willDelete, id) {
+            if (willDelete) {
+                let url = "{{ route('dental.eliminar_odontograma') }}";
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        ids: [id],
+                        id_paciente: $('#id_paciente_fc').val(),
+                        id_ficha_atencion: $('#id_fc').val(),
+                        id_lugar_atencion: $('#id_lugar_atencion').val(),
+                        tipo: 'odped',
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.status == 1) {
+                            swal({
+                                title: 'Odontograma',
+                                text: response.mensaje,
+                                icon: 'success'
+                            });
+
+                            let odontograma = response.odontograma_paciente;
+                            odontograma_global = odontograma;
+                            let table_odped_ = $('#table_odontograma').DataTable();
+
+                            // Vacía la tabla
+                            table_odped_.clear();
+
+                            // Genera los datos (array de arrays o de objetos si usas columns)
+                            let data = [];
+
+                            odontograma.forEach(function(odonto) {
+                                let switchPresupuesto = `
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="presupuestoCheck${odonto.id}"
+                                            value="${odonto.id}" ${odonto.presupuesto == 1 ? 'checked' : ''}
+                                            onchange="togglePresupuesto(${odonto.id}, this.checked)">
+                                        <label class="custom-control-label" for="presupuestoCheck${odonto.id}"></label>
+                                    </div>
+                                `;
+
+                                let switchSeleccion = `
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input checkbox-seleccion"
+                                            id="seleccionCheck${odonto.id}" value="${odonto.id}"
+                                            onchange="toggleSeleccion(${odonto.id}, this.checked)">
+                                        <label class="custom-control-label" for="seleccionCheck${odonto.id}"></label>
+                                    </div>
+                                `;
+
+                                data.push([
+                                    odonto.fecha,
+                                    odonto.tratamiento,
+                                    odonto.caras,
+                                    odonto.pieza,
+                                    odonto.diagnostico,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    switchPresupuesto,
+                                    switchSeleccion
+                                ]);
+                            });
+
+                            // Agrega las nuevas filas
+                            table_odped_.rows.add(data).draw();
+                            $('#contenedor_piezas_dentales_presupuesto').empty();
+                            $('#table_trabajos_presupuesto tbody').empty();
+                            // id que representa el select de piezas post implante
+                            $('#numero_pieza_post_impl2000').empty();
+                            // id que representa el select de piezas pre implante
+                            $('#numero_pieza_tto_impl1000').empty();
+                            odontograma.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                    $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1 fill">
+                                                            <label class="floating-label-activo-sm">Pieza</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4 fill">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
+                                                            <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `);
+                                    $('#table_trabajos_presupuesto tbody').append(`
+                                        <tr>
+                                            <td>${odonto.fecha}</td>
+                                            <td>${odonto.diagnostico} </td>
+                                            <td>${odonto.caras} </td>
+                                            <td>${odonto.pieza} </td>
+                                            <td>${odonto.tratamiento} </td>
+                                            <td>${formatoMoneda(odonto.valor)} </td>
+                                            <td> </td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                    $('#numero_pieza_post_impl2000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
+                                    `);
+                                    $('#numero_pieza_tto_impl1000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
+                                    `);
+                                }
+                            });
+                            let valores_boca_general = response.valores[0];
+                            let valores_odontograma = response.valores[1];
+                            let valores_insumos = response.valores[2];
+                            let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                            $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                            $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                            $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                            $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                            $('#subtotal_clinico').val(formatoMoneda(valores_odontograma));
+                            $('#total_clinico').val(formatoMoneda(valores_odontograma));
+                            $('#total_presupuesto_dental').val(total_general);
+                            $('#total_presupuesto').val(formatoMoneda(total_general));
+                            $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
+                                valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
+                                total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+                            $('#odon_adults').empty();
+                            $('#odon_adults').append(response.odontograma_paciente_vista);
+
+                            let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                            table_odon_gral.clear().draw();
+
+                            odontograma.forEach(function(pieza) {
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table_odon_gral.row.add([
+                                    pieza.pieza,
+                                    pieza.descripcion,
+                                    formatoMoneda(formatoMoneda(pieza.valor)),
+                                    '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                    pieza.id + ')"><i class="feather icon-x"> </i> </button>'
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+                            });
+
+                            let table_odped = $('#table_piezas_presupuesto_odped').DataTable();
+                            table_odped.clear().draw();
+
+                            odontograma.forEach(function(pieza) {
+                                    if(pieza.estado == 0){
+                                        var estado = 'PENDIENTE';
+                                    }else if(pieza.estado == 1){
+                                        var estado = 'TERMINADO';
+                                    }else if(pieza.estado == 2){
+                                        var estado = 'EN PROCESO';
+                                    }else{
+                                        var estado = 'CITADO A CONTROL';
+                                    }
+                                    if (pieza.presupuesto == 1 && pieza.urgencia == 0) {
+                                        // Agregar una nueva fila a la tabla
+                                        let rowNode = table_odped.row.add([
+                                            pieza.pieza,
+                                            pieza.diagnostico,
+                                            pieza.descripcion,
+                                            formatoMoneda(formatoMoneda(pieza.valor)),
+                                            '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                            pieza.id + ')"><i class="feather icon-x"> </i> </button>' +
+                                            '<button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza(' +
+                                            pieza.id + ')"><i class="feather icon-repeat"> </i> </button>',
+                                            estado
+
+                                        ]).draw(false).node(); // Obtener el nodo de la fila
+                                    }
+                            });
+
+                            let table = $('#presup_estado_pago').DataTable();
+
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table.clear().draw();
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            odontograma.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                    if (odonto.estado_pago == 'ok') {
+                                        var clase = 'bg-success';
+                                    } else if (odonto.estado_pago == 'incompleto') {
+                                        var clase = 'bg-warning';
+                                    } else {
+                                        var clase = 'bg-danger';
+                                    }
+                                    if (odonto.estado == 0) {
+                                        var estado = 'PENDIENTE';
+                                    } else {
+                                        var estado = 'TERMINADO';
+                                    }
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table.row.add([
+                                        odonto.descripcion,
+                                        odonto.pieza,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        '<div class="circle ' + clase + '"></div>',
+                                        estado, // Columna vacía
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+                            });
+
+                            $('#table_pagos_reasignar_odontograma tbody').empty();
+                            odontograma.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
+                                    let fila = `<tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                    <td>${odonto.pieza}</td>
+                                    <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                                </tr>`;
+                                    $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                                }
+                            });
+                            let count = $('#random_preimpl').val();
+                            let count_post_impl = $('#random_postimpl').val();
+                            $('#numero_pieza_tto_impl' + count).empty();
+                            $('#numero_pieza_post_impl' + count).empty();
+                            odontograma.forEach(o => {
+                                if (o.presupuesto == 1) {
+                                    $('#numero_pieza_tto_impl' + count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                                    $('#numero_pieza_post_impl' + count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                                }
+
+                            });
+                             // Obtener piezas únicas
+                            const piezasUnicas = [...new Set(odontograma.map(item => item.pieza))];
+
+                            // Seleccionar el <select> y actualizar sus valores
+                            const piezasSelect = $('#paciente_piezas_dentales_ex_impl');
+                            piezasSelect.val(piezasUnicas).trigger('change');
+
+                            // Marcar visualmente las piezas en el odontograma
+                            piezasUnicas.forEach(pieza => {
+                                $(`.pieza_implantologia[data-pieza_impl="${pieza}"]`).addClass('seleccionada');
+                            });
+                            // Escuchar cambios en el Select2 para actualizar el odontograma visual
+                            piezasSelect.on('change', function () {
+                                const piezasSeleccionadas = $(this).val() || [];
+
+                                // Recorre todas las piezas visuales
+                                $('.pieza_implantologia').each(function () {
+                                    const piezaNumero = $(this).data('data-pieza_impl').toString();
+
+                                    if (piezasSeleccionadas.includes(piezaNumero)) {
+                                        $(this).addClass('seleccionada');
+                                    } else {
+                                        $(this).removeClass('seleccionada');
+                                    }
+                                });
+                            });
+
+                             // Obtener piezas únicas
+                            const piezasUnicas_od_gral = [...new Set(odontograma.map(item => item.pieza))];
+
+                            // Seleccionar el <select> y actualizar sus valores
+                            const piezasSelectOdGral = $('#paciente_piezas_dentales_ex');
+                            piezasSelectOdGral.val(piezasUnicas_od_gral).trigger('change');
+
+                            // Marcar visualmente las piezas en el odontograma
+                            piezasUnicas_od_gral.forEach(pieza => {
+                                $(`.pieza[data-pieza="${pieza}"]`).addClass('seleccionada');
+                            });
+                            // Escuchar cambios en el Select2 para actualizar el odontograma visual
+                            piezasSelectOdGral.on('change', function () {
+                                const piezasSeleccionadas = $(this).val() || [];
+
+                                // Recorre todas las piezas visuales
+                                $('.pieza').each(function () {
+                                    const piezaNumero = $(this).data('pieza').toString();
+
+                                    if (piezasSeleccionadas.includes(piezaNumero)) {
+                                        $(this).addClass('seleccionada');
+                                    } else {
+                                        $(this).removeClass('seleccionada');
+                                    }
+                                });
+                            });
+                            $('#odontograma_ped_completo').empty();
+                            $('#odontograma_ped_completo').append(response.odontograma_paciente_vista);
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            } 
+
+        }
     </script>
     @yield('js_inferior')
     @yield('page-script')

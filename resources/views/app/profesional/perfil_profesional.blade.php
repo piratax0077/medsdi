@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="font-weight-bolder">Editar perfil</h5>
+                                <h5 class="font-weight-bolder"></h5>
                             </div>
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
@@ -19,7 +19,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="#">Editar perfil</a>
+                                    <a href="#">Mi perfil</a>
                                 </li>
                             </ul>
                         </div>
@@ -63,21 +63,21 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="info-personal-tab" data-toggle="tab"
                                             href="#info-personal" role="tab" aria-controls="info-personal"
-                                            aria-selected="true">Información personal</a>
+                                            aria-selected="true"><i class="feather icon-user"></i> Información personal</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="info-academico-tab" data-toggle="tab"
                                             href="#info-academico" role="tab" aria-controls="info-academico"
-                                            aria-selected="false">Antecedentes académicos</a>
+                                            aria-selected="false"><i class="feather icon-book"></i> Antecedentes académicos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass"
-                                            role="tab" aria-controls="pass" aria-selected="false">Contraseña</a>
+                                            role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseña</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="info-liquidacion-tab" data-toggle="tab"
                                             href="#info-liquidacion" role="tab" aria-controls="info-liquidacion"
-                                            aria-selected="false">Cuentas bancarias (liquidaciones)</a>
+                                            aria-selected="false"><i class="feather icon-credit-card"></i> Cuentas bancarias (liquidaciones)</a>
                                     </li>
                                 </ul>
                             </div>

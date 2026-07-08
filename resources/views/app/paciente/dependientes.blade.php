@@ -71,6 +71,7 @@
                                         <div class="pb-3 px-2 pt-0 mt-0 text-center">
                                             <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep('{{ $paciente->id }}', '{{ $registro->paciente->id }}')"><i class="feather icon-user"></i> Ver acompañantes</div>
                                             <div type="button" class="btn btn-sm btn-info" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
+                                            <div type="button" class="btn btn-sm btn-danger mt-1" onclick="desvincular_dep('{{ $registro->id }}', '{{ $registro->paciente->nombres }} {{ $registro->paciente->apellido_uno }}')"><i class="feather icon-user-x"></i> Desvincular</div>
                                         </div>
                                     </div>
                                 </div>
@@ -826,6 +827,50 @@
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function desvincular_dep(id_registro, nombre)
+        {
+            swal({
+                title: "Desvincular dependiente",
+                text: "¿Está seguro que desea desvincular a " + nombre + "? Pasará a ser un paciente independiente.",
+                icon: "warning",
+                buttons: {
+                    cancelar: { text: "Cancelar", value: null, visible: true, className: "btn-secondary" },
+                    confirmar: { text: "Sí, desvincular", value: true, visible: true, className: "btn-danger" }
+                },
+                dangerMode: true,
+            })
+            .then(function(confirmar) {
+                if (confirmar) {
+                    let url = "{{ route('paciente.dependientes.desvincular', ':id') }}".replace(':id', id_registro);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: { _token: CSRF_TOKEN },
+                    })
+                    .done(function(data) {
+                        if (data.estado == 1) {
+                            swal({
+                                title: "Desvincular dependiente",
+                                text: "El dependiente fue desvinculado correctamente.",
+                                icon: "success",
+                            });
+                            cargarDependientes();
+                        } else {
+                            swal({
+                                title: "Desvincular dependiente",
+                                text: "No se pudo desvincular: " + data.msj,
+                                icon: "error",
+                            });
+                        }
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError);
+                        swal({ title: "Error", text: "Error al realizar la operación.", icon: "error" });
+                    });
+                }
             });
         }
 

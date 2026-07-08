@@ -126,16 +126,44 @@
 
         .form-section {
             display: none;
-            animation: fadeIn 0.3s;
         }
 
         .form-section.active {
-            display: block;
+            display: block !important;
+            min-height: 300px !important;
+            padding: 20px 0 !important;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .form-section.active h4 {
+            display: block !important;
+            font-size: 1.5rem !important;
+            line-height: 1.5 !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .form-section.active .row {
+            display: flex !important;
+        }
+
+        .form-section.active .col-md-6,
+        .form-section.active .col-12 {
+            display: block !important;
+        }
+
+        .form-section.active label,
+        .form-section.active input,
+        .form-section.active select,
+        .form-section.active button {
+            display: inline-block !important;
+        }
+
+        .form-section.active .d-flex {
+            display: flex !important;
+        }
+
+        .form-section.active .btn {
+            display: inline-block !important;
+            padding: 0.75rem 2rem !important;
         }
 
         .form-label {
@@ -388,6 +416,7 @@
                             <label class="form-label">N° </label>
                             <input type="text" class="form-control" id="numero_direccion" placeholder="Número">
                         </div>
+                    </div>
 
                     <div class="d-flex justify-content-between mt-4">
                         <button type="button" class="btn btn-outline-secondary" onclick="irPaso(1)">
@@ -1071,31 +1100,52 @@
         }
 
         function irPaso(paso) {
-            // Ocultar todas las secciones
-            $('.form-section').removeClass('active');
+            console.log('irPaso llamado con paso:', paso);
+
+            $('.form-section').removeClass('active').hide();
             $('.step').removeClass('active completed');
 
-            // Mostrar sección actual
-            $(`#step${paso}`).addClass('active');
-            $(`.step[data-step="${paso}"]`).addClass('active');
+            $(`#step${paso}`).addClass('active').show();
+
+            // Forzar estilos inline para asegurar visibilidad
+            $(`#step${paso}`).css({
+                'display': 'block',
+                'visibility': 'visible',
+                'opacity': '1',
+                'min-height': '400px',
+                'padding': '20px 0'
+            });
+
+            // Forzar que los hijos sean visibles
+            $(`#step${paso} > *`).css('display', 'block');
+            $(`#step${paso} .row`).css('display', 'flex');
+            $(`#step${paso} .d-flex`).css('display', 'flex');
+
+            console.log('Display del paso después de forzar:', $(`#step${paso}`).css('display'));
+            console.log('Altura del paso:', $(`#step${paso}`).height());
 
             // Marcar pasos anteriores como completados
             for (let i = 1; i < paso; i++) {
                 $(`.step[data-step="${i}"]`).addClass('completed');
             }
 
-            // Scroll al inicio
-            $('html, body').animate({ scrollTop: 0 }, 300);
+            // Marcar el paso actual como activo
+            $(`.step[data-step="${paso}"]`).addClass('active');
 
-            // Generar resumen si es paso 4
+            $('html, body').animate({ scrollTop: 0 }, 300);
             if (paso === 4) {
                 generarResumen();
             }
+            console.log('irPaso finalizado');
         }
 
         function validarYContinuar(pasoActual) {
+            console.log('validarYContinuar llamado con paso:', pasoActual);
+
             if (pasoActual === 2) {
+                console.log('Validando paso 2');
                 if (!validarDatosPaciente()) {
+                    console.log('Validación de datos falló');
                     Swal.fire({
                         icon: 'warning',
                         title: 'Campos incompletos',
@@ -1106,12 +1156,16 @@
 
                 // Verificar si el paciente ya existe (fue encontrado por RUT)
                 let id_paciente = $('#id_paciente').val();
+                console.log('ID Paciente:', id_paciente);
 
                 if(!id_paciente || id_paciente == '0' || id_paciente == '') {
+                    console.log('Paciente no existe, registrando...');
                     // Paciente no existe, registrarlo primero
                     registrarPacienteNuevo();
                     return; // La función registrarPacienteNuevo() continuará al siguiente paso
                 }
+                console.log('Paciente existe, continuando...');
+                // Si el paciente existe, continuar normalmente
             }
 
             if (pasoActual === 3) {
@@ -1125,6 +1179,7 @@
                 }
             }
 
+            console.log('Llamando a irPaso con:', pasoActual + 1);
             irPaso(pasoActual + 1);
         }
 

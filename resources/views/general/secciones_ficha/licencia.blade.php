@@ -891,6 +891,7 @@
         })
         .done(function(resp)
         {
+            console.log('resp', resp);
             if (resp !== 'null')
             {
                 if(resp.estado == 1)
@@ -951,10 +952,11 @@
     function abri_pdf_licencia()
     {
         var id_licencia = $('#id_licencia_fc').val();
+        var id_ficha_atencion = $('#id_fc').val();
         Fancybox.show(
             [
                 {
-                    src: "{{ route('paciente.licencia.pdf') }}?id_licencia="+id_licencia,
+                    src: "{{ route('paciente.licencia.pdf') }}?id_licencia="+id_licencia+"&id_ficha_atencion="+id_ficha_atencion,
                     type: "iframe",
                     preload: false,
                 },

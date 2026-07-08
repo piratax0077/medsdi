@@ -3,11 +3,12 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Interconsulta</h5>
-                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close">
+                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close" onclick="$('#modal_interconsulta').modal('hide')">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body mb-0">
+                <input type="hidden" id="id_interconsulta_email" name="id_interconsulta_email">
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo-sm">Nombre</label>
@@ -82,6 +83,7 @@
                         </div>
                         <div class="modal-footer pt-2 pb-0">
                             <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_interconsulta').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
+                            <button type="button" onclick="enviar_interconsulta_email();" class="btn btn-warning btn-sm" id="btn_enviar_interconsulta_email"><i class="feather icon-send"></i> Enviar PDF</button>
                             <button type="button" onclick="registrar_interconsulta();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
                         </div>
                     </form>

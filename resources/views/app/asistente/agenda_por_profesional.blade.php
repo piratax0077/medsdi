@@ -102,6 +102,8 @@
                                     <button type="button" class="btn btn-success-light-c btn-block btn-xxxs" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera();" ><i class="feather icon-external-link"></i> Ver lista de Espera</button>
                                     <button type="button" class="btn btn-success-light-c btn-block btn-xxxs " id="btn_ver_agregar_hora_extra" onclick="abrir_horas_extras()"; ><i class="feather icon-external-link"></i> Agregar Horas extras</button>
                                     <button type="button" class="btn btn-success-light-c btn-block btn-xxxs " id="btn_ver_agregar_hora_examen" onclick="abrir_horas_examen()"; ><i class="feather icon-external-link"></i>  Ver horas examenes</button>
+                                    <button type="button" class="btn btn-info-light-c btn-block btn-xxxs" id="btn_transcribir_examen" onclick="abrir_transcripcion_examen('')"; ><i class="feather icon-file-text"></i> Transcribir Examen</button>
+
                                 </div>
                             </div>
                         </div>
@@ -143,6 +145,9 @@
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
+
+    {{-- transcribir examen --}}
+    @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen')
 @endsection
 
 @section('page-script')
@@ -151,7 +156,7 @@
             cargarAgendaProfesional(1,'');
         });
     </script>
-    
+
 @endsection
 
 @include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru')

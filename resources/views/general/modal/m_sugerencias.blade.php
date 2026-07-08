@@ -6,7 +6,7 @@
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white text-center">Sugerencias al Software</h5>
 				<button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
+				<span aria-hidden="true" onclick="cerrarsug();">&times;</span>
 				</button>
             </div>
 			<div class="modal-body">
@@ -54,9 +54,25 @@
 	</div>
 </div>
 <script>
-    function sugerencias() {
+
+
+    /*CIERRE MODAL*/
+    function cerrarsug() {
 		$('#fsugerencias').modal('show');
     }
+
+     function cerrarsug() {
+        $('#fsugerencias').modal('hide');
+    }
+  /* CIERRE: CIERRE MODAL */
+
+       function sugerencias() {
+        $('#fsugerencias').modal('show');
+    }
+
+    
+
+
     function registrar_sugerencia() {
             let id_prof_sugerencias= $('#id_profesional_fc').val();
             {{--  let prof_sol_cons_fecha= $('#prof_sol_cons_fecha').val();  --}}

@@ -294,6 +294,8 @@
                         text: "Registro Exitoso.",
                         icon: "success",
                     });
+                    $('#formulario_vac li#otras_vacunas').removeClass('d-none');
+                    $('#formulario_vac li#otras_vacunas').html('<i class="fas fa-check text-info"></i> Se añadio otras vacunas');
                     cargar_vacunas_otras();
                     $('#otras_vac_id_estado_vacuna').val('');
                     $('#otras_vac_nombre_servicio').val('');

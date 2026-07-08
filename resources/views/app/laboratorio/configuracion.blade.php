@@ -1,11 +1,30 @@
 @extends('template.adm_cm.template')
-
-@section('content')
+@section('style')
+<!-- Summernote CSS -->
+<link rel="stylesheet" href="{{ asset('summernote/summernote-lite.min.css') }}">
 <style>
+p {
+    color: #59636d;
+    word-wrap: break-word !important;
+    font-size: 14px;
+}
+.ui-autocomplete {
+        z-index: 9999999 !important;
+        position: absolute;
+        background: #fff;
+        border: 1px solid #545454;
+        padding: 6px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
     .select2-container--open{
         z-index: 9999999 !important;
     }
 </style>
+@endsection
+@section('content')
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -19,11 +38,11 @@
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
                                     @if($institucion->id_tipo_institucion == 3)
-                                    <a href="{{ ROUTE('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
                                     @else
-                                    <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
                                     @endif
@@ -744,7 +763,7 @@
                                         <div class="card-body">
                                             <h4 class="f-18 mb-0 text-info d-inline">Perfil administradores médicos de la Institución</h4>
                                             <div class="btn-group mr-2 float-md-right  ml-4 d-inline">
-                                                <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Administrar</button>
+                                                <button type="button" class="btn btn-sm btn-info" onclick="$('#a_cargo').modal('show');"><i class="feather icon-plus" aria-hidden="true"></i> Administrar</button>
                                             </div>
                                             @if(isset($director_cm) && $director_cm != null)<input type="hidden" name="id_responsable" id="id_director_cm" value="{{$director_cm->id }}"> @endif
                                         </div>
@@ -1756,7 +1775,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
                                                         <div class="col-sm-6 my-auto ml-2">
-                                                            {{ \Carbon\Carbon::parse($director_tecnico->fecha_nac)->format('d-m-Y') }}
+                                                            {{ \Carbon\Carbon::parse($director_tecnico->fecha_nacimiento)->format('d-m-Y') }}
                                                         </div>
                                                     </div>
                                                 </form>
@@ -2233,6 +2252,7 @@
                                                                         <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
                                                                         <td class="align-middle text-left">$ {{ empty($proced->valor)?0:number_format($proced->valor, 0, ",", ".") }}</td>
                                                                         <td class="align-middle text-left">
+                                                                                                                        <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $proced->id }})"><i class="feather icon-edit"></i></button>
                                                                             <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-x"></i></button>
                                                                         </td>
                                                                     </tr>
@@ -2381,11 +2401,13 @@
                             </div>
                         </div>
                         <!--SUCURSALES-->
+                        @if($institucion->sucursales == 1)
                         <div class="tab-pane fade" id="sucursales" role="tabpanel" aria-labelledby="sucursales-tab">
 
                             @include('general.seccion_adm_institucion.sucursales')
 
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -2521,6 +2543,90 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalMostrarPrestacion" tabindex="-1" aria-labelledby="modalMostrarPrestacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalMostrarPrestacionLabel">Editar prestacion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="id_prestacion_editar" name="id_prestacion_editar" value="">
+            <div class="form-row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="nombre_prestacion">Nombre del procedimiento</label>
+                        <input type="text" name="nombre_prestacion" id="nombre_prestacion" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="descripcion_prestacion">Descripción</label>
+                        <input type="text" name="descripcion_prestacion" id="descripcion_prestacion" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="cantidad_bloques_prestacion">Cantidad Bloques</label>
+                        <input type="number" name="cantidad_bloques_prestacion" id="cantidad_bloques_prestacion" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="valor_prestacion">Valor</label>
+                        <input type="number" name="valor_prestacion" id="valor_prestacion" class="form-control form-control-sm">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="indicaciones_prestacion">Indicaciones del procedimiento para el paciente</label>
+                        <textarea name="indicaciones_prestacion" id="indicaciones_prestacion" class="form-control form-control-sm" rows="4" placeholder="Ingrese las indicaciones que el paciente debe seguir para este procedimiento..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="editar_prestacion()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
+            {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
+                <thead>
+                    <tr>
+                        <th>Procedimiento</th>
+                        <th>UCO</th>
+                        <th>¿Laboratorio?</th>
+                        <th>Bloques</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($mis_trabajos_profesional as $mi_trabajo)
+                        <tr>
+                            <td>{{ $mi_trabajo->descripcion }}</td>
+                            <td>{{ $mi_trabajo->uco }}</td>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
+                                    <label class="form-check-label" for="existeLaboratorioDental{{ $mi_trabajo->id }}">
+                                        ¿Laboratorio?
+                                    </label>
+                                </div>
+                            </td>
+                            <td>{{ $mi_trabajo->cantidad_bloques }}</td>
+                            <td>
+                                <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table> --}}
+        </div>
+        <!--<div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>-->
+        </div>
+    </div>
+</div>
 
     {{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
     <div id="a_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_rol" aria-hidden="true">
@@ -2683,12 +2789,56 @@
         </div>
     </div>
 
-    {{--  MODAL AREA  --}}
+     {{--  MODAL AREA  --}}
     <div id="a_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_area" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir o editar direccion medica</h5>
+                    <h5 class="modal-title text-white text-center">Añadir área</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar áreas-->
+                                    <label class="floating-label-activo-sm">Área</label>
+                                    <select class="form-control form-control-sm">
+                                        <option value="">-Seleccione</option>
+                                        <option value="">-Administración General</option>
+                                        <option value="">-Administración Médica</option>
+                                        <option value="">-Administración financiera</option>
+                                        <option value="">-Administración comercial</option>
+                                        <option value="">-Boxes de Atención</option>
+                                        <option value="">-Boxes de Vacunatorio y Curaciones</option>
+                                        <option value="">-Pabellones</option>
+                                        <option value="">-Laboratorio Clìnico</option>
+                                        <option value="">-Laboratorio Especialidades</option>
+                                        <option value="">-Laboratorio Radiologìa</option>
+                                        <option value="">-Farmacia</option>
+                                        <option value="">-Bodega</option>
+                                        <option value="">-Mantención y Aséo</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm mx-auto">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  MODAL CARGO  --}}
+    <div id="a_cargo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_cargo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Añadir Cargo</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -2714,7 +2864,7 @@
                                         <option value="0">Seleccione</option>
                                         @if(isset($profesionales))
                                         @foreach($profesionales as $profesional)
-                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
                                         @endforeach
                                         @endif
                                     </select>
@@ -3047,12 +3197,17 @@
 <!--Cierre: Container Completo-->
 @endsection
 @section('modales')
-    @include('app.laboratorio.modales.agregar_bodega')
-    @include('app.laboratorio.modales.agregar_bodega_editar')
+ @include('app.laboratorio.modales.agregar_bodega')
+    {{-- @include('app.laboratorio.modales.agregar_bodega_editar') --}}
         @include('app.adm_cm.modales.agregar_box')
+        @include('app.laboratorio.modales.anadir_area')
+
 @endsection
 
 @section('page-script')
+<!-- Summernote JS -->
+<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
+<script src="{{ asset('summernote/lang/summernote-es-ES.js') }}"></script>
     <!--SCRIPT MODALS-->
     <script>
         {{--  /*-TABLAS CM-*/  --}}
@@ -3109,7 +3264,7 @@
 
         /*-Añadir área-*/
         function ag_area() {
-            $('#a_area').modal('show');
+            ag_area_cm();
         }
 
         function ag_servicio(){
@@ -3396,6 +3551,136 @@
                     })
         }
 
+         function mostrar_procedimiento(id){
+        console.log(id);
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN,
+        }
+
+        let url = '{{ ROUTE("profesional.mostrar_prestacion_lab") }}';
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.status == "ok"){
+                    // Abrir modal
+                    $('#modalMostrarPrestacion').modal('show');
+                    // Guardar el ID de la prestación
+                    $('#id_prestacion_editar').val(id);
+                    // Llenar los campos del modal
+                    $('#nombre_prestacion').val(response.procedimiento.nombre);
+                        $('#descripcion_prestacion').val(response.procedimiento.descripcion);
+                    $('#cantidad_uco').val(response.procedimiento.cantidad_uco);
+                    $('#cantidad_bloques_prestacion').val(response.procedimiento.cantidad_bloques);
+                    $('#valor_prestacion').val(response.procedimiento.valor);
+                    // Cargar indicaciones en Summernote
+                    $('#indicaciones_prestacion').summernote('code', response.procedimiento.indicaciones || '');
+
+                }
+
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function editar_prestacion(){
+        let id = $('#id_prestacion_editar').val();
+        let nombre = $('#nombre_prestacion').val();
+        let cantidad_bloques = $('#cantidad_bloques_prestacion').val();
+        let valor = $('#valor_prestacion').val();
+        let indicaciones = $('#indicaciones_prestacion').summernote('code');
+
+        // Validaciones
+        if(!id || id == ''){
+            swal({
+                title: 'Error',
+                text: 'No se ha seleccionado una prestación para editar',
+                icon: 'error'
+            });
+            return;
+        }
+
+        if(!nombre || nombre.trim() == ''){
+            swal({
+                title: 'Error',
+                text: 'El nombre del procedimiento es requerido',
+                icon: 'error'
+            });
+            return;
+        }
+
+        if(!cantidad_bloques || cantidad_bloques == ''){
+            swal({
+                title: 'Error',
+                text: 'La cantidad de bloques es requerida',
+                icon: 'error'
+            });
+            return;
+        }
+
+        if(!valor || valor == ''){
+            swal({
+                title: 'Error',
+                text: 'El valor es requerido',
+                icon: 'error'
+            });
+            return;
+        }
+
+        let data = {
+            id: id,
+            nombre: nombre,
+            cantidad_bloques: cantidad_bloques,
+            valor: valor,
+            indicaciones: indicaciones,
+            _token: CSRF_TOKEN,
+        }
+
+        let url = '{{ route("profesional.actualizar_prestacion_lab") }}';
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.status == "ok"){
+                    swal({
+                        title: 'Éxito',
+                        text: 'La prestación ha sido actualizada correctamente',
+                        icon: 'success'
+                    }).then(() => {
+                        // Cerrar modal
+                        $('#modalMostrarPrestacion').modal('hide');
+                        // Recargar la página para ver los cambios
+                        location.reload();
+                    });
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: response.message || 'No se pudo actualizar la prestación',
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+                swal({
+                    title: 'Error',
+                    text: 'Ocurrió un error al actualizar la prestación',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+
 
         /** PERFIL RESPONSABLE */
         function editar_responsable_datos_personales()
@@ -3459,7 +3744,7 @@
             let apellido_dos = $('#perfil_apellido_dos_medico').val();
             let sexo = $('input:radio[name=perfil_sexo_medico]:checked').val();
             let nac = $('#perfil_nac_medico').val();
-            let url = "{{ route('adm_cm.editar_datos_perfil_responsable_medico') }}";
+            let url = "{{ route('laboratorio.editar_datos_perfil_responsable_medico') }}";
 
             let data = {
                 _token: CSRF_TOKEN,
@@ -5263,20 +5548,19 @@
                         // cerrar modal
                         $('#a_procedimiento').modal('hide');
                         let registros = data.registros;
-                        $('#procedimiento_cm tbody').empty();
+                        let table = $('#procedimiento_cm').DataTable();
+                        table.clear();
+
                         $(registros).each(function(i, v) { // indice, valor
-                            $('#procedimiento_cm tbody').append(`
-                            <tr>
-                                <td class="align-items-left text-left">${v.nombre}s</td>
-                                <td class="align-items-left text-left">${v.descripcion}</td>
-                                <td class="align-items-left text-left">${v.cantidad_bloques}</td>
-                                <td class="align-items-left text-left">${v.valor}</td>
-                                <td class="align-items-left text-left">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            `);
+                            table.row.add([
+                                v.nombre,
+                                v.descripcion,
+                                v.cantidad_bloques,
+                                v.valor,
+                                `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>`
+                            ]);
                         });
+                        table.draw();
                     }
                     else
                     {
@@ -5347,20 +5631,19 @@
                 if(data.estado == 1)
                 {
                     let registros = data.registros;
-                    $('#procedimiento_cm tbody').empty();
+                    let table = $('#procedimiento_cm').DataTable();
+                    table.clear();
+
                     $(registros).each(function(i, v) { // indice, valor
-                        $('#procedimiento_cm tbody').append(`
-                        <tr>
-                            <td class="align-items-left text-left">${v.nombre}s</td>
-                            <td class="align-items-left text-left">${v.descripcion}</td>
-                            <td class="align-items-left text-left">${v.cantidad_bloque}</td>
-                            <td class="align-items-left text-left">${v.valor}</td>
-                            <td class="align-items-left text-left">
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                            </td>
-                        </tr>
-                        `);
+                        table.row.add([
+                            v.nombre,
+                            v.descripcion,
+                            v.cantidad_bloques,
+                            v.valor,
+                            `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>`
+                        ]);
                     });
+                    table.draw();
                 }
                 else
                 {

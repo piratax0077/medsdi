@@ -21,7 +21,7 @@
                     </div>
                     <div class="row">
                         {{-- datos paciente --}}
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-12">
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
                                     <!-- Fila RUT -->
@@ -110,7 +110,7 @@
 
                                     <!-- Fila Teléfono -->
                                     <tr>
-                                        <th scope="row"><strong>Telefono</strong></th>
+                                        <th scope="row"><strong>Teléfono</strong></th>
                                         <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_telefono"></span>
@@ -129,10 +129,10 @@
                                     <tr class="paciente_edit_asistente" style="display:none">
                                         <td colspan="2" class="text-right">
                                             <div class="d-flex justify-content-end">
-                                                <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-sm btn-danger mr-2">
+                                                <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-xxs btn-secondary mr-2">
                                                     <i class="feather icon-x"></i> Cancelar actualización
                                                 </button>
-                                                <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-sm btn-info">
+                                                <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-xxs btn-info">
                                                     <i class="feather icon-check"></i> Actualizar paciente
                                                 </button>
                                             </div>
@@ -155,8 +155,15 @@
                         </div>
 
                         {{-- procedimientos --}}
-                        <div class="col-sm-6 col-md-6" id="seccion_examenes">
-
+                        <div class="col-sm-12 col-md-12">
+                            <div class="alert alert-info-modal pb-0" role="alert">
+                                <div class="media">
+                                    <i class="feather icon-activity icono-agenda"></i>
+                                  <div class="media-body" id="seccion_examenes">
+                                    
+                                  </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

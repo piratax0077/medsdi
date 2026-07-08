@@ -615,16 +615,23 @@
                         {{--  console.log(data);  --}}
                         if (data.estado == 1)
                         {
+                            
                             $('#div_resultado_busqueda').html('');
                             $(data.registros).each(function(key_registro, value_registro) {
                                 {{--  console.log(value_registro);  --}}
+                                var image_url = "";
+                                if(value_registro.profesionales_foto_perfil != null){
+                                    image_url = '/storage/'+value_registro.profesionales_foto_perfil;
+                                }else{
+                                    image_url = '/images/iconos/usuario_profesional.svg';
+                                }
                                 var html = '';
                                 html += '<div class="col-sm-12 col-md-4">';
                                 html += '    <div class="card user-card user-card-1 mt-4">';
                                 html += '        <div class="card-body pt-0">';
                                 html += '            <div class="user-about-block text-center">';
                                 html += '                <div class="row align-items-end">';
-                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="storage/'+value_registro.profesionales_foto_perfil+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
+                                html += '                    <div class="col"><img class="img-radius img-fluid wid-70" src="'+image_url+'" alt="'+value_registro.profesionales_nombre+' '+value_registro.profesionales_apellido_uno+' '+value_registro.profesionales_apellido_dos+'"></div>';
                                 html += '                </div>';
                                 html += '            </div>';
                                 html += '            <div class="text-center">';

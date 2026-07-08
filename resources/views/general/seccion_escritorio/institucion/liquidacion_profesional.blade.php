@@ -11,7 +11,7 @@
                                 <h5 class="m-b-10 font-weight-bold">Liquidaciones a Profesionales</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_comercial') }}">Volver a Admin. Comercial</a></li>
 
                             </ul>
@@ -56,7 +56,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table id="aacm_liq_profesionales_med" class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                            <table id="aacm_liq_profesionales_med" class="display table-sm table table-striped dt-responsive nowrap" style="width:100%">
                                                 <thead>
                                                     <tr>
 
@@ -70,35 +70,39 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @if($lista_profesionales['MEDICO'])
+                                                    @foreach($lista_profesionales['MEDICO'] as $profesional)
                                                     <tr>
                                                         <td class="align-middle">
-                                                            <span><strong>Jaime Kriman</strong></span><br>
-                                                            <span>4.345.466-2</span><br>
-                                                            <span>Otorrinolaringología</span>
+                                                            <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }}</strong></span><br>
+                                                            <span>{{ $profesional->rut }}</span><br>
+                                                            <span>{{ $profesional->especialidad->nombre }}</span>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <span>10/11/2023</span><br>
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->fecha_emision : '' }}</span><br>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <span>octubre/20223</span><br>
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->mes_liquidacion : '' }}</span><br>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <span>102</span><br>
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->numero_atenciones : '' }}</span><br>
                                                         </td>
                                                         <td class="align-middle">
-                                                            <span>2.000.000</span><br>
+                                                            <span>{{ number_format($profesional->liquidacion ? $profesional->liquidacion->total : 0, 0, ',', '.') }}</span><br>
                                                         </td>
                                                         <td class="align-middle">
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
+                                                            <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
                                                         </td>
                                                         <td class="align-middle">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-secondary btn-sm btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
+                                                            <button type="button" class="btn btn-orange btn-sm btn-icon" onclick="liquidacion_prof_cm({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
                                                         </td>
                                                     </tr>
+                                                    @endforeach
+                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -118,7 +122,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <table id="liq_profesionales_od" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                                    <table id="liq_profesionales_od" class="display table table-striped table-sm dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
                                                             <th class="align-middle">Fecha</th>
@@ -130,38 +134,35 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @if($lista_profesionales['ODONTOLOG'])
+                                                        @foreach($lista_profesionales['ODONTOLOG'] as $profesional)
                                                         <tr>
                                                             <td class="align-middle">
-                                                                <span>10/11/2022</span><br>
+                                                                <span>{{ $profesional->liquidacion ? $profesional->liquidacion->fecha_emision : '' }}</span><br>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <span><strong>J. Kriman</strong></span><br>
-                                                                <span>4.345.466-2</span><br>
-                                                                <span>Implantología</span>
+                                                                <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }}</strong></span><br>
+                                                                <span>{{ $profesional->rut }}</span><br>
+                                                                <span>{{ $profesional->especialidad->nombre }}</span>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <span>10/03/2022 a 17/03/2022</span><br>
+                                                                <span>{{ $profesional->liquidacion ? $profesional->liquidacion->mes_liquidacion : '' }}</span><br>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <span>10202122</span><br>
+                                                                <span>{{ $profesional->liquidacion ? $profesional->liquidacion->numero_liquidacion : '' }}</span><br>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <span>Pagada</span><br>
+                                                                <span>{{ $profesional->liquidacion ? $profesional->liquidacion->estado : '' }}</span><br>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-
                                                                 <!--Botón Modal-->
                                                                 <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
-
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-purple btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather feather icon-clock"></i></button>
-    															
-                                                                <button type="button" class="btn btn-secondary btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
-                                                                <!--Botón Modal-->
+                                                                <button type="button" class="btn btn-orange btn-sm btn-icon" onclick="liquidacion_prof_cm({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
                                                             </td>
                                                         </tr>
+                                                        @endforeach
+                                                        @endif
                                                     </tbody>
                                                     </table>
                                                 </div>
@@ -187,53 +188,49 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <div class="card-body">
-                                                <table id="liq_profesionales_otros" class="display table table-striped dt-responsive nowrap" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="align-middle">Fecha</th>
-                                                            <th class="align-middle">Profesional</th>
-                                                            <th class="align-middle">Periodo</th>
-                                                            <th class="align-middle">N°Liquidación</th>
-                                                            <th class="align-middle">Estado</th>
-                                                            <th class="align-middle">Info</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="align-middle">
-                                                                <span>10/11/2022</span><br>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span><strong>J. Kriman</strong></span><br>
-                                                                <span>4.345.466-2</span><br>
-                                                                <span>Implantología</span>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span>10/03/2022 a 17/03/2022</span><br>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span>10202122</span><br>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <span>Pagada</span><br>
-                                                            </td>
-                                                            <td class="align-middle">
-                                                                <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
-
-                                                                <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="feather icon-credit-card"></i></button>
-                                                                <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-purple btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
-
-                                                               <!--Botón Modal-->
-																<button type="button" class="btn btn-secondary btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            <table id="liq_profesionales_otros" class="display table table-sm dt-responsive table-striped nowrap" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="align-middle">Fecha</th>
+                                                        <th class="align-middle">Profesional</th>
+                                                        <th class="align-middle">Periodo</th>
+                                                        <th class="align-middle">N°Liquidación</th>
+                                                        <th class="align-middle">Estado</th>
+                                                        <th class="align-middle">Info</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if($lista_profesionales['OTROS'])
+                                                    @foreach($lista_profesionales['OTROS'] as $profesional)
+                                                    <tr>
+                                                        <td class="align-middle">
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->fecha_emision : '' }}</span><br>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }}</strong></span><br>
+                                                            <span>{{ $profesional->rut }}</span><br>
+                                                            <span>{{ $profesional->especialidad->nombre }}</span>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->mes_liquidacion : '' }}</span><br>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->numero_liquidacion : '' }}</span><br>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <span>{{ $profesional->liquidacion ? $profesional->liquidacion->estado : '' }}</span><br>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <!--Botón Modal-->
+                                                            <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
+                                                            <!--Botón Modal-->
+                                                            <button type="button" class="btn btn-orange btn-sm btn-icon" onclick="liquidacion_prof_cm({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -260,6 +257,28 @@
 
 @section('page-script')
     <script>
+        $(document).ready(function() {
+            $('#aacm_liq_profesionales_med').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+                },
+                responsive: true,
+            });
+
+            $('#liq_profesionales_od').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+                },
+                responsive: true,
+            });
+
+            $('#liq_profesionales_otros').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json"
+                },
+                responsive: true,
+            });
+        });
         // script de vista de liquidacion
         function registrar_profesional(){
             $('#registrar_profesional_cm').modal('show');

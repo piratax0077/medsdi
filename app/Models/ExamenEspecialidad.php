@@ -10,6 +10,23 @@ class ExamenEspecialidad extends Model
     use HasFactory;
     protected $table = 'examen_especialidad';
 
+    protected $fillable = [
+        'id_tipo',
+        'id_template',
+        'id_examen_tipo',
+        'id_sub_tipo_especialidad',
+        'id_ficha_atencion',
+        'id_ficha_otros_prof',
+        'id_ficha_especialidad',
+        'id_paciente',
+        'id_profesional',
+        'id_asistente',
+        'nombre',
+        'cuerpo',
+        'revisado',
+        'estado',
+    ];
+
     //examen_especialidad_img
     public function ExamenEspecialidadImg()
     {
@@ -44,6 +61,12 @@ class ExamenEspecialidad extends Model
     public function Profesional()
     {
         return $this->hasOne(Profesional::class,'id', 'id_profesional');
+    }
+
+    //ficha otros profesionales
+    public function FichaOtrosProfesionales()
+    {
+        return $this->hasOne(FichaOtrosProfesionales::class,'id', 'id_ficha_otros_prof');
     }
 
     public function ScopeFiltroEstadoHora($query, $estado)

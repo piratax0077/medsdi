@@ -254,4 +254,49 @@ class FichaPediatriaVacunaController extends Controller
             return $datos;
         }
     }
+
+    public function eliminarVacuna(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_registro))
+        {
+            $error['id_registro'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = FichaPediatriaVacuna::find($request->id_registro);
+
+            if($registro)
+            {
+                if($registro->delete())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Registro eliminado correctamente';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Error al eliminar el registro';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
 }

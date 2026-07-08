@@ -24,6 +24,12 @@
     <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Desactivar inicialización automática de Dropzone lo antes posible
+        window.Dropzone = window.Dropzone || {};
+        window.Dropzone.autoDiscover = false;
+    </script>
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
@@ -76,8 +82,11 @@
             z-index: 3000;
             overflow: auto;
         }
-    </style>
 
+        .select2-container--open {
+            z-index: 9999999 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -140,6 +149,11 @@
     <script src="{{ asset('js/check_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- file-upload Js -->
+    <script>
+        // Evitar que Dropzone inicialice automáticamente elementos con class="dropzone"
+        window.Dropzone = window.Dropzone || {};
+        window.Dropzone.autoDiscover = false;
+    </script>
     <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
     <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
@@ -155,6 +169,9 @@
 
     <!-- form-advance custom js -->
     {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
+
+    <!-- jQuery Mask (necesario para .mask en funciones.js) -->
+    <script src="{{ asset('js/plugins/jquery.mask.min.js') }}"></script>
 
     <!--Apgar-->
     <script src="{{ asset('js/aicalc2.js') }}?upd={{ random_int(1111,9999) }}"></script>

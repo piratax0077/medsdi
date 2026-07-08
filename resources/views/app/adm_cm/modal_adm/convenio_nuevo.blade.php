@@ -119,6 +119,116 @@
 </div>
 
 <script>
+function guardar_nuevo_convenio_institucion(){
+        console.log('Guardar nuevo convenio especial');
 
+        var nombre_convenio = $('#nombre_convenio_especiales').val();
+        var tipo_convenio = $('#tipo_convenio_especiales').val();
+        var porcentaje_dcto = $('#porcentaje_dcto_especiales').val();
+        var tipo_convenio_institucion = $('#tipo_convenio_institucion_especiales').val();
+        var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio_especiales').val();
+        var fecha_final_pago_convenio = $('#fecha_final_pago_convenio_especiales').val();
+        var productos_convenio = $('#productos_convenio_especiales').val();
+        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio_especiales').val();
+        var id_lugar_atencion = "{{ $institucion->id_lugar_atencion }}"; // No se usa en especiales pero se envía para compatibilidad
+        var id_empresa = $('#id_empresa').val() || 0;
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(nombre_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese nombre de convenio</li>';
+        }
+        if(tipo_convenio == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio</li>';
+        }
+        if(porcentaje_dcto == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese porcentaje de descuento</li>';
+        }
+        if(tipo_convenio_institucion == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio institución</li>';
+        }
+        if(fecha_inicial_pago_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione fecha inicial</li>';
+        }
+        if(fecha_final_pago_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione fecha final</li>';
+        }
+        if(productos_convenio == null){
+            valido = 0;
+            mensaje += '<li>Seleccione productos a convenir</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content: {
+                    element: 'div',
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        // Preparar datos en el mismo formato que guardar_tipo_convenio_ffa
+        var data = {
+            nombre_convenio: nombre_convenio,
+            tipo_convenio: tipo_convenio,
+            id_lugar_atencion: id_lugar_atencion,
+            porcentaje: porcentaje_dcto,
+            fecha_inicio: fecha_inicial_pago_convenio,
+            fecha_termino: fecha_final_pago_convenio,
+            observaciones: observaciones_nuevo_convenio,
+            convenios: 'Especial', // Identificador para convenios especiales
+            conveniosSeleccionados: [],
+            id_empresa: id_empresa,
+            productos_convenio: productos_convenio,
+            tipo_convenio_institucion: tipo_convenio_institucion,
+            _token: "{{ csrf_token() }}"
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: "{{ ROUTE('profesional.guardar_tipo_convenio') }}",
+            type: 'POST',
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.estado == 1){
+                    swal({
+                        title: 'Convenio registrado',
+                        text: response.mensaje,
+                        icon: 'success'
+                    });
+                    $('#nuevoConvenioInstitucion').modal('hide');
+                    location.reload();
+                }else{
+                    swal({
+                        title: 'Error',
+                        text: response.mensaje || 'Error al registrar convenio',
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function(xhr, status, error){
+                console.error('Error:', error);
+                swal({
+                    title: 'Error',
+                    text: 'Error al procesar la solicitud',
+                    icon: 'error'
+                });
+            }
+        });
+    }
 
 </script>

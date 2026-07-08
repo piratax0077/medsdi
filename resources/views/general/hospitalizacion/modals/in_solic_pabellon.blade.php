@@ -239,28 +239,28 @@
                                 </div>
                                 <div class="form-row">
                                 	<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                	<div class="card-informacion">
-                                		<div class="card-body">
-                                			<div class="form-row">
-			                                    <div class="form-group col-md-6 col-lg-6 col-xl-5">
-			                                        <label class="floating-label-activo-sm">Cargar Equipo</label>
-			                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_mi_equipo" id="ingreso_sol_pab_modal_mi_equipo" onchange="cargar_mi_equipo('ingreso_sol_pab_modal_mi_equipo','lista_profesionales');">
-			                                            <option value="0">Seleccione</option>
-			                                        </select>
-			                                        <input type="hidden" name="ingreso_sol_pab_modal_lista_profesionales" id="ingreso_sol_pab_modal_lista_profesionales" value="">
-			                                    </div>
-			                                    <div class="col-md-12 mb-2">
-			                                        <div class="form-row lista_profesionales">
+                                        <div class="card-informacion">
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6 col-lg-6 col-xl-5">
+                                                        <label class="floating-label-activo-sm">Cargar Equipo</label>
+                                                        <select class="form-control form-control-sm" name="ingreso_sol_pab_modal_mi_equipo" id="ingreso_sol_pab_modal_mi_equipo" onchange="cargar_mi_equipo('ingreso_sol_pab_modal_mi_equipo','lista_profesionales');">
+                                                            <option value="0">Seleccione</option>
+                                                        </select>
+                                                        <input type="hidden" name="ingreso_sol_pab_modal_lista_profesionales" id="ingreso_sol_pab_modal_lista_profesionales" value="">
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <div class="form-row lista_profesionales">
 
-			                                        </div>
-			                                    </div>
-			                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-			                                        <label class="floating-label-activo-sm">Instrumental especial</label>
-			                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_equipamiento_especial" id="ingreso_sol_pab_modal_equipamiento_especial"></textarea>
-			                                    </div>
-			                                </div>
-			                            </div>
-                                	</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <label class="floating-label-activo-sm">Instrumental especial</label>
+                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ingreso_sol_pab_modal_equipamiento_especial" id="ingreso_sol_pab_modal_equipamiento_especial"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                 	</div>
                             	</div>
                             </div>
@@ -292,8 +292,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_pabellon()"><i class="feather icon-file"></i> PDF</button>
-                <button type="button" class="btn btn-sm btn-info" onclick="registrar_solicitud_pabellon();"><i class="feather icon-save" ></i> Guardar y enviar solicitud</button>
+                <button type="button" class="btn btn-sm btn-info" onclick="registrar_y_generar_pdf_pabellon();"><i class="feather icon-save" ></i> Enviar y generar PDF</button>
             </div>
         </div>
     </div>
@@ -428,13 +427,15 @@
             html += '        <option value="ANESTESISTA">ANESTESISTA</option>';
             html += '    </select>';
             html += '</div>';
-            html += '<div class="form-group col-md-5">';
+            html += '<div class="form-group col-md-7">';
             html += '<label class="floating-label-activo-sm">Profesional </label>';
-            html += '    <input class="form-control form-control-sm equipo_profesional" type="text" name="equipo_profesional_1" id="equipo_profesional_1">';
-            html += '    <input class="form-control form-control-sm equipo_profesional" type="hidden" name="equipo_profesional_id_1" id="equipo_profesional_id_1">';
-            html += '</div>';
-            html += '<div class="form-group col-md-2">';
-            html += '    <button class="btn btn-xs btn-info btn-block" id="btn_registrar_profesional" onclick="guardar_profesional_equipo();"><i class="fa fa-check" aria-hidden="true"></i> Registrar</button>';
+            html += '    <div class="input-group input-group-sm">';
+            html += '        <input class="form-control form-control-sm equipo_profesional" type="text" name="equipo_profesional_1" id="equipo_profesional_1">';
+            html += '        <input class="form-control form-control-sm equipo_profesional" type="hidden" name="equipo_profesional_id_1" id="equipo_profesional_id_1">';
+            html += '        <div class="input-group-append">';
+            html += '            <button class="btn btn-info" id="btn_registrar_profesional" onclick="guardar_profesional_equipo();"><i class="fa fa-check" aria-hidden="true"></i> Registrar</button>';
+            html += '        </div>';
+            html += '    </div>';
             html += '</div>';
 
             html += '<!-- formulario de nuevo profesional -->';
@@ -760,8 +761,11 @@
     //     return regex.test(texto);
     // }
 
-    function registrar_solicitud_pabellon()
-    {
+    // ✅ FUNCIÓN ÚNICA: REGISTRAR Y GENERAR PDF EN UN MISMO PROCESO
+    function registrar_y_generar_pdf_pabellon() {
+        console.log('Iniciando registro y generación de PDF...');
+
+        // Recolectar datos del formulario
         var id_paciente = $('#id_paciente_fc').val();
         var id_profesional = $('#id_profesional_fc').val();
         var id_ficha_atencion = $('#id_fc').val();
@@ -798,6 +802,7 @@
             especialidad += ' {{ $profesional->SubTipoEspecialidad->first()->nombre }}';
         @endif
 
+        // Validar campos obligatorios
         var valido = 1;
         var mensaje = '';
 
@@ -805,122 +810,30 @@
             valido = 0;
             mensaje += '<li>Fecha y hora operación</li>';
         }
-
         if(operacion == ''){
             valido = 0;
             mensaje += '<li>Operación</li>';
         }
-
         if(diagnostico_preoperatorio == ''){
             valido = 0;
             mensaje += '<li>Diagnóstico</li>';
         }
-
         if(equipamiento_especial == ''){
             valido = 0;
             mensaje += '<li>Equipamento especial</li>';
         }
-
         if(comentarios == ''){
             valido = 0;
             mensaje += '<li>Comentarios</li>';
         }
-
         if(tipo_cirugia == ''){
             valido = 0;
             mensaje += '<li>Tipo cirugía</li>';
         }
 
-        if(otros_antecedentes == ''){
-            valido = 0;
-            mensaje += '<li>Otros antecedentes</li>';
-        }
-
-        if(valido == 1){
-            let url = "{{ route('solicitud.pabellon.registrar') }}";
-            $.ajax({
-                url: url,
-                type: "post",
-                data: {
-                    _token : _token,
-                    grado_urgencia : grado_urgencia,
-                    id_hospital : id_hospita,
-                    hospital : hospital ,
-                    fecha_hora_operacion : fecha_hora_operacion,
-                    operacion : operacion,
-                    codigo_cirugia : cirugia,
-                    equipamiento_especial : equipamiento_especial,
-                    especialidad_1 : especialidad,
-                    comentarios : comentarios,
-                    tipo_cirugia : tipo_cirugia,
-                    patalogias_cronicas : patalogias_cronicas,
-                    otros_antecedentes : otros_antecedentes,
-                    diagnostico_preoperatorio : diagnostico_preoperatorio,
-                    tipo_hospitalizacion : '',
-                    // cirujano,
-                    instrumental_especial : '',
-                    insumos_especiales : '',
-                    id_paciente : id_paciente,
-                    id_profesional : id_profesional,
-                    id_ficha_atencion : id_ficha_atencion,
-                    id_lugar_atencion : id_lugar_atencion,
-                    nombre_equipo: nombre_equipo,
-                    descripcion_equipo: descripcion_equipo,
-                    lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
-                    lista_profesionales : lista_profesionales,
-                },
-            })
-            .done(function(resp) {
-                console.log(resp);
-
-                if (resp.estado == 1)
-                {
-                    console.log('registro');
-                    $('#ingreso_sol_pab_modal_otros_antecedentes_m').val();
-                    $('#ingreso_sol_pab_modal_patalogias_cronicas').val();
-                    $('#ingreso_sol_pab_modal_hospital').val();
-                    $('#ingreso_sol_pab_modal_id_hospita').val();
-                    $('#ingreso_sol_pab_modal_diagnostico_preoperatorio').val();
-                    $('#ingreso_sol_pab_modal_tipo_cirugia').val();
-                    $('#ingreso_sol_pab_modal_grado_urgencia').val();
-                    $('#ingreso_sol_pab_modal_operacion').val();
-                    $('#ingreso_sol_pab_modal_cirugia').val();
-                    $('#ingreso_sol_pab_modal_anestesia').val();
-                    $('#ingreso_sol_pab_modal_fecha_hora_operacion').val();
-                    $('#ingreso_sol_pab_modal_mi_equipo').val();
-                    $('#ingreso_sol_pab_modal_lista_profesionales').val();
-                    $('#ingreso_sol_pab_modal_nombre_equipo').val();
-                    $('#ingreso_sol_pab_modal_descripcion_equipo').val();
-                    $('#ingreso_sol_pab_modal_equipamiento_especial').val();
-                    $('#ingreso_sol_pab_modal_comentarios').val();
-                    lista_profesionales_eq_nuevo = [];
-
-                    $('#ingreso_sol_pab_modal').modal('hide');
-                    swal({
-                        title: "Solicitud de Pabellon.",
-                        text: 'Solicitud Exitosa',
-                        icon: "success",
-                    });
-
-
-                }
-                else
-                {
-                    console.log('falla registro');
-                    swal({
-                        title: "Solicitud de Pabellon.",
-                        text: 'Solicitud con problema intente de nuevo',
-                        icon: "error",
-                    });
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-
-        }else{
+        if(valido == 0) {
             swal({
-                title: "Solicitud de Pabellon.",
+                title: "Campos obligatorios",
                 content:{
                     element: "div",
                     attributes:{
@@ -929,93 +842,19 @@
                 },
                 icon: "error",
             });
+            return;
         }
 
-
-
-    }
-
-    function generar_pdf_pabellon(){
-        console.log('generar pdf pabellon');
-        var id_paciente = $('#id_paciente_fc').val();
-        var id_profesional = $('#id_profesional_fc').val();
-        var id_ficha_atencion = $('#id_fc').val();
-        var id_lugar_atencion = $('#id_lugar_atencion').val();
-        var otros_antecedentes = $('#ingreso_sol_pab_modal_otros_antecedentes_m').val();
-        var patalogias_cronicas = $('#ingreso_sol_pab_modal_patalogias_cronicas').val();
-        var hospital = $('#ingreso_sol_pab_modal_hospital').val();
-        var id_hospita = $('#ingreso_sol_pab_modal_id_hospita').val();
-        var diagnostico_preoperatorio = $('#ingreso_sol_pab_modal_diagnostico_preoperatorio').val();
-        var tipo_cirugia = $('#ingreso_sol_pab_modal_tipo_cirugia').val();
-        var grado_urgencia = $('#ingreso_sol_pab_modal_grado_urgencia').val();
-        var operacion = $('#ingreso_sol_pab_modal_operacion').val();
-        var cirugia = $('#ingreso_sol_pab_modal_cirugia').val();
-        var anestesia = $('#ingreso_sol_pab_modal_anestesia').val();
-        var fecha_hora_operacion = $('#ingreso_sol_pab_modal_fecha_hora_operacion').val();
-        var mi_equipo = $('#ingreso_sol_pab_modal_mi_equipo').val();
-        var lista_profesionales = $('#ingreso_sol_pab_modal_lista_profesionales').val();
-
-        var nombre_equipo = '';
-        if($('#ingreso_sol_pab_modal_nombre_equipo').length > 0 )
-            nombre_equipo = $('#ingreso_sol_pab_modal_nombre_equipo').val();
-
-        var descripcion_equipo = '';
-        if($('#ingreso_sol_pab_modal_descripcion_equipo').length > 0 )
-            descripcion_equipo = $('#ingreso_sol_pab_modal_descripcion_equipo').val();
-
-        var equipamiento_especial = $('#ingreso_sol_pab_modal_equipamiento_especial').val();
-        var comentarios = $('#ingreso_sol_pab_modal_comentarios').val();
-        var _token = CSRF_TOKEN;
-
-        var especialidad = '';
-        especialidad = '{{ $profesional->TipoEspecialidad->first()->nombre }}';
-        @if(!empty($profesional->SubTipoEspecialidad) )
-            especialidad += ' {{ $profesional->SubTipoEspecialidad->first()->nombre }}';
-        @endif
-
-        var valido = 1;
-        var mensaje = '';
-
-        if(fecha_hora_operacion == ''){
-            valido = 0;
-            mensaje += '<li>Fecha y hora operación</li>';
-        }
-
-        if(operacion == ''){
-            valido = 0;
-            mensaje += '<li>Operación</li>';
-        }
-
-        if(diagnostico_preoperatorio == ''){
-            valido = 0;
-            mensaje += '<li>Diagnóstico</li>';
-        }
-
-        if(equipamiento_especial == ''){
-            valido = 0;
-            mensaje += '<li>Equipamento especial</li>';
-        }
-
-        if(comentarios == ''){
-            valido = 0;
-            mensaje += '<li>Comentarios</li>';
-        }
-
-        if(tipo_cirugia == ''){
-            valido = 0;
-            mensaje += '<li>Tipo cirugía</li>';
-        }
-
-        // if(otros_antecedentes == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Otros antecedentes</li>';
-        // }
-
-        let data = {
+        // PASO 1: Registrar solicitud en BD
+        let url_registrar = "{{ route('solicitud.pabellon.registrar') }}";
+        $.ajax({
+            url: url_registrar,
+            type: "post",
+            data: {
                 _token : _token,
                 grado_urgencia : grado_urgencia,
                 id_hospital : id_hospita,
-                hospital : hospital ,
+                hospital : hospital,
                 fecha_hora_operacion : fecha_hora_operacion,
                 operacion : operacion,
                 codigo_cirugia : cirugia,
@@ -1027,7 +866,6 @@
                 otros_antecedentes : otros_antecedentes,
                 diagnostico_preoperatorio : diagnostico_preoperatorio,
                 tipo_hospitalizacion : '',
-                // cirujano,
                 instrumental_especial : '',
                 insumos_especiales : '',
                 id_paciente : id_paciente,
@@ -1038,96 +876,176 @@
                 descripcion_equipo: descripcion_equipo,
                 lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
                 lista_profesionales : lista_profesionales,
-        }
-        if(valido == 1){
-            console.log(data);
-            let url = "{{ route('solicitud.pabellon.pdf') }}";
-            $.ajax({
-                url: url,
-                type: "post",
-                data: {
-                    _token : _token,
-                    grado_urgencia : grado_urgencia,
-                    id_hospital : id_hospita,
-                    hospital : hospital ,
-                    fecha_hora_operacion : fecha_hora_operacion,
-                    operacion : operacion,
-                    codigo_cirugia : cirugia,
-                    equipamiento_especial : equipamiento_especial,
-                    especialidad_1 : especialidad,
-                    comentarios : comentarios,
-                    tipo_cirugia : tipo_cirugia,
-                    patalogias_cronicas : patalogias_cronicas,
-                    otros_antecedentes : otros_antecedentes,
-                    diagnostico_preoperatorio : diagnostico_preoperatorio,
-                    tipo_hospitalizacion : '',
-                    // cirujano,
-                    instrumental_especial : '',
-                    insumos_especiales : '',
-                    id_paciente : id_paciente,
-                    id_profesional : id_profesional,
-                    id_ficha_atencion : id_ficha_atencion,
-                    id_lugar_atencion : id_lugar_atencion,
-                    nombre_equipo: nombre_equipo,
-                    descripcion_equipo: descripcion_equipo,
-                    lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
-                    lista_profesionales : lista_profesionales,
-                },
-            })
-            .done(function(resp) {
-                console.log(resp);
+            },
+        })
+        .done(function(resp) {
+            console.log('Respuesta del registro:', resp);
 
-                if (resp.estado == 1)
-                {
-                    console.log('registro');
-                    let width = 800;
-                    let height = 600;
-                    let left = (screen.width - width) / 2;
-                    let top = (screen.height - height) / 2;
-                    window.open(resp.response.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
-                    swal({
-                        title: "PDF generado",
-                        text: "El PDF ha sido generado correctamente.",
-                        icon: "success",
-                        buttons: "Aceptar",
-                    });
-                    lista_profesionales_eq_nuevo = [];
-                }else{
-                    console.log('falla registro');
-                    // ocultamos el modal
-                    $('#ingreso_sol_pab_modal').modal('hide');
-                    swal({
-                        title: "Solicitud de Pabellon.",
-                        text: 'Solicitud con problema intente de nuevo',
-                        icon: "error",
-                    })
-                    .then(function(){
-                        $('#ingreso_sol_pab_modal').modal('show');
-                    });
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }else{
-            console.log('falla registro');
-            // ocultamos el modal
-            $('#ingreso_sol_pab_modal').modal('hide');
-            swal({
-                title: "Solicitud de Pabellon.",
-                content:{
-                    element: "div",
-                    attributes:{
-                        innerHTML: mensaje,
+            if (resp.estado == 1) {
+                console.log('✅ Solicitud registrada en BD, procediendo a generar PDF...');
+
+                // PASO 2: Generar PDF
+                let url_pdf = "{{ route('solicitud.pabellon.pdf') }}";
+                $.ajax({
+                    url: url_pdf,
+                    type: "post",
+                    data: {
+                        _token : _token,
+                        grado_urgencia : grado_urgencia,
+                        id_hospital : id_hospita,
+                        hospital : hospital,
+                        fecha_hora_operacion : fecha_hora_operacion,
+                        operacion : operacion,
+                        codigo_cirugia : cirugia,
+                        equipamiento_especial : equipamiento_especial,
+                        especialidad_1 : especialidad,
+                        comentarios : comentarios,
+                        tipo_cirugia : tipo_cirugia,
+                        patalogias_cronicas : patalogias_cronicas,
+                        otros_antecedentes : otros_antecedentes,
+                        diagnostico_preoperatorio : diagnostico_preoperatorio,
+                        tipo_hospitalizacion : '',
+                        instrumental_especial : '',
+                        insumos_especiales : '',
+                        id_paciente : id_paciente,
+                        id_profesional : id_profesional,
+                        id_ficha_atencion : id_ficha_atencion,
+                        id_lugar_atencion : id_lugar_atencion,
+                        nombre_equipo: nombre_equipo,
+                        descripcion_equipo: descripcion_equipo,
+                        lista_profesionales_eq_nuevo : JSON.stringify(lista_profesionales_eq_nuevo),
+                        lista_profesionales : lista_profesionales,
                     },
-                },
+                })
+                .done(function(resp_pdf) {
+                    console.log('Respuesta del PDF:', resp_pdf);
+
+                    if (resp_pdf.estado == 1) {
+                        console.log('✅ PDF generado correctamente');
+
+                        // PASO 3: Mostrar PDF en Fancybox
+                        let url_pdf_final = resp_pdf.response.ruta;
+                        Fancybox.show([
+                            {
+                                src: url_pdf_final,
+                                type: "iframe",
+                                preload: false,
+                            },
+                        ]);
+
+                        // PASO 4: Agregar PDF a los adjuntos
+                        let nombre_archivo = 'Solicitud de Pabellón - ' + new Date().toLocaleDateString('es-ES');
+                        agregarAdjuntoAlDiv(nombre_archivo, url_pdf_final);
+
+                        // PASO 5: Limpiar formulario
+                        $('#ingreso_sol_pab_modal_otros_antecedentes_m').val('');
+                        $('#ingreso_sol_pab_modal_patalogias_cronicas').val('');
+                        $('#ingreso_sol_pab_modal_hospital').val('');
+                        $('#ingreso_sol_pab_modal_id_hospita').val('');
+                        $('#ingreso_sol_pab_modal_diagnostico_preoperatorio').val('');
+                        $('#ingreso_sol_pab_modal_tipo_cirugia').val('');
+                        $('#ingreso_sol_pab_modal_grado_urgencia').val('1');
+                        $('#ingreso_sol_pab_modal_operacion').val('');
+                        $('#ingreso_sol_pab_modal_cirugia').val('');
+                        $('#ingreso_sol_pab_modal_anestesia').val('');
+                        $('#ingreso_sol_pab_modal_fecha_hora_operacion').val('');
+                        $('#ingreso_sol_pab_modal_mi_equipo').val('0');
+                        $('#ingreso_sol_pab_modal_lista_profesionales').val('');
+                        $('#ingreso_sol_pab_modal_nombre_equipo').val('');
+                        $('#ingreso_sol_pab_modal_descripcion_equipo').val('');
+                        $('#ingreso_sol_pab_modal_equipamiento_especial').val('');
+                        $('#ingreso_sol_pab_modal_comentarios').val('');
+                        lista_profesionales_eq_nuevo = [];
+
+                        // PASO 6: Cerrar modal
+                        $('#ingreso_sol_pab_modal').modal('hide');
+
+                        // PASO 7: Mostrar mensaje de éxito
+                        swal({
+                            title: "Solicitud completada",
+                            text: "La solicitud ha sido registrada y el PDF ha sido generado correctamente.",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+                    } else {
+                        console.log('❌ Error al generar PDF');
+                        swal({
+                            title: "Error",
+                            text: "Error al generar el PDF. Por favor, intente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log('Error en generación de PDF:', jqXHR, ajaxOptions, thrownError);
+                    swal({
+                        title: "Error",
+                        text: "Error al generar el PDF.",
+                        icon: "error",
+                    });
+                });
+            } else {
+                console.log('❌ Error al registrar solicitud');
+                swal({
+                    title: "Error al registrar",
+                    text: 'Solicitud con problema, intente de nuevo',
+                    icon: "error",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log('Error en registro:', jqXHR, ajaxOptions, thrownError);
+            swal({
+                title: "Error",
+                text: "Error al registrar la solicitud.",
                 icon: "error",
-            })
-            .then(function(){
-                $('#ingreso_sol_pab_modal').modal('show');
             });
+        });
+    }
+
+
+
+    // ✅ FUNCIONES PARA AGREGAR Y ABRIR ADJUNTOS
+    function agregarAdjuntoAlDiv(nombre_archivo, url_pdf) {
+        // Verificar que el elemento existe
+        if ($('#archivos_adjuntos_ficha_atencion').length === 0) {
+            console.warn('El div archivos_adjuntos_ficha_atencion no existe en la página');
+            return;
         }
 
+        // Mostrar el div de adjuntos si está oculto
+        $('#archivos_adjuntos_ficha_atencion').removeClass('d-none');
+
+        // Crear el botón del PDF
+        let boton_pdf = `
+            <button type="button" class="btn btn-sm btn-outline-info me-2 mb-2" onclick="abrirAdjunto('${url_pdf}')">
+                <i class="feather icon-file-pdf"></i> ${nombre_archivo}.pdf
+            </button>
+        `;
+
+        // Insertar antes del botón "+ Agregar adjunto"
+        let btn_agregar = $('#adjuntos_indicaciones .btn-success');
+
+        if (btn_agregar.length > 0) {
+            btn_agregar.before(boton_pdf);
+            console.log('PDF agregado a los adjuntos');
+        } else {
+            // Si no existe el botón, agregar al final del div
+            $('#adjuntos_indicaciones').append(boton_pdf);
+            console.log('PDF agregado al final (botón agregar no encontrado)');
+        }
+    }
+
+    function abrirAdjunto(url_pdf) {
+        Fancybox.show(
+            [
+                {
+                    src: url_pdf,
+                    type: "iframe",
+                    preload: false,
+                },
+            ]
+        );
     }
 
 </script>

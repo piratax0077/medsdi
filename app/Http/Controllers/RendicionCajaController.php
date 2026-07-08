@@ -45,7 +45,7 @@ class RendicionCajaController extends Controller
             $valido = 0;
         }
 
-       
+
 
         // if(empty($request->observaciones)){
         //     $error['observaciones'] = 'Campo requerido';
@@ -59,7 +59,7 @@ class RendicionCajaController extends Controller
             $fecha_rendicion = date('Y-m-d H:i:s');
 
             $asistenteReceptor = Asistente::where('id', $request->id_asistente_receptor)->first();
-            
+
             if($asistenteReceptor)
             {
                 // $asistenteReceptor = Asistente::where('id', $request->id_asistente_receptor)->first();

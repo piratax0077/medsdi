@@ -3,7 +3,7 @@
         <div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white text-center">Empleadores informados</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                 <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#m_lic_empleador').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
 			<div class="modal-body">
 				<div class="form-row">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <button type="button" class="btn btn-danger-light btn-sm btn-block">Cancelar</button>
+                        <button type="button" class="btn btn-danger-light btn-sm btn-block" onclick="$('#m_lic_empleador').modal('hide')" >Cancelar</button>
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <button type="button" class="btn btn-info btn-sm btn-block">Continuar</button>
@@ -56,4 +56,3 @@
 		</div>
 	</div>
 </div>
-

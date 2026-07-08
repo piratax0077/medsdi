@@ -340,18 +340,26 @@
     function cargarListaEsperaPorProfesional()
     {
         var body = $('#tabla_lista_espera tbody');
-            $('#tabla_lista_espera').dataTable().fnClearTable();
-            $('#tabla_lista_espera').dataTable().fnDestroy();
-            body.empty();
 
-            url = "{{ route('lista.espera.buscar.por.profesional') }}";
-            let id_profesional = $('#agenda_profesional_asistente').val();
-            let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
-
-            var data = {
-                id_profesional:id_profesional,
-                id_lugar_atencion:id_lugar_atencion,
+        // Destruir DataTables de forma segura
+        try {
+            if ($.fn.DataTable.isDataTable('#tabla_lista_espera')) {
+                $('#tabla_lista_espera').dataTable().fnDestroy();
             }
+        } catch(e) {
+            console.log('Error al destruir DataTable:', e);
+        }
+
+        body.empty();
+
+        url = "{{ route('lista.espera.buscar.por.profesional') }}";
+        let id_profesional = $('#agenda_profesional_asistente').val();
+        let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+
+        var data = {
+            id_profesional:id_profesional,
+            id_lugar_atencion:id_lugar_atencion,
+        }
 
             $.ajax({
                 url: url,
@@ -391,13 +399,8 @@
                 else
                 {
                     body.empty();
-                    $('#tabla_lista_espera').dataTable().fnClearTable();
-                    $('#tabla_lista_espera').dataTable().fnDestroy();
-                    var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
+                    var fila = '<tr><td colspan="6"><span><h5>no existen registros</h5></span></td></tr>'
                     body.append(fila);
-                    $('#tabla_lista_espera').DataTable({
-                        responsive: true,
-                    });
                 }
                 $('#m_lista_espera').modal('show');
             })

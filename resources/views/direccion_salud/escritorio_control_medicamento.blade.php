@@ -10,11 +10,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">CONTROL MEDICAMENTOS</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('ministerio.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('ministerio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Control de Medicamentos</a>
                                 </li>
                             </ul>
                         </div>
@@ -26,46 +28,68 @@
 
             <div class="row m-b-10" >
                 <div class="col-sm-12">
-                    <div class="card-a">
-                        <div class="card-header-a" id="tabla-registros">
-                            <h5 class="font-weight-bold">Registros</h5>
+                    <div class="card">
+                        <div class="card-header bg-white text-c-blue py-3" id="tabla-registros">
+                            <h6 class="font-weight-bold text-dark f-20">Registros</h6>
                         </div>
                         <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
-                            <div class="card-body-aten-a shadow-none">
+                            <div class="card-body shadow-none">
                                 <div class="row">
                                     {{-- filtros --}}
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio">
-
-                                                    @for ($i = 2023; $i <= intval(date('Y')); $i++)
-                                                        @php
-                                                            $selected = '';
-                                                            if($anio == $i) $selected = 'selected';
-                                                            else $selected = '';
-                                                        @endphp
-                                                        <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
-                                                    @endfor
-                                                </select>
+                                        <div class="form-row mb-2">
+                                            <div class="col-12">
+                                            <div class="card-lineal">
+                                                <div class="card-body-lineal">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Región</label>
+                                                            <select class="form-control form-control-sm" id="filtro_region">
+                                                                <option value="">Todas</option>
+                                                                @foreach ($regiones as $region)
+                                                                    <option value="{{ $region->id }}">{{ $region->nombre }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Ciudad</label>
+                                                            <select class="form-control form-control-sm" id="filtro_ciudad">
+                                                                <option value="">Todas</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Año</label>
+                                                            <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio">
+                                                                @for ($i = 2023; $i <= intval(date('Y')); $i++)
+                                                                    @php
+                                                                        $selected = '';
+                                                                        if($anio == $i) $selected = 'selected';
+                                                                        else $selected = '';
+                                                                    @endphp
+                                                                    <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Mes</label>
+                                                            <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes">
+                                                                <option value="">Seleccione</option>
+                                                                @php
+                                                                    $meses = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
+                                                                @endphp
+                                                                @for ($i = 1; $i <= 12; $i++)
+                                                                    <option  value="{{ $i }}" {{ $mes == $i ? 'selected' : '' }}>{{$meses[$i]}}</option>
+                                                                @endfor
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="filtrar_control_med();"><i class="feather icon-search"></i> Buscar</button>
+                                                        </div>
+                                                     </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes">
-                                                    <option value="">Seleccione</option>
-                                                    @php
-                                                        $meses = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
-                                                    @endphp
-                                                    @for ($i = 1; $i <= 12; $i++)
-                                                        <option  value="{{ $i }}" {{ $mes == $i ? 'selected' : '' }}>{{$meses[$i]}}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-info-light-c btn-sm" onclick="filtrar_control_med();">Buscar</button>
                                             </div>
                                         </div>
-
-
                                     </div>
                                     {{--  tablas de registros --}}
                                     <div class="col-md-12">
@@ -83,6 +107,7 @@
                                                         <th>CANT. VENDIDA</th>
                                                         <th>*F. VENTA</th>
                                                         <th>*FARMACIA</th>
+                                                        <th>ACCIONES</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -100,6 +125,7 @@
                                                                     <td>{{ $detalle['cantidad_vendida'] }}</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
+                                                                    <td><button type="button" class="btn btn-sm btn-primary" onclick="ver_pdf_receta({{ $receta['id_ficha_atencion'] }});"><i class="fa fa-file-pdf"></i> Ver</button></td>
                                                                 </tr>
                                                             @endforeach
                                                         @endforeach
@@ -121,10 +147,42 @@
 
     <script>
         $(document).ready(function () {
+             $('#filtro_region').on('change', function() {
+                buscar_ciudad_filtro();
+            });
             $('#tabla_registros_control_med').DataTable({
                 responsive: true,
             });
         });
+
+        // Nueva función para buscar ciudades en el filtro
+    function buscar_ciudad_filtro() {
+        let region = $('#filtro_region').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                region: region,
+            },
+        })
+        .done(function(data) {
+            if (data != null) {
+                data = JSON.parse(data);
+                let ciudades = $('#filtro_ciudad');
+                ciudades.find('option').remove();
+                ciudades.append('<option value="">Todas</option>');
+                $(data).each(function(i, v) {
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                });
+            } else {
+                $('#filtro_ciudad').html('<option value="">Todas</option>');
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 
         function filtrar_control_med()
         {
@@ -171,6 +229,25 @@
                     {
                         $('#tabla_registros_control_med tbody').html('');
 
+                        // Contar medicamentos por día
+                        var medicamentosPorDia = {};
+
+                        $.each(data.registros, function (key, value)
+                        {
+                            var f_temp = (value.created_at).replace('T',' ').replace('Z','').replace('.000000','');
+                            var fecha = new Date(f_temp);
+                            var fechaFormato = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear();
+
+                            $.each(value.detalle, function (key2, value2)
+                            {
+                                var clave = value2.producto + '|' + value2.farmaco + '|' + fechaFormato;
+                                if (!medicamentosPorDia[clave]) {
+                                    medicamentosPorDia[clave] = 0;
+                                }
+                                medicamentosPorDia[clave]++;
+                            });
+                        });
+
                         $.each(data.registros, function (key, value)
                         {
 
@@ -180,8 +257,12 @@
 
                             $.each(value.detalle, function (key2, value2)
                             {
+                                var clave = value2.producto + '|' + value2.farmaco + '|' + fecha;
+                                var esDuplicado = medicamentosPorDia[clave] > 1;
+                                var claseBg = esDuplicado ? 'style="background-color: #ffcccc; color: #cc0000; font-weight: bold;"' : '';
+
                                 var html = '';
-                                html += '<tr>';
+                                html += '<tr ' + claseBg + '>';
                                 html += '   <td>'+value2.producto+'</td>';
                                 html += '   <td>'+value2.farmaco+'</td>';
                                 html += '   <td>'+value2.presentacion+'</td>';
@@ -192,6 +273,7 @@
                                 html += '   <td>'+value2.cantidad_vendida+'</td>';
                                 html += '   <td>-</td>';
                                 html += '   <td>-</td>';
+                                html += '   <td><button type="button" class="btn btn-sm btn-primary" onclick="ver_pdf_receta('+value.id_ficha_atencion+');"><i class="fa fa-file-pdf"></i> Ver</button></td>';
 
                                 html += '</tr>';
 
@@ -220,6 +302,20 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
             }
+        }
+
+        function ver_pdf_receta(id_ficha_atencion)
+        {
+            let url = "{{ route('pdf.receta_medicamentos') }}";
+            Fancybox.show(
+                [
+                    {
+                    src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion,
+                    type: "iframe",
+                    preload: false,
+                    },
+                ]
+            );
         }
     </script>
 @endsection

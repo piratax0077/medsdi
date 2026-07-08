@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LugarAtencion;
+use App\Models\Profesional;
 use App\Models\ProcedimientosCentro;
+use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use Illuminate\Http\Request;
 
 class ProcedimientosCentroController extends Controller
@@ -345,5 +348,51 @@ static public function verRegistros(
     return (object)$datos;
 }
 
+    public function asignarProcedimiento(Request $request)
+    {
+        $request->validate([
+            'id_procedimiento'    => 'required|exists:procedimientos_centro,id',
+            'id_lugar_atencion'   => 'required|exists:lugares_atencion,id',
+            'ids_profesionales'   => 'required|array|min:1',
+            'ids_profesionales.*' => 'required|exists:profesionales,id',
+        ]);
+
+        $procedimientoBase = ProcedimientosCentro::findOrFail($request->id_procedimiento);
+        $lugar             = LugarAtencion::findOrFail($request->id_lugar_atencion);
+
+        $asignados = 0;
+        $omitidos  = 0;
+
+        foreach ($request->ids_profesionales as $id_profesional) {
+            $existe = ProcedimientosCentroLugarAtencionProfesional::where('id_procedimiento_centro', $procedimientoBase->id)
+                ->where('id_lugar_atencion', $lugar->id)
+                ->where('id_profesional', $id_profesional)
+                ->first();
+
+            if ($existe) {
+                $omitidos++;
+                continue;
+            }
+
+            $nuevo = new ProcedimientosCentroLugarAtencionProfesional();
+            $nuevo->id_procedimiento_centro = $procedimientoBase->id;
+            $nuevo->id_lugar_atencion       = $lugar->id;
+            $nuevo->id_profesional          = $id_profesional;
+            $nuevo->nombre                  = $procedimientoBase->nombre;
+            $nuevo->descripcion             = $procedimientoBase->descripcion;
+            $nuevo->minutos_bloque          = $procedimientoBase->minutos_bloque;
+            $nuevo->cantidad_bloques        = $procedimientoBase->cantidad_bloques;
+            $nuevo->otros                   = $procedimientoBase->otros;
+            $nuevo->estado                  = 1;
+            $nuevo->save();
+            $asignados++;
+        }
+
+        return response()->json([
+            'estado'    => 1,
+            'asignados' => $asignados,
+            'omitidos'  => $omitidos,
+        ]);
+    }
 
 }

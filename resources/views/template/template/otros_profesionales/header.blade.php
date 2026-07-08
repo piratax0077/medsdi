@@ -24,7 +24,7 @@
                             @if (Auth::user()->hasRole('Paciente') || Auth::user()->hasRole('Admin'))
                                 <li>
                                     <a href="{{ ROUTE('paciente.home') }}" class="dropdown-item">
-                                        <i class="feather icon-user"></i>
+                                        <i class="feather icon-user" style="font-size: 1.2rem!important!;"></i>
                                         Escritorio paciente
                                     </a>
                                 </li>
@@ -33,13 +33,13 @@
                             @if (Auth::user()->hasRole('Profesional') || Auth::user()->hasRole('Admin'))
                                 <li>
                                     <a href="{{ ROUTE('profesional.home') }}" class="dropdown-item"><i
-                                            class="feather icon-user"></i>
+                                            class="feather icon-user" style="font-size: 1.2rem!important!;"></i>
                                         Escritorio profesional
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ ROUTE('dental.index') }}" class="dropdown-item"><i
-                                            class="feather icon-user"></i>
+                                            class="feather icon-user" style="font-size: 1.2rem!important!;"></i>
                                         Escritorio Dental
                                     </a>
                                 </li>
@@ -47,7 +47,7 @@
 
                             @if (Auth::user()->hasRole('Asistente') || Auth::user()->hasRole('Admin'))
                                 <li><a href="{{ ROUTE('asistente.home') }}" class="dropdown-item"><i
-                                            class="feather icon-user"></i>Escritorio
+                                            class="feather icon-user" style="font-size: 1.2rem!important!;"></i>Escritorio
                                         Asistente</a></li>
                             @endif
                         </ul>
@@ -61,7 +61,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
-                            <span>{{  @Auth::user()->name }}</span>
+                            <span class="font-weight-bold">{{  @Auth::user()->name }}</span>
                         </div>
                         {{--  <ul></ul>  --}}
                         <ul class="pro-body">

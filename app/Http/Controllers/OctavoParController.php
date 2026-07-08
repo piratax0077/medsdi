@@ -8,45 +8,52 @@ use App\Models\OctavoPar;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class OctavoParController extends Controller
 {
     // Mapeo de valores a símbolos de Wingdings 3 para direcciones de nistagmo
     // Mapeo de valores a símbolos Unicode para direcciones de nistagmo
-    private static function convertirValorAWingdings($valor)
+    public static function convertirValorAWingdings($valor)
     {
-        // Mapeo completo para TODAS las opciones de direcciones
         $mapeo = [
-            // Valores vacíos y sin dirección
-            '0' => '',           // Vacío
-            '1' => '0',          // Sin dirección
-            
-            // Nistagmo provocado (valores 2-10, letras G,F,I,H,J,K,M,L,N)
-            '2' => '→',          // G -> Derecha
-            '3' => '←',          // F -> Izquierda  
-            '4' => '↑',          // I -> Arriba
-            '5' => '↓',          // H -> Abajo
-            '6' => '↗',          // J -> Diagonal arriba-derecha
-            '7' => '↖',          // K -> Diagonal arriba-izquierda
-            '8' => '↘',          // M -> Diagonal abajo-derecha
-            '9' => '↙',          // L -> Diagonal abajo-izquierda
-            '10' => '⟲',         // N -> Rotacional
-            
-            // Nistagmo espontáneo (valores 11-13, letras i,j,k,l)
-            '11' => '↻',         // i -> Rotacional horario
-            '12' => '↺',         // j -> Rotacional antihorario  
-            '13' => '⇄',         // k -> Bidireccional horizontal
-            
-            // Mapeos adicionales si se necesitan
-            '14' => '⇅',         // l -> Bidireccional vertical
-            '15' => '◊',         // Nistagmo multidireccional
+            '0' => '',      // Vacío
+            '1' => asset('laboratorio/direcciones/sin.png'),     // Sin dirección
+            '2' => asset('laboratorio/direcciones/flecha-der.png'),     // Derecha (U+2192)
+            '3' => asset('laboratorio/direcciones/flecha-izq.png'),     // Izquierda (U+2190)
+            '4' => asset('laboratorio/direcciones/flecha-arriba.png'),     // Arriba (U+2191)
+            '5' => asset('laboratorio/direcciones/flecha-abajo.png'),     // Abajo (U+2193)
+            '6' => asset('laboratorio/direcciones/flecha-der-curva.png'),     // Diagonal arriba-derecha (U+2197)
+            '7' => asset('laboratorio/direcciones/flecha-izq-curva.png'),     // Diagonal arriba-izquierda (U+2196)
+            '8' => asset('laboratorio/direcciones/flecha-der-sup-curva.png'),     // Diagonal abajo-derecha (U+2198)
+            '9' => asset('laboratorio/direcciones/flecha-izq-sup-curva.png'),     // Diagonal abajo-izquierda (U+2199)
+            '10' => asset('laboratorio/direcciones/flecha-der-arriba-curva.png'),    // Rotacional (U+27F2)
+            '11' => asset('laboratorio/direcciones/flecha-izq-arriba-curva.png'),    // Rotacional inverso (U+27F3)
+            '12' => asset('laboratorio/direcciones/flecha-der-abajo-curva.png'),    // Circular horario (U+27F4)
+            '13' => asset('laboratorio/direcciones/flecha-izq-abajo-curva.png')     // Circular antihorario (U+27F5)
         ];
 
         return $mapeo[$valor] ?? '';
     }
 
-    private static function convertirValorSiNo($valor)
+    public static function convertirValorAWingdingsProvocada($valor){
+        $mapeo = [
+            '0' => '',
+            '1' => asset('laboratorio/direcciones/sin.png'),
+            '2' => asset('laboratorio/direcciones/flecha-izq-curva.png'),
+            '3' => asset('laboratorio/direcciones/flecha-der-sup-curva.png'),
+            '4' => asset('laboratorio/direcciones/flecha-der-arriba-curva.png'),
+            '5' => asset('laboratorio/direcciones/flecha-der-curva.png'),
+            '6' => asset('laboratorio/direcciones/flecha-izq-arriba-curva.png'),
+            '7' => asset('laboratorio/direcciones/flecha-der-abajo-curva.png'),
+            '8' => asset('laboratorio/direcciones/flecha-izq-abajo-curva.png'),
+            '9' => asset('laboratorio/direcciones/flecha-izq-abajo-curva.png'),
+            '10' => asset('laboratorio/direcciones/flecha-der-abajo-curva.png')
+        ];
+
+        return $mapeo[$valor] ?? '';
+    }
+
+    public static function convertirValorSiNo($valor)
     {
         $mapeo = [
             '0' => '',
@@ -58,7 +65,7 @@ class OctavoParController extends Controller
         return $mapeo[$valor] ?? '';
     }
 
-    private static function convertirValorSintomas($valor)
+    public static function convertirValorSintomas($valor)
     {
         $mapeo = [
             '0' => '0',
@@ -270,8 +277,8 @@ class OctavoParController extends Controller
 
             // Calcular edad del paciente
             $edad = '';
-            if ($paciente && $paciente->fecha_nacimiento) {
-                $fechaNac = new \DateTime($paciente->fecha_nacimiento);
+            if ($paciente && $paciente->fecha_nac) {
+                $fechaNac = new \DateTime($paciente->fecha_nac);
                 $hoy = new \DateTime();
                 $edad = $hoy->diff($fechaNac)->y . ' años';
             }
@@ -296,8 +303,11 @@ class OctavoParController extends Controller
                 'otros_pares_craneanos' => $request->otros_pares_craneanos ?? ($octavo_par ? $octavo_par->otros_pares_craneanos : ''),
                 // Datos del request (formulario)
                 'derivado_por' => $request->derivado_por ?? ($octavo_par ? $octavo_par->derivado_por : ''),
+                'derivado_por_rut' => $request->derivado_por_rut ?? ($octavo_par ? $octavo_par->derivado_por_rut : ''),
                 'resumen_anamnestico' => $request->resumen_anamnestico ?? '',
                 'concluciones_examen' => $request->concluciones_examen ?? ($ficha_atencion ? $ficha_atencion->hipotesis : ''),
+                'mov_oculares' => $request->mov_oculares ?? ($octavo_par ? $octavo_par->mov_oculares : ''),
+                'dismetria_ocular' => $request->dismetria_ocular ?? ($octavo_par ? $octavo_par->dismetria_ocular : ''),
 
                 // Pares craneanos - extraer del array nistagmo_espontaneo
                 'ng_1' => self::convertirValorAWingdings($nistagmo_espontaneo['ng_1'] ?? ($octavo_par ? $octavo_par->ng_1 : '')),
@@ -344,17 +354,17 @@ class OctavoParController extends Controller
 
                 // Nistagmo posicional - extraer del array nistagmo_provocado
                 // EaS - usando la nueva estructura del array
-                'eas_direccion' => self::convertirValorAWingdings($nistagmo_provocado['EaS'] ?? ''),
+                'eas_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['EaS'] ?? ''),
                 'eas_latencia' => $nistagmo_provocado['LatEaS'] ?? '',
-                'eas_paroxistico' => '', // No se envía desde el frontend
-                'eas_fatigable' => '', // No se envía desde el frontend
+                'eas_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['eas_1'] ?? ''),
+                'eas_fatigable' => self::convertirValorSiNo($nistagmo_provocado['eas_2'] ?? ''),
                 'eas_duracion' => $nistagmo_provocado['DurEaS'] ?? '',
-                'eas_vertigo' => '', // No se envía desde el frontend
-                'eas_nauseas' => '', // No se envía desde el frontend
-                'eas_vomito' => '', // No se envía desde el frontend
+                'eas_vertigo' => self::convertirValorSintomas($nistagmo_provocado['eas_3'] ?? ''),
+                'eas_nauseas' => self::convertirValorSintomas($nistagmo_provocado['eas_4'] ?? ''),
+                'eas_vomito' => self::convertirValorSintomas($nistagmo_provocado['eas_5'] ?? ''),
 
                 // SaD
-                'sad_direccion' => self::convertirValorAWingdings($nistagmo_provocado['SaD'] ?? ''),
+                'sad_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['SaD'] ?? ''),
                 'sad_latencia' => $nistagmo_provocado['LatSaD'] ?? '',
                 'sad_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['sad_1'] ?? ''),
                 'sad_fatigable' => self::convertirValorSiNo($nistagmo_provocado['sad_2'] ?? ''),
@@ -364,7 +374,7 @@ class OctavoParController extends Controller
                 'sad_vomito' => self::convertirValorSintomas($nistagmo_provocado['sad_5'] ?? ''),
 
                 // DaS
-                'das_direccion' => self::convertirValorAWingdings($nistagmo_provocado['DaS'] ?? ''),
+                'das_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['DaS'] ?? ''),
                 'das_latencia' => $nistagmo_provocado['LatDaS'] ?? '',
                 'das_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['DaS_1'] ?? ''),
                 'das_fatigable' => self::convertirValorSiNo($nistagmo_provocado['DaS_2'] ?? ''),
@@ -374,7 +384,7 @@ class OctavoParController extends Controller
                 'das_vomito' => self::convertirValorSintomas($nistagmo_provocado['DaS_5'] ?? ''),
 
                 // SaL
-                'sal_direccion' => self::convertirValorAWingdings($nistagmo_provocado['SaL'] ?? ''),
+                'sal_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['SaL'] ?? ''),
                 'sal_latencia' => $nistagmo_provocado['LatSal'] ?? '',
                 'sal_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['SaL_1'] ?? ''),
                 'sal_fatigable' => self::convertirValorSiNo($nistagmo_provocado['SaL_2'] ?? ''),
@@ -384,7 +394,7 @@ class OctavoParController extends Controller
                 'sal_vomito' => self::convertirValorSintomas($nistagmo_provocado['SaL_5'] ?? ''),
 
                 // LaS
-                'las_direccion' => self::convertirValorAWingdings($nistagmo_provocado['LaS'] ?? ''),
+                'las_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['LaS'] ?? ''),
                 'las_latencia' => $nistagmo_provocado['LatLas'] ?? '',
                 'las_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['LaS_1'] ?? ''),
                 'las_fatigable' => self::convertirValorSiNo($nistagmo_provocado['LaS_2'] ?? ''),
@@ -394,7 +404,7 @@ class OctavoParController extends Controller
                 'las_vomito' => self::convertirValorSintomas($nistagmo_provocado['LaS_5'] ?? ''),
 
                 // SaE
-                'sae_direccion' => self::convertirValorAWingdings($nistagmo_provocado['SaE'] ?? ''),
+                'sae_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['SaE'] ?? ''),
                 'sae_latencia' => $nistagmo_provocado['LatSaE'] ?? '',
                 'sae_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['SaE_1'] ?? ''),
                 'sae_fatigable' => self::convertirValorSiNo($nistagmo_provocado['SaE_2'] ?? ''),
@@ -404,7 +414,7 @@ class OctavoParController extends Controller
                 'sae_vomito' => self::convertirValorSintomas($nistagmo_provocado['SaE_5'] ?? ''),
 
                 // EaCC
-                'eacc_direccion' => self::convertirValorAWingdings($nistagmo_provocado['EaCC'] ?? ''),
+                'eacc_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['EaCC'] ?? ''),
                 'eacc_latencia' => $nistagmo_provocado['LatEaCC'] ?? '',
                 'eacc_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['EaCC_1'] ?? ''),
                 'eacc_fatigable' => self::convertirValorSiNo($nistagmo_provocado['EaCC_2'] ?? ''),
@@ -414,7 +424,7 @@ class OctavoParController extends Controller
                 'eacc_vomito' => self::convertirValorSintomas($nistagmo_provocado['EaCC_5'] ?? ''),
 
                 // CCaE
-                'ccae_direccion' => self::convertirValorAWingdings($nistagmo_provocado['CCaE'] ?? ''),
+                'ccae_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['CCaE'] ?? ''),
                 'ccae_latencia' => $nistagmo_provocado['LatCCaE'] ?? '',
                 'ccae_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['CCaE_1'] ?? ''),
                 'ccae_fatigable' => self::convertirValorSiNo($nistagmo_provocado['CCaE_2'] ?? ''),
@@ -424,7 +434,7 @@ class OctavoParController extends Controller
                 'ccae_vomito' => self::convertirValorSintomas($nistagmo_provocado['CCaE_5'] ?? ''),
 
                 // EaCCd
-                'eaccd_direccion' => self::convertirValorAWingdings($nistagmo_provocado['EaCCd'] ?? ''),
+                'eaccd_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['EaCCd'] ?? ''),
                 'eaccd_latencia' => $nistagmo_provocado['LatEaCCd'] ?? '',
                 'eaccd_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['EaCCd_1'] ?? ''),
                 'eaccd_fatigable' => self::convertirValorSiNo($nistagmo_provocado['EaCCd_2'] ?? ''),
@@ -434,7 +444,7 @@ class OctavoParController extends Controller
                 'eaccd_vomito' => self::convertirValorSintomas($nistagmo_provocado['EaCCd_5'] ?? ''),
 
                 // CCdaE
-                'ccdae_direccion' => self::convertirValorAWingdings($nistagmo_provocado['CCdaE'] ?? ''),
+                'ccdae_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['CCdaE'] ?? ''),
                 'ccdae_latencia' => $nistagmo_provocado['LatCCdaE'] ?? '',
                 'ccdae_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['CCdaE_1'] ?? ''),
                 'ccdae_fatigable' => self::convertirValorSiNo($nistagmo_provocado['CCdaE_2'] ?? ''),
@@ -444,7 +454,7 @@ class OctavoParController extends Controller
                 'ccdae_vomito' => self::convertirValorSintomas($nistagmo_provocado['CCdaE_5'] ?? ''),
 
                 // EaCCi
-                'eacci_direccion' => self::convertirValorAWingdings($nistagmo_provocado['EaCCi'] ?? ''),
+                'eacci_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['EaCCi'] ?? ''),
                 'eacci_latencia' => $nistagmo_provocado['LatEaCCi'] ?? '',
                 'eacci_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['EaCCi_1'] ?? ''),
                 'eacci_fatigable' => self::convertirValorSiNo($nistagmo_provocado['EaCCi_2'] ?? ''),
@@ -454,7 +464,7 @@ class OctavoParController extends Controller
                 'eacci_vomito' => self::convertirValorSintomas($nistagmo_provocado['EaCCi_5'] ?? ''),
 
                 // CCiaE
-                'cciae_direccion' => self::convertirValorAWingdings($nistagmo_provocado['CCiaE'] ?? ''),
+                'cciae_direccion' => self::convertirValorAWingdingsProvocada($nistagmo_provocado['CCiaE'] ?? ''),
                 'cciae_latencia' => $nistagmo_provocado['LatCCiaE'] ?? '',
                 'cciae_paroxistico' => self::convertirValorSiNo($nistagmo_provocado['CCiaE_1'] ?? ''),
                 'cciae_fatigable' => self::convertirValorSiNo($nistagmo_provocado['CCiaE_2'] ?? ''),
@@ -523,7 +533,7 @@ class OctavoParController extends Controller
             ];
 
             // Generar PDF
-            $pdf = SnappyPdf::loadView('app.laboratorio.pdf.audiometria', $data);
+            $pdf = Pdf::loadView('app.laboratorio.pdf.audiometria', $data);
             $pdf->setPaper('A4', 'portrait');            // Crear directorio si no existe
             $reportesPath = public_path('reportes');
             if (!file_exists($reportesPath)) {

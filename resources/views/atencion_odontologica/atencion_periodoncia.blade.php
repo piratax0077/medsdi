@@ -119,6 +119,8 @@
         @include("atencion_odontologica.modales"){{-- base de botones de sidebar --}}
         @include("atencion_odontologica.include.sidebar_derecho_odonto_period"){{-- modales y data de sidebar especialidad --}}
 
+     @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+
         <!--Modals de especialidad -->
         <!--Modals de especialidad -->
         @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia")
@@ -131,6 +133,8 @@
            @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
         @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
 
+          @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
+
         <!--Modals formularios generales-->
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
@@ -138,11 +142,18 @@
 
     </div>
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+    <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
+    <input type="hidden" name="id_examen_oral_rx" id="id_examen_oral_rx" value="">
+    <input type="hidden" name="id_imagenes_dental" id="id_imagenes_dental" value="">
+    <input type="hidden" name="id_image_pre" id="id_image_pre" value="">
+    <input type="hidden" name="id_image_post" id="id_image_post" value="">
 @endsection
 @section('js_inferior')
 <script>
+            
+        
      $(document).ready(function () {
-
+            
             $('#tabla_antecedentes_paciente').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -150,6 +161,8 @@
             });
         });
         
+
+    
 
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

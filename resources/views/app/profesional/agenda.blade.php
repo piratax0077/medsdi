@@ -11,9 +11,6 @@
             border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
         }
-    </style>
-
-    <style>
         #loading {
             display: none;
             position: absolute;
@@ -184,11 +181,12 @@
     @include('app.profesional.modales.modal_consulta_agenda')
 
     <div id="agenda_agregar_paciente" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="agregar_paciente_asistente" aria-hidden="true">
+        aria-labelledby="agregar_paciente_asistente" aria-hidden="true"
+        data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar horas</h5>
+                    <h5 class="modal-title text-white text-center"><i class="icono-agenda feather icon-calendar"></i> Agendamiento de horas médicas</h5>
                     <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -223,17 +221,17 @@
                         <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
                         <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $lugar_atencion }}">
                         <input type="hidden" name="fecha" id="fecha">
+                        <input type="hidden" name="id_presupuesto" id="id_presupuesto" value="">
 
-                        @if ($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                        @if ($profesional->id_especialidad == 1 && $profesional->id_tipo_especialidad == 3 && $institucion->id_tipo_institucion == 3 || $profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55 || $profesional->id_especialidad == 11)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
 
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
-                                        <option value="">Seleccione</option>
+                                    <select class="form-control form-control-sm select2-procedimientos" name="form_reseva_de_horas_id_procedimiento[]" id="form_reseva_de_horas_id_procedimiento" multiple="multiple">
                                         @if (isset($procedimientos) && !empty($procedimientos))
                                             @foreach ($procedimientos as $proced )
-                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} {{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}Blq.</option>
+                                                <option value="{{ $proced->id_procedimiento_centro }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ strtoupper($proced->nombre) }} </option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -244,20 +242,32 @@
 
                         <div id="examenes" class="d-none">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Examenes</label>
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_examen" id="form_reseva_de_horas_id_examen">
-
-                                    </select>
+                                <div class="row d-none">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Procedimientos</label>
+                                            <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento_examen" id="form_reseva_de_horas_id_procedimiento_examen" onchange="dame_cantidad_bloques(this);">
+                                                <option value="0">Seleccione</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Bloques</label>
+                                            <input type="number" class="form-control form-control-sm" name="cantidad_bloques_atencion_examen" id="cantidad_bloques_atencion_examen" value="0" min="1" max="10" disabled>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
+
                         @if($profesional->id_especialidad == 2 )
                             <div class="col-sm-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Nº de presupuesto</label>
                                     <select class="form-control form-control-sm" name="presupuesto_numero" id="presupuesto_numero" onchange="updateTotalValue()">
-                                        <option value="">Seleccione</option>
+                                        <option value="0">Seleccione</option>
                                     </select>
                                 </div>
                                 <div id="contenedor_tratamientos_presupuesto">
@@ -509,7 +519,7 @@
                             <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
                                         class="feather icon-x"></i> Cancelar</button>
-                                <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
+                                <button type="button" onclick="preparar_cierre_agenda_por_guardado(); agendar_hora();" class="btn btn-info"><i
                                         class="feather icon-check"></i> Agendar hora</button>
                             </div>
                         </div>
@@ -535,40 +545,55 @@
                                     </div>
                                 </div>
                             </div>
-
+      {{-- INFORMACION DEL REPRESENTANTE --}}
+                            <div class="form-row seccion_reserva_paciente_nuevo_representante border p-2  mb-2 bg-light w-100" style="display: none;">
+                                <div class="col-sm-12 col-md-12 mb-3">
+                                    <h6 class="f-14 text-c-blue">Información del Representante Legal o encargado de la
+                                        reserva:</h6>
+                                </div>
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Detalles del Representante (Nombre, RUT, Teléfono, etc.)</label>
+                                        <textarea class="form-control" name="reserva_hora_representante_info_libre" id="reserva_hora_representante_info_libre" rows="4" placeholder="Ingrese aquí toda la información relevante del representante..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
                             {{-- INFORMACION DEL PACIENTE --}}
                             <div class="form-row seccion_reserva_paciente_nuevo">
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Nombres</label>
+                                        <label class="floating-label-activo-sm">Nombres <span class="text-danger">*</span></label>
                                         <input type="text" required class="form-control form-control-sm"
-                                            name="reserva_hora_nombres_paciente" id="reserva_hora_nombres_paciente">
+                                            name="reserva_hora_nombres_paciente" id="reserva_hora_nombres_paciente"
+                                            oninput="validar_campos_minimos();">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Primer Apellido</label>
-                                        <input type="text" class="form-control form-control-sm"
-                                            name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno">
+                                        <label class="floating-label-activo-sm">Primer Apellido <span class="text-danger">*</span></label>
+                                        <input type="text" required class="form-control form-control-sm "
+                                            name="reserva_hora_apellido_uno" id="reserva_hora_apellido_uno"
+                                            oninput="validar_campos_minimos();">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                        <input type="text" class="form-control form-control-sm"
+                                        <label class="floating-label-activo-sm">Segundo Apellido <span class="text-danger">*</span></label>
+                                        <input type="text" required class="form-control form-control-sm"
                                             name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">F. Nacimiento</label>
+                                        <label class="floating-label-activo-sm">F. Nacimiento </label>
                                         {{-- <input type="date" class="form-control form-control-sm"
                                             name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac"
                                             onchange="evaluar_edad();"> --}}
 
                                             <input type="text" class="mask_date form-control form-control-sm"
                                                 name="reserva_hora_fecha_nac" id="reserva_hora_fecha_nac"
-                                                onchange="evaluar_edad();"
+                                                onchange="evaluar_edad(); validar_campos_minimos();"
+                                                oninput="validar_campos_minimos();"
                                                 maxlength="10" placeholder="dd/mm/aaaa"
                                                 autocomplete="off"
                                                 data-mask="00/00/0000"
@@ -603,7 +628,44 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Email de Contacto </label>
+
+                                        <input type="text" class="form-control form-control-sm"
+                                            onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
+                                            id="reserva_hora_correo"><small>Campo opcional</small>
+                                        <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
+                                        {{-- <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label> --}}
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control form-control-sm"
+                                            name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno"
+                                            oninput="validar_campos_minimos();"
+                                            onblur="validar_campo_telefono();"
+                                            onchange="validar_campo_telefono();">
+                                    </div>
+                                    <button class="btn btn-xxs mt-n2  btn-info btn-block"
+                                        type="button" id="btn_reserva_hora_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono();">
+                                        <i class="feather icon-check"></i> Validar teléfono
+                                    </button>
+                                    <div class="form-group" style="display:none" name="div_codigo_validador" id="div_codigo_validador">
+                                        <label class="floating-label-activo-sm">Codigo Validador</label>
+                                        <input type="tel" class="form-control form-control-sm"
+                                            name="reserva_hora_telefono_uno_codigo_validador" id="reserva_hora_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono();">
+                                    </div>
+                                    <input type="hidden" name="result_codigo_validacion" id="result_codigo_validacion" value="0">
+                                    <div id="div_codigo_validador_mensaje" style="display:none"></div>
+                                </div>
+
+
+
+                                <div class="col-sm-12 col-md-6 col-lg-9 col-xl-9">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                         <input type="address" class="form-control form-control-sm"
@@ -611,7 +673,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
+                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Nº</label>
                                         <input type="address" class="form-control form-control-sm"
@@ -619,7 +681,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Región</label>
                                         <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar"
@@ -633,7 +695,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Ciudad</label>
                                         <select id="ciudad_agregar" name="ciudad_agregar"
@@ -642,35 +704,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico Contacto</label>
 
-                                        <input type="text" class="form-control form-control-sm"
-                                            onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
-                                            id="reserva_hora_correo">
-                                        <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
-                                        {{-- <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label> --}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto</label>
-                                        <input type="tel" class="form-control form-control-sm"
-                                            name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno" onblur="validar_campo_telefono();" onchange="validar_campo_telefono();">
-                                    </div>
-                                    <button class="btn btn-sm btn-info btn-block"
-                                        type="button" id="btn_reserva_hora_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono();">
-                                        <i class="feather icon-check"></i> Validar
-                                    </button>
-                                    <div class="form-group" style="display:none" name="div_codigo_validador" id="div_codigo_validador">
-                                        <label class="floating-label-activo-sm">Codigo Validador</label>
-                                        <input type="tel" class="form-control form-control-sm"
-                                            name="reserva_hora_telefono_uno_codigo_validador" id="reserva_hora_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono();">
-                                    </div>
-                                    <input type="hidden" name="result_codigo_validacion" id="result_codigo_validacion" value="0">
-                                    <div id="div_codigo_validador_mensaje" style="display:none"></div>
-                                </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Descripción reserva</label>
@@ -680,238 +714,7 @@
                                 </div>
                             </div>
 
-                            {{-- INFORMACION DEL REPRESENTANTE --}}
-                            <div class="form-row seccion_reserva_paciente_nuevo_representante" style="display: none;">
-                                <div class="col-sm-12 col-md-12 mb-3">
-                                    <h6 class="f-14 text-c-blue">Información del Representante Legal o encargado de la
-                                        reserva:</h6>
-                                </div>
-                                <div class="col-sm-9 col-md-4">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">RUT</label>
-                                        <input type="text" required class="form-control form-control-sm"
-                                            name="reserva_hora_representante_rut" id="reserva_hora_representante_rut"
-                                            oninput="formatoRut(this);">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3 col-md-3">
-                                    <button type="button" class="btn btn-info btn-sm btn-block"
-                                        onclick="buscar_rut_representente();"><i class="feather icon-search"></i>
-                                        Buscar</button>
-                                </div>
-                                <div class="col-sm-12 col-md-4 col-lg-5 col-xl-5">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm"><span
-                                                class="text-danger">*</span>Relación</label>
-                                        <select class="form-control form-control-sm"
-                                            name="reserva_hora_representante_agregar_relacion"
-                                            id="reserva_hora_representante_agregar_relacion">
-                                            <option value="">Seleccione</option>
-                                            <option data-tipo="1" value="Hijo(a)" selected>Hijo(a)</option>
-                                            <option data-tipo="1" value="Sobrino(a)">Sobrino(a)</option>
-                                            <option data-tipo="1" value="Nieto(a)">Nieto(a)</option>
-                                            <option data-tipo="1" value="Hermano(a)">Hermano(a)</option>
-                                            <option data-tipo="1" value="Primo(a)">Primo(a)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="reserva_representante_nuevo_exitente"
-                                    id="reserva_representante_nuevo_exitente" value="0">
-                                <div class="div_representante_nuevo px-1" style="display:none;">
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" required class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_nombres_paciente"
-                                                    id="reserva_hora_representante_nombres_paciente">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Primer Apellido</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_apellido_uno"
-                                                    id="reserva_hora_representante_apellido_uno">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_apellido_dos"
-                                                    id="reserva_hora_representante_apellido_dos">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">F. Nacimiento</label>
-                                                {{-- <input type="date" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_fecha_nac"
-                                                    id="reserva_hora_representante_fecha_nac"> --}}
 
-                                                <input type="text" class="mask_date form-control form-control-sm"
-                                                    name="reserva_hora_representante_fecha_nac" id="reserva_hora_representante_fecha_nac"
-                                                    maxlength="10" placeholder="dd/mm/aaaa"
-                                                    autocomplete="off"
-                                                    data-mask="00/00/0000"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Sexo</label>
-                                                <select id="reserva_hora_representante_sexo"
-                                                    name="reserva_hora_representante_sexo"
-                                                    class="form-control form-control-sm">
-                                                    <option value="0">Selecione una opci&oacute;n</option>
-                                                    <option value="F">Femenino</option>
-                                                    <option value="M">Masculino</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Previsi&oacute;n</label>
-                                                <select id="reserva_hora_representante_convenio"
-                                                    name="reserva_hora_representante_convenio"
-                                                    class="form-control form-control-sm">
-                                                    <option value="0">Selecione una opci&oacute;n</option>
-                                                    @if (isset($prevision))
-                                                        @foreach ($prevision as $p)
-                                                            <option value="{{ $p->id }}">{{ $p->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-4">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                                <input type="address" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_direccion"
-                                                    id="reserva_hora_representante_direccion">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nº.</label>
-                                                <input type="address" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_numero_dir"
-                                                    id="reserva_hora_representante_numero_dir">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Región</label>
-                                                <select onchange="buscar_ciudad_repesentante();"
-                                                    name="reserva_hora_representante_region_agregar"
-                                                    id="reserva_hora_representante_region_agregar"
-                                                    class="form-control form-control-sm" required>
-                                                    <option value="0">Seleccione</option>
-                                                    @if (isset($region))
-                                                        @foreach ($region as $reg)
-                                                            <option value="{{ $reg->id }}">{{ $reg->nombre }}
-                                                            </option>
-                                                        @endforeach
-                                                    @endif
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select id="reserva_hora_representante_ciudad_agregar"
-                                                    name="reserva_hora_representante_ciudad_agregar"
-                                                    class="form-control form-control-sm" required>
-                                                    <option value="0">Seleccione</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                                <input type="text" class="form-control form-control-sm"
-                                                    onblur="validar_email_agenda_representante();validar_campo_telefono_representante();"
-                                                    name="reserva_hora_representante_correo"
-                                                    id="reserva_hora_representante_correo">
-                                                <span id="mensaje_email_reserva_representante"
-                                                    style="display:none"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                            <div class="form-group">
-                                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                <input type="tel" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_telefono_uno"
-                                                    id="reserva_hora_representante_telefono_uno" onblur="validar_campo_telefono_representante();validar_email_agenda_representante();" onchange="validar_campo_telefono_representante();validar_email_agenda_representante();">
-                                            </div>
-
-                                            <button class="btn btn-sm btn-info btn-block"
-                                                type="button" id="btn_reserva_hora_representante_telefono_uno_validar" disabled="disabled" onclick="enviar_validacion_telefono_representante();">
-                                                <i class="feather icon-check"></i> Validar
-                                            </button>
-
-                                            <div class="form-group" style="display:none" name="div_representante_codigo_validador" id="div_representante_codigo_validador">
-                                                <label class="floating-label-activo-sm">Código Validador</label>
-                                                <input type="tel" class="form-control form-control-sm"
-                                                    name="reserva_hora_representante_telefono_uno_codigo_validador" id="reserva_hora_representante_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono_representante();">
-                                            </div>
-
-                                            <input type="hidden" name="result_representante_codigo_validacion" id="result_representante_codigo_validacion" value="0">
-                                            <div id="div_representante_codigo_validador_mensaje" style="display:none"></div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="div_representante_existente" style="display:none;">
-                                    <input type="hidden" name="reserva_representante_id" id="reserva_representante_id"
-                                        value=''>
-                                    <input type="hidden" name="reserva_representante_id_usuario"
-                                        id="reserva_representante_id_usuario" value=''>
-                                    <table class="table table-borderless table-xs">
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Nombre</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_nombre"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Fecha Nacimiento</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_fecha_nacimiento"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Sexo</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_sexo"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Dirección</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_direccion"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Correo electrónico</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_email"></span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row">
-                                                    <strong>Teléfono</strong>
-                                                </th>
-                                                <td><span id="reserva_representante_telefono"></span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
 
                             <div class="form-row">
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -943,8 +746,8 @@
                                 <button type="button" class="btn btn-danger" id="cerrar_registro_paciente_hora"
                                     data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" id="guardar_reserva_paciente"
-                                    onclick="agendar_hora_paciente_nuevo();" class="btn btn-info" disabled="disabled">
-                                    <i class="feather icon-check"></i> Tomar Hora
+                                    onclick="preparar_cierre_agenda_por_guardado(); agendar_hora_paciente_nuevo();" class="btn btn-info" disabled="disabled">
+                                    <i class="feather icon-check"></i> Agendar Hora
                                 </button>
                             </div>
                         </div>
@@ -1281,9 +1084,269 @@
 @endsection
 
 @section('page-script')
+<script>
+    $(document).ready(function() {
+        if ($('#form_reseva_de_horas_id_procedimiento').length) {
+            $('#form_reseva_de_horas_id_procedimiento').select2({
+                placeholder: 'Seleccione uno o más procedimientos',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#agenda_agregar_paciente'),
+            });
+        }
+    });
+
+
+    // ---------------------------------------------------------------------
+    // Protección de datos sin guardar en modal de agendamiento
+    // Evita que el usuario pierda lo escrito si el modal se cierra por error.
+    // ---------------------------------------------------------------------
+    let permitirCerrarAgendaPaciente = false;
+    const AGENDA_PACIENTE_DRAFT_KEY = 'agenda_agregar_paciente_borrador_{{ $profesional->id ?? "prof" }}_{{ $lugar_atencion ?? "lugar" }}';
+
+    const camposBorradorAgendaPaciente = [
+        '#rut_paciente_reserva',
+        '#reserva_hora_nombres_paciente',
+        '#reserva_hora_apellido_uno',
+        '#reserva_hora_apellido_dos',
+        '#reserva_hora_fecha_nac',
+        '#reserva_hora_sexo',
+        '#reserva_hora_convenio',
+        '#reserva_hora_correo',
+        '#reserva_hora_telefono_uno',
+        '#reserva_hora_direccion',
+        '#reserva_hora_numero_dir',
+        '#region_agregar',
+        '#ciudad_agregar',
+        '#reserva_hora_descripcion',
+        '#paciente_dependiente',
+        '#reserva_hora_representante_info_libre',
+        '#reserva_hora_confirmacion',
+        '#reserva_hora_sms',
+        '#input_reserva_hora_nombre',
+        '#input_reserva_hora_apellido_uno',
+        '#input_reserva_hora_apellido_dos',
+        '#input_reserva_fecha_nacimiento',
+        '#input_reserva_sexo',
+        '#input_reserva_convenio',
+        '#input_reserva_direccion_direccion',
+        '#input_reserva_direccion_numero_dir',
+        '#input_reserva_direccion_region',
+        '#input_reserva_direccion_ciudad',
+        '#input_reserva_hora_email',
+        '#input_reserva_hora_telefono'
+    ];
+
+    function obtenerValorCampoAgenda($campo) {
+        if (!$campo.length) return null;
+        if ($campo.attr('type') === 'checkbox') {
+            return $campo.prop('checked') ? 1 : 0;
+        }
+        return $campo.val();
+    }
+
+    function asignarValorCampoAgenda($campo, valor) {
+        if (!$campo.length) return;
+        if ($campo.attr('type') === 'checkbox') {
+            $campo.prop('checked', valor == 1 || valor === true || valor === 'true');
+            return;
+        }
+        $campo.val(valor).trigger('change');
+    }
+
+    function hayDatosPacienteSinGuardar() {
+        let hayDatos = false;
+
+        camposBorradorAgendaPaciente.forEach(function(selector) {
+            let $campo = $(selector);
+            if (!$campo.length) return;
+
+            if ($campo.attr('type') === 'checkbox') {
+                if ($campo.prop('checked')) hayDatos = true;
+                return;
+            }
+
+            let valor = $.trim($campo.val() || '');
+            if (valor !== '' && valor !== '0') {
+                hayDatos = true;
+            }
+        });
+
+        return hayDatos;
+    }
+
+    function guardarBorradorAgendaPaciente() {
+        let borrador = {};
+
+        camposBorradorAgendaPaciente.forEach(function(selector) {
+            let $campo = $(selector);
+            if (!$campo.length) return;
+            borrador[selector] = obtenerValorCampoAgenda($campo);
+        });
+
+        borrador.fecha_guardado = new Date().toISOString();
+        localStorage.setItem(AGENDA_PACIENTE_DRAFT_KEY, JSON.stringify(borrador));
+    }
+
+    function limpiarBorradorAgendaPaciente() {
+        localStorage.removeItem(AGENDA_PACIENTE_DRAFT_KEY);
+    }
+
+    function restaurarBorradorAgendaPaciente(borrador) {
+        Object.keys(borrador).forEach(function(selector) {
+            if (selector === 'fecha_guardado') return;
+            asignarValorCampoAgenda($(selector), borrador[selector]);
+        });
+
+        activar_paciente_dependientes();
+        validar_campos_minimos();
+    }
+
+    function confirmarCierreAgendaPaciente() {
+        swal({
+            title: 'Datos sin guardar',
+            text: 'Hay información ingresada que aún no ha sido guardada. Si cierra el modal, se perderán los datos escritos.',
+            icon: 'warning',
+            buttons: ['Seguir editando', 'Cerrar de todas formas'],
+            dangerMode: true,
+        }).then((cerrar) => {
+            if (cerrar) {
+                permitirCerrarAgendaPaciente = true;
+                limpiarBorradorAgendaPaciente();
+                $('#agenda_agregar_paciente').modal('hide');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('#agenda_agregar_paciente').on('input change', 'input, select, textarea', function() {
+            guardarBorradorAgendaPaciente();
+        });
+
+        $('#agenda_agregar_paciente').on('shown.bs.modal', function() {
+            let borradorTexto = localStorage.getItem(AGENDA_PACIENTE_DRAFT_KEY);
+            if (!borradorTexto || hayDatosPacienteSinGuardar()) return;
+
+            try {
+                let borrador = JSON.parse(borradorTexto);
+                swal({
+                    title: 'Borrador encontrado',
+                    text: 'Hay datos de una reserva que no fueron guardados. ¿Desea recuperarlos?',
+                    icon: 'info',
+                    buttons: ['Descartar', 'Recuperar'],
+                }).then((recuperar) => {
+                    if (recuperar) {
+                        restaurarBorradorAgendaPaciente(borrador);
+                    } else {
+                        limpiarBorradorAgendaPaciente();
+                    }
+                });
+            } catch (e) {
+                limpiarBorradorAgendaPaciente();
+            }
+        });
+
+        $('#agenda_agregar_paciente').on('hide.bs.modal', function(e) {
+            if (permitirCerrarAgendaPaciente) {
+                permitirCerrarAgendaPaciente = false;
+                limpiarBorradorAgendaPaciente();
+                return;
+            }
+
+            if (hayDatosPacienteSinGuardar()) {
+                e.preventDefault();
+                confirmarCierreAgendaPaciente();
+            }
+        });
+    });
+
+    // Utilizar esta función antes de cerrar el modal después de guardar correctamente.
+    function cerrar_modal_agenda_paciente_guardado() {
+        permitirCerrarAgendaPaciente = true;
+        limpiarBorradorAgendaPaciente();
+        $('#agenda_agregar_paciente').modal('hide');
+    }
+    // Marca que el próximo cierre del modal corresponde al flujo normal de agendamiento.
+    // Si la validación/AJAX no cierra el modal, se restaura para seguir protegiendo los datos.
+    function preparar_cierre_agenda_por_guardado() {
+        permitirCerrarAgendaPaciente = true;
+
+        setTimeout(function() {
+            if ($('#agenda_agregar_paciente').hasClass('show')) {
+                permitirCerrarAgendaPaciente = false;
+            }
+        }, 30000);
+    }
+
+    @if(config('broadcasting.connections.pusher.key'))
+    (function() {
+        try {
+            var pusher = new Pusher("{{ config('broadcasting.connections.pusher.key') }}", {
+                cluster: "{{ config('broadcasting.connections.pusher.options.cluster') }}",
+                forceTLS: true
+            });
+
+            pusher.connection.bind('error', function(err) {
+                console.warn('Pusher connection error:', err);
+            });
+
+            @if(isset($profesional))
+            // Suscribirse al canal específico del profesional logueado
+            var channel = pusher.subscribe('horas-medicas.{{ $profesional->id }}');
+                console.log('Escuchando canal: horas-medicas.{{ $profesional->id }}');
+            @else
+                // Fallback al canal general si no hay profesional
+                var channel = pusher.subscribe('horas-medicas');
+                console.log('Escuchando canal general: horas-medicas');
+            @endif
+
+            channel.bind('HoraMedicaUpdated', function(data) {
+                console.log("Evento recibido de Pusher:", data);
+                var tipoAccion = '';
+                switch(data.tipo) {
+                    case 'create':
+                        tipoAccion = 'creado';
+                        break;
+                    case 'update':
+                        tipoAccion = 'actualizado';
+                        break;
+                    case 'cancelada':
+                        tipoAccion = 'cancelado';
+                        break;
+                    case 'delete':
+                        tipoAccion = 'eliminado';
+                        break;
+                    default:
+                        tipoAccion = data.tipo;
+                }
+                // swal({
+                //     title: "Hora Médica Actualizada",
+                //     text: "Se ha " + data.tipo + " una hora médica (ID: " + data.hora.id + ").",
+                //     icon: "info",
+                //     buttons: "Aceptar",
+                // })
+                // .then((aceptar) => {
+                //     if (aceptar) {
+
+                //     }
+                // });
+                // fecha con formato Y-m-d
+                        let fecha_consulta = '{{ date("Y-m-d") }}';
+                        console.log('Fecha consulta para recargar agenda:', fecha_consulta);
+                        // Acción al aceptar
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(), $('#id_lugar_atencion').val(),
+                                        '{{ $profesional->id }}', fecha_consulta);
+            });
+        } catch (e) {
+            console.warn('Pusher no pudo inicializarse:', e);
+        }
+    })();
+    @endif
+        </script>
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
         $(document).ready(function () {
+			$('.loader-bg').hide();
             function calcularSaldoConsulta() {
                 let valorConsulta = parseFloat($('#bono_valor_consulta').val()) || 0;
                 let valorAbono = parseFloat($('#bono_valor_abono_consulta').val()) || 0;
@@ -1348,7 +1411,8 @@
                                 validar_campo_telefono();
                             } else {
                                 console.log("La edad no es válida.");
-                                $("#guardar_reserva_paciente").prop('disabled', true);
+                                // NO deshabilitar el botón aquí, solo mostrar mensaje de advertencia
+                                // El botón se controla con validar_campos_minimos()
                                 $('#mensaje_reserva_hora_fecha_nac').html('');
                                 $('#mensaje_reserva_hora_fecha_nac').show();
                                 $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
@@ -1401,7 +1465,10 @@
                 edad--;
             }
 
-            if (edad < 18) {
+            // Edad a partir de la cual se considera adulto mayor (se activa paciente dependiente)
+            let edad_adulto_mayor = 75;
+
+            if (edad < 18 || edad >= edad_adulto_mayor) {
                 $('#paciente_dependiente').prop('checked', 'checked');
                 // $('.seccion_reserva_paciente_nuevo_representante').show();
                 activar_paciente_dependientes();
@@ -1432,6 +1499,9 @@
                 $('#div_representante_codigo_validador_mensaje').html('');
                 $('#result_representante_codigo_validacion').val('0');
             }
+
+            // Re-evaluar campos mínimos después de evaluar edad
+            validar_campos_minimos();
         }
 
         function buscar_rut_representente() {
@@ -1567,7 +1637,7 @@
                         } else {
                             console.log("La edad no es válida.");
                             $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
-                            $("#guardar_reserva_paciente").prop('disabled', true);
+                            // NO deshabilitar el botón aquí, lo controla validar_campos_minimos()
                         }
 
                     }
@@ -1575,6 +1645,9 @@
                         $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
                 }
             }
+
+            // Re-evaluar campos mínimos después de validar teléfono
+            validar_campos_minimos();
         }
 
         function enviar_validacion_telefono()
@@ -1672,6 +1745,35 @@
         $('.paciente_edit').show();
         $('#modificando_paciente').val(1);
     }
+
+        /**
+         * Valida campos mínimos para habilitar el botón de agendar hora
+         * Solo requiere: Nombres, Primer Apellido y Teléfono
+         * Esto permite guardar el paciente SIN crear usuario (el backend lo permite)
+         * La fecha de nacimiento es OPCIONAL, pero si se ingresa debe ser válida
+         */
+        function validar_campos_minimos() {
+            let nombres = $('#reserva_hora_nombres_paciente').val().trim();
+            let apellido_uno = $('#reserva_hora_apellido_uno').val().trim();
+            let telefono = $('#reserva_hora_telefono_uno').val().trim();
+            let fecha_nac = $('#reserva_hora_fecha_nac').val().trim();
+
+            // Validar campos mínimos
+            let campos_minimos_ok = (nombres !== '' && apellido_uno !== '' && telefono !== '');
+
+            // Si hay fecha ingresada, validar que sea válida
+            let fecha_valida = true;
+            if (fecha_nac !== '' && fecha_nac.length === 10) {
+                fecha_valida = validarEdad(fecha_nac);
+            }
+
+            // Habilitar botón solo si campos mínimos OK y (no hay fecha O fecha es válida)
+            if (campos_minimos_ok && fecha_valida) {
+                $('#guardar_reserva_paciente').prop('disabled', false);
+            } else {
+                $('#guardar_reserva_paciente').prop('disabled', true);
+            }
+        }
 
     function editar_info_paciente_asistente()
     {
@@ -1827,7 +1929,7 @@
                             $('#reserva_hora_email').text(email_paciente);
                             $('#reserva_hora_telefono').text(telefono_paciente);
                             $('#reserva_convenio').text(convenio_txt_paciente);
-                            $('#reserva_direccion').text(direccion_paciente+' '+numero_direccion_paciente+', '+ciudad_txt_paciente);
+                            $('#reserva_direccion').text(direccion_paciente+' '+(numero_direccion_paciente ?? '') +', '+ciudad_txt_paciente);
 
                             $('.paciente_view').show();
                             $('.paciente_edit').hide();
@@ -1932,7 +2034,7 @@
         }
         if( apellido_dos_paciente == '' )
         {
-            valido = 0;
+            valido = 1;
             mensaje += 'Apellido Materno de paciente requerido\n';
         }
         if( fecha_nacimiento == '' )
@@ -2125,6 +2227,8 @@
             });
         }
 
+
+
         function validar_prevision(value){
             let id_clase_bono = value.value;
             console.log(id_clase_bono);
@@ -2148,6 +2252,15 @@
                         }else if(id_clase_bono == 8){
                             var valor = resp.valor_garantia;
                             var valor_bon = 0;
+
+                             swal({
+                                title: "¡Atención!",
+                                text:' Se ha seleccionado un pago de bono con garantía, la cual tendrá una vigencia de 7 días. En caso de que el paciente no presente el bono dentro del plazo establecido, el dinero será reembolsado al profesional y no al paciente.',
+                                icon: "success",
+                                buttons: ["Aceptar"],
+                                dangerMode: true,
+                            });
+
                         }else{
                             var valor = resp.valor_copago_fonasa;
                             var valor_bon = resp.valor_bon_fonasa;
@@ -2185,6 +2298,15 @@
                 $('#bono_valor_consulta').val(0);
             }
 
+        }
+
+        function dame_cantidad_bloques(element){
+            // Obtiene el option seleccionado
+            var selectedOption = element.options[element.selectedIndex];
+            // Lee el atributo data-cant_bloque
+            var cantBloque = selectedOption.getAttribute('data-cant_bloque');
+            console.log(cantBloque);
+            $('#cantidad_bloques_atencion').val(cantBloque);
         }
 
     </script>

@@ -11,6 +11,7 @@ use App\Models\EvolucionNeonatologia;
 use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
 use App\Models\ExamenRadiologico;
+use App\Models\FichaAtencion;
 use App\Models\FichaAtencionDental;
 use App\Models\FichaNeonatologia;
 use App\Models\IngresoPacienteCirugia;
@@ -25,6 +26,7 @@ use App\Models\RecuperacionCirugia;
 use App\Models\Region;
 use App\Models\SalaCirugia;
 use App\Models\SolicitudPabellonQuirurgico;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Faker\Calculator\Ean;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -3184,38 +3186,134 @@ class CirugiaController extends Controller
         ]);
     }
 
+    public function generar_epicrisis_alta_medica($id)
+    {
+
+        $epicrisis = EpicrisisCarnetCirugia::findOrFail($id);
+        $ficha_atencion = FichaAtencion::where('id', $epicrisis->id_ficha_atencion)->first();
+        $lugar_atencion = LugarAtencion::with('direccion')->find($ficha_atencion->id_lugar_atencion);
+        $paciente = Paciente::where('id', $epicrisis->id_paciente)->first();
+        $lugar_atencion = LugarAtencion::where('id', $epicrisis->id_lugar_atencion)->first();
+        $solicitud_pabellon = SolicitudPabellonQuirurgico::where('id', $epicrisis->id_solicitud_pabellon)->first();
+        $profesional = Profesional::where('id', $epicrisis->id_profesional)->first();
+
+        // Certificados y QR
+        $token_receta = '';
+        $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+        if ($temp_token['estado'] != 1) {
+            $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 1);
+        }
+        $token_receta = $temp_token['certificado'];
+        $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+        $qr_documento = GeneradorQrController::generar($url_documento);
+
+        $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 1, $ficha_atencion->id);
+        if ($temp_token['estado'] != 1) {
+            $temp_token = CertificadoController::certificadoProfesional(rand(1114, 999));
+        }
+        $token_profesional = $temp_token['certificado'];
+        $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+        $qr_profesional = GeneradorQrController::generar($url_documento);
+
+        // Arreglos para la vista
+        $array_ficha_atencion = [
+            'id' => $ficha_atencion->id,
+            'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+            'token' => $token_receta,
+            'url' => $url_documento,
+            'qr' => $qr_documento,
+        ];
+
+        $array_lugar_atencion = [
+            'id' => $lugar_atencion->id,
+            'nombre' => $lugar_atencion->nombre,
+            'direccion' => $lugar_atencion->direccion->direccion.' '.$lugar_atencion->direccion->numero_dir.', '.$lugar_atencion->direccion->Ciudad()->first()->nombre,
+            'region' => $lugar_atencion->direccion->Ciudad()->first()->Region()->first()->nombre,
+        ];
+
+        $array_profesional = [
+            'id' => $profesional->id,
+            'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+            'rut' => $profesional->rut,
+            'direccion' => $profesional->direccion->direccion.' '.$profesional->direccion->numero_dir.', '.$profesional->direccion->Ciudad()->first()->nombre,
+            'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+            'id_especialidad' => $profesional->id_especialidad,
+            'num_colegio' => $profesional->num_colegio,
+            'region' => $profesional->direccion->Ciudad()->first()->Region()->first()->nombre,
+            'token' => $token_profesional,
+            'url' => $url_profesional,
+            'qr' => $qr_profesional,
+        ];
+
+        $direccion = $paciente->Direccion()->first();
+        $array_paciente = [
+            'id' => $paciente->id,
+            'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+            'fecha_nac' => $paciente->fecha_nac,
+            'rut' => $paciente->rut,
+            'sexo' => $paciente->sexo,
+            'direccion' => $direccion->direccion.' '.$direccion->numero_dir.', '.$direccion->Ciudad()->first()->nombre
+        ];
+
+        $cuerpo = [
+            'array_ficha_atencion' => $array_ficha_atencion,
+            'array_lugar_atencion' => $array_lugar_atencion,
+            'array_profesional' => $array_profesional,
+            'array_paciente' => $array_paciente,
+            'epicrisis' => $epicrisis
+        ];
+
+        $titulo = 'Solicitud de Alta Médica - Epicrisis';
+
+
+        return PdfController::generarPDF($titulo, compact('titulo', 'cuerpo','array_ficha_atencion', 'array_lugar_atencion', 'array_profesional', 'array_paciente','epicrisis'), 'Exámenes '.$paciente->rut, 'epicrisis_alta_medica');
+
+    }
+
     public function registrar_epicrisis_alta_medica(Request $request)
     {
+
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
 
-        $epicrisis_alta_medica = new EpicrisisCarnetCirugia();
+        // revisar si ya existe epicrisis para esa solicitud de pabellon por el id_ficha_atencion
+        $existing_epicrisis = EpicrisisCarnetCirugia::where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+        if ($existing_epicrisis) {
+            $epicrisis_alta_medica = $existing_epicrisis;
+        }else{
+            $epicrisis_alta_medica = new EpicrisisCarnetCirugia();
+        }
+
+
         $epicrisis_alta_medica->inicio_hospitalizacion = $request->inicio_hospitalizacion;
         $epicrisis_alta_medica->fin_hospitalizacion = $request->fin_hospitalizacion;
         $epicrisis_alta_medica->diagnostico_ingreso = $request->diagnostico_ingreso_epicrisis_alta_medica;
         $epicrisis_alta_medica->diagnostico_alta = $request->diagnostico_alta_epicrisis_alta_medica;
-        $epicrisis_alta_medica->tratamientos_cirugias = $request->tratamiento_cirugia_epicrisis_alta_medica;
-        $epicrisis_alta_medica->procedimientos_quirurgicos_cirugia = $request->procedimiento_quirurgico_cirugia_epicrisis_alta_medica;
+        $epicrisis_alta_medica->tratamientos_cirugias = "";
+        $epicrisis_alta_medica->procedimientos_quirurgicos_cirugia = "";
         $epicrisis_alta_medica->otros_tratamientos_procedimientos = $request->otro_procedimiento_tratamiento_cirugia_epicrisis_alta_medica;
         $epicrisis_alta_medica->tratamientos_controles = $request->tratamiento_control_cirugia_epicrisis_alta_medica;
         $epicrisis_alta_medica->procedimientos_quirurgicos_controles = $request->procedimiento_control_cirugia_epicrisis_alta_medica;
         $epicrisis_alta_medica->fecha_control = $request->fecha_control;
         $epicrisis_alta_medica->indicaciones_alta = $request->indicaciones_alta_epicrisis_alta_medica;
-        //$epicrisis_alta_medica->id_paciente = $request->paciente_ingreso_epicrisis_alta_medica;
+        $epicrisis_alta_medica->id_paciente = $request->id_paciente;
+        $epicrisis_alta_medica->id_lugar_atencion = $request->id_lugar_atencion;
         $epicrisis_alta_medica->id_profesional = $profesional->id;
+        $epicrisis_alta_medica->id_ficha_atencion = $request->id_ficha_atencion;
         //$epicrisis_alta_medica->id_lugar_atencion = $request->lugar_atencion_pabellon;
         $epicrisis_alta_medica->id_solicitud_pabellon = $request->id_solicitud_pabellon;
 
         if (!$epicrisis_alta_medica->save()) {
-            return back();
+            return response()->json(['mensaje' => 'Error al guardar epicrisis de alta médica'], 500);
         }
         $mensaje = 'Se ha agregado ingreso de paciente de forma exitosa';
 
-        return redirect()->back()->with('mensaje', $mensaje);
+        return response()->json(['mensaje' => $mensaje, 'epicrisis_id' => $epicrisis_alta_medica->id], 200);
     }
 
     public function actualizar_epicrisis_alta_medica(Request $request)
     {
+
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
 
@@ -3232,9 +3330,9 @@ class CirugiaController extends Controller
         $epicrisis_alta_medica->procedimientos_quirurgicos_controles = $request->procedimiento_control_cirugia_epicrisis_alta_medica;
         $epicrisis_alta_medica->fecha_control = $request->fecha_control;
         $epicrisis_alta_medica->indicaciones_alta = $request->indicaciones_alta_epicrisis_alta_medica;
-        //$epicrisis_alta_medica->id_paciente = $request->paciente_ingreso_epicrisis_alta_medica;
+        $epicrisis_alta_medica->id_paciente = $request->id_paciente;
         $epicrisis_alta_medica->id_profesional = $profesional->id;
-        //$epicrisis_alta_medica->id_lugar_atencion = $request->lugar_atencion_pabellon;
+        $epicrisis_alta_medica->id_lugar_atencion = $request->id_lugar_atencion;
         $epicrisis_alta_medica->id_solicitud_pabellon = $request->id_solicitud_pabellon;
 
         if (!$epicrisis_alta_medica->save()) {

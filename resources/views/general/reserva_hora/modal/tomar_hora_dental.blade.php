@@ -302,7 +302,7 @@
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label class="floating-label">Descripción Reserva</label>
+                                <label class="floating-label-activo-sm">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
@@ -1272,6 +1272,7 @@ function agendar_hora() {
     let id_lugar_atencion = $('#reserva_hora_id_lugar_atencion').val();
     let id_asistente = $('#reserva_hora_id_asistente').val();
     let origen = $('#reserva_hora_origen').val();
+    let descripcion = $('#reserva_hora_descripcion').val();
 
     let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
     var tipo_agenda_text = 'C';
@@ -1319,9 +1320,11 @@ function agendar_hora() {
                 tipo_hora_medica: tipo_agenda_text,
                 procedimiento: procedimiento,
                 proc_bloque: proc_bloque,
+                descripcion: descripcion
             }
         })
         .done(function(data) {
+            console.log(data);
             if (data != null) {
 
                 data = JSON.parse(data);
@@ -1360,7 +1363,7 @@ function agendar_hora() {
                     $('#reserva_hora_email').html('');
                     $('#reserva_hora_telefono').html('');
 
-
+                    proxima_atencion_paciente();
             } else {
 
                 swal({

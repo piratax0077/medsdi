@@ -128,8 +128,9 @@
     @include('general.hospitalizacion.modals.in_solic_pabellon')
 	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-        @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
     @include('atencion_medica.formularios.modal_atencion_general.modal_indicar_examenes')
+    @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
 

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Solicitud Exámenes Frecuentes</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close text-white" onclick="$('#m_ex_comunes').modal('hide')" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -231,6 +231,36 @@
 <script>
     function sol_ex_comunes() {
         $('#m_ex_comunes').modal('show');
+        $.ajax({
+                url: '{{ route('listar.examen') }}',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    sub_tipo_examen: 804
+                },
+        })
+        .done(function(response) {
+            $('#ex-frecuente').val(null).trigger('change');
+
+            // Limpiar las opciones existentes
+            $('#ex-frecuente').empty();
+
+            // Agregar opción por defecto
+            $('#ex-frecuente').append('<option value="">Seleccione...</option>');
+
+            // Cargar los exámenes en el select2
+            for (var i = 0; i < response.length; i++) {
+                $('#ex-frecuente').append(`<option value="${response[i].cod_examen}">
+                    ${response[i].nombre_examen}
+                </option>`);
+            }
+
+            // Reinicializar el select2 si es necesario
+            $('#ex-frecuente').trigger('change');
+        })
+        .fail(function() {
+            console.log("error");
+        })
     }
 
     function cerrarsol_ex_comunes() {
@@ -242,13 +272,7 @@ function generarPDFtipoExamen(tipo) {
             let auto = 1; // o el valor real que quieras enviar
             let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
 
-            Fancybox.show(
-                [{
-                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
-                    type: "iframe",
-                    preload: false,
-                }, ]
-            );
+            ver_pdf_orden_examenes(id_ficha_atencion);
     }
 
     function guardar_examenes(tipo) {
@@ -284,6 +308,8 @@ function generarPDFtipoExamen(tipo) {
         }else if(tipo == 4){
             // Obtener valores de los exámenes seleccionados
             var select = document.getElementById("ex-frecuente");
+            var tipo_examen = "EXAMENES FRECUENTES";
+            var sub_tipo_examen = "EXAMENES DE LABORATORIO";
             var selectedOptions = Array.from(select.selectedOptions);
             // Obtener diagnóstico y observaciones
             var diagnostico = document.getElementById('diagnostico_comunes').value;

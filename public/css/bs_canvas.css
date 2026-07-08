@@ -44,7 +44,7 @@
 .bs-canvas {
    top: 0;
    width: 0;
-   z-index: 5200000000000!important;
+   z-index: 1200!important;
    overflow-x: hidden;
    overflow-y: auto;
 }

@@ -14,7 +14,21 @@ class ProfesionalInstitucionConvenioController extends Controller
         return static::registrar($request->id_invitacion, $request->id_profesional, $request->id_institucion, $request->id_lugar_atencion, $request->id_tipo_convenio_institucion, $request->fijo, $request->atencion, $request->confirmacion_agenda, $request->ggcc, $request->box, $request->fecha_confirmacion, $request->fecha_rechazo, $request->observacion);
     }
 
-    static public function registrar($id_invitacion, $id_profesional, $id_institucion, $id_lugar_atencion, $id_tipo_convenio_institucion, $fijo, $atencion, $confirmacion_agenda, $ggcc, $box, $fecha_confirmacion, $fecha_rechazo, $observacion)
+    static public function registrar(
+        $id_invitacion,
+        $id_profesional,
+        $id_institucion,
+        $id_lugar_atencion,
+        $id_tipo_convenio_institucion,
+        $fijo,
+        $atencion,
+        $ventas,
+        $confirmacion_agenda,
+        $ggcc,
+        $box,
+        $fecha_confirmacion,
+        $fecha_rechazo,
+        $observacion)
     {
         $datos = array();
         $error = array();
@@ -57,6 +71,11 @@ class ProfesionalInstitucionConvenioController extends Controller
                 if(empty($atencion))
                 {
                     $error['atencion'] = 'campo requerido';
+                    $valido = 0;
+                }
+                if(empty($ventas))
+                {
+                    $error['ventas'] = 'campo requerido';
                     $valido = 0;
                 }
                 if(empty($confirmacion_agenda))
@@ -105,6 +124,7 @@ class ProfesionalInstitucionConvenioController extends Controller
             else if($id_tipo_convenio_institucion == 2)
             {
                 $registro->atencion = $atencion;
+                $registro->ventas = $ventas;
                 $registro->confirmacion_agenda = $confirmacion_agenda;
                 $registro->ggcc = $ggcc;
                 $registro->box = $box;
@@ -167,7 +187,7 @@ class ProfesionalInstitucionConvenioController extends Controller
         return static::modificar($request->id, $request->id_invitacion, $request->id_profesional, $request->id_institucion, $request->id_lugar_atencion, $request->id_tipo_convenio_institucion, $request->fijo, $request->atencion, $request->confirmacion_agenda, $request->ggcc, $request->box, $request->fecha_confirmacion, $request->fecha_rechazo, $request->estado, $request->observacion);
     }
 
-    static public function modificar($id, $id_invitacion, $id_profesional, $id_institucion, $id_lugar_atencion, $id_tipo_convenio_institucion, $fijo, $atencion, $confirmacion_agenda, $ggcc, $box, $fecha_confirmacion, $fecha_rechazo, $estado, $observacion)
+    static public function modificar($id, $id_invitacion, $id_profesional, $id_institucion, $id_lugar_atencion, $id_tipo_convenio_institucion, $fijo, $atencion, $ventas, $confirmacion_agenda, $ggcc, $box, $fecha_confirmacion, $fecha_rechazo, $estado, $observacion)
     {
         $datos = array();
         $error = array();
@@ -197,6 +217,8 @@ class ProfesionalInstitucionConvenioController extends Controller
                     $registro->fijo = $fijo;
                 if(!empty($atencion))
                     $registro->atencion = $atencion;
+                if(!empty($ventas))
+                    $registro->ventas = $ventas;
                 if(!empty($confirmacion_agenda))
                     $registro->confirmacion_agenda = $confirmacion_agenda;
                 if(!empty($ggcc))
@@ -239,9 +261,10 @@ class ProfesionalInstitucionConvenioController extends Controller
         return (object)$datos;
     }
 
-    static public function envioNotificacionConvenio($tipo,$id_invitacion)
+    static public function envioNotificacionConvenio($tipo,$id_invitacion, $id_profesional = '')
     {
-        $datos = array();
+        try {
+            $datos = array();
 
         $invitacion = Invitacion::with('LugarAtencion')->where('id', $id_invitacion)->first();
         $convenio_result = ProfesionalInstitucionConvenio::with('Institucion')
@@ -251,55 +274,43 @@ class ProfesionalInstitucionConvenioController extends Controller
 
         switch ($tipo) {
             case '1':/** correo  */
-                    $retornoNotificacion = 1;//llamdo al envio de correos
-                    if($retornoNotificacion == 1)
-                    {
+                $retornoNotificacion = 1;//llamdo al envio de correos
+                if($retornoNotificacion == 1)
+                {
+                    // Validaciones para evitar null
+                    $nombre = trim(
+                        ($invitacion->nombre ?? '') . ' ' .
+                        ($invitacion->apellido_uno ?? '') . ' ' .
+                        ($invitacion->apellido_dos ?? '')
+                    );
+                    $lugar_atencion_nombre = ($invitacion && $invitacion->LugarAtencion) ? $invitacion->LugarAtencion->nombre : '';
+                    $id_invitacion_val = $invitacion->id ?? '';
+                    $token_val = $invitacion->token ?? '';
+                    $tipo_invitacion_val = $invitacion->tipo_invitacion ?? '';
 
-                        /** envio de correo de confirmacion  */
-                        $blade = 'invitacion_profesional_convenio';
-                        $to = array(
-                                array('email' => $invitacion->email,'name' => $invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos),
-                            );
-                        $cc = array();
-                        $bcc = array();
-                        $asunto = 'MED-SDI - Invitacion Convenio';
-                        $body = array(
-                            'nombre'=>$invitacion->nombre.' '.$invitacion->apellido_uno.' '.$invitacion->apellido_dos,
-                            'lugar_atencion' => $invitacion->LugarAtencion->nombre,
-                            'id_invitacion' => $invitacion->id,
-                            'invitacion_token' => $invitacion->token,
-                            'tipo_invitacion' => $invitacion->tipo_invitacion,
-                            'convenio' => $convenio_result,
-                        );
-                        $archivo = '';/** pendiente */
-                        $id_institucion = '';
+                    $blade = 'invitacion_profesional_convenio';
+                    $to = array(
+                        array('email' => $invitacion->email ?? '', 'name' => $nombre),
+                    );
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Invitacion Convenio';
+                    $body = array(
+                        'nombre' => $nombre,
+                        'lugar_atencion' => $lugar_atencion_nombre,
+                        'id_invitacion' => $id_invitacion_val,
+                        'invitacion_token' => $token_val,
+                        'tipo_invitacion' => $tipo_invitacion_val,
+                        'convenio' => $convenio_result,
+                        'id_profesional' => $id_profesional
+                    );
+                    $archivo = '';
+                    $id_institucion = '';
 
-                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-                        if($result_mail['estado'])
-                        {
-                            $datos['mail']['estado'] = 1;
-                            $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
-
-                            $invitacion->informado = $invitacion->informado+1;
-                            $invitacion->fecha_informado = date('Y-m-d H:i:s');
-                            if($invitacion->save())
-                            {
-                                $datos['estado'] = 1;
-                                $datos['msj'] = 'notificación enviada';
-                            }
-                            else
-                            {
-                                $datos['estado'] = 0;
-                                $datos['msj'] = 'notificación NO enviada';
-                            }
-                        }
-                        else
-                        {
-                            $datos['mail']['estado'] = 0;
-                            $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
-                        }
-                    }
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+                    return $result_mail;
+                    // El resto del código nunca se ejecuta por el return anterior
+                }
                 break;
             case '2': /** mensaje */
                     $retornoNotificacion = 1;//llamso a envio de mensajes
@@ -322,6 +333,15 @@ class ProfesionalInstitucionConvenioController extends Controller
         }
 
         return (object)$datos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return (object)array(
+                'estado' => 0,
+                'msj' => 'Error en el envio de notificación',
+                'error' => $e->getMessage()
+            );
+        }
+
     }
 
     /** WEB */

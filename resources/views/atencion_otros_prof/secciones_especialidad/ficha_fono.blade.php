@@ -19,7 +19,7 @@
             </div>
 
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="#" method="POST">
+                <form action="{{ route('fichaAtencion.store') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     {{--  <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">  --}}

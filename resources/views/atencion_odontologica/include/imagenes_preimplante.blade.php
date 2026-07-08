@@ -19,7 +19,7 @@
                             <div class="dropzone" id="misImagenesDentalesPreimplante"></div>
 
                             <!-- Botones de diagnóstico (quitar en producción) -->
-                            <div class="mt-2" style="border-top: 1px dashed #ccc; padding-top: 10px;">
+                            {{-- <div class="mt-2" style="border-top: 1px dashed #ccc; padding-top: 10px;">
                                 <small class="text-muted">Herramientas de diagnóstico:</small><br>
                                 <button type="button" class="btn btn-sm btn-info mr-1" onclick="diagnosticar_dropzone()">
                                     <i class="fas fa-info-circle"></i> Diagnóstico
@@ -30,7 +30,7 @@
                                 <button type="button" class="btn btn-sm btn-secondary" onclick="reinicializar_dropzone()">
                                     <i class="fas fa-redo"></i> Reiniciar
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     @if($opt == 'preimplante')
@@ -261,83 +261,41 @@
 
         if ($('#mis-imagenes-dentales-post').length) {
             window.dropzone_post = new Dropzone("#mis-imagenes-dentales-post", {
-                url: "{{ route('profesional.imagenes.guardar_dental') }}",
+                url: "{{ ROUTE('profesional.imagenes.guardar_dental')  }}",
                 method: 'post',
                 autoProcessQueue: false, // Desactiva el procesamiento automático
-                uploadMultiple: true, // Subir múltiples archivos en una sola petición
-                parallelUploads: 12, // Número máximo de uploads paralelos
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                paramName: "file",
-                acceptedFiles: "image/jpeg,image/jpg,image/png,image/gif",
+                paramName: "file[]",
+                acceptedFiles: "image/*",
                 maxFilesize: 4, // Tamaño máximo en MB
                 maxFiles: 12,
                 addRemoveLinks: true,
                 dictDefaultMessage: "Arrastra una imagen aquí o haz clic para subirla.",
                 dictRemoveFile: "Eliminar archivo",
-                dictFileTooBig: "El archivo es muy grande. Máximo permitido: 4MB.",
-                dictInvalidFileType: "No puedes subir archivos de este tipo.",
-                dictMaxFilesExceeded: "No puedes subir más de 12 archivos.",
-
-                init: function() {
-                    console.log("Dropzone POST inicializado correctamente");
-
-                    // Manejar éxito en la subida
-                    this.on("success", function(file, response) {
-                        console.log("Imagen POST subida con éxito:", response);
-                        if (response && response.success) {
-                            console.log("Respuesta exitosa del servidor POST");
-                        }
-                    });
-
-                    // Manejar errores
-                    this.on("error", function(file, message) {
-                        console.error("Error al subir imagen POST:", message);
-                        if (typeof message === 'object') {
-                            if (message.message) {
-                                alert("Error: " + message.message);
-                            } else {
-                                alert("Error al procesar el archivo: " + JSON.stringify(message));
-                            }
-                        } else {
-                            alert("Error: " + message);
-                        }
-                    });
-
-                    // Antes de enviar cada archivo
-                    this.on("sending", function(file, xhr, formData) {
-                        console.log("Enviando archivo POST:", file.name);
-
-                        // Verificar que el campo id_imagenes_dental existe y tiene valor
-                        const idExamenElement = document.querySelector('#id_imagenes_dental');
-                        if (!idExamenElement) {
-                            console.error("Campo #id_imagenes_dental no encontrado para POST");
-                            alert("Error: No se puede obtener el ID del examen para imágenes POST.");
-                            return false;
-                        }
-
-                        const idExamenRx = idExamenElement.value;
-                        if (!idExamenRx || idExamenRx === '') {
-                            console.error("Campo #id_imagenes_dental está vacío para POST");
-                            alert("Error: Debes guardar los datos del examen antes de subir imágenes POST.");
-                            return false;
-                        }
-
+                success: function (file, response) {
+                    console.log("Imagen subida con éxito:", response);
+                },
+                error: function (file, message) {
+                    console.error("Error al subir imagen:", message);
+                },
+                sending: function (file, xhr, formData) {
+                    if (formData) {
+                        const idExamenRx = document.querySelector('#id_imagenes_dental').value;
                         const detalle = "Post";
                         formData.append("id_examen", idExamenRx);
                         formData.append("detalle", detalle);
-
-                        console.log("Datos adicionales enviados POST:", {
+                        console.log("Datos adicionales enviados:", {
                             id_examen: idExamenRx,
                             detalle: detalle
                         });
-                    });
-
-                    // Cuando se complete la cola de archivos
-                    this.on("queuecomplete", function() {
-                        console.log("Cola de subida POST completada");
-                    });
+                    } else {
+                        console.error("formData no está disponible");
+                    }
+                },
+                init: function () {
+                    console.log("Dropzone inicializado dinámicamente");
                 }
             });
         }
@@ -351,7 +309,7 @@
     }
 
     function recargar_imagenes_rx(seccion){
-        let url = "{{ route('profesional.recargar_imagenes_dental_paciente') }}";
+        let url = "{{ ROUTE('profesional.recargar_imagenes_dental_paciente') }}";
         let id_paciente = $('#id_paciente_fc').val();
 
         let data = {
@@ -367,8 +325,8 @@
             url: url,
             success: function(resp){
                 console.log(resp);
-                $('#contenedor_imagenes_dent_estudio').empty();
-                $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                $('#contenedor_imagenes_dent_period').empty();
+                $('#contenedor_imagenes_dent_period').append(resp.v);
             },
             error: function(error){
                 console.log(error);
@@ -423,7 +381,7 @@
             seccion: seccion
         }
 
-        let url = "{{ route('profesional.guardar_imagenes_dental_paciente') }}";
+        let url = "{{ ROUTE('profesional.guardar_imagenes_dental_paciente') }}";
 
         $.ajax({
             type:'post',
@@ -547,7 +505,7 @@
 
         console.log(data);
 
-        let url = "{{ route('profesional.guardar_imagenes_dental_paciente') }}";
+        let url = "{{ ROUTE('profesional.guardar_imagenes_dental_paciente') }}";
 
         $.ajax({
             type:'post',
@@ -590,6 +548,8 @@
                             setTimeout(() => {
                                 recargar_imagenes_rx('periodoncica');
                             }, 1000);
+
+                            mostrar_nuevas_imagenes_dent_estudio(1000);
                         });
 
                     } else {
@@ -605,9 +565,9 @@
                         }
 
                         // Recargar las imágenes
-                        setTimeout(() => {
-                            recargar_imagenes_rx('periodoncica');
-                        }, 1000);
+                        // setTimeout(() => {
+                        //     recargar_imagenes_rx('periodoncica');
+                        // }, 1000);
                     }
 
                     // Re-inicializar el Dropzone nuevamente

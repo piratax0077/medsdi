@@ -7,11 +7,16 @@ use App\Models\Articulo;
 use App\Models\DetalleReceta;
 use App\Models\DetalleRecetaInterna;
 use App\Models\FichaAtencion;
+use App\Models\Instituciones;
 use App\Models\LugarAtencion;
 use App\Models\MedicamentoUsoCronicoGeneral;
 use App\Models\Paciente;
+use App\Models\Receta;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
+
+// Carbon
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -415,19 +420,63 @@ class DetalleRecetaController extends Controller
 
     }
 
-    public function dameTodoDetalleRecetaPaciente($id_paciente){
+    public function dameTodoDetalleRecetaPaciente($id_paciente, $id_ficha_atencion = null){
         try{
-            $detalle_receta = DetalleRecetaInterna::select('detalle_receta_interna.*','articulos.present as dosis','receta_dosis.indic as indicaciones','users.name as responsable')
-            ->leftjoin('articulos', 'detalle_receta_interna.id_dosis', '=', 'articulos.id')
-            ->leftjoin('receta_dosis', 'detalle_receta_interna.id_frecuencia', '=', 'receta_dosis.id')
-            ->join('users', 'detalle_receta_interna.id_responsable', '=', 'users.id')
-            ->where('detalle_receta_interna.id_paciente', $id_paciente)
-            ->get();
-            foreach($detalle_receta as $receta){
-                $fechaHora = explode(' ', $receta->created_at);
-                $receta->fecha = $fechaHora[0];
-                $receta->hora = $fechaHora[1];
+            $query = DetalleRecetaInterna::select('detalle_receta_interna.*','detalle_receta_interna.estado_finalizado as finalizado','articulos.present as dosis','receta_dosis.indic as indicaciones','users.name as responsable')
+                ->leftjoin('articulos', 'detalle_receta_interna.id_dosis', '=', 'articulos.id')
+                ->leftjoin('receta_dosis', 'detalle_receta_interna.id_frecuencia', '=', 'receta_dosis.id')
+                ->leftjoin('users', 'detalle_receta_interna.id_responsable', '=', 'users.id')
+                ->where('detalle_receta_interna.id_paciente', $id_paciente);
+
+            if (!empty($id_ficha_atencion)) {
+                $query->where('detalle_receta_interna.id_ficha_atencion', $id_ficha_atencion);
             }
+
+            $detalle_receta = $query->get();
+            foreach($detalle_receta as $receta){
+                // Calcular tiempo transcurrido si el tratamiento ha sido administrado
+                if($receta->estado_tratamiento == 1 && $receta->fecha_administrado && $receta->hora_administrado) {
+                    // Combinar fecha y hora para crear un DateTime completo
+                    $fecha_hora_administracion = $receta->fecha_administrado . ' ' . $receta->hora_administrado;
+                    $fecha_administracion = \Carbon\Carbon::parse($fecha_hora_administracion);
+                    $ahora = \Carbon\Carbon::now();
+
+                    // Calcular diferencia
+                    $diff = $fecha_administracion->diff($ahora);
+
+                    // Formatear diferencia
+                    if($diff->days > 0) {
+                        $receta->tiempo_transcurrido = $diff->days . ' día(s) ' . $diff->h . ' hora(s)';
+                    } elseif($diff->h > 0) {
+                        $receta->tiempo_transcurrido = $diff->h . ' hora(s) ' . $diff->i . ' min';
+                    } else {
+                        $receta->tiempo_transcurrido = $diff->i . ' min';
+                    }
+
+                    // También guardar en minutos totales para cálculos
+                    $receta->minutos_transcurridos = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
+
+                    // EVALUAR POSOLOGÍA Y CAMBIAR ESTADO SI ES NECESARIO
+                    // Obtener el intervalo de frecuencia en minutos según la posología
+                    $fc = new ficha_atencionController();
+                    $intervalo_minutos = $fc->obtenerIntervaloFrecuencia($receta->nombre_frecuencia, $receta->id_frecuencia);
+
+                    // Si el tiempo transcurrido es mayor al intervalo de frecuencia, cambiar estado a pendiente
+                    if($intervalo_minutos > 0 && $receta->minutos_transcurridos >= $intervalo_minutos) {
+                        $receta_actualizar = DetalleRecetaInterna::find($receta->id);
+                        if($receta_actualizar) {
+                            $receta_actualizar->estado_tratamiento = 0; // Cambiar a pendiente
+                            $receta_actualizar->save();
+                            $receta->estado_tratamiento = 0; // Actualizar también en el objeto actual
+                        }
+                    }
+                } else {
+                    $receta->tiempo_transcurrido = null;
+                    $receta->minutos_transcurridos = 0;
+                }
+            }
+
+
             return $detalle_receta;
         }catch(Exception $e){
             return $e->getMessage();
@@ -438,7 +487,10 @@ class DetalleRecetaController extends Controller
     public function registroRecetaInterna(Request $req){
 
         $detalle_receta = new DetalleRecetaInterna();
-        $detalle_receta->id_institucion = 19; // Cambiar por el id institucion del usuario
+        $institucion = Instituciones::where('id_lugar_atencion', $req->id_lugar_atencion)->first();
+        $detalle_receta->id_ficha_atencion = $req->id_ficha;
+        $detalle_receta->id_enfermera = $req->id_enfermera ? $req->id_enfermera : NULL;
+        $detalle_receta->id_institucion = $institucion->id; // Cambiar por el id institucion del usuario
         $detalle_receta->id_servicio = 1; // Cambiar por el id servicio del usuario
         $detalle_receta->id_medicamento = $req->id_medicamento;
         $detalle_receta->receta_am = $req->receta_am;
@@ -456,20 +508,116 @@ class DetalleRecetaController extends Controller
         $detalle_receta->id_tipo_control = $req->id_tipo_control;
         $detalle_receta->composicion = $req->farmaco;
 
+        // === PROCESAMIENTO DE ARCHIVOS CON MEJOR LOGGING ===
+        $archivos_receta_guardados = [];
+
+        \Log::info('=== INICIANDO PROCESAMIENTO DE ARCHIVOS RECETA ENFERMERIA ===', [
+            'id_paciente' => $req->id_paciente,
+            'input_lista_archivo_receta_enf' => $req->input_lista_archivo_receta_enf,
+            'input_vacio' => empty($req->input_lista_archivo_receta_enf),
+        ]);
+
+        if(!empty($req->input_lista_archivo_receta_enf)){
+            $lista_archivo = json_decode($req->input_lista_archivo_receta_enf, true);
+
+            \Log::info('JSON decodificado', [
+                'es_array' => is_array($lista_archivo),
+                'cantidad_archivos' => is_array($lista_archivo) ? count($lista_archivo) : 0,
+                'contenido' => $lista_archivo
+            ]);
+
+            if(is_array($lista_archivo) && count($lista_archivo) > 0){
+                foreach($lista_archivo as $index => $item){
+                    \Log::info('Procesando archivo ' . $index, [
+                        'estructura_item' => $item,
+                        'es_array' => is_array($item),
+                        'cantidad_elementos' => is_array($item) ? count($item) : 0
+                    ]);
+
+                    // Validar que item sea un array y tenga los elementos necesarios
+                    if(!is_array($item) || count($item) < 4){
+                        \Log::warning('Archivo ' . $index . ' tiene estructura incorrecta', ['item' => $item]);
+                        continue;
+                    }
+
+                    $nombre_temp = $item[2] ?? null;
+                    $ext = $item[3] ?? null;
+                    $original = $item[1] ?? null;
+
+                    \Log::info('Datos extraidos del archivo ' . $index, [
+                        'nombre_temp' => $nombre_temp,
+                        'ext' => $ext,
+                        'original' => $original,
+                        'nombre_temp_vacio' => empty($nombre_temp)
+                    ]);
+
+                    if($nombre_temp){
+                        $nombre_final = 'receta_enf_'.$req->id_paciente.'_'.time().'_'.$index.($ext ? '.'.$ext : '');
+
+                        \Log::info('Intentando mover archivo', [
+                            'nombre_temp' => $nombre_temp,
+                            'nombre_final' => $nombre_final,
+                            'directorio_destino' => 'archivo_archivo'
+                        ]);
+
+                        $resultado = CargaImagenController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+                        \Log::info('Resultado de moverArchivo', [
+                            'resultado_completo' => $resultado,
+                            'estado' => $resultado['estado'] ?? 'N/A',
+                            'msj' => $resultado['msj'] ?? 'N/A',
+                            'url' => $resultado['proceso']['url'] ?? 'N/A'
+                        ]);
+
+                        if(($resultado['estado'] ?? 0) == 1){
+                            $archivos_receta_guardados[] = [
+                                'url' => $resultado['proceso']['url'] ?? null,
+                                'nombre' => $nombre_final,
+                                'original' => $original
+                            ];
+
+                            \Log::info('Archivo guardado exitosamente', [
+                                'url' => $resultado['proceso']['url'],
+                                'nombre' => $nombre_final
+                            ]);
+                        } else {
+                            \Log::error('Error al mover archivo: ' . ($resultado['msj'] ?? 'desconocido'), [
+                                'nombre_temp' => $nombre_temp,
+                                'resultado' => $resultado
+                            ]);
+                        }
+                    } else {
+                        \Log::warning('nombre_temp está vacío para archivo ' . $index);
+                    }
+                }
+            } else {
+                \Log::warning('lista_archivo no es un array válido o está vacía', [
+                    'es_array' => is_array($lista_archivo),
+                    'cantidad' => is_array($lista_archivo) ? count($lista_archivo) : 'N/A'
+                ]);
+            }
+        } else {
+            \Log::info('No hay archivos para procesar (input_lista_archivo_receta_enf vacío)');
+        }
+
+        \Log::info('Total archivos guardados: ' . count($archivos_receta_guardados), [
+            'archivos_guardados' => $archivos_receta_guardados
+        ]);
+        // === FIN PROCESAMIENTO DE ARCHIVOS ===
+
         $detalle_receta->observaciones = 'SIN OBSERVACIONES';
-        $detalle_receta->otros = 'SIN OTROS';
+        $detalle_receta->otros = !empty($archivos_receta_guardados) ? json_encode($archivos_receta_guardados) : 'SIN OTROS';
         $detalle_receta->otros_2 = 'SIN OTROS';
 
-        $detalle_receta->estado_tratamiento = 1;
-        $detalle_receta->estado_finalizado = 1;
-        $detalle_receta->id_responsable = Auth::user()->id;
+        $detalle_receta->estado_tratamiento = 0; // 0: En tratamiento, 1: Finalizado
+        $detalle_receta->estado_finalizado = 0; // 0: No finalizado, 1: Finalizado
+        $detalle_receta->id_responsable = !empty($req->id_responsable) ? $req->id_responsable : Auth::id();
 
         // estados del medicamento 1: Pendiente, 2: Administrado
 
-
-
         if($detalle_receta->save()){
-            $dame_todo_detalle_receta_paciente = $this->dameTodoDetalleRecetaPaciente($req->id_paciente);
+            // Para el refresco de la UI, limitar a la ficha actual y evitar mezclar recetas históricas del paciente.
+            $dame_todo_detalle_receta_paciente = $this->dameTodoDetalleRecetaPaciente($req->id_paciente, $req->id_ficha);
 
             return response()->json(['status' => 'success', 'message' => 'Receta registrada correctamente', 'data' => $dame_todo_detalle_receta_paciente]);
         }else{
@@ -477,7 +625,64 @@ class DetalleRecetaController extends Controller
         }
     }
 
+    public function eliminarRegistroReceta(Request $req){
+        $id = $req->id;
+        $detalle_receta = DetalleRecetaInterna::find($id);
+        if($detalle_receta->delete()){
+            $recetas_externas = DetalleRecetaInterna::where('id_paciente', $detalle_receta->id_paciente)->get();
+
+            // Calcular tiempo transcurrido para cada medicamento externo
+            foreach($recetas_externas as $receta){
+                // Calcular tiempo transcurrido si el tratamiento ha sido administrado
+                if($receta->estado_tratamiento == 1 && $receta->fecha_administrado && $receta->hora_administrado) {
+                    // Combinar fecha y hora para crear un DateTime completo
+                    $fecha_hora_administracion = $receta->fecha_administrado . ' ' . $receta->hora_administrado;
+                    $fecha_administracion = \Carbon\Carbon::parse($fecha_hora_administracion);
+                    $ahora = \Carbon\Carbon::now();
+
+                    // Calcular diferencia
+                    $diff = $fecha_administracion->diff($ahora);
+
+                    // Formatear diferencia
+                    if($diff->days > 0) {
+                        $receta->tiempo_transcurrido = $diff->days . ' día(s) ' . $diff->h . ' hora(s)';
+                    } elseif($diff->h > 0) {
+                        $receta->tiempo_transcurrido = $diff->h . ' hora(s) ' . $diff->i . ' min';
+                    } else {
+                        $receta->tiempo_transcurrido = $diff->i . ' min';
+                    }
+
+                    // También guardar en minutos totales para cálculos
+                    $receta->minutos_transcurridos = ($diff->days * 24 * 60) + ($diff->h * 60) + $diff->i;
+
+                    // EVALUAR POSOLOGÍA Y CAMBIAR ESTADO SI ES NECESARIO
+                    // Obtener el intervalo de frecuencia en minutos según la posología
+                    $fc = new ficha_atencionController();
+                    $intervalo_minutos = $fc->obtenerIntervaloFrecuencia($receta->nombre_frecuencia, $receta->id_frecuencia);
+
+                    // Si el tiempo transcurrido es mayor al intervalo de frecuencia, cambiar estado a pendiente
+                    if($intervalo_minutos > 0 && $receta->minutos_transcurridos >= $intervalo_minutos) {
+                        $receta_actualizar = DetalleRecetaInterna::find($receta->id);
+                        if($receta_actualizar) {
+                            $receta_actualizar->estado_tratamiento = 0; // Cambiar a pendiente
+                            $receta_actualizar->save();
+                            $receta->estado_tratamiento = 0; // Actualizar también en el objeto actual
+                        }
+                    }
+                } else {
+                    $receta->tiempo_transcurrido = null;
+                    $receta->minutos_transcurridos = 0;
+                }
+            }
+
+            return response()->json(['status' => 'success', 'message' => 'Registro de receta eliminado correctamente', 'data' => $recetas_externas]);
+        }else{
+            return response()->json(['status' => 'error', 'message' => 'Error al eliminar el registro de receta']);
+        }
+    }
+
     public function eliminarMedicamento(Request $req){
+
         $id = $req->id;
         $detalle_receta = DetalleRecetaInterna::find($id);
         if($detalle_receta->delete()){

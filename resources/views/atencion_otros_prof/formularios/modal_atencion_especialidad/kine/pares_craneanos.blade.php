@@ -1,4 +1,4 @@
-<div id="pares" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pares" aria-hidden="true">
+<div id="pares_craneanos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="pares_craneanos" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
@@ -10,7 +10,7 @@
                 <form>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
-                            <p class="fecha-sm"><strong>Fecha del examen</strong> 
+                            <p class="fecha-sm"><strong>Fecha del examen</strong>
                                 <script>
                                     var f = new Date();
                                     document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -81,13 +81,18 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_pares_craneanos()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
 </div>
 <script>
     function pares() {
-        $('#pares').modal('show');
+        $('#pares_craneanos').modal('show');
+    }
+
+    function guardar_pares_craneanos() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('pares_craneanos');
     }
 </script>

@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Str;
+
 class VentaBonoController extends Controller
 {
 
@@ -84,72 +86,98 @@ class VentaBonoController extends Controller
 
     public function validarAutorizacion(Request $request)
     {
-        $datos = array();
-        $error = array();
-        $valido = 1;
+        $datos = [];
+        $error = [];
 
-        if(empty($request->token))
-        {
-            $error['token'] = 'campo requerido';
-            $valido = 0;
+        if (empty($request->token)) {
+            return [
+                'estado' => 0,
+                'msj' => 'campos requeridos',
+                'error' => [
+                    'token' => 'campo requerido'
+                ]
+            ];
         }
 
-        // $datos['token__'] = $request->token;
+        $funciones = new Funciones();
+        $registro = $funciones->checkStatePermApp($request->token);
 
-        if($valido)
-        {
-            $funciones = new Funciones();
-            $registro = $funciones->checkStatePermApp($request->token);
-            if($registro['estado'] == 1)
-            {
-                if($registro['registro']['estado'] == 0)
-                {
-                    $datos['estado'] = 1;
-                    $datos['estado_log'] = 0;
-                    $datos['msj'] = 'espera';
-                    // $datos['registro'] = $registro;
-                }
-                else if($registro['registro']['estado'] == 1)
-                {
-                    $datos['estado'] = 1;
-                    $datos['estado_log'] = 1;
-                    $datos['msj'] = 'aprobado';
-                    // $datos['registro'] = $registro;
-                }
-                else if($registro['registro']['estado'] == 2)
-                {
-                    $datos['estado'] = 1;
-                    $datos['estado_log'] = 2;
-                    $datos['msj'] = 'rechazado';
-                    // $datos['registro'] = $registro;
-                }
-                else if($registro['registro']['estado'] == 3)
-                {
-                    $datos['estado'] = 1;
-                    $datos['estado_log'] = 3;
-                    $datos['msj'] = 'cancelado';
-                    // $datos['registro'] = $registro;
-                }
-                else
-                {
-                    $datos['estado'] = 0;
-                    $datos['estado_log'] = 0;
-                    $datos['msj'] = 'no valido';
-                }
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'no valido';
-            }
+        if ($registro['estado'] != 1) {
+            session([
+                'lic_estado' => 0,
+            ]);
+
+            return [
+                'estado' => 0,
+                'estado_log' => 0,
+                'msj' => $registro['msj'] ?? 'no valido'
+            ];
         }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'campos requeridos';
-            $datos['error'] = $error;
+
+        $log = $registro['registro'];
+
+        if ($log->estado == 0) {
+            return [
+                'estado' => 1,
+                'estado_log' => 0,
+                'msj' => 'espera'
+            ];
         }
-        return $datos;
+
+        if ($log->estado == 1) {
+            session([
+                'lic_token' => $request->token,
+                'lic_log_id' => $log->id ?? session('lic_log_id'),
+                'lic_estado' => 1,
+                'lic_tipo' => session('lic_tipo') ?: 'bono',
+                'lic_fecha_termino' => $log->fecha_termino ?? null,
+            ]);
+
+            return [
+                'estado' => 1,
+                'estado_log' => 1,
+                'msj' => 'aprobado'
+            ];
+        }
+
+        if ($log->estado == 2) {
+            session([
+                'lic_estado' => 0,
+            ]);
+
+            return [
+                'estado' => 1,
+                'estado_log' => 2,
+                'msj' => 'rechazado'
+            ];
+        }
+
+        if ($log->estado == 3) {
+            session([
+                'lic_estado' => 0,
+            ]);
+
+            return [
+                'estado' => 1,
+                'estado_log' => 3,
+                'msj' => 'cancelado'
+            ];
+        }
+
+        session([
+            'lic_estado' => 0,
+        ]);
+
+        return [
+            'estado' => 0,
+            'estado_log' => 0,
+            'msj' => 'no valido'
+        ];
+    }
+
+    public function validarAutorizacionPaciente(Request $request)
+    {
+        return $this->validarAutorizacion($request);
     }
 
     function conectarIsapreFonasa(Request $request)
@@ -199,23 +227,36 @@ class VentaBonoController extends Controller
 
         if($valido)
         {
+            $monto = $request->monto ?? $request->valor ?? 0;
+            $monto = (int) str_replace(['.', ',', '$', ' '], '', $monto);
+
             $orden = new Orden();
 
             $orden->id_lugar_atencion = $request->id_lugar_atencion;
             $orden->id_hora_medica = $request->id_hora_medica;
-            $orden->origen = $request->origen;
-            $orden->tipo_movimiento = $request->tipo_movimiento;
-            $orden->rut = $request->rut;
-            $orden->nombre = $request->nombre;
-            $orden->apellido_uno = $request->apellido_uno;
-            $orden->apellido_dos = $request->apellido_dos;
-            $orden->email = $request->email;
-            $orden->monto = $request->monto;
-            $orden->estado_orden = $request->estado_orden;
+            $orden->origen = $request->origen ?? 1;
+            $orden->tipo_movimiento = $request->tipo_movimiento ?? 'bono';
+            $orden->id_profesional = $request->id_profesional;
+            $orden->id_paciente = Paciente::where('id_usuario', Auth::user()->id)->first()->id;
+            $orden->monto = $monto;
+            $orden->estado_orden = $request->estado_orden ?? 'PAGADO';
             $orden->fecha_pagado_cap = date('Y-m-d H:i:s');
+            $orden->qr_token = (string) Str::uuid();
+
+
 
             if($orden->save())
             {
+
+                $orden->qr_payload = json_encode([
+                    'orden_id' => $orden->id,
+                    'token' => $orden->qr_token,
+                    'tipo' => 'voucher_bono'
+                ]);
+                $datos['orden_id'] = $orden->id;
+                $datos['qr_token'] = $orden->qr_token;
+                $datos['qr_payload'] = json_decode($orden->qr_payload, true);
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'exito';
 

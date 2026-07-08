@@ -46,7 +46,7 @@
                         <div class="form-group fill">
                             <label class="floating-label">Lado</label>
                             <select class="form-control form-control-sm" id="lado_d" name="lado_d">
-                                <option value="0" selected>Seleccione</option>
+                                <option value="0" selected>No corresponde</option>
                                 <option value="Derecho">Derecho</option>
                                 <option value="Izquierdo">Izquierdo</option>
                                 <option value="Bilateral">Bilateral</option>
@@ -58,7 +58,7 @@
                         <div class="form-group fill">
                             <label class="floating-label">Prioridad</label>
                             <select class="form-control form-control-sm" id="prioridad_d" name="prioridad_d">
-                                <option value="0">Seleccione</option>
+                                {{--  <option value="0">Seleccione</option>  --}}
                                 <option value="1">Baja</option>
                                 <option value="2" selected>Media</option>
                                 <option value="3">Alta</option>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-sm-12">
                         <button type="button" onclick="indicar_examen_cirugia_d();" id="agregar_examen_tabla" class="btn btn-success btn-sm float-right">
-                            <i lass="fa fa-plus"></i> Agregar Examen
+                            <i class="fa fa-plus"></i> Agregar Examen
                         </button>
                     </div>
                     <div class="col-sm-12 mt-3">
@@ -90,6 +90,7 @@
                             <table id="tabla_examen_cirugia_d" class="table table-bordered table-sm tabla_examenes_ficha">
                                 <thead>
                                     <tr>
+                                        <!-- <th class="text-center align-middle" style="display:none">ID Examen</th> -->
                                         <th class="text-center align-middle">Fecha y Hora</th>
                                         <th class="text-center align-middle">Nombre Examen</th>
                                         <th class="text-center align-middle">Lado</th>
@@ -104,12 +105,13 @@
                                     @if(isset($examenes_solicitados))
                                         @foreach($examenes_solicitados as $examen)
                                             <tr>
+                                                <!-- <td class="text-center align-middle" style="display:none">{{ $examen->id }}</td> -->
                                                 <td class="text-center align-middle">{{ $examen->fecha }} {{ $examen->hora }} <br> {{ $examen->responsable }}</td>
                                                 <td class="text-center align-middle">{{ $examen->datos_examen->examen }}</td>
                                                 <td class="text-center align-middle">{{ $examen->datos_examen->lado }}</td>
                                                 <td class="text-center align-middle">{{ $examen->datos_examen->tipo_examen }}</td>
                                                 <td class="text-center align-middle">{{ $examen->datos_examen->prioridad }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->imagenologia_con_contraste ? $examen->datos_examen->imagenologia_con_contraste_d : 'N/C' }}</td>
+                                                <td class="text-center align-middle">{{ $examen->datos_examen->imagenologia_con_contraste ? $examen->datos_examen->imagenologia_con_contraste : 'N/C' }}</td>
                                                 <td class="text-center align-middle">
                                                     <div class="btn btn-danger btn_remove btn-sm" onclick="eliminar_examen_cirugia_d({{ $examen->id }});"><i class="fas fa-trash"></i></div>
                                                 </td>
@@ -215,7 +217,7 @@
                                 examen.lado,
                                 examen.tipo_examen,
                                 examen.prioridad,
-                                examen.imagenologia_con_contraste_d ? $examen.imagenologia_con_contraste_d : 'N/C',
+                                examen.imagenologia_con_contraste_d ? examen.imagenologia_con_contraste_d : 'N/C',
                                 `<div class="btn btn-danger btn_remove btn-sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
                             ]).draw(false); // Redibuja la tabla sin reiniciar la paginación
                         });
@@ -337,7 +339,7 @@
                             examen.tipo_examen,
                             examen.prioridad,
                             examen.imagenologia_con_contraste_d ? examen.imagenologia_con_contraste_d : 'N/C',
-                            `<div class="btn btn-danger btn_remove btn-sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
+                            `<div class="btn btn-danger btn_remove btn_sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
                         ]).draw(false); // Redibuja la tabla sin reiniciar la paginación
                     });
                     swal({

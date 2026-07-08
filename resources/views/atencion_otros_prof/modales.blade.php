@@ -321,6 +321,9 @@
                             //$('#form_control_obesidad').trigger("reset");
                             $('#mensaje').text('Se ha creado la interconsulta de forma correcta');
                             $('#mensaje').show();
+                            if (response.id_last) {
+                                $('#id_interconsulta_email').val(response.id_last);
+                            }
                             $('#modal_interconsulta').modal('hide');
                             ver_pdf_interconsulta(response.id_last);
                         }

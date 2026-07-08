@@ -136,6 +136,9 @@
                                 </h5>
                                 <p id="proxima_hora_atencion_od_gral"></p>
                             </div>
+                            <div class="col-sm-12">
+                                <p id="observaciones_hora_dental"></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -148,6 +151,44 @@
     </div>
 </div>
 
+<!-- modalModificarEvolucion -->
+<div class="modal fade" id="modalModificarEvolucion" tabindex="-1" role="dialog" aria-labelledby="modalModificarEvolucionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarEvolucionLabel">Modificar Evolución</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formModificarEvolucion">
+                    <input type="hidden" id="id_evolucion" name="id_evolucion">
+                    <div class="form-group">
+                        <label for="fecha_evolucion" class="floating-label-activo-sm">Fecha</label>
+                        <input type="date" class="form-control" id="fecha_evolucion" name="fecha_evolucion" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero_pieza_evol" class="floating-label-activo-sm">Número de Pieza</label>
+                        <input type="text" class="form-control" id="numero_pieza_evol" name="numero_pieza_evol" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="procedimiento_evol" class="floating-label-activo-sm">Procedimiento</label>
+                        <input type="text" class="form-control" id="procedimiento_evol" name="procedimiento_evol" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="observaciones" class="floating-label-activo-sm">Evolución</label>
+                        <textarea class="form-control" id="observaciones_evol" name="observaciones_evol"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCambiosEvolucion()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function guardar_pieza_dental_tto_gral(counter){
@@ -614,6 +655,364 @@
                     title: 'Error',
                     text: 'Ocurrió un error al obtener el estado de la prestación.',
                     icon: 'error',
+                });
+            }
+        });
+    }
+
+    // Variable global para almacenar las evoluciones odontológicas generales
+    let evoluciones = [];
+
+    // Funciones auxiliares para trabajar con las evoluciones globales
+    function obtenerEvolucionesOdGral() {
+        return evoluciones;
+    }
+
+    function obtenerEvolucionPorId(id) {
+        return evoluciones.find(evolucion => evolucion.id == id);
+    }
+
+    function obtenerEvolucionesPorPieza(pieza) {
+        return evoluciones.filter(evolucion => evolucion.pieza == pieza);
+    }
+
+    function obtenerEvolucionesPorProfesional(profesional_id) {
+        return evoluciones.filter(evolucion => evolucion.id_profesional == profesional_id);
+    }
+
+    function contarEvoluciones() {
+        return evoluciones.length;
+    }
+
+    function limpiarEvolucionesGlobales() {
+        evoluciones = [];
+        window.evoluciones_od_gral_raw = [];
+        window.total_evoluciones_od_gral = 0;
+    }
+
+    function actualizarEvolucionGlobal(evolucion_actualizada) {
+        const index = evoluciones.findIndex(evol => evol.id == evolucion_actualizada.id);
+        if (index !== -1) {
+            evoluciones[index] = evolucion_actualizada;
+        }
+    }
+
+    function eliminarEvolucionGlobal(id_evolucion) {
+        evoluciones = evoluciones.filter(evol => evol.id != id_evolucion);
+        // También actualizar el contador
+        if (window.total_evoluciones_od_gral !== undefined) {
+            window.total_evoluciones_od_gral = evoluciones.length;
+        }
+    }
+
+    function dame_evoluciones_od_gral(){
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let id_hora_medica = $('#hora_medica').val();
+
+        let url = "{{ route('dental.dame_evoluciones_od_gral') }}";
+
+        let data = {
+            id_ficha_atencion: id_ficha_atencion,
+            id_paciente: id_paciente,
+            id_lugar_atencion: id_lugar_atencion,
+            id_profesional: id_profesional,
+            id_hora_medica: id_hora_medica,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            beforeSend: function(){
+                swal({
+                    title: 'Cargando...',
+                    text: 'Por favor, espere.',
+                    icon: 'info',
+                    button: false
+                });
+            },
+            success: function(response) {
+                swal.close();
+                console.log(response);
+                if(response.estado == 'ok'){
+                    // Guardar las evoluciones en la variable global
+                    evoluciones = response.evoluciones || [];
+                    
+                    // También guardar datos adicionales si los necesitas
+                    if(response.evoluciones_raw) {
+                        window.evoluciones_od_gral_raw = response.evoluciones_raw;
+                    }
+                    if(response.total_evoluciones !== undefined) {
+                        window.total_evoluciones_od_gral = response.total_evoluciones;
+                    }
+                    
+                    // Cargar las evoluciones en la tabla correspondiente
+                    cargarTablaEvolucionesOdGral(response.evoluciones);
+                    
+                    console.log('Evoluciones guardadas globalmente:', evoluciones);
+                }else{
+                    // Limpiar las variables globales si no hay evoluciones
+                    evoluciones = [];
+                    window.evoluciones_od_gral_raw = [];
+                    window.total_evoluciones_od_gral = 0;
+                    
+                    // Limpiar la tabla si no hay evoluciones
+                    limpiarTablaEvolucionesOdGral();
+                }
+
+            },
+            error: function(error) {
+                swal.close();
+                console.log(error);
+                
+                // Limpiar las variables globales en caso de error
+                evoluciones = [];
+                window.evoluciones_od_gral_raw = [];
+                window.total_evoluciones_od_gral = 0;
+            }
+        });
+    }
+
+    function cargarTablaEvolucionesOdGral(evoluciones){
+        const div_evolucion = $('#contenedor_evoluciones_od_gral');
+        div_evolucion.empty();
+
+        if (evoluciones && evoluciones.length > 0) {
+            evoluciones.forEach(function(evolucion, index) {
+                let estado = "";
+                let clase = "";
+                if(evolucion.procedimiento.estado == 0){
+                    estado = "Pendiente";
+                    clase = "badge badge-warning"
+                }else if(evolucion.procedimiento.estado == 1){
+                    estado = "Finalizado";
+                    clase = "badge badge-success";
+                }else if(evolucion.procedimiento.estado == 2){
+                    estado = "Cancelado";
+                    clase = "badge badge-danger";
+                }else if(evolucion.procedimiento.estado == 3){
+                    estado = "Citado a control";
+                    clase = "badge badge-info";
+                }
+                const fila = `
+                    <div class="tab-pane fade active show" id="evolucion-${evolucion.id}" role="tabpanel" aria-labelledby="evolucion-${evolucion.id}-tab">
+                        <div class="card-informacion">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Evolución registrada el ${evolucion.fecha}</h6>
+                                <small class="text-muted">Por: ${evolucion.profesional_nombre_completo}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Pieza N°</label>
+                                            <input type="text" class="form-control form-control-sm" value="${evolucion.pieza}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Procedimiento</label>
+                                            <input type="text" class="form-control form-control-sm" value="${evolucion.procedimiento?.tratamiento}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Evolución</label>
+                                            <textarea class="form-control form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" readonly>${evolucion.evolucion}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <span class="${clase}" style="font-size: 15px;">${estado}</span>
+                                <button type="button" class="btn btn-sm btn-outline-warning" onclick="modificarEvolucionOdGral(${evolucion.id})" title="Eliminar evolución">
+                                    <i class="feather icon-edit"></i> Modificar
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                `;
+                div_evolucion.append(fila);
+            });
+        } else {
+            div_evolucion.append(`
+                <div class="alert alert-info text-center">
+                    <i class="feather icon-info"></i>
+                    No hay evoluciones registradas para esta ficha de atención.
+                </div>
+            `);
+        }
+    }
+
+    // Función para eliminar una evolución odontológica general
+    function eliminarEvolucionOdGral(idEvolucion) {
+        swal({
+            title: "¿Está seguro?",
+            text: "Esta acción eliminará la evolución de forma permanente.",
+            icon: "warning",
+            buttons: ["Cancelar", "Eliminar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                confirmarEliminarEvolucionOdGral(idEvolucion);
+            }
+        });
+    }
+
+    // Función para confirmar la eliminación de la evolución
+    function confirmarEliminarEvolucionOdGral(idEvolucion) {
+        let data = {
+            id_evolucion: idEvolucion,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_paciente: $('#id_paciente_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        };
+
+        $.ajax({
+            url: '{{ route("dental.eliminar_evolucion_od_gral") }}',
+            method: 'POST',
+            data: data,
+            beforeSend: function() {
+                swal({
+                    title: 'Eliminando...',
+                    text: 'Por favor, espere.',
+                    icon: 'info',
+                    buttons: false,
+                    closeOnClickOutside: false
+                });
+            },
+            success: function(response) {
+                console.log(response);
+                swal.close();
+
+                if (response.estado == 'ok') {
+                    swal({
+                        title: "Éxito",
+                        text: "La evolución ha sido eliminada correctamente.",
+                        icon: "success",
+                    }).then(() => {
+                        // Recargar las evoluciones después de eliminar
+                        if (response.evoluciones) {
+                            cargarTablaEvolucionesOdGral(response.evoluciones);
+                        } else {
+                            // Si no se devuelven evoluciones, recargar toda la información
+                            cargarInformacionFichaAtencion($('#id_fc').val());
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response.mensaje || "Error al eliminar la evolución.",
+                        icon: "error",
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                console.error('Error:', xhr.responseText);
+                swal({
+                    title: "Error",
+                    text: "Error en la comunicación con el servidor.",
+                    icon: "error",
+                });
+            }
+        });
+    }
+
+    function modificarEvolucionOdGral(counter){
+        var evolucion = obtenerEvolucionPorId(counter);
+        console.log(evolucion.fecha);
+        // transformar fecha de DD/MM/YYYY HH:mm → YYYY-MM-DD
+        let partes = evolucion.fecha.split(" "); // ["22/08/2025", "14:46"]
+        let fechaPartes = partes[0].split("/");  // ["22", "08", "2025"]
+        let fechaISO = `${fechaPartes[2]}-${fechaPartes[1]}-${fechaPartes[0]}`; // "2025-08-22"
+        // Aquí puedes llenar el formulario con los datos de la evolución seleccionada
+        $('#id_evolucion').val(evolucion.id);
+        $('#fecha_evolucion').val(fechaISO);
+        $('#numero_pieza_evol').val(evolucion.pieza);
+        $('#procedimiento_evol').val(evolucion.procedimiento.tratamiento);
+        $('#observaciones_evol').val(evolucion.evolucion);
+        // Mostrar el modal para modificar la evolución
+        $('#modalModificarEvolucion').modal('show');
+    }
+
+    function guardarCambiosEvolucion() {
+        let idEvolucion = $('#id_evolucion').val();
+        let fecha = $('#fecha_evolucion').val();
+        let numeroPieza = $('#numero_pieza_evol').val();
+        let procedimiento = $('#procedimiento_evol').val();
+        let observaciones = $('#observaciones_evol').val();
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_paciente = $('#id_paciente').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+
+        let data = {
+            id_evolucion: idEvolucion,
+            fecha: fecha,
+            numero_pieza: numeroPieza,
+            procedimiento: procedimiento,
+            observaciones: observaciones,
+            id_ficha_atencion: id_ficha_atencion,
+            id_paciente: id_paciente,
+            id_lugar_atencion: id_lugar_atencion,
+            _token: CSRF_TOKEN
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: '{{ route("dental.modificar_evolucion") }}',
+            method: 'POST',
+            data: data,
+            beforeSend: function() {
+                swal({
+                    title: 'Guardando...',
+                    text: 'Por favor, espere.',
+                    icon: 'info',
+                    buttons: false,
+                    closeOnClickOutside: false
+                });
+            },
+            success: function(response) {
+                console.log(response);
+                swal.close();
+
+                if (response.mensaje == 'ok') {
+                    swal({
+                        title: "Éxito",
+                        text: "La evolución ha sido modificada correctamente.",
+                        icon: "success",
+                    }).then(() => {
+                        // Recargar las evoluciones después de modificar
+                        if (response.evoluciones) {
+                            dame_evoluciones_od_gral();
+                             $('#modalModificarEvolucion').modal('hide');
+                        } else {
+                            // Si no se devuelven evoluciones, recargar toda la información
+                            cargarInformacionFichaAtencion($('#id_fc').val());
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response.mensaje || "Error al modificar la evolución.",
+                        icon: "error",
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                swal.close();
+                console.error('Error:', xhr.responseText);
+                swal({
+                    title: "Error",
+                    text: "Error en la comunicación con el servidor.",
+                    icon: "error",
                 });
             }
         });

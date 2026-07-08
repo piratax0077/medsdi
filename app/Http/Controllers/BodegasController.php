@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Compras;
 use App\Models\Responsable;
 use App\Models\Bodega;
+use App\Models\BodegasSucursal;
+use App\Models\DevolucionProducto;
 use App\Models\Pedido;
 use App\Models\PedidoDetalle;
 use App\Models\Producto;
@@ -25,6 +27,10 @@ use App\Models\AdminInstServ;
 use App\Models\ContratoDependiente;
 use App\Models\ResponsableBodega;
 use App\Models\Temperatura;
+use App\Models\TraspasoProducto;
+use App\Models\Sucursal;
+use App\Models\SucursalHorario;
+use App\Models\SolicitudProveedor;
 use Illuminate\Support\Facades\Auth;
 
 class BodegasController extends Controller
@@ -120,7 +126,11 @@ class BodegasController extends Controller
 
     $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
     $bodega->tipos_productos = json_decode($bodega->tipos_productos);
-    $responsables = Responsable::all();
+    $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                    ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                    ->where('responsable_bodega.id_bodega',$bodega->id)
+                    ->get();
+    $bodega->responsables = $responsables;
 
     return ['bodega' => $bodega, 'responsables' => $responsables];
 }
@@ -215,6 +225,7 @@ class BodegasController extends Controller
 
     public function editar_registro_bodega(Request $request){
         try {
+
             $bodega = Bodega::find($request->idbodega);
 
             $bodega->nombre = $request->nombre_bodega;
@@ -226,6 +237,12 @@ class BodegasController extends Controller
             $bodega->tipos_productos_autorizacion = json_encode($request->cont_ca);
 
             if($bodega->save()){
+                $ids_a_mantener = $request->id_responsables; // array de IDs a mantener
+                if (is_array($ids_a_mantener)) {
+                    ResponsableBodega::where('id_bodega', $bodega->id)
+                        ->whereNotIn('id', $ids_a_mantener)
+                        ->delete();
+                }
                 $bodegas = $this->dameBodegas($request->id_institucion);
                 foreach($bodegas as $bodega){
                     $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
@@ -484,19 +501,34 @@ class BodegasController extends Controller
             }
         }
 
+        $sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
+        $traspasos_productos = TraspasoProducto::where('id_institucion', $institucion->id)
+        ->with(['producto.tipoProducto','responsable','bodegaOrigen','bodegaDestino'])
+        ->get();
+
+        $devoluciones_productos = DevolucionProducto::where('id_institucion', $institucion->id)
+        ->with(['producto.tipoProducto','responsable'])
+        ->get();
+
         if($institucion->id_tipo_institucion == 3){
              return view('app.laboratorio.bodega.historial',[
                 'pedidos' => $productos_solicitados,
                 'ingresos' => $productos_ingresados,
                 'institucion' => $institucion,
+                'pedidos' => $traspasos_productos,
+                'devoluciones' => $devoluciones_productos,
+                'sucursales' => $sucursales,
             ]);
         }
-        
+
 
         return view('app.bodega.historial',[
             'pedidos' => $productos_solicitados,
-            'ingresos' => $productos_ingresados,
-            'institucion' => $institucion,
+                'ingresos' => $productos_ingresados,
+                'institucion' => $institucion,
+                'pedidos' => $traspasos_productos,
+                'devoluciones' => $devoluciones_productos,
+                'sucursales' => $sucursales,
         ]);
     }
 
@@ -513,12 +545,284 @@ class BodegasController extends Controller
     }
 
     public function traspasos(){
-        return view('app.bodega.traspasos');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+$sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
+        $bodegas_sucursales = [];
+            foreach($sucursales as $sucursal){
+                $bodegas = BodegasSucursal::select('bodegas_sucursal.*','bodega.nombre as bodega','sucursal.nombre as sucursal')
+                    ->where('id_sucursal', $sucursal->id)
+                    ->join('bodega','bodegas_sucursal.id_bodega','bodega.id')
+                    ->join('sucursal','bodegas_sucursal.id_sucursal','sucursal.id')
+                    ->get();
+                foreach($bodegas as $bodega){
+                    $bodegas_sucursales[] = $bodega;
+                }
+            }
+
+        if($institucion->id_tipo_institucion == 3){
+
+
+
+                return view('app.laboratorio.bodega.traspasos',[
+                    'institucion' => $institucion,
+                    'sucursales' => $sucursales,
+                    'bodegas_sucursales' => $bodegas_sucursales
+                ]);
+        }
+        return view('app.bodega.traspasos',[
+            'institucion' => $institucion,
+            'sucursales' => $sucursales,
+            'bodegas_sucursales' => $bodegas_sucursales
+        ]);
+    }
+
+    public function devoluciones(){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+
+        $sucursales = Sucursal::where('id_institucion', $institucion->id)->get();
+        $bodegas_sucursales = [];
+        foreach($sucursales as $sucursal){
+            $bodegas = BodegasSucursal::select('bodegas_sucursal.*','bodega.nombre as bodega','sucursal.nombre as sucursal')
+                ->where('id_sucursal', $sucursal->id)
+                ->join('bodega','bodegas_sucursal.id_bodega','bodega.id')
+                ->join('sucursal','bodegas_sucursal.id_sucursal','sucursal.id')
+                ->get();
+            foreach($bodegas as $bodega){
+                $bodegas_sucursales[] = $bodega;
+            }
+        }
+
+        if($institucion->id_tipo_institucion == 3){
+
+
+                return view('app.laboratorio.bodega.devoluciones',[
+                    'institucion' => $institucion,
+                    'sucursales' => $sucursales,
+                    'bodegas_sucursales' => $bodegas_sucursales
+                ]);
+        }
+        return view('app.bodega.devoluciones',[
+            'institucion' => $institucion,
+            'sucursales' => $sucursales,
+            'bodegas_sucursales' => $bodegas_sucursales
+        ]);
     }
 
     public function editarProductoAlmacenado(Request $req){
         try {
-           
+
             //code...
             $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
             ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
@@ -582,7 +886,7 @@ class BodegasController extends Controller
         ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
         ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
         ->join('marcas_productos','productos.id_marca','marcas_productos.id')
-        ->where('compras_detalle.id',$req->id) 
+        ->where('compras_detalle.id',$req->id)
         ->first();
 
         $producto = Producto::find($compra_detalle->id_producto);
@@ -593,25 +897,28 @@ class BodegasController extends Controller
         // $producto->tipo = $req->tipo;
         // $producto->observaciones = $req->observaciones;
 
+        $compra_detalle->cantidad = $req->cantidad;
+
         // Si se envía una nueva imagen, reemplazar
         if ($req->hasFile('nueva_imagen')) {
             try {
                 $file = $req->file('nueva_imagen');
                 $nombreArchivo = time() . '_' . $file->getClientOriginalName();
                 $ruta = public_path('storage/images/farmacia');
-       
+
                 $file->move($ruta, $nombreArchivo);
                 $producto->image_path = 'storage/images/farmacia/' . $nombreArchivo;
             } catch (\Exception $e) {
                 //throw $th;
                 return 'Error al subir la imagen: ' . $e->getMessage();
             }
-            
+
         }
 
         $producto->save();
+        $compra_detalle->save();
 
-        return response()->json(['success' => true, 'producto' => $producto]);
+        return response()->json(['estado' => 'ok', 'producto' => $producto]);
     }
 
     public function eliminarRegistroTemperatura(Request $req){
@@ -652,7 +959,85 @@ class BodegasController extends Controller
     }
 
     public function reportes(){
-        return view('app.bodega.reportes');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+        if($institucion->id_tipo_institucion == 3){
+             return view('app.laboratorio.bodega.reportes',[
+                'institucion' => $institucion,
+             ]);
+        }
+        return view('app.bodega.reportes',[
+            'institucion' => $institucion,
+        ]);
     }
 
     public function reporteDiario(Request $req){
@@ -704,7 +1089,7 @@ class BodegasController extends Controller
         $v = view('app.bodega.reporte_diario',[
             'pedidos' => $productos_solicitados,
             'ingresos' => $productos_ingresados,
-            'fecha' => $fecha_formateada
+            'fecha' => $fecha_formateada,
         ])->render();
 
         return ['mensaje' => 'OK','vista' => $v];
@@ -1052,6 +1437,7 @@ class BodegasController extends Controller
             $bodega->email = $req->email;
             $bodega->tipos_productos = json_encode($req->tpos_productos);
             $bodega->tipos_productos_autorizacion = json_encode($req->cont_ca);
+            $bodega->distribucion = $req->distribucion ?? null;
             if($bodega->save()){
                 $bodegas = $this->dameBodegas($req->id_institucion);
                 foreach($bodegas as $bodega){
@@ -1259,5 +1645,74 @@ class BodegasController extends Controller
 
     public function eliminarProductoBodega(Request $req){
         return $req;
+    }
+
+    public function ultimaCompraProducto(Request $req){
+        $idCompraDetalle = $req->id_producto; // Es realmente un ID de Compras_detalle
+
+        $detalle = Compras_detalle::with(['compra.proveedor'])->find($idCompraDetalle);
+
+        if (!$detalle) {
+            return response()->json(['encontrado' => false]);
+        }
+
+        return response()->json([
+            'encontrado'        => true,
+            'fecha_compra'      => $detalle->fecha_compra,
+            'precio_compra'     => $detalle->precio_compra,
+            'cantidad'          => $detalle->cantidad,
+            'lote'              => $detalle->lote,
+            'fecha_vencimiento' => $detalle->fecha_vencimiento,
+            'observaciones'     => $detalle->observaciones,
+            'numero_factura'    => $detalle->compra->numero_factura ?? '-',
+            'proveedor'         => $detalle->compra->proveedor->nombre ?? '-',
+            'fecha_emision'     => $detalle->compra->fecha_emision ?? '-',
+            'total_final'       => $detalle->compra->total_final ?? 0,
+        ]);
+    }
+
+    public function solicitarProveedor(Request $req){
+        try {
+            $idProducto    = $req->id_producto;
+            $idInstitucion = $req->id_institucion;
+            $tipoPedido    = $req->tipo_pedido; // 'mismo' | 'nuevo'
+
+            $solicitud = new SolicitudProveedor();
+            $solicitud->id_producto    = $idProducto;
+            $solicitud->id_institucion = $idInstitucion;
+            $solicitud->id_usuario     = Auth::id();
+            $solicitud->tipo_pedido    = $tipoPedido;
+            $solicitud->estado         = 'pendiente';
+
+            if ($tipoPedido === 'nuevo') {
+                $solicitud->cantidad      = $req->cantidad;
+                $solicitud->urgencia      = $req->urgencia ?? 'normal';
+                $solicitud->observaciones = $req->observaciones;
+            } else {
+                // Repetir último pedido: copiar datos de la solicitud más reciente del mismo producto
+                $ultima = SolicitudProveedor::where('id_producto', $idProducto)
+                            ->where('id_institucion', $idInstitucion)
+                            ->latest()
+                            ->first();
+
+                if ($ultima) {
+                    $solicitud->cantidad      = $ultima->cantidad;
+                    $solicitud->urgencia      = $ultima->urgencia;
+                    $solicitud->observaciones = $ultima->observaciones;
+                } else {
+                    // No existe pedido previo, se registra como nuevo sin especificaciones
+                    $solicitud->cantidad      = null;
+                    $solicitud->urgencia      = 'normal';
+                    $solicitud->observaciones = 'Solicitud automática por stock bajo (sin pedido previo)';
+                }
+            }
+
+            $solicitud->save();
+
+            return response()->json(['mensaje' => 'OK', 'id' => $solicitud->id]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

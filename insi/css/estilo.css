@@ -1,3 +1,24 @@
-body{
+html {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
   margin-top: 15px;
+}
+
+/* ── Modales de agendamiento: body fijo con scroll interno ── */
+#modalAgendarHora .modal-content,
+#modalAgendarHoraExamen .modal-content {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#modalAgendarHora .modal-body,
+#modalAgendarHoraExamen .modal-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  max-height: calc(90vh - 58px); /* 58px = altura del modal-header */
 }

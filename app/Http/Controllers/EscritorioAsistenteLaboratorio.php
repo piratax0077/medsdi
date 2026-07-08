@@ -19,10 +19,11 @@ class EscritorioAsistenteLaboratorio extends Controller
     /*Asistente Centro Medico*/
     public function index()
     {
-   
+
         $array_data = array();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
-      
+
+
         $region = Region::all();
         $prevision = Prevision::all();
 
@@ -30,7 +31,7 @@ class EscritorioAsistenteLaboratorio extends Controller
             return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
 
         $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
-     
+
         $profesion_oficio = ProfesionOficio::all();
 
         $filtro = array();
@@ -38,12 +39,13 @@ class EscritorioAsistenteLaboratorio extends Controller
         $filtro[] = array('estado',2) ;// contrato activo
         $filtro[] = array('id_empleado',$asistente->id) ;
         $contrato = ContratoDependiente::where($filtro)->first();
-  
+
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
 
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
             $profesionales = $lugares_atencion->profesionales()->get();
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();

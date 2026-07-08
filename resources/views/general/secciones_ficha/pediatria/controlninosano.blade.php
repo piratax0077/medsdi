@@ -53,8 +53,8 @@
 
                                             </div>
                                             <div class="col-sm-6 text-right">
-                                                <button type="button" id="{{ $cns_temp->alias }}_btn_limpiar" class="btn btn-sm btn-danger-light-c mr-2" onclick="limpiar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-x"></i> Limpiar</button>
-                                                <button type="button" id="{{ $cns_temp->alias }}_btn_guardar" class="btn btn-sm btn-info-light-c" onclick="registrar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-save"></i> Guardar</button>
+                                                <button type="button" id="{{ $cns_temp->alias }}_btn_limpiar" class="btn btn-sm btn-secondary mr-2" onclick="limpiar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-x"></i> Limpiar</button>
+                                                <button type="button" id="{{ $cns_temp->alias }}_btn_guardar" class="btn btn-sm btn-info" onclick="registrar_etapa_cns('{{ $cns_temp->alias }}')"><i class=" feather icon-save"></i> Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -66,7 +66,38 @@
             </div>
         </div>
     </div>
+
+    {{-- ============ TABLA RESUMEN: REGISTROS CNS DEL PACIENTE ============ --}}
+    <div class="row mt-3" id="cns_registros" style="display: none;">
+        <div class="col-sm-12 col-md-10 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="text-primary mb-0">Registros guardados del paciente</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover table-bordered" id="tabla_cns_registros">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Control / Etapa</th>
+                                    <th>Fecha registro</th>
+                                    <th>Campos con datos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_cns_registros">
+                                <tr id="cns_registros_vacio">
+                                    <td colspan="4" class="text-center text-muted">Sin registros para este paciente.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @include('general.secciones_ficha.pediatria.modals.modal_prev_accidentes')
 @include('general.secciones_ficha.pediatria.modals.imc_5_19_val_ref')
@@ -171,6 +202,8 @@
             registro_temp[id_campo] = valor_campo;
         });
 
+        console.log('📝 Datos a guardar:', registro_temp);
+
         var ficha_atencion = $('#id_fc').val();
         var id_profesional = $('#id_profesional_fc').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
@@ -178,10 +211,16 @@
         var id_cns_tipo = $('#'+seccion+'_id_cns_tipo').val();
         var id_cns_template = $('#'+seccion+'_id_cns_template').val();
         var nombre = $('#'+seccion+'_nombre').val();
-        var id_responsable = $('#id_responsable_fc').val();
+        // El responsable es el paciente mismo (menor/bebé) si no existe campo específico
+        var id_responsable = $('#id_responsable_fc').val() || id_paciente;
         let url = "{{ route('ficha.registro.cns') }}";
 
         var _token = CSRF_TOKEN;
+
+        console.log('🔑 Parámetros:', {
+            id_cns_tipo, id_cns_template, id_ficha_atencion: ficha_atencion,
+            id_paciente, nombre, seccion
+        });
 
         $.ajax({
 
@@ -203,7 +242,7 @@
         })
         .done(function(data)
         {
-            console.log(data);
+            console.log('✅ Respuesta del servidor:', data);
 
             if (data !== 'null')
             {
@@ -213,15 +252,19 @@
                         title: "Registro Control Niño Sano.",
                         text: nombre+"\nRegistro Exitoso.",
                         icon: "success",
+                    }).then(() => {
+                        // Recargar datos sin bloquear
+                        cargarCns();
                     });
                 }
                 else
                 {
                     swal({
                         title: "Registro Control Niño Sano.",
-                        text: nombre+"\nFalla en Registro\nIntente nuevamente.",
+                        text: nombre+"\nError: " + (data.msj || 'Falla en Registro') + "\nIntente nuevamente.",
                         icon: "error",
                     });
+                    console.error('❌ Error en registro:', data);
                 }
             }
             else
@@ -234,7 +277,12 @@
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
+            console.error('❌ Error AJAX:', jqXHR, ajaxOptions, thrownError);
+            swal({
+                title: "Error en la solicitud",
+                text: "Error: " + (jqXHR.responseJSON?.message || thrownError) + "\nRevise la consola para más detalles.",
+                icon: "error",
+            });
         });
     }
 
@@ -246,29 +294,91 @@
             var datos = [];
         @endif
 
-        console.log(datos);
+        console.log('📋 Registros CNS del paciente encontrados:', datos);
+
+        var $tbody = $('#tbody_cns_registros');
+        $tbody.empty();
+
+        if (!datos || datos.length === 0) {
+            console.log('ℹ️ El paciente no tiene registros CNS guardados.');
+            $tbody.html('<tr><td colspan="4" class="text-center text-muted">Sin registros para este paciente.</td></tr>');
+            return;
+        }
+
+        var filas = 0;
 
         $.each(datos, function (key, value)
         {
-            /** desactivar botones */
-            var alias = value.cns_tipo_template.alias;
-            $('#'+alias+'_btn_limpiar').attr('disabled', true);
-            $('#'+alias+'_btn_guardar').attr('disabled', true);
+            /** El registro debe tener template asociado para saber a qué pestaña pertenece */
+            if (!value.cns_tipo_template || !value.cns_tipo_template.alias) {
+                console.warn('⚠️ Registro CNS sin template asociado (omitido):', value);
+                return true; // continue
+            }
 
-            /** cargar datos */
-            var temp = $.parseJSON(value.cuerpo);
+            var alias = value.cns_tipo_template.alias;
+            var nombreControl = value.cns_tipo_template.nombre || value.nombre || alias;
+            console.log('📌 Cargando datos para sección:', alias, '(registro #' + value.id + ')');
+
+            /** El cuerpo puede venir como string JSON o como objeto ya parseado */
+            var temp;
+            try {
+                temp = (typeof value.cuerpo === 'string') ? $.parseJSON(value.cuerpo) : value.cuerpo;
+            } catch (e) {
+                console.error('❌ Cuerpo JSON inválido en registro #' + value.id, value.cuerpo, e);
+                return true; // continue
+            }
+
+            if (!temp) {
+                return true; // continue
+            }
+
+            /** Recolectar campos con datos reales para la tabla */
+            var camposConDatos = [];
+
             $.each(temp, function (key2, value2)
             {
-                $('#'+key2).val(value2);
-                var tipo_campo = $('#'+key2).prop('nodeName');
-                if(tipo_campo == 'SELECT')
-                {
-                    $('#'+key2).trigger('change');
-                }
+                var $campo = $('#'+key2);
+                var existe = $campo.length > 0;
+                var cargado = (value2 !== '' && value2 !== null && value2 !== '1');
 
-                $('#'+key2).attr('disabled', true);
+                if(cargado)
+                {
+                    camposConDatos.push(key2 + ': ' + value2);
+
+                    if(existe)
+                    {
+                        $campo.val(value2);
+                        var tipo_campo = $campo.prop('nodeName');
+                        if(tipo_campo == 'SELECT')
+                        {
+                            $campo.trigger('change');
+                        }
+                    }
+                }
             });
+
+            /** Fecha de registro */
+            var fecha = value.created_at ? value.created_at.replace('T', ' ').substring(0, 16) : '-';
+
+            /** Detalle de campos con datos */
+            var detalle = camposConDatos.length > 0
+                ? camposConDatos.join('<br>')
+                : '<span class="text-muted">Sin datos capturados</span>';
+
+            $tbody.append(
+                '<tr>' +
+                    '<td>' + value.id + '</td>' +
+                    '<td>' + nombreControl + '</td>' +
+                    '<td>' + fecha + '</td>' +
+                    '<td><small>' + detalle + '</small></td>' +
+                '</tr>'
+            );
+            filas++;
         });
+
+        if (filas === 0) {
+            $tbody.html('<tr><td colspan="4" class="text-center text-muted">Sin registros válidos para este paciente.</td></tr>');
+        }
     }
 
 </script>

@@ -5,7 +5,7 @@
             //imprimir la fecha y la hora actual
             $fecha = \Carbon\Carbon::parse(now());
             $fecha = $fecha->format('d-m-Y H:i');
-            echo $fecha.' '.\Auth::user()->name;
+            echo $fecha.' Responsable: <strong> '.\Auth::user()->name.'</strong>';
             @endphp
         </p>
     </div>

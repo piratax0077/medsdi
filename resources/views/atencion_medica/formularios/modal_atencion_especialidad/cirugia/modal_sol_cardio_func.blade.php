@@ -234,13 +234,8 @@
             let auto = 1; // o el valor real que quieras enviar
             let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
 
-            Fancybox.show(
-                [{
-                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
-                    type: "iframe",
-                    preload: false,
-                }, ]
-            );
+            ver_pdf_orden_examenes(id_ficha_atencion);
+             // $('#m_func_cardio').modal('hide');
     }
 
     function eliminarExamen(id,tipo, nombre_examen = null) {

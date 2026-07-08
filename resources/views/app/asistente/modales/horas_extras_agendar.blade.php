@@ -1,36 +1,42 @@
 {{-- modal agendar Hora Extra --}}
+{{-- modal agendar Hora Extra --}}
 <div class="modal fade" id="m_agendar_hora_extra" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="m_agendar_hora_extra" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1">Agendar Hora Extra</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_modal_he_agenda();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="form-row">
                     <div class="col-md-12">
                         <input type="hidden" name="m_agendar_hora_extra_agendar_id_paciente" id="m_agendar_hora_extra_agendar_id_paciente" value="">
                         <input type="hidden" name="m_agendar_hora_extra_prereserva" id="m_agendar_hora_extra_prereserva" value="0">
-                        <div class="col-md-6">
-                            <label class="mt-4">El Profesional atiende los dias <span id="m_agendar_hora_extra_dias_atencion" class="hljs-strong"></span></label>
+                        <div class="col-md-12 mb-3">
+                            <div class="alert alert-primary f-14" role="alert">
+                              El Profesional atiende los días  <span id="m_agendar_hora_extra_dias_atencion" class="hljs-strong f-16"></span>
+                            </div>
+
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-3">
                             <div class="form-row">
-                                <div class="form-group col-md-12 mb-2 mt-0">
-                                    <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="date" name="m_agendar_hora_extra_fecha" onchange="carga_horas_profesional_horas_extras(this.value);" id="m_agendar_hora_extra_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
+                                <div class="form-group col-md-12 mb-2 mt-3">
+                                    <label class="floating-label-activo-sm mb-0">Seleccione una fecha</label>
+                                    <input class="form-control" type="date" name="m_agendar_hora_extra_fecha" onchange="carga_horas_profesional_horas_extras(this.value);" id="m_agendar_hora_extra_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?> />
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-12 mt-4">
-                            <div class="row">
+                            <div class="form-row">
                                 <div class="col-md-12 text-center">
-                                    <h6 class="text-petroleo" id="m_agendar_hora_extra_fecha_seleccionada"></h6>
+                                    <h5 class="mb-3 text-c-blue" id="m_agendar_hora_extra_fecha_seleccionada"></h5>
                                 </div>
-                                <div class="col-md-12 mx-auto" >
-                                    <div class="row" id="m_agendar_hora_extra_lista_horas">
+                                <div class="col-md-12 mx-auto">
+                                    <div class="form-row">
+                                        <div class="col-12 text-center" id="m_agendar_hora_extra_lista_horas">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -39,13 +45,14 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <!--<div class="modal-footer">
                 {{-- <button type="button" class="btn btn-danger align-middle" onclick="agendar_lista_epera()"; data-dismiss="modal">Eliminar</button> --}}
                 <button type="button" class="btn btn-info align-middle" onclick="cerrar_modal_he_agenda()"; data-dismiss="modal">Cerrar</button>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>
+
 
 {{--  MODAL INFORMACION DE PACIENTE PARA AGENDA  --}}
 <!-- MODAL AGREGAR HORA MEDICA -->
@@ -53,7 +60,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
-                <h5 class="modal-title text-white text-center">Tomar horadd2</h5>
+                <h5 class="modal-title text-white text-center">Tomar hora</h5>
                 <button id="le_cerrar_tomar_hora" type="button" class="close text-white close_he_agenda_agregar_paciente" onclick="$('#he_agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -126,13 +133,13 @@
 
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label class="floating-label">Descripción Reserva</label>
+                                <label class="floating-label-activo-sm">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="he_reserva_hora_descripcion" id="he_reserva_hora_descripcion">
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger close_he_agenda_agregar_paciente" onclick="$('#he_agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
-                            <button type="button" id="he_reserva_hora_btn_agendar" onclick="agendar_hora_le();" class="btn btn-info">Agendar Hora</button>
+                            <button type="button" class="btn btn-danger close_he_agenda_agregar_paciente" onclick="$('#he_agenda_agregar_paciente').modal('hide');" data-dismiss="modal"><i class="feather icon-x"></i>  Cancelar</button>
+                            <button type="button" id="he_reserva_hora_btn_agendar" onclick="agendar_hora_le();" class="btn btn-info"><i class="feather icon-check"></i> Agendar Hora</button>
 
                         </div>
                     </div>
@@ -177,7 +184,7 @@
             data: {
                 //_token: _token,
                 id_profesional: id_profesional,
-                lugar_atencion: id_lugar_atencion
+                lugar_atencion: id_lugar_atencion,
             },
         })
         .done(function(data) {
@@ -234,7 +241,7 @@
                 }
                 else
                 {
-                    $('#m_agendar_hora_extra_dias_atencion').html('NO INFORMADOS');
+                    $('#m_agendar_hora_extra_dias_atencion').html('El profesional no tiene configurada su agenda de examenes en este lugar de atencion');
                     // $('#m_agendar_hora_extra_fecha').attr('disabled',true);
                     $('#m_agendar_hora_extra_fecha_seleccionada').html('');
                 }

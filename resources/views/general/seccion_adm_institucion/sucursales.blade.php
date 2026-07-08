@@ -78,6 +78,11 @@
                                         <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="hor_sucursal({{ $suc->id_institucion }}, {{ $suc->id_lugar_atencion }}, {{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Horario de sucursal"><img class="wid-20" src="{{ asset('images/icons/reloj.png') }}"></button>
                                         <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="adm_boxes({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Administrar boxes"><img class="wid-20" src="{{ asset('images/icons/boxes.png') }}"></button>
                                         <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="adm_bodegas({{ $suc->id_institucion }},{{ $suc->id_lugar_atencion }},{{ $suc->id }});" data-toggle="tooltip" data-placement="top" title="Administrar bodegas"><i class="feather icon-box"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_sucursal({{ $suc->id }})" data-toggle="tooltip" data-placement="top" title="Eliminar sucursal"><i class="feather icon-trash-2"></i></button>
+                                        <div class="custom-control custom-switch d-inline-block ml-2">
+                                            <input type="checkbox" class="custom-control-input" id="esp-{{ $suc->id }}" data-id="{{ $suc->id }}" onchange="checkSucChanged(this)" {{ $suc->estado == 1 ? 'checked' : '' }}>
+                                            <label class="custom-control-label" for="esp-{{ $suc->id }}"></label>
+                                        </div>
                                     </td>
                                 </tr>
 
@@ -1787,5 +1792,96 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+    }
+
+    function checkSucChanged(checkbox) {
+        let isChecked = checkbox.checked;
+        let sucursalId = checkbox.getAttribute('data-id');
+        console.log('Sucursal ID:', sucursalId, 'Checked:', isChecked);
+
+        let url = "{{ route('laboratorio.sucursal.cambiar.estado') }}";
+        let data = {
+            id_sucursal: sucursalId,
+            estado: isChecked ? 1 : 0,
+            _token: CSRF_TOKEN,
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1) {
+                swal({
+                    title: "Sucursal",
+                    text: "Estado de sucursal actualizado correctamente",
+                    icon: "success",
+                });
+            } else {
+                swal({
+                    title: "Error",
+                    text: "Error al actualizar el estado de la sucursal",
+                    icon: "error",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function eliminar_sucursal(id_sucursal) {
+        swal({
+                title: "Eliminar Sucursal",
+                text: "¿Está seguro que desea eliminar la sucursal?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_sucursal(id_sucursal);
+                }
+            });
+    }
+
+    function confirmar_eliminar_sucursal(id_sucursal) {
+        let url = "{{ route('laboratorio.sucursal.eliminar') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id: id_sucursal,
+                _token: CSRF_TOKEN,
+            },
+        })
+        .done(function(data)
+        {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                swal({
+                    title: "Eliminar Sucursal",
+                    text: "Sucursal eliminada con éxito",
+                    icon: "success"
+                })
+                setTimeout(function() {
+                    location.reload()
+                }, 500);
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: data.mensaje,
+                    icon: "error"
+                })
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     }
 </script>

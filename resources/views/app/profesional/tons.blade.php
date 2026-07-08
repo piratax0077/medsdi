@@ -10,9 +10,8 @@
                     <div class="row align-items-center">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Tons</h5>
                             </div>
-                            <ul class="breadcrumb">
+                            <ul class="breadcrumb mt-3">
                                 <li class="breadcrumb-item">
                                     @if(Auth::user()->hasRole('Profesional'))
                                         <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
@@ -54,7 +53,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h4 class="text-white f-20 d-inline">Tons</h4>
                                         <button type="button" class="btn btn-light btn-xs float-md-right d-inline" data-toggle="modal" data-target="#nueva_tons">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Busca y registro TONS
+                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Registrar TONS
                                         </button>
                                     </div>
                                 </div>
@@ -74,7 +73,7 @@
                                         <th class="align-middle">Lugar de atención</th>
                                         <th class="align-middle">Rut</th>
                                         <th class="align-middle">Tons</th>
-                                        <th class="align-middle">Deshabilitar</th>
+                                        <th class="align-middle">Horario</th>
                                         <th class="align-middle">Eliminar</th>
                                     </tr>
                                 </thead>
@@ -113,8 +112,6 @@
 
                                         @endforeach
                                     @endif
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -138,13 +135,15 @@
                 <div class="modal-body">
                     <input type="hidden" name="id_tons" id="id_tons" value="">
                     <div class="form-row">
-                        <div class="col-12">
+                        <div class="col-sm-12 col-md-8">
                             <div class="form-group fill">
                                 <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
                                 <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" oninput="formatoRut(this)">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
+                         <div class="col-sm-12 col-md-4 mx-auto">
+                            <button type="button" class="btn btn-info btn-sm btn-block" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
+                        </div>
                     </div>
 
                     <div class="form-row d-none" id="contenedor_tons">
@@ -239,8 +238,8 @@
                                 <input class="form-control form-control-sm" name="telefono_nueva_tons" id="telefono_nueva_tons" type="text">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="registrar_tons()">Registrar</button>
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 text-center mx-auto">
+                            <button type="button" class="btn btn-info my-3" onclick="registrar_tons()"><i class="feather icon-check"></i> Registrar</button>
                         </div>
 
                     </div>
@@ -319,15 +318,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons()">Asociar a mi equipo</button>
+                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 text-center">
+                            <button type="button" class="btn btn-info" onclick="solicitar_tons()">Asociar a mi equipo</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <!--<div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                     <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
-                </div>
+                </div>-->
 
             </div>
         </div>

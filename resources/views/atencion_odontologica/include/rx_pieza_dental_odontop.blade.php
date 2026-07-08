@@ -84,59 +84,15 @@
 if (typeof dropzoneOdontop === 'undefined') {
     var dropzoneOdontop;
 }
-
-// Función para inicializar Dropzone que se ejecutará inmediatamente y también en document.ready
-function initializeDropzonesOnLoad() {
-    console.log("Inicializando Dropzone para vista cargada dinámicamente...");
-
-    // Esperar un momento para que el DOM se renderice completamente
-    setTimeout(function() {
-        initDropzoneOdontop();
-    }, 100);
-}
-
-// Ejecutar inmediatamente para vistas cargadas dinámicamente
-initializeDropzonesOnLoad();
-
-// También ejecutar en document.ready para vistas cargadas normalmente
 $(document).ready(function(){
-    console.log("Document ready - verificando Dropzone...");
-    if (!dropzoneOdontop) {
-        initDropzoneOdontop();
-    }
+    // Configuración de Dropzone
+    initDropzoneOdontop();
 });
 
 function initDropzoneOdontop() {
-    // Verificar que el elemento existe antes de inicializar
-    const dropzoneElement = document.querySelector("#mis-imagenes-imagenes-rx-dental_end");
-    if (!dropzoneElement) {
-        console.warn("Elemento Dropzone #mis-imagenes-imagenes-rx-dental_end no encontrado. Reintentando...");
-        // Reintentar después de un momento
-        setTimeout(function() {
-            const retryElement = document.querySelector("#mis-imagenes-imagenes-rx-dental_end");
-            if (retryElement) {
-                console.log("Elemento Dropzone encontrado en el reintento. Inicializando...");
-                initDropzoneOdontop();
-            } else {
-                console.error("Elemento Dropzone no se pudo encontrar después del reintento.");
-            }
-        }, 500);
-        return;
-    }
-
-    console.log("Elemento Dropzone encontrado. Inicializando...");
-
-    // Destruir instancia anterior si existe
     if (dropzoneOdontop) {
-        console.log("Destruyendo instancia anterior de Dropzone...");
         dropzoneOdontop.destroy();
         dropzoneOdontop = null;
-    }
-
-    // Verificar que Dropzone está disponible
-    if (typeof Dropzone === 'undefined') {
-        console.error("Dropzone library no está cargada.");
-        return;
     }
 
     dropzoneOdontop = new Dropzone("#mis-imagenes-imagenes-rx-dental_end", {

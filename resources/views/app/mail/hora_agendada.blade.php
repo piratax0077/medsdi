@@ -1,117 +1,402 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Hora Agendada</title>
 </head>
 
-<body>
-    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+<body style="margin:0; padding:0; background-color:#eef3f9;">
+
+    <table border="0" width="100%" cellspacing="0" cellpadding="0" style="background-color:#eef3f9;">
         <tbody>
             <tr>
-                <td style="background-color: #ffffff;" align="center" valign="top" bgcolor="#ffffff"><br>
-                    <table style="width: 100%px; max-width: 600px;" border="0" width="100%" cellspacing="0" cellpadding="0">
+                <td align="center" valign="top" style="padding:45px 15px;">
+
+                    <!-- CONTENEDOR -->
+                    <table border="0"
+                        width="100%"
+                        cellspacing="0"
+                        cellpadding="0"
+                        style="
+                            max-width:640px;
+                            background:#ffffff;
+                            border-radius:30px;
+                            overflow:hidden;
+                            box-shadow:0 20px 60px rgba(15,23,42,0.10);
+                        ">
+
                         <tbody>
-                           <!-- <tr>
-                                <td style="height: 11px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
-                                </td>
-                            </tr>-->
+
+                            <!-- TOP LINE -->
                             <tr>
-                                <td style="text-align: center;">
-                                    <img style="width: 98px; margin-bottom: 20px; margin-top: 20px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
-                                </td>
+                                <td style="
+                                    height:7px;
+                                    background:linear-gradient(90deg,#1a49a3 0%, #31bebe 100%);
+                                "></td>
                             </tr>
+
+                            <!-- HEADER -->
                             <tr>
-                                <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 600; color: #0071bc;">Estimado/a Paciente: <br><br>{{ $detalle['body']['nombre_paciente'] }}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px; border-radius:20px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; font-weight: 500; color: #ffffff;">Su hora ha sido agendada con éxito</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" style="font-family: Helvetica, Arial, sans-serif; font-size: 1.2rem; color: #3366CC; line-height: 10px;">
-                                    <span style="display: inline-block; margin-top: 30px;">
-                                        <img style="width: 2.5rem;" src="https://www.med-sdi.cl/images/email/calendario_1.png" alt="Día">
-                                        <p style="margin-top:5px"><b>{{ $detalle['body']['fecha'] }}</b></p>
-                                    </span>
-                                    <br>
-                                    <span style="display: inline-block; margin-top: 30px;">
-                                        <img style="width: 2.5rem;" src="https://www.med-sdi.cl/images/email/reloj_1.png" alt="Hora">
-                                        <p style="margin-top:5px"><b>{{ $detalle['body']['hora'] }}</b></p>
-                                    </span>
+                                <td align="center"
+                                    style="
+                                        padding:42px 40px 18px 40px;
+                                        background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+                                    ">
+
+                                    <img style="width:98px;"
+                                        src="https://www.med-sdi.cl/images/logo_pais_vertical.png"
+                                        alt="SDI">
+
                                 </td>
                             </tr>
+
+                            <!-- HERO -->
                             <tr>
-                                <td height="20"> </td>
-                            </tr>
-                            <tr>
-                            <td style="background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); padding: 0px 24px 0px 24px; border-top-right-radius:20px; border-top-left-radius:20px; margin-top:7px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 600; color: #ffffff;">INFORMACIÓN SOBRE TU CITA</p>
-                                </td>
-                            </td>
-                            </tr>
-                            </tr>
-                            <tr>
-                                <td style="background-color: #f3f6ff; padding: 0px 11px 0px 0px; border-bottom-right-radius:20px; border-bottom-left-radius:20px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 14px; line-height: 25px; text-align: left; color: #424242; margin-left: 20px;">
-                                        <b style="color:##0071bc!important;">Profesional:</b> <br>{{ $detalle['body']['profesional_nombre'] }}<br>
-                                        <b style="color:##0071bc!important;">Profesión:</b><br> {{ $detalle['body']['profesional_especialidad'] }} <br>
-                                        <b style="color:##0071bc!important;">Especialidad:</b><br> {{ $detalle['body']['profesional_tipo_especialidad'] }} <br>
-                                        @if(isset($detalle['body']['profesional_sub_tipo_especialidad']))
-                                            <b style="color:##0071bc!important;">Tipo Especialidad:</b> <br>{{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br>
-                                        @endif
-                                        <b style="color:##0071bc!important;">Lugar de Atención:</b><br> {{ $detalle['body']['lugar_atencion'] }}<br>
-                                        <b style="color:##0071bc!important;">Dirección:</b><br> {{ $detalle['body']['direccion'] }}
+                                <td style="
+                                    padding:0 48px 35px 48px;
+                                    text-align:center;
+                                ">
+
+                                    <p style="
+                                        margin:0;
+                                        font-family:Helvetica, Arial, sans-serif;
+                                        font-size:13px;
+                                        letter-spacing:2px;
+                                        text-transform:uppercase;
+                                        color:#31bebe;
+                                        font-weight:700;
+                                    ">
+                                        Confirmación de Hora
                                     </p>
+
+                                    <h1 style="
+                                        margin:18px 0 18px 0;
+                                        font-family:Helvetica, Arial, sans-serif;
+                                        font-size:20px;
+                                        line-height:44px;
+                                        letter-spacing:-1px;
+                                        color:#0f172a;
+                                        font-weight:700;
+                                    ">
+
+                                        Hola {{ $detalle['body']['nombre_paciente'] }}
+
+                                    </h1>
+
+                                    <p style="
+                                        margin:0;
+                                        font-family:Helvetica, Arial, sans-serif;
+                                        font-size:18px;
+                                        line-height:32px;
+                                        color:#475569;
+                                    ">
+
+                                        Su hora médica ha sido agendada exitosamente.
+
+                                        <span style="
+                                            color:#1a49a3;
+                                            font-weight:700;
+                                        ">
+                                            
+                                        </span>
+
+                                    </p>
+
                                 </td>
                             </tr>
+
+                            <!-- CARD FECHA Y HORA -->
                             <tr>
-                                <td height="20"> </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 25px; text-align: center; color: #3366CC; margin-top:7px;"><b>¡RECUERDE CONFIRMAR SU HORA PREVIAMENTE Y LLEGAR 15 MINUTOS ANTES A SU CITA!</b></p>
-                                   <!-- <p style="font-family: Helvetica, Arial, sans-serif; font-size: 20px; line-height: 25px; text-align: center; color: #3366CC;"><b>¡RECUERDE LLEGAR 15 MINUTOS ANTES A SU CITA!</b></p>-->
+                                <td style="padding:0 35px;">
+
+                                    <table border="0"
+                                        width="100%"
+                                        cellspacing="0"
+                                        cellpadding="0"
+                                        style="
+                                            border-radius:24px;
+                                            overflow:hidden;
+                                            background:linear-gradient(135deg,#1a49a3 0%, #31bebe 100%);
+                                        ">
+
+                                        <tbody>
+
+                                            <tr>
+                                                <td align="center"
+                                                    style="
+                                                        padding:35px 20px;
+                                                    ">
+
+                                                    <table border="0"
+                                                        cellspacing="0"
+                                                        cellpadding="0">
+
+                                                        <tbody>
+                                                            <tr>
+
+                                                                <!-- FECHA -->
+                                                                <td align="center"
+                                                                    style="padding:0 25px;">
+
+                                                                    <img style="
+                                                                        width:42px;
+                                                                        margin-bottom:12px;
+                                                                    "
+                                                                    src="https://www.med-sdi.cl/images/email/calendario_1.png"
+                                                                    alt="Fecha">
+
+                                                                    <p style="
+                                                                        margin:0;
+                                                                        font-family:Helvetica, Arial, sans-serif;
+                                                                        font-size:14px;
+                                                                        color:#dbeafe;
+                                                                    ">
+                                                                        Fecha
+                                                                    </p>
+
+                                                                    <p style="
+                                                                        margin:8px 0 0 0;
+                                                                        font-family:Helvetica, Arial, sans-serif;
+                                                                        font-size:17px;
+                                                                        color:#ffffff;
+                                                                        font-weight:700;
+                                                                    ">
+                                                                        {{ $detalle['body']['fecha'] }}
+                                                                    </p>
+
+                                                                </td>
+
+                                                                <!-- DIVIDER -->
+                                                                <td width="1"
+                                                                    style="
+                                                                        background:rgba(255,255,255,0.2);
+                                                                    ">
+                                                                </td>
+
+                                                                <!-- HORA -->
+                                                                <td align="center"
+                                                                    style="padding:0 25px;">
+
+                                                                    <img style="
+                                                                        width:42px;
+                                                                        margin-bottom:12px;
+                                                                    "
+                                                                    src="https://www.med-sdi.cl/images/email/reloj_1.png"
+                                                                    alt="Hora">
+
+                                                                    <p style="
+                                                                        margin:0;
+                                                                        font-family:Helvetica, Arial, sans-serif;
+                                                                        font-size:14px;
+                                                                        color:#dbeafe;
+                                                                    ">
+                                                                        Hora
+                                                                    </p>
+
+                                                                    <p style="
+                                                                        margin:8px 0 0 0;
+                                                                        font-family:Helvetica, Arial, sans-serif;
+                                                                        font-size:17px;
+                                                                        color:#ffffff;
+                                                                        font-weight:700;
+                                                                    ">
+                                                                        {{ $detalle['body']['hora'] }}
+                                                                    </p>
+
+                                                                </td>
+
+                                                            </tr>
+                                                        </tbody>
+
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
                                 </td>
                             </tr>
+
+                            <!-- ESPACIO -->
                             <tr>
-                                <td height="20"> </td>
+                                <td height="30"></td>
                             </tr>
-                           <!-- <tr>
-                                <td inline-block style="text-align: center;">
-                                    <img style="width: 50px; margin-bottom: 5px; margin-top: 50px; margin-right: 10px;" src="https://www.med-sdi.cl/images/logo_pais_vertical.png" alt="Medichile">
-                                    <img style="width: 90px; margin-bottom: 5px; margin-top: 50px;" src="https://www.med-sdi.cl/images/logo.png" alt="Medichile">
-                                </td>
-                            </tr>-->
+
+                            <!-- INFORMACION CITA -->
                             <tr>
-                                <td style="height: 6px; background-color: rgb(51,102,204); background: -moz-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(81deg, rgba(51,102,204,1) 0%, rgba(28,190,190,1) 100%);">
+                                <td style="padding:0 35px;">
+
+                                    <table border="0"
+                                        width="100%"
+                                        cellspacing="0"
+                                        cellpadding="0"
+                                        style="
+                                            background:#ffffff;
+                                            border:1px solid #e2e8f0;
+                                            border-radius:24px;
+                                            overflow:hidden;
+                                        ">
+
+                                        <tbody>
+
+                                            <!-- HEADER -->
+                                            <tr>
+                                                <td style="
+                                                    padding:22px 24px;
+                                                    background:#f8fbff;
+                                                    border-bottom:1px solid #e2e8f0;
+                                                ">
+
+                                                    <p style="
+                                                        margin:0;
+                                                        font-family:Helvetica, Arial, sans-serif;
+                                                        font-size:18px;
+                                                        color:#1a49a3;
+                                                        font-weight:700;
+                                                    ">
+                                                        Información de tu cita
+                                                    </p>
+
+                                                </td>
+                                            </tr>
+
+                                            <!-- CONTENIDO -->
+                                            <tr>
+                                                <td style="
+                                                    padding:28px 24px;
+                                                    font-family:Helvetica, Arial, sans-serif;
+                                                    font-size:15px;
+                                                    line-height:30px;
+                                                    color:#475569;
+                                                ">
+
+                                                    <b style="color:#1a49a3;">Profesional:</b><br>
+                                                    {{ $detalle['body']['profesional_nombre'] }}<br><br>
+
+                                                    <b style="color:#1a49a3;">Profesión:</b><br>
+                                                    {{ $detalle['body']['profesional_especialidad'] }}<br><br>
+
+                                                    <b style="color:#1a49a3;">Especialidad:</b><br>
+                                                    {{ $detalle['body']['profesional_tipo_especialidad'] }}<br><br>
+
+                                                    @if(isset($detalle['body']['profesional_sub_tipo_especialidad']))
+                                                        <b style="color:#1a49a3;">Tipo Especialidad:</b><br>
+                                                        {{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br><br>
+                                                    @endif
+
+                                                    <b style="color:#1a49a3;">Lugar de Atención:</b><br>
+                                                    {{ $detalle['body']['lugar_atencion'] }}<br><br>
+
+                                                    <b style="color:#1a49a3;">Dirección:</b><br>
+                                                    {{ $detalle['body']['direccion'] }}
+
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
                                 </td>
                             </tr>
+
+                            <!-- ALERTA -->
                             <tr>
-                                <td style="text-align: center;" align="center">
-                                    <table border="0" width="95%" cellspacing="0" cellpadding="0" align="center">
+                                <td style="padding:35px 40px 15px 40px;">
+
+                                    <table border="0"
+                                        width="100%"
+                                        cellspacing="0"
+                                        cellpadding="0"
+                                        style="
+                                            background:#fff7ed;
+                                            border:1px solid #fed7aa;
+                                            border-radius:20px;
+                                        ">
+
                                         <tbody>
                                             <tr>
-                                                <td style="font-family: Helvetica, Arial, sans-serif;" align="center" valign="top">
-                                                    <p style="text-align: center; color: #999999; font-size: 12px; font-weight: normal; line-height: 20px;">Este correo electrónico fue enviado por <a style="color: #000;" href="https://med-sdi.cl">Salud Digital Integrada</a> <br> <b>Salud Digital Integrada  &copy; <script>document.write(new Date().getFullYear())</script> </b></p>
+                                                <td style="
+                                                    padding:22px 24px;
+                                                    text-align:center;
+                                                ">
+
+                                                    <p style="
+                                                        margin:0;
+                                                        font-family:Helvetica, Arial, sans-serif;
+                                                        font-size:15px;
+                                                        line-height:28px;
+                                                        color:#9a3412;
+                                                        font-weight:700;
+                                                    ">
+
+                                                        ¡Recuerde confirmar previamente su hora y llegar 15 minutos antes a su cita!
+
+                                                    </p>
+
                                                 </td>
-                                                <td width="30"> </td>
-                                                <td width="16"> </td>
                                             </tr>
                                         </tbody>
+
                                     </table>
+
                                 </td>
                             </tr>
+
+                            <!-- FOOTER -->
+                            <tr>
+                                <td style="
+                                    background:#f1f5f9;
+                                    border-top:1px solid #dbe4ee;
+                                    padding:45px 40px;
+                                    text-align:center;
+                                ">
+
+                                    <p style="
+                                        margin:0;
+                                        font-family:Helvetica, Arial, sans-serif;
+                                        font-size:13px;
+                                        line-height:26px;
+                                        color:#64748b;
+                                    ">
+
+                                        Este correo fue enviado por
+
+                                        <span style="
+                                            
+                                            font-weight:700;
+                                        ">
+                                            Salud Digital Integrada
+                                        </span>
+
+                                        <br>
+
+                                        <span style="
+                                            color:#94a3b8;
+                                            font-size:12px;
+                                        ">
+                                            ©{{ date('Y') }} SDI · Todos los derechos reservados
+                                        </span>
+
+                                    </p>
+
+                                </td>
+                            </tr>
+
                         </tbody>
+
                     </table>
+
                 </td>
             </tr>
         </tbody>
     </table>
+
 </body>
 
 </html>

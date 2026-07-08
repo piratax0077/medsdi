@@ -116,7 +116,11 @@
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
-
+    <!-- Summernote CSS -->
+    <link href="{{ asset('summernote/summernote-lite.min.css') }}" rel="stylesheet">
+    <!-- Summernote JS -->
+    <script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
+    <script src="{{ asset('summernote/lang/summernote-es-ES.js') }}"></script>
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
     <script src="{{ asset('js/formularios_wizard.js') }}"></script>
@@ -215,7 +219,15 @@
             $('#m_remuneraciones').modal('show');
         }
 
+    /* agregar proveedores*/
+function agregar_proveedor() {
+	$('#agregar_proveedor_cm').modal('show');
+}
 
+/* editar proveedores*/
+function editar_proveedor() {
+    $('#editar_proveedor_cm').modal('show');
+}
 
         function buscar_ciudad(id_ciudad=0) {
 
@@ -823,6 +835,7 @@
     @yield('page-script')
     @yield('js-profesionales')
     <script src="{{ asset('js/validaRut.js') }}?t={{ time() }}"></script>
+
 </body>
 
 </html>

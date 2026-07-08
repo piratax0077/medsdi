@@ -6,9 +6,9 @@
             <div class="page-header">
                 <div class="page-block">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8 d-inline">
                             <div class="page-header-title">
-                                <h5 class="font-weight-bolder">Editar perfil</h5>
+                                <h5 class="font-weight-bolder"></h5>
                             </div>
                             <ul class="breadcrumb mb-4">
                                 <li class="breadcrumb-item">
@@ -17,9 +17,46 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('paciente.perfil') }}">Editar perfil</a>
+                                    <a href="{{ ROUTE('paciente.perfil') }}">Mi perfil</a>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="col-md-4 float-right">
+                        <!--BARRA DE PROGRESO PARA PERFIL-->
+                        <div class="row align-items-center mb-3">
+
+                        <div class="col-auto">
+                            <div style="
+                                width:60px;
+                                height:60px;
+                                border-radius:50%;
+                                background:#eaf4ff;
+                                color:#003ac9;
+                                display:flex;
+                                align-items:center;
+                                justify-content:center;
+                                font-weight:700;
+                                font-size:18px;">
+                                82%
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <h6 class="mb-1 text-white">
+                                Perfil Incompleto
+                            </h6>
+
+                            <div class="progress mb-2" style="height:8px;">
+                                <div class="progress-bar bg-info"
+                                     style="width:82%;">
+                                </div>
+                            </div>
+
+                            <small class="text-white">
+                               Complete su perfil para facilitar su atención médica.
+                            </small>
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -34,7 +71,9 @@
                                         <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <div class="profile-dp">
                                                 <div class="position-relative d-inline-block">
-                                                    <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/usuario.svg') }}" alt="User image">
+                                                    <img class="img-radius img-fluid wid-100" id="profile-image"
+                                                        src="{{ $paciente->foto_perfil ? asset('storage/' . $paciente->foto_perfil) : asset('images/iconos/usuario.svg') }}"
+                                                        alt="User image">
                                                 </div>
                                                 <div class="overlay">
                                                     <span>Actualizar</span>
@@ -42,26 +81,35 @@
                                             </div>
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#"><i class="feather icon-upload-cloud mr-2"></i>Cambiar imagen de perfil</a>
-                                            <a class="dropdown-item" href="#"><i class="feather icon-trash-2 mr-2"></i>Eliminar imagen</a>
+                                             <a class="dropdown-item" href="#" onclick="document.getElementById('foto-perfil-input').click()">
+                                                <i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil
+                                            </a>
+                                            <a class="dropdown-item" href="#" onclick="eliminar_foto_perfil()">
+                                                <i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía
+                                            </a>
                                         </div>
+                                        <!-- Input file oculto para seleccionar imagen -->
+                                    <input type="file" id="foto-perfil-input" accept="image/*" style="display: none;" onchange="cambiar_foto_perfil(this)">
+
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="col-md-12 mt-md-2 m-0">
                                 <ul class="nav nav-tabs profile-tabs nav-fill mt-1" id="myTab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true">Información personal</a>
+                                        <a class="nav-link text-reset active" id="personal-tab" data-toggle="tab" href="#personal" role="tab" aria-controls="personal" aria-selected="true"><i class="feather icon-user"></i> Información personal</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false">Contactos de emergencia</a>
+                                        <a class="nav-link text-reset" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false"><i class="feather icon-phone"></i> Contactos de emergencia</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="datmedicos-tab" data-toggle="tab" href="#datmedicos" role="tab" aria-controls="datmedicos" aria-selected="false">Datos médicos</a>
+                                        <a class="nav-link text-reset" id="datmedicos-tab" data-toggle="tab" href="#datmedicos" role="tab" aria-controls="datmedicos" aria-selected="false"><i class="feather icon-plus-circle"></i> Datos médicos</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass" role="tab" aria-controls="pass" aria-selected="false">Contraseñas</a>
+                                        <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass" role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseñas</a>
                                     </li>
                                 </ul>
                                 <!--<ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
@@ -1117,9 +1165,9 @@
                                                         <div class="form-group row">
                                                             <div class="col-sm-10 col-form-label font-weight-bolder ml-0">¿Autoriza además entrar a datos confidenciales?</div>
                                                             @if ($paciente->auto_inf_confd)
-                                                                <div class="col-sm-2 my-auto ml-0" id="txt_auto_info_confd"><span class="text-success">SI</span></div>
+                                                                <div class="col-sm-2 my-auto ml-0" id="txt_auto_inf_confd"><span class="text-success">SI</span></div>
                                                             @else
-                                                                <div class="col-sm-2 my-auto ml-0" id="txt_auto_info_confd"><span class="text-danger">NO</span></div>
+                                                                <div class="col-sm-2 my-auto ml-0" id="txt_auto_inf_confd"><span class="text-danger">NO</span></div>
                                                             @endif
                                                         </div>
                                                     </form>
@@ -1254,7 +1302,7 @@
                                         </div>
                                         <!--CONTRASEÑA PERSONAL-->
                                         <div class="card-body pass_personal collapse show" id="pass_personal_1">
-                                            <form >
+                                            <form>
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="font-weight-bolder ml-0 mb-0">Contraseña actual</label>
@@ -2521,6 +2569,141 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
 
+        }
+
+        // Funciones para manejo de foto de perfil
+        function cambiar_foto_perfil(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Validar tipo de archivo
+                if (!file.type.startsWith('image/')) {
+                    swal({
+                        title: "Tipo de archivo no válido",
+                        text: "Por favor, selecciona un archivo de imagen válido.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    })
+                    return;
+                }
+
+                // Validar tamaño (ejemplo: máximo 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    swal({
+                        title: "Archivo demasiado grande",
+                        text: "El archivo es demasiado grande. El tamaño máximo es de 5MB.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+                    return;
+                }
+
+                // Mostrar preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-image').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Enviar al servidor
+                subir_foto_perfil(file);
+            }
+        }
+
+        function subir_foto_perfil(file) {
+            const formData = new FormData();
+            formData.append('foto_perfil', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            $.ajax({
+                url: '{{ route("paciente.actualizar.foto") }}', // Necesitas crear esta ruta
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        swal({
+                            title: "Foto actualizada",
+                            text: "Tu foto de perfil se ha actualizado correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+
+                        // Actualizar la imagen con la nueva URL si es necesario
+                        if (response.foto_url) {
+                            document.getElementById('profile-image').src = response.foto_url;
+                        }
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: response.message || 'Error al actualizar la foto',
+                            icon: "error",
+                            buttons: "Aceptar",
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    swal({
+                        title: "Error",
+                        text: "Error al subir la imagen. Inténtalo de nuevo.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                    });
+
+                    // Revertir la imagen si hay error
+                    document.getElementById('profile-image').src = '{{ $paciente->foto_perfil ? asset("storage/" . $paciente->foto_perfil) : asset("images/iconos/usuario.svg") }}';
+                }
+            });
+        }
+
+        function eliminar_foto_perfil() {
+            swal({
+                title: "¿Eliminar foto de perfil?",
+                text: "Esta acción no se puede deshacer",
+                icon: "warning",
+                buttons: ["Cancelar", "Eliminar"],
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: '{{ route("paciente.eliminar.foto") }}',
+                        method: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                swal({
+                                    title: "Foto eliminada",
+                                    text: "Tu foto de perfil se ha eliminado correctamente",
+                                    icon: "success",
+                                    buttons: "Aceptar",
+                                });
+                                document.getElementById('profile-image').src = '{{ asset("images/iconos/usuario.svg") }}';
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: response.message || 'Error al eliminar la foto',
+                                    icon: "error",
+                                    buttons: "Aceptar",
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            swal({
+                                title: "Error",
+                                text: "Error al eliminar la imagen. Inténtalo de nuevo.",
+                                icon: "error",
+                                buttons: "Aceptar",
+                            });
+                        }
+                    });
+                }
+            });
         }
 
     </script>

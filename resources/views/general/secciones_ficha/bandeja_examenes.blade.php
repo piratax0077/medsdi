@@ -103,7 +103,7 @@
                                                         <tr>
                                                             <td class="d-none">{{ $result_oct_par->id }}</td>
                                                             <td>{{ date('d-m-Y',strtotime($result_oct_par->fecha_ex)) }}</td>
-                                                            <td>{{ $result_oct_par->id }}</td>
+                                                            <td>Equilibrio</td>
                                                             {{-- <td>{{ $result_oct_par->nombre.' '.$result_oct_par->apellido_paterno.' '.$result_oct_par->apellido_materno }}</td> --}}
                                                             {{--  <td>
                                                                 OCTAVO PAR
@@ -118,6 +118,30 @@
                                                     @endif
                                                 @endforeach
                                             @endif
+
+                                            {{-- EXAMENES AUDICION --}}
+                                            @if (isset($reg_audicion))
+                                                @foreach ( $reg_audicion as $result_audicion)
+                                                    @if ($result_audicion->revisado == 0)
+                                                        <tr>
+                                                            <td class="d-none">{{ $result_audicion->id }}</td>
+                                                            <td>{{ date('d-m-Y',strtotime($result_audicion->fecha_ex)) }}</td>
+                                                            <td>{{ $result_audicion->id }}</td>
+                                                            {{-- <td>{{ $result_audicion->nombre.' '.$result_audicion->apellido_paterno.' '.$result_audicion->apellido_materno }}</td> --}}
+                                                            {{--  <td>
+                                                                AUDICION
+                                                            </td>  --}}
+                                                            <td>
+                                                                AUDICION
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenAudicion_{{ $result_audicion->id }}" onclick="verResultadoAudicion('{{ $result_audicion->id }}',1);"><i class="feather icon-activity"></i> Ver</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+
 
                                             @if (isset($reg_exam_rayo))
                                                 @foreach ($reg_exam_rayo as $result_rayo )
@@ -190,6 +214,29 @@
 																</td>
 																<td>
 																	<button type="button" class="btn btn-xxs btn-success-light-c" onclick="verExamenEspecialidad('{{ $exam->id }}',0);"><i class="feather icon-activity"></i> Ver</button>
+																</td>
+															</tr>
+														@endif
+													@endif
+                                                @endforeach
+                                            @endif
+                                            @if(isset($reg_octavo_par))
+                                                @foreach ( $reg_octavo_par as $result_oct_par)
+                                                    @if (!empty($result_oct_par->HoraMedica))
+														@if ($result_oct_par->HoraMedica->id_estado == 6 && $result_oct_par->revisado == 1)
+															<tr>
+																<td>{{ date('d-m-Y',strtotime($result_oct_par->HoraMedica->fecha_realizacion_consulta)) }}</td>
+																<td>{{ $result_oct_par->id }}</td>
+																<td>Equilibrio</td>
+																<td>
+																	@if ($result_oct_par->SubTipoEspecialidad)
+																		{{ $result_oct_par->SubTipoEspecialidad->nombre }}
+																	@else
+																		Octavo Par
+																	@endif
+																</td>
+																<td>
+																	<button type="button" class="btn btn-xxs btn-success-light-c" onclick="verExamenEspecialidad('{{ $result_oct_par->id }}',0);"><i class="feather icon-activity"></i> Ver</button>
 																</td>
 															</tr>
 														@endif
@@ -530,6 +577,98 @@
         }
     }
 
+    function verResultadoOctavoPar(id_examen, cambio_estado)
+    {
+        if(id_examen != '')
+        {
+            var data ='id_examen_octavo_par='+id_examen+'';
+            mostrar_pdf_octavo_par(id_examen);
+
+            if(cambio_estado == 1)
+            {
+                var estado_consulta = $('#rinde_estado_consulta').val();
+
+                let url = "{{ route('pdf.examen.especialidad.octavo_par.revisado') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        id_examen : id_examen,
+                    },
+                })
+                .done(function(data) {
+
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        console.log('examen revisado');
+                        carga_bandeja_entrada();
+                        carga_bandeja_revisados();
+                        carga_bandeja_radiologia();
+                        carga_bandeja_general();
+                    }
+                    else
+                    {
+                        console.log('examen no revisado');
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+        }
+        else
+        {
+            swal({
+                title: "Ver examen octavo par",
+                text:"No Se encuentra examen",
+                icon: "error"
+            });
+        }
+    }
+
+    function mostrar_pdf_octavo_par(id_examen)
+    {
+        let url = "{{ route('pdf.examen_especialidad.octavo_par') }}";
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                id_examen_octavo_par : id_examen
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.archivos && Array.isArray(data.archivos) && data.archivos.length > 0){
+                    swal({
+                        title: "Archivos encontrados",
+                        text: "Se encontraron " + data.archivos.length + " archivo(s).",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir cada PDF en una ventana emergente
+                        data.archivos.forEach(function(archivo, idx){
+                            if(archivo.url && archivo.url.endsWith('.pdf')){
+                                var width = 800;
+                                var height = 600;
+                                var left = (screen.width - width) / 2;
+                                var top = (screen.height - height) / 2;
+                                window.open(archivo.url, 'ExamenPDF'+idx, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                            }
+                        });
+                    });
+                }else{
+                    swal({
+                        title: "Sin archivos PDF",
+                        text: "No se encontraron archivos PDF para este examen.",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            }
+        })
+    }
+
     function carga_bandeja_entrada()
     {
         $('#bandeja_entrada tbody').html('');
@@ -542,6 +681,7 @@
     {
         let url = "{{ route('examen.especialidad.ver.registros') }}";
         var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
         var estado = 6;
         var revisado = 0;
 
@@ -551,6 +691,7 @@
             type: "GET",
             data: {
                 id_paciente : id_paciente,
+                id_profesional : id_profesional,
                 id_estado : estado,
                 revisado : revisado,
             },
@@ -564,13 +705,13 @@
                 {
                     var fila = '';
                     fila += '<tr >';
-                    fila += '    <td>'+value.hora_medica.fecha_realizacion_consulta+'</td>';
-                    fila += '    <td>'+value.id+'</td>';
+                    fila += '    <td>'+value.hora_medica?.fecha_realizacion_consulta+'</td>';
+                    // fila += '    <td>'+value.id+'</td>';
                     fila += '    <td>'+value.nombre+'</td>';
                     fila += '    <td>';
                     if (value.sub_tipo_especialidad!='null' && value.sub_tipo_especialidad!=null)
                     {
-                        fila += ''+value.sub_tipo_especialidad.nombre+'';
+                        fila += ''+value.sub_tipo_especialidad?.nombre+'';
                     }
                     else
                     {
@@ -611,7 +752,7 @@
         })
         .done(function(data) {
 
-            console.log(data);
+            console.log('resultado:'+data);
             if (data.estado == 1)
             {
                 $.each(data.registros, function (index, value)
@@ -619,7 +760,7 @@
                     var fila = '';
                     fila += '<tr >';
                     fila += '    <td>'+value.fecha_registro+'</td>';
-                    fila += '    <td>'+value.id+'</td>';
+                    // fila += '    <td>'+value.id+'</td>';
                     fila += '    <td>LABORATORIO</td>';
                     fila += '    <td>';
                     if (value.obj_tipo_examen!='null')
@@ -656,6 +797,7 @@
     {
         let url = "{{ route('examen.especialidad.ver.registros') }}";
         var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
         var estado = 6;
         var revisado = 1;
 
@@ -667,6 +809,7 @@
             type: "GET",
             data: {
                 id_paciente : id_paciente,
+                id_profesional : id_profesional,
                 id_estado : estado,
                 revisado : revisado,
             },
@@ -682,13 +825,13 @@
                     var fila = '';
                     fila += '<tr >';
                     fila += '<tr>';
-                    fila += '    <td>'+value.hora_medica.fecha_realizacion_consulta+'</td>';
+                    fila += '    <td>'+value.hora_medica?.fecha_realizacion_consulta+'</td>';
                     fila += '    <td>'+value.id+'</td>';
                     fila += '    <td>'+value.nombre+'</td>';
                     fila += '    <td>';
                     if (value.sub_tipo_especialidad!='null')
                     {
-                        fila += ''+value.sub_tipo_especialidad.nombre+'';
+                        fila += ''+value.sub_tipo_especialidad?.nombre+'';
                     }
                     else
                     {

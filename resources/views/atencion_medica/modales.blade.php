@@ -34,16 +34,16 @@
         <div class="boton-formularios">
             <input type="checkbox" id="btn-mas">
             <div class="redes">
-                <a id="boton_1" class="fas fa-user fa-2x" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
+                <a id="boton_1" class="icono-pcte" data-toggle="canvas" data-target="#antecedentes_paciente" aria-expanded="false" aria-controls="bs-canvas-right" title="Antecedentes del paciente" data-placement="left" style="cursor:pointer;"> </a>
                 <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
-                <a id="boton_4" class="fas fa-bed fa-2x" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
+                <a id="boton_4" class="icono-signosv" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cardiología Adultos' )
-                <a id="boton_3" class="fas fa-heart fa-2x" data-toggle="canvas" data-target="#formularios_cardiologicos" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cardiología" data-placement="left" style="cursor:pointer;"></a>
+                <a id="boton_3" class="icono-cardio" data-toggle="canvas" data-target="#formularios_cardiologicos" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cardiología" data-placement="left" style="cursor:pointer;"></a>
                  @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
-                    <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left" ></a>
+                    <a id="boton_3" class="icono-orl" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left" ></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Dermatología' )
@@ -51,50 +51,50 @@
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Oftalmología' )
-                    <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
+                    <a id="boton_3" class="icono-oftalmologia" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Broncopulmonar' )
-                    <a id="boton_3" class="fas fa-bold fa-2x" data-toggle="canvas" data-target="#formularios_broncopulmonar" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios broncopulmonar" data-placement="left"></a>
+                    <a id="boton_3" class="icono-bronco" data-toggle="canvas" data-target="#formularios_broncopulmonar" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios broncopulmonar" data-placement="left"></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia Alta" data-placement="left"></a>
+					<a id="boton_3" class="icono-cirugia" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia Alta" data-placement="left"></a>
 				@endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Gastroenterología' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_gastroenterologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Gastroenterología" data-placement="left"></a>
+					<a id="boton_3" class="icono-gastro" data-toggle="canvas" data-target="#formularios_gastroenterologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Gastroenterología" data-placement="left"></a>
 				@endif
 
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dbaja" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
+					<a id="boton_3" class="icono-coloproctologia" data-toggle="canvas" data-target="#formularios_cir_dbaja" aria-expanded="false" aria-controls="bs-canvas-right" title="Coloproctología" data-placement="left"></a>
 				@endif
 
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Urología' )
-					<a id="boton_3" class="fas fa-user-cog fa-2x" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
+					<a id="boton_3" class="icono-urologia" data-toggle="canvas" data-target="#formularios_uro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Urología" data-placement="left"></a>
 				@endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía digestiva' )
-					<a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_digest" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía Digestiva" data-placement="left"></a>
+					<a id="boton_3" class="icono-cirugia" data-toggle="canvas" data-target="#formularios_cir_digest" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía Digestiva" data-placement="left"></a>
 				@endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía General' )
-                    <a id="boton_3" class="fas fa-user-md fa-2x" data-toggle="canvas" data-target="#formularios_cir_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía" data-placement="left"></a>
+                    <a id="boton_3" class="icono-cirugia" data-toggle="canvas" data-target="#formularios_cir_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugía" data-placement="left"></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Medicina general adultos y niños' )
-                    <a id="boton_3" class="fas fa-heart-broken fa-2x" data-toggle="canvas" data-target="#formularios_medicina_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Medicina General" data-placement="left"></a>
+                    <a id="boton_3" class="icono-medgeneral" data-toggle="canvas" data-target="#formularios_medicina_gen" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Medicina General" data-placement="left"></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Traumatología General' )
-                <a id="boton_3" class="fas fa-bone fa-2x" data-toggle="canvas" data-target="#form_traumato_general" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Traumatología General" data-placement="left"></a>
+                <a id="boton_3" class="icono-trauma" data-toggle="canvas" data-target="#form_traumato_general" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Traumatología General" data-placement="left"></a>
                 @endif
 
                 @if($profesional->TipoEspecialidad()->first()->nombre == 'SIQUIATRÍA' )
-                <a id="boton_3" class="fas fa-brain fa-2x" data-toggle="canvas" data-target="#form_siquiatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Siquiatría" data-placement="left"></a>
+                <a id="boton_3" class="icono-psiquiatria" data-toggle="canvas" data-target="#form_siquiatria" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Siquiatría" data-placement="left"></a>
                 @endif
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Neurología' )
-                <a id="boton_3" class="fas fa-brain fa-2x" data-toggle="canvas" data-target="#form_neuro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Neurología" data-placement="left"></a>
+                <a id="boton_3" class="icono-psiquiatria" data-toggle="canvas" data-target="#form_neuro" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Neurología" data-placement="left"></a>
                 @endif
             </div>
             <div class="btn-mas">
@@ -248,17 +248,20 @@
                         }
                         else
                         {
-                            {{--  $('#mensaje').removeClass('alert-success');
-                            $('#mensaje').addClass('alert-danger');
-                            $('#mensaje').html('Certificado de reposo. Intente nuevamente<i class="fas fa-times"></i>');
-                            $('#mensaje').show();  --}}
+                            // Manejar diferentes tipos de error
+                            let titulo = "Error al registrar";
+                            let icono = "error";
+                            let mensaje = response['msj'];
+
+                            if(response['error_type'] == 'sin_autorizacion') {
+                                titulo = "Autorización Requerida";
+                                mensaje = response['msj'] + "\n\nPara solicitar una autorización, contacte a su administrador.";
+                            }
 
                             swal({
-                                title: "Registro de Certificado de Reposo." ,
-                                text: response['msj'],
-                                icon: "error",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
+                                title: titulo,
+                                text: mensaje,
+                                icon: icono,
                             })
                         }
                     }
@@ -266,6 +269,23 @@
                 .fail(function(e) {
                     console.log("error");
                     console.log(e);
+
+                    // Manejar errores de conexión o del servidor
+                    let errorMsg = "Error de conexión. Intente nuevamente.";
+
+                    try {
+                        if(e.responseJSON && e.responseJSON.message) {
+                            errorMsg = e.responseJSON.message;
+                        }
+                    } catch(err) {
+                        console.log(err);
+                    }
+
+                    swal({
+                        title: "Error",
+                        text: errorMsg,
+                        icon: "error",
+                    });
                 })
         };
 
@@ -282,6 +302,55 @@
                     },
                 ]
             );
+        }
+
+        function enviar_certificado_reposo_email()
+        {
+            let id_fc = $('#id_fc').val();
+
+            if (!id_fc) {
+                swal({
+                    title: "Error",
+                    text: "Debe guardar el certificado antes de enviarlo por email",
+                    icon: "error",
+                });
+                return;
+            }
+
+            let url = "{{ route('ficha_medica.enviar_certificado_reposo_email') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id_ficha_atencion: id_fc
+                },
+            })
+            .done(function(response) {
+                console.log(response);
+                if (response['estado'] == '1') {
+                    swal({
+                        title: "Éxito",
+                        text: response['msj'],
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response['msj'],
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+                swal({
+                    title: "Error",
+                    text: "No se pudo enviar el certificado por email",
+                    icon: "error",
+                });
+            });
         }
 
         function registrar_interconsulta()
@@ -352,17 +421,34 @@
 
                         if (response.estado == 1) {
                             console.log(response);
-                            //$('#form_control_obesidad').trigger("reset");
+                            // Guardar el ID de la interconsulta para envío por email
+                            $('#id_interconsulta_email').val(response.id_last);
+
                             $('#mensaje').text('Se ha creado la interconsulta de forma correcta');
                             $('#mensaje').show();
                             $('#modal_interconsulta').modal('hide');
+
+                            // Mostrar botón de envío por email después de guardar
+                            $('#btn_enviar_interconsulta_email').show();
+
                             ver_pdf_interconsulta(response.id_last);
                         }
                         else
                         {
+                            // Manejar diferentes tipos de error
+                            let titulo = "Error al registrar";
+                            let icono = "error";
+                            let mensaje = response.msj || "Se ha presentado un problema al registrar.";
+
+                            if(response.error_type == 'sin_autorizacion') {
+                                titulo = "Autorización Requerida";
+                                mensaje = response.msj + "\n\nPara solicitar una autorización, contacte a su administrador.";
+                            }
+
                             swal({
-                                title: "Se ha presentado un problema al registrar." ,
-                                icon: "error",
+                                title: titulo,
+                                text: mensaje,
+                                icon: icono,
                             })
                         }
                     })
@@ -370,7 +456,23 @@
                         console.log("error");
                         console.log(e);
 
-                    })
+                        let errorMsg = "Error de conexión. Intente nuevamente.";
+
+                        try {
+                            if(e.responseJSON && e.responseJSON.message) {
+                                errorMsg = e.responseJSON.message;
+                            }
+                        } catch(err) {
+                            console.log(err);
+                        }
+
+                        swal({
+                            title: "Error",
+                            text: errorMsg,
+                            icon: "error",
+                        });
+                    });
+
 
             }
             else
@@ -476,64 +578,135 @@
             );
         }
 
+        function enviar_interconsulta_email()
+        {
+            let id_interconsulta = $('#id_interconsulta_email').val();
+
+            if (!id_interconsulta) {
+                swal({
+                    title: "Información",
+                    text: "La interconsulta aún no ha sido registrada. Por favor, haga clic en 'Guardar' primero.",
+                    icon: "info",
+                });
+                return;
+            }
+
+            let url = "{{ route('ficha_medica.enviar_interconsulta_email') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id_interconsulta: id_interconsulta
+                },
+            })
+            .done(function(response) {
+                if (response['estado'] == '1') {
+                    swal({
+                        title: "Éxito",
+                        text: response['msj'],
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response['msj'],
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+                swal({
+                    title: "Error",
+                    text: "No se pudo enviar la interconsulta por email",
+                    icon: "error",
+                });
+            });
+        }
 
         function registrar_informe_medico() {
+            let comentarios_informe_medico = '';
 
-            {{-- let fecha_informe_medico = $('#fecha_informe_medico').val(); --}}
-            let comentarios_informe_medico = $('textarea#comentarios_informe_medico').val();
+            // Si Summernote está cargado e inicializado
+            if ($.fn.summernote && $('#comentarios_informe_medico').next('.note-editor').length > 0) {
+                comentarios_informe_medico = $('#comentarios_informe_medico').summernote('code');
+            } else {
+                comentarios_informe_medico = $('#comentarios_informe_medico').val();
+            }
+
             let hora_medica = $('#hora_medica').val();
             let id_lugar_atencion = $('#id_lugar_atencion').val();
             let url = "{{ route('ficha_medica.registrar_informe_medico') }}";
 
             $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        comentarios_informe_medico: comentarios_informe_medico,
-                        hora_medica: hora_medica,
-                        id_lugar_atencion: id_lugar_atencion,
-                    },
-                })
-                .done(function(response) {
+                url: url,
+                type: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    comentarios_informe_medico: comentarios_informe_medico,
+                    hora_medica: hora_medica,
+                    id_lugar_atencion: id_lugar_atencion,
+                    tipo_informe: 1
+                },
+            })
+            .done(function(response) {
+                console.log(response);
+                if (response.estado == 1) {
 
-                    if (response != '') {
-                        console.log(response);
+                    $('#mensaje')
+                        .removeClass('alert-danger')
+                        .addClass('alert-success')
+                        .html('Informe médico registrado. <i class="fas fa-check"></i>')
+                        .show();
 
-                        $('#mensaje').removeClass('alert-success');
-                        $('#mensaje').removeClass('alert-danger');
-                        $('#mensaje').hide();
-
-                        if(response['estado'] == '1')
-                        {
-                            //$('#form_control_obesidad').trigger("reset");
-                            $('#mensaje').addClass('alert-success');
-                            $('#mensaje').removeClass('alert-danger');
-                            $('#mensaje').html('Informe medico. <i class="fas fa-check"></i>');
-                            $('#mensaje').show();
-                            $('#modal_inf_medico').modal('hide');
-
-                            ver_pdf_informe_medico($('#id_fc').val());
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Registro de Informe Medico." ,
-                                text: response['msj'],
-                                icon: "error",
-                                // buttons: "Aceptar",
-                                //SuccessMode: true,
-                            })
-                        }
-
-
+                    if (response.id_last) {
+                        $('#id_informe_medico_email').val(response.id_last);
                     }
-                })
-                .fail(function(e) {
-                    console.log("error");
-                    console.log(e);
 
-                })
-        };
+                    $('#modal_inf_medico').modal('hide');
+
+                    ver_pdf_informe_medico($('#id_fc').val());
+
+                } else {
+
+                    let mensaje = response.msj || 'No se pudo registrar el informe médico.';
+                    let icono = 'error';
+                    let titulo = 'Registro de Informe Médico';
+
+                    if (response.error && typeof response.error === 'object') {
+
+                        let errores = [];
+
+                        $.each(response.error, function(campo, texto) {
+                            errores.push(texto);
+                        });
+
+                        if (errores.length > 0) {
+                            mensaje = errores.join('\n');
+                        }
+
+                        if (response.error.autorizacion) {
+                            titulo = 'Autorización requerida';
+                            icono = 'warning';
+                        }
+                    }
+
+                    swal({
+                        title: titulo,
+                        text: mensaje,
+                        icon: icono,
+                    });
+
+                }
+
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+            });
+        }
 
         function ver_pdf_informe_medico(id_ficha_atencion)
         {
@@ -548,6 +721,57 @@
                     },
                 ]
             );
+        }
+
+        function enviar_informe_medico_email()
+        {
+            let id_informe = $('#id_informe_medico_email').val();
+
+            // if (!id_informe) {
+            //     swal({
+            //         title: "Información",
+            //         text: "El informe médico aún no ha sido registrado. Por favor, haga clic en 'Generar Informe' primero.",
+            //         icon: "info",
+            //     });
+            //     return;
+            // }
+
+            let url = "{{ route('ficha_medica.enviar_informe_medico_email') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id_informe_medico: id_informe,
+                    id_ficha_atencion: $('#id_fc').val(),
+                    tipo_informe : 1, // 1 para informe médico, 2 para uso personal
+                },
+            })
+            .done(function(response) {
+                console.log(response);
+                if (response['estado'] == '1') {
+                    swal({
+                        title: "Éxito",
+                        text: response['msj'],
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response['msj'],
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+                swal({
+                    title: "Error",
+                    text: "No se pudo enviar el informe médico",
+                    icon: "error",
+                });
+            })
         }
 
         function registrar_uso_personal() {
@@ -587,6 +811,12 @@
                             $('#mensaje').removeClass('alert-danger');
                             $('#mensaje').html('Uso Personal. <i class="fas fa-check"></i>');
                             $('#mensaje').show();
+
+                            // ✅ Guardar el ID del uso personal registrado
+                            if (response['id_uso_personal']) {
+                                $('#id_uso_personal_email').val(response['id_uso_personal']);
+                            }
+
                             $('#modal_uso_personal').modal('hide');
 
                             ver_pdf_uso_personal($('#id_fc').val());
@@ -625,6 +855,55 @@
                     },
                 ]
             );
+        }
+
+        // ✅ NUEVA FUNCIÓN: Enviar Uso Personal por Email
+        function enviar_uso_personal_email()
+        {
+            let id_uso_personal = $('#id_uso_personal_email').val();
+
+            if (!id_uso_personal) {
+                swal({
+                    title: "Información",
+                    text: "El uso personal aún no ha sido registrado. Por favor, haga clic en 'Guardar' primero.",
+                    icon: "info",
+                });
+                return;
+            }
+
+            let url = "{{ route('ficha_medica.enviar_uso_personal_email') }}";
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id_uso_personal: id_uso_personal
+                },
+            })
+            .done(function(response) {
+                if (response['estado'] == '1') {
+                    swal({
+                        title: "Éxito",
+                        text: response['msj'],
+                        icon: "success",
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: response['msj'],
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+                swal({
+                    title: "Error",
+                    text: "No se pudo enviar el documento de uso personal",
+                    icon: "error",
+                });
+            });
         }
 
         {{--  ESPECIALIDADES Y SUB_ESPECIALIDAD  --}}

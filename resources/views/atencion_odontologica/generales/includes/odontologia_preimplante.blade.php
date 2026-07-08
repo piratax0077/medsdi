@@ -453,7 +453,14 @@
 
                                 <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
                                 <div class="tab-pane fade show" id="estudio_rx" role="tabpanel" aria-labelledby="estudio_rx_tab">
+                                    {{-- <div class="form-row mt-2">
+                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
+                                            <div class="form-group">
 
+                                                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2" onclick="mostrar_nuevas_imagenes_dent_estudio()"><i class="fas fa-plus"></i>CARGAR NUEVA IMAGEN</button>
+                                            </div>
+                                        </div>
+                                    </div> --}}
                                     <div id="contenedor_imagenes_dent_estudio">
                                         @php $count = 1; @endphp
                                         @foreach ($imagenes_preimplante as $imagen)
@@ -1136,7 +1143,7 @@
         $('#modal_insumos_editar').modal('show');
     }
 
-
+    
     function editar_insumo_confirmar(){
         let id_tipo_insumo = $('#tipoInsumo_editar').val();
         if(id_tipo_insumo == 1){
@@ -1209,7 +1216,7 @@
                     }
 
                     table.clear();
-
+                    
                     if(rehab == 0){
                         //Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
@@ -1296,9 +1303,9 @@
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
                     }
+                    
 
-
-
+                    
 
                     $('#contenedor_insumos').empty();
                     insumos.forEach(insumo => {
@@ -1488,7 +1495,7 @@
                         var table = $('#table_insumos_preimplante').DataTable();
                         var rehab = 0;
                     }
-
+                    
                     //Limpiar la tabla sin perder la configuración de DataTables
                     table.clear();
 
@@ -1530,7 +1537,7 @@
                                     botones
                                 ]);
                             }
-
+                            
                         });
                     }else{
                         //Recorrer el array de insumos y agregarlos a la tabla
@@ -1574,7 +1581,7 @@
                             }
                         });
                     }
-
+                    
 
                     //Dibujar la tabla nuevamente con los nuevos datos
                     table.draw();
@@ -1752,7 +1759,7 @@
                                 var table = $('#table_insumos_preimplante').DataTable();
                                 var rehab = 0;
                             }
-
+                            
                             //Limpiar la tabla sin perder la configuración de DataTables
                             table.clear();
 
@@ -1794,7 +1801,7 @@
                                             botones
                                         ]);
                                     }
-
+                                    
                                 });
                             }else{
                                 //Recorrer el array de insumos y agregarlos a la tabla
@@ -1838,7 +1845,7 @@
                                     }
                                 });
                             }
-
+                            
 
                             //Dibujar la tabla nuevamente con los nuevos datos
                             table.draw();
@@ -2043,7 +2050,7 @@
                             var table = $('#table_insumos_preimplante').DataTable();
                             var rehab = 0;
                         }
-
+                        
                         //Limpiar la tabla sin perder la configuración de DataTables
                         table.clear();
 
@@ -2085,7 +2092,7 @@
                                         botones
                                     ]);
                                 }
-
+                                
                             });
                         }else{
                             //Recorrer el array de insumos y agregarlos a la tabla
@@ -2129,7 +2136,7 @@
                                 }
                             });
                         }
-
+                        
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
@@ -2402,6 +2409,8 @@
         })
     }
 
+</script>
+<script>
     function seleccionar_maxilar_superior_impl() {
         const superiorActivo = document.getElementById("max_sup_impl").checked;
          document.getElementById('piezas_presup_impl').checked = false;

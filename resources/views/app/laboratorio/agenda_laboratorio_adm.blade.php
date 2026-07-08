@@ -135,12 +135,8 @@
 
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
-                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio Radiología</a></li>
-                                @else
-                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
-                                @endif
+                                <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+
                             </ul>
                         </div>
                     </div>
@@ -153,7 +149,9 @@
                         <div class="card">
                             <div class="card-header bg-info">
                                     <h4 class="font-weight-bold d-inline f-20 text-white">Laboratorio:&nbsp;&nbsp;</h4><!--Nombre del Laboratorio--><span class=" f-20 d-inline text-white">Laboratorio Clínico</span> <!--Tipo de Laboratorio-->
-
+                                    @include('general.info_simbologia.simbologia_agenda')
+                                    @include('general.anular_hora.anular_hora')
+                                    @include('general.bloqueo_hora.bloque_hora')
                             </div>
                             <div class="card-body">
                                 <div class="col-md-12">
@@ -162,7 +160,7 @@
                                             <label class="floating-label-activo-sm">Sucursal</label>
                                             <select class="form-control form-control-sm" id="agenda_sucursal" name="agenda_sucursal" onchange="cargarBox();">
                                                 <option value="">Seleccione</option>
-                                                @if($sucursales)
+                                                @if($sucursales->isNotEmpty())
                                                     @foreach($sucursales as $key_suc => $value_suc)
                                                         @if ($loop->first)
                                                             <option selected value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ mb_strtoupper($value_suc->nombre, 'UTF-8') }}</option>
@@ -170,6 +168,11 @@
                                                             <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ mb_strtoupper($value_suc->nombre, 'UTF-8') }}</option>
                                                         @endif
                                                     @endforeach
+                                                @else
+                                                    {{-- Sin sucursales: mostrar el lugar de atención principal como única opción --}}
+                                                    <option selected value="0" data-id_lugar_atencion="{{ $institucion[0]->id_lugar_atencion }}" data-id_tipo_agenda="5">
+                                                        {{ mb_strtoupper($institucion[0]->nombre, 'UTF-8') }}
+                                                    </option>
                                                 @endif
                                             </select>
                                         </div>
@@ -181,6 +184,10 @@
                                         </div>
                                     </div>
                                     <div id='agenda'></div>
+                                    <!-- Campos ocultos para anular horas en laboratorio -->
+                                    <input type="hidden" id="agenda_box_actual" name="agenda_box_actual" value="">
+                                    <input type="hidden" id="agenda_sucursal_actual" name="agenda_sucursal_actual" value="">
+                                    <input type="hidden" id="agenda_lugar_atencion_actual" name="agenda_lugar_atencion_actual" value="">
                                 </div>
                             </div>
                         </div>
@@ -934,7 +941,7 @@
                     </div>
                     <div class="form-row">
                         <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
-                        <input type="hidden" name="bono_id_profesional" id="bono_id_profesional" value="{{ $profesional->id }}">
+                        <input type="hidden" name="bono_id_profesional" id="bono_id_profesional" value="{{ $profesional ? $profesional->id : '' }}">
                         <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
                         <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
                         <div class="col-sm-6">
@@ -955,14 +962,14 @@
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Nombre Profesional</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre"
-                                    id="bono_profesional_nombre" disabled="disabled" value="{{ $profesional->nombre.''.$profesional->apellido_uno }}">
+                                    id="bono_profesional_nombre" disabled="disabled" value="{{ $profesional ? $profesional->nombre.' '.$profesional->apellido_uno : 'N/A' }}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm"> Rut Profesional</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_profesional_rut"
-                                    id="bono_profesional_rut" disabled="disabled" value="{{ $profesional->rut }}">
+                                    id="bono_profesional_rut" disabled="disabled" value="{{ $profesional ? $profesional->rut : 'N/A' }}">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -1221,6 +1228,11 @@
             var id_sucursal = $('#agenda_sucursal').val();
             var id_lugar_atencion = $('#agenda_sucursal option:selected').attr('data-id_lugar_atencion');
             var id_box = $('#agenda_box').val();
+
+            // Guardar valores actuales para usar en modal de anular horas
+            $('#agenda_box_actual').val(id_box);
+            $('#agenda_sucursal_actual').val(id_sucursal);
+            $('#agenda_lugar_atencion_actual').val(id_lugar_atencion);
 
             $.ajax({
 
@@ -3043,6 +3055,7 @@
                     }
                 })
                 .done(function(data) {
+                           console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
 
@@ -3718,9 +3731,12 @@
                                 confirmButtonText: "Cool"
                             });
 
-                            @if (isset($profesional) && isset($lugar_atencion))
+                            @if (isset($profesional) && $profesional && isset($lugar_atencion))
                                 // cargarAgendaProfesional('{{ $profesional->id }}',fecha_consulta);
                                 cargarAgendaProfesional($('#id_tipo_agenda').val(), '{{ $lugar_atencion }}','{{ $profesional->id }}', fecha_consulta);
+                            @elseif (isset($lugar_atencion))
+                                // Si no hay profesional, cargar agenda solo con lugar de atención
+                                cargarAgendaProfesional($('#id_tipo_agenda').val(), '{{ $lugar_atencion }}', null, fecha_consulta);
                             @endif
                             $('#agenda_agregar_paciente').modal('hide');
                         } else {
@@ -4075,6 +4091,573 @@
                 });
             }
 
+        }
+
+        // ===== SOBRESCRITURA DE FUNCIONES PARA ANULAR HORAS EN LABORATORIO =====
+
+        // Sobrescribir la función abrir_anular_hora del include general
+        function abrir_anular_hora()
+        {
+            var id_box = $('#agenda_box_actual').val();
+            var id_lugar_atencion = $('#agenda_lugar_atencion_actual').val();
+
+            if(!id_box || id_box == '')
+            {
+                swal({
+                    title: "Anular Hora",
+                    text: "Por favor, seleccione una sucursal y box primero.",
+                    icon: "warning",
+                });
+                return;
+            }
+
+            // Usar id_box en lugar de id_profesional para laboratorio
+            $('#anular_id_profesional').val(id_box);
+            $('#anular_id_lugar_atencion').val(id_lugar_atencion);
+
+            // Ocultar el select de agenda ya que en laboratorio solo hay tipo 5
+            $('#anular_agenda').closest('.form-group').hide();
+            $('#anular_agenda').val('5'); // Tipo agenda laboratorio
+
+            carga_calendario_anular();
+            cargar_dia_para_anular();
+            cargar_anular_horas();
+
+            $('#modal_anular_hora').modal('show');
+        }
+
+        // Sobrescribir la función cargar_anular_horas para usar el contexto de laboratorio
+        function cargar_anular_horas()
+        {
+            let url = "{{ route('agenda.dia.horas.ver') }}";
+            let id_box = $('#anular_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#anular_id_lugar_atencion').val();
+            let fecha_consulta = $('#anular_fecha_consulta').val();
+            $('#horas_medicas_lista').html('');
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                    fecha_consulta: fecha_consulta,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    $.each(data.registros, function (index, value)
+                    {
+                        var html = '';
+                        html += '<div class="form-row">';
+                        html += '<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">';
+                        html += '<div class="card-informacion">';
+                        html += '<div class="card-body px-1 pb-1">';
+                        html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Paciente:</span> '+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</div>';
+                        html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Rut:</span> '+value.paciente.rut+'</div>';
+                        html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Hora inicio:</span> '+value.hora_inicio+'</div>';
+                        html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Hora término:</span> '+value.hora_termino+'</div>';
+                        html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Estado:</span> <span style="background-color:'+value.estado.color+'; color:#fff; padding:2px 5px; border-radius:5px; font-weight:600;">'+value.estado.valor+'</span></div>';
+                        html += '    <div class="card-footer pb-0">';
+                        html += '    <div class="col-md-12 text-right">';
+                        html += '       <button class="btn btn-xxs btn-danger-light-c" onclick="cargar_comentario_anular_hora(\''+value.id+'\');"><i class="feather icon-x"></i> Anular</button>';
+                        html += '    </div>';
+                        html += '   </div>';
+                        html += '    </div>';
+                        html += '    </div>';
+                        html += '    </div>';
+                        html += '</div>';
+
+                        $('#horas_medicas_lista').append(html);
+                    });
+                }
+                else
+                {
+                    if(data.msj == 'sin registros')
+                    {
+                        $('#horas_medicas_lista').html('<div class="alert alert-info">No hay horas médicas para esta fecha.</div>');
+                    }
+                    else
+                    {
+                        var mensaje = '';
+                        if(data.error)
+                        {
+                            $.each(data.error, function (indexInArray, valueOfElement)
+                            {
+                                mensaje += valueOfElement+'\n';
+                            });
+                        }
+                        else
+                        {
+                            mensaje += 'Intente nuevamente.';
+                        }
+
+                        swal({
+                            title: "Anular Hora",
+                            text: mensaje,
+                            icon: "error",
+                        });
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Sobrescribir la función anular_horas para recargar correctamente la agenda de laboratorio
+        function anular_horas()
+        {
+            var id_box = $('#anular_id_profesional_comentario').val();
+            var id_lugar_atencion = $('#anular_id_lugar_atencion_comentario').val();
+            var id_hora = $('#anular_id_hora_comentario').val();
+            var comentario = $('#anular_comentario').val();
+
+            let url = "{{ route('profesional.cancelar_hora') }}";
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    comentario: comentario,
+                    id_hora_medica: id_hora
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    $('#consulta').modal('hide');
+                    swal({
+                        title: "Éxito!",
+                        text: "Hora médica cancelada correctamente",
+                        icon: "success",
+                        confirmButtonText: "Aceptar"
+                    });
+
+                    $('#modal_anular_hora_comentario').modal('hide');
+                    $('#anular_id_profesional_comentario').val('');
+                    $('#anular_id_lugar_atencion_comentario').val('');
+                    $('#anular_id_hora_comentario').val('');
+                    $('#anular_comentario').val('');
+
+                    // Recargar la agenda de laboratorio con la fecha actual
+                    cargarAgendaSucursal($('#anular_fecha_consulta').val());
+
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "No se pudo confirmar la anulación",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // ===== SOBRESCRITURA DE FUNCIONES PARA BLOQUEO DE HORAS EN LABORATORIO =====
+
+        // Sobrescribir la función abrir_bloqueo_hora_atencion del include general
+        function abrir_bloqueo_hora_atencion()
+        {
+            var id_box = $('#agenda_box_actual').val();
+            var id_lugar_atencion = $('#agenda_lugar_atencion_actual').val();
+
+            if(!id_box || id_box == '')
+            {
+                swal({
+                    title: "Bloqueo de Horas",
+                    text: "Por favor, seleccione una sucursal y box primero.",
+                    icon: "warning",
+                });
+                return;
+            }
+
+            // Usar id_box en lugar de id_profesional para laboratorio
+            $('#bloqueo_id_profesional').val(id_box);
+            $('#bloqueo_id_lugar_atencion').val(id_lugar_atencion);
+
+            cargar_bloqueo_horas();
+
+            // Ocultar el select de agenda ya que en laboratorio solo hay tipo 5
+            $('#bloqueo_agenda').closest('.form-group').hide();
+            $('#bloqueo_agenda').val('5'); // Tipo agenda laboratorio
+
+            carga_calendario_bloqueo();
+            $('#bloqueo_motivo').val('');
+            $('#bloqueo_fecha_inicio').val('');
+            $('#bloqueo_fecha_termino').val('');
+            $('#bloqueo_hora_inicio').val('');
+            $('#bloqueo_hora_termino').val('');
+            $('#bloqueo_todo_dia').prop('checked', false);
+
+            $('#modal_bloqueo_hora').modal('show');
+        }
+
+        // Sobrescribir la función registrar_bloqueo_hora para usar el contexto de laboratorio
+        function registrar_bloqueo_hora()
+        {
+            let id_box = $('#bloqueo_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+            let agenda = $('#bloqueo_agenda').val();
+            let motivo = $('#bloqueo_motivo').val();
+            let fecha_inicio = $('#bloqueo_fecha_inicio').val();
+            let fecha_termino = $('#bloqueo_fecha_termino').val();
+            let hora_inicio = $('#bloqueo_hora_inicio').val();
+            let hora_termino = $('#bloqueo_hora_termino').val();
+
+            var todo_dia = '0';
+            if( $('#bloqueo_todo_dia').prop('checked') )    todo_dia = '1';
+            else                                            todo_dia = '0';
+
+            let url = "{{ route('bloqueo.horas.registrar') }}";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                    agenda: agenda,
+                    motivo: motivo,
+                    fecha_inicio: fecha_inicio,
+                    fecha_termino: fecha_termino,
+                    hora_inicio: hora_inicio,
+                    hora_termino: hora_termino,
+                    todo_dia: todo_dia,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    $('#modal_bloqueo_hora').modal('hide');
+
+                    swal({
+                        title: "Bloqueo de horario",
+                        text: "Registro con éxito.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+
+                    $('#bloqueo_agenda option:first').prop('selected', true);
+                    $('#bloqueo_motivo').val('');
+                    $('#bloqueo_fecha_inicio').val('');
+                    $('#bloqueo_fecha_termino').val('');
+                    $('#bloqueo_hora_inicio').val('');
+                    $('#bloqueo_hora_termino').val('');
+                    $('#bloqueo_todo_dia').prop('checked', false);
+
+                    // Recargar la agenda de laboratorio
+                    cargarAgendaSucursal();
+                }
+                else
+                {
+                    var mensaje = '';
+                    if(data.error)
+                    {
+                        $.each(data.error, function (indexInArray, valueOfElement)
+                        {
+                            mensaje += valueOfElement+'\n';
+                        });
+                    }
+                    else
+                    {
+                        mensaje += 'Intente nuevamente.';
+                    }
+
+                    swal({
+                        title: "Bloqueo de horario",
+                        text: mensaje,
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Sobrescribir la función cargar_bloqueo_horas para usar el contexto de laboratorio
+        function cargar_bloqueo_horas()
+        {
+            let url = "{{ route('bloqueo.horas.ver') }}";
+            let id_box = $('#bloqueo_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+            $('#bloqueos_lista').html('');
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    let meses = ['','ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
+                    $.each(data.registros, function (index, value){
+
+                        var fechaInicio = new Date(value.fecha_inicio);
+                        var dia = fechaInicio.getDate()+1;
+                        var mes = fechaInicio.getMonth() + 1;
+                        var anio = fechaInicio.getFullYear();
+                        var fechaInicio = dia + ' de ' + meses[mes] + ' del ' + anio;
+
+                        var fechaTermino = new Date(value.fecha_termino);
+                        var dia = fechaTermino.getDate()+1;
+                        var mes = fechaTermino.getMonth() + 1;
+                        var anio = fechaTermino.getFullYear();
+                        var fechaTermino = dia + ' de ' + meses[mes] + ' del ' + anio;
+
+                        var html = '';
+                        html += '<div class="card-informacion">';
+                        html += '<div class="card-body">';
+                        html += '<div class="row">';
+                        html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> '+((value.motivo == null)?'':value.motivo)+'</div>';
+                        html += '    ';
+                        html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Inicio:</span> '+fechaInicio+' - '+value.hora_inicio+'</div>';
+                        html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> '+fechaTermino+' - '+value.hora_termino+'</div>';
+                        html += '    <div class="col-md-12 mb-1 d-inline mt-3" style="text-align: right;">';
+
+                        if (value.estado == 1)
+                        html += '            <button class="btn btn-xxs btn-info-light-c d-inline" onclick="desbloquear_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-unlock"></i> Desbloquear</button>';
+                        else
+                        html += '            <button class="btn btn-xxs btn-danger-light-c  d-inline" onclick="bloquear_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-lock"></i> Bloquear</button>';
+                        html += '        <button class="btn btn-xxs btn-primary-light-c d-inline" onclick="eliminar_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-x"></i> Eliminar bloqueo</button>';
+
+                        html += '    </div>';
+                        html += '    </div>';
+                        html += '    </div>';
+                        html += '</div>';
+
+                        $('#bloqueos_lista').append(html);
+                    });
+                }
+                else
+                {
+                    if(data.msj == 'sin registros')
+                    {
+                        $('#bloqueos_lista').html('<div class="alert alert-info">No hay bloqueos registrados.</div>');
+                    }
+                    else
+                    {
+                        var mensaje = '';
+                        if(data.error)
+                        {
+                            $.each(data.error, function (indexInArray, valueOfElement)
+                            {
+                                mensaje += valueOfElement+'\n';
+                            });
+                        }
+                        else
+                        {
+                            mensaje += 'Intente nuevamente.';
+                        }
+
+                        swal({
+                            title: "Bloqueo de Horario",
+                            text: mensaje,
+                            icon: "error",
+                        });
+                    }
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Sobrescribir la función desbloquear_bloqueo_hora para usar el contexto de laboratorio
+        function desbloquear_bloqueo_hora(id)
+        {
+            let url = "{{ route('bloqueo.horas.estado') }}";
+            let id_box = $('#bloqueo_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+            let estado = 0;
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id,
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                    estado: estado,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    swal({
+                        title: "Bloqueo de horario desbloqueado",
+                        text: "Registro con éxito.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                    cargar_bloqueo_horas();
+
+                    // Recargar la agenda de laboratorio
+                    cargarAgendaSucursal();
+                }
+                else
+                {
+                    var mensaje = '';
+                    if(data.error)
+                    {
+                        $.each(data.error, function (indexInArray, valueOfElement)
+                        {
+                            mensaje += valueOfElement+'\n';
+                        });
+                    }
+                    else
+                    {
+                        mensaje += 'Intente nuevamente.';
+                    }
+
+                    swal({
+                        title: "Bloqueo de horario",
+                        text: mensaje,
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Sobrescribir la función bloquear_bloqueo_hora para usar el contexto de laboratorio
+        function bloquear_bloqueo_hora(id)
+        {
+            let url = "{{ route('bloqueo.horas.estado') }}";
+            let id_box = $('#bloqueo_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+            let estado = 1;
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id,
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                    estado: estado,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    swal({
+                        title: "Bloqueo de horario bloqueado",
+                        text: "Registro con éxito.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                    cargar_bloqueo_horas();
+
+                    // Recargar la agenda de laboratorio
+                    cargarAgendaSucursal();
+                }
+                else
+                {
+                    var mensaje = '';
+                    if(data.error)
+                    {
+                        $.each(data.error, function (indexInArray, valueOfElement)
+                        {
+                            mensaje += valueOfElement+'\n';
+                        });
+                    }
+                    else
+                    {
+                        mensaje += 'Intente nuevamente.';
+                    }
+
+                    swal({
+                        title: "Bloqueo de Horario",
+                        text: mensaje,
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        // Sobrescribir la función eliminar_bloqueo_hora para usar el contexto de laboratorio
+        function eliminar_bloqueo_hora(id)
+        {
+            let url = "{{ route('bloqueo.horas.estado') }}";
+            let id_box = $('#bloqueo_id_profesional').val(); // En laboratorio usamos id_box
+            let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+            let estado = 2;
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id,
+                    id_box: id_box, // Enviar id_box para laboratorio
+                    id_lugar_atencion: id_lugar_atencion,
+                    estado: estado,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    swal({
+                        title: "Bloqueo de horario eliminado",
+                        text: "Registro con éxito.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
+                    cargar_bloqueo_horas();
+
+                    // Recargar la agenda de laboratorio
+                    cargarAgendaSucursal();
+                }
+                else
+                {
+                    var mensaje = '';
+                    if(data.error)
+                    {
+                        $.each(data.error, function (indexInArray, valueOfElement)
+                        {
+                            mensaje += valueOfElement+'\n';
+                        });
+                    }
+                    else
+                    {
+                        mensaje += 'Intente nuevamente.';
+                    }
+
+                    swal({
+                        title: "Bloqueo de Horario",
+                        text: mensaje,
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
     </script>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CV - Desarrollador Full Stack Laravel</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #4b5563;
+      --accent: #0f766e;
+      --line: #e5e7eb;
+      --bg-soft: #f8fafc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+      line-height: 1.35;
+      font-size: 12px;
+    }
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 16mm;
+    }
+    .header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0.3px;
+    }
+    .role {
+      margin-top: 2px;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .contact {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    h2 {
+      font-size: 14px;
+      margin: 12px 0 6px;
+      padding: 4px 6px;
+      background: var(--bg-soft);
+      border-left: 4px solid var(--accent);
+    }
+    p { margin: 0 0 7px; }
+    ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    li { margin: 0 0 5px; }
+    .exp-title {
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .exp-meta {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip {
+      border: 1px solid var(--line);
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 11px;
+    }
+    .small { color: var(--muted); }
+    @media print {
+      .page { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="header">
+      <h1>Francisco Rojo Gallardo</h1>
+      <div class="role">Desarrollador Full Stack Laravel (Junior Avanzado)</div>
+      <div class="contact">Coquimbo, Chile | +56 9 5398 0899 | francisco.rojo.gallardo@gmail.com | linkedin.com/in/francisco-rojo-gallardo</div>
+    </section>
+
+    <section>
+      <h2>Perfil Profesional</h2>
+      <p>Desarrollador web Full Stack con foco en Laravel y PHP, experiencia en implementación de funcionalidades end-to-end para sistemas clínicos y administrativos, además de desarrollo de aplicaciones móviles con Cordova para Android. Capacidad para resolver requerimientos reales integrando backend, frontend, base de datos y mejoras de experiencia de usuario.</p>
+    </section>
+
+    <section>
+      <h2>Experiencia</h2>
+      <div class="exp-title">Desarrollador Full Stack Laravel - Proyecto sistema clínico/administrativo</div>
+      <div class="exp-meta">Marzo 2024 - Actualidad</div>
+      <ul>
+        <li>Implementación de módulos completos con Laravel: rutas, controladores, vistas Blade y endpoints AJAX.</li>
+        <li>Persistencia de datos con MySQL/MariaDB, incluyendo migraciones y serialización JSON en campos de negocio.</li>
+        <li>Corrección de incidencias productivas en vistas y controladores por tipado y consistencia de datos.</li>
+        <li>Integración frontend con jQuery, Select2, DataTables y SweetAlert2 para flujos dinámicos.</li>
+        <li>Reorganización de dashboard operativo en estructura 2x2 por dominios funcionales para mejorar navegación.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Proyectos Adicionales</h2>
+      <ul>
+        <li>Desarrollo de aplicaciones móviles híbridas con Cordova para Android en proyectos independientes.</li>
+        <li>Desarrollo full stack de módulo tótem de autoatención (JavaScript + Laravel) para Android: permite agregar productos a carrito, enviar pedidos a caja central para procesamiento de venta, generar cotizaciones e imprimir tickets en dispositivos Android.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Logros Relevantes</h2>
+      <ul>
+        <li>Implementación de persistencia de productos a convenir en convenios especiales: creación, edición y guardado consistente.</li>
+        <li>Desarrollo de carga de productos por paciente para sección Devolver a Proveedor mediante endpoint y tabla dinámica.</li>
+        <li>Reducción de errores de interfaz mediante validaciones robustas en Blade para variables no-objeto.</li>
+        <li>Estandarización de nuevas rutas y métodos de controlador para renovación de stock y estadísticas financieras.</li>
+      </ul>
+    </section>
+
+    <section class="grid">
+      <div>
+        <h2>Stack Técnico</h2>
+        <div class="chip-list">
+          <span class="chip">PHP</span>
+          <span class="chip">Laravel</span>
+          <span class="chip">Blade</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">jQuery</span>
+          <span class="chip">AJAX</span>
+          <span class="chip">Bootstrap</span>
+          <span class="chip">Cordova</span>
+          <span class="chip">Android</span>
+          <span class="chip">MySQL/MariaDB</span>
+          <span class="chip">Git</span>
+          <span class="chip">Laragon</span>
+        </div>
+      </div>
+      <div>
+        <h2>Educación</h2>
+        <p><strong>Universidad Santo Tomas</strong></p>
+        <p class="small">2012 - 2019</p>
+        <h2>Idiomas</h2>
+        <p>Español: Nativo</p>
+        <p>Inglés: Básico intermedio</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

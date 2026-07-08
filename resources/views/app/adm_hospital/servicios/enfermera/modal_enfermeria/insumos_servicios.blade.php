@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                @if($enfermera)
+                @if(isset($enfermera) && $enfermera)
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary">Guardar</button>
                 @endif

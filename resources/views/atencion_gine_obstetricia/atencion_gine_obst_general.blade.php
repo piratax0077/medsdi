@@ -10,7 +10,7 @@
                         <div class="col-md-6">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN GINECO-OBSTÉTRICA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                {{-- <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                     $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                     $fecha = \Carbon\Carbon::parse(now());
@@ -18,10 +18,10 @@
                                     $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
                                     {{ $fecha }}
-                                </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                </p> --}}
+                                {{-- <p class="font-italic mt-0 mb-0 text-white">
                                     <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>
+                                </p> --}}
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -43,20 +43,20 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item" id="nav-licencia">
+                                    {{-- <li class="nav-item" id="nav-licencia">
                                         @if(!empty(session('lic_token')) && session('lic_estado') == 1)
                                             <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
                                         @else
                                             <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#" role="tab" aria-controls="licencia" aria-selected="false" onclick="abrir_autorizacion();">Licencia</a>
                                         @endif
-                                    </li>
-                                    <li class="nav-item" id="nav-fmu">
+                                    </li> --}}
+                                    {{-- <li class="nav-item" id="nav-fmu">
                                         @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
                                         @else
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
@@ -122,11 +122,11 @@
         {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")
         @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.m_interconsulta")  --}}
-		
+
     </div>
     <script>
     </script>
-	
+
     {{-- listo --}}
 	@include('atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_tunner_f')
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_ciclo")
@@ -144,7 +144,7 @@
 
     {{-- en proceso --}}
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.m_toma_pap")
-
+    @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
     {{-- pendiente --}}
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.modal_embriesgo")
     {{-- @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.eco_obstetrica") --}}
@@ -152,5 +152,86 @@
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.carnet_alta_obstetrico")
     @include("atencion_gine_obstetricia.formularios.modal_atencion_especialidad.gineco_obst.protocolo_parto")
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection
+@section('page-script')
+    <script>
+         $('#tipo_examen_d').off('change').on('change', function(e) {
+                e.preventDefault();
+                tipo_examen = $('#tipo_examen_d').val();
+
+                $("#sub_tipo_examen_d").empty();
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.sub_tipo_examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            tipo_examen: tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#sub_tipo_examen_d').html(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+
+                        /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                        if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste_d').removeAttr('disabled');
+                        else  $('#imagenologia_con_contraste_d').attr('disabled','disabled');
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  buscar examenes por el sub tipo de examen  --}}
+            $('#sub_tipo_examen_d').off('change').on('change', function(e) {
+
+                e.preventDefault();
+                sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route("listar.examen") }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: {
+                            sub_tipo_examen: sub_tipo_examen
+                        },
+                    })
+                    .done(function(response) {
+
+                        $('#examen_d').html(
+                            `<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                        ${response[i].nombre_examen}
+                                    </option>`);
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+
+            });
+
+            {{--  mostrar ocultar mensaje de examenes de radiologia con contraste --}}
+            $('#imagenologia_con_contraste_d').change(function(){
+                if($('#imagenologia_con_contraste_d').is(':checked') )
+                {
+                    $('#mensaje_imagenologia_con_contraste_d').show();
+                }
+                else
+                {
+                    $('#mensaje_imagenologia_con_contraste_d').hide();
+                }
+
+            });
+    </script>
 @endsection
 

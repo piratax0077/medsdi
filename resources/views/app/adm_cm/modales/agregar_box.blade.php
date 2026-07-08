@@ -13,23 +13,23 @@
                                 <div class="col-md-12 col-md-12 col-lg-6 col-xl-6">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Asignar N° al box</label>
-                                        <input type="text" name="numero_box" id="numero_box" class="form-control form-control-sm">
+                                        <input type="text" name="numero_box_nuevo" id="numero_box_nuevo" class="form-control form-control-sm">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Tipo Box</label>
-                                        <select class="form-control form-control-sm" name="tpo_box_servicio" id="tpo_box_servicio" onchange="dame_especializacion_box()">
+                                        <select class="form-control form-control-sm" name="tpo_box_servicio_nuevo" id="tpo_box_servicio_nuevo" onchange="dame_especializacion_box()">
                                             <option value="0">Seleccione</option>
                                             <option value="Normal">Normal</option>
                                             <option value="Especializado">Especializado</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12" id="contenedor_tpo_especializacion">
+                                <div class="col-sm-12" id="contenedor_tpo_especializacion_nuevo" >
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Tipo de especialización</label>
-                                        <select class="form-control form-control-sm" name="tpo_especializacion" id="tpo_especializacion">
+                                        <select class="form-control form-control-sm" name="tpo_especializacion_nuevo" id="tpo_especializacion_nuevo">
                                             <option value="0">Seleccione</option>
                                             <option value="Oftalmologia">Oftalmología</option>
                                             <option value="Otorrino">Otorrino</option>
@@ -44,7 +44,7 @@
                                 <div class="col-sm-6 d-none">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Equipamiento</label>
-                                        <select class="form-control form-control-sm" name="equip_ad" id="equip_ad" multiple="multiple">
+                                        <select class="form-control form-control-sm" name="equip_ad_nuevo" id="equip_ad_nuevo" multiple="multiple">
                                             <option value="Carro paro">Carro paro</option>
                                             <option value="Oxigenoterápia">Oxigenoterápia</option>
                                             <option value="Pabellon de yeso">Pabellon de yeso</option>
@@ -54,7 +54,7 @@
                                 <div class="col-sm-6 d-none">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Cantidad de camillas</label>
-                                        <input type="number" class="form-control form-control-sm" name="n_camillas_box_servicio" id="n_camillas_box_servicio">
+                                        <input type="number" class="form-control form-control-sm" name="n_camillas_box_servicio_nuevo" id="n_camillas_box_servicio_nuevo">
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Ubicación</label>
-                                        <select class="form-control form-control-sm" name="tpo_equip_servicio" id="tpo_equip_servicio">
+                                        <select class="form-control form-control-sm" name="tpo_equip_servicio_nuevo" id="tpo_equip_servicio_nuevo">
                                             <option value="0">Seleccione</option>
                                             <option value="1">Piso 1</option>
                                             <option value="2">Piso 2</option>
@@ -80,7 +80,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Sección</label>
-                                        <select class="form-control form-control-sm" name="seccion_box" id="seccion_box">
+                                        <select class="form-control form-control-sm" name="seccion_box_nuevo" id="seccion_box_nuevo">
                                             <option value="0">Seleccione</option>
                                             <option value="1">Pediatría</option>
                                             <option value="2">General</option>
@@ -94,7 +94,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="form-group fill">
                                         <label class="floating-label-activo-sm">Observaciones</label>
-                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act_" id="ot_pat_act_"></textarea>
+                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act_nuevo" id="ot_pat_act_nuevo"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -125,20 +125,20 @@
     }
 
     function guardar_box_servicio(){
-        let numero_box = $('#numero_box').val();
-        let tpo_box_servicio = $('#tpo_box_servicio').val();
+        let numero_box = $('#numero_box_nuevo').val();
+        let tpo_box_servicio = $('#tpo_box_servicio_nuevo').val();
         let id_institucion = $('#id_institucion').val();
         let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
         if(tpo_box_servicio == 'Especializado'){
-            var tpo_especializacion = $('#tpo_especializacion').val();
+            var tpo_especializacion = $('#tpo_especializacion_nuevo').val();
         }else{
             var tpo_especializacion = '';
         }
-        let tpo_equip_servicio = $('#tpo_equip_servicio').val();
-        let seccion_box = $('#seccion_box').val();
-        let ot_pat_act_ = $('#ot_pat_act_').val();
-        let n_camillas_box_servicio = $('#n_camillas_box_servicio').val();
-        let equip_ad = $('#equip_ad').val();
+        let tpo_equip_servicio = $('#tpo_equip_servicio_nuevo').val();
+        let seccion_box = $('#seccion_box_nuevo').val();
+        let ot_pat_act_ = $('#ot_pat_act_nuevo').val();
+        let n_camillas_box_servicio = $('#n_camillas_box_servicio_nuevo').val();
+        let equip_ad = $('#equip_ad_nuevo').val();
         let url = "{{ route('adm_cm.guardar_box_servicio') }}";
 
         var valido = 1;
@@ -225,12 +225,12 @@
     }
 
     function dame_especializacion_box(){
-        let tipo_box = $('#tpo_box_servicio').val();
+        let tipo_box = $('#tpo_box_servicio_nuevo').val();
         console.log(tipo_box);
         if(tipo_box == 'Especializado'){
-            $('#contenedor_tpo_especializacion').removeClass('d-none');
+            $('#contenedor_tpo_especializacion_nuevo').removeClass('d-none');
         }else{
-            $('#contenedor_tpo_especializacion').addClass('d-none');
+            $('#contenedor_tpo_especializacion_nuevo').addClass('d-none');
         }
     }
 
@@ -238,9 +238,9 @@
         let tipo_box = $('#editar_tpo_box_servicio').val();
         console.log(tipo_box);
         if(tipo_box == 'Especializado'){
-            $('#editar_contenedor_tpo_especializacion').removeClass('d-none');
+            $('#editar_contenedor_tpo_especializacion_nuevo').removeClass('d-none');
         }else{
-            $('#editar_contenedor_tpo_especializacion').addClass('d-none');
+            $('#editar_contenedor_tpo_especializacion_nuevo').addClass('d-none');
         }
     }
 </script>

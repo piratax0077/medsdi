@@ -231,10 +231,10 @@
                                             </div>
                                             <div
                                                 class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-3 pr-3 pl-3">
-                                                {{-- <button type="button"
-                                                    class="btn btn-outline-primary btn-block btn-sm"
-                                                    onclick="examenes_nutri();"><i class="feather icon-edit-1"></i>
-                                                    Indicar examen especialidad </button> --}}
+                                               <!-- textarea para escribir la dieta diaria -->
+                                                <label class="floating-label-activo-sm">Dieta diaria</label>
+                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;"
+                                                    name="dieta_diaria" id="dieta_diaria"></textarea>
                                             </div>
                                             <div
                                                 class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-3 pr-3 pl-3">
@@ -2287,6 +2287,20 @@
                     </div>
 
                     <div class="form-row mt-2">
+                        <div class="col-sm-12 mt-2">
+                            <label class="floating-label-activo-sm">Tipo de Control/Tratamiento</label>
+                            <select class="form-control form-control-sm" name="tipo_control_tratamiento" id="tipo_control_tratamiento" multiple="multiple">
+                                <option value="cpeso">Control de peso / Obesidad</option>
+                                <option value="chipertension">Hipertensión arterial</option>
+                                <option value="cdiabet">Diabetes</option>
+                                <option value="cinsufren">Insuficiencia renal</option>
+                                <option value="epoc">Enfermedad pulmonar obstructiva crónica</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row mt-2">
                         <div class="col-sm-3 col-md-4 col-lg-4 col-xl-3 mt-2">
                             <label class="floating-label-activo-sm">Número de Sesiones</label>
                             <input type="number" class="form-control form-control-sm" name="numero_sesiones" id="numero_sesiones">
@@ -2771,6 +2785,7 @@
             $('#select_13').select2();
             $('#select_14').select2();
             $('#select_15').select2();
+            $('#tipo_control_tratamiento').select2();
 
             $('#form_ficha_nutri').on('submit', function(e) {
                 const hora = $('#hora_agendada').val();
@@ -2974,6 +2989,7 @@
 
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            let tipo_agenda = 1;
             let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
 
             $.ajax({
@@ -2983,6 +2999,7 @@
                     //_token: _token,
                     id_profesional: id_profesional,
                     lugar_atencion: id_lugar_atencion,
+                    tipo_agenda: tipo_agenda
                 },
             })
             .done(function(data) {
@@ -3425,6 +3442,7 @@
         const tratamiento = $('#tratamiento_seguir').val().trim();
         const sesiones = $('#numero_sesiones').val().trim();
         const objetivos = $('#objetivos').val().trim();
+        const tipoControl = $('#tipo_control_tratamiento').val();
         const id_ficha_atencion = $('#id_fc').val();
 
         // Validación simple
@@ -3441,13 +3459,14 @@
             diagnostico: diagnostico,
             tratamiento: tratamiento,
             numero_sesiones: sesiones,
+            tipo_control_tratamiento: tipoControl,
             objetivos: objetivos,
             id_ficha_atencion: id_ficha_atencion,
-            _token: CSRF_TOKEN // Asegúrate de definir CSRF_TOKEN en tu vista
+            _token: $('meta[name="csrf-token"]').attr('content') || $('input[name="_token"]').val()
         };
 
         $.ajax({
-            url: '{{ route("profesional.guardar_planificacion_nutri") }}', // Ajusta si tu ruta es diferente
+            url: '{{ route("profesional.guardar_planificacion_otros_prof") }}', // Ajusta si tu ruta es diferente
             method: 'POST',
             data: data,
             success: function(response) {
@@ -3581,6 +3600,11 @@
                 $('#tratamiento_seguir').val(data.registro.tratamiento);
                 $('#numero_sesiones').val(data.registro.numero_sesiones);
                 $('#objetivos').val(data.registro.objetivos);
+
+                // Cargar tipos de control/tratamiento si existen
+                if (data.registro.tipo_control_tratamiento) {
+                    $('#tipo_control_tratamiento').val(data.registro.tipo_control_tratamiento).trigger('change');
+                }
             } else {
                 var numero_sesion = ' (No se ha iniciado tratamiento)';
 
@@ -3682,6 +3706,8 @@
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             datos_control: datos_control,
             objetivo_logrado: $('#objetivo_logrado_control').is(':checked') ? 1 : 0,
+            peso_actual: datos_control.peso_actual_control || '',
+            observaciones: datos_control.observaciones_control || '',
             _token: $('meta[name="csrf-token"]').attr('content')
         };
 

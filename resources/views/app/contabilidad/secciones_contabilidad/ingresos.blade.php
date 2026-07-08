@@ -42,104 +42,48 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12 mb-3">
+                                            <div class="alert alert-light border mb-0">
+                                                <strong>Mes actual:</strong> {{ ($fecha_actual ?? now())->translatedFormat('F Y') }} |
+                                                <strong>Registros:</strong> {{ $cantidad_ingresos_mes ?? 0 }} |
+                                                <strong>Total ingresos:</strong> ${{ number_format(($total_ingresos_mes ?? 0), 0, ',', '.') }}
+                                            </div>
                                         </div>
                                     </div>
                                     <div style="overflow-x:auto;">
-                                    <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                    <table id="tabla_ingresos_cm" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                         <thead>
                                             <tr>
-                                                <th class="text-center align-middle">N° fact/boleta</th>
+                                                <th class="text-center align-middle">N° bono</th>
                                                 <th class="text-center align-middle">Fecha</th>
-                                                <th class="text-center align-middle">vendedor</th>
-                                                <th class="text-center align-middle">rubro</th>
-                                                <th class="text-center align-middle">producto</th>
-                                                <th class="text-center align-middle">cantidad</th>
-                                                <th class="text-center align-middle">valor/doc</th>
-                                                <th class="text-center align-middle">Impuesto</th>
-                                                <th class="text-center align-middle">comprador</th>
-                                                <th class="text-center align-middle">estado/pago</th>
-                                                <th class="text-center align-middle">Acción</th>
+                                                <th class="text-center align-middle">Glosa</th>
+                                                <th class="text-center align-middle">Valor</th>
+                                                <th class="text-center align-middle">Rendido</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>0023214</strong></span><br>
-                                                    <span>factura</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>02/12/2021</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>monica caceres</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                        <span><strong>Insumos Médicos</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>medio contraste</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>2 unid </span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>17000</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>2365</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>c. escobar</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                        <span>pagado</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_detalleventa();">
-                                                    <i class="feather icon-edit"></i> ver doc</button>
-                                                    <button type="button" class="btn btn-danger btn-sm btn-icon-sm">
-                                                    <i class="feather icon-x-circle"></i> D</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>565445</strong></span><br>
-                                                    <span>Bono Atención</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>02/12/2021</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>monica caceres</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                        <span><strong>atencion medica</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>consultas</strong></span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>210 unid </span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>170000</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>236521</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>c.Tobarr</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                        <span>pagado</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_detalleventa();">
-                                                    <i class="feather icon-edit"></i> ver doc</button>
-                                                    <button type="button" class="btn btn-danger btn-sm btn-icon-sm">
-                                                    <i class="feather icon-x-circle"></i> D</button>
-                                                </td>
-                                            </tr>
+                                            @forelse(($ingresos_mes ?? []) as $ingreso)
+                                                <tr>
+                                                    <td class="align-middle text-center">
+                                                        <span><strong>{{ $ingreso->numero_bono ?? '-' }}</strong></span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>{{ !empty($ingreso->fecha_atencion) ? \Carbon\Carbon::parse($ingreso->fecha_atencion)->format('d/m/Y') : '-' }}</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>{{ $ingreso->glosa ?? '-' }}</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>${{ number_format((float) ($ingreso->valor_atencion ?? 0), 0, ',', '.') }}</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <span>{{ ((int) ($ingreso->rendido ?? 0) === 1) ? 'Sí' : 'No' }}</span>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td class="align-middle text-center" colspan="5">No hay ingresos registrados para el mes actual.</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
 
                                             @include('app.contabilidad.modals.registrar_venta')

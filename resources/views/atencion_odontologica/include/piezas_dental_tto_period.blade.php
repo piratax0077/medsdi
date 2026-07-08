@@ -392,20 +392,30 @@
 <script>
 
     $(document).ready(function(){
-        console.log('ready!');
-        const cantidad_superficie_teñida = $('#cant_superficie_teñida1000');
-        const cantidad_superficie_total = $('#cant_superficie_total1000');
-        const indice_oleary = $('#indice_oleary1000');
+        
 
-        // calcular el porcentaje
-        const result = parseFloat((cantidad_superficie_teñida.val() / cantidad_superficie_total.val()) * 100).toFixed(2);
-        console.log(result);
-        if(!isNaN(result)){
-            indice_oleary.val(result + '%');
-        } else {
-            indice_oleary.val('');
-        }
+        // Agregar event listeners para ambos inputs
+        $('#cant_superficie_teñida1000, #cant_superficie_total1000').on('input', function() {
+            calcularIndice();
+        });
     });
+
+    // Función para calcular el índice
+        function calcularIndice() {
+            const cantidad_superficie_teñida = $('#cant_superficie_teñida1000').val();
+            const cantidad_superficie_total = $('#cant_superficie_total1000').val();
+            const indice_oleary = $('#indice_oleary1000');
+
+            // Calcular el porcentaje solo si ambos valores existen
+            if(cantidad_superficie_teñida && cantidad_superficie_total) {
+                const result = parseFloat((cantidad_superficie_teñida / cantidad_superficie_total) * 100).toFixed(2);
+                if(!isNaN(result)){
+                    indice_oleary.val(result + '%');
+                } else {
+                    indice_oleary.val('');
+                }
+            }
+        }
 
     function dame_tratamientos_pieza_period(pieza, counter, tipo) {
         let id_paciente = $('#id_paciente_fc').val();
@@ -509,6 +519,10 @@
             material_injerto_tto_text = $('#obs_mat_inj_oseo'+counter).val();
         }
 
+        let cantidad_superficie_teñida = $('#cant_superficie_teñida'+counter).val();
+        let cantidad_superficie_total = $('#cant_superficie_total'+counter).val();
+        let indice_oleary = $('#indice_oleary'+counter).val();
+
         let tipo_injerto_tto = $('#metodo_injerto_tto'+counter).val();
 
         let suturas_tto = $('#suturas_period'+counter).val();
@@ -599,6 +613,9 @@
             incidente_tto_text: incidente_tto_text,
             material_injerto_tto: material_injerto_tto,
             material_injerto_tto_text: material_injerto_tto_text,
+            cantidad_superficie_teñida: cantidad_superficie_teñida ? cantidad_superficie_teñida : 0,
+            cantidad_superficie_total: cantidad_superficie_total ? cantidad_superficie_total : 0,
+            indice_oleary: indice_oleary ? indice_oleary : 0,
             tipo_injerto_tto: tipo_injerto_tto,
             suturas_tto: suturas_tto,
             suturas_tto_text: suturas_tto_text,
@@ -611,7 +628,7 @@
             _token: CSRF_TOKEN
         }
 
-        console.log(data);
+         console.log(data);
 
         let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_tto_period') }}";
 
@@ -622,24 +639,14 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.mensaje == 'OK'){
-                    swal({
-                        title: "Pieza guardada",
-                        text: "Pieza guardada correctamente",
-                        icon: "success",
-                        button: "Aceptar",
-                    });
+                    
                     $('#contenedor_tto_periodoncia').empty();
                     $('#contenedor_tto_periodoncia').append(resp.v);
                     $('#pieza_dental_tto_period').empty();
                     // Verificar si existen exámenes en la respuesta
                     if (resp.examenes && resp.examenes.length > 0) {
-                        let detalleCirugia = resp.examenes.map(examen =>
-                            `La pieza ${examen.numero_pieza} se ha realizado ${examen.tipo_procedimiento} ` +
-                            `usando ${examen.anestesia} con ${examen.numero_tubos} tubos, ` +
-                            `con la técnica ${examen.tecnica_anestesia}`
-                        ).join("\n");
+                       
 
-                        $('#det_cir').val(detalleCirugia);
                         // Poblar el select2 con las piezas únicas
                         let piezasUnicas = [...new Set(resp.examenes.map(examen => examen.numero_pieza))];
 
@@ -661,7 +668,7 @@
                             // Recorrer el odontograma y agregar nuevas filas
                             odontograma.forEach(function(odonto) {
 
-                                if (odonto.presupuesto == 1) {
+                                if (odonto.presupuesto == 1 && odonto.urgencia == 0) {
                                     if(odonto.estado_pago == 'ok'){
                                         var clase = 'bg-success';
                                     }else if(odonto.estado_pago == 'incompleto'){
@@ -691,9 +698,8 @@
                                     $(rowNode).addClass('text-center align-middle status-circle');
                                 }
                             });
-                    } else {
-                        $('#det_cir').val('No hay detalles de cirugía disponibles.');
-                    }
+                            pieza_dental_tto_period(2000);
+                    } 
 
                     let odontograma = resp.odontograma;
                     $('#table_pagos_reasignar_odontograma tbody').empty();
@@ -713,6 +719,16 @@
                     $('#odon_adults').append(resp.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(resp.odontograma_paciente_vista);
+                    swal({
+                        title: "Pieza guardada",
+                        text: "Pieza guardada correctamente",
+                        icon: "success",
+                        button: "Aceptar",
+                    })
+                    .then(() => {
+                        cargar_tto_periodoncia();
+                    });
+                    
                 }
             },
             error: function(error){
@@ -895,7 +911,7 @@
                             `con la técnica ${examen.tecnica_anestesia}`
                         ).join("\n");
 
-                        $('#det_cir').val(detalleCirugia);
+                        $('#det_cir_period').val(detalleCirugia);
                         // Poblar el select2 con las piezas únicas
                         let piezasUnicas = [...new Set(resp.examenes.map(examen => examen.numero_pieza))];
 
@@ -948,7 +964,7 @@
                                 }
                             });
                     } else {
-                        $('#det_cir').val('No hay detalles de cirugía disponibles.');
+                        $('#det_cir_period').val('No hay detalles de cirugía disponibles.');
                     }
 
                     let odontograma = resp.odontograma;

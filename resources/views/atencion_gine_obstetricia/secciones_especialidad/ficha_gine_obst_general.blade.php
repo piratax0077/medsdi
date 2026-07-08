@@ -7,13 +7,19 @@
                         <a class="nav-secciones active text-uppercase" id="atencion_gine_obst_gen-tab" data-toggle="tab" href="#atencion_gine_obst_gen" role="tab" aria-controls="atencion_gine_obst_gen" aria-selected="true">Atención Especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="examen_proced-tab" data-toggle="tab" href="#examen_proced" role="tab" aria-controls="examen_proced" aria-selected="false">Exámenes y Procedimientos</a>
+                        <a class="nav-secciones text-uppercase" id="examen_proced-tab" data-toggle="tab" href="#examen_proced" role="tab" aria-controls="examen_proced" onclick="$('#tipo_proced').select2();" aria-selected="false">Exámenes y Procedimientos</a>
                     </li>
 				</ul>
             </div>
             <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-12">
@@ -41,7 +47,7 @@
                             </div>-->
                             <!--FORMULARIOS-->
                             <div class="row">
-                                
+
                                 <!--Formulario / Menor de edad-->
                                 @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "3"])
                                 <!--Cierre: Formulario / Menor de edad-->
@@ -50,11 +56,11 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
                                         <div class="card-header-a" id="motivo">
-                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="false" aria-controls="motivo_c">
+                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#motivo_c" aria-expanded="true" aria-controls="motivo_c">
                                                 Motivo de la consulta
                                             </button>
                                         </div>
-                                        <div id="motivo_c" class="collapse" aria-labelledby="motivo" data-parent="#motivo">
+                                        <div id="motivo_c" class="collapse show" aria-labelledby="motivo" data-parent="#motivo">
                                             <div class="card-body-aten-a">
                                                 <div class="form-row">
                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -1589,7 +1595,7 @@
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                            @include('general.secciones_ficha.seccion_receta_examen_comunes_gine')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                             <!--GUARDAR O IMPRIMIR FICHA-->
                             <div class="row mb-3 m-t-10">
@@ -1605,31 +1611,34 @@
         </div>
     </div>
 </div>
-
+@include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 @section('page-script-ficha-atencion')
     <script>
         $(document).ready(function() {
+                     /** MENSAJE*/
+       /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
             /* formatear rut */
-            // $("#solicitado_rut_eco_gine").rut({
-            //     formatOn: 'keyup',
-            //     minimumLength: 2,
-            //     validateOn: 'change',
-            //     useThousandsSeparator : false
-            // });
-
-            // $("#solicitado_rut_eco_obst").rut({
-            //     formatOn: 'keyup',
-            //     minimumLength: 2,
-            //     validateOn: 'change',
-            //     useThousandsSeparator : false
-            // });
-
-            // $("#solicitado_rut_proced").rut({
-            //     formatOn: 'keyup',
-            //     minimumLength: 2,
-            //     validateOn: 'change',
-            //     useThousandsSeparator : false
-            // });
+            $("#solicitado_por_rut_rfl").rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
 
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
@@ -1651,6 +1660,7 @@
                     // Set selection
                     $('#descripcion_cie').val(ui.item.label); // display the selected text
                     $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#id_descripcion_cie').trigger('onchange');
                     return false;
                 }
             });
@@ -2039,25 +2049,31 @@
 
         /** MANEJO DE IMAGENES ECOGRAFIA GINECOLOGIA*/
         var myDropzone_eco_gine;
-        Dropzone.options.misArchivosEcoGine = {
-            init:function()
-            {
-                myDropzone_eco_gine = this;
-            },
-            url: "{{ route('profesional.imagen.carga') }}",
-            method: 'post',
-            createImageThumbnails: true,
-            addRemoveLinks: true,
-            headers:{
-                'X-CSRF-TOKEN' : CSRF_TOKEN,
-                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-            },
+        // Evitar inicialización múltiple de Dropzone
+        if (!window.dropzoneInitialized) {
+            window.dropzoneInitialized = {};
+        }
 
-            acceptedFiles: "image/*",
-            maxFilesize: 4,
-            maxFiles: 12,
-            /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+        if (!window.dropzoneInitialized.misArchivosEcoGine) {
+            Dropzone.options.misArchivosEcoGine = {
+                init:function()
+                {
+                    myDropzone_eco_gine = this;
+                },
+                url: "{{ route('profesional.imagen.carga') }}",
+                method: 'post',
+                createImageThumbnails: true,
+                addRemoveLinks: true,
+                headers:{
+                    'X-CSRF-TOKEN' : CSRF_TOKEN,
+                    // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+                },
+
+                acceptedFiles: "image/*",
+                maxFilesize: 4,
+                maxFiles: 12,
+                /** El texto utilizado antes de que se eliminen los archivos. */
+                dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
 
             /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
             dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
@@ -2137,11 +2153,14 @@
                 cargar_lista_imagenes(myDropzone_eco_gine,'eco_gine');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
-        };
+            };
+            window.dropzoneInitialized.misArchivosEcoGine = true;
+        }
 
         var myDropzone_eco_obst;
-        Dropzone.options.misArchivosEcoObst = {
-            init:function()
+        if (!window.dropzoneInitialized.misArchivosEcoObst) {
+            Dropzone.options.misArchivosEcoObst = {
+                init:function()
             {
                 myDropzone_eco_obst = this;
             },
@@ -2238,7 +2257,9 @@
                 cargar_lista_imagenes(myDropzone_eco_obst,'eco_obst');
                 return this.emit("error", file, this.options.dictUploadCanceled);
             },
-        };
+            };
+            window.dropzoneInitialized.misArchivosEcoObst = true;
+        }
 
         var lista_imagenes = {};
         function cargar_lista_imagenes(obj_dropzone, alias_examen)
@@ -2293,6 +2314,52 @@
             }
         }
         /** CIERRE MANEJO DE IMAGENES */
+
+        function agregar_examenes_ficha() {
+            var rows = [];
+            $('#tabla_examen_cirugia_d tr').each(function(i, n) {
+                if (i > 0) {
+                    var rol = {};
+                    var data = $(this).find("td");
+                    rol["fecha_hora"]      = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["nombre_examen"]   = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["lado"]            = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["tipo"]            = $.trim($(data[3]).text().split("\n").join(""));
+                    rol["prioridad"]       = $.trim($(data[4]).text().split("\n").join(""));
+                    rol["con_contraste"]   = $.trim($(data[5]).text().split("\n").join(""));
+                    rows.push(rol);
+                }
+            });
+            $('#examenes').val(JSON.stringify(rows));
+            // Actualizar lista de imágenes de ambos dropzones antes de enviar
+            if (typeof myDropzone_eco_gine !== 'undefined' && myDropzone_eco_gine) {
+                cargar_lista_imagenes(myDropzone_eco_gine, 'eco_gine');
+            }
+            if (typeof myDropzone_eco_obst !== 'undefined' && myDropzone_eco_obst) {
+                cargar_lista_imagenes(myDropzone_eco_obst, 'eco_obst');
+            }
+        }
+
+        function agregar_medicamentos_ficha() {
+            var rows1 = [];
+            $('#tabla_medicamento_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    var rol = {};
+                    var data = $(this).find("td");
+                    rol["id_producto"]          = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["uso_cronico"]          = $.trim($(data[1]).text().split("\n").join(""));
+                    rol["medicamento"]          = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["presentacion"]         = $.trim($(data[3]).text().split("\n").join(""));
+                    rol["posologia"]            = $.trim($(data[4]).text().split("\n").join(""));
+                    rol["via_administracion"]   = $.trim($(data[5]).text().split("\n").join(""));
+                    rol["periodo"]              = $.trim($(data[6]).text().split("\n").join(""));
+                    rol["compra"]               = $.trim($(data[7]).text().split("\n").join(""));
+                    rows1.push(rol);
+                }
+            });
+            $('#medicamentos').val(JSON.stringify(rows1));
+        }
+
     </script>
 @endsection
 

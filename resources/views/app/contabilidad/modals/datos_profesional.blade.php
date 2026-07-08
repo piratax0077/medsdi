@@ -14,24 +14,24 @@
                 <input type="hidden" name="id_contrato_edit" id="id_contrato_edit" value="">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
+                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="prof_ev-nutricional" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset active" id="info-profesion-tab" data-toggle="tab" href="#info-profesion" role="tab" aria-controls="info-profesion" aria-selected="true">Profesión</a>
+                                <a class="nav-link-aten text-reset active" id="prof_info-profesion-tab" data-toggle="tab" href="#prof_info-profesion" role="tab" aria-controls="prof_info-profesion" aria-selected="true">Profesión</a>
                             </li>
                             {{-- <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                                <a class="nav-link-aten text-reset" id="prof_info-tipo_contrato-tab" data-toggle="tab" href="#prof_info-tipo_contrato" role="tab" aria-controls="prof_info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
                             </li> --}}
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="info_personal_cont-tab" data-toggle="tab" href="#info_personal_cont" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
+                                <a class="nav-link-aten text-reset" id="prof_info_personal_cont-tab" data-toggle="tab" href="#prof_info_personal_cont" role="tab" aria-controls="prof_info_personal_cont" aria-selected="false">Información Personal</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información Bancaria</a>
+                                <a class="nav-link-aten text-reset" id="prof_info_contrato_pers-tab" data-toggle="tab" href="#prof_info_contrato_pers" role="tab" aria-controls="prof_info_contrato_pers" aria-selected="false">Información Bancaria</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                                <a class="nav-link-aten text-reset" id="prof_leyes_sociales-tab" data-toggle="tab" href="#prof_leyes_sociales" role="tab" aria-controls="prof_leyes_sociales" aria-selected="false">Leyes Sociales</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="horario_contrato-tab" data-toggle="tab" href="#horario_contrato" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
+                                <a class="nav-link-aten text-reset" id="prof_horario_contrato-tab" data-toggle="tab" href="#prof_horario_contrato" role="tab" aria-controls="prof_horario_contrato" aria-selected="false">Horario</a>
                             </li>
 
                         </ul>
@@ -39,8 +39,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="info-profesion" role="tabpanel" aria-labelledby="info-profesion-tab">
+                        <div class="tab-content" id="prof_myTabContent">
+                            <div class="tab-pane fade show active" id="prof_info-profesion" role="tabpanel" aria-labelledby="prof_info-profesion-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                         <div class="form-group">
@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
+                            <div class="tab-pane fade" id="prof_info-tipo_contrato" role="tabpanel" aria-labelledby="prof_info-tipo_contrato-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="form-group">
@@ -87,7 +87,7 @@
                             </div>
 
 
-                            <div class="tab-pane fade" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
+                            <div class="tab-pane fade" id="prof_info_personal_cont" role="tabpanel" aria-labelledby="prof_info_personal_cont-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <div class="form-group">
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane fade" id="info_contrato_pers" role="tabpanel" aria-labelledby="info_contrato_pers-tab">
+                            <div class="tab-pane fade" id="prof_info_contrato_pers" role="tabpanel" aria-labelledby="prof_info_contrato_pers-tab">
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="t-modal">Datos Bancarios Para Dep&oacute;sito</h6>
@@ -225,7 +225,7 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane fade" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
+                            <div class="tab-pane fade" id="prof_leyes_sociales" role="tabpanel" aria-labelledby="prof_leyes_sociales-tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <form>
@@ -311,7 +311,7 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane fade" id="horario_contrato" role="tabpanel" aria-labelledby="horario_contrato-tab">
+                            <div class="tab-pane fade" id="prof_horario_contrato" role="tabpanel" aria-labelledby="prof_horario_contrato-tab">
                                 <form>
                                     <div class="form-row">
                                         <div class="col-sm-12 col-md-12 mb-2">

@@ -42,6 +42,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
+                                            
+                                            <div id="pieza_dental_tto_impl">
+                                            </div>
                                             <div id="contenedor_tto_implantologia">
                                                 @php $counter = 1 @endphp
                                                 @foreach ($examenes_tto_implantes as $e)
@@ -543,18 +546,16 @@
                                                                     <div class="form-group">
                                                                         <button type="button"
                                                                             class="btn btn-icon btn-danger-light-c"
-                                                                            onclick="eliminar_pieza_dental_tto_impl({{ $e->id }},{{ $e->id_procedimiento }})">X</button>
+                                                                            onclick="eliminar_pieza_dental_tto_impl({{ $e->id }},{{ $e->id_procedimiento }})"><i class="fas fa-times"></i></button>
 
                                                                     </div>
-                                                                    <div class="badge badge-danger">Prestación terminada.</div>
+                                                                    <h5><span class="badge badge-light-danger-b">Prestación finalizada</span></h5>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     @php $counter++; @endphp
                                                 @endforeach
-                                            </div>
-                                            <div id="pieza_dental_tto_impl">
                                             </div>
                                         </div>
                                     </div>

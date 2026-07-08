@@ -7,7 +7,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="card-fmu">
 
-                    <h4 class="text-c-blue f-18 pt-2 text-center">Ficha Médica Única</h4>
+                    <h4 class="text-c-blue f-18 pt-2 text-center">Ficha Médica Única..</h4>
                 </div>
             </div>
         </div>

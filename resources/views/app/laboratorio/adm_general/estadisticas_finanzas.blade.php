@@ -9,12 +9,12 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Inventario</h5>
+                            <h5 class="m-b-10 font-weight-bold">Estadísticas y Finanzas</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
                             <li class="breadcrumb-item"><a href="{{ route('laboratorio.area_comercial') }}">Administración</a></li>
-                            <li class="breadcrumb-item"><a href="#">Inventario</a></li>
+                            <li class="breadcrumb-item"><a href="#">Finanzas</a></li>
                         </ul>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="tab-pane fade" id="comparativo" role="tabpanel" aria-labelledby="comparativo-tab">
                         @include('app.laboratorio.adm_general.inventario.estadisticas_finanzas.comparativo')
                     </div>
-                </div>
+                </div>  
             </div>
         </div>
     </div>
@@ -192,7 +192,7 @@
             }
         });
     }
-
+    
 
     // Funciones para cada tab (pill)
     function cargarTotales() {
@@ -381,16 +381,19 @@
         const filtros = getFiltrosEstadisticas();
         console.log('Comisión por atención:', filtros);
     }
+
     function cargarConsolidado() {
         if (!validarFechas()) return;
         const filtros = getFiltrosEstadisticas();
         console.log('Consolidado:', filtros);
     }
+
     function cargarBoletas() {
         if (!validarFechas()) return;
         const filtros = getFiltrosEstadisticas();
         console.log('Boletas:', filtros);
     }
+
     function cargarBonos() {
         if (!validarFechas()) return;
         const filtros = getFiltrosEstadisticas();
@@ -417,11 +420,13 @@
             }
         });
     }
+
     function cargarRetiros() {
         if (!validarFechas()) return;
         const filtros = getFiltrosEstadisticas();
         console.log('Retiros:', filtros);
     }
+
     function cargarExcedentes() {
         if (!validarFechas()) return;
         const filtros = getFiltrosEstadisticas();
@@ -453,7 +458,7 @@
                 $('#grafico_pacientes').html('<div class="alert alert-danger">Error al buscar estadísticas.</div>');
             }
         });
-    }
+    }   
 
         // Asignar eventos al cambiar de tab
         document.addEventListener('DOMContentLoaded', function() {

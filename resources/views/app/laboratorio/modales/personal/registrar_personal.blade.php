@@ -8,11 +8,11 @@
             </div>
             <div class="modal-body">
                 <form>
-                        <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
-                        <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
-                        <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
-                        <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                        <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
+                        <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
+                        <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                        <input type="hidden" name="add_empleado_id_admin_creador_personal" id="add_empleado_id_admin_creador_personal" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="add_empleado_id_tipo_admin_creador_personal" id="add_empleado_id_tipo_admin_creador_personal" value="{{ Auth::user()->Roles()->first()->id }}">
+                        <input type="hidden" name="add_empleado_clave_ingreso_personal" id="add_empleado_clave_ingreso_personal" value="{{ rand(11111,99999) }}">
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>
@@ -49,7 +49,7 @@
                                 <!---->
                                 <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
+                                        <select class="form-control form-control-sm" name="add_empleado_tipo_contrato_contrato" id="add_empleado_tipo_contrato_contrato">
                                             <option value="">Seleccione</option>
                                             @if ($lista_tipo_contrato)
                                                 @foreach ($lista_tipo_contrato as $item)
@@ -68,23 +68,23 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">RUT:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut" onblur="buscar_persona_rut_nuevo_empleado();">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut_personal" id="add_empleado_rut_personal" onblur="buscar_persona_rut_nuevo_empleado();">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre" id="add_empleado_nombre">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_personal" id="add_empleado_nombre_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno" id="add_empleado_apellido_uno">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno_personal" id="add_empleado_apellido_uno_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos" id="add_empleado_apellido_dos">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos_personal" id="add_empleado_apellido_dos_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Sexo</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_sexo" id="add_empleado_sexo">
+                                                <select class="form-control form-control-sm" name="add_empleado_sexo_personal" id="add_empleado_sexo_personal">
                                                     <option value="">Seleccione</option>
                                                     <option value="F">Femenino</option>
                                                     <option value="M">Masculino</option>
@@ -92,21 +92,21 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento" id="add_empleado_fecha_nacimiento">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento_personal" id="add_empleado_fecha_nacimiento_personal">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Email:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email_personal" id="add_empleado_email_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono" id="add_empleado_telefono">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono_personal" id="add_empleado_telefono_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Región</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_region" id="add_empleado_region" onchange="buscar_ciudad_nuevo_empleado();">
+                                                <select class="form-control form-control-sm" name="add_empleado_region_personal" id="add_empleado_region_personal" onchange="buscar_ciudad_nuevo_empleado_lab();">
                                                     <option value="">Seleccione</option>
                                                     @if($regiones)
                                                         @foreach ($regiones as $reg )
@@ -118,17 +118,17 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_ciudad" id="add_empleado_ciudad">
+                                                <select class="form-control form-control-sm" name="add_empleado_ciudad_personal" id="add_empleado_ciudad_personal">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Dirección</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion" id="add_empleado_direccion">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion_personal" id="add_empleado_direccion_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Número</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero" id="add_empleado_numero">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero_personal" id="add_empleado_numero_personal">
                                             </div>
                                         </div>
                                     </form>
@@ -142,74 +142,74 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio" id="add_empleado_fecha_inicio">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio_personal" id="add_empleado_fecha_inicio_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Termino</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino" id="add_empleado_fecha_termino">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino_personal" id="add_empleado_fecha_termino_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
                                                 <label  class="cr">Indefinido</label>
-                                                <input type="hidden" id="add_cont_indefinido" name="add_cont_indefinido" value="0">
+                                                <input type="hidden" id="add_cont_indefinido_personal" name="add_cont_indefinido_personal" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef', 'add_cont_indefinido', 'add_empleado_fecha_termino');" id="add_empleado_check_contrato_indef" name="add_empleado_check_contrato_indef" value="">
-                                                    <label for="add_empleado_check_contrato_indef" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef_contrato', 'add_cont_indefinido_contrato', 'add_empleado_fecha_termino_contrato');" id="add_empleado_check_contrato_indef_contrato" name="add_empleado_check_contrato_indef_contrato" value="">
+                                                    <label for="add_empleado_check_contrato_indef_contrato" class="cr"></label>
                                                 </div>
                                             </div>
 
 
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
-                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible" id="add_empleado_monto_imponible">
+                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible_personal" id="add_empleado_monto_imponible_personal">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
-                                                <input type="hidden" id="add_empleado_locomocion" name="add_empleado_locomocion" value="0">
+                                                <input type="hidden" id="add_empleado_locomocion_personal" name="add_empleado_locomocion_personal" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion', 'add_empleado_locomocion', 'add_empleado_locomocion_porcentaje');" id="add_empleado_check_locomocion" name="add_empleado_check_locomocion" value="">
-                                                    <label for="add_empleado_check_locomocion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion_contrato', 'add_empleado_locomocion_contrato', 'add_empleado_locomocion_porcentaje_contrato');" id="add_empleado_check_locomocion_contrato" name="add_empleado_check_locomocion_contrato" value="">
+                                                    <label for="add_empleado_check_locomocion_contrato" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje" id="add_empleado_locomocion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje_personal" id="add_empleado_locomocion_porcentaje_personal" value="N/A">
                                             </div>
 
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
-                                                 <input type="hidden" id="add_empleado_colacion" name="add_empleado_colacion" value="0">
+                                                <input type="hidden" id="add_empleado_colacion_personal" name="add_empleado_colacion_personal" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion', 'add_empleado_colacion', 'add_empleado_colacion_porcentaje');" id="add_empleado_check_colacion" name="add_empleado_check_colacion" value="">
-                                                    <label for="add_empleado_check_colacion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion_contrato', 'add_empleado_colacion_contrato', 'add_empleado_colacion_porcentaje_contrato');" id="add_empleado_check_colacion_contrato" name="add_empleado_check_colacion_contrato" value="">
+                                                    <label for="add_empleado_check_colacion_contrato" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje" id="add_empleado_colacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje_personal" id="add_empleado_colacion_porcentaje_personal" value="N/A">
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
-                                                <input type="hidden" id="add_empleado_asignacion_familiar" name="add_empleado_asignacion_familiar" value="0">
+                                                <input type="hidden" id="add_empleado_asignacion_familiar_personal" name="add_empleado_asignacion_familiar_personal" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar', 'add_empleado_asignacion_familiar', 'add_empleado_asignacion_familiar_cantidad');" id="add_empleado_check_asignacion_familiar" name="add_empleado_check_asignacion_familiar" value="">
-                                                    <label for="add_empleado_check_asignacion_familiar" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar_contrato', 'add_empleado_asignacion_familiar_contrato', 'add_empleado_asignacion_familiar_cantidad_contrato');" id="add_empleado_check_asignacion_familiar_contrato" name="add_empleado_check_asignacion_familiar_contrato" value="">
+                                                    <label for="add_empleado_check_asignacion_familiar_contrato" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad" id="add_empleado_asignacion_familiar_cantidad" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad_personal" id="add_empleado_asignacion_familiar_cantidad_personal" value="N/A">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
-                                                <input type="hidden" id="add_empleado_caja_compensacion" name="add_empleado_caja_compensacion" value="0">
+                                                <input type="hidden" id="add_empleado_caja_compensacion_personal" name="add_empleado_caja_compensacion_personal" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion', 'add_empleado_caja_compensacion', 'add_empleado_caja_compensacion_porcentaje');" id="add_empleado_check_caja_compensacion" name="add_empleado_check_caja_compensacion" value="">
-                                                    <label for="add_empleado_check_caja_compensacion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion_contrato', 'add_empleado_caja_compensacion_contrato', 'add_empleado_caja_compensacion_porcentaje_contrato');" id="add_empleado_check_caja_compensacion_contrato" name="add_empleado_check_caja_compensacion_contrato" value="">
+                                                    <label for="add_empleado_check_caja_compensacion_contrato" class="cr"></label>
                                                 </div>
 
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje" id="add_empleado_caja_compensacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje_personal" id="add_empleado_caja_compensacion_porcentaje_personal" value="N/A">
                                             </div>
                                         </div>
                                     </form>
@@ -223,7 +223,7 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Días de Trabajo</label>
-                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_asistente" id="add_empleado_dias_laborales_asistente" multiple="multiple">
+                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_asistente_personal" id="add_empleado_dias_laborales_asistente_personal" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
                                                     <option value="3">Miercoles</option>
@@ -235,20 +235,20 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_personal" name="add_empleado_hora_entrada_personal" value="08:00">
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_personal" name="add_empleado_hora_salida_personal" value="19:00">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora Inicio Colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion_personal" name="add_empleado_hora_entrada_colacion_personal" value="12:00">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion_personal" name="add_empleado_hora_salida_colacion_personal" value="13:00">
                                             </div>
                                         </div>
                                     </form>
@@ -258,7 +258,7 @@
                                     <div class="form-group form-row">
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
-                                            <select name="afp" id="afp" class="form-control form-control-sm">
+                                            <select name="afp_contrato" id="afp_contrato" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">AFP Capital</option>
                                                 <option value="2">AFP Cuprum</option>
@@ -270,7 +270,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
-                                            <select name="salud" id="salud" class="form-control form-control-sm">
+                                            <select name="salud_contrato" id="salud_contrato" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">Fonasa</option>
                                                 <option value="2">Isapre Banmedica</option>
@@ -284,13 +284,13 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
-                                                <input type="text" name="seguros" id="seguros" class="form-control form-control-sm">
+                                                <input type="text" name="seguros_contrato" id="seguros_contrato" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
-                                                <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                                                <input type="number" name="cantidad_contrato" id="cantidad_contrato" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -317,27 +317,27 @@
 <script>
     $(document).ready(function() {
         {{--  FORMATEO DE RUT AGREGAR NUEVO PROFESIONAL   --}}
-        $("#add_empleado_rut").rut({
+        $("#add_empleado_rut_personal").rut({
             formatOn: 'keyup',
             minimumLength: 2,
             validateOn: 'change',
             useThousandsSeparator : false
         });
         // select2
-        $('#add_empleado_dias_laborales_asistente').select2({
+        $('#add_empleado_dias_laborales_asistente_personal').select2({
             placeholder: "Seleccione"
         });
     });
 
-    function registrar_personal() {
+    function registrar_personal_lab() {
         $('#modal_agregar_personal').modal('show');
-        limpiar_formulario();
+        limpiar_formulario_personal();
     }
 
     {{-- BUSCAR CIUDAD DE REGISTRAR --}}
     function buscar_ciudad_nuevo_empleado(id_ciudad=0)
     {
-        let region = $('#add_empleado_region').val();
+        let region = $('#add_empleado_region_contrato').val();
         let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
         $.ajax({
             url: url,
@@ -379,69 +379,112 @@
         });
     };
 
+    function buscar_ciudad_nuevo_empleado_lab(id_ciudad=0)
+    {
+        let region = $('#add_empleado_region_personal').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                region: region,
+            },
+        })
+        .done(function(data) {
+            if (data != null)
+            {
+                data = JSON.parse(data);
+
+                let ciudades = $('#add_empleado_ciudad_personal');
+
+                ciudades.find('option').remove();
+                ciudades.append('<option value="0">Seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                })
+
+                if(id_ciudad != 0)
+                    ciudades.val(id_ciudad);
+
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
 
     function registrar_nuevo_empleado()
     {
         var valido = 1;
         var mensaje = '';
-        let id_institucion = $('#add_empleado_id_institucion').val();
-        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
-        let id_admin_creador = $('#add_empleado_id_admin_creador').val();
-        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador').val();
-        let tipo_contrato = $('#add_empleado_tipo_contrato').val();
+        let id_institucion = $('#id_institucion').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_admin_creador = $('#add_empleado_id_admin_creador_personal').val();
+        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador_personal').val();
+        let tipo_contrato = $('#add_empleado_tipo_contrato_contrato').val();
 
-        let rut = $('#add_empleado_rut').val();
-        let nombre = $('#add_empleado_nombre').val();
-        let apellido_uno = $('#add_empleado_apellido_uno').val();
-        let apellido_dos = $('#add_empleado_apellido_dos').val();
-        let sexo = $('#add_empleado_sexo').val();
-        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento').val();
-        let email = $('#add_empleado_email').val();
+        let rut = $('#add_empleado_rut_personal').val();
+        let nombre = $('#add_empleado_nombre_personal').val();
+        let apellido_uno = $('#add_empleado_apellido_uno_personal').val();
+        let apellido_dos = $('#add_empleado_apellido_dos_personal').val();
+        let sexo = $('#add_empleado_sexo_personal').val();
+        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_personal').val();
+        let email = $('#add_empleado_email_personal').val();
 
-        let fecha_inicio = $('#add_empleado_fecha_inicio').val();
-        let fecha_termino = $('#add_empleado_fecha_termino').val();
-        let monto_imponible = $('#add_empleado_monto_imponible').val();
+        let fecha_inicio = $('#add_empleado_fecha_inicio_personal').val();
+        let fecha_termino = $('#add_empleado_fecha_termino_personal').val();
+        let monto_imponible = $('#add_empleado_monto_imponible_personal').val();
 
-        let locomocion = ( $('#add_empleado_locomocion').val() == ''?'0':$('#add_empleado_locomocion').val() );
+        let locomocion = ( $('#add_empleado_locomocion_personal').val() == ''?'0':$('#add_empleado_locomocion_personal').val() );
         var locomocion_porcentaje = '';
         if(locomocion == 1)
-            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje').val();
+            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje_personal').val();
         else
             locomocion_porcentaje = '0';
 
-        let colacion = ( $('#add_empleado_colacion').val() == ''?'0':$('#add_empleado_colacion').val() );
+        let colacion = ( $('#add_empleado_colacion_personal').val() == ''?'0':$('#add_empleado_colacion_personal').val() );
         var colacion_porcentaje = '';
         if(colacion == 1)
-            colacion_porcentaje = $('#add_empleado_colacion_porcentaje').val();
+            colacion_porcentaje = $('#add_empleado_colacion_porcentaje_personal').val();
         else
             colacion_porcentaje = '0';
 
-        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar').val() == ''?'0':$('#add_empleado_asignacion_familiar').val() );
+        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar_personal').val() == ''?'0':$('#add_empleado_asignacion_familiar_personal').val() );
         var asignacion_familiar_cantidad = '';
         if(asignacion_familiar == 1)
-            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad').val();
+            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad_personal').val();
         else
             asignacion_familiar_cantidad = '0';
 
-        let caja_compensacion = ( $('#add_empleado_caja_compensacion').val() == ''?'0':$('#add_empleado_caja_compensacion').val() );
+        let caja_compensacion = ( $('#add_empleado_caja_compensacion_personal').val() == ''?'0':$('#add_empleado_caja_compensacion_personal').val() );
         var caja_compensacion_porcentaje = '';
         if(caja_compensacion == 1)
-            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje').val();
+            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje_personal').val();
         else
             caja_compensacion_porcentaje = '0';
 
-
-        let telefono = $('#add_empleado_telefono').val();
-        let region = $('#add_empleado_region').val();
-        let ciudad = $('#add_empleado_ciudad').val();
-        let direccion = $('#add_empleado_direccion').val();
-        let numero = $('#add_empleado_numero').val();
-        let dias_laborales = $('#add_empleado_dias_laborales_asistente').val();
-        let hora_entrada = $('#add_empleado_hora_entrada').val();
-        let hora_salida = $('#add_empleado_hora_salida').val();
-        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion').val();
-        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion').val();
-        let clave_ingreso = $('#add_empleado_clave_ingreso').val();
+        let telefono = $('#add_empleado_telefono_personal').val();
+        let region = $('#add_empleado_region_personal').val();
+        let ciudad = $('#add_empleado_ciudad_personal').val();
+        let direccion = $('#add_empleado_direccion_personal').val();
+        let numero = $('#add_empleado_numero_personal').val();
+        let dias_laborales = $('#add_empleado_dias_laborales_asistente_personal').val();
+        let hora_entrada = $('#add_empleado_hora_entrada_personal').val();
+        let hora_salida = $('#add_empleado_hora_salida_personal').val();
+        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion_personal').val();
+        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion_personal').val();
+        let clave_ingreso = $('#add_empleado_clave_ingreso_personal').val();
         let _token = CSRF_TOKEN;
 
         if(id_institucion == '')
@@ -621,28 +664,18 @@
                     id_institucion: id_institucion,
                     id_lugar_atencion: id_lugar_atencion,
                     id_admin_creador: id_admin_creador,
-
                     id_tipo_admin_creador: id_tipo_admin_creador,
-
                     tipo_contrato: tipo_contrato,
-
                     rut: rut,
                     nombre: nombre,
                     apellido_uno: apellido_uno,
                     apellido_dos: apellido_dos,
-                    fecha_nacimiento: fecha_nacimiento,
                     sexo: sexo,
+                    fecha_nacimiento: fecha_nacimiento,
                     email: email,
-                    telefono: telefono,
-                    region: region,
-                    ciudad: ciudad,
-                    direccion: direccion,
-                    numero: numero,
-
                     fecha_inicio: fecha_inicio,
                     fecha_termino: fecha_termino,
                     monto_imponible: monto_imponible,
-
                     locomocion: locomocion,
                     locomocion_porcentaje: locomocion_porcentaje,
                     colacion: colacion,
@@ -651,52 +684,39 @@
                     asignacion_familiar_cantidad: asignacion_familiar_cantidad,
                     caja_compensacion: caja_compensacion,
                     caja_compensacion_porcentaje: caja_compensacion_porcentaje,
-
+                    telefono: telefono,
+                    region: region,
+                    ciudad: ciudad,
+                    direccion: direccion,
+                    numero: numero,
                     dias_laborales: dias_laborales,
                     hora_entrada: hora_entrada,
                     hora_salida: hora_salida,
                     hora_entrada_colacion: hora_entrada_colacion,
                     hora_salida_colacion: hora_salida_colacion,
-
-                    otro: '',
-                    otro_2: '',
-
-                    clave_ingreso: clave_ingreso,
+                    clave_ingreso: clave_ingreso
                 },
-            })
-            .done(function(data) {
-                console.log(data);
-                if (data != null) {
-                    if(data.estado == 1)
-                    {
-                        $('#modal_agregar_personal').modal('hide');
-
+                success: function(data) {
+                    console.log(data);
+                    if(data.estado == 1) {
                         swal({
                             title: "Ingreso de Personal",
-                            text: 'Registro Exitoso.',
+                            text: data.mensaje,
                             icon: "success",
                             buttons: "Aceptar",
                         });
                         limpiar_formulario();
                         $('#contenedor_asistentes_personal').empty();
                         $('#contenedor_asistentes_personal').append(data.view);
-                    }
-                    else
-                    {
-
+                    } else {
                         var mensaje = '';
-                        if(data.error)
-                        {
-                            $.each(data.error, function (indexInArray, valueOfElement)
-                            {
+                        if(data.error) {
+                            $.each(data.error, function (indexInArray, valueOfElement) {
                                 mensaje += valueOfElement+'\n';
                             });
-                        }
-                        else
-                        {
+                        } else {
                             mensaje += 'Intente nuevamente.';
                         }
-
                         swal({
                             title: "Ingreso de Personal",
                             text: mensaje,
@@ -705,9 +725,9 @@
                             DangerMode: true,
                         });
                     }
-                }
-                else
-                {
+                },
+                error: function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError);
                     swal({
                         title: "Error",
                         text: "Error al cargar ingresar personal",
@@ -716,9 +736,6 @@
                         DangerMode: true,
                     });
                 }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
             });
 
         }
@@ -750,7 +767,7 @@
         }
     }
 
-    function limpiar_formulario()
+    function limpiar_formulario_personal()
     {
         $('#modal_agregar_personal').find('input,textarea,select,checkbox').each(function(key, element){
             if($(element).attr('type') == 'checkbox')
@@ -765,14 +782,14 @@
                 $(element).val('13:00');
             else if($(element).attr('id') == 'add_empleado_hora_salida_colacion')
                 $(element).val('13:00');
-            else if($(element).attr('id') == 'add_empleado_id_institucion')
+            else if($(element).attr('id') == 'add_empleado_id_institucion_contrato')
                 $(element).val();
             else if($(element).attr('id') == 'add_empleado_id_lugar_atencion')
                 $(element).val();
-            else if($(element).attr('id') == 'add_empleado_id_admin_creador')
-                $(element).val();
-            else if($(element).attr('id') == 'add_empleado_id_tipo_admin_creador')
-                $(element).val();
+            else if($(element).attr('id') == 'add_empleado_id_admin_creador_personal')
+                return;
+            else if($(element).attr('id') == 'add_empleado_id_tipo_admin_creador_personal')
+                return;
             else
                 $(element).val('');
         });

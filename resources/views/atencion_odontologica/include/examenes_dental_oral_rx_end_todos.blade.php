@@ -230,7 +230,7 @@
                                     del
                                     radiólogo</label>
                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;"
-                                    name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}">{{ $e->informe_radiologo ?? '' }}</textarea>
+                                    name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}">{{ $e->informe ?? '' }}</textarea>
                             </div>
                         </div>
                         <div

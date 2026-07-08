@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#indicar_examenes').modal('hide')"><span
                         aria-hidden="true">×</span>
                 </button>
             </div>
@@ -92,43 +92,21 @@
                         <!--Cierre Tabla-->
                     </div>
                 </div>
+                <button type="button" onclick="registro_examen_ficha();" data-dismiss="modal" class="btn btn-info">Generar Orden de Examen</button>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" data-dismiss="modal" class="btn btn-info">Guardar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#indicar_examenes').modal('hide')">Cancelar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-info" onclick="$('#indicar_examenes').modal('hide')">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 <script>
-    // function indicar_examen_ficha() {
-    //         var tipo_examen = $("#tipo_examen option:selected").text();
-    //         var sub_tipo_examen = $("#sub_tipo_examen option:selected").text();
-    //         var examen = $("#examen option:selected").text();
-    //         var prioridad = $("#prioridad option:selected").text();
 
-    //         var i = 1; //contador para asignar id al boton que borrara la fila
-    //         var fila = '<tr class="tr_examen_cirugia" id="row' + i + '"><td>' +
-    //             tipo_examen + '</td><td>' +
-    //             sub_tipo_examen + '</td><td>' +
-    //             examen + '</td><td>' +
-    //             prioridad + '</td><td><button type="button" name="remove" id="' + i +
-    //             '" class="btn btn-danger btn_remove1">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
+    $(document).ready(function() {
+        dame_examenes();
+    });
 
-    //         i++;
-
-    //         $('#tabla_examen_cirugia tr:first').after(fila);
-    //         $("#adicionados1").text(
-    //             ""
-    //         ); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
-    //         var nFilas = $("#tabla_examen_cirugia tr").length;
-    //         $("#adicionados1").append(nFilas - 1);
-    //         $("#sub_tipo_examen").empty();
-    //         $("#examen").empty();
-    //         //$("#frecuencia").empty();
-    //         //$("#periodo").empty();
-    //         //$("#prioridad").empty();
-    //     }
     function indicar_examen_ficha() {
         var id_tipo_examen = $("#tipo_examen").val();
         var tipo_examen = $("#tipo_examen option:selected").text();
@@ -187,7 +165,7 @@
             _token: CSRF_TOKEN
         }
 
-        var url = "{{ ROUTE('examen.indicar_examen') }}";
+        var url = "{{ ROUTE('examen.indicar_examen_hosp') }}";
 
         $.ajax({
             type:'post',
@@ -224,4 +202,82 @@
             }
         });
     }
+
+    function dame_examenes(){
+        let id_ficha_atencion = $('#id_fc').val();
+        let url = "{{ ROUTE('examen.dame_examenes_hosp') }}";
+
+        $.ajax({
+            type:'get',
+            url: url,
+            data:{
+                id_ficha_atencion: id_ficha_atencion,
+                id_paciente: $('#id_paciente').val(),
+            },
+            success: function(examenes){
+                console.log(examenes);
+                    let table = $('#tabla_examen_ficha').DataTable();
+            // Limpiar la tabla
+            table.clear();
+
+            // Agregar cada fila
+            examenes.forEach(examen => {
+                table.row.add([
+                    examen.datos_examen.examen,
+                    examen.datos_examen.tipo_examen,
+                    examen.datos_examen.sub_tipo_examen,
+                    examen.datos_examen.prioridad,
+                    `<button type="button" onclick="eliminar_examen_ind(${examen.id})" class="btn btn-danger btn-icon"><i class="feather icon-x"></i></button>`
+                ]);
+            });
+
+            // Dibujar la tabla con los nuevos datos
+            table.draw();
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function eliminar_examen_ind(id_examen){
+                swal({
+                    title: "Eliminar Examen",
+                    text: "¿Está seguro que desea eliminar el examen?",
+                    icon: "warning",
+                    buttons: ["Cancelar", "Aceptar"],
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        eliminar_examen_confirmar(id_examen);
+                    }
+                });
+        }
+
+        function eliminar_examen_confirmar(id_examen){
+            console.log(id_examen);
+            let url ="{{ ROUTE('examen.eliminar_examen_hosp') }}"
+            $.ajax({
+                type:'get',
+                url: url,
+                data:{
+                    id: id_examen
+                },
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.estado == 1){
+                        swal({
+                            icon:'success',
+                            text: resp.mensaje,
+                        });
+                        dame_examenes();
+                    }
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+
 </script>

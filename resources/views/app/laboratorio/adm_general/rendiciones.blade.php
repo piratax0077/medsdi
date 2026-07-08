@@ -102,7 +102,7 @@
                                                     <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 col-xxxl-3">
                                                         <div class="form-group">
                                                             <label class="floating-label-activo-sm">Recibe caja</label>
-                                                            <select name="id_asistente_receptor" id="id_asistente_receptor" class="form-control form-control-sm">
+                                                            <select name="id_profesional_receptor" id="id_profesional_receptor" class="form-control form-control-sm">
                                                                 <option value="0">Seleccione</option>
                                                                 @if(isset($listado_recibe))
                                                                     @foreach ( $listado_recibe as $recibe )
@@ -193,13 +193,13 @@
                                                                                 @if($value_b->id_clase_bono == 1)
                                                                                     Emitido por la institución
                                                                                  @elseif($value_b->id_clase_bono == 2)
-                                                                                    Control sin costo
-                                                                                {{--@elseif($value_b->id_clase_bono == 3)
+                                                                                    Váucher
+                                                                                @elseif($value_b->id_clase_bono == 3)
                                                                                     Caja Vecina
                                                                                 @elseif($value_b->id_clase_bono == 4)
                                                                                     Bono Web
                                                                                 @elseif($value_b->id_clase_bono == 5)
-                                                                                    Bono Web Pre-Pago --}}
+                                                                                    Bono Web Pre-Pago
                                                                                 @elseif($value_b->id_clase_bono == 6)
                                                                                     Particular
                                                                                 @elseif($value_b->id_clase_bono == 8)
@@ -482,7 +482,7 @@
             var conteo_activo = 0; // valida si conteo esta activo
 
             $(document).ready(function(){
-                $('#id_asistente_receptor').select2();
+                $('#id_profesional_receptor').select2();
                 $('#id_asistente_receptor_prof').select2();
                 $('#id_asistente_receptor_prof').on('select2:select', function (e) {
                     cargar_registros_prof(); // tu función
@@ -582,18 +582,29 @@
             function rendir_caja()
             {
                 let url = "{{ route('laboratorio.caja.rendir.bonos') }}";
-
+                let  id_profesional_receptor = $('#id_profesional_receptor').val();
+                if(id_profesional_receptor == 0)
+                {
+                    swal({
+                        title: "Error al Rendir Caja.",
+                        text: "Debe seleccionar el Profesional que recibe la caja.",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                    return false;
+                }
                 $.ajax({
                         url: url,
                         type: "POST",
                         data: {
                             _token: '{{ csrf_token() }}',
                             bonos : $('#lista_bonos').val(),
-                            id_asistente_receptor : $('#id_asistente_receptor').val(),
+                            id_asistente_receptor: id_profesional_receptor,
                             archivos : $('#input_lista_archivo').val(),
                             observaciones : $('#observaciones_rendicion').val(),
                             fecha: $('#fecha_rendicion').val(),
-                            
+
                         },
                     })
                     .done(function(data) {
@@ -691,6 +702,38 @@
                                     if(data.registro.estado == 0)
                                     {
                                         console.log('espera aprobacion');
+                                        
+                                        // Verificar si el tiempo está por terminar (2 minutos restantes)
+                                        if(tiempo == 2)
+                                        {
+                                            // Detener el conteo mientras se espera la respuesta del usuario
+                                            conteo_activo = 0;
+                                            
+                                            swal({
+                                                title: "Solicitud de Rendicion",
+                                                text: 'El tiempo para Autorizar Rendición esta por finalizar (quedan 2 minutos). ¿Desea extender el tiempo? Si presiona "Más Tiempo" se agregará tiempo adicional. Si presiona "Desistir" la Rendición quedará Anulada.',
+                                                icon: "warning",
+                                                buttons: ["Desistir", 'Más Tiempo'],
+                                                closeOnClickOutside: false,
+                                                closeOnEsc: false,
+                                            }).then((result) => {
+                                                if (result == true)
+                                                {
+                                                    // Usuario quiere más tiempo - reiniciar el contador
+                                                    reiniciar_rendicion( $('#numero_rendicion_hidde').val());
+                                                }
+                                                else
+                                                {
+                                                    // Usuario desiste - cancelar la rendición
+                                                    desistir_rendicion();
+                                                }
+                                            });
+                                        }
+                                        else
+                                        {
+                                            // Continuar validando solo si NO estamos esperando respuesta del usuario
+                                            validar_rendicion();
+                                        }
                                     }
                                     else
                                     {
@@ -722,8 +765,9 @@
 
                                             console.log('confirmado');
                                             value_validacion = 1;
-                                            cargar_registros();
-                                            cargar_registros_prof()
+                                            // cargar_registros();
+                                            // cargar_registros_prof();
+                                            // NO continuar validando, la rendición ya fue aceptada
                                             return false;
                                         }
                                         else if(data.registro.estado == 2)
@@ -735,6 +779,7 @@
                                                 buttons: "Aceptar",
                                                 // DangerMode: true,
                                             });
+                                            // NO continuar validando, la rendición ya venció
                                         }
                                         else if(data.registro.estado == 3)
                                         {
@@ -745,6 +790,7 @@
                                                 buttons: "Aceptar",
                                                 // DangerMode: true,
                                             });
+                                            // NO continuar validando, la rendición fue rechazada
                                         }
                                     }
                                 }
@@ -757,29 +803,14 @@
                                         buttons: "Aceptar",
                                         // DangerMode: true,
                                     });
-                                }
-
-                                validar_rendicion(tiempo);
-                                if(tiempo == 8)
-                                {
-                                    swal({
-                                        title: "Solicitud de Rendicion",
-                                        text: 'El tiempo para Autorizar Rendición esta por finalizar, Desea continuar presione el botón "Más Tiempo", si "Acepta" la Rendición quedará Anulada y debera realizarla de nuevo.',
-                                        icon: "warning",
-                                        buttons: ["Aceptar", 'Más Tiempo'],
-                                    }).then((result) => {
-                                        if (result == true)
-                                        {
-                                            reiniciar_rendicion( $('#numero_rendicion_hidde').val());
-                                        }
-                                    });
+                                    // NO continuar validando en caso de error
                                 }
 
                             })
                             .fail(function(jqXHR, ajaxOptions, thrownError) {
                                 console.log(jqXHR, ajaxOptions, thrownError)
                             });
-                    }, 10000);// 600 = 1seg |  60000 = 1 minutos | 10000 = 10 seg | 600000 = 10 minutos
+                    }, 60000);// 60000 ms = 1 minuto real - cada ciclo resta 1 minuto de la variable tiempo
                 }
                 else
                 {
@@ -1219,7 +1250,7 @@
                     url: url,
                     type: "GET",
                     data: {
-                        'id_profesional': $('#id_asistente_receptor_prof').val()
+                        'id_profesional': $('#id_profesional_receptor_prof').val()
                     },
                 })
                 .done(function(data) {

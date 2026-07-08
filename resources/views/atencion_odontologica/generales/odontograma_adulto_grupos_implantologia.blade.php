@@ -51,9 +51,9 @@
         gap: 15px;
         margin-bottom:20px;
         margin-top:10px;
-    } */
+    }
 
-    /* .fila {
+    .fila {
         display: grid;
         grid-template-columns: repeat(16, 1fr);
         gap: 8px;

@@ -3,25 +3,17 @@
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Empleado Nuevo</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Registrar nuevo empleado</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
-                        <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
-                        <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
-                        <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
-                        <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                        <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
+                    <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
+                    <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                    <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
+                    <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
                     <div class="row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <script>
-                            var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-                            var f=new Date();
-                            document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                            </script>
-                        </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
@@ -46,28 +38,33 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="tab-content" id="info-ingreso">
-                                <!---->
+                                <!--TIPO DE CONTRATO-->
                                 <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
-                                            <option value="">Seleccione</option>
-                                            @if ($lista_tipo_contrato)
-                                                @foreach ($lista_tipo_contrato as $item)
-                                                    <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <h6 class="t-modal">Tipo de contrato</h6>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
+                                                <option value="">Seleccione</option>
+                                                @if ($lista_tipo_contrato)
+                                                    @foreach ($lista_tipo_contrato as $item)
+                                                        <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                    <!--INFO PERSONAL-->
+                                <!--INFO PERSONAL-->
                                 <div class="tab-pane fade show" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                                <h6 class="t-modal">Información y datos de contacto</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">RUT:</label>
+                                                <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut" onblur="buscar_persona_rut_nuevo_empleado();">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -97,7 +94,7 @@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Email:</label>
+                                                <label class="floating-label-activo-sm">Email</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -138,14 +135,14 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                                <h6 class="t-modal">Información y datos del contrato</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio" id="add_empleado_fecha_inicio">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Termino</label>
+                                                <label class="floating-label-activo-sm">Fecha Término</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino" id="add_empleado_fecha_termino">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
@@ -205,9 +202,7 @@
                                                     <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion', 'add_empleado_caja_compensacion', 'add_empleado_caja_compensacion_porcentaje');" id="add_empleado_check_caja_compensacion" name="add_empleado_check_caja_compensacion" value="">
                                                     <label for="add_empleado_check_caja_compensacion" class="cr"></label>
                                                 </div>
-
                                             </div>
-
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje" id="add_empleado_caja_compensacion_porcentaje" value="N/A">
                                             </div>
@@ -219,7 +214,7 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                                <h6 class="t-modal">Horario de trabajo</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Días de Trabajo</label>
@@ -233,20 +228,20 @@
                                                     <option value="7">Domingo</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                <label class="floating-label-activo-sm">Hora inicio colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
                                             </div>
@@ -256,6 +251,9 @@
                                 <!-- LEYES SOCIALES -->
                                 <div class="tab-pane fade show" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
                                     <div class="form-group form-row">
+                                        <div class="col-sm-12 col-md-12 mb-2">
+                                            <h6 class="t-modal">Leyes sociales</h6>
+                                        </div>
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
                                             <select name="afp" id="afp" class="form-control form-control-sm">
@@ -295,15 +293,14 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado();">Añadir al Equipo</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="registrar_nuevo_empleado();"><i class="feather icon-plus"></i> Añadir al Equipo</button>
                 {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
                 </form>
             </div>
@@ -608,6 +605,7 @@
         //     valido = 0;
         //     mensaje += 'Campo requerido clave_ingreso\n';
         // }
+
 
         if(valido == 1)
         {

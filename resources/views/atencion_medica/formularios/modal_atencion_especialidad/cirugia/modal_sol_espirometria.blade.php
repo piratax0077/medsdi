@@ -207,6 +207,8 @@
         if (tipo == 1) {
             // Obtener valores de los exámenes seleccionados
             var select = document.getElementById("ex-funcional");
+            var tipo_examen = "EXAMENES FUNCIONALES";
+            var sub_tipo_examen = "ESPIROMETRÍA";
             var selectedOptions = Array.from(select.selectedOptions);
             // Obtener diagnóstico y observaciones
             var diagnostico = document.getElementById('diagnostico_especialidad').value;
@@ -214,6 +216,9 @@
         } else if (tipo == 2) {
             // Obtener valores de los exámenes seleccionados
             var select = document.getElementById("examen_rx");
+            var tipo_examen = "ESTUDIO RADIOLÓGICO";
+            var sub_tipo_examen = "RADIOGRAFÍA SIMPLE";
+            var id_sub_tipo_examen = 356;
             var selectedOptions = Array.from(select.selectedOptions);
             // Obtener diagnóstico y observaciones
             var diagnostico = document.getElementById('diagnostico_rx').value;
@@ -222,29 +227,46 @@
             // Obtener valores de los exámenes seleccionados
             var select = document.getElementById("examenes_endoscopico");
             var selectedOptions = Array.from(select.selectedOptions);
+            var tipo_examen = "EXAMENES ENDOSCOPICO";
+            var sub_tipo_examen = "ENDOSCOPIA DIGESTIVA ALTA";
+            var id_sub_tipo_examen = 766;
             // Obtener diagnóstico y observaciones
             var diagnostico = document.getElementById('diagnostico_endoscopico').value;
             var observaciones = document.getElementById("observaciones_endoscopias").value;
+        }else if(tipo == 4){
+            // Obtener valores de los exámenes seleccionados
+            var select = document.getElementById("ex-frecuente");
+            var selectedOptions = Array.from(select.selectedOptions);
+            // Obtener diagnóstico y observaciones
+            var diagnostico = document.getElementById('diagnostico_comunes').value;
+            var observaciones = document.getElementById("observaciones_comunes").value;
         }
 
 
         if (selectedOptions.length === 0) {
-            alert("Debe seleccionar al menos un examen.");
+            swal("Debe seleccionar al menos un examen.");
             return;
         }
-
-
 
         let examenes_texto = selectedOptions.map(option => option.text);
 
         let data = {
+            id_examen: selectedOptions.map(option => option.value),
+            tipo_examen: tipo_examen,
+            id_tipo_examen: tipo,
+            sub_tipo_examen: sub_tipo_examen,
+            id_sub_tipo_examen: id_sub_tipo_examen,
             diagnostico: diagnostico,
             observaciones: observaciones,
             id_ficha_atencion: $('#id_fc').val(),
-            tipo_examen: tipo,
+            id_paciente: $('#id_paciente_fc').val(),
             examenes: examenes_texto,
+            lado: 'No Corresponde',
+            prioridad: 1,
             _token: CSRF_TOKEN
         }
+
+        console.log(data);
 
         let url = "{{ ROUTE('profesional.examen.registro') }}";
         $.ajax({
@@ -254,7 +276,6 @@
             success: function(resp) {
                 console.log(resp);
                 if (resp.success) {
-                    // Limpiar campos
                     limpiar_campos(tipo);
                     swal({
                         title: 'Se han guardado con éxito los examenes',
@@ -293,13 +314,7 @@
             let auto = 1; // o el valor real que quieras enviar
             let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
 
-            Fancybox.show(
-                [{
-                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
-                    type: "iframe",
-                    preload: false,
-                }, ]
-            );
+            ver_pdf_orden_examenes(id_ficha_atencion);
     }
 
     function eliminarExamen(id,tipo, nombre_examen = null) {

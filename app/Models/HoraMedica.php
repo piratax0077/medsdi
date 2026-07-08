@@ -36,6 +36,11 @@ class HoraMedica extends Model
         return $this->hasOne(LugarAtencion::class,'id','id_lugar_atencion');
     }
 
+    public function Asistente()
+    {
+        return $this->hasOne(Asistente::class,'id','id_asistente');
+    }
+
     public function scopeIdNotIn($query, $array)
     {
         if(count($array) > 0)

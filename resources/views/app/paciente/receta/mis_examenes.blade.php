@@ -28,7 +28,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4 class="text-c-blue f-20 d-inline">Mis exámenes</h4>
+                                    <h4 class="text-c-blue f-20 d-inline">Exámenes cargados por mí</h4>
                                     <button type="button" class="btn btn-info btn-sm float-right d-inline" onclick="subir_ex_pcte();"><i class="feather icon-plus"></i> Subir examen</button>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@
                                     <tbody>
                                         @if ($examenes_especialidad_realizados)
                                             @foreach ($examenes_especialidad_realizados as $exam)
-                                                @if ($exam->HoraMedica->id_estado == 6)
+                                                @if ($exam->HoraMedica && $exam->HoraMedica->id_estado == 6)
                                                     <tr>
                                                         <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
                                                         <td class="text-wrap">{{ $exam->id }}</td>
@@ -135,10 +135,79 @@
                             </div>
                         </div>
                     </div>
+                     {{-- ===== RESULTADOS SUBIDOS POR PROFESIONAL O LABORATORIO ===== --}}
+    @if(isset($fichas_con_resultado) && $fichas_con_resultado->count() > 0)
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-c-blue f-20">Resultados subidos por profesional o laboratorios</h4>
+                </div>
+                <div class="card-body">
+                    <div style="overflow-x:auto;">
+                        <table id="examen-resultado-prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Procedimiento</th>
+                                    <th>Profesional o laboratorio</th>
+                                    <th>Archivos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($fichas_con_resultado as $ficha)
+                                    @php
+                                        $archivos_json = null;
+                                        if($ficha->FichaOtrosProfesionales)
+                                            $archivos_json = $ficha->FichaOtrosProfesionales->archivo;
+                                        elseif($ficha->FichaAtencion)
+                                            $archivos_json = $ficha->FichaAtencion->archivo;
+                                        $archivos_ficha = $archivos_json ? json_decode($archivos_json, true) : [];
+                                    @endphp
+                                    @if(is_array($archivos_ficha) && count($archivos_ficha) > 0)
+                                    <tr>
+                                        <td data-sort="{{ $ficha->fecha_realizacion_consulta }}">
+                                            {{ $ficha->fecha_realizacion_consulta ? date('d-m-Y', strtotime($ficha->fecha_realizacion_consulta)) : '-' }}
+                                        </td>
+                                        <td>
+                                            @if($ficha->ProcedimientoCentro)
+                                                {{ $ficha->ProcedimientoCentro->nombre }}
+                                            @elseif($ficha->alias_examen)
+                                                {{ $ficha->alias_examen }}
+                                            @else
+                                                Examen
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($ficha->Profesional)
+                                                {{ $ficha->Profesional->nombre.' '.$ficha->Profesional->apellido_uno }}
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success-light-c btn-xxs"
+                                                onclick='verArchivosFicha({{ json_encode($archivos_ficha) }})'>
+                                                <i class="feather icon-file-plus"></i> Ver ({{ count($archivos_ficha) }})
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!--Modal-->
     <div id="ex-pcte" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="#" aria-hidden="true">
@@ -216,6 +285,9 @@
        $('#examenes-pcte').DataTable({
           responsive: true,
       });
+       if ($('#examen-resultado-prof').length) {
+           $('#examen-resultado-prof').DataTable({ responsive: true });
+       }
     });
 
         $(document).ready(function () {
@@ -275,6 +347,19 @@
                     icon: "error"
                 });
             }
+        }
+
+        function verArchivosFicha(archivos)
+        {
+            if (!archivos || archivos.length === 0) {
+                swal({ title: 'Sin archivos', text: 'No se encontraron archivos adjuntos.', icon: 'warning' });
+                return;
+            }
+            var items = archivos.map(function(a) {
+                var type = (a.url.indexOf('.pdf') !== -1) ? 'iframe' : 'image';
+                return { src: a.url, type: type, preload: false };
+            });
+            Fancybox.show(items);
         }
 
         function verResultadoExamen(id_examen, cambio_estado)
@@ -353,6 +438,16 @@
 
                 url: url,
                 type: "post",
+                beforeSend: function() {
+                    $('#ex-pcte').modal('hide');
+                    swal({
+                        title: "Registro de examen",
+                        text: "Cargando información, por favor espere.",
+                        icon: "{{ asset('assets/img/loading.gif') }}",
+                        buttons: false,
+                        closeOnClickOutside: false,
+                    });
+                },
                 data: {
                     _token: CSRF_TOKEN,
                     fecha_registro: fecha,
@@ -365,6 +460,8 @@
                 },
             })
             .done(function(data) {
+                swal.close();
+                console.log(data);
                 if (data.estado == 1)
                 {
                     swal({

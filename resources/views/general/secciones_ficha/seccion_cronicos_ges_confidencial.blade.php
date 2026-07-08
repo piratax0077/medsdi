@@ -179,9 +179,10 @@
                             <option value="chipertension">Hipertensión arterial</option>
                             <option value="cdiabet">Diabetes</option>
                             <option value="cinsufren">Insuficiencia renal</option>
+                            {{-- <option value="epoc">Enfermedad pulmonar obstructiva crónica</option>
                             <option value="cmtumorales">Marcadores tumorales</option>
                             <option value="creumato">Reumatología</option>
-                            <option value="clitemia">Litemia</option>
+                            <option value="clitemia">Litemia</option> --}}
                         </select>
                     </div>
                 </div>
@@ -206,10 +207,10 @@
                                             <a class="nav-link-aten text-reset active" id="obes-ctrl-tab" data-toggle="tab" href="#obes-ctrl" role="tab" aria-controls="obes-ctrl" aria-selected="true">Control</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="obes-hist-tab" data-toggle="tab" href="#obes-hist" role="tab" aria-controls="obes-hist" aria-selected="true">Historial de controles</a>
+                                            <a class="nav-link-aten text-reset" id="obes-hist-tab" data-toggle="tab" href="#obes-hist" onclick="dame_historial_controles()" role="tab" aria-controls="obes-hist" aria-selected="true">Historial de controles</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="obes-med-tab" data-toggle="tab" href="#obes-med" role="tab" aria-controls="obes-med" aria-selected="true">Medicamentos</a>
+                                            <a class="nav-link-aten text-reset" id="obes-med-tab" data-toggle="tab" href="#obes-med" onclick="ver_medicamento_cronico_por_tipo('cpeso')" role="tab" aria-controls="obes-med" aria-selected="true">Medicamentos</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -252,46 +253,33 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <table id="control_obesidad" class="display table table-striped dt-responsive nowrap pb-4 table-xs" style="width:100%">
+                                                    <table id="tabla_planes" class="table table-bordered table-sm">
                                                         <thead>
                                                             <tr>
-                                                                <th>Nº Control</th>
-                                                                <th>Fecha</th>
-                                                                <th>Peso</th>
-                                                                <th>Variación</th>
-                                                                <th>Peso Ideal</th>
-                                                                <!-- <th class="text-center align-middle">Acción</th>-->
+                                                                <th>Plan N°</th>
+                                                                <th>Fecha inicio</th>
+
+                                                                <th>Sesiones</th>
+                                                                <th>Estado</th>
+                                                                <th>Profesional</th>
+                                                                <th>Controles</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-
-                                                            @if (isset($control_peso))
-                                                                @foreach ($control_peso as $cp)
-                                                                    <tr>
-                                                                        <td>{{ $cp->id }}</td>
-                                                                        <td>
-                                                                            {{ \Carbon\Carbon::parse($cp->created_at)->format('d-m-Y') }}
-                                                                        </td>
-                                                                        <td>{{ $cp->peso }}</td>
-                                                                        <td>{{ $cp->variacion }}
-                                                                        </td>
-                                                                        <td>{{ $cp->ideal }}</td>
-                                                                        <!--<td class="text-center align-middle">
-                                                                            <button href="#!" class="btn btn-danger btn-sm">
-                                                                                <i class="feather icon-x"></i> Eliminar</button>
-                                                                        </td>-->
-                                                                    </tr>
-
-                                                                @endforeach
-                                                            @else
-                                                                <span>NO EXISTEN REGISTROS</span>
-
-                                                            @endif
-
-
-                                                        </tbody>
+                                                        <tbody></tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div id="contenedor_grafico_variacion_peso_controles">
+                                                                <canvas id="grafico_peso" height="100"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <!--MEDICAMENTOS-->
@@ -435,7 +423,7 @@
                 <div id="hipertension_div" style="display: none">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue"Control hipertensión</h5>
+                            <h5 class="f-20 text-center text-c-blue">Control hipertensión</h5>
                         </div>
                     </div>
                     <div class="card">
@@ -447,10 +435,10 @@
                                             <a class="nav-link-aten text-reset active" id="hiper-ctrl-tab" data-toggle="tab" href="#hiper-ctrl" role="tab" aria-controls="hiper-ctrl" aria-selected="true">Control</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="hiper-hist-tab" data-toggle="tab" href="#hiper-hist" role="tab" aria-controls="hiper-hist" aria-selected="true">Historial de controles</a>
+                                            <a class="nav-link-aten text-reset" id="hiper-hist-tab" onclick="dame_historial_presion()" data-toggle="tab" href="#hiper-hist" role="tab" aria-controls="hiper-hist" aria-selected="true">Historial de controles</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="hiper-med-tab" data-toggle="tab" href="#hiper-med" role="tab" aria-controls="hiper-med" aria-selected="true">Medicamentos</a>
+                                            <a class="nav-link-aten text-reset" id="hiper-med-tab" data-toggle="tab" href="#hiper-med" onclick="ver_medicamento_cronico_por_tipo('chipertension')" role="tab" aria-controls="hiper-med" aria-selected="true">Medicamentos</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -469,17 +457,17 @@
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <label class="floating-label-activo-sm">Presión Sistólica</label>
                                                     <input type="text" class="form-control form-control-sm"
-                                                        name="presion_sistolica_hipertension" id="presion_sistolica_hipertension">
+                                                        name="presion_sistolica_hipertension" id="presion_sistolica_hipertension" onkeyup="calcularPAM()">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <label class="floating-label-activo-sm">Presión Diastólica</label>
                                                     <input type="text" class="form-control form-control-sm"
-                                                        name="presion_diastolica_hipertension" id="presion_diastolica_hipertension">
+                                                        name="presion_diastolica_hipertension" id="presion_diastolica_hipertension" onkeyup="calcularPAM()">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
-                                                    <label class="floating-label-activo-sm">Presión Ideal</label>
+                                                    <label class="floating-label-activo-sm">PAM</label>
                                                     <input type="text" class="form-control form-control-sm"
-                                                        name="ideal_hipertension" id="ideal_hipertension">
+                                                        name="presion_arterial_media_hipertension" id="presion_arterial_media_hipertension">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <button type="button" onclick="registrar_hipertension();"
@@ -533,6 +521,19 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div id="contenedor_grafico_variacion_presion">
+                                                                <canvas id="grafico_presion" height="100"></canvas>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <!--MEDICAMENTOS-->
@@ -691,7 +692,7 @@
                                             <a class="nav-link-aten text-reset" id="diabet-hist-tab" data-toggle="tab" href="#diabet-hist" role="tab" aria-controls="diabet-hist" aria-selected="true">Historial de controles</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link-aten text-reset" id="diabet-med-tab" data-toggle="tab" href="#diabet-med" role="tab" aria-controls="diabet-med" aria-selected="true">Medicamentos</a>
+                                            <a class="nav-link-aten text-reset" id="diabet-med-tab" data-toggle="tab" href="#diabet-med" onclick="ver_medicamento_cronico_por_tipo('cdiabet')" role="tab" aria-controls="diabet-med" aria-selected="true">Medicamentos</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -1217,7 +1218,10 @@
                     <h4 class="azul">En construcción</h4>
                     <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-90">
                 </div>
-
+                <div id="epoc_div" style="display: none;">
+                    <h4 class="azul">En construcción</h4>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-90">
+                </div>
             </div>
             <!--Cierre modal body
             <div class="modal-footer">
@@ -1232,12 +1236,12 @@
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-				<div class="row">
-					<div class="col-md-7">
-						<h5 class="modal-title text-white">Seleccione antecedente</h5>
-					</div>
-					<div class="col-md-5">
-						<select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h5 class="modal-title text-white">Seleccione antecedente</h5>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">
                             <option value="n_C">Seleccione</option>
                             @if($tipo_antecedente)
                                 @foreach ( $tipo_antecedente as $tipo)
@@ -1245,8 +1249,8 @@
                                 @endforeach
                             @endif
                         </select>
-					</div>
-				</div>
+                    </div>
+                </div>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#m_agregar_antecedente').modal('hide')">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1333,6 +1337,7 @@
 
     $(document).ready(function ()
     {
+
         /** MEDICAMENTOS DE CRONICOS */
         $('#nombre_medicamento_cpeso').autocomplete({
             source: function(request, response) {
@@ -1523,6 +1528,8 @@
             }
         });
 
+
+
         /** accion check confidencial */
         $('#confidencial').change(function() {
             if ($('#confidencial').is(':checked')) {
@@ -1530,6 +1537,11 @@
             } else {
                 $('#confidencial_descripcion').hide();
             }
+        });
+
+         $('#form_enfermedad_cronica').on('hidden.bs.modal', function () {
+            // cerrar el check de enfermedad cronica
+            $('#enf_cronico').prop('checked', false);
         });
 
         /** accion check ges */
@@ -1565,6 +1577,23 @@
                 return false;
             }
         });
+
+        $('#m_agregar_antecedente').on('hidden.bs.modal', function () {
+            $('#check_antecedentes').prop('checked', false);
+        });
+
+        $('#form_enfermedad_cronica').on('hidden.bs.modal', function () {
+            $('#enf_cronico').prop('checked', false);
+        });
+
+        $('#form_ges').on('hidden.bs.modal', function () {
+            $('#modal_ges').prop('checked', false);
+        });
+
+        $('#confidencial_descripcion').on('hidden.bs.modal', function () {
+            $('#confidencial').prop('checked', false);
+        });
+         cambiar_antecedente_sidebar();
     });
 
     /** CRONICO */
@@ -1614,6 +1643,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                 break;
                 case 'chipertension':
                     $('#hipertension_div').show();
@@ -1623,6 +1653,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                     ver_control_hipertension();
 
                 break;
@@ -1634,9 +1665,19 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                     ver_control_diabetes();
                 break;
-
+                case 'epoc':
+                    $('#hipertension_div').hide();
+                    $('#control_peso_div').hide();
+                    $('#diabetes_div').hide();
+                    $('#cinsufren_div').hide();
+                    $('#cmtumorales_div').hide();
+                    $('#creumato_div').hide();
+                    $('#clitemia_div').hide();
+                    $('#epoc_div').show();
+                break;
                 case 'cinsufren':
                     $('#hipertension_div').hide();
                     $('#control_peso_div').hide();
@@ -1645,6 +1686,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                 break;
                 case 'cmtumorales':
                     $('#hipertension_div').hide();
@@ -1654,6 +1696,7 @@
                     $('#cmtumorales_div').show();
                     $('#creumato_div').hide();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                 break;
                 case 'creumato':
                     $('#hipertension_div').hide();
@@ -1663,6 +1706,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').show();
                     $('#clitemia_div').hide();
+                    $('#epoc_div').hide();
                 break;
                 case 'clitemia':
                     $('#hipertension_div').hide();
@@ -1672,6 +1716,7 @@
                     $('#cmtumorales_div').hide();
                     $('#creumato_div').hide();
                     $('#clitemia_div').show();
+                    $('#epoc_div').hide();
                 break;
 
                 default:
@@ -1886,9 +1931,25 @@
                     //$('#form_control_obesidad').trigger("reset");
                     $('#mensaje').text('Se ha agregago control de diabetes correctamente');
                     $('#mensaje').show();
-                    $('#form_enfermedad_cronica').modal('hide');
+                    // $('#form_enfermedad_cronica').modal('hide');
                     // location.reload();
                     ver_control_diabetes();
+                    // limpiar campos
+                    $('#peso_diabetes').val('');
+                    $('#pies_diabetes').val('');
+                    $('#hga1c_diabetes').val('');
+                    // $('#colesterol_diabetes').val('');
+                    $('#glucosuria_diabetes').val('');
+                    $('#creatina_diabetes').val('');
+                    $('#glicosilada_postprandial_diabetes').val('');
+                    $('#glicosilada_ayuno_diabetes').val('');
+                    swal({
+                        title: "Control de Diabetes.",
+                        text: "Control de Diabetes agregado correctamente.",
+                        icon: "success",
+                        // buttons: "Aceptar",
+                        //SuccessMode: true,
+                    });
                 }
             })
             .fail(function(e) {
@@ -1896,6 +1957,126 @@
                 console.log(e);
             })
     };
+
+    // Función mejorada que acepta el tipo de enfermedad como parámetro
+    function ver_medicamento_cronico_por_tipo(tipoEnfermedad)
+    {
+        $('#' + tipoEnfermedad + '-med').html('');
+
+        let url = "{{ route('medicamento_cronico.getRegsitros') }}";
+
+        var _token = CSRF_TOKEN;
+        var id_ficha_atencion = $('#id_fc').val();
+        var id_paciente = $('#id_paciente_fc').val();
+        var tipo_enfermedad_param = tipoEnfermedad; // Usar el parámetro recibido
+
+        console.log('Cargando medicamentos para tipo:', tipo_enfermedad_param);
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: {
+                _token: _token,
+                id_paciente: id_paciente,
+                tipo_enfermedad: tipo_enfermedad_param,
+            },
+        })
+        .done(function(data) {
+            console.log('Datos recibidos:', data);
+
+            if (data !== 'null') {
+                var html = '';
+                html += '<div class="table-responsive">';
+                html += '<table class="display table table-striped dt-responsive nowrap pb-4 table-sm" style="width:100%">';
+                html += '<thead>';
+                html += '    <tr>';
+                html += '        <th class="align-middle">Nombre Medicamento</th>';
+                html += '        <th class="align-middle">Presentación</th>';
+                html += '        <th class="align-middle">Posología</th>';
+                html += '        <th class="align-middle">Cantidad</th>';
+                html += '        <th class="align-middle">Vía Administración</th>';
+                html += '        <th class="align-middle">Período</th>';
+                html += '        <th class="align-middle">Acción</th>';
+                html += '        <th class="align-middle">Seleccionar</th>';
+                html += '    </tr>';
+                html += '</thead>';
+                html += '<tbody>';
+
+                if (data.estado == 1 && data.registros && data.registros.length > 0) {
+                    $.each(data.registros, function(index, value) {
+                        html += '<tr>';
+                        html += '    <td class="align-middle">' + (value.nombre_medicamento || 'N/A') + '</td>';
+                        html += '    <td class="align-middle">' + (value.presentacion || 'N/A') + '</td>';
+                        html += '    <td class="align-middle">' + (value.posologia || 'N/A') + '</td>';
+                        html += '    <td class="align-middle">' + (value.cantidad || 'N/A') + '</td>';
+                        html += '    <td class="align-middle">' + (value.via_administracion || 'N/A') + '</td>';
+                        html += '    <td class="align-middle">' + (value.periodo || 'N/A') + '</td>';
+                        html += '    <td class="align-middle text-center">';
+                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(' + value.id + ')" title="Eliminar medicamento">';
+                        html += '            <i class="feather icon-trash-2"></i>';
+                        html += '        </button>';
+                        html += '    </td>';
+                        html += '    <td class="text-center align-middle">';
+
+                        if (typeof lic_token !== 'undefined' && lic_token != '' && typeof lic_estado !== 'undefined' && lic_estado == 1 && $('#descripcion_hipotesis').val() != '') {
+                            html += '        <input type="checkbox" data-id="' + value.id + '" class="btn_agregar_medicamento" name="medicamento_cronico_' + tipo_enfermedad_param + '[]" id="medicamento_cronico_' + tipo_enfermedad_param + '_' + value.id + '">';
+                        } else {
+                            html += '        <input type="checkbox" data-id="' + value.id + '" class="btn_agregar_medicamento" name="medicamento_cronico_' + tipo_enfermedad_param + '[]" id="medicamento_cronico_' + tipo_enfermedad_param + '_' + value.id + '" disabled>';
+                        }
+                        html += '    </td>';
+                        html += '</tr>';
+                    });
+                } else {
+                    html += '<tr>';
+                    html += '    <td class="text-center align-middle" colspan="8">';
+                    html += '        <div class="alert alert-info mb-0">';
+                    html += '            <i class="feather icon-info"></i> No hay medicamentos registrados para ' + getNombreTipoEnfermedad(tipo_enfermedad_param);
+                    html += '        </div>';
+                    html += '    </td>';
+                    html += '</tr>';
+                }
+
+                html += '</tbody>';
+                html += '</table>';
+                html += '</div>';
+
+                console.log('Cargando HTML en:', '#' + tipo_enfermedad_param + '-med');
+                $('#' + tipo_enfermedad_param + '-med').html(html);
+
+                // Trigger evento para actualizar otros elementos si es necesario
+                if ($('#descripcion_hipotesis').length) {
+                    $('#descripcion_hipotesis').trigger('keyup');
+                }
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.error('Error al cargar medicamentos:', jqXHR, ajaxOptions, thrownError);
+
+            var htmlError = '<div class="alert alert-danger" role="alert">';
+            htmlError += '<i class="feather icon-alert-circle"></i> Error al cargar los medicamentos. ';
+            htmlError += 'Por favor, intente nuevamente.';
+            htmlError += '</div>';
+
+            $('#' + tipoEnfermedad + '-med').html(htmlError);
+        });
+    }
+
+    // Función auxiliar para obtener nombres legibles
+    function getNombreTipoEnfermedad(tipo) {
+        const nombres = {
+            'cpeso': 'Control de Peso',
+            'chipertension': 'Control de Hipertensión',
+            'cdiabet': 'Control de Diabetes',
+            'cinsufren': 'Insuficiencia Renal',
+            'cmtumorales': 'Marcadores Tumorales',
+            'creumato': 'Reumatología',
+            'clitemia': 'Litemia',
+            'cronico': 'Medicamentos Crónicos'
+        };
+        return nombres[tipo] || tipo;
+    }
+
+
 
     function ver_medicamento_cronico()
     {
@@ -2026,7 +2207,7 @@
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
-                    ver_medicamento_cronico();
+                    ver_medicamento_cronico_por_tipo(tipo_enfermedad);
                 }
                 else{
 
@@ -2281,7 +2462,7 @@
                         $('#med_cronicomes_'+tipo+'').html('<option value="0">Seleccione</option>');
 
                         // ver_medicamento_cronico_patologia()
-                        ver_medicamento_cronico();
+                        ver_medicamento_cronico_por_tipo(tipo_enfermedad);
                     }
                     else{
 
@@ -2894,6 +3075,91 @@
         }
     }
 
+    // Función mejorada para eliminar medicamentos por tipo específico
+    function eliminar_med_cronico_patologia(id, tipo = null) {
+        // Si no se pasa tipo, intentar detectarlo del contexto actual
+        if (!tipo && typeof cronicos_tipo_actual !== 'undefined') {
+            tipo = cronicos_tipo_actual;
+        }
+
+        swal({
+            title: "¿Eliminar medicamento?",
+            text: "Esta acción no se puede deshacer",
+            icon: "warning",
+            buttons: {
+                cancel: {
+                    text: "Cancelar",
+                    value: false,
+                    visible: true,
+                    className: "btn btn-secondary"
+                },
+                confirm: {
+                    text: "Sí, eliminar",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-danger"
+                }
+            },
+            dangerMode: true,
+        })
+        .then((confirmar) => {
+            if (!confirmar) return;
+
+            let url = "{{ route('medicamento_cronico.deleteRegsitro') }}";
+            var _token = CSRF_TOKEN;
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    _token: _token,
+                    id: id
+                },
+            })
+            .done(function(data) {
+                console.log('Respuesta eliminación:', data);
+
+                if (data !== 'null' && data.estado == 1) {
+                    swal({
+                        title: "¡Eliminado!",
+                        text: "Medicamento eliminado exitosamente",
+                        icon: "success",
+                        timer: 2000
+                    });
+
+                    // Recargar la tabla del tipo específico
+                    if (tipo) {
+                        console.log('Recargando tabla para tipo:', tipo);
+                        ver_medicamento_cronico_por_tipo(tipo);
+                    } else {
+                        console.log('Tipo no especificado, recargando tablas visibles');
+                        // Fallback: recargar todas las tablas visibles
+                        const tiposVisibles = ['cpeso', 'chipertension', 'cdiabet', 'cinsufren', 'cmtumorales'];
+                        tiposVisibles.forEach(tipoEnf => {
+                            if ($('#' + tipoEnf + '_div').is(':visible')) {
+                                ver_medicamento_cronico_por_tipo(tipoEnf);
+                            }
+                        });
+                    }
+                } else {
+                    swal({
+                        title: "Error",
+                        text: data.mensaje || "No se pudo eliminar el medicamento",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.error('Error al eliminar:', jqXHR, ajaxOptions, thrownError);
+                swal({
+                    title: "Error de conexión",
+                    text: "No se pudo conectar con el servidor",
+                    icon: "error",
+                });
+            });
+        });
+    }
+
     function agregar_a_receta(tipo)
     {
         var lista_medicamentos_a_receta = [];
@@ -2993,20 +3259,25 @@
     {
         if($('#check_antecedentes').prop('checked'))
         {
-            $('#nuevo_antecedente').val(1);
+            // Seleccionar la primera opción real (no "Seleccione")
+            var primeraTipo = $('#nuevo_antecedente option:not([value="n_C"]):first').val();
+            if(primeraTipo) {
+                $('#nuevo_antecedente').val(primeraTipo);
+            }
+            $('#m_agregar_antecedente').off('shown.bs.modal.antecedente').on('shown.bs.modal.antecedente', function() {
+                cambiar_antecedente_sidebar();
+            });
             $('#m_agregar_antecedente').modal('show');
-            cambiar_antecedente();
         }
     }
 
     function cambiar_antecedente()
     {
-
         if($('#nuevo_antecedente').val() != 'n_C')
         {
             var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
             var tipo = $("#nuevo_antecedente").val();
-       
+
             $('#agregar-antecedente').show();
             $('#modificar-antecedente').hide();
             $('#modificar-antecedente-cancelar').hide();
@@ -3035,7 +3306,18 @@
                         <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
                                 <td class="f-16 font-weight-bold">Nombre</td>
-                                <td><input class="form-control" type="text" id="nombre"></td>
+                                <td>
+                                    <select class="form-control form-control-sm" id="nombre" name="nombre">
+                                        <option value="">Seleccione enfermedad crónica</option>
+                                        <option value="Obesidad">Obesidad</option>
+                                        <option value="Hipertensión arterial">Hipertensión arterial</option>
+                                        <option value="Diabetes">Diabetes</option>
+                                        <option value="Insuficiencia renal">Insuficiencia renal</option>
+                                        <option value="Enfermedad pulmonar obstructiva crónica">EPOC</option>
+                                        <option value="Dislipidemias">Dislipidemias</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td class="f-16 font-weight-bold">Comentarios</td>
@@ -3168,13 +3450,13 @@
             // if(tipo == 1){
             //     cargarRegistrosAntecedentes(tipo);
             // }
-            
+
             $('#titulo_antecedente').html('Añadir '+nombre_enfermedad);
             $('#modal-body-input').html(html);
             $('#tipo-antecedente-m').val(tipo);
             $('#id-antecedente-m').val('');
 
-            if( tipo == 7)
+            if( tipo == '7')
             {
                 activarMedicamentos('nombre_medicamento_cronico');
                 // ver_medicamento_cronico();// ver tabla medicamentos cronicos generales
@@ -3190,29 +3472,29 @@
     }
 
     {{--  MEDICAMENTOS AUTOCOMPLETE --}}
-	const activarMedicamentos = (input) => {
-		$("#"+input).autocomplete({
-			source: function(request, response) {
-				$.ajax({
-					url: "{{ route('dental.getArticulo') }}",
-					type: 'post',
-					dataType: "json",
-					data: {
-						_token: CSRF_TOKEN,
-						search: request.term
-					},
-					success: function(data) {
-						console.log(data.length);
-						response(data);
-					}
-				});
-			},
-			select: function(event, ui) {
-				$('#'+input).val(ui.item.label);
-				return false;
-			}
-		});
-	}
+    const activarMedicamentos = (input) => {
+        $("#"+input).autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "{{ route('dental.getArticulo') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data.length);
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                $('#'+input).val(ui.item.label);
+                return false;
+            }
+        });
+    }
 
     const agregarAntecedente = () => {
 
@@ -3220,7 +3502,7 @@
 
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/registrar';
-        var tipo = $('#tipo-antecedente-m').val();
+        var tipo = parseInt($('#tipo-antecedente-m').val());
 
         /* CAMPOS */
         data.nombre = $('#nombre').val();
@@ -3235,7 +3517,7 @@
         data.discapacidad_permanente = $('#discapacidad_permanente').val();
 
         data.id_paciente = $('#id_paciente_fc').val();
-        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
+        data.id_tipo_antecedente = tipo;
         data.id_users = $('#user-id').val();
         data.rut_responsable =$('#user-rut').val();
         data.profesion = $('#user-profesion').val();
@@ -3262,8 +3544,55 @@
                     $('#discapacidad_permanente').val('');
 
                     cargarRegistrosAntecedentes(tipo);
-                    msg('Antecedente','Registro Ingresado.','success');
+                    // Actualizar también el sidebar si existe
+                    if(typeof cargarRegistrosAntecedentesSidebar === 'function') {
+                        cargarRegistrosAntecedentesSidebar(tipo);
+                    }
 
+                    // Pregunta si desea seguir agregando antecedentes
+                    swal({
+                        title: "Antecedente agregado",
+                        text: "¿Deseas seguir agregando más patologías?",
+                        icon: "success",
+                        buttons: {
+                            cancel: {
+                                text: "No, cerrar",
+                                value: false,
+                                visible: true,
+                                className: "btn btn-secondary"
+                            },
+                            confirm: {
+                                text: "Sí, agregar más",
+                                value: true,
+                                visible: true,
+                                className: "btn btn-primary"
+                            }
+                        },
+                        dangerMode: false,
+                    })
+                    .then((seguirAgregando) => {
+                        if (seguirAgregando) {
+                            // Limpiar campos específicos según el tipo
+                            $('#nombre').val('');
+                            $('#comentario').val('');
+                            $('#procedimiento').val('');
+                            $('#nombre_medicamento_cronico').val('');
+                            $('#fecha').val('');
+                            $('#dosis').val('');
+                            $('#institucion').val('');
+                            $('#discapacidad_tipo').val('');
+                            $('#discapacidad_grado').val('');
+                            $('#discapacidad_permanente').val('');
+
+                            // Dar foco al campo nombre
+                            setTimeout(function() {
+                                $('#nombre').focus();
+                            }, 100);
+                        } else {
+                            // Cerrar el modal
+                            $('#m_agregar_antecedente').modal('hide');
+                        }
+                    });
 
                 }else{
                     msg('Antecedente','Campo Obligatorio: '+JSON.stringify(resp.error),'danger');
@@ -3279,6 +3608,9 @@
 
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/ver_registros';
+
+        // Asegurar que tipo sea un número
+        tipo = parseInt(tipo);
 
         data.id_paciente = $('#id_paciente_fc').val();
         data.id_tipo_antecedente = tipo;
@@ -3308,7 +3640,7 @@
                         console.log(tipo);
                         switch(tipo)
                         {
-                            case '1':
+                            case 1:
                                 $('#listado_patologias_paciente').empty();
                                 head_ =`
                                     <tr>
@@ -3320,7 +3652,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.profesional} <br/>${e.antecedente_data.rut_responsable}</td>
@@ -3328,9 +3660,9 @@
                                         <td>${permiso_}</td>
                                     </tr>
                                 `;
-                                html_patologias += `<li data-antecedente-id="${e.id}">${e.antecedente_data.nombre}</li>`;
+                                html_patologias += `<li>${e.antecedente_data.nombre}</li>`;
                             break;
-                            case '2':
+                            case 2:
                                 head_ =`
                                     <tr>
                                         <th>Procedimiento</th>
@@ -3341,7 +3673,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
@@ -3351,8 +3683,8 @@
                                 `;
 
                             break;
-                            
-                            case '3':
+
+                            case 3:
                                 head_ =`
                                     <tr>
                                         <th>Fecha</th>
@@ -3364,7 +3696,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.fecha}</td>
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
@@ -3374,7 +3706,7 @@
                                     </tr>
                                 `;
                             break;
-                            case '4':
+                            case 4:
                                 head_ =`
                                     <tr>
                                         <th>Procedimiento</th>
@@ -3386,7 +3718,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.rut_responsable}</td>
@@ -3396,7 +3728,7 @@
                                     </tr>
                                 `;
                             break;
-                            case '5':
+                            case 5:
                                 head_ =`
                                     <tr>
                                         <th>Patología</th>
@@ -3406,7 +3738,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.procedimiento}</td>
                                         <td>${e.antecedente_data.institucion}</td>
                                         <td>${e.antecedente_data.fecha}</td>
@@ -3414,7 +3746,7 @@
                                     </tr>
                                 `;
                             break;
-                            case '6':
+                            case 6:
                                 head_ =`
                                     <tr>
                                         <th>Nombre Alergia</th>
@@ -3424,7 +3756,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.comentario}</td>
                                         <td>${e.antecedente_data.fecha_regitro}</td>
@@ -3432,7 +3764,7 @@
                                     </tr>
                                 `;
                             break;
-                            case '7':
+                            case 7:
                                 head_ =`
                                     <tr>
                                         <th>Nombre Medicamento Crónico</th>
@@ -3442,7 +3774,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.nombre_medicamento_cronico}</td>
                                         <td>${e.antecedente_data.dosis}</td>
                                         <td>${e.antecedente_data.fecha_regitro}</td>
@@ -3450,7 +3782,7 @@
                                     </tr>
                                 `;
                             break;
-                            case '8':
+                            case 8:
                                 head_ =`
                                     <tr>
                                         <th>Discapacidad</th>
@@ -3461,7 +3793,7 @@
                                     </tr>
                                 `;
                                 html_ +=`
-                                    <tr data-antecedente-id="${e.id}">
+                                    <tr>
                                         <td>${e.antecedente_data.nombre}</td>
                                         <td>${e.antecedente_data.discapacidad_grado}</td>
                                         <td>${e.antecedente_data.discapacidad_permanente}</td>
@@ -3479,7 +3811,15 @@
                     if(tipo == 1){
                         $('#listado_patologias_paciente').html(html_patologias);
                     }
-                    
+
+                }
+                else
+                {
+                    // No hay registros activos: limpiar el cuerpo de la tabla
+                    $('#tabla_antecedentes tbody').html('');
+                    if(tipo == 1){
+                        $('#listado_patologias_paciente').html('');
+                    }
                 }
             },
             error: (resp)=>{
@@ -3541,7 +3881,7 @@
 
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/modificar';
-        var tipo = $('#tipo-antecedente-m').val();
+        var tipo = parseInt($('#tipo-antecedente-m').val());
 
         /* CAMPOS */
         data.id = $('#id-antecedente-m').val();
@@ -3558,7 +3898,7 @@
 
 
         data.id_paciente = $('#id_paciente_fc').val();
-        data.id_tipo_antecedente = $('#tipo-antecedente-m').val();
+        data.id_tipo_antecedente = tipo;
         data.id_users = $('#user-id').val();
         data.rut_responsable =$('#user-rut').val();
         data.profesion = $('#user-profesion').val();
@@ -3592,6 +3932,10 @@
                     $('#discapacidad_permanente').val('');
 
                     cargarRegistrosAntecedentes(tipo);
+                    // Actualizar también el sidebar si existe
+                    if(typeof cargarRegistrosAntecedentesSidebar === 'function') {
+                        cargarRegistrosAntecedentesSidebar(tipo);
+                    }
                     msg('Antecedente','Registro Modificado.','success');
 
                 }
@@ -3637,7 +3981,7 @@
 
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/estado';
-        var tipo =   $('#tipo-antecedente-m-desactivar').val();
+        var tipo = parseInt($('#tipo-antecedente-m-desactivar').val());
 
         /* CAMPOS */
         data.id = $('#id-antecedente-m-desactivar').val();
@@ -3651,11 +3995,11 @@
             success: (resp)=>{
                 if(resp.estado==1)
                 {
-                    const antecedenteId = $('#id-antecedente-m-desactivar').val();
                     cargarRegistrosAntecedentes(tipo);
-                    // Remueve inmediatamente el antecedente de la tabla y del listado de patologías visibles.
-                    $(`#tabla_antecedentes tbody tr[data-antecedente-id=\"${antecedenteId}\"]`).remove();
-                    $(`#listado_patologias_paciente li[data-antecedente-id=\"${antecedenteId}\"]`).remove();
+                    // Actualizar también el sidebar si existe
+                    if(typeof cargarRegistrosAntecedentesSidebar === 'function') {
+                        cargarRegistrosAntecedentesSidebar(tipo);
+                    }
                     msg('Antecedente','Registro Desactivado.','success');
                     $('#modal-confirmar').modal('hide');
 
@@ -3668,4 +4012,700 @@
             }
         });
     }
+
+    function dame_historial_controles(){
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let data = {
+            id_paciente: id_paciente,
+            id_lugar_atencion: id_lugar_atencion,
+            id_ficha_atencion: id_ficha_atencion,
+            id_profesional: id_profesional,
+            _token: CSRF_TOKEN
+        }
+
+        console.log(data);
+        let url = "{{ route('profesional.dame_historial_controles_nutricionales') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.mensaje === 'ok') {
+
+                    const planes = data.planes;
+                    const controlesAgrupados = data.controles_agrupados;
+                    const tieneObesidad = data.tiene_obesidad;
+                    const controlesObesidadAgrupados = data.registros_obesidad;
+
+                    const tablaPlanes = $('#tabla_planes tbody');
+                    tablaPlanes.empty();
+
+                    planes.forEach(plan => {
+                        const estado = plan.estado == 1 ? 'Activo' : 'Finalizado';
+
+                        tablaPlanes.append(`
+                            <tr>
+                                <td>${plan.id}</td>
+                                <td>${plan.fecha}</td>
+                                <td>${plan.numero_sesiones}</td>
+                                <td>${estado}</td>
+                                <td>${plan.profesional_nombre} ${plan.profesional_apellido}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary ver-controles" data-plan="${plan.id}">
+                                        Ver controles
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                    // agregar un nuevo plan ficticio en caso de que tieneObesidad sea 1
+                    if (tieneObesidad == 1) {
+                        tablaPlanes.append(`
+                            <tr>
+                                <td>Control Paciente</td>
+                                <td>${new Date().toISOString().split('T')[0]}</td>
+                                <td>${controlesObesidadAgrupados.length}</td>
+                                <td>Activo</td>
+                                <td>---</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary ver-controles" data-plan="nuevo">
+                                        Ver controles
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    }
+
+                    $('#tabla_planes').on('click', '.ver-controles', function () {
+                        const planId = $(this).data('plan');
+                        let controles;
+                        if (planId === 'nuevo') {
+                            controles = controlesObesidadAgrupados;
+                        } else {
+                            controles = controlesAgrupados[planId];
+                        }
+                        console.log(controles);
+                        const tablaControles = $('#tabla_controles tbody');
+                        tablaControles.empty();
+
+                        if (!controles || controles.length === 0) {
+                            tablaControles.append('<tr><td colspan="6">Sin controles registrados para este plan.</td></tr>');
+                            return;
+                        }
+
+                        controles.forEach((ctrl, index) => {
+                            let fechaFormateada = '-';
+                            if (ctrl.created_at) {
+                                const fecha = new Date(ctrl.created_at);
+                                fechaFormateada = fecha.toISOString().split('T')[0];
+                            }
+
+                            tablaControles.append(`
+                                <tr>
+
+                                    <td>${fechaFormateada}</td>
+                                    <td>${index + 1}</td> <!-- Número de sesión generado -->
+                                    <td>${ctrl.peso_actual_control ?? '- kg'} </td>
+                                    <td>${ctrl.trabajo_en_obesidad ?? 'Obesidad'}</td>
+                                    <td>${ctrl.objetivo_logrado == 1 ? '✔️' : '❌'}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-info ver-detalle-control"
+                                            data-id-ficha="${ctrl.id_ficha_atencion}">
+                                            Ver detalle
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                        // Al final del $('#tabla_planes').on('click', '.ver-controles'...)
+                        const labels = [];
+                        const pesosIniciales = [];
+                        const pesosActuales = [];
+
+                        // Construimos los datos para el gráfico
+                        controles.forEach((ctrl, index) => {
+
+
+                        let fecha = '-';
+                        if (ctrl.fecha) {
+                            fecha = new Date(ctrl.fecha).toISOString().split('T')[0];
+                        } else if (ctrl.created_at) {
+                            fecha = new Date(ctrl.created_at).toISOString().split('T')[0];
+                        }
+
+                        // Si existe datos_control, usa esos campos, si no, usa los directos (obesidad)
+                        let pesoInicial = ctrl.datos_control?.peso_inicial_control ?? ctrl.ideal ?? 0;
+                        let pesoActual = ctrl.datos_control?.peso_actual_control ?? ctrl.peso ?? 0;
+
+                        labels.push(`Control ${index + 1}\n${fecha}`);
+                        pesosIniciales.push(parseFloat(pesoInicial));
+                        pesosActuales.push(parseFloat(pesoActual));
+                        });
+
+                        // Destruimos gráfico anterior si existe
+                        if (window.graficoPesoInstance) {
+                            window.graficoPesoInstance.destroy();
+                        }
+
+                        // Creamos el nuevo gráfico
+                        const ctx = document.getElementById('grafico_peso').getContext('2d');
+                        window.graficoPesoInstance = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Peso Inicial',
+                                        data: pesosIniciales,
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                        tension: 0.3
+                                    },
+                                    {
+                                        label: 'Peso Actual',
+                                        data: pesosActuales,
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        tension: 0.3
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'Evolución del Peso en Controles'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: false,
+                                        title: {
+                                            display: true,
+                                            text: 'Peso (kg)'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+
+                    });
+
+
+
+            } else {
+                swal({
+                    title: "Sin registros",
+                    text: data.detalle ?? 'No se encontraron controles.',
+                    icon: "warning",
+                    button: "Aceptar",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+            swal({
+                title: "Error!",
+                text: "Paciente no cuenta con controles actualmente.",
+                icon: "error",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+        });
+
+    }
+
+    function dame_control(id_ficha_atencion = null) {
+        let historial = true;
+        if (id_ficha_atencion == null) {
+            id_ficha_atencion = $('#id_fc').val();
+            historial = false;
+        }
+
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let url = "{{ route('profesional.dame_control_nutricional') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                id_ficha_atencion: id_ficha_atencion,
+                id_paciente: id_paciente,
+                id_profesional: id_profesional,
+                id_lugar_atencion: id_lugar_atencion,
+                _token: CSRF_TOKEN
+            },
+        })
+        .done(function (data) {
+            console.log(data);
+            if (data.mensaje == 'ok') {
+                let registros = data.registro.datos_control;
+                console.log(registros);
+
+                if (!historial) {
+                    for (let key in registros) {
+                        if (registros.hasOwnProperty(key)) {
+                            let $element = $('#' + key);
+                            if ($element.length > 0) {
+                                let value = registros[key];
+                                $element.val(value !== null ? value : '');
+                            }
+                        }
+                    }
+                } else {
+                    $('#modalControlNutricional').modal('show');
+                    let html = '';
+
+                    for (let key in registros) {
+                        if (registros.hasOwnProperty(key)) {
+                            let valor = registros[key];
+
+                            if (key.startsWith('num_sesion')) {
+                                continue;
+                            }
+
+                            if (valor !== null && valor !== '' && valor !== '0') {
+                                let label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                html += `
+                                    <div class="mb-2">
+                                        <strong>${label}:</strong> ${valor}
+                                    </div>
+                                `;
+                            }
+                        }
+                    }
+
+                    if (html === '') {
+                        html = '<p class="text-muted">No hay información relevante para mostrar.</p>';
+                    }
+
+                    $('#contenido_control_nutricional_historial').html(html);
+
+                    // === Agregar gráfico Chart.js ===
+                    const pesoInicial = parseFloat(registros.peso_inicial_control);
+                    const pesos = {
+                        Obesidad: parseFloat(registros.peso_actual_control),
+                        Diabetes: parseFloat(registros.peso_atual_diabetes),
+                        Hipertensión: parseFloat(registros.peso_actual_hipertension),
+                        Dislipidemia: parseFloat(registros.colesterol_y_trigico_actual),
+                        Irenal: parseFloat(registros.peso_actual_irenal),
+                        Hiperuricemia: parseFloat(registros.peso_actual_hiperuric)
+                    };
+
+                    const labels = [];
+                    const valores = [];
+
+                    for (const [condicion, peso] of Object.entries(pesos)) {
+                        if (!isNaN(peso)) {
+                            labels.push(condicion);
+                            valores.push(peso);
+                        }
+                    }
+
+                    const pesoBase = new Array(labels.length).fill(pesoInicial);
+
+                    // Destruir gráfico anterior si ya existe
+                    if (window.chartPeso) {
+                        window.chartPeso.destroy();
+                    }
+
+                    // Asegurar que exista el canvas
+                    $('#grafico_control_peso').html('<canvas id="canvas_grafico_peso"></canvas>');
+                    const ctx = document.getElementById('canvas_grafico_peso').getContext('2d');
+
+                    window.chartPeso = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Peso Actual',
+                                    data: valores,
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    fill: false,
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Peso Inicial',
+                                    data: pesoBase,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderDash: [5, 5],
+                                    fill: false,
+                                    tension: 0
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Evolución del Peso por Condición'
+                                }
+                            }
+                        }
+                    });
+                }
+            } else {
+                console.log('No se pudo cargar el control nutricional.');
+                $('#num_sesion_obesidad').val(data.num_sesion);
+                $('#num_sesion_diabetes').val(data.num_sesion);
+                $('#num_sesion_hipertension').val(data.num_sesion);
+                $('#num_sesion_dislipidemia').val(data.num_sesion);
+                $('#num_sesion_irenal').val(data.num_sesion);
+                $('#num_sesion_hiperuric').val(data.num_sesion);
+            }
+        })
+        .fail(function (jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError);
+            console.log('Error al cargar el control nutricional.');
+        });
+    }
+
+    function dame_historial_presion(){
+        let id_paciente = $('#id_paciente_fc').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_ficha_atencion = $('#id_fc').val();
+        let id_profesional = $('#id_profesional_fc').val();
+        let data = {
+            id_paciente: id_paciente,
+            id_lugar_atencion: id_lugar_atencion,
+            id_ficha_atencion: id_ficha_atencion,
+            id_profesional: id_profesional,
+            _token: CSRF_TOKEN
+        }
+
+        console.log(data);
+        let url = "{{ route('profesional.dame_historial_controles_hipertension') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.mensaje === 'ok') {
+                const fechas = [];
+                const sistolica = [];
+                const diastolica = [];
+                const pam = [];
+
+                let controles = data.controles;
+
+                controles.forEach(ctrl => {
+                    // Formatea la fecha
+                    let fecha = '-';
+                    if (ctrl.created_at) {
+                        fecha = new Date(ctrl.created_at).toLocaleDateString();
+                    }
+                    fechas.push(fecha);
+                    sistolica.push(ctrl.sistolica ?? null);
+                    diastolica.push(ctrl.diastolica ?? null);
+                    pam.push(ctrl.ideal ?? null);
+                });
+
+                if (window.chartPresion) {
+                    window.chartPresion.destroy();
+                    $('#grafico_presion').remove();
+                    $('#contenedor_grafico_variacion_presion').html('<canvas id="grafico_presion" height="100"></canvas>');
+                }
+
+                // Espera a que el DOM se actualice antes de crear el gráfico
+                setTimeout(function() {
+                    const canvas = document.getElementById('grafico_presion');
+                    if (!canvas) {
+                        console.error('No se encontró el canvas grafico_presion en el DOM.');
+                        return;
+                    }
+                    const ctx = document.getElementById('grafico_presion').getContext('2d');
+                    window.chartPresion = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: fechas,
+                            datasets: [
+                                {
+                                    label: 'Sistólica',
+                                    data: sistolica,
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    fill: false,
+                                },
+                                {
+                                    label: 'Diastólica',
+                                    data: diastolica,
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    fill: false,
+                                },
+                                {
+                                    label: 'Presión Arterial Media (PAM)',
+                                    data: pam,
+                                    borderColor: 'rgba(100, 30, 28, 1)',
+                                    backgroundColor: 'rgba(100, 30, 28, 0.2)',
+                                    fill: false,
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { position: 'top' },
+                                title: { display: true, text: 'Historial de Presión Arterial' }
+                            }
+                        }
+                    });
+                }, 1000);
+            } else {
+                swal({
+                    title: "Sin registros",
+                    text: data.detalle ?? 'No se encontraron controles de hipertensión.',
+                    icon: "warning",
+                    button: "Aceptar",
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+            swal({
+                title: "Error!",
+                text: "Paciente no cuenta con controles de hipertensión actualmente.",
+                icon: "error",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            });
+        });
+    }
+
+    function calcularPAM(idEvolucion = null) {
+        var id = idEvolucion ? idEvolucion : '';
+        var pas = $('#presion_sistolica_hipertension').val();
+        if (pas == '') {
+            pas = 0;
+        }
+        var pad = $('#presion_diastolica_hipertension').val();
+        // if(pad == ''){
+        //     pad = 0;
+        // }
+        // var pam = ((parseInt(pas) * 2) + parseInt(pad)) / 3;
+        // $('#pam').val(pam.toFixed(2));
+
+        var resultado = ((parseInt(pad) * 2) + parseInt(pas));
+        $('#presion_arterial_media_hipertension').val((parseInt(resultado) / 3).toFixed(2));
+    }
+
+     function cambiar_antecedente_sidebar()
+    {
+        if($('#nuevo_antecedente').val() != 'n_C')
+        {
+            var nombre_enfermedad = $("#nuevo_antecedente option:selected").text();
+            var tipo = $("#nuevo_antecedente").val();
+
+            $('#agregar-antecedente').show();
+            $('#modificar-antecedente').hide();
+            $('#modificar-antecedente-cancelar').hide();
+
+            $('#modal-body-input').html('');
+            var html = '';
+            console.log(tipo);
+            switch(tipo)
+            {
+                case '2':
+                    html+=`
+                        <table class="display table  table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td><input class="form-control" type="text" id="procedimiento"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Incidente</td>
+                                <td><textarea class="form-control" id="comentario"></textarea></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '1':
+                    html+=`
+                        <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Nombre</td>
+                                <td>
+                                    <select class="form-control form-control-sm" id="nombre" name="nombre" onchange="toggleOtraEnfermedadCronica(this.value)">
+                                        <option value="">Seleccione enfermedad crónica</option>
+                                        <option value="Obesidad">Obesidad</option>
+                                        <option value="Hipertensión arterial">Hipertensión arterial</option>
+                                        <option value="Diabetes">Diabetes</option>
+                                        <option value="Insuficiencia renal">Insuficiencia renal</option>
+                                        <option value="EPOC">EPOC</option>
+                                        <option value="Dislipidemias">Dislipidemias</option>
+                                        <option value="__otro__">Otra Patología Crónica (Especifique)</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm mt-2" id="nombre_otra_enfermedad" placeholder="Escriba la patología crónica..." style="display:none;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Comentarios</td>
+                                <td><textarea class="form-control" id="comentario"></textarea></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '3':
+                    html+=`
+                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Fecha Cirugía</td>
+                                <td><input class="form-control" type="date" id="fecha"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td><input class="form-control" type="text" id="procedimiento"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Incidente</td>
+                                <td><textarea class="form-control" id="comentario"></textarea></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '4':
+                    html+=`
+                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td><input class="form-control" type="text" id="procedimiento"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Detalle</td>
+                                <td><textarea class="form-control" id="comentario"></textarea></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '5':
+                    html+=`
+                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Nombre antecedente</td>
+                                <td><input class="form-control form-control-sm" type="text" id="procedimiento"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Institución</td>
+                                <td><textarea class="form-control form-control-sm" id="institucion"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Fecha Evento</td>
+                                <td><input class="form-control" type="date" id="fecha"></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '6':
+                    html+=`
+                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Nombre alergia</td>
+                                <td><input class="form-control form-control-sm" type="text" id="nombre"></td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Detalle</td>
+                                <td><textarea class="form-control form-control-sm" id="comentario"></textarea></td>
+                            </tr>
+                        </table>
+                    `;
+                break;
+                case '7':
+                    html+=`
+                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Nombre Medicamento</td>
+                                <td>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Dosis</td>
+                                <td><textarea class="form-control" id="dosis"></textarea></td>
+                            </tr>
+
+                        </table>
+                    `;
+                break;
+                case '8':
+                    html+=`
+                        <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                            <tr>
+                                <td class="f-16 font-weight-bold">Tipo de Discapacidad</td>
+                                <td>
+                                    <select class="form-control form-control-sm" name="nombre" id="nombre">
+                                        <option value="Auditíva">Auditíva</option>
+                                        <option value="Visual">Visual</option>
+                                        <option value="Locomotora">Locomotora </option>
+                                        <option value="Neurológica">Neurológica</option>
+                                        <option value="Fonoarticulatoria">Fonoarticulatoria</option>
+                                        <option value="Cognitiva">Cognitiva</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Grado</td>
+                                <td>
+                                    <input class="form-control form-control-sm" type="text" id="discapacidad_grado">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="f-16 font-weight-bold">Permanente</td>
+                                <td>
+                                    <select class="form-control form-control-sm" name="discapacidad_permanente" id="discapacidad_permanente">
+                                        <option value="si">SI</option>
+                                        <option value="no">NO</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                        </table>
+                    `;
+                break;
+            }
+            console.log(tipo);
+                cargarRegistrosAntecedentesSidebar(tipo);
+            // if(tipo == 1){
+            //     cargarRegistrosAntecedentes(tipo);
+            // }
+
+            $('#titulo_antecedente').html('Añadir '+nombre_enfermedad);
+            $('#modal-body-input').html(html);
+            $('#tipo-antecedente-m').val(tipo);
+            $('#id-antecedente-m').val('');
+
+            if( tipo == '7')
+            {
+                activarMedicamentos('nombre_medicamento_cronico');
+                // ver_medicamento_cronico();// ver tabla medicamentos cronicos generales
+            }
+
+        }
+        else
+        {
+            $('#modal-body-input').html('');
+            $('#nuevo_antecedente').val(1);
+            cambiar_antecedente();
+        }
+    }
+
 </script>

@@ -3,11 +3,10 @@
         <div class="modal-content" >
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">LAMINAS TEST DE LING</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                 <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#modal_lam_ling').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
-
                     <div id="planificacion" class="form-row">
                         <div class="col-sm-8 mt-2">
                             <div class="form-group fill">
@@ -162,8 +161,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"onclick="$('#modal_lam_ling').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('modal_lam_ling');">Enviar al Paciente</button>
             </div>
         </div>
     </div>

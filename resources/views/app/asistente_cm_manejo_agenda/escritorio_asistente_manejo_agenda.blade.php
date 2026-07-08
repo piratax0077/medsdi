@@ -112,19 +112,33 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 f-12 pb-0" id="tabla_info_profesional" style="display: none;">
-                                     <div class="align-middle m-b-25">
-                                        <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
-                                        <div class="d-inline-block f-11">
-                                            <span>
-                                                <strong id="nombre_profesional_agenda"></strong>
-                                            </span><br>
-                                            <span id="especialidad_porfesional_agenda"></span>
-                                            <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
-                                            @include('general.bloqueo_hora.bloque_hora_asistente')
-                                            @include('general.anular_hora.anular_hora_asistente')
-                                            <span class="status active"></span>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="align-middle m-b-25">
+                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="user image" class="img-radius align-top m-r-15 wid-60" id="img_profesional">
+                                                <div class="d-inline-block f-11">
+                                                    <span>
+                                                        <strong id="nombre_profesional_agenda"></strong>
+                                                    </span><br>
+                                                    <span id="especialidad_porfesional_agenda"></span>
+                                                    <button type="button" class="btn btn-info-light-c btn-xxxs" id="btn_ver_info_profesional_seleccionado"  onclick=""><i class="feather icon-plus"></i> Más información</button>
+                                                    @include('general.bloqueo_hora.bloque_hora_asistente')
+                                                    @include('general.anular_hora.anular_hora_asistente')
+                                                    <span class="status active"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-4" {{ $boxes->count() > 0 ? '' : 'style=display:none' }}>
+                                            <div class="align-middle m-b-25">
+                                                <div class="d-inline-block f-11">
+                                                    <span><strong>BOX</strong></span> <button type="button" class="btn btn-warning-light-c btn-xxxs" id="btn_ver_modificar_box_prof"  onclick=""><i class="feather icon-edit"></i></button><br>
+                                                    <span><strong id="profesional_box" style="font-size: 16px;"></strong></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 pb-0" id="seccion_agenda_botones" style="display: none;">
                                     <button type="button" class="btn btn-success-light-c btn-block btn-xxxs" id="btn_ver_lista_espera_profesional_seleccionado" onclick="lista_espera();" ><i class="feather icon-external-link"></i> Ver lista de Espera</button>
@@ -142,7 +156,8 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h5 class="text-c-blue my-1" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    <h5 class="text-c-blue my-1 d-inline" style="font-size: 1.1rem;" id="titulo_tipo_agenda"></h5>
+                                    @include('general.info_simbologia.simbologia_agenda')
                                 </div>
                             </div>
                             <div id='agenda'></div>
@@ -176,6 +191,10 @@
 
     {{-- transcribir examen por asistente --}}
     @include('app.asistente_cm_manejo_agenda.modales.transcribir_examen');
+
+    {{-- lugar atencion box profesional --}}
+    @include('general.asignacion_box_prof.asignacion_box_prof')
+
 @endsection
 
 
@@ -618,6 +637,19 @@
                                         $('.btn-agenda-'+value).show();
                                     });
                                 }
+
+                                // informacion de box
+                                if (data.lug_prof_box !== null && data.lug_prof_box !== undefined)
+                                {
+                                    $('#profesional_box').html(data.lug_prof_box.box.tipo_box+' '+data.lug_prof_box.box.numero_box);
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_editar_box_prof(\''+data.lug_prof_box.id+'\')');
+                                }
+                                else
+                                {
+                                    $('#profesional_box').html('');
+                                    $('#btn_ver_modificar_box_prof').attr('onclick','abrir_agregar_box_prof('+data.profesional.id+')');
+                                }
+
                             }
 
                             if(data.estado == 1 && data.horario.length!=0)
@@ -721,7 +753,8 @@
                                                 url: url,
                                                 type: "GET",
                                                 data: {
-                                                    id_profesional: id_profesional
+                                                    id_profesional: id_profesional,
+                                                    id_lugar_atencion: id_lugar_atencion,
                                                 },
                                                 success:function(data){
                                                     if (data !== 'null')
@@ -1426,6 +1459,7 @@
             $('#hm_ver_hora').hide();
             $('#confirmacion_hora').show();
             $('#confirmacion_hora_medica').show();
+                $('#confirmacion_hora_medica .row.d-none').removeClass('d-none');
         };
 
         {{--  CONFIRMAR HORA  --}}
@@ -1555,6 +1589,7 @@
                         valor_atencion: bono_valor_consulta,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
+                        id_lugar_atencion: $('#agenda_lugar_atencion_asistente').val(),
                         id_asistente: '{{ $asistente->id }}',
                         id_paciente: bono_id_paciente,
                         id_tipo_bono: bono_id_tipo_bono,
@@ -1788,7 +1823,7 @@
 
                             $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
                             $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir ? data.direccion.numero_dir : '');
 
                             $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
                             // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
@@ -1919,6 +1954,10 @@
         };
 
         function formatDateDB(dateStr) {
+            console.log('formatDateDB input:', dateStr);
+            if(dateStr == '' || dateStr == null || dateStr == undefined) {
+                dateStr = $('#reserva_hora_fecha_nac').val();
+            }
             // Dividir la fecha en partes
             let parts = dateStr.split('/');
 
@@ -2210,6 +2249,7 @@
             }
             else
             {
+                console.log(reserva_hora_fecha_nac);
                 reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 

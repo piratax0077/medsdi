@@ -10,11 +10,13 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio ENFERMEDADES DE NOTIFICACION OBLIGATORIA</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('ministerio.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('ministerio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Enfermedades de Notificación Obligatoria</a>
                                 </li>
                             </ul>
                         </div>
@@ -25,46 +27,50 @@
 
             <div class="row m-b-10" >
                 <div class="col-sm-12">
-                    <div class="card-a">
-                        <div class="card-header-a" id="tabla-registros">
-                            <h5 class="font-weight-bold">Registros</h5>
+                    <div class="card">
+                        <div class="card-header bg-white py-3" id="tabla-registros">
+                            <h6 class="font-weight-bold f-20 text-dark">Registros</h6>
                         </div>
                         <div id="tabla-registros-c" class="collapse show" aria-labelledby="tabla-registros" data-parent="#tabla-registros">
-                            <div class="card-body-aten-a shadow-none">
+                            <div class="card-body">
                                 <div class="row">
                                     {{-- filtros --}}
                                     <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio">
+                                        <div class="card-lineal">
+                                            <div class="card-body-lineal">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-5">
+                                                        <label class="floating-label-activo-sm">Año</label>
+                                                        <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio">
 
-                                                    @for ($i = 2023; $i <= intval(date('Y')); $i++)
-                                                        @php
-                                                            $selected = '';
-                                                            if($anio == $i) $selected = 'selected';
-                                                            else $selected = '';
-                                                        @endphp
-                                                        <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes">
-                                                    <option value="">Seleccione</option>
-                                                    @php
-                                                        $meses = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
-                                                    @endphp
-                                                    @for ($i = 1; $i <= 12; $i++)
-                                                        <option  value="{{ $i }}" {{ $mes == $i ? 'selected' : '' }}>{{$meses[$i]}}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-info-light-c btn-sm" onclick="filtrar_eno();">Buscar</button>
+                                                            @for ($i = 2023; $i <= intval(date('Y')); $i++)
+                                                                @php
+                                                                    $selected = '';
+                                                                    if($anio == $i) $selected = 'selected';
+                                                                    else $selected = '';
+                                                                @endphp
+                                                                <option value="{{ $i }}" {{ $selected }}>{{ $i }}</option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-5">
+                                                        <label class="floating-label-activo-sm">Mes</label>
+                                                        <select class="form-control form-control-sm" name="filtro_mes" id="filtro_mes">
+                                                            <option value="">Seleccione</option>
+                                                            @php
+                                                                $meses = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
+                                                            @endphp
+                                                            @for ($i = 1; $i <= 12; $i++)
+                                                                <option  value="{{ $i }}" {{ $mes == $i ? 'selected' : '' }}>{{$meses[$i]}}</option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="filtrar_eno();"><i class="feather icon-search"></i> Buscar</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                     {{--  tablas de registros --}}
                                     <div class="col-md-12">

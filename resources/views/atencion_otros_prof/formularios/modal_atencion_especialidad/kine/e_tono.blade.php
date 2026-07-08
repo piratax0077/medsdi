@@ -40,7 +40,7 @@
                                                     document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
                                                  </script>)
                                                 </span></h6>
-                                                 
+
                                                 <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-musc d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
                                             </div>
                                         </div>
@@ -88,7 +88,7 @@
                                                         document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
                                                      </script>)
                                                     </span></h6>
-                                                     
+
                                                     <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-mov d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
                                                 </div>
                                             </div>
@@ -143,7 +143,7 @@
                                                         document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
                                                      </script>)
                                                     </span></h6>
-                                                     
+
                                                     <button type="button" class="btn btn-info-light-c btn-xxs btn-agregar-grupo-tono d-inline float-right mb-2"><i class="feather icon-plus"></i> Añadir Grupo</button>
                                                 </div>
                                             </div>
@@ -185,11 +185,11 @@
                             <!--estudio emg-->
                             <div class="tab-pane fade show" id="emg" role="tabpanel" aria-labelledby="emg-tab">
                                 <div class="form-row">
-                 
+
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <h6 class="t-aten">EMG y Est. Conducción Nerviosa</h6>
                                         </div>
-                
+
                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm" for="emg_grupo_es">Grupo Estudiado</label>
@@ -245,7 +245,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="guardar_tono()"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -405,6 +405,12 @@
             html += '</div>';
         $('#contenedor_grupo_tono').append(html);
     }
+
+    function guardar_tono() {
+        // Acumular datos en memoria en lugar de hacer AJAX
+        acumular_examen('tono');
+    }
+
     $(document).ready(function(){
         $('.btn-agregar-grupo-tono').click(function(){
             agregarGrupoTono()();

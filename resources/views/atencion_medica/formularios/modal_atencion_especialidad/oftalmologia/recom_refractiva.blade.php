@@ -3,15 +3,16 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Recomendaciones generales Cirugía Refractiva</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#m_ind_refra').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <div class="modal-body">
-                <embed src="../documentos\oftalmo\ojos refractiva.pdf" type="application/pdf" width="100%" height="400px"/>
+           
+             <div class="modal-body">
+                 <embed src="{{ asset('documentos/oftalmo/ojosrefractiva.pdf') }}" type="application/pdf"  data-documento="ojosrefractiva.pdf"  data-url="documentos/oftalmo/ojosrefractiva.pdf"  width="100%" height="680px"> 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-info btn-sm">Enviar a paciente</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#m_ind_refra').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-info btn-sm"  onclick="envio_indicaciones_pdf('m_ind_refra');">Enviar al Paciente</button>                     
             </div>
         </div>
-    </div> 
+    </div>
 </div>

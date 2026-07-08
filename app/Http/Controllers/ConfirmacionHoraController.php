@@ -713,4 +713,114 @@ class ConfirmacionHoraController extends Controller
 
         return $datos;
     }
+
+    /**
+     * Procesa la confirmación o rechazo de una hora médica desde el email
+     *
+     * @param int $id - ID de la hora médica
+     * @param string $accion - 'confirmar' o 'rechazar'
+     * @param string $token - Token MD5 para validación
+     * @return view
+     */
+    public function confirmarHora(Request $request, $id, $accion)
+    {
+        try {
+            $token = $request->query('token', '');
+            $hora_medica = HoraMedica::find($id);
+            $mensaje = '';
+
+            if (!$hora_medica) {
+                $mensaje = 'La cita médica no fue encontrada.';
+                return view('app.confirmacion.confirmacion')->with(['mensaje' => $mensaje, 'paciente' => null]);
+            }
+
+            $paciente = $hora_medica->Paciente()->first();
+
+            // Validar token: md5(id + paciente_id)
+            $token_esperado = md5($id . $paciente->id);
+            if ($token !== $token_esperado) {
+                $mensaje = 'Token de validación inválido. La solicitud no puede ser procesada.';
+                return view('app.confirmacion.confirmacion')->with(['mensaje' => $mensaje, 'paciente' => null]);
+            }
+
+            // Validar que la acción sea válida
+            if (!in_array($accion, ['confirmar', 'rechazar'])) {
+                $mensaje = 'Acción no válida.';
+                return view('app.confirmacion.confirmacion')->with(['mensaje' => $mensaje, 'paciente' => null]);
+            }
+
+            // Actualizar estado de la hora médica según la acción
+            if ($accion === 'confirmar') {
+                $hora_medica->estado_confirmacion_paciente = 1; // Confirmada
+                $hora_medica->id_estado = 2; // Confirmada
+                $mensaje = '✅ Gracias por confirmar su cita. Le esperamos en el horario agendado.';
+                $estado_mail = 'confirmada';
+            } else {
+                $hora_medica->estado_confirmacion_paciente = 0; // Rechazada
+                $hora_medica->id_estado = 3; // Rechazada
+                $mensaje = '❌ Su cita ha sido marcada como rechazada. Si desea reagendar, por favor contacte con nuestra clínica.';
+                $estado_mail = 'rechazada';
+            }
+
+            $hora_medica->fecha_confirmacion_paciente = date('Y-m-d H:i:s');
+            $hora_medica->save();
+
+            // Enviar correo de confirmación al paciente
+            $profesional = $hora_medica->Profesional()->first();
+            $lugar_atencion = $hora_medica->LugarAtencion()->first();
+
+            $blade = 'confirmacion_accion_paciente';
+            $to = [
+                ['email' => $paciente->email, 'name' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos],
+            ];
+            $cc = [
+                ['email' => 'francisco.rojo.gallardo@gmail.com', 'name' => 'Francisco Rojo']
+            ];
+            $bcc = [];
+            $asunto = $accion === 'confirmar'
+                ? 'MED-SDI - Confirmación de cita recibida'
+                : 'MED-SDI - Cita rechazada';
+
+            $body = [
+                'nombre_paciente' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                'accion' => $accion,
+                'fecha' => $hora_medica->fecha_consulta,
+                'hora' => $hora_medica->hora_inicio,
+                'profesional_nombre' => $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                'profesional_especialidad' => $profesional->Especialidad()->first() ? $profesional->Especialidad()->first()->nombre : '',
+                'lugar_atencion' => $lugar_atencion ? $lugar_atencion->nombre : '',
+                'direccion' => $lugar_atencion && $lugar_atencion->Direccion()->first() && $lugar_atencion->Direccion()->first()->Ciudad()->first()
+                    ? $lugar_atencion->Direccion()->first()->direccion . ' ' . $lugar_atencion->Direccion()->first()->numero_dir . ', ' . $lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre
+                    : '',
+            ];
+
+            $archivo = '';
+            $id_institucion = '';
+
+            $result_mail = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+            Log::channel('notificacion_confirmacion_hora')->info(
+                json_encode([
+                    'evento' => 'confirmacion_accion_paciente',
+                    'id_hora_medica' => $id,
+                    'accion' => $accion,
+                    'fecha' => date('Y-m-d H:i:s'),
+                    'mail_enviado' => $result_mail['estado'] ? 'SI' : 'NO'
+                ])
+            );
+
+            return view('app.confirmacion.confirmacion')->with([
+                'mensaje' => $mensaje,
+                'evento' => $hora_medica,
+                'paciente' => mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error en confirmarHora: ' . $e->getMessage());
+            return view('app.confirmacion.confirmacion')->with([
+                'mensaje' => 'Ocurrió un error al procesar su solicitud. Por favor, intente más tarde.',
+                'paciente' => null
+            ]);
+        }
+    }
 }

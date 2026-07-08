@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_ofa">Examen Motor Postura y Marcha</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+               <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#postura_mot').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </button>
             </div>
             <div class="modal-body">
@@ -36,7 +36,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Seg.Superior</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -74,7 +74,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Seg.Medios</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -112,7 +112,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left">Seg.Inferior </h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -150,7 +150,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Patrón Postural</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -170,7 +170,7 @@
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline">
                                         <h6 class="t-aten d-inline float-left"> Patrón de Marcha</h6>
-                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong> 
+                                        <p class="fecha-sm d-inline float-right"><strong>Fecha del examen</strong>
                                             <script>
                                                 var f = new Date();
                                                 document.write(f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear());
@@ -188,7 +188,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
+                 <button type="button" class="btn btn-danger btn-sm" onclick="$('#postura_mot').modal('hide')" data-bs-dismiss="modal"> <i class="feather icon-x"></i> Cerrar</button>
                 <button type="button" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>

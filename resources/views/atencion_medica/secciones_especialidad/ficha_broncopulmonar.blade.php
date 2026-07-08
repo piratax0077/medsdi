@@ -73,6 +73,8 @@
 
                                         <!--Motivo consulta-->
                                         @include('general.secciones_ficha.motivo')
+                                            <!--    evaluacion torax y respiratoria->
+                                        @include('general.secciones_ficha.comun_neuro_trauma_kine.torax')
                                         {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="form-row mb-1">
                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
@@ -100,7 +102,13 @@
                                             </div>
                                         </div>
                                         <!-- hospitalizacion -->  --}}
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                       
+                                     
+                                        <!-- cierre hospitalizacion -->
+                                        <!-- ges -->
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                        <!-- cierre ges -->
+                                         {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="hospitalizar_paciente">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
@@ -113,12 +121,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- cierre hospitalizacion -->
-                                        <!-- ges -->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-                                        <!-- cierre ges -->
-
+                                        </div>  --}}
                                         <hr>
 
                                         <!-- Diagnóstico -->

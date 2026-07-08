@@ -37,8 +37,12 @@
                                     @endif
                                 </li>
 
-                                <li class="breadcrumb-item"><a href="administracion_cm.php">Administracion del centro
-                                        médico {{ $institucion->nombre }}</a></li>
+                                @php
+                                $titulo = $institucion->id_tipo_institucion == 3 ? 'Escritorio Laboratorio' : 'Escritorio Adm. Comercial';
+                                $ruta = $institucion->id_tipo_institucion == 3 ? route('laboratorio.adm_general.home') : route('adm_cm.home');
+                                @endphp
+
+                                <li class="breadcrumb-item"><a href="{{ $ruta }}">{{ $titulo }} {{ $institucion->nombre }}</a></li>
 
                                 <li class="breadcrumb-item"><a href="compras.php">Compras</a></li>
 
@@ -2192,7 +2196,7 @@
 
             }
 
-            var url = '{{ route('buscarProductos') }}';
+            var url = '{{ route("buscarProductos") }}';
 
 
 
@@ -2242,7 +2246,7 @@
                 },
 
                 success: function(response) {
-
+                    console.log(response);
                     // pasar json a la tabla
 
                     let productos = response.productos;

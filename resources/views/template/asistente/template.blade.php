@@ -40,6 +40,10 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+     {{-- Pusher para Broadcasting en tiempo real --}}
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.15.3/dist/echo.iife.js"></script>
+
     @yield('page-styles')
 
     <!-- flatpickr -->
@@ -131,6 +135,107 @@
 
     <script src='{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}'></script>
 	<script src='{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}'></script>
+
+     {{-- SCRIPT DE PUSHER ADAPTADO PARA SUSCRIPCIÓN DINÁMICA --}}
+    <script>
+        // Inicializar Pusher
+        var pusher = new Pusher("{{ env('PUSHER_APP_KEY') }}", {
+            cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            forceTLS: true
+        });
+
+        // Variables para gestionar el canal actual
+        var currentChannel = null;
+        var currentProfesionalId = null;
+
+        /**
+         * Suscribirse al canal de un profesional específico
+         * @param {string|number} id_profesional - ID del profesional al que suscribirse
+         */
+        function suscribirCanalProfesional(id_profesional) {
+            console.log('Intentando suscribirse al profesional ID:', id_profesional);
+            if (!id_profesional || id_profesional == '0') {
+                console.log('No se ha seleccionado un profesional válido');
+                return;
+            }
+
+            // Si ya estamos suscritos a un canal diferente, desuscribirse
+            if (currentChannel && currentProfesionalId !== id_profesional) {
+                console.log('Desuscribiendo del canal: horas-medicas.' + currentProfesionalId);
+                pusher.unsubscribe('horas-medicas.' + currentProfesionalId);
+            }
+
+            // Suscribirse al nuevo canal
+            currentProfesionalId = id_profesional;
+            var channelName = 'horas-medicas.' + id_profesional;
+            console.log('Suscribiendo al canal: ' + channelName);
+            currentChannel = pusher.subscribe(channelName);
+
+            // Escuchar el evento HoraMedicaUpdated
+            currentChannel.bind('HoraMedicaUpdated', function(data) {
+                console.log("Evento recibido de Pusher:", data);
+
+                var tipoAccion = '';
+                switch(data.tipo) {
+                    case 'create':
+                        tipoAccion = 'creado';
+                        break;
+                    case 'update':
+                        tipoAccion = 'actualizado';
+                        break;
+                    case 'cancelada':
+                        tipoAccion = 'cancelado';
+                        break;
+                    case 'delete':
+                        tipoAccion = 'eliminado';
+                        break;
+                    default:
+                        tipoAccion = data.tipo;
+                }
+
+                swal({
+                    title: "Hora Médica Actualizada",
+                    text: "Se ha " + tipoAccion + " una hora médica (ID: " + data.hora.id + ").",
+                    icon: "info",
+                    buttons: {
+                        cancel: "Cerrar",
+                        confirm: "Recargar Agenda"
+                    },
+                })
+                .then((recargar) => {
+                    if (recargar) {
+                        // Recargar la agenda actual si la función existe
+                        if (typeof cargarAgendaProfesional === 'function') {
+                            var tipoAgenda = $('#tipo_agenda_seleccionado').val() || 'semanal';
+                            var fecha = $('#fecha_agenda_actual').val() || new Date().toISOString().split('T')[0];
+                            cargarAgendaProfesional(tipoAgenda, fecha);
+                        } else {
+                            // Si no existe la función, recargar la página completa
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Inicializar suscripción cuando la página esté lista
+        $(document).ready(function() {
+            // Si existe el campo agenda_profesional_asistente (usado en la vista de asistente)
+            if ($('#agenda_profesional_asistente').length) {
+                // Suscribirse al profesional inicial si ya está seleccionado
+                var profesionalInicial = $('#agenda_profesional_asistente').val();
+                if (profesionalInicial && profesionalInicial != '0') {
+                    suscribirCanalProfesional(profesionalInicial);
+                }
+
+                // Detectar cambios en la selección del profesional
+                $('#agenda_profesional_asistente').on('change', function() {
+                    var nuevoProfesional = $(this).val();
+                    suscribirCanalProfesional(nuevoProfesional);
+                });
+            }
+        });
+    </script>
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
@@ -234,7 +339,14 @@
             });
 
             $(".close_modal_recepcion_bonos_api").click(function() {
-                $("#modal_recepcion_bonos_api").modal('hide')
+                $("#modal_recepcion_bonos_api").modal('hide');
+                $('#mensaje_email_bono').text('');
+                $('#mensaje_email_bono').hide();
+                $('#btn_bono_paciente_telefono_validar').show();
+                $('#btn_bono_paciente_telefono_validar').attr('disabled', true);
+                $('#div_codigo_validador_bono').hide();
+                $('#div_codigo_validador_mensaje_bono').hide();
+                $('#result_codigo_validacion_bono').val('0');
             });
 
             $(".close_agenda_agregar_paciente").click(function() {
@@ -934,6 +1046,12 @@
                                                         /** PESTAÑA DE RECIBIR PAGO */
                                                         $('#bono_paciente_rut').val(data.paciente.rut);
                                                         $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                        $('#bono_paciente_email').val(data.paciente.email);
+                                                        $('#bono_paciente_telefono').val(data.paciente.telefono_uno);
+
+                                                        // Ejecutar validación de teléfono después de cargar datos
+                                                        validar_campo_telefono_bono();
+
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                         $('#bono_profesional_rut').val( data.profesional.rut);
                                                         $('#bono_hora_medica').val(info.event.id);
@@ -1071,6 +1189,7 @@
                                         $('#datos_hora_medica').show();
                                         $('#cancelacion_hora_medica').hide();
                                         $('#confirmacion_hora_medica').hide();
+                                        $('#confirmacion_hora_medica .row').addClass('d-none');
                                         /*$('#opcion_cancelar_hora_div').hide();*/
                                         $('#id_hora_medica').val(info.event.id);
                                         $('#id_hora_realizar').val(info.event.id);
@@ -1399,6 +1518,7 @@
             $('#hm_ver_hora').hide();
             $('#confirmacion_hora').show();
             $('#confirmacion_hora_medica').show();
+            $('#confirmacion_hora_medica .row.d-none').removeClass('d-none');
         };
 
         {{--  CONFIRMAR HORA  --}}
@@ -1456,6 +1576,9 @@
             let token = CSRF_TOKEN;
             var bono_paciente_rut = $('#bono_paciente_rut').val();
             var bono_paciente_nombre = $('#bono_paciente_nombre').val();
+            var bono_paciente_email = $('#bono_paciente_email').val();
+            var bono_paciente_telefono = $('#bono_paciente_telefono').val();
+            var result_codigo_validacion_bono = $('#result_codigo_validacion_bono').val();
             var bono_profesional_nombre = $('#bono_profesional_nombre').val();
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
@@ -1486,6 +1609,27 @@
                 mensaje += 'Campo requerido NOMBRE DEL PACIENTE\n';
                 valido = 0;
             }
+
+            // Validación de email y teléfono validado
+            // Considerar emails temporales del sistema como "sin email"
+            var tieneEmailReal = (bono_paciente_email != '' &&
+                                  bono_paciente_email.trim() != '' &&
+                                  bono_paciente_email.indexOf('@med-sdi.cl') === -1);
+
+            if(!tieneEmailReal && (bono_paciente_telefono == '' || bono_paciente_telefono.trim() == ''))
+            {
+                mensaje += 'Debe ingresar al menos un medio de contacto (Email o Teléfono)\n';
+                valido = 0;
+            }
+
+            // Si no hay email real, el teléfono debe estar validado con SMS
+            if(!tieneEmailReal &&
+               (result_codigo_validacion_bono == '' || result_codigo_validacion_bono == '0'))
+            {
+                // mensaje += 'Debe validar el número de teléfono con el código SMS\n';
+                // valido = 0;
+            }
+
             if(bono_profesional_nombre == '')
             {
                 mensaje += 'Campo requerido NOMBRE DEL PROFESIONAL\n';
@@ -1548,7 +1692,9 @@
                         id_tipo_bono: bono_id_tipo_bono,
                         id_clase_bono: bono_id_clase_bono,
                         id_referencia: bono_hora_medica,//une bono a hora medica (para buscar id ficha atencion)
-                        numero_sesiones: bono_sn_sesiones
+                        numero_sesiones: bono_sn_sesiones,
+                        paciente_email: bono_paciente_email,
+                        paciente_telefono: bono_paciente_telefono
                     }
                 })
                 .done(function(data)
@@ -1566,6 +1712,8 @@
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
+                            $('#bono_paciente_email').val('');
+                            $('#bono_paciente_telefono').val('');
                             $('#bono_profesional_nombre').val('');
                             $('#bono_profesional_rut').val('');
                             $('#bono_numero').val('');
@@ -1574,6 +1722,13 @@
                             $('#recepcion_programa').val('');
                             $('#bono_sn_sesiones').val('');
                             $('#bono_hora_medica').val('');
+                            // Limpiar validación de teléfono
+                            $('#btn_bono_paciente_telefono_validar').show();
+                            $('#btn_bono_paciente_telefono_validar').attr('disabled', true);
+                            $('#div_codigo_validador_bono').hide();
+                            $('#div_codigo_validador_mensaje_bono').hide();
+                            $('#result_codigo_validacion_bono').val('0');
+                            $('#mensaje_email_bono').hide();
                             {{--  $('#bono_id_profesional').val('');  --}}
                             {{--  $('#bono_id_paciente').val('');  --}}
                             {{--  $('#bono_id_tipo_bono').val('');  --}}
@@ -1767,7 +1922,7 @@
 
                         $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
                         $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                        $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+                        $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir ? data.direccion.numero_dir : '');
 
                         $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
                         // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
@@ -2095,318 +2250,86 @@
                 edad--;
             }
 
-            // if( edad > 18 )
+            // Validación simplificada: email es opcional, solo verificar que haya al menos un medio de contacto
             if( $('#paciente_dependiente').prop('checked') == false )
             {
-                if (reserva_hora_email == '') {
-
-                    if(reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0') )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el email o teléfono 1",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        if(reserva_result_codigo_validacion =='0')
-                        {
-                            console.log( 'reserva_hora_email' );
-                            console.log( reserva_hora_email );
-                            var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                            if (caract.test(reserva_hora_email) == false){
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono 2",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                        }
-
-                    }
-                }
-                else
-                {
-
-                    if (reserva_hora_telefono_uno == '')
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Debe ingresar el teléfono",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        if(reserva_hora_email == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0'))
-                        {
-                            swal({
-                                title: "Error!",
-                                text: "Debe validar el teléfono",
-                                icon: "error",
-                                type: "danger",
-                                DangerMode: true,
-                            });
-                            return;
-                        }
-                    }
-                }
-            }
-
-            var reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
-            var reserva_representante_id = $('#reserva_representante_id').val();
-            var reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
-            var reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
-            var reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
-            var reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
-            var reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
-            var reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
-            var reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
-            var reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
-            var reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
-            var reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
-            var reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
-            var reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
-            var reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
-            var reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
-            var reserva_hora_representante_result_codigo_validacion = $('#result_representante_codigo_validacion').val();
-            var reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
-
-
-            var dependiente = 0;
-            if($('#paciente_dependiente').prop('checked')  == true)
-                dependiente = 1;
-            else if($('#paciente_dependiente').prop('checked')  == false)
-                dependiente = 0;
-
-            if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
-            {
-                if(reserva_hora_representante_agregar_relacion == '')
+                // Verificar que al menos haya email o teléfono
+                if ((reserva_hora_email == '' || reserva_hora_email.trim() == '') &&
+                    (reserva_hora_telefono_uno == '' || reserva_hora_telefono_uno.trim() == ''))
                 {
                     swal({
                         title: "Error!",
-                        text: "Debe seleccionar Relación",
+                        text: "Debe ingresar al menos un medio de contacto (email o teléfono)",
                         icon: "error",
                         type: "danger",
                         DangerMode: true,
                     });
                     return;
                 }
-                if(reserva_representante_nuevo_exitente == '1')
+            }
+
+            var reserva_hora_representante_info_libre = $('#reserva_hora_representante_info_libre').val();
+
+            var dependiente = 0;
+            if($('#paciente_dependiente').prop('checked')  == true)
+                dependiente = 1;
+
+            /** DATOS REPRESENTATE */
+            let reserva_hora_representante_rut = $('#reserva_hora_representante_rut').val();
+            let reserva_hora_representante_agregar_relacion = $('#reserva_hora_representante_agregar_relacion').val();
+            let reserva_representante_nuevo_exitente = $('#reserva_representante_nuevo_exitente').val();
+            let reserva_hora_representante_nombres_paciente = $('#reserva_hora_representante_nombres_paciente').val();
+            let reserva_hora_representante_apellido_uno = $('#reserva_hora_representante_apellido_uno').val();
+            let reserva_hora_representante_apellido_dos = $('#reserva_hora_representante_apellido_dos').val();
+            let reserva_hora_representante_fecha_nac = $('#reserva_hora_representante_fecha_nac').val();
+            let reserva_hora_representante_sexo = $('#reserva_hora_representante_sexo').val();
+            let reserva_hora_representante_convenio = $('#reserva_hora_representante_convenio').val();
+            let reserva_hora_representante_direccion = $('#reserva_hora_representante_direccion').val();
+            let reserva_hora_representante_numero_dir = $('#reserva_hora_representante_numero_dir').val();
+            let reserva_hora_representante_region_agregar = $('#reserva_hora_representante_region_agregar').val();
+            let reserva_hora_representante_ciudad_agregar = $('#reserva_hora_representante_ciudad_agregar').val();
+            let reserva_hora_representante_correo = $('#reserva_hora_representante_correo').val();
+            let reserva_hora_representante_telefono_uno = $('#reserva_hora_representante_telefono_uno').val();
+            let reserva_representante_id = $('#reserva_representante_id').val();
+            let reserva_representante_id_usuario = $('#reserva_representante_id_usuario').val();
+            let reserva_representante_result_codigo_validacion = $('#result_representante_codigo_validacion').val();
+
+            if( edad < 18 || dependiente == 1)
+            {
+                if(reserva_hora_representante_rut == '')
                 {
-                    /** existente */
-                    if(reserva_representante_id == '')
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Información del Representante con problemas",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    // if($('#reserva_representante_id_usuario').val() == '')
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Información del Representante con problemas",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
+                    swal({
+                        title: "Error!",
+                        text: "Debe ingresar el RUT del representante",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+                    });
+                    return;
                 }
-                else
+                if(reserva_hora_representante_agregar_relacion == '')
                 {
-                    /** nuevo */
-                    if( reserva_hora_representante_nombres_paciente == '' )
-                    {
+                    swal({
+                        title: "Error!",
+                        text: "Debe ingresar la relación con el paciente",
+                        icon: "error",
+                        type: "danger",
+                        DangerMode: true,
+                    });
+                    return;
+                }
+
+                if(reserva_representante_nuevo_exitente == 0) {
+                    if(reserva_hora_representante_nombres_paciente == '' || reserva_hora_representante_apellido_uno == '' || reserva_hora_representante_fecha_nac == '') {
                         swal({
                             title: "Error!",
-                            text: "Nombre del Representante requerido",
+                            text: "Debe completar los datos básicos del representante nuevo",
                             icon: "error",
                             type: "danger",
                             DangerMode: true,
-
                         });
                         return;
                     }
-                    if( reserva_hora_representante_apellido_uno == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Paterno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_apellido_dos == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Apellido Materno del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_fecha_nac == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Fecha Nacimiento del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    else
-                    {
-                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
-                    }
-                    if( reserva_hora_representante_sexo == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Sexo del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    if( reserva_hora_representante_direccion == '' )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Direccion del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-                    // if( reserva_hora_representante_numero_dir == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Numero del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    // if( reserva_hora_representante_region_agregar == '' )
-                    // {
-                    //     swal({
-                    //         title: "Error!",
-                    //         text: "Region del Representante requerido",
-                    //         icon: "error",
-                    //         type: "danger",
-                    //         DangerMode: true,
-
-                    //     });
-                    //     return;
-                    // }
-                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
-                    {
-                        swal({
-                            title: "Error!",
-                            text: "Ciudad del Representante requerido",
-                            icon: "error",
-                            type: "danger",
-                            DangerMode: true,
-
-                        });
-                        return;
-                    }
-
-                    if( $('#paciente_dependiente').prop('checked') == true )
-                    {
-                        if (reserva_hora_representante_correo == '') {
-
-                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el email o teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                if (caract.test(reserva_hora_representante_correo) == false){
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe ingresar el email o teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                        else
-                        {
-
-                            if (reserva_hora_representante_telefono_uno == '')
-                            {
-                                swal({
-                                    title: "Error!",
-                                    text: "Debe ingresar el teléfono del representante",
-                                    icon: "error",
-                                    type: "danger",
-                                    DangerMode: true,
-                                });
-                                return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
-                                {
-                                    swal({
-                                        title: "Error!",
-                                        text: "Debe validar el teléfono del representante",
-                                        icon: "error",
-                                        type: "danger",
-                                        DangerMode: true,
-                                    });
-                                    return;
-                                }
-                            }
-                        }
-                    }
-
                 }
             }
 
@@ -2443,10 +2366,10 @@
                         id_lugar_atencion: id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
                         /** representante */
-                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
-                        reserva_representante_id: reserva_representante_id,
-                        reserva_representante_id_usuario: reserva_representante_id_usuario,
+                        reserva_hora_representante_info_libre: reserva_hora_representante_info_libre,
                         reserva_hora_representante_rut: reserva_hora_representante_rut,
+                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion,
+                        reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
                         reserva_hora_representante_nombres_paciente: reserva_hora_representante_nombres_paciente,
                         reserva_hora_representante_apellido_uno: reserva_hora_representante_apellido_uno,
                         reserva_hora_representante_apellido_dos: reserva_hora_representante_apellido_dos,
@@ -2459,8 +2382,9 @@
                         reserva_hora_representante_ciudad_agregar: reserva_hora_representante_ciudad_agregar,
                         reserva_hora_representante_correo: reserva_hora_representante_correo,
                         reserva_hora_representante_telefono_uno: reserva_hora_representante_telefono_uno,
-                        reserva_hora_representante_result_codigo_validacion: reserva_hora_representante_result_codigo_validacion,
-                        reserva_hora_representante_agregar_relacion: reserva_hora_representante_agregar_relacion
+                        reserva_representante_id: reserva_representante_id,
+                        reserva_representante_id_usuario: reserva_representante_id_usuario,
+                        reserva_representante_result_codigo_validacion: reserva_representante_result_codigo_validacion
                     },
                 })
                 .done(function(data) {
@@ -2633,11 +2557,12 @@
             let reserva_hora_email = $('#prereserva_hora_correo').val();
             let reserva_hora_telefono_uno = $('#prereserva_hora_telefono_uno').val();
 
-            if(reserva_hora_email == '' && reserva_hora_telefono_uno =='')
+            // Email es opcional, solo validar si hay al menos teléfono
+            if(reserva_hora_telefono_uno == '')
             {
                 swal({
                     title: "Error!",
-                    text: "Debe email de contacto o telefono",
+                    text: "Debe ingresar un teléfono de contacto",
                     icon: "error",
                     type: "danger",
                     DangerMode: true,
@@ -3975,6 +3900,114 @@
                     console.error('Error al enviar datos:', error);
                 }
             });
+        }
+
+        function validar_email_bono() {
+
+            let email = $('#bono_paciente_email').val();
+
+            // Si el email está vacío, limpiar mensajes y permitir continuar (no es obligatorio)
+            if (email == '' || email.trim() == '') {
+                $('#mensaje_email_bono').text('');
+                $('#mensaje_email_bono').hide();
+                return true;
+            }
+
+            // Si es un email temporal del sistema, no validar (permitir)
+            if (email.indexOf('@med-sdi.cl') !== -1) {
+                $('#mensaje_email_bono').text('');
+                $('#mensaje_email_bono').hide();
+                return true;
+            }
+
+            // Si hay email, validar formato
+            if (email.indexOf('@', 0) == -1 || email.indexOf('.', 0) == -1) {
+                $('#mensaje_email_bono').text('El formato del correo electrónico no es válido');
+                $('#mensaje_email_bono').show();
+                $('#bono_paciente_email').focus();
+                return false;
+            }
+
+            // Validar si el email ya existe (excluyendo al paciente actual)
+            let url = "{{ route('agenda.paciente.validar_email') }}";
+            let id_paciente_actual = $('#bono_id_paciente').val();
+
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        email: email,
+                        id_paciente_excluir: id_paciente_actual
+                    }
+                })
+                .done(function(data) {
+                    if (data == 'fail') {
+                        $('#mensaje_email_bono').text('Este email ya está registrado en el sistema');
+                        $('#mensaje_email_bono').show();
+                        $('#bono_paciente_email').focus();
+                    } else {
+                        $('#mensaje_email_bono').text('');
+                        $('#mensaje_email_bono').hide();
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function validar_campo_telefono_bono() {
+            var telefono = $('#bono_paciente_telefono').val();
+            var email = $('#bono_paciente_email').val();
+
+            // Limpiar formato del teléfono (eliminar espacios, guiones, etc)
+            var telefonoLimpio = telefono.replace(/[\s\-\(\)]/g, '');
+
+            // Verificar si NO hay email real (vacío o email temporal del sistema)
+            var sinEmailReal = (email == '' || email.trim() == '' || email.indexOf('@med-sdi.cl') !== -1);
+
+            if (sinEmailReal) {
+                // No hay email real, entonces DEBE validar el teléfono
+                var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i); //+56612341234
+                if (re.test(telefonoLimpio)) {
+                    $('#btn_bono_paciente_telefono_validar').attr('disabled', false);
+                    $('#btn_bono_paciente_telefono_validar').show();
+                } else {
+                    $('#btn_bono_paciente_telefono_validar').attr('disabled', true);
+                    $('#btn_bono_paciente_telefono_validar').show();
+                }
+            } else {
+                // Hay email real válido, NO es necesario validar teléfono
+                $('#btn_bono_paciente_telefono_validar').hide();
+                $('#div_codigo_validador_bono').hide();
+                $('#div_codigo_validador_mensaje_bono').hide();
+                $('#result_codigo_validacion_bono').val('0');
+            }
+        }
+
+        function enviar_validacion_telefono_bono() {
+            $('#btn_bono_paciente_telefono_validar').hide();
+            $('#div_codigo_validador_bono').show();
+            $('#bono_paciente_telefono_codigo_validador').val('');
+            $('#div_codigo_validador_mensaje_bono').html('');
+            $('#result_codigo_validacion_bono').val('0');
+        }
+
+        function validar_codigo_telefono_bono() {
+            var codigo = $('#bono_paciente_telefono_codigo_validador').val();
+            if (codigo.length >= 4) {
+                console.log(codigo);
+                if (codigo == '1234') {
+                    $('#div_codigo_validador_bono').hide();
+                    $('#div_codigo_validador_mensaje_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').html('<span style="color:green;">Teléfono validado correctamente</span>');
+                    $('#result_codigo_validacion_bono').val('1');
+                } else {
+                    $('#div_codigo_validador_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').show();
+                    $('#div_codigo_validador_mensaje_bono').html('<span style="color:red;">Código no válido, intente nuevamente</span>');
+                    $('#result_codigo_validacion_bono').val('0');
+                }
+            }
         }
 
         function validar_tipo_hora_medica(id)

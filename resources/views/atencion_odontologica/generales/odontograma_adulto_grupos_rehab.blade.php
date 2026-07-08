@@ -85,7 +85,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        min-height: 80px;
         position: relative;
     }
 
@@ -104,7 +103,7 @@
     }
 </style>
 
-<div class="odontograma">
+<div class="odontograma" style="overflow: scroll;">
     <!-- Fila superior (1.8 al 1.1 y 2.1 al 2.8) -->
     <div class="fila">
         @for($i = 18; $i >= 11; $i--)

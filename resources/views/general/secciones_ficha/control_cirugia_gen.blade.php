@@ -30,10 +30,10 @@
                             <textarea class="form-control caja-texto form-control-sm" data-titulo="Masas Palpables" data-seccion="Control Cirugia General" data-tipo="control cirugia general"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="masas_cpq_cg" id="masas_cpq_cg" placeholder="PRESENCIA DE MASAS"></textarea>
                         </div>
                          <!-- botones modal -->
-                        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3 d-none">
                            <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="no_disponible();"><i class="feather icon-file"></i> Ver Protocolo Cirugía</button>
                         </div>
-                        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
+                        <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3 d-none">
                            <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="no_disponible();"><i class="feather icon-file"></i> Ver Epicrisis</button>
                         </div>
                     </div>

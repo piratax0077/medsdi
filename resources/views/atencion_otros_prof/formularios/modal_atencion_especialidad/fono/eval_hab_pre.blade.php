@@ -3,8 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_eval_hab_preart">Evaluación Habilidades Pre-Articulatorias</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="close text-white" data-dismiss="modal" onclick="$('#est_habpreart').modal('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
@@ -168,10 +167,12 @@
                     </div>
                 </form>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">
-                Guardar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#est_habpreart').modal('hide')">Cerrar modal</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="registrar_est_habpreart();"><i class="feather icon-save"></i> Guardar y enviar</button>
+
+                {{--  <button type="button" class="btn btn-info btn-sm" onclick="envio_indicaciones_pdf('m_eval_espasmof');">Enviar al Paciente</button>  --}}
             </div>
         </div>
     </div>

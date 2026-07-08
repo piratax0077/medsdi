@@ -3,7 +3,8 @@
 		<div class="modal-content" >
 			<div class="modal-header bg-light">
 				<h5 class="modal-title text-c-blue mt-1">Responsables</h5>
-				<button type="button" class="btn btn-primary btn-icon" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close"  data-dismiss="modal"  aria-label="Close" onclick="$('#m_responsables_fmu').modal('hide');">
+				<span aria-hidden="true">&times;</span>
 			</div>
 			<div class="modal-body">
                 <div class="row">

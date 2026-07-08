@@ -86,7 +86,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="align-middle">Nombre / Rut</th>
-                                                        <th class="align-middle">Profesion</th>
+                                                        <th class="align-middle">Profesión</th>
                                                         <th class="align-middle">Tipo de Contrato / <br>Fecha contrato</th>
                                                         <th class="align-middle">Remuneración Mes</th>
                                                         <th class="align-middle">Acción</th>
@@ -1049,6 +1049,7 @@
 
     function registrar_nuevo_profesional(){
 
+        console.log('registrar nuevo profesional');
         let valido = 1;
         let mensaje = '';
 
@@ -1121,8 +1122,6 @@
         let banco = $('#banco_nuevo_profesional').val();
         let n_cta = $('#n_cta_nuevo_profesional').val();
         let sucursal = $('#sucursal_nuevo_profesional').val();
-
-
 
         if(rut == ''){
             valido = 0;
@@ -1330,9 +1329,12 @@
                         icon: "success",
                         buttons: "Aceptar",
                         DangerMode: true,
+                    })
+                    .then((value) => {
+                        location.reload();
                     });
-                    $('#card_body_profesionales_contratados').empty();
-                    $('#card_body_profesionales_contratados').append(data.v);
+                    // $('#card_body_profesionales_contratados').empty();
+                    // $('#card_body_profesionales_contratados').append(data.v);
                 }else{
                     swal({
                         title: "Error",

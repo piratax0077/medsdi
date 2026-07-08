@@ -62,6 +62,7 @@
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
     {{--  /** agregar css */  --}}
+    <link rel="stylesheet" href="{{ asset('summernote/summernote-lite.min.css') }}">
 
       <style>
         .ui-front {
@@ -180,6 +181,8 @@
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
 
+    {{-- summernote --}}
+	<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
     {{-- zoom  --}}
     <script src="{{ asset('js/app.js') }}" ></script>
     {{-- <script src="{{ asset('js/react.production.min.js') }}" ></script> --}}
@@ -406,23 +409,38 @@
             let comuna = $('#paciente_comuna_edit').val();
             let email = $('#paciente_email_edit').val();
             let telefono = $('#paciente_telefono_edit').val();
+            let convenio = $('#paciente_convenio_edit').val();
 
-            let data = {
-                id: id_paciente,
-                nombre: nombres,
-                apellido_uno: apellido_uno,
-                apellido_dos: apellido_dos,
-                fecha_nacimiento: fecha_nac,
-                sexo: sexo,
-                direccion: direccion,
-                region: region,
-                ciudad: comuna,
-                email: email,
-                telefono: telefono,
-                _token: CSRF_TOKEN
+            // Validar campos obligatorios
+            if (!id_paciente || !nombres || !apellido_uno) {
+                swal({
+                    title: "Error",
+                    text: "Debe completar al menos el nombre y primer apellido",
+                    icon: "error",
+                });
+                return;
             }
 
-            console.log(data);
+            // Construir objeto solo con campos que tienen valor
+            let data = {
+                id: id_paciente,
+                _token: CSRF_TOKEN
+            };
+
+            // Agregar campos solo si tienen valor
+            if (nombres) data.nombre = nombres;
+            if (apellido_uno) data.apellido_uno = apellido_uno;
+            if (apellido_dos) data.apellido_dos = apellido_dos;
+            if (fecha_nac) data.fecha_nacimiento = fecha_nac;
+            if (sexo && sexo != '0') data.sexo = sexo;
+            if (direccion) data.direccion = direccion;
+            if (region && region != '0') data.region = region;
+            if (comuna && comuna != '0') data.ciudad = comuna;
+            if (email) data.email = email;
+            if (telefono) data.telefono = telefono;
+            if (convenio && convenio != '0') data.convenio = convenio;
+
+            console.log('Datos a enviar:', data);
             let url = "{{ route('asistente.paciente.modificar') }}";
 
             $.ajax({
@@ -438,6 +456,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
+                        let direccion = data.direccion ? data.direccion.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {
@@ -446,9 +465,10 @@
                             $('#sexo_paciente').text('Femenino');
                         }
                         $('#email_paciente_').text(paciente.email);
-                        $('#telefono_paciente').text(paciente.telefono_uno);
+                        $('#telefono_paciente_').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-                        $('#direccion_paciente_').text(data.direccion.direccion.direccion);
+                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
+                        $('#direccion_paciente_').text(direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);

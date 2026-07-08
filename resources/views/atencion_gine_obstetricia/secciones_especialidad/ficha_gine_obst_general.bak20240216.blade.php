@@ -103,17 +103,17 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group" id="div_tipo_mens" style="display:none;">
-                                                            <label class="floating-label-activo-sm " for="obs_tipo_mens">Otras<i>(Describir)</i></label>
+                                                            <label class="floating-label-activo-sm " for="obs_tipo_mens">Otras (Describir)</label>
                                                             <textarea class="form-control form-control-sm" data-titulo="Obs.Orientacion Alterada "data-seccion="Funciones Corticales"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_mens" id="obs_tipo_mens" placeholder="Descripción Otro Motivo"></textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label-activo-sm" for="anam">Anmnésis</label>
+                                                        <label class="floating-label-activo-sm" for="anam">Anmnesis</label>
                                                         <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="anam" id="anam"></textarea>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label-activo-sm" for="examen_fisico">Examen de la Especialidad</label>
+                                                        <label class="floating-label-activo-sm" for="examen_fisico">Examen de la especialidad</label>
                                                         <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="EXAMEN FISICO DE LA ESPECIALIDAD"></textarea>
                                                     </div>
                                                     <br>
@@ -190,7 +190,7 @@
                                                                                 <div class="tab-pane fade show active" id="ginecol_gen" role="tabpanel" aria-labelledby="ginecol_gen-tab">
                                                                                     <div class="form-row">
                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                            <h6 class="t-aten">Exámen ginecológico</h6>
+                                                                                            <h6 class="t-aten">Examen ginecológico</h6>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="form-row">
@@ -208,7 +208,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                             <div class="form-group">
-                                                                                            <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="gine_sol_examenes_flujo();">Solicitar Examenes</button>
+                                                                                            <button type="button" class="btn btn-primary-light-c btn-block btn-sm mb-2"  onclick="gine_sol_examenes_flujo();">Solicitar exámenes</button>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -229,7 +229,7 @@
                                                                                         </div>
                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                             <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm" for="res_exam">Resultado Examenes</label>
+                                                                                                <label class="floating-label-activo-sm" for="res_exam">Resultado exámenes</label>
                                                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Resultado Examenes" data-seccion="Ginecologia General" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="res_exam" id="res_exam"></textarea>
                                                                                             </div>
                                                                                         </div>
@@ -245,7 +245,7 @@
                                                                                     <div class="form-row">
                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6">
                                                                                             <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm" for="desc_ex_mamas">Descripción examen de Mamas</label>
+                                                                                                <label class="floating-label-activo-sm" for="desc_ex_mamas">Descripción examen de mamas</label>
                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="desc_ex_mamas" id="desc_ex_mamas"></textarea>
                                                                                             </div>
                                                                                         </div>
@@ -263,7 +263,7 @@
                                                                                     <div class="form-row">
                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                             <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm" for="obs_ex_mamas">Observaciones Examen de mamas</label>
+                                                                                                <label class="floating-label-activo-sm" for="obs_ex_mamas">Obs. Examen de mamas</label>
                                                                                                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Examen mamas" data-seccion="Mamas" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_mamas" id="obs_ex_mamas"></textarea>
                                                                                             </div>
                                                                                         </div>

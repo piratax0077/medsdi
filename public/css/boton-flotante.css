@@ -16,7 +16,7 @@
 .redes a, .btn-mas label{
     display: block!important;
     text-decoration: none!important;
-    background: #72B02C!important;
+    background: #38b37f!important;
     color: #fff!important;
     width: 55px!important;
     height: 55px!important;
@@ -28,8 +28,8 @@
 
 }
 .redes a:hover{
-    background: #fff!important;
-    color: #61A514!important;
+    background: #A06CC1!important;
+    color: #fff!important;
 }
 .redes a{
     margin-bottom: -15px!important;
@@ -82,7 +82,7 @@
 .card .card-header {
     border-bottom: 1px solid;
     position: relative;
-    border-color: transparent;
+    border-color: #ced4da;
 }
 
 .bg-card-collapse{
@@ -113,6 +113,468 @@
     display: flex;
     justify-content: flex-end;
 }
+
+
+/**ICONOS PARA BOTON DE MODALS **/
+
+   /**PACIENTE*/
+.icono-pcte {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-pcte::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/paciente.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+  /**SIGNOS VITALES*/
+.icono-signosv {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-signosv::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 54%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/signovital.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+
+   /**OTORRINO*/
+.icono-orl {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-orl::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/oido.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**CARDIOLOGIA*/
+.icono-cardio {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-cardio::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 48%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-image: url('../images/iconosidebar/cardiologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**TAUMATOLOGIA*/
+.icono-trauma {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-trauma::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 47%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-image: url('../images/iconosidebar/traumatologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**GASTROENTEROLOGO*/
+.icono-gastro {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-gastro::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 47%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background-image: url('../images/iconosidebar/gastro.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+   /**DERMATOLOGIA*/
+.icono-dermatologia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-dermatologia::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background-image: url('../images/iconosidebar/dermatologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**MEDICINA GENERAL*/
+.icono-medgeneral {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-medgeneral::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background-image: url('../images/iconosidebar/medicinageneral.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**UROLOGIA*/
+.icono-urologia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-urologia::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 53%;
+  transform: translateY(-50%);
+  width: 33px;
+  height: 33px;
+  background-image: url('../images/iconosidebar/urologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+   /**CIRUGIAS*/
+.icono-cirugia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-cirugia::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background-image: url('../images/iconosidebar/cirugia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+   /**PEDIATRIA*/
+.icono-pediatria {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-pediatria::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 35px;
+  background-image: url('../images/iconosidebar/pediatria.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+   /**GINECOLOGIA Y OBSTETRICIA*/
+.icono-gineobst {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-gineobst::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/gineobst.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+  /**OFTALMOLOGIA*/
+.icono-oftalmologia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-oftalmologia::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/oftalmologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+  /**FISIOTERAPIA*/
+.icono-fisioterapia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-fisioterapia::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/fisioterapia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+
+    /**PSIQUIATRA*/
+.icono-psiquiatria {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-psiquiatria::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/psiquiatria.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+    /**BRONCOPULPONAR*/
+.icono-bronco {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-bronco::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 46%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/broncopulmonar.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+    /**COLOPROCTOLOGIA*/
+.icono-coloproctologia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-coloproctologia::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 46%;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/coloproctologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+
+
+
+    /**PSICOLOGIA*/
+.icono-psico {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-psico::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/psicologia.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+    /**NUTRICION*/
+.icono-nutri {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-nutri::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/nutricion.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+    /**FONOAUDIOLOGIA*/
+.icono-fonoaudiologia {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-fonoaudiologia::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/fono.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+  /**TERAPIA OCUPACIONAL*/
+.icono-to {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-to::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/to.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+  /**KINESIOLOGIA*/
+.icono-kine {
+  position: relative;
+  padding-left: 40px; /* espacio para el ícono */
+  cursor: pointer;
+}
+
+.icono-kine::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('../images/iconosidebar/kine.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 
 
 

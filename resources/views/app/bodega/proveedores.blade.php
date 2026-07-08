@@ -1,4 +1,11 @@
 @extends('template.adm_cm.template')
+@section('style')
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
+@endsection
 @section('content')
 <!--****Container Completo****-->
 <div class="pcoded-main-container">
@@ -11,9 +18,15 @@
                             <h5 class="m-b-10 font-weight-bold">Proveedores</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="escritorio_admin_general_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="administracion_cm.php">Administracion del centro médico</a></li>
-                            <li class="breadcrumb-item"><a href="proveedores_cm.php">Proveedores</a></li>
+                            @if($institucion->id_tipo_institucion == 3)
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.adm_general.proveedores_laboratorio_admin') }}">Proveedores</a></li>
+                            @else
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_comercial') }}">Administracion del centro médico</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.proveedores') }}">Proveedores</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -75,7 +88,6 @@
                     </table>
                 </div>
             </div>
-            <button class="btn btn-danger btn-sm">Buscar proveedor</button>
         </div>
     </div>
 </div>
@@ -101,17 +113,18 @@
                 @endif
                 <form action="{{ ROUTE('guardarProveedor') }}" method="post">
                     @csrf
+                    <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group fill">
-                                <label class="floating-label">Proveedor</label>
-                                <input class="form-control form-control-sm" name="nombre_prov" id="nombre_prov" type="text">
+                                <label class="floating-label-activo-sm">Proveedor</label>
+                                <input class="form-control form-control-sm" name="nombre_prov" id="nombre_prov" type="text" required>
                             </div>
                         </div>
 						<div class="col-sm-12">
                             <div class="form-group fill">
-                                <label class="floating-label">Productos</label>
-                                <select name="prov_prod" id="prov_prod" class="form-control">
+                                <label class="floating-label-activo-sm">Productos</label>
+                                <select name="prov_prod[]" id="prov_prod" class="form-control" multiple required>
                                     <option value="0">Seleccione</option>
                                     @foreach($tipo_producto as $producto)
                                         <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
@@ -121,44 +134,44 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group fill">
-                                <label class="floating-label">Rut</label>
-                                <input class="form-control form-control-sm" name="rut" id="rut" type="text" >
+                                <label class="floating-label-activo-sm">Rut</label>
+                                <input class="form-control form-control-sm" name="rut" id="rut" type="text" required>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group fill">
-                                <label class="floating-label">Rol</label>
-                                <input class="form-control form-control-sm" name="rol" id="rol" type="text" >
+                                <label class="floating-label-activo-sm">Rol</label>
+                                <input class="form-control form-control-sm" name="rol" id="rol" type="text" required>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group fill">
-                                <label class="floating-label">Correo Electrónico</label>
-                                <input class="form-control form-control-sm" name="email" id="email" type="email" >
+                                <label class="floating-label-activo-sm">Correo Electrónico</label>
+                                <input class="form-control form-control-sm" name="email" id="email" type="email" required>
                             </div>
                         </div>
                     <div class="col-sm-12">
                         <div class="form-group fill">
-                            <label class="floating-label">Teléfono</label>
-                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                            <label class="floating-label-activo-sm">Teléfono</label>
+                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="text" required>
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group fill">
-                            <label class="floating-label">Teléfono (opcional)</label>
-                            <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
+                            <label class="floating-label-activo-sm">Teléfono (opcional)</label>
+                            <input class="form-control form-control-sm" name="telefono_opcional" id="telefono_opcional" type="text" >
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group fill">
-                            <label class="floating-label">Dirección / Calle</label>
-                            <input class="form-control form-control-sm" name="direccion" id="direccion" type="text">
+                            <label class="floating-label-activo-sm">Dirección / Calle</label>
+                            <input class="form-control form-control-sm" name="direccion" id="direccion" type="text" required>
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group fill">
-                            <label class="floating-label">Número</label>
-                            <input class="form-control form-control-sm" name="numero" id="numero" type="text" >
+                            <label class="floating-label-activo-sm">Número</label>
+                            <input class="form-control form-control-sm" name="numero" id="numero" type="text"  required>
                         </div>
                     </div>
 
@@ -222,7 +235,7 @@
                         <div class="col-sm-12">
                             <div class="form-group fill">
                                 <label class="floating-label">Productos</label>
-                                <select class="form-control form-control-sm" name="prov_prod_" id="prov_prod_">
+                                <select class="form-control form-control-sm" name="prov_prod_[]" id="prov_prod_" multiple required>
                                     <option value="0">Seleccione</option>
                                     @foreach($tipo_producto as $producto)
                                         <option value="{{ $producto->id }}">{{ $producto->nombre }}</option>
@@ -311,6 +324,74 @@
 
 @section('page-script')
 <script>
+
+    $(document).ready(function() {
+        // select2
+        $('#prov_prod').select2({
+            placeholder: "Seleccione productos",
+            width: '100%'
+        });
+         $('#prov_prod_').select2({
+            placeholder: "Seleccione productos",
+            width: '100%'
+         });
+    });
+
+    function eliminar_proveedor(id_proveedor) {
+        console.log('confirmar eliminar proveedor ' + id_proveedor);
+        swal({
+            title: '¿Estás seguro?',
+            text: "¿Estás seguro de eliminar este proveedor? Esta acción no se puede deshacer.",
+            icon: 'warning',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    value: null,
+                    visible: true,
+                    className: '',
+                    closeModal: true,
+                },
+                confirm: {
+                    text: 'Sí, eliminar',
+                    value: true,
+                    visible: true,
+                    className: 'bg-danger',
+                    closeModal: true
+                }
+            },
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_proveedor(id_proveedor);
+            }
+        });
+    }
+
+    function confirmar_eliminar_proveedor(id_proveedor) {
+        console.log('eliminando proveedor ' + id_proveedor);
+        let url = '{{ ROUTE("eliminarProveedor") }}';
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data:{
+                'id': id_proveedor
+            },
+            success: function(response) {
+                console.log(response);
+                if(response.mensaje == 'OK'){
+                    console.log('proveedor eliminado');
+                    location.reload();
+                } else {
+                    console.log('error al eliminar proveedor');
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
     function cambiarEstadoProveedor(id_proveedor) {
         console.log('cambiando estado del proveedor ' + id_proveedor);
         let url = '{{ ROUTE("cambiarEstadoProveedor", ":id") }}';

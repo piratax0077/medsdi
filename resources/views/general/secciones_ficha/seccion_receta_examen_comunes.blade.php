@@ -10,7 +10,7 @@
             @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
                 <div class="col-sm-12 col-md-6 text-center">
                     <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                        <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento</button>
+                        <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento {{ isset($profesional) && $profesional->id_tipo_especialidad == 9 && $profesional->id_sub_tipo_especialidad == 121 ? ' Alopatía' : '' }}</button>
                         <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary  btn-sm mt-1 wid-20" id="btn_medicamento_pdf"><i class="feather icon-file"></i> Ver PDF</button>
                         {{-- <button type="button" onclick="ver_pdf_receta_retenido($('#id_fc').val());" class="btn btn-warning-light btn-sm mt-1" id=""><i class="feather icon-file"></i> Ver PDF</button> --}}
                     </div>
@@ -24,7 +24,7 @@
             @else
                 <div class="col-sm-12 col-md-6 text-center">
                     <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                        <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento</button>
+                        <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento {{ isset($profesional) && $profesional->id_tipo_especialidad == 9 && $profesional->id_sub_tipo_especialidad == 121 ? ' Alopatía' : '' }}</button>
                         <button type="button" disabled="disabled" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary  btn-sm mt-1 wid-20" id="btn_medicamento_pdf"><i class="feather icon-file"></i> Ver PDF</button>
                         {{-- <button type="button" disabled="disabled" onclick="ver_pdf_receta_retenido($('#id_fc').val());" class="btn_medicamento_pdf btn btn-warning-light btn-sm mt-1" id="btn_medicamento_retenida_pdf"><i class="feather icon-file"></i> Ver PDF</button> --}}
                     </div>
@@ -39,7 +39,7 @@
         @else
             <div class="col-sm-12 col-md-6 text-center">
                 <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-                    <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento</button>
+                    <button type="button" disabled="disabled" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar medicamento {{ isset($profesional) && $profesional->id_tipo_especialidad == 9 && $profesional->id_sub_tipo_especialidad == 121 ? ' Alopatía' : '' }}</button>
                     <button type="button" disabled="disabled" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-primary  btn-sm mt-1 wid-20" id="btn_medicamento_pdf"><i class="feather icon-file"></i> Ver PDF</button>
                     {{-- <button type="button" disabled="disabled" onclick="ver_pdf_receta_retenido($('#id_fc').val());" class="btn_medicamento_pdf btn btn-warning-light btn-sm mt-1" id="btn_medicamento_retenida_pdf"><i class="feather icon-file"></i> PDF PDF</button> --}}
                 </div>
@@ -701,18 +701,36 @@
             );
         }
 
-        function ver_pdf_receta_retenido(id_ficha_atencion)
+         function ver_pdf_receta_retenido(id_ficha_atencion, id_receta)
         {
+            const pdfUrl = "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion=" + id_ficha_atencion + '&id_receta=' + id_receta;
 
-            let url = "{{ route('pdf.receta_medicamentos') }}";
             Fancybox.show(
-                [
-                    {
-                    src: "{{ route('pdf.receta_medicamentos') }}?id_ficha_atencion="+id_ficha_atencion+'&tipo_control=1',
-                    type: "iframe",
-                    preload: false,
-                    },
-                ]
+                [{ src: pdfUrl, type: "iframe", preload: false }],
+                {
+                    Toolbar: {
+                        display: [
+                            { id: "prev",     position: "center" },
+                            { id: "title",    position: "center" },
+                            { id: "next",     position: "center" },
+                            { id: "imprimir", position: "right"  },
+                            { id: "close",    position: "right"  },
+                        ],
+                        items: {
+                            imprimir: {
+                                tpl: '<button class="carousel__button" title="Imprimir receta" style="width:auto;padding:0 14px;font-size:12px;gap:6px;display:flex;align-items:center;">'
+                                   + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style="flex-shrink:0"><path fill="currentColor" d="M18 3H6v4H5a3 3 0 0 0-3 3v6h4v4h12v-4h4V10a3 3 0 0 0-3-3h-1V3zm-2 2v2H8V5h8zm-8 14v-4h8v4H8zm10-6H6v-2h12v2zm1-3a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>'
+                                   + '<span>Imprimir</span></button>',
+                                click: function() {
+                                    const win = window.open(pdfUrl, '_blank');
+                                    if (win) {
+                                        win.onload = function () { win.print(); };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             );
         }
         {{--  METODOS DE RECETA  FIN --}}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Instituciones;
 use App\Models\Marcas_productos;
 use App\Models\Unidades_medidas;
 use App\Models\Producto;
@@ -103,22 +104,22 @@ class ProductosController extends Controller
             if($producto){
                 return false;
             }
-            // Validar el archivo
-            $req->validate([
-                'imagen' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-            // Obtener el archivo
-            $file = $req->file('imagen');
+            // Validar el archivo (ahora puede ser nulo)
+            // $req->validate([
+            //     'imagen' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048',
+            // ]);
 
-            // Definir el nombre del archivo y la ruta donde se guardará
-            $nombreArchivo = time() . '_' . $file->getClientOriginalName();
-            $ruta = public_path('storage/images/farmacia');
-
-            // Mover el archivo a la carpeta public/images/farmacia
-            $file->move($ruta, $nombreArchivo);
-
-            // Obtener la ruta pública del archivo
-            $rutaPublica = 'storage/images/farmacia/' . $nombreArchivo;
+            // Verificar si se subió una imagen
+            if ($req->hasFile('imagen')) {
+                $file = $req->file('imagen');
+                $nombreArchivo = time() . '_' . $file->getClientOriginalName();
+                $ruta = public_path('storage/images/farmacia');
+                $file->move($ruta, $nombreArchivo);
+                $rutaPublica = 'storage/images/farmacia/' . $nombreArchivo;
+            } else {
+                $nombreArchivo = 'no-image.png';
+                $rutaPublica = 'storage/images/farmacia/no-image.png';
+            }
 
             $producto = new Producto();
             $producto->codigo_interno = $req->codigo_interno;
@@ -126,9 +127,13 @@ class ProductosController extends Controller
             $producto->stock_minimo = $req->stock_minimo;
             $producto->stock_maximo = $req->stock_maximo;
             $producto->stock_actual += $req->cantidad;
-            $producto->imagen = $nombreArchivo; // Guardar la ruta pública de la imagen
+            $producto->precio_neto = $req->precio_neto;
+            $producto->precio_venta = $req->precio_venta;
+            $producto->precio_compra = $req->precio_compra;
+            $producto->imagen = $nombreArchivo; // Guardar el nombre de la imagen
             $producto->descripcion = $req->observaciones;
             $producto->id_tipo_producto = $req->tipo_producto;
+            $producto->lado_producto = $req->lado_producto;
             $producto->id_unidad_medida = $req->unidad_medida;
             $producto->almacenamiento = intval($req->almacenamiento);
             $producto->id_tipo_almacenamiento = intval($req->tipo_almacenamiento);
@@ -145,8 +150,9 @@ class ProductosController extends Controller
 
     }
 
-    public function buscarProductosTipo($id){
+    public function buscarProductosTipo($id, $id_lugar_atencion){
         try {
+            $institucion = Instituciones::where('id_lugar_atencion', $id_lugar_atencion)->first();
             //code...
             if($id == 0){
                 $productos = Producto::select('productos.codigo_interno','productos.id', DB::raw('MAX(productos.nombre) as nombre_producto'),DB::raw('MAX(productos.stock_actual) as stock_actual'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('SUM(compras_detalle.cantidad) as cantidad'),DB::raw('MAX(compras_detalle.precio_compra) as precio_unitario'), DB::raw('MAX(proveedores.nombre) as proveedor'))
@@ -156,6 +162,7 @@ class ProductosController extends Controller
                 ->join('compras_detalle', 'productos.id', 'compras_detalle.id_producto')
                 ->join('compras', 'compras_detalle.id_compra', 'compras.id')
                 ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
+                ->where('compras.id_institucion', $institucion->id)
                 ->groupBy('productos.codigo_interno','productos.id')
                 ->get();
             }else{
@@ -167,6 +174,7 @@ class ProductosController extends Controller
                 ->join('compras', 'compras_detalle.id_compra', 'compras.id')
                 ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
                 ->where('productos.id_tipo_producto', $id)
+                ->where('compras.id_institucion', $institucion->id)
                 ->groupBy('productos.codigo_interno','productos.id')
                 ->get();
             }
@@ -187,6 +195,7 @@ class ProductosController extends Controller
     }
 
     public function buscarProductos(Request $req){
+
         $tag = $req->producto;
         $idproveedor = $req->idproveedor;
         $productos = Producto::select('productos.codigo_interno','productos.id',DB::raw('MAX(compras_detalle.precio_compra) as precio_unitario'), DB::raw('MAX(productos.nombre) as nombre_producto'), DB::raw('MAX(tipo_producto.nombre) as tipo_producto'), DB::raw('MAX(unidades_medidas.nombre) as unidad_medida'), DB::raw('MAX(marcas_productos.nombre) as marca'), DB::raw('MAX(proveedores.nombre) as proveedor'))
@@ -206,6 +215,7 @@ class ProductosController extends Controller
     }
 
     public function seleccionarProducto($idproducto){
+
         $producto = Producto::select('productos.*', 'tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida', 'marcas_productos.nombre as marca','compras_detalle.cantidad','compras_detalle.lote','compras_detalle.fecha_vencimiento','compras_detalle.observaciones','compras_detalle.otros','compras_detalle.precio_compra as precio_unitario')
         ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
         ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')

@@ -79,7 +79,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="modalSucursalesDestinoLabel"></h5>
+                <h5 class="modal-title text-white" id="modalSucursalesDestinoLabel">Traspaso entre sucursales</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -95,6 +95,17 @@
                         </li>
                     @endforeach
                 </ul>
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="">Recibe</label>
+                            <select name="" id="" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -182,6 +193,10 @@
                 console.log(data);
                 var tbody = $('#tabla_resultados_productos tbody');
                 var productos = data.productos;
+                if(productos.length == 0){
+                    tbody.html('<tr><td colspan="5" class="text-center">No se encontraron productos</td></tr>');
+                    return;
+                }
                 tbody.empty();
                 productos.forEach(function(producto) {
                     var fila = '<tr>' +

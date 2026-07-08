@@ -47,6 +47,11 @@
                             <textarea type="text" class="form-control form-control-sm" rows="2" name="comentarios_certificado"
                                 id="comentarios_certificado"></textarea>
                         </div>
+                        <div class="form-group col-sm-12 col-md-12">
+                            <label class="floating-label-activo-sm">Correo destinatario <small class="text-muted">(para envío por email)</small></label>
+                            <input type="email" class="form-control form-control-sm" id="email_certificado_reposo"
+                                name="email_certificado_reposo" value="{{ $paciente->email }}" placeholder="correo@ejemplo.com">
+                        </div>
                     </div>
                     {{--  <div class="form-row">
                         <div class="col-sm-12 col-md-12 text-center">
@@ -60,6 +65,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_certificado_reposo').modal('hide')"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" onclick="enviar_certificado_reposo_email();" class="btn btn-warning btn-sm"><i class="feather icon-send"></i> Enviar PDF</button>
                 <button type="button" onclick="registrar_cetificado_reposo();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>

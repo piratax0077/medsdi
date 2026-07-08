@@ -4,239 +4,232 @@
 
 
 </div>
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-		<div class="col-md-12 py-0 px-2">
-			<div class="row mx-0">
 
-				<div class="col-sm-12 col-md-12">
-					<ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
-						<li class="nav-item-secciones">
-							<a  class="nav-secciones active text-uppercase" id="atencion-diagnostica-tab" data-toggle="tab" href="#atencion-diagnostica" role="tab" aria-controls="atencion-diagnostica" aria-selected="true">Atención especialidad</a>
-						</li>
-						<li class="nav-item-secciones">
-							<a onclick="dame_atencion_sico()" class="nav-secciones text-uppercase" id="atencion_sicosocial-tab" data-toggle="tab" href="#atencion_sicosocial" role="tab" aria-controls="atencion_sicosocial" aria-selected="false">Evaluación Psicosocial</a>
-						</li>
-                          @if($tiene_controles == 1)
-						<li class="nav-item-secciones">
-								<a class="nav-secciones  text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="true">Evolución</a>
-						</li>
-                        <li class="nav-item-secciones">
-								<a class="nav-secciones  text-uppercase" onclick="dame_historial_controles()" id="evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="true">Historial Evolución</a>
-						</li>
-                        @endif
-					</ul>
-				</div>
+		<div class="row mx-0" style="background-color: #ecf0f5!important;">
 
-				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<div class="form-row mb-1">
-						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-							<div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
-						</div>
-						<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
-							<div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
-						</div>
+			<div class="col-sm-12 col-md-12">
+				<ul class="nav nav-tabs-secciones mb-3 mt-1" id="orl" role="tablist">
+					<li class="nav-item-secciones">
+						<a  class="nav-secciones active text-uppercase" id="atencion-diagnostica-tab" data-toggle="tab" href="#atencion-diagnostica" role="tab" aria-controls="atencion-diagnostica" aria-selected="true">Atención especialidad</a>
+					</li>
+					<li class="nav-item-secciones">
+						<a onclick="dame_atencion_sico()" class="nav-secciones text-uppercase" id="atencion_sicosocial-tab" data-toggle="tab" href="#atencion_sicosocial" role="tab" aria-controls="atencion_sicosocial" aria-selected="false">Evaluación Psicosocial</a>
+					</li>
+                    @if($tiene_controles == 1)
+					<li class="nav-item-secciones">
+							<a class="nav-secciones  text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="true">Evolución</a>
+					</li>
+                    <li class="nav-item-secciones">
+							<a class="nav-secciones  text-uppercase" onclick="dame_historial_controles()" id="evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="true">Historial Evolución</a>
+					</li>
+                    @endif
+				</ul>
+			</div>
+
+			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+				<div class="form-row mb-1">
+					<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+						<div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+					</div>
+					<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+						<div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
 					</div>
 				</div>
+			</div>
 
-				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<form action="{{ route('ficha.otro.prof.registrar_ficha_sico') }}" method="POST">
-						<input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
-						<input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
-						<input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
-						<input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
-						<input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
-						<input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
-						<input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
-						<input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
-						<input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
-						<input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
-						<input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
-						<input type="hidden" name="tipopdf" id="tipopdf" value="0">
-						<input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
-                        <input type="hidden" name="hora_agendada" id="hora_agendada" value="0">
-                        <input type="hidden" name="finalizando_sesiones" id="finalizando_sesiones" value="0">
-                        <input type="hidden" name="id_plan" id="id_plan" value="0">
-						@csrf
-						<div class="tab-content" id="ficha-ad-psico">
-                            @if (session('error'))
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-message">
-                                    <strong>Error:</strong> {!! session('error') !!}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                                </div>
-                            @endif
-                            @if (session('success'))
-                                <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-message">
-                                    <strong>Éxito:</strong> {{ session('success') }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-                                </div>
-                            @endif
-							<!--ATENCIÓN  DIAGNOSTICA-->
-							<div class="tab-pane fade show active" id="atencion-diagnostica" role="tabpanel" aria-labelledby="atencion-diagnostica">
-								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-										<div class="row">
-											<div class="col-md-12 mt-2 mb-0">
-												<h6 class="f-20 text-c-blue mb-3">Atención diagnóstica</h6>
-											</div>
+			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+				<form action="{{ route('ficha.otro.prof.registrar_ficha_sico') }}" method="POST">
+					<input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
+					<input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
+					<input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
+					<input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
+					<input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+					<input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
+					<input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
+					<input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+					<input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+					<input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+					<input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
+					<input type="hidden" name="tipopdf" id="tipopdf" value="0">
+					<input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+                    <input type="hidden" name="hora_agendada" id="hora_agendada" value="0">
+                    <input type="hidden" name="finalizando_sesiones" id="finalizando_sesiones" value="0">
+                    <input type="hidden" name="id_plan" id="id_plan" value="0">
+					@csrf
+					<div class="tab-content" id="ficha-ad-psico">
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-message">
+                                <strong>Error:</strong> {!! session('error') !!}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-message">
+                                <strong>Éxito:</strong> {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                            </div>
+                        @endif
+						<!--ATENCIÓN  DIAGNÓSTICA-->
+						<div class="tab-pane fade show active" id="atencion-diagnostica" role="tabpanel" aria-labelledby="atencion-diagnostica">
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="row">
+										<div class="col-md-12 mt-2 mb-0">
+											<h6 class="f-20 text-c-blue mb-3">Atención diagnóstica</h6>
 										</div>
-										<!--FORMULARIOS-->
-										<div class="row">
-											<!--MOTIVO CONSULTA-->
-											<!--RESPONSABLE-->
-											<!--Formulario / Menor de edad-->
-											@include('general.secciones_ficha.seccion_menor')
-											<!--Cierre: Formulario / Menor de edad-->
-											<!--INFORMACIÓN-->
-											@include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
-											<!--ANTECEDENTES FAMILIARES-->
-											{{--  @include('atencion_otros_prof.secciones_especialidad.includes.generales.antecedentes')  --}}
-											<!--ANTECEDENTES PSICO-SOCIALES-->
-											{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="ant_gen">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#ant_gen-c" aria-expanded="false" aria-controls="ant_gen-c">
-														Antecedentes Psico-sociales
-														</button>
-													</div>
-													<div id="ant_gen-c" class="collapse" aria-labelledby="ant_gen" data-parent="#ant_gen">
-														<div class="card-body-aten-a">
-															<div class="row">
-																<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																	<ul class="nav nav-tabs-aten nav-fill mb-3" id="myTab" role="tablist">
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset active" id="ps_ant_gen_tab" data-toggle="tab" href="#ps_ant_gen" role="tab" aria-controls="ps_ant_gen" aria-selected="true">Generales</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset" id="residencia_tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false">Residencia</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset" id="psi_habitos_tab" data-toggle="tab" href="#psi_habitos" role="tab" aria-controls="psi_habitos" aria-selected="false">Hábitos</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset" id="psi_trabajo_tab" data-toggle="tab" href="#psi_trabajo" role="tab" aria-controls="psi_trabajo" aria-selected="false">Trabajo</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset" id="psi_esparcimiento_tab" data-toggle="tab" href="#psi_esparcimiento" role="tab" aria-controls="psi_esparcimiento" aria-selected="false">Esparcimiento</a>
-																		</li>
-																		<li class="nav-item">
-																			<a class="nav-link-aten text-reset" id="psi_obs_gen_ant_tab" data-toggle="tab" href="#psi_obs_gen_ant" role="tab" aria-controls="psi_obs_gen_ant" aria-selected="false">Obs. generales</a>
-																		</li>
-																	</ul>
-																</div>
+									</div>
+									<!--FORMULARIOS-->
+									<div class="row">
+										<!--MOTIVO CONSULTA-->
+										<!--RESPONSABLE-->
+										<!--Formulario / Menor de edad-->
+										@include('general.secciones_ficha.seccion_menor')
+										<!--Cierre: Formulario / Menor de edad-->
+										<!--INFORMACIÓN-->
+										@include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
+										<!--ANTECEDENTES FAMILIARES-->
+										{{--  @include('atencion_otros_prof.secciones_especialidad.includes.generales.antecedentes')  --}}
+										<!--ANTECEDENTES PSICO-SOCIALES-->
+										{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="ant_gen">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#ant_gen-c" aria-expanded="false" aria-controls="ant_gen-c">
+													Antecedentes Psico-sociales
+													</button>
+												</div>
+												<div id="ant_gen-c" class="collapse" aria-labelledby="ant_gen" data-parent="#ant_gen">
+													<div class="card-body-aten-a">
+														<div class="row">
+															<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																<ul class="nav nav-tabs-aten nav-fill mb-3" id="myTab" role="tablist">
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset active" id="ps_ant_gen_tab" data-toggle="tab" href="#ps_ant_gen" role="tab" aria-controls="ps_ant_gen" aria-selected="true">Generales</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset" id="residencia_tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false">Residencia</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset" id="psi_habitos_tab" data-toggle="tab" href="#psi_habitos" role="tab" aria-controls="psi_habitos" aria-selected="false">Hábitos</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset" id="psi_trabajo_tab" data-toggle="tab" href="#psi_trabajo" role="tab" aria-controls="psi_trabajo" aria-selected="false">Trabajo</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset" id="psi_esparcimiento_tab" data-toggle="tab" href="#psi_esparcimiento" role="tab" aria-controls="psi_esparcimiento" aria-selected="false">Esparcimiento</a>
+																	</li>
+																	<li class="nav-item">
+																		<a class="nav-link-aten text-reset" id="psi_obs_gen_ant_tab" data-toggle="tab" href="#psi_obs_gen_ant" role="tab" aria-controls="psi_obs_gen_ant" aria-selected="false">Obs. generales</a>
+																	</li>
+																</ul>
 															</div>
-															<div class="row">
-																<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																	<div class="tab-content" id="pediat-contenido">
-																		<!--generales-->
-																		<div class="tab-pane fade show active" id="ps_ant_gen" role="tabpanel" aria-labelledby="ps_ant_gen_tab">
-																			<div class="form-row">
-																				<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																					<label class="floating-label-activo-sm" for="lugar_nacimiento">Lugar de nacimiento</label>
-																					<input type="text" class="form-control form-control-sm" name="lugar_nacimiento" id="lugar_nacimiento">
-																				</div>
-																				<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																					<label class="floating-label-activo-sm" for="estado_civil">Estado civil</label>
-																					<select class="form-control form-control-sm" name="estado_civil" id="estado_civil">
-																					<option value="0">Seleccione</option>
-																					<option value="1">Soltero/a</option>
-																					<option value="2">En pareja</option>
-																					<option value="3">Casado/a</option>
-																					<option value="4">Separado/a</option>
-																					<option value="5">Viudo/a</option>
-																					</select>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																					<label class="floating-label-activo-sm" for="niv_ed">Nivel de educación</label>
-																					<select class="form-control form-control-sm" name="niv_ed" id="niv_ed">
-																					<option value="0">Seleccione</option>
-																					<option value="1">Básica incompleta</option>
-																					<option value="2">Básica completa</option>
-																					<option value="3">Ens. Media incompleta</option>
-																					<option value="4">Ens. Media completa</option>
-																					<option value="5">Universitaria incompleta</option>
-																					<option value="6">Universitaria completa</option>
-																					</select>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																					<label class="floating-label-activo-sm" for="ocupacion">Ocupación</label>
-																					<input type="text" class="form-control form-control-sm" name="ocupacion" id="ocupacion">
-																				</div>
-																				<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																					<label class="floating-label-activo-sm" for="religion">Religión</label>
-																					<input type="text" class="form-control form-control-sm" name="religion" id="religion">
-																				</div>
+														</div>
+														<div class="row">
+															<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																<div class="tab-content" id="pediat-contenido">
+																	<!--GENERALES-->
+																	<div class="tab-pane fade show active" id="ps_ant_gen" role="tabpanel" aria-labelledby="ps_ant_gen_tab">
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																				<label class="floating-label-activo-sm" for="lugar_nacimiento">Lugar de nacimiento</label>
+																				<input type="text" class="form-control form-control-sm" name="lugar_nacimiento" id="lugar_nacimiento">
+																			</div>
+																			<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																				<label class="floating-label-activo-sm" for="estado_civil">Estado civil</label>
+																				<select class="form-control form-control-sm" name="estado_civil" id="estado_civil">
+																				<option value="0">Seleccione</option>
+																				<option value="1">Soltero/a</option>
+																				<option value="2">En pareja</option>
+																				<option value="3">Casado/a</option>
+																				<option value="4">Separado/a</option>
+																				<option value="5">Viudo/a</option>
+																				</select>
+																			</div>
+																			<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																				<label class="floating-label-activo-sm" for="niv_ed">Nivel de educación</label>
+																				<select class="form-control form-control-sm" name="niv_ed" id="niv_ed">
+																				<option value="0">Seleccione</option>
+																				<option value="1">Básica incompleta</option>
+																				<option value="2">Básica completa</option>
+																				<option value="3">Ens. Media incompleta</option>
+																				<option value="4">Ens. Media completa</option>
+																				<option value="5">Universitaria incompleta</option>
+																				<option value="6">Universitaria completa</option>
+																				</select>
+																			</div>
+																			<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																				<label class="floating-label-activo-sm" for="ocupacion">Ocupación</label>
+																				<input type="text" class="form-control form-control-sm" name="ocupacion" id="ocupacion">
+																			</div>
+																			<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																				<label class="floating-label-activo-sm" for="religion">Religión</label>
+																				<input type="text" class="form-control form-control-sm" name="religion" id="religion">
 																			</div>
 																		</div>
-																		<!--residencia-->
-																		<div class="tab-pane fade show" id="residencia" role="tabpanel" aria-labelledby="residencia_tab">
-																			<div class="form-row">
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="vive_con">Vive con</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="vive_con" id="vive_con"></textarea>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="vive_obs">Observaciones</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="vive_obs" id="vive_obs"></textarea>
-																				</div>
+																	</div>
+																	<!--RESIDENCIA-->
+																	<div class="tab-pane fade show" id="residencia" role="tabpanel" aria-labelledby="residencia_tab">
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm" for="vive_con">Vive con</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="vive_con" id="vive_con"></textarea>
+																			</div>
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm" for="vive_obs">Observaciones</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="vive_obs" id="vive_obs"></textarea>
 																			</div>
 																		</div>
-																		<!--habitos-->
-																		<div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
+																	</div>
+																	<!--HABITOS-->
+																	<div class="tab-pane fade show" id="psi_habitos" role="tabpanel" aria-labelledby="psi_habitos_tab">
 
-																			<div class="form-row">
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="alcohol">Consumo de alcohol</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="alcohol" id="alcohol"></textarea>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm"for="tabaco" >Consumo de tabaco</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="tabaco" id="tabaco"></textarea>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="sustancias_ilicitas">Consumo de sust. ilícitas</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sustancias_ilicitas" id="sustancias_ilicitas"></textarea>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="sexualidad">Sexualidad</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sexualidad" id="sexualidad"></textarea>
-																				</div>
-																				<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																					<label class="floating-label-activo-sm" for="com_generales">Comentarios generales</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="com_generales" id="com_generales"></textarea>
-																				</div>
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm" for="alcohol">Consumo de alcohol</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="alcohol" id="alcohol"></textarea>
 																			</div>
-
-																		</div>
-																		<!--trabajo-->
-																		<div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
-
-																			<div class="form-row">
-																				<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																					<label class="floating-label-activo-sm" for="ant_laborales">Antecedentes laborales</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_laborales" id="ant_laborales"></textarea>
-																				</div>
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm"for="tabaco" >Consumo de tabaco</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="tabaco" id="tabaco"></textarea>
 																			</div>
-
-																		</div>
-																		<!--esparcimiento-->
-																		<div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
-
-																			<div class="form-row">
-																				<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																					<label class="floating-label-activo-sm" for="ant_esparc" >Esparcimiento</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_esparc" id="ant_esparc"></textarea>
-																				</div>
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm" for="sustancias_ilicitas">Consumo de sust. ilícitas</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sustancias_ilicitas" id="sustancias_ilicitas"></textarea>
 																			</div>
-
+																			<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																				<label class="floating-label-activo-sm" for="sexualidad">Sexualidad</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sexualidad" id="sexualidad"></textarea>
+																			</div>
+																			<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																				<label class="floating-label-activo-sm" for="com_generales">Comentarios generales</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="com_generales" id="com_generales"></textarea>
+																			</div>
 																		</div>
-																		<!--OBSERVACIONES GENERALES-->
-																		<div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
-																			<div class="form-row">
 
-																				<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																					<label class="floating-label-activo-sm" for="obs_generales" >Observaciones generales</label>
-																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="obs_generales" id="obs_generales"></textarea>
-																				</div>
+																	</div>
+																	<!--TRABAJO-->
+																	<div class="tab-pane fade" id="psi_trabajo" role="tabpanel" aria-labelledby="psi_trabajo_tab">
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																				<label class="floating-label-activo-sm" for="ant_laborales">Antecedentes laborales</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_laborales" id="ant_laborales"></textarea>
+																			</div>
+																		</div>
+																	</div>
+																	<!--ESPARCIMIENTO-->
+																	<div class="tab-pane fade" id="psi_esparcimiento" role="tabpanel" aria-labelledby="psi_esparcimiento_tab">
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																				<label class="floating-label-activo-sm" for="ant_esparc" >Esparcimiento</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_esparc" id="ant_esparc"></textarea>
+																			</div>
+																		</div>
+																	</div>
+																	<!--OBSERVACIONES GENERALES-->
+																	<div class="tab-pane fade show " id="psi_obs_gen_ant" role="tabpanel" aria-labelledby="psi_obs_gen_ant_tab">
+																		<div class="form-row">
+																			<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																				<label class="floating-label-activo-sm" for="obs_generales" >Observaciones generales</label>
+																				<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="obs_generales" id="obs_generales"></textarea>
 																			</div>
 																		</div>
 																	</div>
@@ -245,270 +238,275 @@
 														</div>
 													</div>
 												</div>
-											</div>  --}}
-											<!--BIOPATOGRAFÍA-->
-											{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="biopato">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#biopato-c" aria-expanded="false" aria-controls="biopato-c">
-														Biopatografía
-														</button>
-													</div>
-													<div id="biopato-c" class="collapse" aria-labelledby="biopato" data-parent="#biopato">
-														<div class="card-body-aten-a">
-
-															<div class="form-row">
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="prenatal"  >Prenatal</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="prenatal" id="prenatal"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="natal"  >Natal</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="natal" id="natal"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="infancia" >Infancia</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="infancia" id="infancia"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="adolescencia" >Adolescencia</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="adolescencia" id="adolescencia"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="edad_adulta" >Edad adulta</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="edad_adulta" id="edad_adulta"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="ad_mayor" >Adulto mayor</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ad_mayor" id="ad_mayor"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																	<label class="floating-label-activo-sm"for="actualidad"  >Actualidad</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="actualidad" id="actualidad"></textarea>
-																</div>
-															</div>
-
-														</div>
-													</div>
+											</div>
+										</div>  --}}
+										<!--BIOPATOGRAFÍA-->
+										{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="biopato">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#biopato-c" aria-expanded="false" aria-controls="biopato-c">
+													Biopatografía
+													</button>
 												</div>
-											</div>  --}}
-
-											<!--ANTECEDENTES MÉDICOS, PSIQUIATRICOS, PSICOLÓGICOS-->
-											{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="a-med">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#a-med-c" aria-expanded="false" aria-controls="a-med-c">
-														Antecedentes médicos, psiquiatricos, psicológicos
-														</button>
-													</div>
-													<div id="a-med-c" class="collapse" aria-labelledby="a-med" data-parent="#a-med">
-														<div class="card-body-aten-a">
-
-															<div class="form-row">
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="ant_medicos">Antecedentes médicos</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_medicos" id="ant_medicos"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="ant_suicidio">Ant. de suicidio (paciente o familiares)</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="ant_suicidio" id="ant_suicidio"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="enf_mentales">Ant. de enfermedades mentales (paciente o familiares)</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="enf_mentales" id="enf_mentales" ></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="trat_psicologicos_prev">Tratamientos psicológicos previos</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="trat_psicologicos_prev" id="trat_psicologicos_prev"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="trat_psiquiatricos_prev">Tratamientos psiquiátricos previos</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="trat_psiquiatricos_prev" id="trat_psiquiatricos_prev"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="medicacion_actual">Medicación (actual)</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="medicacion_actual" id="medicacion_actual"></textarea>
-																</div>
+												<div id="biopato-c" class="collapse" aria-labelledby="biopato" data-parent="#biopato">
+													<div class="card-body-aten-a">
+														<div class="form-row">
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="prenatal"  >Prenatal</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="prenatal" id="prenatal"></textarea>
 															</div>
-
-														</div>
-													</div>
-												</div>
-											</div>  --}}
-											{{--  @include('atencion_otros_prof.secciones_especialidad.includes.generales.eval_psiconeuro')  --}}
-											<!--EXÁMEN MENTAL-->
-											{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="exmental">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exmental-c" aria-expanded="false" aria-controls="exmental-c">
-														Examen mental
-														</button>
-													</div>
-													<div id="exmental-c" class="collapse" aria-labelledby="exmental" data-parent="#exmental">
-														<div class="card-body-aten-a">
-
-															<div class="form-row">
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="presentacion">Presentación</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="presentacion" id="presentacion"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="conciencia">Conciencia</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="conciencia" id="conciencia"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="actitud">Actitud</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="actitud" id="actitud"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="atencion_concentracion">Atención y concentración</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="atencion_concentracion" id="atencion_concentracion"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="afectividad">Afectividad</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="afectividad" id="afectividad"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="pensamiento">Pensamiento</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="pensamiento" id="pensamiento"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="sensopercepcion">Sensopercepción</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sensopercepcion" id="sensopercepcion"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="psicomotricidad">Psicomotricidad</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psicomotricidad" id="psicomotricidad"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="sueno">Sueño</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sueno" id="sueno"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="higiene">Higiene</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="higiene" id="higiene"></textarea>
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm"for="alimentacion">Alimentación</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="alimentacion" id="alimentacion"></textarea>
-																</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="natal"  >Natal</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="natal" id="natal"></textarea>
 															</div>
-
-														</div>
-													</div>
-												</div>
-											</div>  --}}
-											<!--PLAN DE TRABAJO-->
-											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="plan-trabajo">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#plan-trabajo-c" aria-expanded="true" aria-controls="plan-trabajo-c">
-														Plan de trabajo
-														</button>
-													</div>
-													<div id="plan-trabajo-c" class="collapse show" aria-labelledby="plan-trabajo" data-parent="#plan-trabajo">
-														<div class="card-body-aten-a">
-
-															<div class="form-row">
-																<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																	{{-- <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button> --}}
-                                                                    <button type="button"
-                                                                    class="btn btn-outline-primary btn-block btn-sm "
-                                                                    onclick="hora_medica_pedir({{ $profesional->id }},{{ $id_lugar_atencion }}); dame_plan_tratamiento({{ $id_ficha_atencion }})"><i
-                                                                        class="feather icon-file-plus"></i> Plan de
-                                                                    Tratamiento</button>
-																</div>
-
-																<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																	<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="ind_ic_psi();"><i class="feather icon-plus"></i> Indicar Interconsulta Siquiatría</button>
-																</div>
-																<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																	<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="informe_psi();"><i class="feather icon-plus"></i> Enviar Informe</button>
-																</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="infancia" >Infancia</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="infancia" id="infancia"></textarea>
 															</div>
-
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="adolescencia" >Adolescencia</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="adolescencia" id="adolescencia"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="edad_adulta" >Edad adulta</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="edad_adulta" id="edad_adulta"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="ad_mayor" >Adulto mayor</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ad_mayor" id="ad_mayor"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+																<label class="floating-label-activo-sm"for="actualidad"  >Actualidad</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="actualidad" id="actualidad"></textarea>
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
-											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="card-a">
-													<div class="card-header-a" id="diagnostico">
-														<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
-														Diagnóstico e Indicaciones
-														</button>
+										</div>  --}}
+
+									  <!--ANTECEDENTES MÉDICOS, PSIQUIATRICOS, PSICOLÓGICOS-->
+								{{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="a-med">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#a-med-c" aria-expanded="false" aria-controls="a-med-c">
+													Antecedentes médicos, psiquiatricos, psicológicos
+													</button>
+												</div>
+												<div id="a-med-c" class="collapse" aria-labelledby="a-med" data-parent="#a-med">
+													<div class="card-body-aten-a">
+														<div class="form-row">
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="ant_medicos">Antecedentes médicos</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="ant_medicos" id="ant_medicos"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="ant_suicidio">Ant. de suicidio (paciente o familiares)</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="ant_suicidio" id="ant_suicidio"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="enf_mentales">Ant. de enfermedades mentales (paciente o familiares)</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="enf_mentales" id="enf_mentales" ></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="trat_psicologicos_prev">Tratamientos psicológicos previos</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="trat_psicologicos_prev" id="trat_psicologicos_prev"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="trat_psiquiatricos_prev">Tratamientos psiquiátricos previos</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="trat_psiquiatricos_prev" id="trat_psiquiatricos_prev"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="medicacion_actual">Medicación (actual)</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="medicacion_actual" id="medicacion_actual"></textarea>
+															</div>
+														</div>
 													</div>
-													<div id="diagnostico-c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
-														<div class="card-body-aten-a">
-															<div class="form-row">
-																<div class="form-group col-md-4">
-																	<label class="floating-label-activo-sm"for="hipotesis">Hipótesis diagnóstica</label>
-																	<input type="text" class="form-control form-control-sm"  data-input_igual="hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_tratamiento" name="hipotesis" id="hipotesis" onchange="cargarIgual('hipotesis')">
-																</div>
-																<div class="form-group col-md-4">
-																	<label class="floating-label-activo-sm"for="indicaciones">Indicaciones</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
-																</div>
-																<div class="form-group col-md-4">
-																	<label class="floating-label-activo-sm"for="pronostico">Pronóstico</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="pronostico" id="pronostico"></textarea>
-																</div>
-															</div>
-															<div class="form-row">
+												</div>
+											</div>
+										</div>  --}}
+										{{--  @include('atencion_otros_prof.secciones_especialidad.includes.generales.eval_psiconeuro')  --}}
+										<!--EXÁMEN MENTAL-->
+										{{--<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="exmental">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exmental-c" aria-expanded="false" aria-controls="exmental-c">
+													Examen mental
+													</button>
+												</div>
+												<div id="exmental-c" class="collapse" aria-labelledby="exmental" data-parent="#exmental">
+													<div class="card-body-aten-a">
 
-																{{--  <div class="form-group col-md-4">
-																	<label class="floating-label-activo-sm"for="indicaciones">DSM-5  (Por grupo Patología)</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
-																</div>  --}}
-																 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
-																	<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
-																	<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
-																</div>
-																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="descripcion_dsm-5">Diagnóstico DSM-5</label>
-																	<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="" onchange="cargarIgual('descripcion_dsm-5')">
-																	<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_dsm-5" id="id_descripcion_dsm-5" value="" onchange="cargarIgual('id_descripcion_dsm-5')">
-																</div>
-
+														<div class="form-row">
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="presentacion">Presentación</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="presentacion" id="presentacion"></textarea>
 															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="conciencia">Conciencia</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="conciencia" id="conciencia"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="actitud">Actitud</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="actitud" id="actitud"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="atencion_concentracion">Atención y concentración</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="atencion_concentracion" id="atencion_concentracion"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="afectividad">Afectividad</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="afectividad" id="afectividad"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="pensamiento">Pensamiento</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="pensamiento" id="pensamiento"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="sensopercepcion">Sensopercepción</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sensopercepcion" id="sensopercepcion"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="psicomotricidad">Psicomotricidad</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="psicomotricidad" id="psicomotricidad"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="sueno">Sueño</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sueno" id="sueno"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="higiene">Higiene</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="higiene" id="higiene"></textarea>
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm"for="alimentacion">Alimentación</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="alimentacion" id="alimentacion"></textarea>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>  --}}
+										<!--PLAN DE TRABAJO-->
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="plan-trabajo">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#plan-trabajo-c" aria-expanded="true" aria-controls="plan-trabajo-c">
+													Plan de trabajo
+													</button>
+												</div>
+												<div id="plan-trabajo-c" class="collapse show" aria-labelledby="plan-trabajo" data-parent="#plan-trabajo">
+													<div class="card-body-aten-a">
+
+														<div class="form-row">
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																{{-- <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button> --}}
+                                                                <button type="button"
+                                                                class="btn btn-outline-primary btn-block btn-sm "
+                                                                onclick="hora_medica_pedir({{ $profesional->id }},{{ $id_lugar_atencion }}); dame_plan_tratamiento({{ $id_ficha_atencion }})"><i
+                                                                    class="feather icon-edit-1"></i> Plan de
+                                                                Tratamiento</button>
+															</div>
+
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="ind_ic_psi();"><i class="feather icon-edit-1"></i> Indicar Interconsulta Psiquiatría</button>
+															</div>
+															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="informe_psi();"><i class="feather icon-edit-1"></i> Enviar Informe</button>
+															</div>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="card-a">
+												<div class="card-header-a" id="diagnostico">
+													<button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left" type="button" data-toggle="collapse" data-target="#diagnostico-c" aria-expanded="false" aria-controls="diagnostico-c">
+													Diagnóstico e Indicaciones
+													</button>
+												</div>
+												<div id="diagnostico-c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
+													<div class="card-body-aten-a">
+														<div class="form-row">
+															<div class="form-group col-md-4">
+																<label class="floating-label-activo-sm"for="hipotesis">Hipótesis diagnóstica</label>
+																<input type="text" class="form-control form-control-sm"  data-input_igual="hipotesis_certificado,eno_diagnositico_confirmado,diagnostico_tratamiento" name="hipotesis" id="hipotesis" onchange="cargarIgual('hipotesis')">
+															</div>
+															<div class="form-group col-md-4">
+																<label class="floating-label-activo-sm"for="indicaciones">Indicaciones</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+															</div>
+															<div class="form-group col-md-4">
+																<label class="floating-label-activo-sm"for="pronostico">Pronóstico</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="pronostico" id="pronostico"></textarea>
+															</div>
+														</div>
+														<div class="form-row">
+
+															{{--  <div class="form-group col-md-4">
+																<label class="floating-label-activo-sm"for="indicaciones">DSM-5  (Por grupo Patología)</label>
+																<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
+															</div>  --}}
+															 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
+																<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+																<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
+															</div>
+															<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																<label class="floating-label-activo-sm" for="descripcion_dsm-5">Diagnóstico DSM-5</label>
+																<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="" onchange="cargarIgual('descripcion_dsm-5')">
+																<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_dsm-5" id="id_descripcion_dsm-5" value="" onchange="cargarIgual('id_descripcion_dsm-5')">
+															</div>
+
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<!--GUARDAR O IMPRIMIR FICHA-->
-											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-												<div class="row mb-3">
-													<div class="col-md-12 text-center">
-														<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-														<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
-													</div>
+									</div>
+									<div class="row">
+										<!--GUARDAR O IMPRIMIR FICHA-->
+										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+											<div class="row mb-3">
+												<div class="col-md-12 text-center">
+													<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+													<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="tab-pane fade" id="atencion_sicosocial" role="tabpanel" aria-labelledby="atencion_sicosocial">
-								@include('general.secciones_ficha.siquiatria.eval_sicosocial')
-							</div>
-							<!--EVOLUCION-->
-							<div class="tab-pane fade" id="evolucion" role="tabpanel" aria-labelledby="evolucion">
-								@include('atencion_otros_prof.secciones_especialidad.includes.generales.evolucion')
-							</div>
-                            <!--EVOLUCION-->
-							<div class="tab-pane fade" id="historial_evolucion" role="tabpanel" aria-labelledby="historial_evolucion">
-								@include('atencion_otros_prof.secciones_especialidad.includes.generales.historial_evolucion')
-							</div>
 						</div>
-					</form>
-				</div>
+
+						<div class="tab-pane fade" id="atencion_sicosocial" role="tabpanel" aria-labelledby="atencion_sicosocial">
+							@include('general.secciones_ficha.siquiatria.eval_sicosocial')
+						</div>
+						<!--EVOLUCION-->
+						<div class="tab-pane fade" id="evolucion" role="tabpanel" aria-labelledby="evolucion">
+							@include('atencion_otros_prof.secciones_especialidad.includes.generales.evolucion')
+						</div>
+                        <!--EVOLUCION-->
+						<div class="tab-pane fade" id="historial_evolucion" role="tabpanel" aria-labelledby="historial_evolucion">
+							@include('atencion_otros_prof.secciones_especialidad.includes.generales.historial_evolucion')
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
-	</div>
+<div class="modal fade" id="modal_imagen_psicologia" tabindex="-1" role="dialog" aria-labelledby="modalZoomLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body zoom-container" style="overflow:hidden; text-align:center;">
+                <img id="imagen_psico_zoom" src="" style="max-width:100%; transition: transform 0.3s ease;">
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.modal_indicar_terapia')
@@ -858,8 +856,7 @@
 <!-- -->
 @section('page-script-ficha-atencion')
     <script>
-        // DECLARACIÓN GLOBAL (accesible desde cualquier parte del script)
-        var archivosSubidos = [];
+         var archivosSubidos = [];
         document.addEventListener('DOMContentLoaded', function () {
             const btnGrabar = document.getElementById('btnGrabarvoz');
             const campoTexto = document.getElementById('com_inf_fono');
@@ -992,6 +989,24 @@
 </script>
 @endsection
 <script>
+    function amplificar_imagen_psicologia(path){
+        $('#modal_imagen_psicologia').modal('show');
+
+        $('.zoom-container').on('mousemove', function (e) {
+            const $img = $(this).find('img');
+            const offsetX = e.offsetX;
+            const offsetY = e.offsetY;
+            const width = $(this).width();
+            const height = $(this).height();
+            const xPercent = (offsetX / width) * 100;
+            const yPercent = (offsetY / height) * 100;
+
+            $img.css('transform-origin', `${xPercent}% ${yPercent}%`);
+        });
+
+        $('#imagen_psico_zoom').attr('src', path);
+    }
+
     function cargarIgual(input)
     {
 
@@ -1063,13 +1078,13 @@
         html += '        <div class="col-sm-12 col-md-6">';
         html += '            <div class="form-group">';
         html += '                <label class="floating-label-activo-sm">Nombre Hermano/a</label>';
-        html += '                <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hno_' + cantidad + '" id="psi_hf_nombre_hno_' + cantidad + '">';
+        html += '                <input type="text" class="form-control form-control-sm" name="psi_hf_nombre_hno_ev_' + cantidad + '" id="psi_hf_nombre_hno_ev_' + cantidad + '">';
         html += '            </div>';
         html += '        </div>';
         html += '        <div class="col-sm-12 col-md-6">';
         html += '            <div class="form-group">';
         html += '                <label class="floating-label-activo-sm">Relación con Hermano</label>';
-        html += '                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=8" onblur="this.rows=1;" name="psi_rel_hf_hno_' + cantidad + '" id="psi_hf_rel_hno_' + cantidad + '"></textarea>';
+        html += '                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=8" onblur="this.rows=1;" name="psi_rel_hf_hno_ev_' + cantidad + '" id="psi_hf_rel_hno_ev_' + cantidad + '"></textarea>';
         html += '            </div>';
         html += '        </div>';
         html += '    </div>';
@@ -1336,6 +1351,7 @@
 
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+            let tipo_agenda = 1;
             let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
 
             $.ajax({
@@ -1664,8 +1680,8 @@
                     $('#proxima_fecha_atencion').html(data.fecha_consulta);
                     $('#proxima_hora_atencion_inicio').html(data.hora_inicio);
                     $('#proxima_hora_atencion_fin').html(data.hora_termino);
-                    guardar_plan_tratamiento_psico();
-                    $('#hora_agendada').val(1);
+                    // Incrementar hora_agendada DENTRO del success de guardar_plan
+                    guardar_plan_tratamiento_psico(true); // true = llamado desde agendar_hora
                     let esUltimaSesion = false;
                     if($('#finalizando_sesiones').val() == 1){
                         esUltimaSesion = true;
@@ -1762,13 +1778,14 @@
         });
     }
 
-    function guardar_plan_tratamiento_psico() {
+    function guardar_plan_tratamiento_psico(desde_agendar_hora) {
         const diagnostico = $('#diagnostico_tratamiento').val().trim();
         const tratamiento = $('#tratamiento_seguir').val().trim();
         const sesiones = $('#numero_sesiones').val().trim();
         const objetivos = $('#objetivos').val().trim();
         const id_ficha_atencion = $('#id_fc').val();
         const tipo_sesiones = $('#tipo_sesiones').val();
+        const hora_medica = $('#hora_medica').val();
 
         // Validación simple
         if (!diagnostico || !sesiones || !objetivos) {
@@ -1787,13 +1804,14 @@
             objetivos: objetivos,
             id_ficha_atencion: id_ficha_atencion,
             tipo_sesiones: tipo_sesiones,
+            hora_medica: hora_medica,
             _token: CSRF_TOKEN // Asegúrate de definir CSRF_TOKEN en tu vista
         };
 
         console.log(data);
 
         $.ajax({
-            url: '{{ route("profesional.guardar_planificacion_nutri") }}', // Ajusta si tu ruta es diferente
+            url: '{{ route("profesional.guardar_planificacion_otros_prof") }}', // Ajusta si tu ruta es diferente
             method: 'POST',
             data: data,
             success: function(response) {
@@ -1806,6 +1824,14 @@
                 }).then(() => {
                     $('#plan_nutri').modal('hide');
                     $('#form_plan_nutri')[0].reset(); // limpia el formulario
+
+                    // Si fue llamado desde agendar_hora, marcar que hay próxima sesión agendada
+                    if (desde_agendar_hora === true) {
+                        $('#hora_agendada').val(1);
+                    } else {
+                        // Si fue llamado manualmente, resetear la bandera
+                        $('#hora_agendada').val(0);
+                    }
                     // Aquí podrías recargar alguna parte de la vista si necesitas
                 });
             },
@@ -1866,6 +1892,7 @@
                     text: response.detalle || 'Evaluación psicológica guardada correctamente.',
                     icon: 'success'
                 });
+                dame_atencion_sico();
             },
             error: function(xhr) {
                 let mensaje = 'Error al guardar la evaluación.';
@@ -1899,6 +1926,27 @@
             console.log(data);
             if (data.mensaje == 'ok') {
                 let registros = data.registro;
+                // Elimina hermanos anteriores (por si los hay)
+                $('#contenedor_hermanos').html('');
+
+                // Verifica cuántos hermanos vienen en los datos
+                let hermanos = [];
+                for (let key in registros) {
+                    if (key.startsWith('psi_hf_nombre_hno_')) {
+                        hermanos.push(key);
+                    }
+                }
+
+                // Ordena por número para agregarlos en orden correcto
+                hermanos.sort((a, b) => {
+                    const numA = parseInt(a.replace('psi_hf_nombre_hno_', ''));
+                    const numB = parseInt(b.replace('psi_hf_nombre_hno_', ''));
+                    return numA - numB;
+                });
+
+                // Crea los campos necesarios antes de rellenar datos
+                hermanos.forEach(() => agregarHermanos());
+
                 // Recorremos todas las propiedades del objeto
                 for (let key in registros) {
                     if (registros.hasOwnProperty(key)) {
@@ -1915,6 +1963,58 @@
                     }
                 }
                 evaluar_hermanos();
+                console.log(data.imagenes);
+                if (data.imagenes && Array.isArray(data.imagenes)) {
+                    const contenedor = $('#listado_imagenes_psico_pc');
+                    contenedor.empty(); // Limpia el contenedor por si ya tenía imágenes
+
+                    data.imagenes.forEach(function(url) {
+                        const html = `
+                            <div class="mb-2 position-relative" style="display:inline-block;">
+                                <img src="${url}" alt="Archivo adjunto" onclick="amplificar_imagen_psicologia('${url}')" class="img-thumbnail" style="max-width: 150px; height: auto;">
+                                <button type="button" class="btn btn-sm btn-danger eliminar-imagen" data-url="${url}" style="position: absolute; top: 5px; right: 5px;">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        `;
+                        contenedor.append(html);
+                    });
+
+
+                    // Evento para eliminar imagen
+                    contenedor.on('click', '.eliminar-imagen', function () {
+                        const boton = $(this);
+                        const ruta = boton.data('url');
+
+                        swal({
+                            title: "¿Eliminar archivo?",
+                            text: "Esta acción no se puede deshacer.",
+                            icon: "warning",
+                            buttons: ["Cancelar", "Sí, eliminar"],
+                            dangerMode: true,
+                        }).then((confirmado) => {
+                            if (confirmado) {
+                                $.ajax({
+                                    url: '{{ route("paciente.archivo.eliminar") }}',
+                                    type: 'POST',
+                                    data: {
+                                        ruta: ruta,
+                                        _token: $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    success: function(res) {
+                                        boton.closest('div').remove();
+                                        swal("Eliminado", res.mensaje, "success");
+                                        dame_atencion_sico();
+                                    },
+                                    error: function(err) {
+                                        console.error(err);
+                                        swal("Error", "No se pudo eliminar el archivo", "error");
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
             } else {
                 // swal({
                 //     title: "Error!",
@@ -2105,6 +2205,21 @@
                             continue;
                         }
 
+                        if (key === 'objetivo_logrado') {
+                            let label = 'Objetivo Logrado';
+                            let icono = (valor == '1')
+                                ? '<span class="text-success"><i class="fas fa-check-circle"></i> Sí</span>'
+                                : '<span class="text-danger"><i class="fas fa-times-circle"></i> No</span>';
+
+                            html += `
+                                <div class="mb-2">
+                                    <strong>${label}:</strong> ${icono}
+                                </div>
+                            `;
+                            continue; // evita que se duplique más abajo
+                        }
+
+
                             // Filtrar nulls, vacíos y "0"
                             if (valor !== null && valor !== '' && valor !== '0') {
                                 // Opcional: formatear claves para mostrar como texto legible
@@ -2123,19 +2238,6 @@
                         html = '<p class="text-muted">No hay información relevante para mostrar.</p>';
                     }
 
-                    if (key === 'objetivo_logrado') {
-                        let label = 'Objetivo Logrado';
-                        let icono = (valor == '1')
-                            ? '<span class="text-success"><i class="fas fa-check-circle"></i> Sí</span>'
-                            : '<span class="text-danger"><i class="fas fa-times-circle"></i> No</span>';
-
-                        html += `
-                            <div class="mb-2">
-                                <strong>${label}:</strong> ${icono}
-                            </div>
-                        `;
-                        continue; // evita que se duplique más abajo
-                    }
 
 
                     $('#contenido_control_nutricional_historial').html(html);

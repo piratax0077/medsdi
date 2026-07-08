@@ -3,13 +3,13 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Agregar gasto Institucional</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="$('#agregar_gasto_cm').modal('hide');"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-
                 <input type="hidden" name="tipo_pago" id="tipo_pago" value="0">
                 <ul class="nav nav-pills bg-white" id="finanzas" role="tablist">
                     <li class="nav-item active">
+                        <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_general-tab" data-toggle="tab" onclick="$('#tipo_pago').val(0)" href="#pago_general" role="tab" aria-controls="pago_general" aria-selected="false">Pago General<span></span></a>
                     </li>
                     <li class="nav-item">
                         <a class="btn btn-outline-info btn-sm mr-1 my-1 has-ripple" id="pago_factura-tab" data-toggle="tab" onclick="$('#tipo_pago').val(1)" href="#pago_factura" role="tab" aria-controls="pago_factura" aria-selected="false">Pago Factura<span class="ripple ripple-animate" ></span></a>
@@ -22,6 +22,21 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-row">
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Sucursal</label>
+                                                <select class="form-control form-control-sm" id="sucursal_gasto_inst" name="sucursal_gasto_inst">
+                                                    <option value="0" data-select2-id="0">Seleccione</option>
+                                                    <option value="{{ $institucion->id_lugar_atencion }}">{{ $institucion->nombre }}</option>
+                                                    @foreach ($sucursales as $sucursal)
+                                                        <option value="{{ $sucursal->id_lugar_atencion }}">{{ $sucursal->nombre }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        
                                         <div class="col-sm-4 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Tipo de gasto</label>
@@ -213,7 +228,21 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-row">
-
+                                        <div class="col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm">Sucursal</label>
+                                                <select class="form-control form-control-sm" id="sucursal_factura_gasto_inst" name="sucursal_factura_gasto_inst">
+                                                    <option value="0" data-select2-id="0">Seleccione</option>
+                                                    <option value="{{ $institucion->id_lugar_atencion }}">{{ $institucion->nombre }}</option>
+                                                    @foreach ($sucursales as $sucursal)
+                                                        <option value="{{ $sucursal->id_lugar_atencion }}">{{ $sucursal->nombre }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        
                                         <div class="col-sm-4 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">N° Factura</label>
@@ -248,7 +277,22 @@
                                         <div class="col-sm-4 col-md-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Modo de pago</label>
-                                                <input class="form-control form-control-sm" type="text" id="modo_pago_factura_gasto_inst">
+                                                <select name="modo_pago_factura_gasto_inst" id="modo_pago_factura_gasto_inst" class="form-control form-control-sm">
+                                                    <option value="">Seleccione</option>
+                                                    <option value="Transferencia">Transferencia</option>
+                                                    <option value="Efectivo">Efectivo</option>
+                                                    <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+                                                    <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+                                                    <option value="Cheque">Cheque</option>
+                                                    <option value="PAC">PAC (Pago Automático de Cuentas)</option>
+                                                    <option value="PAT">PAT (Pago Automático con Tarjeta)</option>
+                                                    <option value="Débito Automático">Débito Automático</option>
+                                                    <option value="WebPay">WebPay</option>
+                                                    <option value="Mercado Pago">Mercado Pago</option>
+                                                    <option value="PayPal">PayPal</option>
+                                                    <option value="Vale Vista">Vale Vista</option>
+                                                    <option value="Otro">Otro</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-4 col-md-4">
@@ -261,17 +305,17 @@
                                 </div>
                             </div>
                             <div class="row">
-
+                                
                             </div>
 
                         </form>
                     </div>
                 </div>
-
-=======
-                <form>
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-row">
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 <button type="button" class="btn btn-danger-light btn-sm btn-block" data-dismiss="modal">Cancelar</button>
@@ -309,6 +353,50 @@
         var modo_pago = $('#modo_pago_gasto_inst').val();
         var monto = $('#monto_gasto_inst').val();
         var tipo_pago = $('#tipo_pago').val();
+        if(tipo_pago == 1){
+            id_lugar_atencion = $('#sucursal_factura_gasto_inst').val();
+        }else{
+            id_lugar_atencion = $('#sucursal_gasto_inst').val();
+        }
+        // validaciones
+        var valido = 1;
+        var mensaje = '';
+
+        if(id_lugar_atencion == 0){
+            valido = 0;
+            mensaje += 'Seleccione una sucursal.\n';
+        }
+        if(nombre == ''){
+            valido = 0;
+            mensaje += 'Ingrese un nombre para el gasto.\n';
+        }
+        if(vencimiento == ''){
+            valido = 0;
+            mensaje += 'Ingrese una fecha de vencimiento.\n';
+        }
+        if(emisor == ''){
+            valido = 0;
+            mensaje += 'Ingrese un emisor.\n';
+        }
+        if(grupo == 0){
+            valido = 0;
+            mensaje += 'Seleccione una cuenta de contabilidad.\n';
+        }
+        if(monto == '' || monto == 0){
+            valido = 0;
+            mensaje += 'Ingrese un monto a pagar válido.\n';
+        }
+        if(valido == 0){
+            swal({
+                title: "Agregar Gasto",
+                text: mensaje,
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return;
+        }
+
         var _token = CSRF_TOKEN;
 
         let url = "{{ route('gastos.agregar') }}";

@@ -108,6 +108,28 @@ class PacientesDependientesController extends Controller
 
     }
 
+    public function desvincular(Request $request, $id)
+    {
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$paciente) {
+            return response()->json(['estado' => 0, 'msj' => 'Paciente no encontrado']);
+        }
+
+        $registro = PacientesDependientes::where('id', $id)
+                        ->where('id_responsable', $paciente->id)
+                        ->first();
+
+        if (!$registro) {
+            return response()->json(['estado' => 0, 'msj' => 'Registro no encontrado o sin permisos']);
+        }
+
+        $registro->estado = 0;
+        $registro->save();
+
+        return response()->json(['estado' => 1, 'msj' => 'Dependiente desvinculado correctamente']);
+    }
+
     public function ver_registro_paciente(Request $request)
     {
         $datos = array();

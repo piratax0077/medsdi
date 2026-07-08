@@ -1,8 +1,8 @@
 <div id="c_horario" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="c_horario" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md" role="document">
         <div class="modal-content" >
-            <div class="modal-header">
-                <h5 class="modal-title text-c-blue mt-1">Horario de atención</h5>
+            <div class="modal-header-sdi">
+                <h5 class="modal-title-sdi text-c-blue "><i class="feather icon-clock icono-primary"></i> Horario de atención</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -10,8 +10,8 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
-                                <label class="floating-label">Día</label>
-                                <select class="form-control form-control-sm" name="dia" id="dia">
+                                <label class="floating-label-negro">Día</label>
+                                <select class="form-control" name="dia" id="dia">
                                     <option>Seleccione</option>
                                     <option>Lunes a viernes</option>
                                     <option>Lunes</option>
@@ -26,8 +26,8 @@
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
-                                <label class="floating-label">Desde</label>
-                                <select class="form-control form-control-sm" name="desde" id="desde">
+                                <label class="floating-label-negro">Desde</label>
+                                <select class="form-control" name="desde" id="desde">
                                     <option>Seleccione horario</option>
                                     <option>8:00 am</option>
                                     <option>8:30 am</option>
@@ -63,8 +63,8 @@
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
-                                <label class="floating-label">Hasta</label>
-                                <select class="form-control form-control-sm" name="desde" id="desde">
+                                <label class="floating-label-negro">Hasta</label>
+                                <select class="form-control" name="desde" id="desde">
                                     <option>Seleccione</option>
                                     <option>8:00 am</option>
                                     <option>8:30 am</option>
@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2 text-center">
-                            <button type="button" class="btn btn-info btn-sm" data-dismiss="modal"><i class="feather icon-clock"></i> Añadir horario</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal"><i class="feather icon-clock"></i> Añadir horario</button>
                         </div>
                         <div class="col-sm-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2 mb-2">
                             <table class="table table-xs">
@@ -130,7 +130,7 @@
                             </table>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                            <button type="button" class="btn btn-info">Guardar</button>
+                            <button type="button" class="btn btn-primary"><i class="feather icon-save"></i> Guardar Horario</button>
                         </div>
                     </div>
                 </form>

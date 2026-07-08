@@ -9,9 +9,13 @@
         class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
         title="Atenciones previas"><i class="feather icon-activity"></i></a>
 
+    {{-- <a href="{{ ROUTE('profesional.editar_paciente', $p->id) }}"
+        class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top"
+        title="Editar paciente"><i class="feather icon-edit"></i></a> --}}
+
         <!--EMITIR DOCUMENTOS-->
         <a href="#"
-        class="btn btn-icon btn-orange" onclick="emitir_doc()" data-toggle="tooltip" data-placement="top"
+        class="btn btn-icon btn-orange" onclick="emitir_doc({{ $p->id }})" data-toggle="tooltip" data-placement="top"
         title="Emitir documentos"><i class="feather icon-file-text"></i></a>
 
     <!--<a onclick="autorizacion_ficha_medica_unica({{ $p->id }});"

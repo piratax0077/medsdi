@@ -1,14 +1,14 @@
 <div id="c_mod" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="c_mod" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm" role="document">
 		<div class="modal-content" >
-			<div class="modal-header">
-				<h5 class="modal-title text-c-blue mt-1">Modalidad de trabajo</h5>
+			<div class="modal-header-sdi">
+				<h5 class="modal-title-sdi text-c-blue"><i class="icono-primary feather icon-briefcase"></i> Modalidad de trabajo</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
 				<form>
                     <div class="form-row">
-                        <p>Esta modalidad estará visible en los motores de búsquedas de asistentes pertenecientes a Medichile</p>
+                        <p>Esta modalidad estará visible en los motores de búsquedas de asistentes pertenecientes a SDI</p>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="mod_1">
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                    		<button type="button" class="btn btn-info">Guardar</button>
+                    		<button type="button" class="btn btn-primary"><i class="feather icon-save"></i> Guardar</button>
                     	</div>
                     </div>
                 </form>

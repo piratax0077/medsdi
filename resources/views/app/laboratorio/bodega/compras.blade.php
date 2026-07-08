@@ -36,11 +36,15 @@
                                     </a>
                                     @endif
                                 </li>
-
-                                <li class="breadcrumb-item"><a href="administracion_cm.php">Administracion del centro
+                                @if($institucion->id_tipo_institucion == 3)
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.area_comercial') }}">Administracion del centro
                                         médico {{ $institucion->nombre }}</a></li>
+                                @else
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}">Administracion del centro
+                                        médico {{ $institucion->nombre }}</a></li>
+                                @endif
 
-                                <li class="breadcrumb-item"><a href="compras.php">Compras</a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('compras') }}">Compras</a></li>
 
                             </ul>
 
@@ -675,6 +679,8 @@
     <input type="hidden" id="id_producto" value="0">
 
     <input type="hidden" id="id_tipo_productos" value="0">
+
+    <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
 @endsection
 
 @section('page-script')
@@ -882,6 +888,7 @@
             var proveedor = $('#proveedor_cab').val();
             var fecha = $('#fecha').val();
             var nro_factura = $('#nro_factura').val();
+            var id_institucion = $('#id_institucion').val();
 
             // validar que los campos no estén vacíos
             if (proveedor === '0') {
@@ -900,7 +907,8 @@
             var data = {
                 proveedor: proveedor,
                 fecha: fecha,
-                nro_factura: nro_factura
+                nro_factura: nro_factura,
+                id_institucion: id_institucion
             };
 
 
@@ -2984,9 +2992,8 @@
                                         <option value="0">Seleccione</option>
 
                                         @foreach ($tipos_producto as $tp)
-                                            @if($tp->id_tipo_institucion == 3 && $tp->id_tipo_institucion != 8)
-                                                <option value="{{$tp->id}}">{{$tp->nombre}}</option>
-                                            @endif
+                                            <option value="{{$tp->id}}">{{$tp->nombre}}</option>
+                                      
                                         @endforeach
 
                                     </select>
@@ -2996,11 +3003,11 @@
 
                                 <div class="form-group col-md-3" id="div_tipo_producto" style="display: none;">
 
-                                    <label for="tipo_producto" class="floating-label-activo-sm">Tipo </label>
+                                    <label for="tipo_producto" class="floating-label-activo-sm">Tipo</label>
 
                                     <select name="tipo_producto" class="form-control form-control-sm" id="tipo_producto">
 
-                                        <option value="0">Seleccione</option>
+                                          <option value="0">Seleccione</option>
                                         <option value="retroauricular">Retroauricular</option>
                                         <option value="intracanal">Intracanal</option>
                                         <option value="cintillo_oseo">Cintillo Óseo</option>

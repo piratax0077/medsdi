@@ -10,6 +10,13 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="navbar-nav ml-auto">
+                <li>
+                    <a href="{{ route('ministerio.home') }}" >
+                        <i class="feather icon-home" style="font-size: 1.2rem!important;">
+                            
+                        </i>
+                    </a>
+                </li>
                 @if (count(Auth::user()->roles()->get()) > 1)
                     <li>
                         <div class="dropdown drp-user">
@@ -63,7 +70,7 @@
 						</a>
 						<div class="dropdown-menu dropdown-menu-right profile-notification">
 							<div class="pro-head">
-								<span>{{  @Auth::user()->name }}</span>
+								<span class="font-weight-bold">{{  @Auth::user()->name }}</span>
 							</div>
 							{{--  <ul></ul>  --}}
 							<ul class="pro-body">

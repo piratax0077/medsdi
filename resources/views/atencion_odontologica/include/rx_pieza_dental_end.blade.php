@@ -13,7 +13,7 @@
                                     </div>
                                     <div class="card-body">
                                         <!-- [ Main Content ] start -->
-                                        <div class="dropzone" id="mis-imagenes-imagenes-rx-dental_end" action="{{ route('profesional.imagen.carga') }}"></div>
+                                        <div class="dropzone" id="mis-imagenes-imagenes-rx-dental_end_{{ $counter }}" action="{{ route('profesional.imagen.carga') }}"></div>
                                         <!-- [ file-upload ] end -->
                                     </div>
                                 </div>
@@ -26,23 +26,38 @@
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Piezas N°</label>
                                     <select class="form-control form-control-sm select2_rx_end" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                        <option value="13">13</option>
-                                        <option value="14">14</option>
-                                        <option value="15">15</option>
-                                        <option value="16">16</option>
-                                        <option value="17">17</option>
-                                        <option value="18">18</option>
-                                        <option value="21">21</option>
-                                        <option value="22">22</option>
-                                        <option value="23">23</option>
-                                        <option value="24">24</option>
-                                        <option value="25">25</option>
-                                        <option value="26">26</option>
-                                        <option value="27">27</option>
-                                        <option value="28">28</option>
-                                        <!-- Agrega todas las piezas necesarias -->
+                                        <option value="1.1">1.1</option>
+                                        <option value="1.2">1.2</option>
+                                        <option value="1.3">1.3</option>
+                                        <option value="1.4">1.4</option>
+                                        <option value="1.5">1.5</option>
+                                        <option value="1.6">1.6</option>
+                                        <option value="1.7">1.7</option>
+                                        <option value="1.8">1.8</option>
+                                        <option value="2.1">2.1</option>
+                                        <option value="2.2">2.2</option>
+                                        <option value="2.3">2.3</option>
+                                        <option value="2.4">2.4</option>
+                                        <option value="2.5">2.5</option>
+                                        <option value="2.6">2.6</option>
+                                        <option value="2.7">2.7</option>
+                                        <option value="2.8">2.8</option>
+                                        <option value="3.1">3.1</option>
+                                        <option value="3.2">3.2</option>
+                                        <option value="3.3">3.3</option>
+                                        <option value="3.4">3.4</option>
+                                        <option value="3.5">3.5</option>
+                                        <option value="3.6">3.6</option>
+                                        <option value="3.7">3.7</option>
+                                        <option value="3.8">3.8</option>
+                                        <option value="4.1">4.1</option>
+                                        <option value="4.2">4.2</option>
+                                        <option value="4.3">4.3</option>
+                                        <option value="4.4">4.4</option>
+                                        <option value="4.5">4.5</option>
+                                        <option value="4.6">4.6</option>
+                                        <option value="4.7">4.7</option>
+                                        <option value="4.8">4.8</option>
                                     </select>
 
                                 </div>
@@ -101,7 +116,6 @@
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-icon btn-info" onclick="guardar_nueva_pieza_ex_radio_end({{ $counter }})"><i class="feather icon-save"></i></button>
-                <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_nueva_pieza_dental_rx_end({{ $counter }})"><i class="feather icon-x"></i></button>
             </div>
         </div>
     </div>
@@ -109,26 +123,37 @@
 
 
 <script>
-if (typeof dropzoneEnd === 'undefined') {
-    var dropzoneEnd;
+// Variable global para manejar múltiples dropzones
+if (typeof dropzoneEndInstances === 'undefined') {
+    var dropzoneEndInstances = {};
 }
+
 $(document).ready(function(){
     $('.select2_rx_end').select2({
         width: '100%',
         placeholder: 'Seleccionar pieza(s)',
         allowClear: true
     });
-    // Configuración de Dropzone
-    initDropzoneEnd();
+    // Configuración de Dropzone con counter específico
+    initDropzoneEnd({{ $counter }});
 });
 
-function initDropzoneEnd() {
-    if (dropzoneEnd) {
-        dropzoneEnd.destroy();
-        dropzoneEnd = null;
+function initDropzoneEnd(counter) {
+    const dropzoneId = `mis-imagenes-imagenes-rx-dental_end_${counter}`;
+    
+    // Destruir instancia anterior si existe
+    if (dropzoneEndInstances[counter]) {
+        dropzoneEndInstances[counter].destroy();
+        dropzoneEndInstances[counter] = null;
     }
 
-    dropzoneEnd = new Dropzone("#mis-imagenes-imagenes-rx-dental_end", {
+    // Verificar que el elemento existe antes de inicializar
+    if (!document.getElementById(dropzoneId)) {
+        console.error(`Elemento con ID ${dropzoneId} no encontrado`);
+        return;
+    }
+
+    dropzoneEndInstances[counter] = new Dropzone(`#${dropzoneId}`, {
         url: "{{ route('profesional.imagenes.guardar_rx_end_dental') }}",
         method: 'post',
         autoProcessQueue: false,  // No procesar automáticamente
@@ -152,7 +177,7 @@ function initDropzoneEnd() {
             // Verifica si formData es válido antes de agregar los datos
             if (formData) {
                 // Agregar parámetros adicionales a formData
-                const idPaciente = dame_id_paciente(); // Suponiendo que tienes esta función definida
+                const idPaciente = $('#id_paciente').val();
                 const idLugarAtencion = document.querySelector("#id_lugar_atencion").value;
                 const idEspecialidad = document.querySelector("#id_especialidad").value;
                 const idProfesional = document.querySelector('#id_profesional_fc').value;
@@ -171,7 +196,8 @@ function initDropzoneEnd() {
                     id_lugar_atencion: idLugarAtencion,
                     id_especialidad: idEspecialidad,
                     id_profesional: idProfesional,
-                    id_examen: idExamenRx
+                    id_examen: idExamenRx,
+                    counter: counter
                 });
             } else {
                 console.error("formData no está disponible");
@@ -186,7 +212,7 @@ function guardar_nueva_pieza_ex_radio(counter){
     let espacio_periodontal_aplical = $('#rx_esp_peri_apical'+counter).val();
     let hueso_alveolar_apical = $('#h_apical'+counter).val();
     let obs = $('#obs_ex_oral'+counter).val();
-    let id_paciente = dame_id_paciente();
+    let id_paciente = $('#id_paciente').val();
     let id_lugar_atencion = $('#id_lugar_atencion').val();
     let id_especialidad = $('#id_especialidad').val();
     let id_profesional = $('#id_profesional_fc').val();
@@ -309,8 +335,9 @@ function guardar_nueva_pieza_ex_radio_end(count){
     let numero_pieza = $('#end_numero_pieza_'+count).val();
     let espacio_periodontal_aplical = $('#end_rx_esp_peri_apical'+count).val();
     let hueso_alveolar_apical = $('#end_h_apical'+count).val();
+    let informe_radiologo = $('#inf_rad'+count).val();
     let obs = $('#end_obs_ex_oral'+count).val();
-    let id_paciente = dame_id_paciente();
+    let id_paciente = $('#id_paciente').val();
     let id_lugar_atencion = $('#id_lugar_atencion').val();
     let id_especialidad = $('#id_especialidad').val();
     let id_profesional = $('#id_profesional_fc').val();
@@ -319,17 +346,17 @@ function guardar_nueva_pieza_ex_radio_end(count){
     let valido = 1;
     let mensaje = '';
 
-    if(numero_pieza == ''){
+    if(numero_pieza == '' || numero_pieza == null){
         valido = 0;
-        mensaje += '<li>numero de pieza </li>';
+        mensaje += '<li>Número de pieza</li>';
     }
     if(espacio_periodontal_aplical == 0){
         valido = 0;
-        mensaje += '<li>Espacio periodontal </li>';
+        mensaje += '<li>Espacio periodontal</li>';
     }
     if(hueso_alveolar_apical == 0){
         valido = 0;
-        mensaje += '<li>Hueso alveolar </li>';
+        mensaje += '<li>Hueso alveolar</li>';
     }
     if(valido == 0){
         swal({
@@ -347,7 +374,6 @@ function guardar_nueva_pieza_ex_radio_end(count){
         return false;
     }
 
-
     let url = "{{ ROUTE('profesional.guardar_pieza_dental_examen_oral_rx_end') }}";
 
     $.ajax({
@@ -357,6 +383,7 @@ function guardar_nueva_pieza_ex_radio_end(count){
             numero_pieza: numero_pieza,
             espacio_periodontal_aplical: espacio_periodontal_aplical,
             hueso_alveolar_apical: hueso_alveolar_apical,
+            informe_radiologo: informe_radiologo,
             obs: obs,
             id_paciente: id_paciente,
             id_lugar_atencion: id_lugar_atencion,
@@ -375,35 +402,35 @@ function guardar_nueva_pieza_ex_radio_end(count){
                 $('#id_examen_oral_rx').val(resp.rx.id);
 
                 $('#nueva_pieza_end').empty();
-                // procesar cola del dropzone
-                if (dropzoneEnd.getQueuedFiles().length > 0) {
+                
+                // Usar la instancia específica del dropzone
+                const dropzoneInstance = dropzoneEndInstances[count];
+                
+                if (dropzoneInstance && dropzoneInstance.getQueuedFiles().length > 0) {
                     console.log("Iniciando carga de imágenes...");
                     // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                    dropzoneEnd.off("queuecomplete");
+                    dropzoneInstance.off("queuecomplete");
 
                     // Procesar la cola de imágenes
-                    dropzoneEnd.processQueue();  // Esto procesará la cola y subirá las imágenes
+                    dropzoneInstance.processQueue();
 
                     // Usamos un evento para esperar a que se complete la carga de imágenes
-                    dropzoneEnd.on("queuecomplete", function() {
-                        // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
+                    dropzoneInstance.on("queuecomplete", function() {
                         console.log("Carga de imágenes completada.");
                     });
                 } else {
-                    console.log("No hay imágenes para cargar.");
-                    alert("No has seleccionado imágenes para subir.");
-
-                    // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                    if (dropzoneEnd) {
-                        // Destruir la instancia actual de Dropzone
-                        dropzoneEnd.destroy();
+                    console.log("No hay imágenes para cargar o dropzone no encontrado.");
+                    
+                    // Re-inicializar el Dropzone si es necesario
+                    if (!dropzoneInstance) {
+                        initDropzoneEnd(count);
                     }
-
-                    // Re-inicializar el Dropzone nuevamente
-                    initDropzoneEnd();  // Asegúrate de que la función initDropzone esté disponible
                 }
             }
             mostrar_nueva_pieza_ex_radio_end(1000);
+            setTimeout(() => {
+                recargar_imagenes_rx("endodoncia");
+            }, 3000);
             swal({
                 icon: 'success',
                 title: 'Éxito',
@@ -411,10 +438,14 @@ function guardar_nueva_pieza_ex_radio_end(count){
             });
         },
         error: function(error){
-            console.log(error);
+            console.log("Error al guardar:", error);
+            swal({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al guardar la pieza'
+            });
         }
-    })
-
+    });
 }
 
 </script>

@@ -236,8 +236,7 @@
         <div class="row  g-0 align-items-center">
             <div class="col-lg-8 d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center" style="height: 80px;">
-                    <img src="{{ asset('images/logo_instituciones/logo_insi.jpg') }}" alt="Logo" class="img-fluid"
-                        style="max-height: 80px;" id="logo-header">
+                    <img src="{{ asset($logoInsi) }}" alt="Logo" class="img-fluid" style="max-height: 80px;" id="logo-header">
                 </div>
                 <div class="hora-header text-end" id="hora-header">
                     {{-- 13:50 --}}
@@ -295,6 +294,7 @@
         </div>
     </footer>
 
+    {{-- modal  --}}
     <div class="modal fade" id="modal_mnsaje_inicio" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_mnsaje_inicio" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

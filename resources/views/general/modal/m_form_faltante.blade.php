@@ -5,7 +5,7 @@
 		<div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white text-center">Solicitud de Inclusión  de Formulario Faltante </h5>
-				<button type="button" class="close"  data-bs-dismiss="modal"  aria-label="Close">
+				<button type="button" class="close"  data-bs-dismiss="modal"  aria-label="Close" onclick="cerrarfaltante();">
 				<span aria-hidden="true">&times;</span>
 				</button>
             </div>
@@ -54,6 +54,17 @@
 </div>
 
 <script>
+    /**CIERRE MODAL**/
+    function cerrarfaltante()
+    {
+        $('#ffaltante').modal('show');
+    }
+    function cerrarfaltante() {
+        $('#ffaltante').modal ('hide');
+      }
+    /**CIERRE: CIERRE MODAL**/
+
+
     function f_faltante() {
 		$('#ffaltante').modal('show');
 		}
@@ -76,6 +87,7 @@
                     form_faltante: form_faltante,
                     form_faltante_especialidad: form_faltante_especialidad,
                     obs_sol_form_formulario: obs_sol_form_formulario,
+                    id_paciente_fc: $('#id_paciente_fc').val(),
                 },
             })
             .done(function(response) {

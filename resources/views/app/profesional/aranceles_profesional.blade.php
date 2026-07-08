@@ -149,7 +149,7 @@ p {
                                         <td>${{ number_format($mi_trabajo->valor,0,',','.') }}</td>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
+                                                <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}"  @if($mi_trabajo->laboratorio == 1) checked @endif>
                                                 <label class="form-check-label" for="existeLaboratorioDental{{ $mi_trabajo->id }}">
                                                     ¿Laboratorio?
                                                 </label>
@@ -174,10 +174,10 @@ p {
 <!-- Modal -->
 <div class="modal fade" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
+      <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="form-row">
@@ -245,11 +245,11 @@ p {
             </table> --}}
         </div>
         <!--<div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>-->
-        </div>
+      </div>
     </div>
-</div>
+  </div>
 @endsection
 
 @section('page-script')
@@ -472,7 +472,7 @@ p {
                             '$'+p.valor,
                             `
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" ${isChecked_p}>
                                 <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                     ¿Laboratorio?
                                 </label>
@@ -760,7 +760,7 @@ p {
                                 '$'+valor,
                                 `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}"  ${isChecked_p}>
                                     <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                         ¿Laboratorio?
                                     </label>

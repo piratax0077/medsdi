@@ -2989,7 +2989,7 @@
 
                 $("#examen_d").empty();
                 $.ajax({
-                        url: '{{ route("listar.examen") }}',
+                        url: '{{ route('listar.examen') }}',
                         type: 'GET',
                         dataType: 'json',
                         data: {
