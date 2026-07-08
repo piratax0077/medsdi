@@ -39,9 +39,9 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
 
-                                            <td width="90" align="center">
+                                            <td width="80" align="center">
                                                 <img
-                                                    src="https://www.med-sdi.cl/images/sdi-color-v.svg"
+                                                    src="https://www.med-sdi.cl/images/sdi-color-h.svg"
                                                     alt="SDI"
                                                     style="width:100px;">
                                             </td>
@@ -62,7 +62,7 @@
                                                 <p style="
                                                     margin:0;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
+                                                    font-size:13px;
                                                     letter-spacing:2px;
                                                     text-transform:uppercase;
                                                     color:#31bebe;
@@ -88,7 +88,7 @@
                                     <h1 style="
                                         margin:0;
                                         font-family:Helvetica, Arial, sans-serif;
-                                        font-size:22px;
+                                        font-size:16px;
                                         color:#0f172a;
                                         font-weight:700;
                                     ">
@@ -100,13 +100,13 @@
 
                             <!-- MENSAJE -->
                             <tr>
-                                <td style="padding:25px 45px 15px 45px;" align="center">
+                                <td style="padding:10px 20px 20px 20px;" align="center">
 
                                     <p style="
                                         margin:0;
                                         font-family:Helvetica, Arial, sans-serif;
-                                        font-size:16px;
-                                        line-height:28px;
+                                        font-size:14px;
+                                        line-height:21px;
                                         color:#475569;
                                     ">
                                         Se ha realizado correctamente la actualización de tu contraseña.
@@ -118,7 +118,7 @@
 
                             <!-- PASSWORD -->
                             <tr>
-                                <td style="padding:10px 35px 20px 35px;">
+                                <td style="padding:10px 20px 20px 20px;">
 
                                     <table width="100%"
                                         border="0"
@@ -138,12 +138,13 @@
                                             ">
 
                                                 <span style="
+                                                    text-align: center;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:16px;
+                                                    font-size:14px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                 ">
-                                                    Nueva Contraseña
+                                                    NUEVA CONTRASEÑA
                                                 </span>
 
                                             </td>
@@ -157,7 +158,7 @@
 
                                                 <span style="
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:24px;
+                                                    font-size:20px;
                                                     font-weight:700;
                                                     color:#0f172a;
                                                     letter-spacing:2px;
@@ -250,21 +251,11 @@
 
                             <!-- FOOTER -->
                             <tr>
-                                <td style="
-                                    background:#f1f5f9;
-                                    border-top:1px solid #dbe4ee;
-                                    padding:25px 20px;
-                                    text-align:center;
-                                ">
+                                <td style="font-family:Helvetica, Arial, sans-serif;padding:16px;text-align:center;background:#f1f5f9;">
 
-
-                                    <p style="
-                                        margin:10px 0 0 0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:12px;
-                                        color:#94a3b8;
-                                    ">
-                                        ©{{ date('Y') }} Salud Digital Integrada · Todos los derechos reservados
+                                    <p style="margin:0;font-size:11px;color:#64748b;line-height:16px;">
+                                        Este correo fue enviado por <strong>SDI</strong><br>
+                                        &copy; {{ date('Y') }} &middot; Todos los derechos reservados
                                     </p>
 
                                 </td>

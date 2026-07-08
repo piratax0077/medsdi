@@ -12,7 +12,7 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="0" style="background-color:#eef3f9;">
         <tbody>
             <tr>
-                <td align="center" valign="top" style="padding:45px 15px;">
+                <td align="center" valign="top" style="padding:15px;">
 
                     <!-- CONTENEDOR -->
                     <table border="0"
@@ -38,44 +38,46 @@
                             </tr>
 
                             <!-- HEADER -->
+                    <tr>
+                        <td class="px-pad" style="padding:18px 26px 12px 26px;">
+
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tr>
+
+                                    <!-- LOGO -->
+                                    <td class="header-cell" align="left" valign="middle" width="130">
+                                        <img
+                                        src="https://www.med-sdi.cl/images/sdi-color-h.svg"
+                                        width="100"
+                                        alt="Salud Digital Integrada"
+                                        style="width:100px; display:block;">
+                                    </td>
+
+                                    <!-- TITULO -->
+                                    <td class="header-title-cell" align="right" valign="middle">
+                                        <p style="margin:0;font-size:11px; font-family:Helvetica, Arial, sans-serif;letter-spacing:2px;text-transform:uppercase;color:#31bebe;font-weight:700;">
+                                            Confirmación de cita
+                                        </p>
+                                    </td>
+
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                
                             <tr>
                                 <td align="center"
                                     style="
-                                        padding:42px 40px 18px 40px;
-                                        background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+                                        padding:6px 26px 10px 26px;
                                     ">
-
-                                    <img style="width:98px;"
-                                        src="https://www.med-sdi.cl/images/logo_pais_vertical.png"
-                                        alt="Medichile">
-
-                                </td>
-                            </tr>
-
-                            <!-- HERO -->
-                            <tr>
-                                <td align="center"
-                                    style="
-                                        padding:0 48px 38px 48px;
-                                    ">
-
-                                    <p style="
-                                        margin:0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:13px;
-                                        letter-spacing:2px;
-                                        text-transform:uppercase;
-                                        color:#31bebe;
-                                        font-weight:700;
-                                    ">
-                                        Confirmación de Cita
-                                    </p>
 
                                     <h1 style="
                                         margin:18px 0 18px 0;
                                         font-family:Helvetica, Arial, sans-serif;
-                                        font-size:20px;
-                                        line-height:44px;
+                                        font-size:17px;
+                                        line-height:28px;
                                         color:#0f172a;
                                         font-weight:700;
                                     ">
@@ -85,128 +87,57 @@
                                     <p style="
                                         margin:0;
                                         font-family:Helvetica, Arial, sans-serif;
-                                        font-size:18px;
-                                        line-height:32px;
+                                        font-size:14px;
+                                        line-height:24px;
                                         color:#475569;
                                     ">
 
-                                        Le recordamos que tiene una cita médica programada.
-
-                                    </p>
-
-                                    <p style="
-                                        margin:22px 0 0 0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:16px;
-                                        line-height:30px;
-                                        color:#64748b;
-                                    ">
-
-                                        Necesitamos que confirme su asistencia para mantener activa su atención médica.
+                                        Le recordamos que tiene una cita médica programada. <br>Por favor, confirme su asistencia.
 
                                     </p>
 
                                 </td>
                             </tr>
 
-                            <!-- FECHA Y HORA -->
+                            
+                            <!-- FECHA HORA -->
                             <tr>
-                                <td align="center"
-                                    style="padding:0 35px 10px 35px;">
+                                <td class="px-pad" style="padding:12px 22px;">
 
-                                    <table border="0"
-                                        width="100%"
-                                        cellspacing="0"
-                                        cellpadding="0"
-                                        style="
-                                            background:linear-gradient(135deg,#1a49a3 0%, #31bebe 100%);
-                                            border-radius:24px;
-                                            overflow:hidden;
-                                        ">
+                                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
+                                    style="border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;">
 
-                                        <tbody>
-                                            <tr>
+                                    <tr>
 
-                                                <!-- FECHA -->
-                                                <td width="50%"
-                                                    align="center"
-                                                    style="
-                                                        padding:30px 15px;
-                                                        border-right:1px solid rgba(255,255,255,0.12);
-                                                    ">
+                                        <td class="stack-cell" align="center" style="padding:12px;border-right:1px solid #edf2f7;">
+                                             <img style="width:35px;"
+                                                                src="https://www.med-sdi.cl/images/email/calendario_1.png"
+                                                                alt="Día">
+                                            <p style="font-family:Helvetica, Arial, sans-serif;margin:0;font-size:12px;color:#64748b;font-weight:700;">Fecha</p>
+                                            <p style="font-family:Helvetica, Arial, sans-serif;margin:3px 0 0 0;font-size:14px;color:#1a49a3;font-weight:700;">
+                                                {{ $detalle['body']['fecha'] }}
+                                            </p>
+                                        </td>
 
-                                                    <img style="width:42px;"
-                                                        src="https://www.med-sdi.cl/images/email/calendario_1.png"
-                                                        alt="Día">
+                                        <td class="stack-cell" align="center" style="padding:12px;">
+                                             <img style="width:35px;"
+                                                                src="https://www.med-sdi.cl/images/email/reloj_1.png"
+                                                                alt="Día">
+                                            <p style="font-family:Helvetica, Arial, sans-serif;margin:0;font-size:12px;color:#64748b;font-weight:700;">Hora</p>
+                                            <p style="font-family:Helvetica, Arial, sans-serif;margin:3px 0 0 0;font-size:14px;color:#1a49a3;font-weight:700;">
+                                                {{ $detalle['body']['hora'] }}
+                                            </p>
+                                        </td>
 
-                                                    <p style="
-                                                        margin:15px 0 5px 0;
-                                                        font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:13px;
-                                                        letter-spacing:1px;
-                                                        text-transform:uppercase;
-                                                        color:rgba(255,255,255,0.70);
-                                                    ">
-                                                        Fecha
-                                                    </p>
+                                    </tr>
+                                </table>
 
-                                                    <p style="
-                                                        margin:0;
-                                                        font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:17px;
-                                                        font-weight:700;
-                                                        color:#ffffff;
-                                                    ">
-                                                        {{ $detalle['body']['fecha'] }}
-                                                    </p>
-
-                                                </td>
-
-                                                <!-- HORA -->
-                                                <td width="50%"
-                                                    align="center"
-                                                    style="
-                                                        padding:30px 15px;
-                                                    ">
-
-                                                    <img style="width:42px;"
-                                                        src="https://www.med-sdi.cl/images/email/reloj_1.png"
-                                                        alt="Hora">
-
-                                                    <p style="
-                                                        margin:15px 0 5px 0;
-                                                        font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:13px;
-                                                        letter-spacing:1px;
-                                                        text-transform:uppercase;
-                                                        color:rgba(255,255,255,0.70);
-                                                    ">
-                                                        Hora
-                                                    </p>
-
-                                                    <p style="
-                                                        margin:0;
-                                                        font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:17px;
-                                                        font-weight:700;
-                                                        color:#ffffff;
-                                                    ">
-                                                        {{ $detalle['body']['hora'] }}
-                                                    </p>
-
-                                                </td>
-
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
 
                             <!-- INFORMACION -->
                             <tr>
-                                <td style="padding:20px 35px 10px 35px;">
+                                <td style="padding:18px 26px 12px 26px;">
 
                                     <table border="0"
                                         width="100%"
@@ -225,19 +156,19 @@
                                             <tr>
                                                 <td colspan="2"
                                                     style="
-                                                        padding:22px 24px;
                                                         background:#f8fbff;
+                                                        padding:12px 12px;
                                                         border-bottom:1px solid #e2e8f0;
                                                     ">
 
                                                     <p style="
                                                         margin:0;
-                                                        font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:18px;
+                                                        font-size:12px;
                                                         color:#1a49a3;
                                                         font-weight:700;
+                                                        font-family:Helvetica, Arial, sans-serif;
                                                     ">
-                                                        Información de tu Cita
+                                                        INFORMACIÓN DE SU CITA
                                                     </p>
 
                                                 </td>
@@ -247,9 +178,10 @@
                                             <tr>
                                                 <td width="38%"
                                                     style="
-                                                        padding:18px 24px;
+                                                        text-transform: uppercase;
+                                                        padding:10px 10px;
+                                                        font-size:11px;
                                                         font-family:Helvetica, Arial, sans-serif;
-                                                        font-size:14px;
                                                         color:#1a49a3;
                                                         font-weight:700;
                                                         border-bottom:1px solid #f1f5f9;
@@ -258,9 +190,10 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding: 10px 5px 10px 5px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#475569;
                                                     border-bottom:1px solid #f1f5f9;
                                                 ">
@@ -270,9 +203,10 @@
 
                                             <tr style="background:#fcfdff;">
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
+                                                    padding:10px 10px;
+                                                    font-size:11px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                     border-bottom:1px solid #f1f5f9;
@@ -281,9 +215,10 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
+                                                    padding: 10px 5px 10px 5px;
+                                                    font-size:11px;
                                                     color:#475569;
                                                     border-bottom:1px solid #f1f5f9;
                                                 ">
@@ -293,9 +228,10 @@
 
                                             <tr>
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding:10px 10px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                     border-bottom:1px solid #f1f5f9;
@@ -304,9 +240,10 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
+                                                    padding: 10px 5px 10px 5px;
+                                                    font-size:11px;
                                                     color:#475569;
                                                     border-bottom:1px solid #f1f5f9;
                                                 ">
@@ -318,9 +255,10 @@
 
                                             <tr style="background:#fcfdff;">
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding:10px 10px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                     border-bottom:1px solid #f1f5f9;
@@ -329,9 +267,10 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding: 10px 5px 10px 5px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#475569;
                                                     border-bottom:1px solid #f1f5f9;
                                                 ">
@@ -343,9 +282,10 @@
 
                                             <tr>
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding:10px 10px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                     border-bottom:1px solid #f1f5f9;
@@ -354,21 +294,23 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    text-transform: uppercase;
+                                                    padding: 10px 5px 10px 5px;
+                                                    font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#475569;
                                                     border-bottom:1px solid #f1f5f9;
                                                 ">
-                                                    {{ $detalle['body']['lugar_atencion'] }}
+                                                    <strong>{{ $detalle['body']['lugar_atencion'] }}</strong><br>
+                                                    <i>{{ $detalle['body']['direccion'] }}</i>
                                                 </td>
                                             </tr>
 
-                                            <tr style="background:#fcfdff;">
+                                            <!--<tr style="background:#fcfdff;">
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    padding:10px 10px;
+                                                        font-size:11px;
                                                     font-family:Helvetica, Arial, sans-serif;
-                                                    font-size:14px;
                                                     color:#1a49a3;
                                                     font-weight:700;
                                                 ">
@@ -376,14 +318,14 @@
                                                 </td>
 
                                                 <td style="
-                                                    padding:18px 24px;
+                                                    padding:12px 22px;
                                                     font-family:Helvetica, Arial, sans-serif;
                                                     font-size:14px;
                                                     color:#475569;
                                                 ">
                                                     {{ $detalle['body']['direccion'] }}
                                                 </td>
-                                            </tr>
+                                            </tr>-->
 
                                         </tbody>
 
@@ -392,37 +334,110 @@
                                 </td>
                             </tr>
 
-                            <!-- ALERTAS -->
+                            <!-- AVISO SI YA CONFIRMO POR OTRO MEDIO -->
                             <tr>
-                                <td align="center"
-                                    style="padding:30px 45px 10px 45px;">
+                                <td class="px-pad" style="padding:0 28px 16px 28px;">
+                                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
+                                    style="font-family:Helvetica, Arial, sans-serif;background-color:#eaf1fb;border-left:4px solid #1a49a3;border-radius:10px;">
+                                        <tr>
+                                            <td style="padding:14px 16px;font-size:13px;color:#1a49a3;font-weight:600;line-height:19px;">
+                                                Si ya realizó la confirmación por otro medio ignorare esta notificación.<br><br>
+                                                ¡RECUERDE LLEGAR 15 MINUTOS ANTES A SU CITA!
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
 
-                                    <p style="
-                                        margin:0 0 18px 0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:17px;
-                                        line-height:30px;
-                                        color:#1a49a3;
-                                        font-weight:700;
-                                    ">
-                                        ¡SI YA REALIZÓ LA CONFIRMACIÓN POR OTRO MEDIO ROGAMOS IGNORAR ESTA NOTIFICACIÓN!
-                                    </p>
+                         
 
-                                    <p style="
-                                        margin:0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:17px;
-                                        line-height:30px;
-                                        color:#1a49a3;
-                                        font-weight:700;
-                                    ">
-                                        ¡RECUERDE LLEGAR 15 MINUTOS ANTES A SU CITA!
-                                    </p>
+                            <!-- BOTONES CONFIRMAR / CANCELAR -->
+                            <tr>
+                                <td class="px-pad" style="padding:0 28px 12px 28px;">
+
+                                    <table width="100%" cellspacing="0" cellpadding="0" role="presentation">
+                                        <tr>
+
+                                            <!-- CONFIRMAR -->
+                                            <td class="btn-cell" align="center" width="50%" style="padding:0 6px 0 0;">
+                                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
+                                                style="background-color:#1a49a3;background-image:linear-gradient(90deg,#1a49a3,#31bebe);border-radius:14px;">
+                                                    <tr>
+                                                        <td align="center" style="padding:14px;">
+                                                            <!--[if mso]>
+                                                            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ $detalle['body']['link_confirmar'] }}" style="height:40px;v-text-anchor:middle;width:180px;" arcsize="20%" strokecolor="#1a49a3" fillcolor="#1a49a3">
+                                                            <w:anchorlock/>
+                                                            <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Confirmar Hora</center>
+                                                            </v:roundrect>
+                                                            <![endif]-->
+                                                            <!--[if !mso]><!-->
+                                                             <a target="_blank"
+                                                                        href="{{ $detalle['body']['url_aprobacion'] }}"
+                                                            style="
+                                                             font-family:Helvetica, Arial, sans-serif;
+                                                            display:inline-block;
+                                                            width:100%;
+                                                            padding:11px 0px;
+                                                            background:transparent;
+                                                            color:#ffffff;
+                                                            font-weight:700;
+                                                            font-size:14px;
+                                                            text-decoration:none;
+                                                            mso-hide:all;
+                                                            ">
+                                                            Confirmar Asistencia
+                                                            </a>
+                                                            <!--<![endif]-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <!-- CANCELAR -->
+                                            <td class="btn-cell" align="center" width="50%" style="padding:0 0 0 6px;">
+                                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
+                                                style="background-color:#dc2626;border-radius:14px;">
+                                                    <tr>
+                                                        <td align="center" style="padding:14px;">
+                                                            <!--[if mso]>
+                                                            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ $detalle['body']['link_cancelar'] }}" style="height:40px;v-text-anchor:middle;width:180px;" arcsize="20%" strokecolor="#dc2626" fillcolor="#dc2626">
+                                                            <w:anchorlock/>
+                                                            <center style="color:#ffffff;font-family:Arial,sans-serif;font-size:14px;font-weight:bold;">Cancelar Hora</center>
+                                                            </v:roundrect>
+                                                            <![endif]-->
+                                                            <!--[if !mso]><!-->
+                                                            <a target="_blank"
+                                                                        href="{{ $detalle['body']['url_rechazo'] }}"
+                                                                        style="
+                                                             font-family:Helvetica, Arial, sans-serif;
+                                                            display:inline-block;
+                                                            width:100%;
+                                                            padding:11px 0px;
+                                                            background:transparent;
+                                                            color:#ffffff;
+                                                            font-weight:700;
+                                                            font-size:14px;
+                                                            text-decoration:none;
+                                                            mso-hide:all;
+                                                            ">
+                                                            No asistire
+                                                            </a>
+                                                            <!--<![endif]-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                        </tr>
+                                    </table>
 
                                 </td>
                             </tr>
 
-                            <!-- BOTONES -->
+            
+
+
+                            <!-- BOTONES 
                             <tr>
                                 <td align="center"
                                     style="padding:42px 30px 38px 30px;">
@@ -435,7 +450,7 @@
 
                                             <tr>
 
-                                                <!-- CONFIRMAR -->
+                                             
                                                 <td align="center"
                                                     style="
                                                         border-radius:50px;
@@ -447,9 +462,9 @@
                                                         href="{{ $detalle['body']['url_aprobacion'] }}"
                                                         style="
                                                             display:inline-block;
-                                                            padding:18px 34px;
+                                                            padding:12px 34px;
                                                             font-family:Helvetica, Arial, sans-serif;
-                                                            font-size:16px;
+                                                            font-size:14px;
                                                             font-weight:700;
                                                             color:#ffffff;
                                                             text-decoration:none;
@@ -469,7 +484,7 @@
 
                                             <tr>
 
-                                                <!-- RECHAZAR -->
+                                            
                                                 <td align="center"
                                                     style="
                                                         border-radius:50px;
@@ -481,9 +496,9 @@
                                                         href="{{ $detalle['body']['url_rechazo'] }}"
                                                         style="
                                                             display:inline-block;
-                                                            padding:18px 42px;
+                                                            padding:12px 42px;
                                                             font-family:Helvetica, Arial, sans-serif;
-                                                            font-size:16px;
+                                                            font-size:14px;
                                                             font-weight:700;
                                                             color:#ffffff;
                                                             text-decoration:none;
@@ -502,44 +517,15 @@
                                     </table>
 
                                 </td>
-                            </tr>
+                            </tr>-->
 
                             <!-- FOOTER -->
                             <tr>
-                                <td style="
-                                    background:#f1f5f9;
-                                    border-top:1px solid #dbe4ee;
-                                    padding:38px 40px;
-                                    text-align:center;
-                                ">
+                                <td style="font-family:Helvetica, Arial, sans-serif;padding:16px;text-align:center;background:#f1f5f9;">
 
-                                    <p style="
-                                        margin:0;
-                                        font-family:Helvetica, Arial, sans-serif;
-                                        font-size:13px;
-                                        line-height:26px;
-                                        color:#64748b;
-                                    ">
-
-                                        Este correo electrónico fue enviado por
-
-                                        <br>
-
-                                        <span style="
-                                            font-weight:700;
-                                        ">
-                                            Salud Digital Integrada
-                                        </span>
-
-                                        <br><br>
-
-                                        <span style="
-                                            color:#94a3b8;
-                                            font-size:12px;
-                                        ">
-                                            ©<script>document.write(new Date().getFullYear())</script> SDI · Todos los derechos reservados
-                                        </span>
-
+                                    <p style="margin:0;font-size:11px;color:#64748b;line-height:16px;">
+                                        Este correo fue enviado por <strong>SDI</strong><br>
+                                        &copy; {{ date('Y') }} &middot; Todos los derechos reservados
                                     </p>
 
                                 </td>

@@ -29,44 +29,42 @@
 </tr>
 
 <!-- HEADER -->
-<tr>
-<td style="
-    text-align:center;
-    padding:42px 30px 22px 30px;
-">
+ <tr>
+    <td class="px-pad" style="padding:18px 26px 12px 26px;">
 
-<img 
-   src="https://www.med-sdi.cl/images/logo_pais_vertical.png"
-    alt="SDI"
-    width="95"
-    style="
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+            <tr>
 
-        padding:14px;
-    "
->
+                <!-- LOGO -->
+                <td class="header-cell" align="left" valign="middle" width="130">
+                    <img
+                    src="https://www.med-sdi.cl/images/sdi-color-h.svg"
+                    width="100"
+                    alt="SDI"
+                    style="width:100px; display:block;">
+                </td>
 
-</td>
+                <!-- TITULO -->
+                <td class="header-title-cell" align="right" valign="middle">
+                    <p style="margin:0;font-size:11px; font-family:Helvetica, Arial, sans-serif;letter-spacing:2px;text-transform:uppercase;color:#31bebe;font-weight:700;">
+                        Hora Médica Agendada
+                    </p>
+                </td>
+
+            </tr>
+        </table>
+
+    </td>
 </tr>
 
 <!-- HERO -->
 <tr>
 <td style="padding:0 45px 20px 45px; text-align:center;">
 
-<p style="
-    margin:0;
-    font-size:13px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:#31bebe;
-    font-weight:700;
-">
-Hora Médica Agendada
-</p>
-
 <h2 style="
     margin:18px 0 12px 0;
     color:#0f172a;
-    font-size:20px;
+    font-size:17px;
     line-height:42px;
     font-weight:700;
 ">
@@ -76,8 +74,8 @@ Hola, {{ $detalle['body']['nombre_paciente'] }}
 <p style="
     margin:0;
     color:#64748b;
-    font-size:17px;
-    line-height:30px;
+    font-size:14px;
+    line-height:21px;
 ">
 Tu hora fue agendada correctamente.<br>
 Puedes confirmar o cancelar tu cita utilizando los botones inferiores.
@@ -86,89 +84,46 @@ Puedes confirmar o cancelar tu cita utilizando los botones inferiores.
 </td>
 </tr>
 
-<!-- CARD FECHA Y HORA -->
-<tr>
-<td style="padding:10px 35px 10px 35px;">
+ <!-- FECHA HORA -->
+    <tr>
+        <td class="px-pad" style="padding:12px 22px;">
 
-<table width="100%" style="
-    background:#ffffff;
-    border:1px solid #e2e8f0;
-    border-radius:24px;
-">
+            <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
+            style="border:1px solid #e2e8f0;border-radius:16px;overflow:hidden;">
 
-<tr>
+            <tr>
 
-<!-- FECHA -->
-<td width="50%" align="center" style="
-    padding:28px 20px;
-    border-right:1px solid #edf2f7;
-">
+                <td class="stack-cell" align="center" style="padding:12px;border-right:1px solid #edf2f7;">
+                     <img style="width:35px;"
+                                        src="https://www.med-sdi.cl/images/email/calendario_1.png"
+                                        alt="Día">
+                    <p style="font-family:Helvetica, Arial, sans-serif;margin:0;font-size:12px;color:#64748b;font-weight:700;">Fecha</p>
+                    <p style="font-family:Helvetica, Arial, sans-serif;margin:3px 0 0 0;font-size:14px;color:#1a49a3;font-weight:700;">
+                        {{ $detalle['body']['fecha'] }}
+                    </p>
+                </td>
 
-<img src="https://www.med-sdi.cl/images/email/calendario_1.png" alt="Fecha"
-    width="34"
-    style="margin-bottom:10px;"
->
+                <td class="stack-cell" align="center" style="padding:12px;">
+                     <img style="width:35px;"
+                                        src="https://www.med-sdi.cl/images/email/reloj_1.png"
+                                        alt="Día">
+                    <p style="font-family:Helvetica, Arial, sans-serif;margin:0;font-size:12px;color:#64748b;font-weight:700;">Hora</p>
+                    <p style="font-family:Helvetica, Arial, sans-serif;margin:3px 0 0 0;font-size:14px;color:#1a49a3;font-weight:700;">
+                        {{ $detalle['body']['hora'] }}
+                    </p>
+                </td>
 
-<p style="
-    margin:0;
-    font-size:14px;
-    font-weight: 700;
-    color:#64748b;
-">
-Fecha
-</p>
+            </tr>
+        </table>
 
-<p style="
-    margin:8px 0 0 0;
-    font-size:17px;
-    font-weight:700;
-    color:#1a49a3;
-">
-{{ $detalle['body']['fecha'] }}
-</p>
-
-</td>
-
-<!-- HORA -->
-<td width="50%" align="center" style="
-    padding:28px 20px;
-">
-
-<img 
-       src="https://www.med-sdi.cl/images/email/reloj_1.png" alt="Hora"
-    width="34"
-    style="margin-bottom:10px;"
->
-
-<p style="
-    margin:0;
-    font-size:14px;
-    color:#64748b;
-     font-weight: 700;
-">
-Hora
-</p>
-
-<p style="
-    margin:8px 0 0 0;
-    font-size:17px;
-    font-weight:700;
-    color:#1a49a3;
-">
-{{ $detalle['body']['hora'] }}
-</p>
-
-</td>
-
+    </td>
 </tr>
-</table>
 
-</td>
-</tr>
+
 
 <!-- BOTONES -->
 <tr>
-<td align="center" style="padding:35px 25px 20px 25px;">
+<td align="center" style="padding:20px 20px 20px 20px;">
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -176,7 +131,7 @@ Hora
 <!-- CONFIRMAR -->
 <td align="center"
     style="
-        border-radius:50px;
+        border-radius:20px;
         background:linear-gradient(135deg,#31bebe 0%, #1995a8 100%);
         box-shadow:0 10px 25px rgba(49,190,190,0.28);
     "
@@ -201,7 +156,7 @@ Confirmar hora
 <!-- CANCELAR -->
 <td align="center"
     style="
-        border-radius:50px;
+        border-radius:20px;
         background:linear-gradient(135deg,#ef4444 0%, #dc2626 100%);
         box-shadow:0 10px 25px rgba(239,68,68,0.22);
     "
@@ -230,7 +185,7 @@ Cancelar hora
 
 <!-- INFORMACION -->
 <tr>
-<td style="padding:10px 35px 25px 35px;">
+<td style="padding:0 20px 20px 20px;">
 
 <table width="100%" style="
     background:#ffffff;
@@ -243,17 +198,19 @@ Cancelar hora
 <tr>
 <td colspan="2" style="
     background:#f8fbff;
-    padding:22px 24px;
+     padding:12px 12px;
     border-bottom:1px solid #e2e8f0;
 ">
 
 <p style="
     margin:0;
-    font-size:18px;
+    font-size:12px;
+     padding:3px;
     color:#1a49a3;
     font-weight:700;
+    text-transform: uppercase;
 ">
-Información de tu Atención
+Información de su cita
 </p>
 
 </td>
@@ -262,8 +219,9 @@ Información de tu Atención
 <!-- PROCEDIMIENTO -->
 <tr>
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+     padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#1a49a3;
     font-weight:700;
     border-bottom:1px solid #f1f5f9;
@@ -272,8 +230,9 @@ Procedimiento
 </td>
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#475569;
     border-bottom:1px solid #f1f5f9;
 ">
@@ -285,8 +244,9 @@ Procedimiento
 <tr style="background:#fcfdff;">
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#1a49a3;
     font-weight:700;
     border-bottom:1px solid #f1f5f9;
@@ -295,8 +255,9 @@ Indicaciones
 </td>
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#475569;
     border-bottom:1px solid #f1f5f9;
 ">
@@ -309,8 +270,9 @@ Indicaciones
 <tr>
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#1a49a3;
     font-weight:700;
     border-bottom:1px solid #f1f5f9;
@@ -319,21 +281,24 @@ Lugar
 </td>
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#475569;
     border-bottom:1px solid #f1f5f9;
 ">
-{{ $detalle['body']['lugar_atencion'] }}
+<strong>{{ $detalle['body']['lugar_atencion'] }}</strong><br>
+<i>{{ $detalle['body']['direccion'] }}</i>
 </td>
 
 </tr>
 
-<tr style="background:#fcfdff;">
+<!--<tr style="background:#fcfdff;">
 
 <td style="
-    padding:18px 24px;
-    font-size:14px;
+    padding:10px 10px;
+    font-size:11px;
+    text-transform: uppercase;
     color:#1a49a3;
     font-weight:700;
 ">
@@ -348,7 +313,7 @@ Dirección
 {{ $detalle['body']['direccion'] }}
 </td>
 
-</tr>
+</tr>-->
 
 </table>
 
@@ -357,18 +322,18 @@ Dirección
 
 <!-- ALERTA -->
 <tr>
-<td style="padding:0 35px 30px 35px;">
+<td style="padding:0 20px 20px 20px;">
 
 <table width="100%" style="
     background:#eef4ff;
     border-left:4px solid #1a49a3;
     border-radius:14px;
-    padding:18px;
+    padding:14px;
 ">
 
 <tr>
 <td style="
-    font-size:14px;
+    font-size:12px;
     color:#1e3a8a;
     line-height:24px;
 ">
@@ -393,29 +358,10 @@ Presentarse en la consulta con 15 minutos de anticipación.
     text-align:center;
 ">
 
-<p style="
-    margin:0;
-    font-size:13px;
-    line-height:26px;
-    color:#64748b;
-">
-
-Este correo fue enviado por
-
-<span style="font-weight:700;">
-Salud Digital Integrada
-</span>
-
-<br>
-
-<span style="
-    font-size:12px;
-">
-© <span id="year"></span> SDI · Todos los derechos reservados
-</span>
-
+ <p style="margin:0;font-size:11px;color:#64748b;line-height:16px;">
+    Este correo fue enviado por <strong>SDI</strong><br>
+    &copy; {{ date('Y') }} &middot; Todos los derechos reservados
 </p>
-
 </td>
 </tr>
 

@@ -21,14 +21,14 @@
         }
         .header {
             text-align: center;
-            border-bottom: 3px solid #17a2b8;
+            border-bottom: 2px solid #1a49a3;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
         .header h1 {
-            color: #17a2b8;
+            color: #1a49a3;
             margin: 0;
-            font-size: 22px;
+            font-size: 18px;
         }
         .header p {
             color: #666;
@@ -40,8 +40,8 @@
             color: #333;
         }
         .info-box {
-            background-color: #f0f9fb;
-            border-left: 4px solid #17a2b8;
+            background-color: #eaf1fb;
+            border-left: 4px solid #1a49a3;
             padding: 15px;
             margin: 20px 0;
             border-radius: 0 4px 4px 0;
@@ -52,7 +52,7 @@
         }
         .label {
             font-weight: bold;
-            color: #17a2b8;
+            color: #1a49a3;
         }
         .footer {
             margin-top: 30px;
@@ -62,13 +62,17 @@
             color: #999;
             font-size: 11px;
         }
+
+        p {
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Informe de Nutricion</h1>
-            <p>MED-SDI - Sistema de Informacion Medica</p>
+            <h1>Informe de Nutrición</h1>
+            <!--<p>MED-SDI - Sistema de Informacion Medica</p>-->
         </div>
 
         <div class="content">
@@ -102,8 +106,10 @@
         </div>
 
         <div class="footer">
-            <p>Este correo fue generado automaticamente por MED-SDI.</p>
-            <p>Por favor no responder a este mensaje.</p>
+              <p style="margin:0;font-size:11px;color:#64748b;line-height:16px;">
+                                        Este correo fue enviado por <strong>SDI</strong><br>
+                                        &copy; {{ date('Y') }} &middot; Todos los derechos reservados
+                </p>
         </div>
     </div>
 </body>
