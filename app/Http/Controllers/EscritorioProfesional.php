@@ -10951,6 +10951,13 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         ]);
     }
 
+    public function facturacion(){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        return view('app.profesional.facturacion', [
+            'profesional' => $profesional
+        ]);
+    }
+
     public function cancelar_hora_link($id)
     {
         $request = new \Illuminate\Http\Request();

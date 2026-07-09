@@ -62,7 +62,8 @@
                     <li class="nav-item pcoded-hasmenu">
                         <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-settings"></i></span><span class="pcoded-mtext text-center">Configuraciones</span></a>
                         <ul class="pcoded-submenu">
-                            <li><a href="{{ route('profesional.mi_perfil') }}">Editar Perfil</a></li>
+                            <li><a href="{{ route('profesional.mi_perfil') }}"><i class="feather icon-user mr-2"></i>Editar Perfil</a></li>
+                            <li><a href="{{ route('profesional.facturacion') }}"><i class="feather icon-file-text mr-2"></i>Mi Plan y Facturación</a></li>
                             <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
                         </ul>
                     </li>
@@ -187,7 +188,10 @@
                     <li class="nav-item pcoded-hasmenu">
                         <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-settings"></i></span><span class="pcoded-mtext text-center">Configuraciones</span></a>
                         <ul class="pcoded-submenu">
-                            <li><a href="{{ route('profesional.mi_perfil') }}">Editar Perfil</a></li>
+                            <li><a href="{{ route('profesional.mi_perfil') }}"><i class="feather icon-user mr-2"></i>Editar Perfil</a></li>
+                            @if(isset($profesional))
+                            <li><a href="{{ route('profesional.facturacion') }}"><i class="feather icon-file-text mr-2"></i>Mi Plan y Facturación</a></li>
+                            @endif
                             @if(isset($profesional))
                             <li><a href="javascript:void(0)" onclick="imprimir_tarjeta_presentacion_profesional({{ $profesional->id }})"><i class="feather icon-credit-card mr-1"></i>Tarjeta de Presentaci&#243;n</a></li>
                             @endif

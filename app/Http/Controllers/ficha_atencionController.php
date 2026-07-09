@@ -1926,110 +1926,117 @@ class ficha_atencionController extends Controller
         /** RECETAS */
         $fecha_actual = date("d-m-Y");
         $regisrto_result = array();
-        $lista_recetas = Recomendacion::where('activo', $paciente->id)
-            ->whereDate('created_at', '>=', date("Y-m-d", strtotime($fecha_actual . "- 1 year")))
-            ->pluck('id')
-            ->toArray();
-        if($lista_recetas)
+
+        // Paciente 741: se omiten las recetas/medicamentos para evitar error al desencriptar
+        // registros antiguos cifrados con una APP_KEY distinta.
+        if ((int) $paciente->id !== 741)
         {
-            $registros = Recomendacion::whereIn('id', $lista_recetas)->get();
-            if($registros)
+            $lista_recetas = Recomendacion::where('activo', $paciente->id)
+                ->whereDate('created_at', '>=', date("Y-m-d", strtotime($fecha_actual . "- 1 year")))
+                ->pluck('id')
+                ->toArray();
+
+            if($lista_recetas)
             {
-                $regisrto_result = array();
-                foreach ($registros as $key => $value)
+                $registros = Recomendacion::whereIn('id', $lista_recetas)->get();
+                if($registros)
                 {
-                    $detalle = RecomendacionDetalle::where('id_recomendacion',$value->id)->get();
-                    $detalle_temp = array();
-                    if($detalle)
+                    $regisrto_result = array();
+                    foreach ($registros as $key => $value)
                     {
+                        $detalle = RecomendacionDetalle::where('id_recomendacion',$value->id)->get();
                         $detalle_temp = array();
-                        foreach ($detalle as $key_det => $value_det)
+                        if($detalle)
                         {
-                            // Obtener la última administración real desde el historial
-                            $ultimaAdministracion = RecomendacionDetalleAdministracion::where('id_recomendacion_detalle', $value_det->id)
-                                ->orderBy('fecha_hora_administracion', 'desc')
-                                ->first();
+                            $detalle_temp = array();
+                            foreach ($detalle as $key_det => $value_det)
+                            {
+                                // Obtener la última administración real desde el historial
+                                $ultimaAdministracion = RecomendacionDetalleAdministracion::where('id_recomendacion_detalle', $value_det->id)
+                                    ->orderBy('fecha_hora_administracion', 'desc')
+                                    ->first();
 
-                            // Calcular si puede administrar basándose en la última administración
-                            $puedeAdministrar = true;
-                            $ultimaAdministracionFecha = null;
-                            $ultimaAdministracionHora = null;
-                            $horasDesdeUltimaAdmin = null;
+                                // Calcular si puede administrar basándose en la última administración
+                                $puedeAdministrar = true;
+                                $ultimaAdministracionFecha = null;
+                                $ultimaAdministracionHora = null;
+                                $horasDesdeUltimaAdmin = null;
 
-                            if ($ultimaAdministracion) {
-                                $ultimaAdministracionFecha = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->format('d-m-Y');
-                                $ultimaAdministracionHora = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->format('H:i');
+                                if ($ultimaAdministracion) {
+                                    $ultimaAdministracionFecha = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->format('d-m-Y');
+                                    $ultimaAdministracionHora = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->format('H:i');
 
-                                // Calcular horas transcurridas desde la última administración
-                                $horasDesdeUltimaAdmin = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->diffInHours(now());
+                                    // Calcular horas transcurridas desde la última administración
+                                    $horasDesdeUltimaAdmin = \Carbon\Carbon::parse($ultimaAdministracion->fecha_hora_administracion)->diffInHours(now());
 
-                                // Si han pasado menos de 6 horas, no puede administrar
-                                // Este valor puede ajustarse según la frecuencia del medicamento
-                                if ($horasDesdeUltimaAdmin < 6) {
+                                    // Si han pasado menos de 6 horas, no puede administrar
+                                    // Este valor puede ajustarse según la frecuencia del medicamento
+                                    if ($horasDesdeUltimaAdmin < 6) {
+                                        $puedeAdministrar = false;
+                                    }
+                                }
+
+                                // Si el tratamiento está finalizado (estado = 2), no puede administrar
+                                if ($value_det->estado == 2) {
                                     $puedeAdministrar = false;
                                 }
-                            }
 
-                            // Si el tratamiento está finalizado (estado = 2), no puede administrar
-                            if ($value_det->estado == 2) {
-                                $puedeAdministrar = false;
+                                $detalle_temp[] = array(
+                                    'id' => $value_det->id,
+                                    'id_receta' => $value_det->id_recomendacion,
+                                    'id_tipo_control' => decrypt($value_det->control),
+                                    'id_producto' => decrypt($value_det->id_articulo),
+                                    'producto' => decrypt($value_det->articulo),
+                                    'farmaco' => decrypt($value_det->componente),
+                                    'id_presentacion' => decrypt($value_det->id_apariencia),
+                                    'presentacion' => decrypt($value_det->apariencia),
+                                    'id_receta_dosis' => decrypt($value_det->id_cuota),
+                                    'posologia' => decrypt($value_det->cuota),
+                                    'id_via_administracion' => decrypt($value_det->id_regimen),
+                                    'via_administracion' => decrypt($value_det->regimen),
+                                    'id_periodo' => decrypt($value_det->id_lapso),
+                                    'periodo' => decrypt($value_det->lapso),
+                                    'uso_cronico' => decrypt($value_det->uso_frecuente),
+                                    'cantidad_compra' => decrypt($value_det->volumen_compra),
+                                    'cantidad' => decrypt($value_det->volumen),
+                                    'cantidad_vendida' => decrypt($value_det->volumen_entregado),
+                                    'comentario' => decrypt($value_det->comentario),
+                                    'token_doc' => $value_det->cod_doc,
+                                    'estado' => $value_det->estado,
+                                    'fecha_administrado' => $value_det->fecha_administrado,
+                                    'hora_administrado' => $value_det->hora_administrado,
+                                    'nombre_responsable' => !empty($value_det->id_responsable)
+                                        ? (optional(User::find($value_det->id_responsable))->name ?? '')
+                                        : '',
+                                    'created_at' => $value_det->created_at,
+                                    'updated_at' => $value_det->updated_at,
+                                    // Nuevos campos para control de administración
+                                    'ultima_administracion_fecha' => $ultimaAdministracionFecha,
+                                    'ultima_administracion_hora' => $ultimaAdministracionHora,
+                                    'horas_desde_ultima_admin' => $horasDesdeUltimaAdmin,
+                                    'puede_administrar' => $puedeAdministrar,
+                                );
                             }
-
-                            $detalle_temp[] = array(
-                                'id' => $value_det->id,
-                                'id_receta' => $value_det->id_recomendacion,
-                                'id_tipo_control' => decrypt($value_det->control),
-                                'id_producto' => decrypt($value_det->id_articulo),
-                                'producto' => decrypt($value_det->articulo),
-                                'farmaco' => decrypt($value_det->componente),
-                                'id_presentacion' => decrypt($value_det->id_apariencia),
-                                'presentacion' => decrypt($value_det->apariencia),
-                                'id_receta_dosis' => decrypt($value_det->id_cuota),
-                                'posologia' => decrypt($value_det->cuota),
-                                'id_via_administracion' => decrypt($value_det->id_regimen),
-                                'via_administracion' => decrypt($value_det->regimen),
-                                'id_periodo' => decrypt($value_det->id_lapso),
-                                'periodo' => decrypt($value_det->lapso),
-                                'uso_cronico' => decrypt($value_det->uso_frecuente),
-                                'cantidad_compra' => decrypt($value_det->volumen_compra),
-                                'cantidad' => decrypt($value_det->volumen),
-                                'cantidad_vendida' => decrypt($value_det->volumen_entregado),
-                                'comentario' => decrypt($value_det->comentario),
-                                'token_doc' => $value_det->cod_doc,
-                                'estado' => $value_det->estado,
-                                'fecha_administrado' => $value_det->fecha_administrado,
-                                'hora_administrado' => $value_det->hora_administrado,
-                                'nombre_responsable' => !empty($value_det->id_responsable)
-                                    ? (optional(User::find($value_det->id_responsable))->name ?? '')
-                                    : '',
-                                'created_at' => $value_det->created_at,
-                                'updated_at' => $value_det->updated_at,
-                                // Nuevos campos para control de administración
-                                'ultima_administracion_fecha' => $ultimaAdministracionFecha,
-                                'ultima_administracion_hora' => $ultimaAdministracionHora,
-                                'horas_desde_ultima_admin' => $horasDesdeUltimaAdmin,
-                                'puede_administrar' => $puedeAdministrar,
-                            );
                         }
-                    }
 
-                    $regisrto_result[] = array(
-                        'id' => $value->id,
-                        'id_ficha_atencion' => $value->atencion,
-                        'id_ingreso_paciente' => $value->salida,
-                        'id_recuperacion' => $value->herir,
-                        'id_sala' => $value->cuadro,
-                        'id_paciente' => $value->activo,
-                        'id_profesional' => $value->aficionado,
-                        'id_tipo_control' => $value->control,
-                        'token_doc' => $value->cod_doc,
-                        'token_auto' => $value->cod_auto,
-                        'pdf' => $value->info,
-                        'estado' => $value->estado,
-                        'detalle' => $detalle_temp,
-                        'created_at' => $value->created_at,
-                        'updated_at' => $value->updated_at,
-                    );
+                        $regisrto_result[] = array(
+                            'id' => $value->id,
+                            'id_ficha_atencion' => $value->atencion,
+                            'id_ingreso_paciente' => $value->salida,
+                            'id_recuperacion' => $value->herir,
+                            'id_sala' => $value->cuadro,
+                            'id_paciente' => $value->activo,
+                            'id_profesional' => $value->aficionado,
+                            'id_tipo_control' => $value->control,
+                            'token_doc' => $value->cod_doc,
+                            'token_auto' => $value->cod_auto,
+                            'pdf' => $value->info,
+                            'estado' => $value->estado,
+                            'detalle' => $detalle_temp,
+                            'created_at' => $value->created_at,
+                            'updated_at' => $value->updated_at,
+                        );
+                    }
                 }
             }
         }
@@ -14092,7 +14099,7 @@ class ficha_atencionController extends Controller
         if($informMedico)
         {
             $tipo_informe = TipoInforme::find($informMedico->id_tipo_informe);
-            $titulo = mb_strtoupper($tipo_informe->titulo, 'UTF-8');
+$titulo = mb_strtoupper($tipo_informe->titulo, 'UTF-8');
 
             $ficha_atencion = '';
             if(!empty($request->id_ficha_atencion))

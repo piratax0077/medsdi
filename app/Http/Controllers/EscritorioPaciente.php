@@ -3806,7 +3806,6 @@ class EscritorioPaciente extends Controller
     {
         $datos = array();
         $error = array();
-        $valido = 1;
 
         $paciente = Paciente::where('id', $request->id)->first();
 
@@ -3817,10 +3816,41 @@ class EscritorioPaciente extends Controller
             ]);
         }
 
+        /**
+         * Validar primero el correo contra users,
+         * porque de esto depende el inicio de sesión.
+         */
+        $email_origen = $paciente->email;
+        $email_nuevo  = $request->email ?? $paciente->email;
+        $usuario      = null;
+
+        if (!empty($request->email) && $email_origen != $email_nuevo) {
+            $usuario = User::find($paciente->id_usuario);
+
+            if (!$usuario) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'No se encontró el usuario asociado al paciente.'
+                ]);
+            }
+
+            $existeCorreo = User::where('email', $email_nuevo)
+                ->where('id', '<>', $usuario->id)
+                ->exists();
+
+            if ($existeCorreo) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El correo electrónico ya se encuentra registrado por otro usuario.'
+                ]);
+            }
+        }
+
         // Campos obligatorios
         if (!empty($request->nombre)) {
             $paciente->nombres = $request->nombre;
         }
+
         if (!empty($request->apellido_uno)) {
             $paciente->apellido_uno = $request->apellido_uno;
         }
@@ -3836,6 +3866,7 @@ class EscritorioPaciente extends Controller
                 } else {
                     $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fecha_nacimiento)->format('Y-m-d');
                 }
+
                 $paciente->fecha_nac = $fechaConvertida;
             } catch (\Exception $e) {
                 // Si hay error al parsear la fecha, se mantiene la actual
@@ -3849,18 +3880,18 @@ class EscritorioPaciente extends Controller
 
         // Previsión opcional
         $convenio = $request->convenio ?? null;
+
         if ($convenio && $convenio != '0') {
             $prevision = Prevision::find($convenio);
+
             if ($prevision) {
                 $paciente->id_prevision = $prevision->id;
             }
         }
 
         // Email opcional
-        $email_origen = $paciente->email;
-        $email_nuevo = $request->email ?? $paciente->email;
         if (!empty($request->email)) {
-            $paciente->email = $request->email;
+            $paciente->email = $email_nuevo;
         }
 
         // Teléfono opcional
@@ -3878,76 +3909,57 @@ class EscritorioPaciente extends Controller
         $region_paciente  = $region ? Region::where('id', $region)->first() : null;
         $ciudad_paciente  = $ciudad ? Ciudad::where('id', $ciudad)->first() : null;
 
-        if ($paciente->save())
-        {
+        if ($paciente->save()) {
             $datos['estado'] = 1;
             $datos['msj']    = 'exito';
 
-            // ✅ CORRECCIÓN: convertir a array para no contaminar el modelo Eloquent
-            $datos['paciente']                    = $paciente->toArray();
-            $datos['paciente']['region']          = $region_paciente ? $region_paciente->nombre : '';
-            $datos['paciente']['ciudad']          = $ciudad_paciente ? $ciudad_paciente->nombre : '';
+            $datos['paciente']                     = $paciente->toArray();
+            $datos['paciente']['region']           = $region_paciente ? $region_paciente->nombre : '';
+            $datos['paciente']['ciudad']           = $ciudad_paciente ? $ciudad_paciente->nombre : '';
             $datos['paciente']['numero_direccion'] = $numero_direccion ?? '';
-            $datos['paciente']['prevision']       = $prevision ? $prevision->nombre : '';
+            $datos['paciente']['prevision']        = $prevision ? $prevision->nombre : '';
 
             /** modificar/crear dirección solo si se proporciona */
-            if (!empty($direccion) && !empty($ciudad))
-            {
+            if (!empty($direccion) && !empty($ciudad)) {
                 $id_direccion    = $paciente->id_direccion;
                 $carga_direccion = Direccion::find($id_direccion);
 
-                if ($carga_direccion)
-                {
-                    // Modificar dirección existente
+                if ($carga_direccion) {
                     $carga_direccion->direccion  = $direccion;
                     $carga_direccion->numero_dir = $numero_direccion ?? 's/n';
                     $carga_direccion->id_ciudad  = $ciudad;
 
-                    if ($carga_direccion->save())
-                    {
+                    if ($carga_direccion->save()) {
                         $datos['direccion']['estado']    = 1;
                         $datos['direccion']['msj']       = 'exito';
                         $datos['direccion']['direccion'] = $carga_direccion;
-                    }
-                    else
-                    {
+                    } else {
                         $datos['direccion']['estado'] = 0;
                         $datos['direccion']['msj']    = 'falla';
                     }
-                }
-                else
-                {
-                    // Crear nueva dirección
-                    $nueva_direccion            = new Direccion();
+                } else {
+                    $nueva_direccion             = new Direccion();
                     $nueva_direccion->direccion  = $direccion;
                     $nueva_direccion->numero_dir = $numero_direccion ?? 's/n';
                     $nueva_direccion->id_ciudad  = $ciudad;
 
-                    if ($nueva_direccion->save())
-                    {
+                    if ($nueva_direccion->save()) {
                         $datos['direccion']['estado']    = 1;
                         $datos['direccion']['msj']       = 'exito';
                         $datos['direccion']['direccion'] = $nueva_direccion;
 
-                        // ✅ Aquí sí usamos el modelo $paciente directamente (sin campos extra)
                         $paciente->id_direccion = $nueva_direccion->id;
 
-                        if ($paciente->save())
-                        {
-                            // ✅ Actualizamos también el array de respuesta
+                        if ($paciente->save()) {
                             $datos['paciente']['id_direccion'] = $nueva_direccion->id;
 
                             $datos['direccion']['update_paciente']['estado'] = 1;
                             $datos['direccion']['update_paciente']['msj']    = 'exito';
-                        }
-                        else
-                        {
+                        } else {
                             $datos['direccion']['update_paciente']['estado'] = 0;
                             $datos['direccion']['update_paciente']['msj']    = 'falla';
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $datos['direccion']['estado'] = 0;
                         $datos['direccion']['msj']    = 'falla';
                     }
@@ -3955,28 +3967,22 @@ class EscritorioPaciente extends Controller
             }
 
             /** modifica usuario si el email cambió */
-            if (!empty($email_nuevo) && $email_origen != $email_nuevo)
-            {
-                $usuario = User::find($paciente->id_usuario);
+            if (!empty($email_nuevo) && $email_origen != $email_nuevo) {
+                if (!$usuario) {
+                    $usuario = User::find($paciente->id_usuario);
+                }
 
-                if ($usuario)
-                {
+                if ($usuario) {
                     $usuario->email = $email_nuevo;
 
-                    if ($usuario->save())
-                    {
+                    if ($usuario->save()) {
                         $datos['usuario']['estado'] = 1;
                         $datos['usuario']['msj']    = 'exito';
-                        /** envío de correo al paciente para notificar cambio de correo */
-                    }
-                    else
-                    {
+                    } else {
                         $datos['usuario']['estado'] = 0;
                         $datos['usuario']['msj']    = 'falla';
                     }
-                }
-                else
-                {
+                } else {
                     $datos['usuario']['estado'] = 0;
                     $datos['usuario']['msj']    = 'no encontrado';
                 }
@@ -3987,18 +3993,25 @@ class EscritorioPaciente extends Controller
                 ->get()
                 ->each(function ($hora) use ($paciente) {
                     $hora->update([
-                        'descripcion' => $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos
+                        'descripcion' => trim(
+                            $paciente->nombres . ' ' .
+                            $paciente->apellido_uno . ' ' .
+                            $paciente->apellido_dos
+                        )
                     ]);
                 });
-        }
-        else
-        {
-            $datos['estado'] = 0; // ✅ Corregido: era 1 cuando debería ser 0 (falla)
+        } else {
+            $datos['estado'] = 0;
             $datos['msj']    = 'falla';
             $datos['error']  = $error;
         }
 
         return $datos;
+    }
+
+    public function facturacion(){
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->get()->first();
+        return view('app.paciente.facturacion', compact('paciente'));
     }
 
     public function modificarContacto(Request $request){

@@ -11,7 +11,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
                 <input type="hidden" id="permisos_rol_id_asistente" value="">
-                <input type="hidden" id="permisos_rol_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                <input type="hidden" id="permisos_rol_id_lugar_atencion" value="{{ isset($institucion) ? $institucion->id_lugar_atencion : '' }}">
             </div>
             <div class="modal-body">
 

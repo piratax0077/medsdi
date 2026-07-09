@@ -517,6 +517,8 @@ Route::group([
     Route::get('mensajes/{id?}', [App\Http\Controllers\EscritorioPaciente::class, 'mensaje'])->name('paciente.mensaje');
 
     Route::get('mensaje-json/{id}', [App\Http\Controllers\EscritorioPaciente::class, 'mensajeJson'])->name('paciente.mensaje.json');
+
+    Route::get('facturacion', [App\Http\Controllers\EscritorioPaciente::class, 'facturacion'])->name('paciente.facturacion');
 });
 
 /** INICIO DE LICENCIA */
@@ -954,6 +956,11 @@ Route::group([
     Route::post('/eliminar_evolucion_profesional', [App\Http\Controllers\EscritorioEnfermerasController::class, 'eliminar_evolucion_profesional'])->name('profesional.eliminar_evolucion_profesional_hosp');
     Route::post('/modificar_evolucion_profesional', [App\Http\Controllers\EscritorioEnfermerasController::class, 'modificar_evolucion_profesional'])->name('profesional.modificar_evolucion_profesional_hosp');
     Route::post('/generar_pdf_resumen_evoluciones', [App\Http\Controllers\EscritorioEnfermerasController::class, 'generar_pdf_resumen_evoluciones'])->name('profesional.generar_pdf_resumen_evoluciones_hosp');
+    Route::get('/asistente/get/permisos', [App\Http\Controllers\AdministradorCmController::class, 'get_permisos_asistente'])->name('profesional.asistente.get.permisos');
+    Route::post('/asistente/get/permisos/guardar', [App\Http\Controllers\AdministradorCmController::class, 'guardarAsistentesPermisos'])->name('profesional.asistente.guardar.permisos');
+
+    // Menu Profesional
+    Route::get('facturacion', [App\Http\Controllers\EscritorioProfesional::class, 'facturacion'])->name('profesional.facturacion');
 
 });
 
@@ -3317,3 +3324,13 @@ Route::get('pantalla2/{token}', [\App\Http\Controllers\PantallaController::class
 Route::get('/reserva/hora/online', [App\Http\Controllers\ReservaHoraOnlineController::class, 'index'])
     ->middleware('verify.reserva.token')
     ->name('reserva.hora.online');
+
+Route::get('/test/mensajeria', function (\App\Services\Mensajeria\MensajeriaService $mensajeria) {
+    return $mensajeria->enviarWhatsapp(
+        '56995474660',
+        'Mensaje de prueba MedSDI',
+        [
+            'tipo' => 'test_produccion',
+        ]
+    );
+});
