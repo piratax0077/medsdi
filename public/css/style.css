@@ -5385,6 +5385,26 @@ input[type="button"].btn-block {
     border-radius: 8px;
 }
 
+.icono-success-light {
+    background-color: #DBF5DD;
+    margin-right: 5px;
+    color: #4AD082;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+
+.icono-secondary-light {
+    background-color: #D6DBE0;
+    margin-right: 5px;
+    color: #5A697F;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+
+
+
 .icono-agenda {
     background-color: #fff;
     margin-right: 5px;
@@ -5906,7 +5926,7 @@ a.badge-secondary:focus, a.badge-secondary.focus {
 
 .badge-success {
     color: #fff;
-    background-color: #72B02C;
+    background-color: #71D67C;
 }
 
 a.badge-success:hover, a.badge-success:focus {
@@ -11284,7 +11304,7 @@ a.text-secondary:hover, a.text-secondary:focus {
 }
 
 .text-success {
-    color: #9ccc65 !important;
+    color: #71D67C!important;
 }
 
 a.text-success:hover, a.text-success:focus {
@@ -20869,7 +20889,7 @@ a{
 }
 
 .switch.switch-success input[type=checkbox]:checked + .cr:before {
-    background: #9ccc65;
+    background: #71D67C;
 }
 
 .switch.switch-warning input[type=checkbox]:checked + .cr:before {
@@ -20919,9 +20939,15 @@ a.badge-light-secondary.active, a.badge-light-secondary:active, a.badge-light-se
 }
 
 .badge-light-success {
-    background: rgba(156, 204, 101, 0.2);
-    border-color: #e3f1d4;
-    color: #9ccc65;
+    background: #ccf6d1;
+    border-color: #ccf6d1;
+    color: #31ba40;
+}
+
+.badge-light-purple {
+    background: #e5deff;
+    border-color: #e5deff;
+    color: #9A6CF6;
 }
 
 a.badge-light-success.active, a.badge-light-success:active, a.badge-light-success:focus, a.badge-light-success:hover {
@@ -20931,9 +20957,9 @@ a.badge-light-success.active, a.badge-light-success:active, a.badge-light-succes
 }
 
 .badge-light-info {
-    background: rgba(0, 172, 193, 0.2);
-    border-color: #b8e8ee;
-    color: #00acc1;
+    background: #cff1f1;
+    border-color: #cff1f1;
+    color: #15A9B5;
 }
 
 a.badge-light-info.active, a.badge-light-info:active, a.badge-light-info:focus, a.badge-light-info:hover {
@@ -22361,9 +22387,6 @@ pre[class*=language-]:before {
     background-color: #9ccc65 !important;
 }
 
-.text-success {
-    color: #9ccc65 !important;
-}
 
 .b-success {
     border: 1px solid #9ccc65 !important;
@@ -33741,7 +33764,7 @@ font-family: 'Nunito', sans-serif;
     top: -11px!important;
     left: 9px!important;
     font-size: 0.85rem!important;
-    color: #1848a1!important;
+    color: #343a40!important;
     background-color: #fff!important;
     border-radius:3px!important;
     font-weight:600!important;
@@ -33773,7 +33796,7 @@ font-family: 'Nunito', sans-serif;
     top: -11px!important;
     left: 12px!important;
     font-size: 0.85rem!important;
-    color: #1848a1!important;
+    color: #343a40!important;
     background-color: #fff!important;
     border-radius:3px!important;
     font-weight:600!important;
@@ -36876,3 +36899,382 @@ CARD TRASPASO CAJA
     /* ─── Tamaños ───────────────────────────────────────────────── */
     .progress-ring--sm .progress-ring__pct  { font-size: 1rem; }
     .progress-ring--sm .progress-ring__label { font-size: 0.55rem; }
+
+
+
+    /**FACTURACION, PLANES, SUSCRIPCIONES**/
+    <style>
+    .billing-shell {
+        background: #f4f7fb;
+        border-radius: 0 0 18px 18px;
+        padding: 24px;
+    }
+
+    .billing-card {
+        border: 0;
+        border-radius: 18px;
+        box-shadow: 0 12px 28px rgba(22, 46, 58, .08);
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .billing-header {
+        background: linear-gradient(135deg, #2759A5 0%, #1699C6 100%) !important;
+        padding: 24px 28px;
+        border-bottom: 0 !important;
+    }
+
+    .billing-header h4 {
+        font-weight: 800;
+        margin-bottom: 4px;
+        color: #fff !important;
+    }
+
+    .billing-header p {
+        color: rgba(255,255,255,.88) !important;
+        margin-bottom: 0;
+    }
+
+    .billing-layout {
+        display: grid;
+        grid-template-columns: 310px 1fr;
+        gap: 24px;
+    }
+
+    .billing-sidebar {
+        background: #fff;
+        border: 1px solid #e7edf5;
+        border-radius: 18px;
+        padding: 22px;
+        height: 100%;
+    }
+
+    .billing-sidebar-title {
+        color: #7b8d9b;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        margin-bottom: 18px;
+        text-transform: uppercase;
+    }
+
+    .billing-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 13px 14px;
+        color: #637587;
+        border-radius: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-decoration: none;
+        transition: all .2s ease;
+        cursor: pointer;
+    }
+
+    .billing-nav-item:hover {
+        color: #2759A5;
+        background: #eef3ff;
+        text-decoration: none;
+    }
+
+    .billing-nav-item.active {
+        background: #e6eefc;
+        color: #2759A5;
+    }
+
+    .billing-nav-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: #eef3ff;
+        color: #2759A5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 34px;
+    }
+
+    .billing-nav-item.active .billing-nav-icon {
+        background: #3867b0;
+        color: #fff;
+    }
+
+    .billing-help {
+        margin-top: 18px;
+        padding: 20px;
+        border-radius: 16px;
+        color: #fff;
+        background: linear-gradient(135deg, #2759A5 0%, #31bebe 100%);
+    }
+
+    .billing-help h6 {
+        color: #fff;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .billing-help p {
+        color: rgba(255,255,255,.88);
+        margin-bottom: 12px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .billing-help a {
+        color: #fff;
+        font-weight: 800;
+        text-decoration: underline;
+    }
+
+    .billing-main {
+        background: #fff;
+        border: 1px solid #e7edf5;
+        border-radius: 18px;
+        padding: 28px;
+    }
+
+    .billing-main h4 {
+        font-weight: 800;
+        color: #172b3a;
+        margin-bottom: 4px;
+    }
+
+    .billing-main .subtitle {
+        color: #6f7f8f;
+        margin-bottom: 26px;
+    }
+
+    .plan-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .plan-card {
+        position: relative;
+        border: 1px solid #e7edf5;
+        border-radius: 18px;
+        padding: 24px 22px 20px;
+        background: #fff;
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+        transition: all .2s ease;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 35px rgba(39, 89, 165, .10);
+    }
+
+    .plan-card.active {
+        border: 2px solid #49B8C6;
+        background: linear-gradient(180deg, #f6fbff 0%, #ffffff 55%);
+    }
+
+    .plan-card.recommended {
+        border: 2px solid rgba(155, 99, 208, .50);
+        background: #fff;
+    }
+
+    .plan-badge {
+        position: absolute;
+        top: -13px;
+        left: 22px;
+        background: #9B63D0;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 6px 14px;
+        border-radius: 999px;
+        box-shadow: 0 8px 18px rgba(155, 99, 208, .26);
+    }
+
+    .plan-name {
+        font-weight: 800;
+        color: #172b3a;
+        margin-bottom: 8px;
+        font-size: 17px;
+    }
+
+    .plan-price {
+        display: flex;
+        align-items: flex-start;
+        gap: 3px;
+        color: #0f1f2d;
+        margin-bottom: 0;
+    }
+
+    .plan-price small {
+        font-size: 15px;
+        font-weight: 800;
+        margin-top: 8px;
+    }
+
+    .plan-price strong {
+        font-size: 38px;
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: -1.5px;
+    }
+
+    .plan-period {
+        color: #7d8b98;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-bottom: 24px;
+    }
+
+    .plan-limit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #6f7f8f;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .plan-icons {
+        display: flex;
+        gap: 7px;
+        margin-bottom: 24px;
+        min-height: 20px;
+    }
+
+    .plan-icons i {
+        color: #d6e0ea;
+        font-size: 14px;
+    }
+
+    .plan-icons i.active {
+        color: #2759A5;
+    }
+
+    .plan-card.active .plan-icons i.active {
+        color: #49B8C6;
+    }
+
+    .plan-card.recommended .plan-icons i.active {
+        color: #9B63D0;
+    }
+
+    .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 22px;
+    }
+
+    .plan-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: #405363;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .plan-features i {
+        color: #2dbf7f;
+        margin-top: 2px;
+    }
+
+    .plan-actions {
+        margin-top: auto;
+    }
+
+    .btn-plan {
+        width: 100%;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-weight: 800;
+        border: 1px solid #49B8C6;
+        color: #2aa9b8;
+        background: #fff;
+        transition: all .2s ease;
+    }
+
+    .btn-plan:hover {
+        color: #fff;
+        background: #49B8C6;
+        border-color: #49B8C6;
+    }
+
+    .btn-plan-active {
+        background: #31bebe;
+        border-color: #31bebe;
+        color: #fff;
+        cursor: default;
+    }
+
+    .btn-plan-active:hover {
+        background: #b9c1c8;
+        border-color: #b9c1c8;
+        color: #fff;
+    }
+
+    .btn-plan-accent {
+        background: #fff;
+        border-color: #9B63D0;
+        color: #9B63D0;
+    }
+
+    .btn-plan-accent:hover {
+        background: #874fc4;
+        border-color: #874fc4;
+        color: #fff;
+    }
+
+    .section-panel {
+        display: none;
+    }
+
+    .section-panel.active {
+        display: block;
+    }
+
+    .payment-box,
+    .invoice-box {
+        border: 1px solid #e7edf5;
+        border-radius: 16px;
+        padding: 20px;
+        background: #fff;
+        margin-bottom: 16px;
+    }
+
+    .invoice-table th {
+        color: #7b8d9b;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        border-top: none;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eef3ff;
+        color: #2759A5;
+        font-weight: 800;
+        font-size: 12px;
+    }
+
+    @media (max-width: 1199px) {
+        .billing-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .plan-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .plan-card {
+            min-height: auto;
+        }
+    }
+</style>
