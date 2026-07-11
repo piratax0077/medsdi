@@ -80,6 +80,10 @@ use App\Models\UsoPersonal;
 use App\Mail\CorreoGenerico;
 use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+// DB
+use Illuminate\Support\Facades\DB;
+
 use DateTime;
 
 class EscritorioPaciente extends Controller
@@ -3804,209 +3808,400 @@ class EscritorioPaciente extends Controller
 
     public function modificarPaciente(Request $request)
     {
-        $datos = array();
-        $error = array();
+        $request->validate([
+            'id'               => 'required|integer',
+            'email'            => 'nullable|string|max:255',
+            'fecha_nacimiento' => 'nullable|string',
+        ]);
 
-        $paciente = Paciente::where('id', $request->id)->first();
+        $paciente = Paciente::find($request->id);
 
         if (!$paciente) {
             return response()->json([
                 'estado' => 0,
-                'msj' => 'Paciente no encontrado'
-            ]);
+                'msj'    => 'Paciente no encontrado.',
+            ], 404);
         }
 
-        /**
-         * Validar primero el correo contra users,
-         * porque de esto depende el inicio de sesión.
-         */
-        $email_origen = $paciente->email;
-        $email_nuevo  = $request->email ?? $paciente->email;
-        $usuario      = null;
+        /*
+        |--------------------------------------------------------------------------
+        | Preparación del correo
+        |--------------------------------------------------------------------------
+        |
+        | El campo no viene en el request:
+        |   se conserva el correo actual.
+        |
+        | El campo viene vacío:
+        |   pacientes.email queda en NULL.
+        |
+        | El campo viene con un correo:
+        |   se valida antes de guardar.
+        |
+        */
 
-        if (!empty($request->email) && $email_origen != $email_nuevo) {
+        $emailFueEnviado = $request->exists('email');
+        $emailOrigen     = $paciente->email
+            ? mb_strtolower(trim($paciente->email))
+            : null;
+
+        $emailNuevo = $emailOrigen;
+
+        if ($emailFueEnviado) {
+            $emailNuevo = mb_strtolower(trim((string) $request->input('email')));
+            $emailNuevo = $emailNuevo !== '' ? $emailNuevo : null;
+        }
+
+        $usuario = null;
+
+        if (!empty($paciente->id_usuario)) {
             $usuario = User::find($paciente->id_usuario);
+        }
 
-            if (!$usuario) {
+        /*
+        |--------------------------------------------------------------------------
+        | Validar correo nuevo
+        |--------------------------------------------------------------------------
+        */
+
+        if ($emailFueEnviado && $emailNuevo !== null) {
+            if (!filter_var($emailNuevo, FILTER_VALIDATE_EMAIL)) {
                 return response()->json([
                     'estado' => 0,
-                    'msj' => 'No se encontró el usuario asociado al paciente.'
-                ]);
+                    'msj'    => 'El correo electrónico ingresado no es válido.',
+                ], 422);
             }
 
-            $existeCorreo = User::where('email', $email_nuevo)
-                ->where('id', '<>', $usuario->id)
+            /*
+            * Verificar que el correo no pertenezca a otro usuario.
+            */
+            $existeCorreoUsuario = User::whereRaw(
+                    'LOWER(TRIM(email)) = ?',
+                    [$emailNuevo]
+                )
+                ->when($usuario, function ($query) use ($usuario) {
+                    $query->where('id', '<>', $usuario->id);
+                })
                 ->exists();
 
-            if ($existeCorreo) {
+            if ($existeCorreoUsuario) {
                 return response()->json([
                     'estado' => 0,
-                    'msj' => 'El correo electrónico ya se encuentra registrado por otro usuario.'
-                ]);
+                    'msj'    => 'El correo electrónico ya se encuentra registrado por otro usuario.',
+                ], 422);
+            }
+
+            /*
+            * Verificar que el correo no pertenezca a otro paciente.
+            */
+            $existeCorreoPaciente = Paciente::whereRaw(
+                    'LOWER(TRIM(email)) = ?',
+                    [$emailNuevo]
+                )
+                ->where('id', '<>', $paciente->id)
+                ->exists();
+
+            if ($existeCorreoPaciente) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj'    => 'El correo electrónico ya se encuentra asociado a otro paciente.',
+                ], 422);
             }
         }
 
-        // Campos obligatorios
-        if (!empty($request->nombre)) {
-            $paciente->nombres = $request->nombre;
-        }
+        DB::beginTransaction();
 
-        if (!empty($request->apellido_uno)) {
-            $paciente->apellido_uno = $request->apellido_uno;
-        }
+        try {
+            /*
+            |--------------------------------------------------------------------------
+            | Datos generales
+            |--------------------------------------------------------------------------
+            */
 
-        // Campos opcionales
-        $paciente->apellido_dos = $request->apellido_dos ?? $paciente->apellido_dos;
-
-        // Fecha de nacimiento opcional con validación
-        if (!empty($request->fecha_nacimiento)) {
-            try {
-                if (strpos($request->fecha_nacimiento, '/') !== false) {
-                    $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
-                } else {
-                    $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fecha_nacimiento)->format('Y-m-d');
-                }
-
-                $paciente->fecha_nac = $fechaConvertida;
-            } catch (\Exception $e) {
-                // Si hay error al parsear la fecha, se mantiene la actual
+            if ($request->filled('nombre')) {
+                $paciente->nombres = trim($request->nombre);
             }
-        }
 
-        // Sexo opcional
-        if (!empty($request->sexo) && $request->sexo != '0') {
-            $paciente->sexo = $request->sexo;
-        }
-
-        // Previsión opcional
-        $convenio = $request->convenio ?? null;
-
-        if ($convenio && $convenio != '0') {
-            $prevision = Prevision::find($convenio);
-
-            if ($prevision) {
-                $paciente->id_prevision = $prevision->id;
+            if ($request->filled('apellido_uno')) {
+                $paciente->apellido_uno = trim($request->apellido_uno);
             }
-        }
 
-        // Email opcional
-        if (!empty($request->email)) {
-            $paciente->email = $email_nuevo;
-        }
+            if ($request->exists('apellido_dos')) {
+                $apellidoDos = trim((string) $request->apellido_dos);
 
-        // Teléfono opcional
-        if (!empty($request->telefono)) {
-            $paciente->telefono_uno = $request->telefono;
-        }
+                $paciente->apellido_dos = $apellidoDos !== ''
+                    ? $apellidoDos
+                    : null;
+            }
 
-        // Variables para la respuesta
-        $region           = $request->region ?? null;
-        $ciudad           = $request->ciudad ?? null;
-        $direccion        = $request->direccion ?? null;
-        $numero_direccion = $request->numero_direccion ?? null;
+            /*
+            |--------------------------------------------------------------------------
+            | Fecha de nacimiento
+            |--------------------------------------------------------------------------
+            */
 
-        $prevision        = isset($paciente->id_prevision) ? Prevision::find($paciente->id_prevision) : null;
-        $region_paciente  = $region ? Region::where('id', $region)->first() : null;
-        $ciudad_paciente  = $ciudad ? Ciudad::where('id', $ciudad)->first() : null;
+            if ($request->filled('fecha_nacimiento')) {
+                try {
+                    $fechaNacimiento = trim($request->fecha_nacimiento);
 
-        if ($paciente->save()) {
-            $datos['estado'] = 1;
-            $datos['msj']    = 'exito';
-
-            $datos['paciente']                     = $paciente->toArray();
-            $datos['paciente']['region']           = $region_paciente ? $region_paciente->nombre : '';
-            $datos['paciente']['ciudad']           = $ciudad_paciente ? $ciudad_paciente->nombre : '';
-            $datos['paciente']['numero_direccion'] = $numero_direccion ?? '';
-            $datos['paciente']['prevision']        = $prevision ? $prevision->nombre : '';
-
-            /** modificar/crear dirección solo si se proporciona */
-            if (!empty($direccion) && !empty($ciudad)) {
-                $id_direccion    = $paciente->id_direccion;
-                $carga_direccion = Direccion::find($id_direccion);
-
-                if ($carga_direccion) {
-                    $carga_direccion->direccion  = $direccion;
-                    $carga_direccion->numero_dir = $numero_direccion ?? 's/n';
-                    $carga_direccion->id_ciudad  = $ciudad;
-
-                    if ($carga_direccion->save()) {
-                        $datos['direccion']['estado']    = 1;
-                        $datos['direccion']['msj']       = 'exito';
-                        $datos['direccion']['direccion'] = $carga_direccion;
+                    if (strpos($fechaNacimiento, '/') !== false) {
+                        $paciente->fecha_nac = Carbon::createFromFormat(
+                            'd/m/Y',
+                            $fechaNacimiento
+                        )->format('Y-m-d');
                     } else {
-                        $datos['direccion']['estado'] = 0;
-                        $datos['direccion']['msj']    = 'falla';
+                        $paciente->fecha_nac = Carbon::createFromFormat(
+                            'Y-m-d',
+                            $fechaNacimiento
+                        )->format('Y-m-d');
                     }
-                } else {
-                    $nueva_direccion             = new Direccion();
-                    $nueva_direccion->direccion  = $direccion;
-                    $nueva_direccion->numero_dir = $numero_direccion ?? 's/n';
-                    $nueva_direccion->id_ciudad  = $ciudad;
+                } catch (\Throwable $e) {
+                    DB::rollBack();
 
-                    if ($nueva_direccion->save()) {
-                        $datos['direccion']['estado']    = 1;
-                        $datos['direccion']['msj']       = 'exito';
-                        $datos['direccion']['direccion'] = $nueva_direccion;
+                    return response()->json([
+                        'estado' => 0,
+                        'msj'    => 'La fecha de nacimiento no tiene un formato válido.',
+                    ], 422);
+                }
+            }
 
-                        $paciente->id_direccion = $nueva_direccion->id;
+            /*
+            |--------------------------------------------------------------------------
+            | Sexo
+            |--------------------------------------------------------------------------
+            */
 
-                        if ($paciente->save()) {
-                            $datos['paciente']['id_direccion'] = $nueva_direccion->id;
+            if ($request->filled('sexo') && (string) $request->sexo !== '0') {
+                $paciente->sexo = $request->sexo;
+            }
 
-                            $datos['direccion']['update_paciente']['estado'] = 1;
-                            $datos['direccion']['update_paciente']['msj']    = 'exito';
-                        } else {
-                            $datos['direccion']['update_paciente']['estado'] = 0;
-                            $datos['direccion']['update_paciente']['msj']    = 'falla';
-                        }
-                    } else {
-                        $datos['direccion']['estado'] = 0;
-                        $datos['direccion']['msj']    = 'falla';
+            /*
+            |--------------------------------------------------------------------------
+            | Previsión
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->exists('convenio')) {
+                $convenio = $request->convenio;
+
+                if (!empty($convenio) && (string) $convenio !== '0') {
+                    $previsionExiste = Prevision::find($convenio);
+
+                    if (!$previsionExiste) {
+                        DB::rollBack();
+
+                        return response()->json([
+                            'estado' => 0,
+                            'msj'    => 'La previsión seleccionada no existe.',
+                        ], 422);
+                    }
+
+                    $paciente->id_prevision = $previsionExiste->id;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Correo
+            |--------------------------------------------------------------------------
+            */
+
+            if ($emailFueEnviado) {
+                /*
+                * Si viene vacío se guarda NULL.
+                * Si no viene en el request, se conserva el correo actual.
+                */
+                $paciente->email = $emailNuevo;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Teléfono
+            |--------------------------------------------------------------------------
+            */
+
+            if ($request->exists('telefono')) {
+                $telefono = trim((string) $request->telefono);
+
+                $paciente->telefono_uno = $telefono !== ''
+                    ? $telefono
+                    : null;
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Dirección
+            |--------------------------------------------------------------------------
+            */
+
+            $direccionFueEnviada = $request->exists('direccion');
+            $ciudadFueEnviada    = $request->exists('ciudad');
+
+            if ($direccionFueEnviada || $ciudadFueEnviada) {
+                $direccionTexto = trim((string) $request->input('direccion'));
+                $idCiudad       = $request->input('ciudad');
+                $numeroDir      = trim((string) $request->input('numero_direccion'));
+
+                if ($direccionTexto !== '' && !empty($idCiudad)) {
+                    $ciudadExiste = Ciudad::find($idCiudad);
+
+                    if (!$ciudadExiste) {
+                        DB::rollBack();
+
+                        return response()->json([
+                            'estado' => 0,
+                            'msj'    => 'La ciudad seleccionada no existe.',
+                        ], 422);
+                    }
+
+                    $direccionPaciente = null;
+
+                    if (!empty($paciente->id_direccion)) {
+                        $direccionPaciente = Direccion::find(
+                            $paciente->id_direccion
+                        );
+                    }
+
+                    if (!$direccionPaciente) {
+                        $direccionPaciente = new Direccion();
+                    }
+
+                    $direccionPaciente->direccion  = $direccionTexto;
+                    $direccionPaciente->numero_dir = $numeroDir !== ''
+                        ? $numeroDir
+                        : 's/n';
+                    $direccionPaciente->id_ciudad  = $idCiudad;
+                    $direccionPaciente->save();
+
+                    if ((int) $paciente->id_direccion !== (int) $direccionPaciente->id) {
+                        $paciente->id_direccion = $direccionPaciente->id;
                     }
                 }
             }
 
-            /** modifica usuario si el email cambió */
-            if (!empty($email_nuevo) && $email_origen != $email_nuevo) {
-                if (!$usuario) {
-                    $usuario = User::find($paciente->id_usuario);
-                }
+            /*
+            |--------------------------------------------------------------------------
+            | Guardar paciente
+            |--------------------------------------------------------------------------
+            */
 
-                if ($usuario) {
-                    $usuario->email = $email_nuevo;
+            $paciente->save();
 
-                    if ($usuario->save()) {
-                        $datos['usuario']['estado'] = 1;
-                        $datos['usuario']['msj']    = 'exito';
-                    } else {
-                        $datos['usuario']['estado'] = 0;
-                        $datos['usuario']['msj']    = 'falla';
-                    }
-                } else {
-                    $datos['usuario']['estado'] = 0;
-                    $datos['usuario']['msj']    = 'no encontrado';
-                }
+            /*
+            |--------------------------------------------------------------------------
+            | Actualizar usuario asociado
+            |--------------------------------------------------------------------------
+            |
+            | El usuario solamente se actualiza cuando se ingresa un correo nuevo.
+            | Si el profesional deja vacío el correo del paciente, se conserva el
+            | correo de users para no romper el inicio de sesión.
+            |
+            */
+
+            $correoCambio = $emailOrigen !== $emailNuevo;
+
+            if ($emailFueEnviado && $emailNuevo !== null && $correoCambio && $usuario){
+                $usuario->email = $emailNuevo;
+                $usuario->save();
             }
 
-            /** modificar horas medicas */
+            /*
+            |--------------------------------------------------------------------------
+            | Actualizar descripción de las horas médicas
+            |--------------------------------------------------------------------------
+            */
+
+            $nombreCompleto = trim(implode(' ', array_filter([
+                $paciente->nombres,
+                $paciente->apellido_uno,
+                $paciente->apellido_dos,
+            ])));
+
             HoraMedica::where('id_paciente', $paciente->id)
-                ->get()
-                ->each(function ($hora) use ($paciente) {
-                    $hora->update([
-                        'descripcion' => trim(
-                            $paciente->nombres . ' ' .
-                            $paciente->apellido_uno . ' ' .
-                            $paciente->apellido_dos
-                        )
-                    ]);
-                });
-        } else {
-            $datos['estado'] = 0;
-            $datos['msj']    = 'falla';
-            $datos['error']  = $error;
-        }
+                ->update([
+                    'descripcion' => $nombreCompleto,
+                ]);
 
-        return $datos;
+            DB::commit();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Preparar respuesta
+            |--------------------------------------------------------------------------
+            */
+
+            $paciente->refresh();
+
+            $previsionPaciente = !empty($paciente->id_prevision)
+                ? Prevision::find($paciente->id_prevision)
+                : null;
+
+            $direccionPaciente = !empty($paciente->id_direccion)
+                ? Direccion::find($paciente->id_direccion)
+                : null;
+
+            $ciudadPaciente = $direccionPaciente
+                ? Ciudad::find($direccionPaciente->id_ciudad)
+                : null;
+
+            $regionPaciente = null;
+
+            if ($ciudadPaciente && !empty($ciudadPaciente->id_region)) {
+                $regionPaciente = Region::find($ciudadPaciente->id_region);
+            } elseif ($request->filled('region')) {
+                $regionPaciente = Region::find($request->region);
+            }
+
+            $datosPaciente = $paciente->toArray();
+
+            $datosPaciente['prevision'] = $previsionPaciente
+                ? $previsionPaciente->nombre
+                : '';
+
+            $datosPaciente['direccion'] = $direccionPaciente
+                ? $direccionPaciente->direccion
+                : '';
+
+            $datosPaciente['numero_direccion'] = $direccionPaciente
+                ? $direccionPaciente->numero_dir
+                : '';
+
+            $datosPaciente['ciudad'] = $ciudadPaciente
+                ? $ciudadPaciente->nombre
+                : '';
+
+            $datosPaciente['region'] = $regionPaciente
+                ? $regionPaciente->nombre
+                : '';
+
+            return response()->json([
+                'estado'   => 1,
+                'msj'      => 'Paciente modificado correctamente.',
+                'paciente' => $datosPaciente,
+                'usuario'  => [
+                    'actualizado' => (
+                        $emailFueEnviado &&
+                        $emailNuevo !== null &&
+                        $correoCambio &&
+                        $usuario
+                    ),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Error al modificar paciente', [
+                'paciente_id' => $paciente->id,
+                'usuario_id'  => $paciente->id_usuario,
+                'mensaje'     => $e->getMessage(),
+                'archivo'     => $e->getFile(),
+                'linea'       => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'estado' => 0,
+                'msj'    => 'No fue posible modificar los datos del paciente.',
+            ], 500);
+        }
     }
 
     public function facturacion(){

@@ -70,6 +70,8 @@ return [
     // 'timezone' => 'UTC',
     'timezone' => env('APP_TIMEZONE', 'America/Santiago'),
 
+    'detect_multiple_sessions' => env('DETECT_MULTIPLE_SESSIONS', true),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

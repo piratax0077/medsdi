@@ -17,6 +17,8 @@ use App\Http\Controllers\UsoPersonalController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 Route::get('/Acceso_Profesional_NI/{token}', [App\Http\Controllers\EscritorioProfesional::class, 'acceso_pni'])->name('anonymous.acceso_pni');
 Route::get('/Check_sdi_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('anonymous.check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
@@ -3333,4 +3335,24 @@ Route::get('/test/mensajeria', function (\App\Services\Mensajeria\MensajeriaServ
             'tipo' => 'test_produccion',
         ]
     );
+});
+
+Route::post('/whatsapp/webhook', function (Request $request) {
+
+    Log::info('WhatsApp entrante desde Twilio', [
+        'from' => $request->input('From'),
+        'to'   => $request->input('To'),
+        'body' => $request->input('Body'),
+        'sid'  => $request->input('MessageSid'),
+    ]);
+
+    $mensaje = 'Hola 👋 Hemos recibido correctamente tu mensaje en MedSDI.';
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Message>' . htmlspecialchars($mensaje, ENT_XML1, 'UTF-8') . '</Message>
+</Response>';
+
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');
 });

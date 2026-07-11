@@ -19,14 +19,9 @@ class DetectMultipleSessions
      */
     public function handle(Request $request, Closure $next)
     {
-        // hacemos que pase sin verificar si la función está desactivada en la configuración
-
-        return $next($request);
-
-         // Desactivar si está configurado
-            if (!config('app.detect_multiple_sessions', true)) {
-                return $next($request);
-            }
+        if (!config('app.detect_multiple_sessions', true)) {
+            return $next($request);
+        }
 
         if (Auth::check()) {
             $user_id = Auth::id();

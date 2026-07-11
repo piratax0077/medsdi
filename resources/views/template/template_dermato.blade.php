@@ -393,7 +393,7 @@
                         $('#email_contacto_').text(contacto.email);
                         $('#telefono_contacto').text(contacto.telefono_uno);
                         $('#comuna_region_contacto').html(contacto.ciudad + '<br> ' + contacto.region);
-                
+
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);
@@ -534,7 +534,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
-                        let direccion = data.direccion ? data.direccion.direccion.direccion : 'Sin información';
+                        let direccion = data.paciente.direccion ? data.paciente.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {

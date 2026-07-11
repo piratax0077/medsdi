@@ -402,7 +402,7 @@
             $('#info_paciente-edit').css('display', 'none');
         }
 
- function guardarInformacionPaciente(){
+        function guardarInformacionPaciente(){
             let id_paciente = $('#id_paciente').val();
             let nombres = $('#paciente_nombre_edit').val();
             let apellido_uno = $('#paciente_apellido_uno_edit').val();
@@ -448,7 +448,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
-                        let direccion = data.direccion ? data.direccion.direccion.direccion : 'Sin información';
+                        let direccion = data.paciente.direccion ? data.paciente.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {

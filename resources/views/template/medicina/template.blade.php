@@ -428,6 +428,7 @@
             let comuna = $('#paciente_comuna_edit').val();
             let email = $('#paciente_email_edit').val();
             let telefono = $('#paciente_telefono_edit').val();
+            let convenio = $('#paciente_convenio_edit').val();
 
             let data = {
                 id: id_paciente,
@@ -441,6 +442,7 @@
                 ciudad: comuna,
                 email: email,
                 telefono: telefono,
+                convenio: convenio,
                 _token: CSRF_TOKEN
             }
 
@@ -460,6 +462,7 @@
                     if (data.estado == 1)
                     {
                         let paciente = data.paciente;
+                        let direccion = data.paciente.direccion ? data.paciente.direccion.direccion : 'Sin información';
                         $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
                         $('#fecha_nac_paciente').text(paciente.fecha_nac);
                         if (paciente.sexo == 'M') {
@@ -468,9 +471,10 @@
                             $('#sexo_paciente').text('Femenino');
                         }
                         $('#email_paciente_').text(paciente.email);
-                        $('#telefono_paciente').text(paciente.telefono_uno);
+                        $('#telefono_paciente_').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-                        $('#direccion_paciente_').text(data.direccion.direccion.direccion);
+                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
+                        $('#direccion_paciente_').text(direccion);
                         // $('.paciente_view_asistente').show();
                         // $('.paciente_edit_asistente').hide();
                         // $('#modificando_paciente_asistente').val(0);

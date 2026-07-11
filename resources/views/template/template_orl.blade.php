@@ -397,7 +397,7 @@
             $('#info_paciente-edit').css('display', 'none');
         }
 
-        function guardarInformacionPaciente() {
+        function guardarInformacionPaciente(){
             let id_paciente = $('#id_paciente').val();
             let nombres = $('#paciente_nombre_edit').val();
             let apellido_uno = $('#paciente_apellido_uno_edit').val();
@@ -411,104 +411,83 @@
             let telefono = $('#paciente_telefono_edit').val();
             let convenio = $('#paciente_convenio_edit').val();
 
-            if (!id_paciente || !nombres || !apellido_uno) {
-                swal({
-                    title: "Error",
-                    text: "Debe completar al menos el nombre y primer apellido",
-                    icon: "error",
-                });
-                return;
-            }
-
             let data = {
                 id: id_paciente,
+                nombre: nombres,
+                apellido_uno: apellido_uno,
+                apellido_dos: apellido_dos,
+                fecha_nacimiento: fecha_nac,
+                sexo: sexo,
+                direccion: direccion,
+                region: region,
+                ciudad: comuna,
+                email: email,
+                telefono: telefono,
+                convenio: convenio,
                 _token: CSRF_TOKEN
-            };
+            }
 
-            if (nombres) data.nombre = nombres;
-            if (apellido_uno) data.apellido_uno = apellido_uno;
-            if (apellido_dos) data.apellido_dos = apellido_dos;
-            if (fecha_nac) data.fecha_nacimiento = fecha_nac;
-            if (sexo && sexo != '0') data.sexo = sexo;
-            if (direccion) data.direccion = direccion;
-            if (region && region != '0') data.region = region;
-            if (comuna && comuna != '0') data.ciudad = comuna;
-            if (email) data.email = email;
-            if (telefono) data.telefono = telefono;
-            if (convenio && convenio != '0') data.convenio = convenio;
-
+            console.log(data);
             let url = "{{ route('asistente.paciente.modificar') }}";
 
             $.ajax({
+
                 url: url,
                 type: "get",
                 data: data,
-            })
-            .done(function(data) {
+                })
+                .done(function(data) {
                 console.log(data);
+                if (data.estado == 1)
+                {
+                    if (data.estado == 1)
+                    {
+                        let paciente = data.paciente;
+                        let direccion = data.paciente.direccion ? data.paciente.direccion.direccion : 'Sin información';
+                        $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
+                        $('#fecha_nac_paciente').text(paciente.fecha_nac);
+                        if (paciente.sexo == 'M') {
+                            $('#sexo_paciente').text('Masculino');
+                        } else {
+                            $('#sexo_paciente').text('Femenino');
+                        }
+                        $('#email_paciente_').text(paciente.email);
+                        $('#telefono_paciente_').text(paciente.telefono_uno);
+                        $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
+                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
+                        $('#direccion_paciente_').text(direccion);
+                        // $('.paciente_view_asistente').show();
+                        // $('.paciente_edit_asistente').hide();
+                        // $('#modificando_paciente_asistente').val(0);
 
-                if (data.estado == 1) {
-                    let paciente = data.paciente;
-                    let direccion = data.direccion && data.direccion.direccion
-                        ? data.direccion.direccion.direccion
-                        : 'Sin información';
-
-                    $('#nombre_completo_paciente').text(
-                        paciente.nombres + ' ' + paciente.apellido_uno + ' ' + (paciente.apellido_dos ?? '')
-                    );
-
-                    $('#fecha_nac_paciente').text(paciente.fecha_nac ?? 'Sin información');
-
-                    if (paciente.sexo == 'M') {
-                        $('#sexo_paciente').text('Masculino');
-                    } else if (paciente.sexo == 'F') {
-                        $('#sexo_paciente').text('Femenino');
-                    } else {
-                        $('#sexo_paciente').text('Sin información');
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Actualización Exitosa",
+                            icon: "success",
+                        });
+                        cancelarInformacionPaciente();
                     }
-
-                    $('#email_paciente_').text(paciente.email ?? 'Sin información');
-                    $('#telefono_paciente_').text(paciente.telefono_uno ?? 'Sin información');
-                    $('#comuna_region_paciente').html((paciente.ciudad ?? '') + '<br> ' + (paciente.region ?? ''));
-                    $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
-                    $('#direccion_paciente_').text(direccion);
-
+                    else
+                    {
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
                     swal({
                         title: "Actualización de Paciente",
-                        text: data.msj && data.msj != 'exito'
-                            ? data.msj
-                            : "Actualización Exitosa",
-                        icon: "success",
-                    });
-
-                    cancelarInformacionPaciente();
-                } else {
-                    swal({
-                        title: "Actualización de Paciente",
-                        text: data.msj
-                            ? data.msj
-                            : "Falla en Actualización.\nIntente de nuevo.",
+                        text: "Falla en Actualización.\nIntente de nuevo.",
                         icon: "error",
                     });
                 }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError);
-
-                let mensaje = "Ocurrió un error inesperado.\nIntente de nuevo.";
-
-                if (jqXHR.responseJSON && jqXHR.responseJSON.msj) {
-                    mensaje = jqXHR.responseJSON.msj;
-                } else if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-                    mensaje = jqXHR.responseJSON.message;
-                }
-
-                swal({
-                    title: "Actualización de Paciente",
-                    text: mensaje,
-                    icon: "error",
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
                 });
-            });
         }
 
         function buscar_ciudad_paciente(id_ciudad = 0) {

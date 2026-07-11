@@ -3303,66 +3303,110 @@ class EscritorioProfesional extends Controller
 
     public function cambio_estado_lugar_atencion(Request $request)
     {
-        /**
-         * Estados usados en la vista:
-         * 1 = Activo / habilitado
-         * 0 = Inactivo / deshabilitado
-         * 3 = Eliminado o desasociado visualmente
-         *
-         * Importante:
-         * Al deshabilitar o eliminar/desasociar un lugar de atención se liberan
-         * sus horarios. Así, si el profesional usa ese mismo bloque horario en
-         * otro lugar, al volver a habilitar este lugar deberá configurar un nuevo
-         * horario y se evita una sobreagenda silenciosa.
-         */
         $estado = (int) $request->estado;
-        $id_lugar_atencion = (int) $request->id_lugar_atencion;
+        $idLugarAtencion = (int) $request->id_lugar_atencion;
 
-        if (empty($id_lugar_atencion) || !in_array($estado, [0, 1, 3])) {
-            return 'fail';
+        if (
+            empty($idLugarAtencion) ||
+            !in_array($estado, [0, 1, 3], true)
+        ) {
+            return response()->json([
+                'estado' => 'fail',
+                'mensaje' => 'Los datos enviados no son válidos.',
+            ], 422);
         }
 
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $profesional = Profesional::where(
+            'id_usuario',
+            Auth::user()->id
+        )->first();
+
         if (!$profesional) {
-            return 'fail';
+            return response()->json([
+                'estado' => 'fail',
+                'mensaje' => 'No se encontró al profesional.',
+            ], 404);
         }
 
-        $ProfesionalLugar = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $id_lugar_atencion)
+        $profesionalLugar = ProfesionalesLugaresAtencion::where(
+                'id_lugar_atencion',
+                $idLugarAtencion
+            )
             ->where('id_profesional', $profesional->id)
             ->first();
 
-        if (!$ProfesionalLugar) {
-            return 'fail';
+        if (!$profesionalLugar) {
+            return response()->json([
+                'estado' => 'fail',
+                'mensaje' => 'El lugar de atención no está asociado al profesional.',
+            ], 404);
         }
 
         DB::beginTransaction();
 
         try {
-            $ProfesionalLugar->estado = $estado;
-            $ProfesionalLugar->save();
+            $estadoAnterior = (int) $profesionalLugar->estado;
 
-            if (in_array($estado, [0, 3])) {
-                /**
-                 * Liberar horarios del lugar de atención.
-                 * No se restauran automáticamente al volver a habilitar,
-                 * para obligar a validar/configurar horarios nuevamente.
-                 */
+            $profesionalLugar->estado = $estado;
+            $profesionalLugar->save();
+
+            /*
+            * Al deshabilitar o desasociar el lugar:
+            * los horarios se conservan, pero quedan inactivos.
+            */
+            if (in_array($estado, [0, 3], true)) {
                 ProfesionalHorario::where('id_profesional', $profesional->id)
-                    ->where('id_lugar_atencion', $id_lugar_atencion)
-                    ->delete();
+                    ->where('id_lugar_atencion', $idLugarAtencion)
+                    ->where('estado', 1)
+                    ->update([
+                        'estado' => 0,
+                        'deshabilitado_por_lugar' => 1,
+                        'updated_at' => now(),
+                    ]);
+            }
+
+            /*
+            * Al volver a habilitar:
+            * se recuperan solamente los horarios que fueron deshabilitados
+            * automáticamente por la desactivación del lugar.
+            */
+            if ($estado === 1 && in_array($estadoAnterior, [0, 3], true)) {
+                ProfesionalHorario::where('id_profesional', $profesional->id)
+                    ->where('id_lugar_atencion', $idLugarAtencion)
+                    ->where('deshabilitado_por_lugar', 1)
+                    ->update([
+                        'estado' => 1,
+                        'deshabilitado_por_lugar' => 0,
+                        'updated_at' => now(),
+                    ]);
             }
 
             DB::commit();
-            return 'ok';
-        } catch (\Exception $e) {
+
+            $mensaje = $estado === 1
+                ? 'El lugar de atención fue habilitado y sus horarios anteriores fueron recuperados.'
+                : 'El lugar de atención fue deshabilitado. Sus horarios fueron conservados para poder recuperarlos posteriormente.';
+
+            return response()->json([
+                'estado' => 'ok',
+                'mensaje' => $mensaje,
+            ]);
+        } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error('Error cambio_estado_lugar_atencion: ' . $e->getMessage(), [
+
+            Log::error('Error cambio_estado_lugar_atencion', [
+                'mensaje' => $e->getMessage(),
+                'archivo' => $e->getFile(),
+                'linea' => $e->getLine(),
                 'id_profesional' => $profesional->id,
-                'id_lugar_atencion' => $id_lugar_atencion,
-                'estado' => $estado,
+                'id_lugar_atencion' => $idLugarAtencion,
+                'estado_solicitado' => $estado,
             ]);
 
-            return 'fail';
+            return response()->json([
+                'estado' => 'fail',
+                'mensaje' => 'No fue posible cambiar el estado del lugar de atención.',
+            ], 500);
         }
     }
 
@@ -8945,6 +8989,8 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
         $profesional = Profesional::with(['TipoEspecialidad', 'Especialidad'])->find($id);
         $lugares = $profesional->LugaresAtencion()->get();
+        // ultimos 5 lugares de atencion
+        $lugares = $lugares->take(5);
         foreach ($lugares as $lugar) {
             $lugar->dir = $lugar->Direccion()->first();
         }
