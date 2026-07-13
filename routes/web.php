@@ -3337,22 +3337,16 @@ Route::get('/test/mensajeria', function (\App\Services\Mensajeria\MensajeriaServ
     );
 });
 
-Route::post('/whatsapp/webhook', function (Request $request) {
-
-    Log::info('WhatsApp entrante desde Twilio', [
-        'from' => $request->input('From'),
-        'to'   => $request->input('To'),
-        'body' => $request->input('Body'),
-        'sid'  => $request->input('MessageSid'),
-    ]);
-
-    $mensaje = 'Hola 👋 Hemos recibido correctamente tu mensaje en MedSDI.';
-
-    $xml = '<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-    <Message>' . htmlspecialchars($mensaje, ENT_XML1, 'UTF-8') . '</Message>
-</Response>';
-
-    return response($xml, 200)
-        ->header('Content-Type', 'text/xml');
+Route::get('/test/config-mensajeria', function () {
+    return [
+        'driver' => config('mensajeria.driver'),
+        'sid_inicio' => substr(
+            (string) config('mensajeria.twilio.sid'),
+            0,
+            5
+        ),
+        'from' => config('mensajeria.twilio.from'),
+    ];
 });
+
+Route::post('/whatsapp/webhook', [\App\Http\Controllers\WhatsappController::class, 'webhook'])->name('whatsapp.webhook');

@@ -7,6 +7,7 @@ use App\Models\JitsiVideo;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Services\Mensajeria\MensajeriaService;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
@@ -549,97 +550,279 @@ class JitsiController extends Controller
         return $datos;
     }
 
-    public function envioNotificacionLlamada()
+    public static function buildMensajeRecordatorioWhatsapp($paciente, $profesional, $fechaConsulta, $horaConsulta, $link): string
     {
+        $nombrePaciente = trim(($paciente->nombres ?? '') . ' ' . ($paciente->apellido_uno ?? ''));
+        $nombreProfesional = trim(($profesional->nombres ?? '') . ' ' . ($profesional->apellido_uno ?? ''));
 
+        return "MED-SDI - Recordatorio de consulta\n"
+            . "Hola {$nombrePaciente}.\n"
+            . "Tu consulta con {$nombreProfesional} está programada para {$fechaConsulta} a las {$horaConsulta}.\n"
+            . "Accede a la videollamada aquí:\n{$link}";
+    }
+
+
+    public function envioNotificacionLlamada(MensajeriaService $mensajeria)
+    {
         $fecha = date('Y-m-d');
-        // $fecha = '2025-05-05';
-
-
-        // Obtener la hora actual
         $horaActual = date('H:i:s');
-
-        // Obtener la hora actual con 5 minutos añadidos
         $horaMasCinco = date('H:i:s', strtotime('+5 minutes'));
 
-        $filtros = array();
-        $filtros[] = array('fecha_consulta', $fecha);
-        $filtros[] = array('tipo_hora_medica', 'T');
-        $filtros[] = array('id_jitsi_video_consulta', '<>','');
-        // $filtros[] = array('hora_inicio', $hora);
+        $registros = HoraMedica::whereDate('fecha_consulta', $fecha)
+            ->where('tipo_hora_medica', 'T')
+            ->whereNotNull('id_jitsi_video_consulta')
+            ->where('id_jitsi_video_consulta', '<>', '')
+            ->whereIn('id_estado', [1, 2, 4, 8])
+            /*
+             * Descomentar estas dos líneas cuando quieras limitar
+             * el envío a consultas dentro de los próximos 5 minutos.
+             */
+            // ->whereTime('hora_inicio', '>', $horaActual)
+            // ->whereTime('hora_inicio', '<=', $horaMasCinco)
+            ->get();
 
+        $resultados = [];
 
-        $registros = HoraMedica::where($filtros)
-                                ->whereIn('id_estado', [1,2,4,8])
-                                //->whereTime('hora_inicio', '>', $horaActual)
-                                //->whereTime('hora_inicio', '<', $horaMasCinco)
-                                ->get();
+        foreach ($registros as $value) {
+            $correo = [
+                'estado' => 0,
+                'msj' => 'Correo no procesado.',
+            ];
 
-        foreach ($registros as $key => $value)
-        {
+            $resultadoWhatsapp = [
+                'estado' => 0,
+                'msj' => 'WhatsApp no procesado.',
+                'sid' => null,
+            ];
 
-            $registro_jitsi = JitsiVideo::find($value->id_jitsi_video_consulta);
-            if($registro_jitsi->estado == 1)
-            {
+            try {
+                $registroJitsi = JitsiVideo::find($value->id_jitsi_video_consulta);
 
-                $id_profesional = $registro_jitsi->id_profesional;
-                $profesional = Profesional::find($id_profesional);
-
-                $id_paciente = $registro_jitsi->id_paciente;
-                $paciente = Paciente::find($id_paciente);
-
-                $nombre_grupo = $registro_jitsi->nombre_grupo;
-
-                $lugar_atencion = LugarAtencion::find($value->id_lugar_atencion);
-
-                $blade = 'notificacion_video_llamada';
-                $to = array(
-                        array('email' => $paciente->email,'name' => $paciente->nombres.' '.$paciente->apellido_uno)
-                    );
-                $cc = array();
-                $bcc = array();
-                $asunto = 'MED-SDI - Notificación Link de Consulta';
-                $body = array(
-                    'nombre_paciente' => $paciente->nombres.' '.$paciente->apellido_uno,
-                    'nombre_profesional' => $profesional->nombres.' '.$profesional->apellido_uno,
-                    'link_meet' => env('JITSI_LINK_MEET').env('JITSI_APP_ID').'/'.$nombre_grupo,
-                    'lugar_atencion' => $lugar_atencion->nombre,
-                    'fecha_consulta' => $value->fecha_consulta,
-                    'hora_consulta' => $value->hora_inicio
-                );
-
-                $archivo = '';/** pendiente */
-                $id_institucion = '';
-
-                $correo = SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-                if($correo['estado'])
-                {
-                    /** estado de notificado */
-                    $registro_jitsi->estado = 2;
-                    $registro_jitsi->save();
+                if (!$registroJitsi) {
+                    throw new \Exception('No se encontró el registro Jitsi.');
                 }
 
+                if ((int) $registroJitsi->estado !== 1) {
+                    $resultados[] = [
+                        'id_hora_medica' => $value->id,
+                        'correo' => [
+                            'estado' => 0,
+                            'msj' => 'La notificación ya fue procesada.',
+                        ],
+                        'whatsapp' => [
+                            'estado' => 0,
+                            'msj' => 'La notificación ya fue procesada.',
+                            'sid' => null,
+                        ],
+                    ];
 
-            }
-            else
-            {
-                $correo = array(
-                    'estado' => 1,
-                    'msj' => 'notificacion ya ha sido enviada'
+                    continue;
+                }
+
+                $profesional = Profesional::find($registroJitsi->id_profesional);
+                $paciente = Paciente::find($registroJitsi->id_paciente);
+                $lugarAtencion = LugarAtencion::find($value->id_lugar_atencion);
+
+                if (!$profesional) {
+                    throw new \Exception('No se encontró el profesional.');
+                }
+
+                if (!$paciente) {
+                    throw new \Exception('No se encontró el paciente.');
+                }
+
+                if (!$lugarAtencion) {
+                    throw new \Exception('No se encontró el lugar de atención.');
+                }
+
+                $linkConsulta = rtrim(env('JITSI_LINK_MEET'), '/')
+                    . '/'
+                    . trim(env('JITSI_APP_ID'), '/')
+                    . '/'
+                    . ltrim($registroJitsi->nombre_grupo, '/');
+
+                /*
+                 * Envío de correo.
+                 */
+                if (!empty($paciente->email)) {
+                    $correo = SendMailController::envioCorreo(
+                        'notificacion_video_llamada',
+                        [
+                            [
+                                'email' => trim($paciente->email),
+                                'name' => trim(
+                                    ($paciente->nombres ?? '')
+                                    . ' '
+                                    . ($paciente->apellido_uno ?? '')
+                                ),
+                            ],
+                        ],
+                        [],
+                        [],
+                        'MED-SDI - Notificación Link de Consulta',
+                        [
+                            'nombre_paciente' => trim(
+                                ($paciente->nombres ?? '')
+                                . ' '
+                                . ($paciente->apellido_uno ?? '')
+                            ),
+                            'nombre_profesional' => trim(
+                                ($profesional->nombres ?? '')
+                                . ' '
+                                . ($profesional->apellido_uno ?? '')
+                            ),
+                            'link_meet' => $linkConsulta,
+                            'lugar_atencion' => $lugarAtencion->nombre,
+                            'fecha_consulta' => $value->fecha_consulta,
+                            'hora_consulta' => $value->hora_inicio,
+                        ],
+                        '',
+                        ''
+                    );
+                } else {
+                    $correo = [
+                        'estado' => 0,
+                        'msj' => 'El paciente no tiene correo electrónico.',
+                    ];
+                }
+
+                /*
+                 * Envío de WhatsApp usando MensajeriaService,
+                 * el mismo servicio utilizado por /test/mensajeria.
+                 */
+                $telefono = $this->normalizarTelefonoWhatsapp(
+                    $paciente->telefono_uno ?? null
+                );
+
+                if ($telefono) {
+                    $mensajeWhatsapp = self::buildMensajeRecordatorioWhatsapp(
+                        $paciente,
+                        $profesional,
+                        date('d-m-Y', strtotime($value->fecha_consulta)),
+                        substr((string) $value->hora_inicio, 0, 5),
+                        $linkConsulta
+                    );
+
+                    $resultadoWhatsapp = $mensajeria->enviarWhatsapp(
+                        $telefono,
+                        $mensajeWhatsapp,
+                        [
+                            'tipo' => 'recordatorio_telemedicina',
+                            'id_hora_medica' => $value->id,
+                            'id_paciente' => $paciente->id,
+                            'id_profesional' => $profesional->id,
+                            'id_jitsi_video_consulta' => $registroJitsi->id,
+                        ]
+                    );
+
+                    if (!is_array($resultadoWhatsapp)) {
+                        $resultadoWhatsapp = [
+                            'estado' => (bool) $resultadoWhatsapp,
+                            'msj' => $resultadoWhatsapp
+                                ? 'WhatsApp enviado correctamente.'
+                                : 'No fue posible enviar el WhatsApp.',
+                            'sid' => null,
+                        ];
+                    }
+                } else {
+                    $resultadoWhatsapp = [
+                        'estado' => 0,
+                        'msj' => 'El paciente no tiene un teléfono móvil chileno válido.',
+                        'sid' => null,
+                    ];
+                }
+
+                $correoEnviado = !empty($correo['estado']);
+                $whatsappEnviado = !empty($resultadoWhatsapp['estado']);
+
+                /*
+                 * Mientras se valida WhatsApp, solo se marca como notificado
+                 * cuando ambos canales fueron enviados correctamente.
+                 * Así el cron puede reintentar si WhatsApp falla.
+                 */
+                if ($correoEnviado && $whatsappEnviado) {
+                    $registroJitsi->estado = 2;
+                    $registroJitsi->save();
+                }
+
+                $resultadoActual = [
+                    'id_hora_medica' => $value->id,
+                    'id_paciente' => $paciente->id,
+                    'telefono_original' => $paciente->telefono_uno ?? null,
+                    'telefono_normalizado' => $telefono,
+                    'correo' => $correo,
+                    'whatsapp' => $resultadoWhatsapp,
+                ];
+
+                $resultados[] = $resultadoActual;
+
+                Log::build([
+                    'path' => storage_path(
+                        'logs/log_envio_notificacion_link_consulta_'
+                        . date('Ymd')
+                        . '.log'
+                    ),
+                ])->info(
+                    'Resultado recordatorio de telemedicina',
+                    $resultadoActual
+                );
+            } catch (\Throwable $e) {
+                $resultadoError = [
+                    'id_hora_medica' => $value->id ?? null,
+                    'correo' => $correo,
+                    'whatsapp' => $resultadoWhatsapp,
+                    'error' => $e->getMessage(),
+                ];
+
+                $resultados[] = $resultadoError;
+
+                Log::error(
+                    'Error enviando recordatorio de telemedicina',
+                    [
+                        'id_hora_medica' => $value->id ?? null,
+                        'error' => $e->getMessage(),
+                        'archivo' => $e->getFile(),
+                        'linea' => $e->getLine(),
+                    ]
                 );
             }
-
-            echo json_encode($correo);
-
-            Log::build([
-                'path' => storage_path('logs/log_envio_notificacion_link_consulta_' . date('Ymd') . '.log'),
-              ])->info(json_encode($correo) );
-
         }
 
-        return $registros;
+        return response()->json([
+            'estado' => 1,
+            'fecha_ejecucion' => date('Y-m-d H:i:s'),
+            'cantidad' => count($resultados),
+            'resultados' => $resultados,
+        ]);
+    }
 
+    private function normalizarTelefonoWhatsapp($telefono)
+    {
+        if ($telefono === null) {
+            return null;
+        }
+
+        $telefono = preg_replace('/\D+/', '', (string) $telefono);
+
+        if ($telefono === '' || $telefono === '569') {
+            return null;
+        }
+
+        /*
+         * Ejemplos aceptados:
+         * 995474660    -> 56995474660
+         * 56995474660  -> 56995474660
+         * +56 9 9547 4660 -> 56995474660
+         */
+        if (strlen($telefono) === 9 && substr($telefono, 0, 1) === '9') {
+            $telefono = '56' . $telefono;
+        }
+
+        if (!preg_match('/^569\d{8}$/', $telefono)) {
+            return null;
+        }
+
+        return $telefono;
     }
 
 }
