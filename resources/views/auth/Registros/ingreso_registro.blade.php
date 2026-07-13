@@ -89,14 +89,30 @@
                                     <input type="text" class="form-control" name="email" id="email" value="" placeholder="correo@ejemplo.com o 12345678-9">
                                     <small>Escriba correo electrónico o RUT sin puntos y con guión</small>
                                 </div>
-                                <div class="form-group mb-3">
+                                 <div class="form-group mb-3">
+            <label class="floating-label-activo-sm">Ingrese su contraseña</label>
+            <div>
+                <input type="password" class="form-control" name="password" id="password"
+                    value="" style="padding-right: 40px;">
+                <span id="toggle-password" onclick="togglePassword()"
+                    style="position: absolute; right: 12px; top: 32%; transform: translateY(-50%); cursor: pointer; user-select: none;">
+                    <i class="feather icon-eye-off"></i>
+                </span>
+            </div>
+            <a href="javascript:void(0);" class="text-c-blue forgot-password" onclick="activar_recuperar_password();">
+                                            ¿Olvidó su contraseña?
+                                       </a>
+        </div>
+
+
+                                <!--<div class="form-group mb-3">
                                     <label class="floating-label-activo-sm">Ingrese su contraseña</label>
                                     <input type="password" class="form-control" name="password" id="password"
                                         value="">
                                        <a href="javascript:void(0);" class="text-c-blue forgot-password" onclick="activar_recuperar_password();">
                                             ¿Olvidó su contraseña?
                                        </a>
-                                </div>
+                                </div>-->
 
                                 <button class="btn btn-info mb-4" id="btn-ingresar">Ingresar</button>
                             </form>
@@ -273,6 +289,21 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <script>
+
+function togglePassword()
+{
+    var passwordInput = document.getElementById('password');
+    var toggleIcon = document.getElementById('toggle-password');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.innerHTML = '<i class="feather icon-eye"></i>';
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.innerHTML = '<i class="feather icon-eye-off"></i>';
+    }
+}
+
+
         function activar_registro()
         {
             $('#ingreso').hide();
