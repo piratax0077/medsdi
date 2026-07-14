@@ -167,71 +167,62 @@
                                         });
                                     },
 
-                                    events: function(start, end, callback){
-                                            var arrayTemp = [];
-                                            let url = "{{ route('hora_medica.ver') }}";
-                                            $.ajax({
-                                                url: url,
-                                                type: "GET",
-                                                data: {
-                                                    id_profesional: id_profesional,
-                                                    id_lugar_atencion: id_lugar_atencion,
-                                                },
-                                                success:function(data){
-                                                    console.log(data);
-                                                    if (data !== 'null')
-                                                    {
-                                                        if(data.estado == 1)
-                                                        {
-                                                            var arrayTemp = [];
-                                                            data.registros.forEach(element => {
-                                                                var rut = element.paciente.rut+' | ';
-                                                                var valor = element.estado.valor+' | ';
-                                                                var comentarios_confirmacion = '';
-                                                                if(comentarios_confirmacion != 'null')
-                                                                    comentarios_confirmacion = element.comentarios_confirmacion+' | ';
-                                                                var nombre = element.paciente.prevision.nombre
-                                                                var descripcion = '';
+                                    events: function(fetchInfo, successCallback, failureCallback) {
+                                        let url = "{{ route('hora_medica.ver') }}";
 
-                                                                if(element.tipo_hora_medica == 'B')
-                                                                {
-                                                                    descripcion += valor;
-                                                                    arrayTemp.push({
-                                                                                    id: element.id,
-                                                                                    title: element.descripcion,
-                                                                                    description: descripcion ,
-                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                    backgroundColor: element.estado.color
-                                                                    });
-                                                                }
-                                                                else
-                                                                {
-                                                                    descripcion += rut;
-                                                                    descripcion += valor;
-                                                                    descripcion += comentarios_confirmacion;
-                                                                    descripcion += nombre;
-                                                                    arrayTemp.push({
-                                                                                    id: element.id,
-                                                                                    title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                    description: descripcion ,
-                                                                                    start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                    end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                    backgroundColor: element.estado.color
-                                                                    });
-                                                                }
-                                                            });
-                                                            console.log(arrayTemp);
-                                                            end(arrayTemp);
-                                                        }
-                                                        else
-                                                        {
-                                                            console.log('falla en carga');
-                                                        }
+                                        $.ajax({
+                                            url: url,
+                                            type: "GET",
+                                            dataType: "json",
+                                            data: {
+                                                id_profesional: id_profesional,
+                                                id_lugar_atencion: id_lugar_atencion,
+                                                tipo_agenda: tipo_agenda,
+                                                fecha_inicio: fetchInfo.startStr,
+                                                fecha_termino: fetchInfo.endStr
+                                            },
+                                            success: function(data) {
+                                                if (!data || Number(data.estado) !== 1) {
+                                                    successCallback([]);
+                                                    return;
+                                                }
+
+                                                const eventos = (data.registros || []).map(function(element) {
+                                                    const paciente = element.paciente || {};
+                                                    const estado = element.estado || {};
+                                                    const prevision = paciente.prevision || {};
+
+                                                    let descripcion = '';
+
+                                                    if (element.tipo_hora_medica === 'B') {
+                                                        descripcion = (estado.valor || '') + ' | ';
+                                                    } else {
+                                                        descripcion =
+                                                            (paciente.rut || '') + ' | ' +
+                                                            (estado.valor || '') + ' | ' +
+                                                            (element.comentarios_confirmacion || '') + ' | ' +
+                                                            (prevision.nombre || '');
                                                     }
 
-                                                }
-                                            });
+                                                    return {
+                                                        id: element.id,
+                                                        title: element.tipo_hora_medica === 'B'
+                                                            ? element.descripcion
+                                                            : (element.tipo_hora_medica || '') + ' - ' + (element.descripcion || ''),
+                                                        description: descripcion,
+                                                        start: element.fecha_consulta + 'T' + element.hora_inicio,
+                                                        end: element.fecha_consulta + 'T' + element.hora_termino,
+                                                        backgroundColor: estado.color || null
+                                                    };
+                                                });
+
+                                                successCallback(eventos);
+                                            },
+                                            error: function(xhr) {
+                                                console.error('Error cargando horas médicas:', xhr);
+                                                failureCallback(xhr);
+                                            }
+                                        });
                                     },
 
                                     eventClick: function(info) {
