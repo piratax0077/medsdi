@@ -194,6 +194,14 @@
                         </div>
                         @endif
                         <div class="card social-widget-card bg-c-info opacidad px-0">
+                            <a href="#" class="btn" type="button">
+                                <div class="card-body">
+                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
+                                    <h5 class="my-auto text-white">Reportes y estadísticas</h5>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card social-widget-card bg-c-info opacidad px-0">
                             <a href="{{ route('profesional.flujo_caja') }}" class="btn" type="button">
                                 <div class="card-body">
                                     <img class="wid-30 mb-3" src="{{ asset('images/iconos/flujo_caja_3.svg') }}">

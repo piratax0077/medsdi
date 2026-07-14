@@ -10,7 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class=" font-weight-bold">Administrador general Centro Médico</h5>
+                                <h5 class=" font-weight-bold">Administrador general de {{ mb_strtoupper($institucion->nombre) }}</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -90,12 +90,22 @@
                     </div>
 
                 </div>
-                <div class="col">
+                {{--<div class="col">
                      <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.mis_profesionales') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-45 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                                 <h6 class="mt-2 mb-0">Info profesionales del CM</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>--}}
+                <div class="col">
+                     <div class="card subir py-auto">
+                        <a href="#">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-45 text-center" src="{{ asset('images/iconos/estadisticas.png') }}">
+                                <h6 class="mt-2 mb-0">Reportes y estadísticas</h6>
                             </div>
                         </a>
                     </div>

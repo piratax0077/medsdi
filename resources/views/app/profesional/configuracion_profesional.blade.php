@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
+                        {{--<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.diagnosticos_cie10') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -65,6 +65,21 @@
                                         <h5>
                                             Configuración Diagnósticos CIE-10
                                         </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>--}}
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
+                            <div class="card subir py-3">
+                                <a href="#">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-60 text-center mb-2"
+                                            src="{{ asset('images/iconos/diagnosticos-frecuentes.svg') }}"
+                                            alt=" Configuración Diagnósticos CIE-10">
+                                        <h5 class="mb-3">
+                                            MedStudio
+                                        </h5>
+                                        <!--<p class="text-dark">Diseña documentos clínicos únicos para tu consulta</p>-->
                                     </div>
                                 </a>
                             </div>
