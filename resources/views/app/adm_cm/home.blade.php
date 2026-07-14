@@ -102,7 +102,7 @@
                 </div>--}}
                 <div class="col">
                      <div class="card subir py-auto">
-                        <a href="#">
+                        <a href="{{ ROUTE('adm_cm.reportes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-45 text-center" src="{{ asset('images/iconos/estadisticas.png') }}">
                                 <h6 class="mt-2 mb-0">Reportes y estadísticas</h6>

@@ -12774,5 +12774,117 @@ public function eliminarFoto(Request $request)
         }
     }
 
+    public function reportes()
+    {
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
 
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+
+        $view = view('app.adm_cm.reportes', compact('institucion','tipo_institucion'));
+        return $view;
+    }
 }

@@ -71,7 +71,7 @@
                         </div>--}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
-                                <a href="#">
+                                <a href="{{ ROUTE('profesional.medstudio') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-2"
                                             src="{{ asset('images/iconos/diagnosticos-frecuentes.svg') }}"
@@ -114,7 +114,7 @@
                                 </a>
                             </div>
                         </div>
-                       
+
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
                                 <a href="#">
@@ -177,7 +177,7 @@
                                 {{-- </a> --}}
                             </div>
                         </div>
-                    
+
                         @if($profesional->id_especialidad == 2)
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">

@@ -964,7 +964,8 @@ Route::group([
 
     // Menu Profesional
     Route::get('facturacion', [App\Http\Controllers\EscritorioProfesional::class, 'facturacion'])->name('profesional.facturacion');
-
+    Route::get('/medstudio', [App\Http\Controllers\EscritorioProfesional::class, 'medstudio'])->name('profesional.medstudio');
+    Route::get('/reportes', [App\Http\Controllers\EscritorioProfesional::class, 'reportes'])->name('profesional.reportes');
 });
 
 
@@ -1955,6 +1956,7 @@ Route::group([
     Route::post('/registrar_servicio_cm', [App\Http\Controllers\AdministradorCmController::class, 'registrar_servicio_cm'])->name('adm_cm.registrar_servicio_cm');
     Route::post('/eliminar_servicio_cm', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_servicio_cm'])->name('adm_cm.eliminar_servicio_cm');
     Route::get('/Estadisticas', [App\Http\Controllers\AdministradorCmController::class, 'estadisticas'])->name('adm_cm.estadisticas');
+    Route::get('/Reportes', [App\Http\Controllers\AdministradorCmController::class, 'reportes'])->name('adm_cm.reportes');
 
     Route::post('/procedimientos/institucion/registro', [App\Http\Controllers\ProcedimientosCentroController::class, 'registrar_r'])->name('adm_cm.procedimiento.registrar');
     Route::post('/procedimientos/institucion/modificar', [App\Http\Controllers\ProcedimientosCentroController::class, 'modificar_r'])->name('adm_cm.procedimiento.modificar');
@@ -3284,6 +3286,7 @@ Route::post('/guardar_dieta_nutricional', [App\Http\Controllers\EscritorioProfes
 Route::post('/examenes/enviar/mail', [App\Http\Controllers\EscritorioProfesional::class, 'enviarMailExamenes'])->name('profesional.examenes.enviar');
 Route::post('/dame_correlativo', [App\Http\Controllers\EscritorioProfesional::class, 'dameCorrelativo'])->name('profesional.dame_correlativo');
 Route::post('/profesional/cambiar_estado', [App\Http\Controllers\EscritorioProfesional::class, 'cambiarEstado'])->name('profesional.cambiar_estado');
+
 Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');
 Route::get('/paciente/datos/cargar/prereserva/registrar',[App\Http\Controllers\EscritorioPaciente::class, 'registrarCargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva.registrar');
 Route::post('/paciente/dieta', [App\Http\Controllers\EscritorioPaciente::class, 'dameDietaNutricional'])->name('paciente.dame_dieta_nutricional');

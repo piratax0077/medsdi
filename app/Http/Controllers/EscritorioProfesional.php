@@ -10786,6 +10786,18 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         return $datos;
     }
 
+    public function medstudio(){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $view = view('app.profesional.medstudio', compact('profesional'));
+        return $view;
+    }
+
+    public function reportes(){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $view = view('app.profesional.reportes', compact('profesional'));
+        return $view;
+    }
+
     public function presupuestosPaciente(Request $request)
     {
         $id = $request->input('id');
