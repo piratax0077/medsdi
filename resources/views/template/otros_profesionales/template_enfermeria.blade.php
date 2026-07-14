@@ -328,111 +328,7 @@
                 $('#tabla_curaciones_enfermera').DataTable();
                 $('#tabla_otros_procedimientos_enfermera').DataTable();
                 // listar_medicamentos_enfermera(id_paciente);
-            });
-             function editarInformacionPaciente(){
-            $('#modal_editar_paciente').modal('show');
-            $('#info_paciente').css('display', 'none');
-            $('#info_paciente-edit').css('display', 'block');
-        }
-
-        function cancelarInformacionPaciente(){
-            $('#info_paciente').css('display', 'block');
-            $('#info_paciente-edit').css('display', 'none');
-        }
-
-        function guardarInformacionPaciente(){
-            let id_paciente = $('#id_paciente').val();
-            let nombres = $('#paciente_nombre_edit').val();
-            let apellido_uno = $('#paciente_apellido_uno_edit').val();
-            let apellido_dos = $('#paciente_apellido_dos_edit').val();
-            let fecha_nac = $('#paciente_fn_edit').val();
-            let sexo = $('#paciente_sexo_edit').val();
-            let direccion = $('#paciente_dir_edit').val();
-            let region = $('#paciente_region_edit').val();
-            let comuna = $('#paciente_comuna_edit').val();
-            let email = $('#paciente_email_edit').val();
-            let telefono = $('#paciente_telefono_edit').val();
-            let convenio = $('#paciente_convenio_edit').val();
-
-            let data = {
-                id: id_paciente,
-                nombre: nombres,
-                apellido_uno: apellido_uno,
-                apellido_dos: apellido_dos,
-                fecha_nacimiento: fecha_nac,
-                sexo: sexo,
-                direccion: direccion,
-                region: region,
-                ciudad: comuna,
-                email: email,
-                telefono: telefono,
-                convenio: convenio,
-                _token: CSRF_TOKEN
-            }
-
-            console.log(data);
-            let url = "{{ route('asistente.paciente.modificar') }}";
-
-            $.ajax({
-
-                url: url,
-                type: "get",
-                data: data,
-                })
-                .done(function(data) {
-                console.log(data);
-                if (data.estado == 1)
-                {
-                    if (data.estado == 1)
-                    {
-                        let paciente = data.paciente;
-                        $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
-                        $('#fecha_nac_paciente').text(paciente.fecha_nac);
-                        if (paciente.sexo == 'M') {
-                            $('#sexo_paciente').text('Masculino');
-                        } else {
-                            $('#sexo_paciente').text('Femenino');
-                        }
-                        $('#email_paciente_').text(paciente.email);
-                        $('#telefono_paciente').text(paciente.telefono_uno);
-                        $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
-                        $('#prevision_paciente').text(paciente.prevision ? paciente.prevision : 'Sin información');
-
-                        // $('.paciente_view_asistente').show();
-                        // $('.paciente_edit_asistente').hide();
-                        // $('#modificando_paciente_asistente').val(0);
-
-                        swal({
-                            title: "Actualización de Paciente",
-                            text: "Actualización Exitosa",
-                            icon: "success",
-                        });
-                        cancelarInformacionPaciente();
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Actualización de Paciente",
-                            text: "Falla en Actualización.\nIntente de nuevo.",
-                            icon: "error",
-                        });
-                    }
-                }
-                else
-                {
-                    swal({
-                        title: "Actualización de Paciente",
-                        text: "Falla en Actualización.\nIntente de nuevo.",
-                        icon: "error",
-                    });
-                }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-                });
-        }
-
-        function buscar_ciudad_paciente(id_ciudad = 0) {
+            });function buscar_ciudad_paciente(id_ciudad = 0) {
 
             let region = $('#paciente_region_edit').val();
             let url = "{{ route('profesional.buscar_ciudad_region') }}";
@@ -582,6 +478,7 @@
         }
         </script>
         @yield('js_inferior')
+    @include('includes.guardar_informacion_paciente')
         @yield('page-script')
         @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
         @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}

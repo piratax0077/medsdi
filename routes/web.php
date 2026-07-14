@@ -637,6 +637,7 @@ Route::group([
 	Route::get('buscar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'buscarDiagnostico_cie10'])->name('profesional.buscar_diagnosticos_cie10');
 	Route::post('registrar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'registrarDiagnosticoCie10Profesional'])->name('profesional.registrar_diagnosticos_cie10');
 
+    Route::post('paciente/contacto-emergencia/sidebar/crear',[App\Http\Controllers\EscritorioPaciente::class, 'crearcontactoSidebar'])->name('profesional.paciente.contacto.sidebar.crear');
 
     Route::get('Flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'ver_flujo_caja'])->name('profesional.flujo_caja');
     Route::get('tarjeta_presentacion/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'tarjeta_presentacion_profesional'])->name('profesional.tarjeta_presentacion');

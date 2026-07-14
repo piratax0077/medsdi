@@ -10295,31 +10295,23 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $paciente = new Paciente();
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
-            // Si el paciente tiene dirección, crearla. Si no, usar la del lugar de atención
+            // Si el paciente informa dirección y comuna, se crea la dirección.
+            // Si no informa ambos datos, id_direccion se guarda como NULL.
             $id_direccion_paciente = null;
 
-            if (!empty($request->reserva_hora_direccion) && !empty($request->reserva_hora_comuna)) {
-                // Crear nueva dirección del paciente
+            $direccion_paciente = trim((string) $request->reserva_hora_direccion);
+            $id_comuna_paciente = $request->reserva_hora_comuna;
+
+            if ($direccion_paciente !== '' && !empty($id_comuna_paciente)) {
                 $direccion = new Direccion();
-                $direccion->direccion = $request->reserva_hora_direccion;
-                $direccion->numero_dir = $request->reserva_hora_numero_dir;
-                $direccion->id_ciudad = $request->reserva_hora_comuna;
+                $direccion->direccion = $direccion_paciente;
+                $direccion->numero_dir = !empty($request->reserva_hora_numero_dir)
+                    ? trim((string) $request->reserva_hora_numero_dir)
+                    : null;
+                $direccion->id_ciudad = $id_comuna_paciente;
                 $direccion->save();
+
                 $id_direccion_paciente = $direccion->id;
-            } else {
-                // Usar dirección del lugar de atención
-                $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
-                if ($lugar_atencion && $lugar_atencion->id_direccion) {
-                    $id_direccion_paciente = $lugar_atencion->id_direccion;
-                } else {
-                    // Fallback: crear dirección con valores por defecto mínimos
-                    $direccion = new Direccion();
-                    $direccion->direccion = 'Sin dirección';
-                    $direccion->numero_dir = 'S/N';
-                    $direccion->id_ciudad = 1; // Santiago por defecto
-                    $direccion->save();
-                    $id_direccion_paciente = $direccion->id;
-                }
             }
 
             $paciente->token = md5(uniqid());

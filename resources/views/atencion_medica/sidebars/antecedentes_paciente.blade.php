@@ -300,287 +300,262 @@
                 </div>
             </div>
               <!------------------CONTACTO EMERGENCIA SOS-------------------->
+            @php
+                $contactoEmergencia = $paciente->ContactosEmergencia()->first();
+                $direccionContacto = $contactoEmergencia ? $contactoEmergencia->Direccion()->first() : null;
+                $ciudadContacto = $direccionContacto ? $direccionContacto->Ciudad()->first() : null;
+                $regionContacto = $ciudadContacto ? $ciudadContacto->Region()->first() : null;
+            @endphp
+
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="headingTwo">
                     <h2 class="mb-0">
                         <button class="btn btn-light btn-block text-left collapsed text-info" type="button"
                             data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                            aria-controls="collapseTwo"><i
-                                class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            aria-controls="collapseTwo">
+                            <i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
                             CONTACTO DE EMERGENCIA
                         </button>
                     </h2>
                 </div>
+
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                     <div class="card-body-sidebar">
+                        <input type="hidden" id="contacto_id_paciente" value="{{ $paciente->id }}">
+
                         <div id="info_contacto">
+                            @if (!$contactoEmergencia)
+                                <div id="alerta_sin_contacto" class="alert alert-warning py-2">
+                                    El paciente no tiene contacto de emergencia registrado.
+                                </div>
+                            @endif
+
                             <div class="form-row align-items-center pt-1">
-                                <div class="col-1"><img class=" wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/rut-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/rut-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">RUT</h6>
-                                    <p >
-
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->rut }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
-                                    </p>
+                                    <p id="rut_contacto">{{ $contactoEmergencia->rut ?? 'Sin registro de contacto' }}</p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/usuario-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/usuario-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Nombre</h6>
-                                    <p id="nombre_completo_contacto">
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->nombre }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
-
-                                    </p>
+                                    <p id="nombre_completo_contacto">{{ $contactoEmergencia->nombre ?? 'Sin registro de contacto' }}</p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/usuario-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/usuario-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Apellidos</h6>
                                     <p id="apellidos_contacto">
-
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->apellido_uno . ' ' . $paciente->ContactosEmergencia()->first()->apellido_dos }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
+                                        @if ($contactoEmergencia)
+                                            {{ trim(($contactoEmergencia->apellido_uno ?? '') . ' ' . ($contactoEmergencia->apellido_dos ?? '')) ?: 'Sin apellidos registrados' }}
+                                        @else
+                                            Sin registro de contacto
+                                        @endif
                                     </p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/hogar-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/hogar-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Dirección</h6>
-                                    <p>
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-
-                                            {{ $paciente->ContactosEmergencia()->first()->Direccion()->first()->direccion .
-                                                ' ' .
-                                                $paciente->ContactosEmergencia()->first()->Direccion()->first()->numero_dir }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
+                                    <p id="direccion_contacto">
+                                        @if ($direccionContacto)
+                                            {{ trim(($direccionContacto->direccion ?? '') . ' ' . ($direccionContacto->numero_dir ?? '')) ?: 'Sin dirección registrada' }}
+                                        @else
+                                            Sin dirección registrada
+                                        @endif
                                     </p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/hogar-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/hogar-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Región - Comuna</h6>
                                     <p id="comuna_region_contacto">
-
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->Direccion()->first()->Ciudad()->first()->nombre }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
+                                        @if ($ciudadContacto || $regionContacto)
+                                            {{ $ciudadContacto->nombre ?? 'Sin comuna registrada' }}
+                                            @if ($regionContacto)<br>{{ $regionContacto->nombre }}@endif
+                                        @else
+                                            Sin comuna o región registrada
+                                        @endif
                                     </p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/email-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/email-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Email</h6>
-                                    <p id="email_contacto_">
-
-                                    @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->email }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-
-                                    </p>
+                                    <p id="email_contacto_">{{ $contactoEmergencia->email ?? 'Sin email registrado' }}</p>
                                 </div>
                             </div>
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"><img class=" wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/telefono-info.png') }}"></div>
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/telefono-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Teléfono</h6>
-                                    <p>  @if ($paciente->ContactosEmergencia()->first() != null)
-                                        <span class="info">
-                                            {{ $paciente->ContactosEmergencia()->first()->telefono }}
-                                        </span>
-                                    @else
-                                        <span class="info">Sin registro de contacto</span>
-                                    @endif
-                                    </p>
+                                    <p id="telefono_contacto">{{ $contactoEmergencia->telefono ?? 'Sin teléfono registrado' }}</p>
                                 </div>
                             </div>
 
                             <div class="form-row mt-3 mb-5">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                <div class="col-12 text-center">
                                     <button type="button" class="btn btn-primary-light-c btn-xxs"
-                                        onclick="editarInformacionContacto()"><i class="feather icon-edit"></i> Editar
-                                        información</button>
+                                        onclick="editarInformacionContacto()">
+                                        <i class="feather icon-edit"></i>
+                                        <span id="texto_boton_contacto">{{ $contactoEmergencia ? 'Editar contacto' : 'Agregar contacto' }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- El formulario siempre existe: vacío para crear y con datos para editar. --}}
+                        <div id="info_contacto-edit" style="display: none">
+                            <div class="form-row pt-3">
+                                <label class="col-2 text-dark font-weight-bolder">Rut</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input id="contacto_rut_edit" name="contacto_rut_edit" type="text"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->rut ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Nombre</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input id="contacto_nombre_edit" name="contacto_nombre_edit" type="text"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->nombre ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Apellido Paterno</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input id="contacto_apellido_uno" name="contacto_apellido_uno" type="text"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->apellido_uno ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Apellido Materno</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input id="contacto_apellido_dos" name="contacto_apellido_dos" type="text"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->apellido_dos ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">FN</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="date" name="contacto_fn_edit" id="contacto_fn_edit"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->fecha_nac ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Sexo</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="contacto_sexo_edit" id="contacto_sexo_edit" class="form-control form-control-sm">
+                                        <option value="">Seleccione</option>
+                                        <option value="M" @if (($contactoEmergencia->sexo ?? '') == 'M') selected @endif>Masculino</option>
+                                        <option value="F" @if (($contactoEmergencia->sexo ?? '') == 'F') selected @endif>Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Dirección</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" class="form-control form-control-sm" id="contacto_dir_edit"
+                                        value="{{ $direccionContacto ? trim(($direccionContacto->direccion ?? '') . ' ' . ($direccionContacto->numero_dir ?? '')) : '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1 text-dark">
+                                <label class="col-2 text-dark font-weight-bolder">Región</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="contacto_region_edit" id="contacto_region_edit"
+                                        class="form-control form-control-sm" onchange="buscar_ciudad_contacto();">
+                                        <option value="0">Seleccione región</option>
+                                        @foreach ($regiones as $region)
+                                            <option value="{{ $region->id }}"
+                                                @if ($regionContacto && $regionContacto->id == $region->id) selected @endif>
+                                                {{ $region->nombre }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Comuna</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="contacto_comuna_edit" id="contacto_comuna_edit" class="form-control form-control-sm">
+                                        <option value="0">Seleccione comuna</option>
+                                        @if (isset($paciente->comunas_contacto_emer))
+                                            @foreach ($paciente->comunas_contacto_emer as $comuna)
+                                                <option value="{{ $comuna->id }}"
+                                                    @if ($ciudadContacto && $ciudadContacto->id == $comuna->id) selected @endif>
+                                                    {{ $comuna->nombre }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Email</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="email" id="contacto_email_edit" name="contacto_email_edit"
+                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->email ?? '' }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Teléfono</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" class="form-control form-control-sm" id="contacto_telefono_edit"
+                                        name="contacto_telefono_edit" value="{{ $contactoEmergencia->telefono ?? '' }}">
+                                </div>
+                            </div>
+
+                            <div class="form-row mt-3 mb-5">
+                                <div class="col-12 text-center">
+                                    <button type="button" class="btn btn-primary-light-c btn-xxs"
+                                        onclick="guardarInformacionContacto()">
+                                        <i class="feather icon-save"></i> Guardar información
+                                    </button>
+                                    <button type="button" class="btn btn-danger-light-c btn-xxs"
+                                        onclick="cancelarInformacionContacto()">
+                                        <i class="feather icon-x"></i> Cancelar edición
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @if ($paciente->ContactosEmergencia()->exists())
-                        <div id="info_contacto-edit" style="display: none">
-                        <div class="form-row pt-3">
-                            <label class="col-2 text-dark font-weight-bolder">Rut</label>
-                            <div class="col-9 ml-2 text-secondary">
-                               <input id="contacto_rut_edit" name="contacto_rut_edit" type="text" class="form-control form-control-sm" value="{{ $paciente->ContactosEmergencia()->first()->rut }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2  text-dark font-weight-bolder">Nombre</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input id="contacto_nombre_edit" name="contacto_nombre_edit" type="text" class="form-control form-control-sm" value="{{ $paciente->ContactosEmergencia()->first()->nombre }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Apellido Paterno</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input id="contacto_apellido_uno" name="contacto_apellido_uno" type="text" class="form-control form-control-sm" value="{{ $paciente->ContactosEmergencia()->first()->apellido_uno }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Apellido Materno</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input id="contacto_apellido_dos" name="contacto_apellido_dos" type="text" class="form-control form-control-sm" value="{{ $paciente->ContactosEmergencia()->first()->apellido_dos }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">FN</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input type="date" name="contacto_fn_edit" id="contacto_fn_edit" value="{{ $paciente->ContactosEmergencia()->first()->fecha_nac }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Sexo</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <select name="contacto_sexo_edit" id="contacto_sexo_edit" class="form-control form-control-sm">
-                                    <option value="M" @if ($paciente->ContactosEmergencia()->first()->sexo == 'M') selected @endif>Masculino
-                                    </option>
-                                    <option value="F" @if ($paciente->ContactosEmergencia()->first()->sexo == 'F') selected @endif>Femenino
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        {{-- <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
-                            <div class="col-9 ml-2 text-secondary">
-
-                            </div>
-                        </div> --}}
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Dirección</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input type="text" class="form-control form-control-sm" id="contacto_dir_edit"
-                                    value="{{ $paciente->ContactosEmergencia()->first()->Direccion()->first()->direccion .
-                                                ' ' .
-                                                $paciente->ContactosEmergencia()->first()->Direccion()->first()->numero_dir }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1 text-dark ">
-                            <label class="col-2 text-dark font-weight-bolder">Región</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <select name="contacto_region_edit" onchange="buscar_ciudad_contacto({{ $paciente->ContactosEmergencia()->first()->Direccion()->first()->Ciudad()->first()->id }});" id="contacto_region_edit" class="form-control form-control-sm"
-                                    >
-                                    <option value="0">Seleccione región</option>
-                                    @foreach ($regiones as $region)
-                                        <option value="{{ $region->id }}"
-                                            @if ($paciente->ContactosEmergencia()->first()->Direccion()->first()->Ciudad()->first()->Region()->first()->id == $region->id) selected @endif>{{ $region->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Comuna</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <select name="contacto_comuna_edit" id="contacto_comuna_edit" class="form-control form-control-sm">
-                                    <option value="0">Seleccione comuna</option>
-                                    @foreach ($paciente->comunas_contacto_emer as $comuna)
-                                        <option value="{{ $comuna->id }}"
-                                            @if ($paciente->ContactosEmergencia()->first()->Direccion()->first()->Ciudad()->first()->id == $comuna->id) selected @endif>{{ $comuna->nombre }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Email</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input type="text" id="contacto_email_edit" name="contacto_email_edit"
-                                    class="form-control form-control-sm" value="{{ $paciente->ContactosEmergencia()->first()->email }}">
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Teléfono</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                <input type="text" class="form-control form-control-sm" id="contacto_telefono_edit"
-                                    name="contacto_telefono_edit" value="{{ $paciente->ContactosEmergencia()->first()->telefono }}">
-                            </div>
-                        </div>
-                        <div class="form-row mt-3 mb-5">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                <button type="button" class="btn btn-primary-light-c btn-xxs"
-                                    onclick="guardarInformacionContacto()"><i class="feather icon-save"></i> Guardar
-                                    información</button>
-                                <button type="button" class="btn btn-danger-light-c btn-xxs"
-                                    onclick="cancelarInformacionContacto()"><i class="feather icon-x"></i> Cancelar
-                                    edición</button>
-                            </div>
-                        </div>
-                    </div>
-                    @else
-                        <div class="alert alert-warning">
-                            El paciente no tiene contacto de emergencia registrado.
-                        </div>
-                    @endif
-
                 </div>
             </div>
 

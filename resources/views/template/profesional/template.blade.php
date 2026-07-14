@@ -141,11 +141,6 @@
     <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <!--full calendar 5-->
-
-    <script src="{{ asset('js\fullcalendar-5.10.1\lib\main.js') }}"></script>
-	<script src="{{ asset('js\fullcalendar-5.10.1\lib\locales\es.js') }}"></script>
-
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />

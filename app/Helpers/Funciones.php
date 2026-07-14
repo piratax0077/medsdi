@@ -522,12 +522,15 @@ class Funciones{
         }
     }
 
-    function getMensajes($id_usuario) {
+    public static function getMensajes($id_usuario)
+    {
         $mensajes = Mensajes::where('id_receptor', $id_usuario)->orderBy('fecha_envio', 'DESC')->get();
-        foreach($mensajes as $mensaje){
+
+        foreach ($mensajes as $mensaje) {
             $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
             $mensaje->destinatarios = json_decode($mensaje->destinatarios);
         }
+
         return $mensajes;
     }
 }
