@@ -10,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2">
                             <div class="page-header-title mt-2">
-                                <h5 class="text-white d-inline f-16 mt-2"><strong>ATENCIÓN PSICOLOGIA ADULTO</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-2"><strong>ATENCIÓN PSICOLOGÍA ADULTO</strong></h5>
                                 <p class="f-16 mt-0 mb-0 text-white float-md-right font-weight-bold d-inline mr-3">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -71,16 +71,16 @@
                             @include('atencion_otros_prof.secciones_especialidad.ficha_psico_adulto')
                         </div>
                         <!--Ficha Médica Única-->
-                        <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
+                        <div class="tab-pane fade" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
 							@include('general.secciones_ficha.fmu')
                         </div>
                         <!--Atenciones previas-->
-                        <div class="tab-pane fade show mb-3" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
+                        <div class="tab-pane fade mb-3" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                             {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
                             @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
                         <!--Hospitalización-->
-                        <div class="tab-pane fade show" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
+                        <div class="tab-pane fade" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
                             @include('general.hospitalizacion.hospitalizacion_op')
                         </div>
                     </div>
@@ -98,6 +98,20 @@
 
 
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+@endsection
+
+@section('page-script')
+<script>
+    $(document).ready(function() {
+        // Inicializar el tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#com_inf_fono').summernote({
+            height: 250,
+            lang: 'es-ES',
+            placeholder: 'Ingrese el informe psicológico...'
+        });
+    });
+</script>
 @endsection
 
 

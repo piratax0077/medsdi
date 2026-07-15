@@ -1864,6 +1864,16 @@ Route::group([
 	/** OTROS PROFESIONALES */
     /** PSICOLOGIA Y PSIQUIATRIA */
     Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
+
+    Route::post(
+        'Ficha_Atencion/psicologia/informe/guardar',
+        [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'guardarInformePsicologico']
+    )->name('ficha.otro.prof.psicologia.informe.guardar');
+
+    Route::post(
+        'Ficha_Atencion/psicologia/informe/pdf',
+        [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'generarPdfInformePsicologico']
+    )->name('ficha.otro.prof.psicologia.informe.pdf');
     Route::post('Ficha_Atencion/crear/siqui', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_siqui'])->name('ficha.otro.prof.registrar_ficha_siqui');
 	Route::post('sicologia/plan_tratamiento/registro', [App\Http\Controllers\PlanTratamientoTerapiaSicologicaController::class, 'registrar_r'])->name('ficha.otro.prof.plan_tratamiento.registro');
     Route::post('sicologia/test_rorshchach/registro', [App\Http\Controllers\PsicoPsiquiatriaController::class, 'TestRorshchachRegistro'])->name('ficha.otro.prof.test_rorshchach.registro');

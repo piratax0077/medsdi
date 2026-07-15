@@ -35,6 +35,7 @@ use App\Models\FonoValoracionEquilibrio;
 use App\Models\HoraMedica;
 use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
+use App\Models\LugarAtencion;
 use App\Models\OctavoPar;
 use App\Models\OtrosProfesionalesSeccionAntecedentes;
 use App\Models\Paciente;
@@ -46,6 +47,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+
+
+use Illuminate\Support\Facades\DB;
+
 
 use Carbon\Carbon;
 
@@ -123,6 +128,333 @@ class FichaAtencionOtrosProfController extends Controller
         return (object)$datos;
 
     }
+
+
+public function guardarInformePsicologico(Request $request)
+{
+    $datos = $request->validate([
+        'id_ficha_atencion'    => 'required|integer|exists:fichas_atenciones,id',
+        'id_paciente'          => 'required|integer|exists:pacientes,id',
+        'id_profesional'       => 'required|integer|exists:profesionales,id',
+        'id_lugar_atencion'    => 'required|integer|exists:lugar_atencion,id',
+        'fecha_informe'        => 'required|date',
+        'procedencia'          => 'nullable|string|max:255',
+        'diagnostico'          => 'required|string|max:500',
+        'sesiones_realizadas'  => 'nullable|integer|min:0',
+        'sesiones_pendientes'  => 'nullable|integer|min:0',
+        'tratamiento_realizado'=> 'nullable|string',
+        'informe'              => 'required|string',
+        'nombre_profesional'   => 'nullable|string|max:255',
+        'proximo_control'      => 'nullable|date',
+    ]);
+
+    DB::beginTransaction();
+
+    try {
+        $informe = InformePsicologico::updateOrCreate(
+            [
+                'id_ficha_atencion' => $datos['id_ficha_atencion'],
+            ],
+            $datos
+        );
+
+        DB::commit();
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => 'Informe psicológico guardado correctamente.',
+            'informe' => $informe,
+        ]);
+    } catch (\Throwable $e) {
+        DB::rollBack();
+
+        Log::error('Error guardando informe psicológico', [
+            'error' => $e->getMessage(),
+            'request' => $request->except('_token'),
+        ]);
+
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'No fue posible guardar el informe psicológico.',
+        ], 500);
+    }
+}
+
+public function generarPdfInformePsicologico(Request $request)
+{
+    $datos = [];
+    $error = [];
+    $camposRequeridos = 0;
+
+    if (empty($request->id_ficha_atencion) || (int) $request->id_ficha_atencion === 0) {
+        $error['id_ficha_atencion'] = 'campo requerido';
+        $camposRequeridos = 1;
+    }
+
+    if ($camposRequeridos !== 0) {
+        return response([
+            'estado' => 0,
+            'msj' => 'Campos requeridos.',
+            'request' => $request->all(),
+            'error' => $error,
+        ])->header('Content-Type', 'application/json');
+    }
+
+    try {
+        $fichaAtencion = FichaAtencion::find($request->id_ficha_atencion);
+
+        if (!$fichaAtencion) {
+            return response([
+                'estado' => 0,
+                'msj' => 'No se encontró la ficha de atención.',
+            ])->header('Content-Type', 'application/json');
+        }
+
+        $lugarAtencion = LugarAtencion::with('direccion')
+            ->find($fichaAtencion->id_lugar_atencion);
+
+        $profesional = Profesional::find($fichaAtencion->id_profesional);
+        $paciente = Paciente::find($fichaAtencion->id_paciente);
+
+        if (!$lugarAtencion || !$profesional || !$paciente) {
+            return response([
+                'estado' => 0,
+                'msj' => 'No fue posible obtener la información necesaria para el informe.',
+            ])->header('Content-Type', 'application/json');
+        }
+
+        /*
+         * El informe puede venir directamente desde el modal
+         * o recuperarse desde una tabla si ya fue guardado.
+         */
+        $informePsicologico = (object) [
+            'fecha_informe' => $request->fecha_informe,
+            'procedencia' => $request->procedencia,
+            'diagnostico' => $request->diagnostico,
+            'sesiones_realizadas' => $request->sesiones_realizadas,
+            'sesiones_pendientes' => $request->sesiones_pendientes,
+            'tratamiento_realizado' => $request->tratamiento_realizado,
+            'informe' => $request->informe,
+            'proximo_control' => $request->proximo_control,
+        ];
+
+        /*
+         * Certificado del documento.
+         * Se puede usar un tipo documental propio para informe psicológico.
+         */
+        $tokenDocumento = '';
+        $urlDocumento = '';
+        $qrDocumento = '';
+
+        $tempToken = CertificadoController::certificadoDocumento(
+            $fichaAtencion->id,
+            $profesional->id,
+            $paciente->id,
+            8, // Tipo documento: informe psicológico. Ajustar según tabla/configuración.
+            $fichaAtencion->id
+        );
+
+        if ($tempToken['estado'] == 1) {
+            $tokenDocumento = $tempToken['certificado'];
+        } else {
+            $tempToken = CertificadoController::certificadoDocumento(
+                $fichaAtencion->id,
+                rand(111, 999),
+                $paciente->id,
+                8,
+                $fichaAtencion->id
+            );
+
+            $tokenDocumento = $tempToken['certificado'];
+        }
+
+        $urlDocumento = CertificadoController::generarUrlDocumento($tokenDocumento);
+        $qrDocumento = GeneradorQrController::generar($urlDocumento);
+
+        /*
+         * Certificado del profesional.
+         */
+        $tokenProfesional = '';
+        $urlProfesional = '';
+        $qrProfesional = '';
+
+        $tempProfesional = CertificadoController::certificadoProfesional(
+            $profesional->id,
+            1,
+            8,
+            $fichaAtencion->id
+        );
+
+        if ($tempProfesional['estado'] == 1) {
+            $tokenProfesional = $tempProfesional['certificado'];
+        } else {
+            $tempProfesional = CertificadoController::certificadoProfesional(
+                rand(1114, 9999),
+                rand(1114, 9999),
+                8,
+                $fichaAtencion->id
+            );
+
+            $tokenProfesional = $tempProfesional['certificado'];
+        }
+
+        $urlProfesional = CertificadoController::generarUrlProfesional(
+            $tokenProfesional
+        );
+
+        /*
+         * Aquí había un error en la función de ejemplo:
+         * usaba $url_documento para generar el QR profesional.
+         */
+        $qrProfesional = GeneradorQrController::generar($urlProfesional);
+
+        /*
+         * Datos ficha.
+         */
+        $array_ficha_atencion = [
+            'id' => $fichaAtencion->id,
+            'created_at' => $fichaAtencion->created_at
+                ? $fichaAtencion->created_at->format('d/m/Y')
+                : now()->format('d/m/Y'),
+            'token' => $tokenDocumento,
+            'url' => $urlDocumento,
+            'qr' => $qrDocumento,
+        ];
+
+        /*
+         * Dirección del lugar, manejando valores nulos.
+         */
+        $direccionLugar = '';
+        $regionLugar = '';
+
+        if ($lugarAtencion->direccion) {
+            $direccionLugar = trim(
+                ($lugarAtencion->direccion->direccion ?? '') . ' ' .
+                ($lugarAtencion->direccion->numero_dir ?? '')
+            );
+
+            $ciudadLugar = $lugarAtencion->direccion->Ciudad()->first();
+
+            if ($ciudadLugar) {
+                $direccionLugar .= ', ' . $ciudadLugar->nombre;
+
+                $region = $ciudadLugar->Region()->first();
+
+                if ($region) {
+                    $regionLugar = $region->nombre;
+                }
+            }
+        }
+
+        $array_lugar_atencion = [
+            'id' => $lugarAtencion->id,
+            'nombre' => $lugarAtencion->nombre,
+            'direccion' => $direccionLugar,
+            'region' => $regionLugar,
+        ];
+
+        /*
+         * Especialidad profesional.
+         */
+        $subtipoEspecialidad = '';
+
+        $subtipo = $profesional->subTipoEspecialidad()->first();
+        $tipo = $profesional->tipoEspecialidad()->first();
+
+        if ($subtipo) {
+            $subtipoEspecialidad = $subtipo->nombre;
+        } elseif ($tipo) {
+            $subtipoEspecialidad = $tipo->nombre;
+        }
+
+        $array_profesional = [
+            'id' => $profesional->id,
+            'nombre' => trim(
+                $profesional->nombre . ' ' .
+                $profesional->apellido_uno . ' ' .
+                $profesional->apellido_dos
+            ),
+            'rut' => $profesional->rut,
+            'especialidad' => $subtipoEspecialidad,
+            'id_especialidad' => $profesional->id_especialidad,
+            'num_colegio' => $profesional->num_colegio,
+            'token' => $tokenProfesional,
+            'url' => $urlProfesional,
+            'qr' => $qrProfesional,
+        ];
+
+        /*
+         * Dirección paciente.
+         */
+        $direccionPaciente = '';
+        $direccionPacienteModel = $paciente->Direccion()->first();
+
+        if ($direccionPacienteModel) {
+            $direccionPaciente = trim(
+                ($direccionPacienteModel->direccion ?? '') . ' ' .
+                ($direccionPacienteModel->numero_dir ?? '')
+            );
+
+            $ciudadPaciente = $direccionPacienteModel->Ciudad()->first();
+
+            if ($ciudadPaciente) {
+                $direccionPaciente .= ', ' . $ciudadPaciente->nombre;
+            }
+        }
+
+        $array_paciente = [
+            'id' => $paciente->id,
+            'nombre' => trim(
+                $paciente->nombres . ' ' .
+                $paciente->apellido_uno . ' ' .
+                $paciente->apellido_dos
+            ),
+            'fecha_nac' => $paciente->fecha_nac,
+            'rut' => $paciente->rut,
+            'sexo' => $paciente->sexo,
+            'direccion' => $direccionPaciente,
+        ];
+
+        /*
+         * Datos específicos del informe psicológico.
+         */
+        $arrayInforme = [
+            'fecha_informe' => $informePsicologico->fecha_informe,
+            'procedencia' => $informePsicologico->procedencia,
+            'diagnostico' => $informePsicologico->diagnostico,
+            'sesiones_realizadas' => $informePsicologico->sesiones_realizadas,
+            'sesiones_pendientes' => $informePsicologico->sesiones_pendientes,
+            'tratamiento_realizado' => $informePsicologico->tratamiento_realizado,
+            'informe' => $informePsicologico->informe,
+            'proximo_control' => $informePsicologico->proximo_control,
+        ];
+
+        return PdfController::generarPDF(
+            'INFORME PSICOLÓGICO',
+            compact(
+                'array_ficha_atencion',
+                'array_lugar_atencion',
+                'array_profesional',
+                'array_paciente',
+                'arrayInforme'
+            ),
+            'Informe Psicologico ' . $paciente->rut,
+            'pdf_informe_psicologico'
+        );
+    } catch (\Throwable $e) {
+        \Log::error('Error al generar informe psicológico PDF', [
+            'id_ficha_atencion' => $request->id_ficha_atencion,
+            'error' => $e->getMessage(),
+            'archivo' => $e->getFile(),
+            'linea' => $e->getLine(),
+        ]);
+
+        return response([
+            'estado' => 0,
+            'msj' => 'No fue posible generar el informe psicológico.' . $e->getMessage(),
+        ], 500)->header('Content-Type', 'application/json');
+    }
+}
 
     public function store_sico(Request $request)//listo - revisado
     {

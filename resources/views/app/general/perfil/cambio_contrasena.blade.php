@@ -28,15 +28,48 @@
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo">Contraseña actual</label>
-                            <input type="password" class="form-control form-control-sm" id="contrasena_actual" name="contrasena_actual">
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" id="contrasena_actual" name="contrasena_actual">
+                                <div class="input-group-append">
+                                    <button type="button"
+                                        class="btn btn-outline-secondary btn-toggle-password"
+                                        data-target="contrasena_actual"
+                                        aria-label="Mostrar contraseña"
+                                        title="Mostrar contraseña">
+                                        <i class="feather icon-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo">Nueva contraseña</label>
-                            <input type="password" class="form-control form-control-sm" id="password_registro" name="password_registro">
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" id="password_registro" name="password_registro">
+                                <div class="input-group-append">
+                                    <button type="button"
+                                        class="btn btn-outline-secondary btn-toggle-password"
+                                        data-target="password_registro"
+                                        aria-label="Mostrar contraseña"
+                                        title="Mostrar contraseña">
+                                        <i class="feather icon-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <label class="floating-label-activo">Repita nueva contraseña</label>
-                            <input type="password" class="form-control form-control-sm" id="password_confirmacion_registro" name="password_confirmacion_registro">
+                            <div class="input-group input-group-sm">
+                                <input type="password" class="form-control" id="password_confirmacion_registro" name="password_confirmacion_registro">
+                                <div class="input-group-append">
+                                    <button type="button"
+                                        class="btn btn-outline-secondary btn-toggle-password"
+                                        data-target="password_confirmacion_registro"
+                                        aria-label="Mostrar contraseña"
+                                        title="Mostrar contraseña">
+                                        <i class="feather icon-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
@@ -52,3 +85,47 @@
         <!--CIERRE: CARD CONTRASEÑA PERSONAL-->
     </div>
 </div>
+
+
+<script>
+    (function () {
+        function alternarVisibilidadPassword(boton) {
+            var idInput = boton.getAttribute('data-target');
+            var input = document.getElementById(idInput);
+            var icono = boton.querySelector('i');
+
+            if (!input) {
+                return;
+            }
+
+            var mostrar = input.type === 'password';
+            input.type = mostrar ? 'text' : 'password';
+
+            if (icono) {
+                icono.classList.toggle('icon-eye', !mostrar);
+                icono.classList.toggle('icon-eye-off', mostrar);
+            }
+
+            boton.setAttribute(
+                'aria-label',
+                mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña'
+            );
+
+            boton.setAttribute(
+                'title',
+                mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña'
+            );
+        }
+
+        document.addEventListener('click', function (event) {
+            var boton = event.target.closest('.btn-toggle-password');
+
+            if (!boton) {
+                return;
+            }
+
+            event.preventDefault();
+            alternarVisibilidadPassword(boton);
+        });
+    })();
+</script>

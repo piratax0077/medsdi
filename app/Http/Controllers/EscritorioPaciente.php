@@ -2525,11 +2525,17 @@ class EscritorioPaciente extends Controller
             'apellido_dos' => 'nullable|string|max:100',
             'fn'           => 'nullable|date',
             'sexo'         => 'nullable|in:M,F',
+            'parentezco'   => 'nullable|string|max:255',
             'direccion'    => 'nullable|string|max:255',
             'numero_dir'   => 'nullable|string|max:30',
             'comuna'       => 'nullable|integer|exists:ciudades,id',
-            'email'        => 'nullable|email|max:150',
-            'telefono'     => 'nullable|string|max:30',
+            'email'        => 'nullable|email|max:150|required_without:telefono',
+            'telefono'     => 'nullable|string|max:30|required_without:email',
+        ], [
+            'nombre.required' => 'Debe ingresar el nombre del contacto.',
+            'email.email' => 'El correo electrónico no tiene un formato válido.',
+            'email.required_without' => 'Debe ingresar al menos un teléfono o un correo electrónico.',
+            'telefono.required_without' => 'Debe ingresar al menos un teléfono o un correo electrónico.',
         ]);
 
         DB::beginTransaction();
@@ -2561,16 +2567,24 @@ class EscritorioPaciente extends Controller
             }
 
             /*
-            * Crear dirección solo si se informa dirección y comuna.
+            * Normalizar datos.
+            */
+            $nombre = trim((string) $request->nombre);
+            $telefono = trim((string) $request->telefono);
+            $email = trim((string) $request->email);
+            $direccionTexto = trim((string) $request->direccion);
+            $numeroDireccion = trim((string) $request->numero_dir);
+
+            /*
+            * Crear dirección solamente cuando se informe dirección y comuna.
             */
             $direccion = null;
-            $direccionTexto = trim((string) $request->direccion);
 
-            if ($direccionTexto !== '' && !empty($request->comuna)) {
+            if ($direccionTexto !== '' && $request->filled('comuna')) {
                 $direccion = new Direccion();
                 $direccion->direccion = $direccionTexto;
-                $direccion->numero_dir = !empty($request->numero_dir)
-                    ? trim((string) $request->numero_dir)
+                $direccion->numero_dir = $numeroDireccion !== ''
+                    ? $numeroDireccion
                     : null;
                 $direccion->id_ciudad = $request->comuna;
                 $direccion->save();
@@ -2580,15 +2594,44 @@ class EscritorioPaciente extends Controller
             * Crear contacto de emergencia.
             */
             $contacto = new ContactoEmergencia();
-            $contacto->rut = $request->rut ?: null;
-            $contacto->nombre = trim($request->nombre);
-            $contacto->apellido_uno = $request->apellido_uno ?: null;
-            $contacto->apellido_dos = $request->apellido_dos ?: null;
-            $contacto->fecha_nac = $request->fn ?: null;
-            $contacto->sexo = $request->sexo ?: null;
-            $contacto->email = $request->email ?: null;
-            $contacto->telefono = $request->telefono ?: null;
-            $contacto->id_direccion = $direccion ? $direccion->id : null;
+            $contacto->rut = $request->filled('rut')
+                ? trim((string) $request->rut)
+                : null;
+
+            $contacto->nombre = $nombre;
+
+            $contacto->apellido_uno = $request->filled('apellido_uno')
+                ? trim((string) $request->apellido_uno)
+                : null;
+
+            $contacto->apellido_dos = $request->filled('apellido_dos')
+                ? trim((string) $request->apellido_dos)
+                : null;
+
+            $contacto->fecha_nac = $request->filled('fn')
+                ? $request->fn
+                : null;
+
+            $contacto->sexo = $request->filled('sexo')
+                ? $request->sexo
+                : null;
+
+            $contacto->parentezco = $request->filled('parentezco')
+                ? trim((string) $request->parentezco)
+                : null;
+
+            $contacto->email = $email !== ''
+                ? $email
+                : null;
+
+            $contacto->telefono = $telefono !== ''
+                ? $telefono
+                : null;
+
+            $contacto->id_direccion = $direccion
+                ? $direccion->id
+                : null;
+
             $contacto->save();
 
             /*
@@ -2632,10 +2675,15 @@ class EscritorioPaciente extends Controller
                     'apellido_dos' => $contacto->apellido_dos,
                     'fecha_nac' => $contacto->fecha_nac,
                     'sexo' => $contacto->sexo,
+                    'parentezco' => $contacto->parentezco,
                     'email' => $contacto->email,
                     'telefono' => $contacto->telefono,
-                    'direccion' => $direccion ? $direccion->direccion : null,
-                    'numero_dir' => $direccion ? $direccion->numero_dir : null,
+                    'direccion' => $direccion
+                        ? $direccion->direccion
+                        : null,
+                    'numero_dir' => $direccion
+                        ? $direccion->numero_dir
+                        : null,
                     'ciudad' => $nombreCiudad,
                     'region' => $nombreRegion,
                 ],
@@ -4374,6 +4422,7 @@ class EscritorioPaciente extends Controller
         $ciudad = $request->comuna;
         $email = $request->email;
         $telefono = $request->telefono;
+        $parentezco = $request->parentezco;
 
         $region_contacto = Region::where('id', $region)->first();
         $ciudad_contacto = Ciudad::where('id', $ciudad)->first();
@@ -4392,6 +4441,7 @@ class EscritorioPaciente extends Controller
         $contacto->fecha_nac = $fecha_nacimiento;
         $contacto->email = $email;
         $contacto->telefono = $telefono;
+        $contacto->parentezco = $parentezco;
 
         if( $contacto->save() )
         {

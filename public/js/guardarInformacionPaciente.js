@@ -185,8 +185,20 @@
         var direccion = $('#contacto_dir_edit').val();
         var region = $('#contacto_region_edit').val();
         var comuna = $('#contacto_comuna_edit').val();
-        var email = $('#contacto_email_edit').val();
-        var telefono = $('#contacto_telefono_edit').val();
+        var parentezco = $('#parentezco_contacto_emergencia').val();
+        var telefono = $('#contacto_telefono_edit').val().trim();
+        var email = $('#contacto_email_edit').val().trim();
+
+        if (!telefono && !email) {
+            swal({
+                title: 'Datos incompletos',
+                text: 'Debe ingresar al menos un teléfono o un correo electrónico.',
+                icon: 'warning',
+                buttons: 'Aceptar'
+            });
+
+            return;
+        }
 
         var data = {
             id_paciente: id_paciente,
@@ -201,6 +213,7 @@
             comuna: comuna,
             email: email,
             telefono: telefono,
+            parentezco: parentezco,
             _token: CSRF_TOKEN
         };
 
@@ -269,6 +282,167 @@
             });
         });
     };
+
+
+    window.limpiarCamposContactoEmergencia = function(mantenerRut = true) {
+        const rutActual = $('#contacto_rut_edit').val();
+
+        $('#contacto_nombre_edit').val('');
+        $('#contacto_apellido_uno').val('');
+        $('#contacto_apellido_dos').val('');
+        $('#contacto_email_edit').val('');
+        $('#contacto_telefono_edit').val('');
+        $('#contacto_fn_edit').val('');
+        $('#contacto_sexo_edit').val('');
+        $('#contacto_dir_edit').val('');
+        $('#contacto_region_edit').val('0');
+        $('#contacto_comuna_edit').html('<option value="0">Seleccione comuna</option>');
+        $('#parentezco_contacto_emergencia').val('');
+
+        if (mantenerRut) {
+            $('#contacto_rut_edit').val(rutActual);
+        } else {
+            $('#contacto_rut_edit').val('');
+        }
+    }
+
+    window.buscarRutContactoEmergencia = function() {
+        const rut = $('#contacto_rut_edit').val().trim();
+
+        if (!rut) {
+            swal({ title: 'Ingrese un RUT para buscar', icon: 'warning', buttons: 'Aceptar' });
+            return;
+        }
+
+        limpiarCamposContactoEmergencia(true);
+
+        $('#mensaje_busqueda_contacto').text('Buscando paciente...').removeClass('text-success text-danger').addClass('text-muted');
+
+        $.ajax({
+            url: window.BUSCAR_RUT_CONTACTO_URL,
+            type: 'GET',
+            data: { rut: rut }
+        })
+        .done(function(response) {
+            let data = response;
+
+            if (typeof response === 'string') {
+                try {
+                    data = JSON.parse(response);
+                } catch (e) {
+                    data = null;
+                }
+            }
+
+            if (!data || data === 'null' || data === null) {
+                limpiarCamposContactoEmergencia(true);
+                $('#mensaje_busqueda_contacto').text('No se encontró un paciente con ese RUT.').removeClass('text-muted').addClass('text-danger');
+                swal({ title: 'No se encontró un paciente con ese RUT', icon: 'warning', buttons: 'Aceptar' });
+                return;
+            }
+
+            if (data.tipo_paciente === 'NO') {
+                limpiarCamposContactoEmergencia(true);
+                $('#mensaje_busqueda_contacto').text('El RUT no corresponde a un paciente activo.').removeClass('text-muted').addClass('text-danger');
+                swal({ title: 'El RUT no corresponde a un paciente activo', icon: 'info', buttons: 'Aceptar' });
+                return;
+            }
+
+            const nombres = data.nombres || data.nombre || '';
+            const apellidoUno = data.apellido_uno || '';
+            const apellidoDos = data.apellido_dos || '';
+            const email = data.email || '';
+            const telefono = data.telefono_uno || data.telefono || '';
+            const fechaNac = data.fecha_nac || '';
+            const sexo = data.sexo || '';
+
+            $('#contacto_nombre_edit').val(nombres);
+            $('#contacto_apellido_uno').val(apellidoUno);
+            $('#contacto_apellido_dos').val(apellidoDos);
+            $('#contacto_email_edit').val(email);
+            $('#contacto_telefono_edit').val(telefono);
+            $('#contacto_fn_edit').val(fechaNac);
+            $('#contacto_sexo_edit').val(sexo);
+            $('#contacto_rut_edit').val(data.rut || rut);
+
+            let direccion = '';
+            let numeroDir = '';
+            let ciudad = null;
+            let regionId = null;
+            let ciudadId = null;
+
+            if (data.Direccion) {
+                const direccionData = Array.isArray(data.Direccion) ? data.Direccion[0] : data.Direccion;
+                if (direccionData) {
+                    direccion = direccionData.direccion || '';
+                    numeroDir = direccionData.numero_dir || '';
+                    ciudad = direccionData.Ciudad || direccionData.ciudad || null;
+                }
+            }
+
+            if (ciudad) {
+                ciudadId = ciudad.id || '';
+                regionId = ciudad.id_region || (ciudad.Region ? ciudad.Region.id : null);
+            }
+
+            $('#contacto_dir_edit').val([direccion, numeroDir].filter(Boolean).join(' ').trim());
+
+            if (regionId) {
+                $('#contacto_region_edit').val(regionId);
+                buscarCiudadContactoEmergencia(ciudadId);
+            } else {
+                $('#contacto_region_edit').val('0');
+                $('#contacto_comuna_edit').html('<option value="0">Seleccione comuna</option>');
+            }
+
+            $('#mensaje_busqueda_contacto').text('Datos del paciente cargados correctamente.').removeClass('text-muted text-danger').addClass('text-success');
+            swal({ title: 'Paciente encontrado', text: 'Se completaron los datos del formulario.', icon: 'success', buttons: 'Aceptar' });
+        })
+        .fail(function(xhr) {
+            console.error(xhr);
+            limpiarCamposContactoEmergencia(true);
+            $('#mensaje_busqueda_contacto').text('No se pudo completar la búsqueda.').removeClass('text-muted').addClass('text-danger');
+            swal({ title: 'Error al buscar el paciente', icon: 'error', buttons: 'Aceptar' });
+        });
+    }
+
+    window.buscarCiudadContactoEmergencia = function(ciudadId = 0) {
+        const region = $('#contacto_region_edit').val();
+
+        if (!region || region === '0') {
+            $('#contacto_comuna_edit').html('<option value="0">Seleccione comuna</option>');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('buscar_ciudad_region') }}",
+            type: 'GET',
+            data: { region: region }
+        })
+        .done(function(response) {
+            let data = response;
+
+            if (typeof response === 'string') {
+                try {
+                    data = JSON.parse(response);
+                } catch (e) {
+                    data = [];
+                }
+            }
+
+            const ciudades = $('#contacto_comuna_edit');
+            ciudades.find('option').remove();
+            ciudades.append('<option value="0">Seleccione comuna</option>');
+
+            $(data).each(function(i, v) {
+                ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+            });
+
+            if (ciudadId) {
+                ciudades.val(ciudadId);
+            }
+        });
+    }
 
     window.buscar_ciudad_contacto = function(id_ciudad = 0) {
         var region = $('#contacto_region_edit').val();

@@ -1998,7 +1998,9 @@
         var direccion_paciente = $('#input_reserva_hora_direccion_asistente').val();
         var numero_direccion_paciente = $('#input_reserva_hora_numero_asistente').val();
         var region_paciente = $('#input_reserva_hora_region_asistente').val();
+        var region_paciente_text = $('#input_reserva_hora_region_asistente option:selected').text();
         var ciudad_paciente = $('#input_reserva_hora_ciudad_asistente').val();
+        var ciudad_paciente_text = $('#input_reserva_hora_ciudad_asistente option:selected').text();
         var valido = 1;
         var mensaje = '';
 
@@ -2080,6 +2082,8 @@
                             $('#datos_consulta_email').text(email_paciente);
                             $('#datos_consulta_telefono').text(telefono_paciente);
                             $('#datos_consulta_direcion').text(direccion_paciente);
+                            $('#datos_consulta_region').text(region_paciente_text);
+                            $('#datos_consulta_ciudad').text(ciudad_paciente_text);
                             $('#datos_consulta_numero').text(numero_direccion_paciente);
 
                             $('.paciente_view_asistente').show();

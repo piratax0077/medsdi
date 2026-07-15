@@ -54,16 +54,21 @@
                             </div>
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
-                                <div class="col-1"></div><!--<img class=" wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/femenino-info.png') }}"></div>-->
-                                <!--<div class="col-1"><img class=" wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/masculino-info.png') }}"></div>-->
-                                <div class="col-10  ml-2 text-secondary">
+                                <div class="col-1">
+                                    @if ($paciente->sexo == 'M')
+                                        <img class="wid-30 pl-2 mr-2"
+                                            src="{{ asset('images/sdi-iconos/masculino-info.png') }}"
+                                            alt="Masculino">
+                                    @else
+                                        <img class="wid-30 pl-2 mr-2"
+                                            src="{{ asset('images/sdi-iconos/femenino-info.png') }}"
+                                            alt="Femenino">
+                                    @endif
+                                </div>
+                                <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Sexo</h6>
                                     <p id="sexo_paciente">
-                                    @if ($paciente->sexo == 'M')
-                                        Masculino
-                                    @else
-                                        Femenino
-                                    @endif
+                                        {{ $paciente->sexo == 'M' ? 'Masculino' : 'Femenino' }}
                                     </p>
                                 </div>
                             </div>
@@ -364,6 +369,14 @@
 
                             <hr class="mt-2 mb-2">
                             <div class="form-row align-items-center mt-1">
+                                <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/usuario-info.png') }}"></div>
+                                <div class="col-10 ml-2 text-secondary">
+                                    <h6 class="text-dark">Relación con el paciente</h6>
+                                    <p id="parentezco_contacto">{{ $contactoEmergencia->parentezco ?? 'Sin registro' }}</p>
+                                </div>
+                            </div>
+                            <hr class="mt-2 mb-2">
+                            <div class="form-row align-items-center mt-1">
                                 <div class="col-1"><img class="wid-30 pl-2 mr-2" src="{{ asset('images/sdi-iconos/hogar-info.png') }}"></div>
                                 <div class="col-10 ml-2 text-secondary">
                                     <h6 class="text-dark">Dirección</h6>
@@ -427,8 +440,32 @@
                             <div class="form-row pt-3">
                                 <label class="col-2 text-dark font-weight-bolder">Rut</label>
                                 <div class="col-9 ml-2 text-secondary">
-                                    <input id="contacto_rut_edit" name="contacto_rut_edit" type="text"
-                                        class="form-control form-control-sm" value="{{ $contactoEmergencia->rut ?? '' }}">
+                                    <div class="input-group input-group-sm">
+                                        <input id="contacto_rut_edit"
+                                            name="contacto_rut_edit"
+                                            type="text"
+                                            class="form-control"
+                                            value="{{ $contactoEmergencia->rut ?? '' }}"
+                                            autocomplete="off"
+                                            data-paciente-id="{{ $paciente->id }}"
+                                            data-contacto-existe="{{ $contactoEmergencia ? 1 : 0 }}"
+                                            placeholder="Ej: 12.345.678-9">
+
+                                        <div class="input-group-append">
+                                            <button type="button"
+                                                id="btn_buscar_rut_contacto"
+                                                class="btn btn-info"
+                                                onclick="buscarRutContactoEmergencia()"
+                                                title="Buscar persona por RUT">
+                                                <i class="feather icon-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <small id="mensaje_busqueda_contacto"
+                                        class="form-text text-muted">
+                                        Ingrese el RUT y presione buscar para autocompletar los datos.
+                                    </small>
                                 </div>
                             </div>
                             <hr class="mt-2">
@@ -476,6 +513,24 @@
                                         <option value="">Seleccione</option>
                                         <option value="M" @if (($contactoEmergencia->sexo ?? '') == 'M') selected @endif>Masculino</option>
                                         <option value="F" @if (($contactoEmergencia->sexo ?? '') == 'F') selected @endif>Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Relación</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select id="parentezco_contacto_emergencia"
+                                            name="parentezco_contacto_emergencia"
+                                            class="form-control form-control-sm">
+                                        <option value="">Seleccione una opción</option>
+                                        @foreach (['Pareja','Padre','Madre','Hermano/a','Abuelo/a','Tío/a','Primo/a','Amigo/a','Otro'] as $item)
+                                            <option value="{{ $item }}"
+                                                @if(($contactoEmergencia->parentezco ?? '') == $item) selected @endif>
+                                                {{ $item }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -920,3 +975,4 @@
         </div>
     </div>
 </div>
+

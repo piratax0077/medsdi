@@ -20,7 +20,7 @@
 							<a class="nav-secciones  text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="true">Evolución</a>
 					</li>
                     <li class="nav-item-secciones">
-							<a class="nav-secciones  text-uppercase" onclick="dame_historial_controles()" id="evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="true">Historial Evolución</a>
+							<a class="nav-secciones  text-uppercase" onclick="dame_historial_controles()" id="historial-evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="true">Historial Evolución</a>
 					</li>
                     @endif
 				</ul>
@@ -38,7 +38,7 @@
 			</div>
 
 			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-				<form action="{{ route('ficha.otro.prof.registrar_ficha_sico') }}" method="POST">
+				<form action="{{ route('ficha.otro.prof.registrar_ficha_sico') }}" method="POST" id="form_ficha_psicologia">
 					<input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
 					<input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
 					<input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
@@ -60,13 +60,13 @@
                         @if (session('error'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alert-message">
                                 <strong>Error:</strong> {!! session('error') !!}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                             </div>
                         @endif
                         @if (session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-message">
                                 <strong>Éxito:</strong> {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
                             </div>
                         @endif
 						<!--ATENCIÓN  DIAGNÓSTICA-->
@@ -491,7 +491,7 @@
 							@include('atencion_otros_prof.secciones_especialidad.includes.generales.evolucion')
 						</div>
                         <!--EVOLUCION-->
-						<div class="tab-pane fade" id="historial_evolucion" role="tabpanel" aria-labelledby="historial_evolucion">
+						<div class="tab-pane fade" id="historial_evolucion" role="tabpanel" aria-labelledby="historial-evolucion-tab">
 							@include('atencion_otros_prof.secciones_especialidad.includes.generales.historial_evolucion')
 						</div>
 					</div>
@@ -502,12 +502,48 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body zoom-container" style="overflow:hidden; text-align:center;">
-                <img id="imagen_psico_zoom" src="" style="max-width:100%; transition: transform 0.3s ease;">
+                <img id="imagen_psico_zoom" src="" alt="Imagen clínica ampliada" style="max-width:100%; transition: transform 0.3s ease;">
             </div>
         </div>
     </div>
 </div>
 
+
+
+<script>
+    (function () {
+        var formularioFicha = document.getElementById('form_ficha_psicologia');
+
+        if (!formularioFicha) {
+            return;
+        }
+
+        formularioFicha.addEventListener('submit', function (event) {
+            if (formularioFicha.dataset.enviando === '1') {
+                event.preventDefault();
+                return;
+            }
+
+            formularioFicha.dataset.enviando = '1';
+
+            var botones = formularioFicha.querySelectorAll(
+                'button[type="submit"], input[type="submit"]'
+            );
+
+            botones.forEach(function (boton) {
+                boton.disabled = true;
+
+                if (boton.tagName === 'INPUT') {
+                    boton.dataset.textoOriginal = boton.value;
+                    boton.value = 'Guardando...';
+                } else {
+                    boton.dataset.htmlOriginal = boton.innerHTML;
+                    boton.innerHTML = '<i class="feather icon-loader"></i> Guardando...';
+                }
+            });
+        });
+    })();
+</script>
 
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.modal_indicar_terapia')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_interconsulta_psi')
@@ -613,7 +649,7 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label">Descripción Reserva</label>
-                                <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
+                                <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion_existente" id="reserva_hora_descripcion_existente">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -747,7 +783,7 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Descrici&oacute;n Reserva</label>
-                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
+                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion_nuevo" id="reserva_hora_descripcion_nuevo">
                                 </div>
                             </div>
                         </div>
@@ -1650,6 +1686,7 @@
                 id_asistente: id_asistente,
                 origen: origen,
                 tipo_hora_medica: tipo_agenda_text,
+                descripcion: $('#reserva_hora_descripcion_existente').val(),
             }
         })
         .done(function(data) {
