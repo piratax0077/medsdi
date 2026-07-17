@@ -119,12 +119,22 @@
                             if(evaluacion)
                             {
                                 var calendarEl = document.getElementById('agenda');
+
+                                /*
+                                 * Permite posicionar la agenda automáticamente en la próxima
+                                 * fecha que tenga horas médicas, pero solamente durante la
+                                 * carga inicial. Así no se interfiere con la navegación manual.
+                                 */
+                                var agendaPosicionadaEnProximaFecha = false;
+                                var fechaActualAgenda = '{{ date('Y-m-d') }}';
+                                var permitirSaltoAutomatico = !fecha || fecha === fechaActualAgenda;
+
                                 var CalendarEl = new FullCalendar.Calendar(calendarEl, {
                                     droppable: false,
                                     editable: false,
                                     locale: "es",
                                     timeZone: 'local',
-                                    initialDate: fecha,
+                                    initialDate: fecha || fechaActualAgenda,
                                     initialView: 'timeGridWeek',
                                     themeSystem: 'bootstrap',
                                     slotDuration: '00:15:00',
@@ -217,6 +227,40 @@
                                                 });
 
                                                 successCallback(eventos);
+
+                                                /*
+                                                 * El backend devuelve proxima_fecha sin limitarla
+                                                 * al rango visible. Si hoy no tiene horas, la vista
+                                                 * salta al próximo día disponible (por ejemplo,
+                                                 * desde el miércoles al próximo lunes).
+                                                 *
+                                                 * La bandera se activa antes de gotoDate(), porque
+                                                 * gotoDate vuelve a ejecutar esta fuente de eventos.
+                                                 */
+                                                if (
+                                                    !agendaPosicionadaEnProximaFecha &&
+                                                    permitirSaltoAutomatico &&
+                                                    data.proxima_fecha
+                                                ) {
+                                                    agendaPosicionadaEnProximaFecha = true;
+
+                                                    var fechaVistaActual = fetchInfo.startStr.substring(0, 10);
+                                                    var fechaVistaTermino = fetchInfo.endStr.substring(0, 10);
+                                                    var proximaFecha = data.proxima_fecha.substring(0, 10);
+
+                                                    /*
+                                                     * Aunque la próxima fecha esté dentro de la semana
+                                                     * visible, gotoDate la deja como fecha de referencia
+                                                     * y evita que la agenda quede enfocada en un día pasado.
+                                                     */
+                                                    if (
+                                                        proximaFecha !== fechaActualAgenda ||
+                                                        proximaFecha < fechaVistaActual ||
+                                                        proximaFecha >= fechaVistaTermino
+                                                    ) {
+                                                        CalendarEl.gotoDate(proximaFecha);
+                                                    }
+                                                }
                                             },
                                             error: function(xhr) {
                                                 console.error('Error cargando horas médicas:', xhr);
@@ -673,9 +717,6 @@
                                 })
 
                                 CalendarEl.render();
-
-                                if(fecha != '' && fecha != null)
-                                    CalendarEl.gotoDate(fecha);
                             }
                         }
                         else

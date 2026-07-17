@@ -87,13 +87,42 @@
                                 id="com_inf_fono"
                                 required></textarea>
 
-                            <button type="button"
-                                class="btn btn-outline-primary btn-sm mt-2"
-                                id="btnGrabarvoz">
-                                <i class="feather icon-mic"></i> Dictar informe
-                            </button>
+                            <div class="d-flex flex-wrap align-items-center mt-2" style="gap: 6px;">
+                                <button type="button"
+                                    class="btn btn-outline-primary btn-sm"
+                                    id="btnGrabarvoz"
+                                    onclick="iniciarDictadoInformePsicologico()">
+                                    <i class="feather icon-mic"></i> Dictar informe
+                                </button>
 
-                            <span id="estado_voz_voz" class="text-muted ml-2"></span>
+                                <button type="button"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    id="btnDetenervoz"
+                                    onclick="detenerDictadoInformePsicologico()"
+                                    disabled>
+                                    <i class="feather icon-square"></i> Detener
+                                </button>
+
+                                <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                    id="btnLimpiarvoz"
+                                    onclick="limpiarDictadoInformePsicologico()">
+                                    <i class="feather icon-trash-2"></i> Limpiar
+                                </button>
+
+                                <span id="estado_voz_voz"
+                                    class="badge badge-light ml-1"
+                                    style="font-size: .78rem;">
+                                    ⏸ Detenido
+                                </span>
+                            </div>
+
+                            <div id="texto_interino_informe_psico"
+                                class="mt-2 px-2 py-1"
+                                style="display:none; background:#e8f7fa; border:1px solid #b8e8f0;
+                                       color:#117a8b; border-radius:4px; font-style:italic;
+                                       min-height:28px;">
+                            </div>
                         </div>
 
                         <div class="form-group col-md-8">
@@ -141,6 +170,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     function cargarIdentificadoresInformePsicologico() {
@@ -208,6 +238,10 @@
             data: $('#form_informe_psicologico').serialize()
         })
         .done(function(response) {
+            console.log(
+                'Respuesta del servidor al guardar informe psicológico:',
+                response
+            );
             if (response && Number(response.estado) === 1) {
                 swal({
                     title: 'Informe psicológico',
@@ -239,6 +273,7 @@
             });
         })
         .fail(function(xhr) {
+            console.log('Error al guardar informe psicológico:', xhr);
             let mensaje = 'No fue posible guardar el informe psicológico.';
 
             if (xhr.responseJSON) {
@@ -274,26 +309,445 @@
 
         cargarIdentificadoresInformePsicologico();
 
-        const formularioOriginal = document.getElementById('form_informe_psicologico');
-        const formularioPdf = document.createElement('form');
+        var formulario = $('#form_informe_psicologico');
+        var boton = $('#btn_ver_pdf_informe_psicologico');
+        var textoOriginalBoton = boton.html();
 
-        formularioPdf.method = 'POST';
-        formularioPdf.action = "{{ route('ficha.otro.prof.psicologia.informe.pdf') }}";
-        formularioPdf.target = '_blank';
-        formularioPdf.style.display = 'none';
+        /*
+         * La ventana debe abrirse directamente desde el clic del usuario.
+         * Si se abre dentro del callback AJAX, Chrome puede bloquearla.
+         */
+        var ventanaPdf = window.open(
+            '',
+            'informePsicologicoPdf',
+            'width=1050,height=780,scrollbars=yes,resizable=yes'
+        );
 
-        const datos = new FormData(formularioOriginal);
+        if (!ventanaPdf) {
+            swal({
+                title: 'Ventana bloqueada',
+                text: 'El navegador bloqueó la ventana emergente. Habilite las ventanas emergentes para este sitio.',
+                icon: 'warning',
+                button: 'Aceptar'
+            });
+            return;
+        }
 
-        datos.forEach(function(valor, nombre) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = nombre;
-            input.value = valor;
-            formularioPdf.appendChild(input);
+        /*
+         * Mostrar una pantalla de carga mientras el backend genera el PDF.
+         */
+        ventanaPdf.document.open();
+        ventanaPdf.document.write(
+            '<!DOCTYPE html>' +
+            '<html lang="es">' +
+                '<head>' +
+                    '<meta charset="UTF-8">' +
+                    '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+                    '<title>Generando informe psicológico</title>' +
+                    '<style>' +
+                        'html,body{' +
+                            'width:100%;height:100%;margin:0;' +
+                            'font-family:Arial,sans-serif;background:#f8f9fa;' +
+                        '}' +
+                        '.contenedor{' +
+                            'height:100%;display:flex;flex-direction:column;' +
+                            'align-items:center;justify-content:center;color:#6c757d;' +
+                        '}' +
+                        '.spinner{' +
+                            'width:44px;height:44px;border:4px solid #d9eff1;' +
+                            'border-top-color:#17a2b8;border-radius:50%;' +
+                            'animation:girar .8s linear infinite;margin-bottom:18px;' +
+                        '}' +
+                        '@keyframes girar{to{transform:rotate(360deg);}}' +
+                    '</style>' +
+                '</head>' +
+                '<body>' +
+                    '<div class="contenedor">' +
+                        '<div class="spinner"></div>' +
+                        '<div>Generando informe psicológico...</div>' +
+                    '</div>' +
+                '</body>' +
+            '</html>'
+        );
+        ventanaPdf.document.close();
+
+        boton.prop('disabled', true).html(
+            '<span class="spinner-border spinner-border-sm mr-1"></span> Generando...'
+        );
+
+        $.ajax({
+            url: "{{ route('ficha.otro.prof.psicologia.informe.pdf') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: formulario.serialize()
+        })
+        .done(function(response) {
+            console.log(
+                'Respuesta del servidor al generar PDF del informe psicológico:',
+                response
+            );
+
+            if (
+                response &&
+                Number(response.estado) === 1 &&
+                response.url
+            ) {
+                /*
+                 * Agregar parámetro para evitar mostrar una versión anterior
+                 * almacenada en caché.
+                 */
+                var urlPdf = response.url +
+                    (response.url.indexOf('?') === -1 ? '?' : '&') +
+                    't=' + Date.now();
+
+                /*
+                 * Reutilizar la misma ventana y navegar hacia el PDF.
+                 */
+                ventanaPdf.location.replace(urlPdf);
+                ventanaPdf.focus();
+                return;
+            }
+
+            if (ventanaPdf && !ventanaPdf.closed) {
+                ventanaPdf.close();
+            }
+
+            swal({
+                title: 'No fue posible generar el PDF',
+                text: response && response.msj
+                    ? response.msj
+                    : 'El servidor no devolvió una URL válida.',
+                icon: 'error',
+                button: 'Aceptar'
+            });
+        })
+        .fail(function(xhr) {
+            console.log('error al generar PDF del informe psicológico:', xhr);
+            if (ventanaPdf && !ventanaPdf.closed) {
+                ventanaPdf.close();
+            }
+
+            var mensaje = 'Ocurrió un error al generar el informe psicológico.';
+
+            if (xhr.responseJSON) {
+                mensaje = xhr.responseJSON.msj ||
+                    xhr.responseJSON.message ||
+                    mensaje;
+
+                if (xhr.responseJSON.errors) {
+                    mensaje = Object.values(xhr.responseJSON.errors)
+                        .flat()
+                        .join('\n');
+
+                }
+            }
+
+            swal({
+                title: 'Error',
+                text: mensaje,
+                icon: 'error',
+                button: 'Aceptar'
+            });
+        })
+        .always(function() {
+            boton.prop('disabled', false).html(textoOriginalBoton);
         });
-
-        document.body.appendChild(formularioPdf);
-        formularioPdf.submit();
-        formularioPdf.remove();
     }
+
+    // ================================================================
+    // DICTADO POR VOZ PARA EL INFORME PSICOLÓGICO
+    // Inserta el texto directamente en Summernote (#com_inf_fono).
+    // ================================================================
+    var reconocimientoInformePsicologico = null;
+    var dictandoInformePsicologico = false;
+    var reconocimientoInformePsicologicoActivo = false;
+    var reinicioDictadoInformePendiente = null;
+
+    function obtenerContenidoInformePsicologico() {
+        if ($('#com_inf_fono').next('.note-editor').length) {
+            return $('#com_inf_fono').summernote('code');
+        }
+
+        return $('#com_inf_fono').val() || '';
+    }
+
+    function obtenerTextoPlanoInformePsicologico() {
+        var html = obtenerContenidoInformePsicologico();
+
+        return $('<div>').html(html).text().replace(/\u00a0/g, ' ').trim();
+    }
+
+    function insertarTextoDictadoInformePsicologico(texto) {
+        texto = $.trim(texto || '');
+
+        if (!texto) {
+            return;
+        }
+
+        var editorInicializado = $('#com_inf_fono').next('.note-editor').length > 0;
+
+        if (editorInicializado) {
+            /*
+             * No usar pasteHTML porque Summernote requiere un rango de
+             * selección activo y puede lanzar:
+             * "Failed to execute setStart on Range".
+             *
+             * En su lugar obtenemos el HTML actual y agregamos el texto
+             * escapado al final.
+             */
+            var htmlActual = $('#com_inf_fono').summernote('code') || '';
+            var textoActual = $('<div>').html(htmlActual).text().trim();
+            var textoSeguro = $('<div>').text(texto).html();
+
+            if (
+                htmlActual === '<p><br></p>' ||
+                htmlActual === '<br>' ||
+                textoActual === ''
+            ) {
+                htmlActual = '';
+            }
+
+            var separador = htmlActual !== '' ? '&nbsp;' : '';
+            var nuevoHtml = htmlActual + separador + textoSeguro;
+
+            $('#com_inf_fono').summernote('code', nuevoHtml);
+        } else {
+            var actual = $('#com_inf_fono').val() || '';
+            var separadorTexto = actual.trim() !== '' ? ' ' : '';
+
+            $('#com_inf_fono')
+                .val(actual + separadorTexto + texto)
+                .trigger('input');
+        }
+    }
+
+    function actualizarEstadoDictadoInformePsicologico(estado, texto) {
+        var badge = $('#estado_voz_voz');
+
+        badge.removeClass('badge-light badge-success badge-danger badge-warning');
+
+        if (estado === 'escuchando') {
+            badge.addClass('badge-success').html('🎙️ Escuchando...');
+        } else if (estado === 'error') {
+            badge.addClass('badge-danger').html('❌ ' + texto);
+        } else if (estado === 'procesando') {
+            badge.addClass('badge-warning').html('💬 Procesando...');
+        } else {
+            badge.addClass('badge-light').html('⏸ Detenido');
+        }
+    }
+
+    function iniciarDictadoInformePsicologico() {
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            actualizarEstadoDictadoInformePsicologico('error', 'No compatible');
+
+            swal({
+                title: 'Dictado por voz no disponible',
+                text: 'El navegador no soporta reconocimiento de voz. Utilice Google Chrome o Microsoft Edge.',
+                icon: 'warning',
+                button: 'Aceptar'
+            });
+
+            return;
+        }
+
+        /*
+         * Evita crear o iniciar un reconocimiento cuando ya existe uno
+         * escuchando o en proceso de inicio.
+         */
+        if (dictandoInformePsicologico || reconocimientoInformePsicologicoActivo) {
+            return;
+        }
+
+        if (reinicioDictadoInformePendiente) {
+            clearTimeout(reinicioDictadoInformePendiente);
+            reinicioDictadoInformePendiente = null;
+        }
+
+        reconocimientoInformePsicologico = new SpeechRecognition();
+        reconocimientoInformePsicologico.lang = 'es-CL';
+        reconocimientoInformePsicologico.continuous = true;
+        reconocimientoInformePsicologico.interimResults = true;
+
+        reconocimientoInformePsicologico.onstart = function() {
+            reconocimientoInformePsicologicoActivo = true;
+            dictandoInformePsicologico = true;
+
+            $('#btnGrabarvoz').prop('disabled', true);
+            $('#btnDetenervoz').prop('disabled', false);
+            $('#texto_interino_informe_psico').show().text('');
+
+            actualizarEstadoDictadoInformePsicologico('escuchando');
+        };
+
+        reconocimientoInformePsicologico.onresult = function(event) {
+            var textoFinal = '';
+            var textoInterino = '';
+
+            for (var i = event.resultIndex; i < event.results.length; i++) {
+                var fragmento = event.results[i][0].transcript;
+
+                if (event.results[i].isFinal) {
+                    textoFinal += fragmento;
+                } else {
+                    textoInterino += fragmento;
+                }
+            }
+
+            $('#texto_interino_informe_psico')
+                .text(textoInterino ? '💬 ' + textoInterino : '');
+
+            if ($.trim(textoFinal) !== '') {
+                insertarTextoDictadoInformePsicologico(textoFinal);
+                $('#texto_interino_informe_psico').text('');
+            }
+        };
+
+        reconocimientoInformePsicologico.onend = function() {
+            reconocimientoInformePsicologicoActivo = false;
+
+            /*
+             * Chrome puede cerrar una sesión de reconocimiento por silencio.
+             * Se reinicia con una pequeña pausa y solo cuando el objeto ya
+             * terminó realmente.
+             */
+            if (dictandoInformePsicologico) {
+                reinicioDictadoInformePendiente = setTimeout(function() {
+                    if (
+                        dictandoInformePsicologico &&
+                        reconocimientoInformePsicologico &&
+                        !reconocimientoInformePsicologicoActivo
+                    ) {
+                        try {
+                            reconocimientoInformePsicologico.start();
+                        } catch (e) {
+                            console.warn('No fue posible reiniciar el dictado:', e);
+                        }
+                    }
+                }, 350);
+
+                return;
+            }
+
+            $('#btnGrabarvoz').prop('disabled', false);
+            $('#btnDetenervoz').prop('disabled', true);
+            $('#texto_interino_informe_psico').hide().text('');
+
+            actualizarEstadoDictadoInformePsicologico('detenido');
+        };
+
+        reconocimientoInformePsicologico.onerror = function(event) {
+            reconocimientoInformePsicologicoActivo = false;
+
+            if (event.error === 'no-speech') {
+                return;
+            }
+
+            dictandoInformePsicologico = false;
+
+            if (reinicioDictadoInformePendiente) {
+                clearTimeout(reinicioDictadoInformePendiente);
+                reinicioDictadoInformePendiente = null;
+            }
+
+            $('#btnGrabarvoz').prop('disabled', false);
+            $('#btnDetenervoz').prop('disabled', true);
+            $('#texto_interino_informe_psico').hide().text('');
+
+            var mensajes = {
+                'not-allowed': 'Permiso de micrófono denegado',
+                'audio-capture': 'No se encontró micrófono',
+                'network': 'Error de conexión',
+                'aborted': 'Dictado cancelado'
+            };
+
+            actualizarEstadoDictadoInformePsicologico(
+                'error',
+                mensajes[event.error] || event.error
+            );
+        };
+
+        try {
+            reconocimientoInformePsicologico.start();
+        } catch (e) {
+            reconocimientoInformePsicologicoActivo = false;
+            dictandoInformePsicologico = false;
+            actualizarEstadoDictadoInformePsicologico('error', 'No se pudo iniciar');
+            console.error(e);
+        }
+    }
+
+    function detenerDictadoInformePsicologico() {
+        dictandoInformePsicologico = false;
+
+        if (reinicioDictadoInformePendiente) {
+            clearTimeout(reinicioDictadoInformePendiente);
+            reinicioDictadoInformePendiente = null;
+        }
+
+        if (reconocimientoInformePsicologico) {
+            reconocimientoInformePsicologico.onend = function() {
+                reconocimientoInformePsicologicoActivo = false;
+            };
+
+            try {
+                reconocimientoInformePsicologico.stop();
+            } catch (e) {
+                console.warn('No fue posible detener el dictado:', e);
+            }
+        }
+
+        reconocimientoInformePsicologicoActivo = false;
+        reconocimientoInformePsicologico = null;
+
+        $('#btnGrabarvoz').prop('disabled', false);
+        $('#btnDetenervoz').prop('disabled', true);
+        $('#texto_interino_informe_psico').hide().text('');
+
+        actualizarEstadoDictadoInformePsicologico('detenido');
+    }
+
+    function limpiarDictadoInformePsicologico() {
+        var contenido = obtenerTextoPlanoInformePsicologico();
+
+        if (contenido === '') {
+            return;
+        }
+
+        swal({
+            title: 'Limpiar informe',
+            text: '¿Desea eliminar todo el contenido del informe psicológico?',
+            icon: 'warning',
+            buttons: {
+                cancel: 'Cancelar',
+                confirm: {
+                    text: 'Sí, limpiar',
+                    value: true
+                }
+            },
+            dangerMode: true
+        }).then(function(confirmado) {
+            if (!confirmado) {
+                return;
+            }
+
+            if ($('#com_inf_fono').next('.note-editor').length) {
+                $('#com_inf_fono').summernote('code', '');
+            } else {
+                $('#com_inf_fono').val('');
+            }
+
+            $('#texto_interino_informe_psico').hide().text('');
+        });
+    }
+
+    /*
+     * Detener el micrófono al cerrar el modal para evitar que siga
+     * escuchando fuera del informe.
+     */
+    $('#informe_psi').on('hidden.bs.modal', function() {
+        detenerDictadoInformePsicologico();
+    });
 </script>

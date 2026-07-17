@@ -188,7 +188,7 @@
             top: -285px;
             left: 0px;
             right: 0px;
-            height: 25085;
+            height: 250px;
         }
 
         footer {
@@ -246,7 +246,7 @@
     </style>
 </head>
 <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador
-    {{ $cuerpo['arrayFichaAtencion']['token'] ?? '' }}</div>
+    {{ $cuerpo['array_ficha_atencion']['token'] ?? '' }}</div>
 
 @include('PDF.header')
 @include('PDF.footer')
@@ -262,22 +262,22 @@
                 <tr>
                     <td width="50%">
                         <strong>Nombre:</strong>
-                        {{ $cuerpo['arrayPaciente']['nombre'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_paciente']['nombre'] ?? 'Sin información' }}
                     </td>
                     <td width="50%">
                         <strong>RUT:</strong>
-                        {{ $cuerpo['arrayPaciente']['rut'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_paciente']['rut'] ?? 'Sin información' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Fecha de nacimiento:</strong>
-                        {{ $cuerpo['arrayPaciente']['fecha_nac'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_paciente']['fecha_nac'] ?? 'Sin información' }}
                     </td>
                     <td>
                         <strong>Sexo:</strong>
                         @php
-                            $sexoPaciente = $cuerpo['arrayPaciente']['sexo'] ?? '';
+                            $sexoPaciente = $cuerpo['array_paciente']['sexo'] ?? '';
                         @endphp
 
                         @if ($sexoPaciente === 'M')
@@ -292,7 +292,7 @@
                 <tr>
                     <td colspan="2">
                         <strong>Dirección:</strong>
-                        {{ $cuerpo['arrayPaciente']['direccion'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_paciente']['direccion'] ?? 'Sin información' }}
                     </td>
                 </tr>
             </table>
@@ -305,7 +305,7 @@
                 <tr>
                     <td width="50%">
                         <strong>Fecha del informe:</strong>
-                        {{ $cuerpo['arrayInforme']['fecha_informe'] ?? ($cuerpo['arrayFichaAtencion']['created_at'] ?? 'Sin información') }}
+                        {{ $cuerpo['arrayInforme']['fecha_informe'] ?? ($cuerpo['array_ficha_atencion']['created_at'] ?? 'Sin información') }}
                     </td>
                     <td width="50%">
                         <strong>Procedencia:</strong>
@@ -315,7 +315,7 @@
                 <tr>
                     <td>
                         <strong>Lugar de atención:</strong>
-                        {{ $cuerpo['arrayLugarAtencion']['nombre'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_lugar_atencion']['nombre'] ?? 'Sin información' }}
                     </td>
                     <td>
                         <strong>Próximo control:</strong>
@@ -359,7 +359,7 @@
         <div class="seccion-examen">
             <div class="titulo-seccion">Informe psicológico</div>
             <p class="desc">
-                {!! nl2br(e($cuerpo['arrayInforme']['informe'] ?? 'Sin información')) !!}
+                {!! $cuerpo['arrayInforme']['informe'] ?? '<p>Sin información</p>' !!}
             </p>
         </div>
 
@@ -370,30 +370,35 @@
                 <tr>
                     <td width="60%">
                         <strong>Nombre:</strong>
-                        {{ $cuerpo['arrayProfesional']['nombre'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_profesional']['nombre'] ?? 'Sin información' }}
                     </td>
                     <td width="40%">
                         <strong>RUT:</strong>
-                        {{ $cuerpo['arrayProfesional']['rut'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_profesional']['rut'] ?? 'Sin información' }}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <strong>Especialidad:</strong>
-                        {{ $cuerpo['arrayProfesional']['especialidad'] ?? 'Psicología' }}
+                        {{ $cuerpo['array_profesional']['especialidad'] ?? 'Psicología' }}
                     </td>
                     <td>
                         <strong>N.º de colegio:</strong>
-                        {{ $cuerpo['arrayProfesional']['num_colegio'] ?? 'Sin información' }}
+                        {{ $cuerpo['array_profesional']['num_colegio'] ?? 'Sin información' }}
                     </td>
                 </tr>
             </table>
 
-            @if (!empty($cuerpo['arrayProfesional']['qr']))
+            @php
+                $qrProfesional = $cuerpo['array_profesional']['qr'] ?? null;
+            @endphp
+
+            @if (is_string($qrProfesional) && trim($qrProfesional) !== '')
                 <div class="text-center mt-3">
                     <div class="div-qr">
-                        <img style="width: 85px;"
-                            src="data:image/png;base64,{{ $cuerpo['arrayProfesional']['qr'] }}"
+                        <img
+                            style="width: 85px;"
+                            src="data:image/png;base64,{{ $qrProfesional }}"
                             alt="Código QR profesional">
                     </div>
                     <p style="font-size: 0.65rem;">

@@ -33,6 +33,7 @@ use App\Models\FichaSiqui;
 use App\Models\FonoInforme;
 use App\Models\FonoValoracionEquilibrio;
 use App\Models\HoraMedica;
+use App\Models\InformeMedico;
 use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
 use App\Models\LugarAtencion;
@@ -132,30 +133,84 @@ class FichaAtencionOtrosProfController extends Controller
 
 public function guardarInformePsicologico(Request $request)
 {
-    $datos = $request->validate([
-        'id_ficha_atencion'    => 'required|integer|exists:fichas_atenciones,id',
-        'id_paciente'          => 'required|integer|exists:pacientes,id',
-        'id_profesional'       => 'required|integer|exists:profesionales,id',
-        'id_lugar_atencion'    => 'required|integer|exists:lugar_atencion,id',
-        'fecha_informe'        => 'required|date',
-        'procedencia'          => 'nullable|string|max:255',
-        'diagnostico'          => 'required|string|max:500',
-        'sesiones_realizadas'  => 'nullable|integer|min:0',
-        'sesiones_pendientes'  => 'nullable|integer|min:0',
-        'tratamiento_realizado'=> 'nullable|string',
-        'informe'              => 'required|string',
-        'nombre_profesional'   => 'nullable|string|max:255',
-        'proximo_control'      => 'nullable|date',
-    ]);
-
-    DB::beginTransaction();
-
     try {
-        $informe = InformePsicologico::updateOrCreate(
+        $datos = $request->validate([
+            'id_ficha_atencion' =>
+                'required|integer|exists:ficha_otros_profesionales,id',
+
+            'fecha_informe' =>
+                'required|date',
+
+            'procedencia' =>
+                'nullable|string|max:255',
+
+            'diagnostico' =>
+                'required|string|max:500',
+
+            'sesiones_realizadas' =>
+                'nullable|integer|min:0',
+
+            'sesiones_pendientes' =>
+                'nullable|integer|min:0',
+
+            'tratamiento_realizado' =>
+                'nullable|string',
+
+            /*
+             * Puede contener HTML generado por Summernote.
+             */
+            'informe' =>
+                'required|string',
+
+            'nombre_profesional' =>
+                'nullable|string|max:255',
+
+            'proximo_control' =>
+                'nullable|date',
+        ]);
+
+        $ficha = FichaOtrosProfesionales::findOrFail(
+            $datos['id_ficha_atencion']
+        );
+
+        DB::beginTransaction();
+
+        $informe = InformeMedico::updateOrCreate(
             [
-                'id_ficha_atencion' => $datos['id_ficha_atencion'],
+                /*
+                 * Un informe psicológico por ficha de
+                 * otros profesionales.
+                 */
+                'id_tipo_informe' => 8,
+                'id_ficha_otro_prof' => $ficha->id,
             ],
-            $datos
+            [
+                /*
+                 * Guardar directamente el HTML.
+                 *
+                 * Ejemplo:
+                 * <p>Texto del informe</p>
+                 * <ul><li>Detalle</li></ul>
+                 */
+                'informe_medico' => $datos['informe'],
+
+                'fecha_informe_medico' =>
+                    $datos['fecha_informe'],
+
+                'id_paciente' =>
+                    $ficha->id_paciente,
+
+                'id_profesional' =>
+                    $ficha->id_profesional,
+
+                'id_lugar_atencion' =>
+                    $ficha->id_lugar_atencion,
+
+                /*
+                 * Esta atención utiliza ficha_otros_profesionales.
+                 */
+                'id_ficha_atencion' => null,
+            ]
         );
 
         DB::commit();
@@ -163,23 +218,51 @@ public function guardarInformePsicologico(Request $request)
         return response()->json([
             'estado' => 1,
             'msj' => 'Informe psicológico guardado correctamente.',
-            'informe' => $informe,
+            'informe' => [
+                'id' => $informe->id,
+                'id_tipo_informe' => $informe->id_tipo_informe,
+                'id_ficha_otro_prof' => $informe->id_ficha_otro_prof,
+                'fecha_informe_medico' =>
+                    $informe->fecha_informe_medico,
+            ],
         ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'Revise los datos enviados.',
+            'errors' => $e->errors(),
+        ], 422);
     } catch (\Throwable $e) {
-        DB::rollBack();
+        if (DB::transactionLevel() > 0) {
+            DB::rollBack();
+        }
 
         Log::error('Error guardando informe psicológico', [
-            'error' => $e->getMessage(),
-            'request' => $request->except('_token'),
+            'id_ficha_otro_prof' =>
+                $request->id_ficha_atencion,
+
+            'error' =>
+                $e->getMessage(),
+
+            'archivo' =>
+                $e->getFile(),
+
+            'linea' =>
+                $e->getLine(),
+
+            'request' =>
+                $request->except('_token'),
         ]);
 
         return response()->json([
             'estado' => 0,
             'msj' => 'No fue posible guardar el informe psicológico.',
+            'detalle' => config('app.debug')
+                ? $e->getMessage()
+                : null,
         ], 500);
     }
 }
-
 public function generarPdfInformePsicologico(Request $request)
 {
     $datos = [];
@@ -201,7 +284,7 @@ public function generarPdfInformePsicologico(Request $request)
     }
 
     try {
-        $fichaAtencion = FichaAtencion::find($request->id_ficha_atencion);
+        $fichaAtencion = FichaOtrosProfesionales::find($request->id_ficha_atencion);
 
         if (!$fichaAtencion) {
             return response([
@@ -214,6 +297,7 @@ public function generarPdfInformePsicologico(Request $request)
             ->find($fichaAtencion->id_lugar_atencion);
 
         $profesional = Profesional::find($fichaAtencion->id_profesional);
+
         $paciente = Paciente::find($fichaAtencion->id_paciente);
 
         if (!$lugarAtencion || !$profesional || !$paciente) {
@@ -257,14 +341,7 @@ public function generarPdfInformePsicologico(Request $request)
         if ($tempToken['estado'] == 1) {
             $tokenDocumento = $tempToken['certificado'];
         } else {
-            $tempToken = CertificadoController::certificadoDocumento(
-                $fichaAtencion->id,
-                rand(111, 999),
-                $paciente->id,
-                8,
-                $fichaAtencion->id
-            );
-
+            $tempToken = CertificadoController::certificadoDocumento($fichaAtencion->id, rand(111, 999), $paciente->id, 8, $fichaAtencion->id );
             $tokenDocumento = $tempToken['certificado'];
         }
 
@@ -278,29 +355,17 @@ public function generarPdfInformePsicologico(Request $request)
         $urlProfesional = '';
         $qrProfesional = '';
 
-        $tempProfesional = CertificadoController::certificadoProfesional(
-            $profesional->id,
-            1,
-            8,
-            $fichaAtencion->id
-        );
+        $tempProfesional = CertificadoController::certificadoProfesional($profesional->id,1,8, $fichaAtencion->id);
 
         if ($tempProfesional['estado'] == 1) {
             $tokenProfesional = $tempProfesional['certificado'];
         } else {
-            $tempProfesional = CertificadoController::certificadoProfesional(
-                rand(1114, 9999),
-                rand(1114, 9999),
-                8,
-                $fichaAtencion->id
-            );
+            $tempProfesional = CertificadoController::certificadoProfesional(rand(1114, 9999), rand(1114, 9999), 8, $fichaAtencion->id);
 
             $tokenProfesional = $tempProfesional['certificado'];
         }
 
-        $urlProfesional = CertificadoController::generarUrlProfesional(
-            $tokenProfesional
-        );
+        $urlProfesional = CertificadoController::generarUrlProfesional($tokenProfesional);
 
         /*
          * Aquí había un error en la función de ejemplo:
@@ -328,10 +393,7 @@ public function generarPdfInformePsicologico(Request $request)
         $regionLugar = '';
 
         if ($lugarAtencion->direccion) {
-            $direccionLugar = trim(
-                ($lugarAtencion->direccion->direccion ?? '') . ' ' .
-                ($lugarAtencion->direccion->numero_dir ?? '')
-            );
+            $direccionLugar = trim(($lugarAtencion->direccion->direccion ?? '') . ' ' . ($lugarAtencion->direccion->numero_dir ?? ''));
 
             $ciudadLugar = $lugarAtencion->direccion->Ciudad()->first();
 
@@ -429,18 +491,55 @@ public function generarPdfInformePsicologico(Request $request)
             'proximo_control' => $informePsicologico->proximo_control,
         ];
 
-        return PdfController::generarPDF(
-            'INFORME PSICOLÓGICO',
-            compact(
-                'array_ficha_atencion',
-                'array_lugar_atencion',
-                'array_profesional',
-                'array_paciente',
-                'arrayInforme'
-            ),
-            'Informe Psicologico ' . $paciente->rut,
-            'pdf_informe_psicologico'
+
+        $titulo = 'INFORME PSICOLÓGICO';
+
+        $nombre = 'informe_psicologico_' .
+            $fichaAtencion->id .
+            '_' .
+            date('YmdHis');
+
+        $template = 'pdf_informe_psicologico';
+
+        $datosPdf = compact(
+            'array_ficha_atencion',
+            'array_lugar_atencion',
+            'array_profesional',
+            'array_paciente',
+            'arrayInforme'
         );
+
+        /*
+        * Usamos G para guardar el archivo y obtener su URL.
+        */
+
+        $resultado = PdfController::generarPDF(
+            $titulo,
+            $datosPdf,
+            $nombre,
+            $template,
+            'G'
+        );
+
+        if (
+            $resultado &&
+            isset($resultado->estado) &&
+            (int) $resultado->estado === 1
+        ) {
+            return response()->json([
+                'estado' => 1,
+                'msj' => 'PDF generado correctamente.',
+                'url' => $resultado->pdf_url,
+                'archivo' => $resultado->pdf ?? null,
+            ]);
+        }
+
+        return response()->json([
+            'estado' => 0,
+            'msj' => $resultado->msj ?? 'No fue posible guardar el PDF.',
+            'resultado' => $resultado,
+            'tipo_resultado' => gettype($resultado),
+        ], 500);
     } catch (\Throwable $e) {
         \Log::error('Error al generar informe psicológico PDF', [
             'id_ficha_atencion' => $request->id_ficha_atencion,

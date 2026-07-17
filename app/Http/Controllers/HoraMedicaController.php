@@ -13,92 +13,144 @@ class HoraMedicaController extends Controller
     public function verHorasMedicas(Request $request)
     {
         try {
-            $query = HoraMedica::query();
-
             /*
-             * Filtro por una fecha específica.
-             * Se mantiene por compatibilidad con las otras llamadas existentes.
-             */
-            if ($request->filled('fecha_consulta')) {
-                $query->whereDate('fecha_consulta', $request->fecha_consulta);
+            * Consulta base.
+            *
+            * Aquí se agregan todos los filtros que deben aplicarse tanto:
+            * - a los registros visibles;
+            * - como a la búsqueda de la próxima hora médica.
+            */
+            $queryBase = HoraMedica::query();
+
+            if ($request->filled('id_ficha_atencion')) {
+                $queryBase->where(
+                    'id_ficha_atencion',
+                    $request->id_ficha_atencion
+                );
+            }
+
+            if ($request->filled('id_profesional')) {
+                $queryBase->where(
+                    'id_profesional',
+                    $request->id_profesional
+                );
+            }
+
+            if ($request->filled('id_lugar_atencion')) {
+                $queryBase->where(
+                    'id_lugar_atencion',
+                    $request->id_lugar_atencion
+                );
+            }
+
+            if ($request->filled('id_asistente')) {
+                $queryBase->where(
+                    'id_asistente',
+                    $request->id_asistente
+                );
+            }
+
+            if ($request->filled('id_paciente')) {
+                $queryBase->where(
+                    'id_paciente',
+                    $request->id_paciente
+                );
+            }
+
+            if ($request->filled('id_estado')) {
+                $queryBase->where(
+                    'id_estado',
+                    $request->id_estado
+                );
+            }
+
+            if ($request->filled('id_box')) {
+                $queryBase->where(
+                    'id_box',
+                    $request->id_box
+                );
             }
 
             /*
-             * Rango visible de FullCalendar.
-             *
-             * FullCalendar envía la fecha final como límite exclusivo,
-             * por eso se utiliza:
-             *
-             * fecha_consulta >= fecha_inicio
-             * fecha_consulta < fecha_termino
-             */
+            * Estados que pueden mostrarse en la agenda.
+            */
+            $estadosAgenda = [
+                1,  // Reservada
+                2,  // Confirmada
+                4,  // Espera
+                5,  // Realizando
+                6,  // Realizada
+                7,  // Inasistida
+                8,  // Llamando
+                9,  // Examen realizado sin resultado
+                10, // Examen realizado con resultado
+                11, // Examen transcrito
+                12, // Examen finalizado
+                13, // Bloqueo por profesional
+                16  // Pre reserva
+            ];
+
+            $queryBase->whereIn('id_estado', $estadosAgenda);
+
+            /*
+            * Consulta para obtener los registros del rango visible.
+            */
+            $queryRegistros = clone $queryBase;
+
+            /*
+            * Filtro por una fecha específica.
+            */
+            if ($request->filled('fecha_consulta')) {
+                $queryRegistros->whereDate(
+                    'fecha_consulta',
+                    $request->fecha_consulta
+                );
+            }
+
+            /*
+            * FullCalendar entrega la fecha final como límite exclusivo.
+            */
             if (
                 $request->filled('fecha_inicio') &&
                 $request->filled('fecha_termino')
             ) {
-                $fechaInicio = Carbon::parse($request->fecha_inicio)->toDateString();
-                $fechaTermino = Carbon::parse($request->fecha_termino)->toDateString();
+                $fechaInicio = Carbon::parse(
+                    $request->fecha_inicio
+                )->toDateString();
 
-                $query->whereDate('fecha_consulta', '>=', $fechaInicio)
-                    ->whereDate('fecha_consulta', '<', $fechaTermino);
+                $fechaTermino = Carbon::parse(
+                    $request->fecha_termino
+                )->toDateString();
+
+                $queryRegistros
+                    ->whereDate(
+                        'fecha_consulta',
+                        '>=',
+                        $fechaInicio
+                    )
+                    ->whereDate(
+                        'fecha_consulta',
+                        '<',
+                        $fechaTermino
+                    );
             }
 
-            if ($request->filled('id_ficha_atencion')) {
-                $query->where('id_ficha_atencion', $request->id_ficha_atencion);
-            }
-
-            if ($request->filled('id_profesional')) {
-                $query->where('id_profesional', $request->id_profesional);
-            }
-
-            if ($request->filled('id_lugar_atencion')) {
-                $query->where('id_lugar_atencion', $request->id_lugar_atencion);
-            }
-
-            if ($request->filled('id_asistente')) {
-                $query->where('id_asistente', $request->id_asistente);
-            }
-
-            if ($request->filled('id_paciente')) {
-                $query->where('id_paciente', $request->id_paciente);
-            }
-
-            if ($request->filled('id_estado')) {
-                $query->where('id_estado', $request->id_estado);
-            }
-
-            if ($request->filled('id_box')) {
-                $query->where('id_box', $request->id_box);
-            }
-
-            /*
-             * Estados mostrados en la agenda:
-             * 1  Reservada
-             * 2  Confirmada
-             * 4  Espera
-             * 5  Realizando
-             * 6  Realizada
-             * 7  Inasistida
-             * 8  Llamando
-             * 9  Examen realizado sin carga de resultado
-             * 10 Examen realizado con carga de resultado
-             * 11 Examen transcrito
-             * 12 Examen finalizado
-             * 13 Bloqueo por profesional
-             * 16 Pre reserva
-             */
-            $registros = $query
-                ->whereIn('id_estado', [
-                    1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16
-                ])
+            $registros = $queryRegistros
                 ->with([
                     'Estado',
                     'Paciente' => function ($pacienteQuery) {
                         $pacienteQuery
-                            ->select('id', 'id_prevision', 'rut')
+                            ->select(
+                                'id',
+                                'id_prevision',
+                                'rut'
+                            )
                             ->with([
                                 'Prevision' => function ($previsionQuery) {
-                                    $previsionQuery->select('id', 'nombre');
+                                    $previsionQuery->select(
+                                        'id',
+                                        'nombre'
+                                    );
                                 }
                             ]);
                     }
@@ -108,14 +160,36 @@ class HoraMedicaController extends Controller
                 ->get();
 
             /*
-             * Una agenda sin registros no es un error.
-             * FullCalendar debe recibir un arreglo vacío.
-             */
+            * Buscar la próxima fecha con horas médicas desde hoy.
+            *
+            * Esta consulta no utiliza el rango visible del calendario,
+            * porque la próxima hora puede estar en la semana siguiente.
+            */
+            $proximaHora = (clone $queryBase)
+                ->whereDate(
+                    'fecha_consulta',
+                    '>=',
+                    Carbon::today()->toDateString()
+                )
+                ->orderBy('fecha_consulta')
+                ->orderBy('hora_inicio')
+                ->first([
+                    'id',
+                    'fecha_consulta',
+                    'hora_inicio'
+                ]);
+
             return response()->json([
                 'estado' => 1,
                 'registros' => $registros,
+                'proxima_fecha' => $proximaHora
+                    ? Carbon::parse($proximaHora->fecha_consulta)->toDateString()
+                    : null,
+                'proxima_hora' => $proximaHora
+                    ? $proximaHora->hora_inicio
+                    : null,
                 'msj' => $registros->isEmpty()
-                    ? 'sin registros'
+                    ? 'sin registros en el rango visible'
                     : 'registros encontrados'
             ]);
         } catch (\Throwable $e) {
@@ -129,6 +203,8 @@ class HoraMedicaController extends Controller
             return response()->json([
                 'estado' => 0,
                 'registros' => [],
+                'proxima_fecha' => null,
+                'proxima_hora' => null,
                 'msj' => 'No fue posible cargar las horas médicas.'
             ], 500);
         }

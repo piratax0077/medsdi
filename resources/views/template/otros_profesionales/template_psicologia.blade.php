@@ -5,7 +5,9 @@
             $assetVersion = config('app.asset_version', '1.0.0');
         @endphp
         @include('atencion_otros_prof.include.head_psicologia')
-        <script src="{{ asset('js/jquery.min.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                crossorigin="anonymous"></script>
 
         <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
         <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ $assetVersion }}">

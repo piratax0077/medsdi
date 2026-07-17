@@ -894,43 +894,14 @@
     <script>
          var archivosSubidos = [];
         document.addEventListener('DOMContentLoaded', function () {
-            const btnGrabar = document.getElementById('btnGrabarvoz');
-            const campoTexto = document.getElementById('com_inf_fono');
-            const estado = document.getElementById('estado_voz_voz');
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-            if (!SpeechRecognition) {
-                btnGrabar.disabled = true;
-                estado.textContent = 'Navegador no compatible con dictado por voz.';
-                return;
-            }
-
-            const reconocimiento = new SpeechRecognition();
-            reconocimiento.lang = 'es-CL';
-            reconocimiento.continuous = false;
-            reconocimiento.interimResults = false;
-
-            btnGrabar.addEventListener('click', () => {
-                reconocimiento.start();
-                estado.textContent = '🎙️ Escuchando...';
-            });
-
-
-            reconocimiento.onresult = function (event) {
-                const resultado = event.results[0][0].transcript;
-                campoTexto.value += (campoTexto.value ? ' ' : '') + resultado;
-            };
-
-            reconocimiento.onend = function () {
-                estado.textContent = '✅ Dictado finalizado.';
-            };
-
-            reconocimiento.onerror = function (event) {
-                estado.textContent = '❌ Error: ' + event.error;
-            };
-            iniciarVozIndex();
-        });
+    /*
+     * El dictado del informe psicológico ahora se administra desde
+     * informe_psico.blade.php.
+     *
+     * Aquí se conserva únicamente el dictado de evolución/indicaciones.
+     */
+    iniciarVozIndex();
+});
 
 
         function iniciarVozIndex(){

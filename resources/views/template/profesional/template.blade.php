@@ -152,7 +152,7 @@
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
     <script src="{{ asset('js/sidebar.js') }}"></script>
-    <script src="{{ asset('js/validaRut.js') }}"></script>
+    {{-- <script src="{{ asset('js/validaRut.js') }}"></script> --}}
     <script src="{{ asset('js/periodontograma.js') }}"></script>
 
     <!-- momnent -->
