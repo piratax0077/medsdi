@@ -196,7 +196,7 @@
                         <div class="card social-widget-card bg-c-info opacidad px-0">
                             <a href="{{ ROUTE('profesional.reportes') }}" class="btn" type="button">
                                 <div class="card-body">
-                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
+                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/grafico.png') }}">
                                     <h5 class="my-auto text-white">Reportes y estadísticas</h5>
                                 </div>
                             </a>
