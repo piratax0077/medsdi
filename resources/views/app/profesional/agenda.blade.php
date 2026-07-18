@@ -2061,61 +2061,167 @@
                 let url = "{{ route('asistente.paciente.modificar') }}";
 
                 $.ajax({
-
                     url: url,
-                    type: "get",
+                    type: "GET",
                     data: data,
-                })
-                .done(function(data) {
-                    console.log(data);
-                    if (data.estado == 1)
-                    {
-                        if (data.estado == 1)
-                        {
-                            $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
-                            $('#datos_consulta_edad').text(fecha_nacimiento);
-                            if (sexo_paciente == 'M') {
-                                $('#datos_consulta_sexo').text('Masculino');
-                            } else {
-                                $('#datos_consulta_sexo').text('Femenino');
-                            }
-                            $('#datos_consulta_email').text(email_paciente);
-                            $('#datos_consulta_telefono').text(telefono_paciente);
-                            $('#datos_consulta_direcion').text(direccion_paciente);
-                            $('#datos_consulta_region').text(region_paciente_text);
-                            $('#datos_consulta_ciudad').text(ciudad_paciente_text);
-                            $('#datos_consulta_numero').text(numero_direccion_paciente);
+                    dataType: "json",
 
-                            $('.paciente_view_asistente').show();
-                            $('.paciente_edit_asistente').hide();
-                            $('#modificando_paciente_asistente').val(0);
-
-                            swal({
-                                title: "Actualización de Paciente",
-                                text: "Actualización Exitosa",
-                                icon: "success",
-                            });
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Actualización de Paciente",
-                                text: "Falla en Actualización.\nIntente de nuevo.",
-                                icon: "error",
-                            });
-                        }
+                    beforeSend: function () {
+                        // Opcional: evitar doble clic mientras se procesa.
+                        $('#btn_actualizar_paciente_asistente')
+                            .prop('disabled', true);
                     }
-                    else
-                    {
+                })
+                .done(function (respuesta) {
+
+                    if (Number(respuesta.estado) !== 1) {
                         swal({
                             title: "Actualización de Paciente",
-                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            text: respuesta.msj || "No fue posible actualizar al paciente.",
                             icon: "error",
+                            buttons: "Aceptar"
                         });
+
+                        return;
                     }
+
+                    /*
+                    * Es mejor utilizar los datos devueltos por el backend,
+                    * porque ya vienen guardados y normalizados.
+                    */
+                    var paciente = respuesta.paciente || {};
+
+                    var nombreCompleto = [
+                        paciente.nombres || nombre_paciente,
+                        paciente.apellido_uno || apellido_uno_paciente,
+                        paciente.apellido_dos || apellido_dos_paciente
+                    ]
+                    .filter(function (valor) {
+                        return valor && String(valor).trim() !== '';
+                    })
+                    .join(' ');
+
+                    $('#datos_consulta_nombre').text(nombreCompleto);
+
+                    $('#datos_consulta_edad').text(
+                        paciente.fecha_nac || fecha_nacimiento
+                    );
+
+                    var sexoGuardado = paciente.sexo || sexo_paciente;
+
+                    $('#datos_consulta_sexo').text(
+                        sexoGuardado === 'M' ? 'Masculino' : 'Femenino'
+                    );
+
+                    $('#datos_consulta_email').text(
+                        paciente.email || ''
+                    );
+
+                    $('#datos_consulta_telefono').text(
+                        paciente.telefono_uno || telefono_paciente || ''
+                    );
+
+                    $('#datos_consulta_direcion').text(
+                        paciente.direccion || direccion_paciente || ''
+                    );
+
+                    $('#datos_consulta_region').text(
+                        paciente.region || region_paciente_text || ''
+                    );
+
+                    $('#datos_consulta_ciudad').text(
+                        paciente.ciudad || ciudad_paciente_text || ''
+                    );
+
+                    $('#datos_consulta_numero').text(
+                        paciente.numero_direccion || numero_direccion_paciente || ''
+                    );
+
+                    $('.paciente_view_asistente').show();
+                    $('.paciente_edit_asistente').hide();
+                    $('#modificando_paciente_asistente').val(0);
+
+                    swal({
+                        title: "Actualización de Paciente",
+                        text: respuesta.msj || "Actualización exitosa.",
+                        icon: "success",
+                        buttons: "Aceptar"
+                    });
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                .fail(function (jqXHR, textStatus, errorThrown) {
+
+                    console.error(
+                        'Error al actualizar paciente:',
+                        jqXHR,
+                        textStatus,
+                        errorThrown
+                    );
+
+                    var mensaje = 'No fue posible actualizar los datos del paciente.';
+
+                    /*
+                    * Respuesta JSON normal del controlador:
+                    * jqXHR.responseJSON.msj
+                    */
+                    if (
+                        jqXHR.responseJSON &&
+                        jqXHR.responseJSON.msj
+                    ) {
+                        mensaje = jqXHR.responseJSON.msj;
+                    }
+                    /*
+                    * Respaldo para respuestas que lleguen como texto JSON.
+                    */
+                    else if (jqXHR.responseText) {
+                        try {
+                            var respuestaError = JSON.parse(
+                                $.trim(jqXHR.responseText)
+                            );
+
+                            if (respuestaError.msj) {
+                                mensaje = respuestaError.msj;
+                            }
+                        } catch (errorParseo) {
+                            console.warn(
+                                'La respuesta del servidor no era JSON válido.',
+                                errorParseo
+                            );
+                        }
+                    }
+
+                    /*
+                    * Errores de validación estándar de Laravel.
+                    */
+                    if (
+                        jqXHR.status === 422 &&
+                        jqXHR.responseJSON &&
+                        jqXHR.responseJSON.errors
+                    ) {
+                        var mensajesValidacion = [];
+
+                        $.each(jqXHR.responseJSON.errors, function (campo, errores) {
+                            if (Array.isArray(errores)) {
+                                mensajesValidacion = mensajesValidacion.concat(errores);
+                            }
+                        });
+
+                        if (mensajesValidacion.length > 0) {
+                            mensaje = mensajesValidacion.join('\n');
+                        }
+                    }
+
+                    swal({
+                        title: jqXHR.status === 422
+                            ? "Datos no válidos"
+                            : "Actualización de Paciente",
+                        text: mensaje,
+                        icon: "error",
+                        buttons: "Aceptar"
+                    });
+                })
+                .always(function () {
+                    $('#btn_actualizar_paciente_asistente')
+                        .prop('disabled', false);
                 });
             }
             else

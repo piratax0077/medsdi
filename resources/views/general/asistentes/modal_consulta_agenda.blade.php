@@ -2549,23 +2549,25 @@
         if(direccion == '')
         {
             valido = 0;
-            mensaje += 'direccion del Paciente requerido\n';
+            mensaje += 'Dirección del Paciente requerido\n';
         }
         if(numero == '')
         {
             valido = 0;
-            mensaje += 'numero del Paciente requerido\n';
+            mensaje += 'Número de Dirección del Paciente requerido\n';
         }
         if(region == '' || region == null)
         {
             valido = 0;
-            mensaje += 'region del Paciente requerido\n';
+            mensaje += 'Región del Paciente requerido\n';
         }
         if(ciudad == '' || region == null || ciudad == 0)
         {
             valido = 0;
-            mensaje += 'ciudad del Paciente requerido\n';
+            mensaje += 'Ciudad del Paciente requerido\n';
         }
+
+        console.log('hola');
 
         if (valido == 1) {
             if (modificando == 1) {

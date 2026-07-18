@@ -83,6 +83,8 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 // DB
 use Illuminate\Support\Facades\DB;
+// log
+use Illuminate\Support\Facades\Log;
 
 use DateTime;
 
@@ -2516,194 +2518,438 @@ class EscritorioPaciente extends Controller
     }
 
     public function crearcontactoSidebar(Request $request)
-    {
-        $request->validate([
-            'id_paciente'  => 'required|integer|exists:pacientes,id',
-            'rut'          => 'nullable|string|max:20',
-            'nombre'       => 'required|string|max:100',
-            'apellido_uno' => 'nullable|string|max:100',
-            'apellido_dos' => 'nullable|string|max:100',
-            'fn'           => 'nullable|date',
-            'sexo'         => 'nullable|in:M,F',
-            'parentezco'   => 'nullable|string|max:255',
-            'direccion'    => 'nullable|string|max:255',
-            'numero_dir'   => 'nullable|string|max:30',
-            'comuna'       => 'nullable|integer|exists:ciudades,id',
-            'email'        => 'nullable|email|max:150|required_without:telefono',
-            'telefono'     => 'nullable|string|max:30|required_without:email',
-        ], [
-            'nombre.required' => 'Debe ingresar el nombre del contacto.',
-            'email.email' => 'El correo electrónico no tiene un formato válido.',
-            'email.required_without' => 'Debe ingresar al menos un teléfono o un correo electrónico.',
-            'telefono.required_without' => 'Debe ingresar al menos un teléfono o un correo electrónico.',
-        ]);
+{
+    $datosValidados = $request->validate([
+        'id_paciente'  => 'required|integer|exists:pacientes,id',
+        'rut'          => 'nullable|string|max:20',
+        'nombre'       => 'required|string|max:100',
+        'apellido_uno' => 'nullable|string|max:100',
+        'apellido_dos' => 'nullable|string|max:100',
+        'fn'           => 'nullable|date',
+        'sexo'         => 'nullable|in:M,F',
+        'parentezco'   => 'nullable|string|max:255',
+        'direccion'    => 'nullable|string|max:255',
+        'numero_dir'   => 'nullable|string|max:30',
+        'region'       => 'nullable|integer',
+        'comuna'       => 'nullable|integer|exists:ciudades,id',
+        'email'        => 'nullable|email|max:150|required_without:telefono',
+        'telefono'     => 'nullable|string|max:30|required_without:email',
+    ], [
+        'id_paciente.required' => 'Debe indicar el paciente.',
+        'id_paciente.exists' => 'El paciente indicado no existe.',
+        'nombre.required' => 'Debe ingresar el nombre del contacto.',
+        'comuna.exists' => 'La comuna seleccionada no existe.',
+        'email.email' => 'El correo electrónico no tiene un formato válido.',
+        'email.required_without' =>
+            'Debe ingresar al menos un teléfono o un correo electrónico.',
+        'telefono.required_without' =>
+            'Debe ingresar al menos un teléfono o un correo electrónico.',
+    ]);
 
-        DB::beginTransaction();
+    $paciente = Paciente::find($datosValidados['id_paciente']);
 
-        try {
-            $paciente = Paciente::find($request->id_paciente);
+    if (!$paciente) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'Paciente no encontrado.',
+        ], 404);
+    }
 
-            if (!$paciente) {
-                return response()->json([
-                    'estado' => 0,
-                    'msj' => 'Paciente no encontrado.',
-                ], 404);
-            }
+    /*
+     * Normalizar antes de iniciar la transacción.
+     */
+    $nombre = trim((string) $request->input('nombre'));
 
-            /*
-            * Revisar si el paciente ya tiene un contacto asociado.
-            */
-            $relacionExistente = PacienteContactoEmergencia::where(
+    $telefono = trim(
+        (string) $request->input('telefono')
+    );
+
+    $email = mb_strtolower(
+        trim((string) $request->input('email'))
+    );
+
+    $rut = $request->filled('rut')
+        ? trim((string) $request->input('rut'))
+        : null;
+
+    $rutNormalizado = $rut
+        ? mb_strtolower(
+            preg_replace('/[^0-9kK]/', '', $rut)
+        )
+        : null;
+
+    $direccionTexto = trim(
+        (string) $request->input('direccion')
+    );
+
+    $numeroDireccion = trim(
+        (string) $request->input('numero_dir')
+    );
+
+    DB::beginTransaction();
+
+    try {
+        /*
+        |--------------------------------------------------------------------------
+        | Buscar relación existente del paciente
+        |--------------------------------------------------------------------------
+        */
+
+        $relacion = PacienteContactoEmergencia::where(
                 'id_paciente',
                 $paciente->id
-            )->first();
+            )
+            ->lockForUpdate()
+            ->first();
 
-            if ($relacionExistente) {
+        $pacienteTeniaRelacion = $relacion !== null;
+
+        $contacto = null;
+        $accion = 'creado';
+
+        /*
+         * Si el paciente ya tiene un contacto, editar ese mismo.
+         */
+        if ($relacion) {
+            $contacto = ContactoEmergencia::where(
+                    'id',
+                    $relacion->id_contacto
+                )
+                ->lockForUpdate()
+                ->first();
+
+            if ($contacto) {
+                $accion = 'actualizado';
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Buscar contacto existente para reutilizarlo
+        |--------------------------------------------------------------------------
+        |
+        | Solamente se realiza cuando el paciente no tiene un contacto válido
+        | relacionado.
+        */
+
+        if (!$contacto && $email !== '') {
+            $contacto = ContactoEmergencia::whereRaw(
+                    'LOWER(TRIM(email)) = ?',
+                    [$email]
+                )
+                ->lockForUpdate()
+                ->first();
+
+            if ($contacto) {
+                $accion = 'asociado';
+            }
+        }
+
+        if (!$contacto && $rutNormalizado !== null) {
+            $contacto = ContactoEmergencia::whereRaw(
+                    "
+                    LOWER(
+                        REPLACE(
+                            REPLACE(TRIM(rut), '.', ''),
+                            '-',
+                            ''
+                        )
+                    ) = ?
+                    ",
+                    [$rutNormalizado]
+                )
+                ->lockForUpdate()
+                ->first();
+
+            if ($contacto) {
+                $accion = 'asociado';
+            }
+        }
+
+        /*
+         * Si no existe por relación, correo ni RUT, crear uno nuevo.
+         */
+        if (!$contacto) {
+            $contacto = new ContactoEmergencia();
+            $accion = 'creado';
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Validar posibles conflictos entre correo y RUT
+        |--------------------------------------------------------------------------
+        |
+        | Evita actualizar un contacto con un correo que pertenece a otro
+        | contacto distinto.
+        */
+
+        if ($email !== '') {
+            $contactoConCorreo = ContactoEmergencia::whereRaw(
+                    'LOWER(TRIM(email)) = ?',
+                    [$email]
+                )
+                ->when(
+                    $contacto->exists,
+                    function ($query) use ($contacto) {
+                        $query->where('id', '<>', $contacto->id);
+                    }
+                )
+                ->first();
+
+            if ($contactoConCorreo) {
+                DB::rollBack();
+
                 return response()->json([
                     'estado' => 0,
-                    'msj' => 'El paciente ya tiene un contacto de emergencia registrado.',
-                    'id_contacto' => $relacionExistente->id_contacto,
+                    'msj' => 'El correo electrónico pertenece a otro contacto de emergencia.',
                 ], 422);
             }
+        }
 
-            /*
-            * Normalizar datos.
-            */
-            $nombre = trim((string) $request->nombre);
-            $telefono = trim((string) $request->telefono);
-            $email = trim((string) $request->email);
-            $direccionTexto = trim((string) $request->direccion);
-            $numeroDireccion = trim((string) $request->numero_dir);
+        if ($rutNormalizado !== null) {
+            $contactoConRut = ContactoEmergencia::whereRaw(
+                    "
+                    LOWER(
+                        REPLACE(
+                            REPLACE(TRIM(rut), '.', ''),
+                            '-',
+                            ''
+                        )
+                    ) = ?
+                    ",
+                    [$rutNormalizado]
+                )
+                ->when(
+                    $contacto->exists,
+                    function ($query) use ($contacto) {
+                        $query->where('id', '<>', $contacto->id);
+                    }
+                )
+                ->first();
 
-            /*
-            * Crear dirección solamente cuando se informe dirección y comuna.
-            */
-            $direccion = null;
+            if ($contactoConRut) {
+                DB::rollBack();
 
-            if ($direccionTexto !== '' && $request->filled('comuna')) {
-                $direccion = new Direccion();
-                $direccion->direccion = $direccionTexto;
-                $direccion->numero_dir = $numeroDireccion !== ''
-                    ? $numeroDireccion
-                    : null;
-                $direccion->id_ciudad = $request->comuna;
-                $direccion->save();
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El RUT pertenece a otro contacto de emergencia.',
+                ], 422);
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Crear o actualizar dirección
+        |--------------------------------------------------------------------------
+        */
+
+        $direccion = null;
+
+        if ($direccionTexto !== '' && $request->filled('comuna')) {
+            if (!empty($contacto->id_direccion)) {
+                $direccion = Direccion::where(
+                        'id',
+                        $contacto->id_direccion
+                    )
+                    ->lockForUpdate()
+                    ->first();
             }
 
+            if (!$direccion) {
+                $direccion = new Direccion();
+            }
+
+            $direccion->direccion = $direccionTexto;
+
+            $direccion->numero_dir = $numeroDireccion !== ''
+                ? $numeroDireccion
+                : null;
+
+            $direccion->id_ciudad = $request->comuna;
+            $direccion->save();
+
+            $contacto->id_direccion = $direccion->id;
+        } elseif ($direccionTexto === '') {
             /*
-            * Crear contacto de emergencia.
-            */
-            $contacto = new ContactoEmergencia();
-            $contacto->rut = $request->filled('rut')
-                ? trim((string) $request->rut)
-                : null;
+             * Se desvincula, pero no se elimina el registro anterior.
+             */
+            $contacto->id_direccion = null;
+        }
 
-            $contacto->nombre = $nombre;
+        /*
+        |--------------------------------------------------------------------------
+        | Guardar contacto
+        |--------------------------------------------------------------------------
+        */
 
-            $contacto->apellido_uno = $request->filled('apellido_uno')
-                ? trim((string) $request->apellido_uno)
-                : null;
+        $contacto->rut = $rut;
+        $contacto->nombre = $nombre;
 
-            $contacto->apellido_dos = $request->filled('apellido_dos')
-                ? trim((string) $request->apellido_dos)
-                : null;
+        $contacto->apellido_uno = $request->filled('apellido_uno')
+            ? trim((string) $request->apellido_uno)
+            : null;
 
-            $contacto->fecha_nac = $request->filled('fn')
-                ? $request->fn
-                : null;
+        $contacto->apellido_dos = $request->filled('apellido_dos')
+            ? trim((string) $request->apellido_dos)
+            : null;
 
-            $contacto->sexo = $request->filled('sexo')
-                ? $request->sexo
-                : null;
+        $contacto->fecha_nac = $request->filled('fn')
+            ? $request->fn
+            : null;
 
+        $contacto->sexo = $request->filled('sexo')
+            ? $request->sexo
+            : null;
+
+        /*
+         * Se puede conservar este campo por compatibilidad,
+         * pero la relación específica se guarda en la tabla pivote.
+         */
+        if (property_exists($contacto, 'parentezco')) {
             $contacto->parentezco = $request->filled('parentezco')
                 ? trim((string) $request->parentezco)
                 : null;
+        }
 
-            $contacto->email = $email !== ''
-                ? $email
-                : null;
+        $contacto->email = $email !== ''
+            ? $email
+            : null;
 
-            $contacto->telefono = $telefono !== ''
-                ? $telefono
-                : null;
+        $contacto->telefono = $telefono !== ''
+            ? $telefono
+            : null;
 
-            $contacto->id_direccion = $direccion
-                ? $direccion->id
-                : null;
+        $contacto->save();
 
-            $contacto->save();
+        /*
+        |--------------------------------------------------------------------------
+        | Crear o actualizar relación con el paciente
+        |--------------------------------------------------------------------------
+        */
 
-            /*
-            * Asociar el contacto al paciente.
-            */
+        if (!$relacion) {
             $relacion = new PacienteContactoEmergencia();
             $relacion->id_paciente = $paciente->id;
-            $relacion->id_contacto = $contacto->id;
-            $relacion->save();
+        }
 
-            /*
-            * Obtener ciudad y región para actualizar el sidebar.
-            */
-            $nombreCiudad = null;
-            $nombreRegion = null;
+        $relacion->id_contacto = $contacto->id;
+
+        /*
+         * El parentesco pertenece a esta relación:
+         * una persona puede ser hermano de un paciente y padre de otro.
+         */
+        $relacion->relacion = $request->filled('parentezco')
+            ? trim((string) $request->parentezco)
+            : null;
+
+        $relacion->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Obtener ciudad y región
+        |--------------------------------------------------------------------------
+        */
+
+        $nombreCiudad = null;
+        $nombreRegion = null;
+
+        if (!empty($contacto->id_direccion)) {
+            $direccion = Direccion::find(
+                $contacto->id_direccion
+            );
 
             if ($direccion) {
-                $ciudad = Ciudad::find($direccion->id_ciudad);
+                $ciudad = Ciudad::find(
+                    $direccion->id_ciudad
+                );
 
                 if ($ciudad) {
                     $nombreCiudad = $ciudad->nombre;
 
-                    $region = Region::find($ciudad->id_region);
+                    $region = Region::find(
+                        $ciudad->id_region
+                    );
 
                     if ($region) {
                         $nombreRegion = $region->nombre;
                     }
                 }
             }
+        }
 
-            DB::commit();
+        DB::commit();
 
-            return response()->json([
-                'estado' => 1,
-                'msj' => 'Contacto de emergencia registrado correctamente.',
-                'contacto' => [
-                    'id' => $contacto->id,
-                    'rut' => $contacto->rut,
-                    'nombre' => $contacto->nombre,
-                    'apellido_uno' => $contacto->apellido_uno,
-                    'apellido_dos' => $contacto->apellido_dos,
-                    'fecha_nac' => $contacto->fecha_nac,
-                    'sexo' => $contacto->sexo,
-                    'parentezco' => $contacto->parentezco,
-                    'email' => $contacto->email,
-                    'telefono' => $contacto->telefono,
-                    'direccion' => $direccion
-                        ? $direccion->direccion
-                        : null,
-                    'numero_dir' => $direccion
-                        ? $direccion->numero_dir
-                        : null,
-                    'ciudad' => $nombreCiudad,
-                    'region' => $nombreRegion,
-                ],
-            ]);
-        } catch (\Throwable $e) {
-            DB::rollBack();
+        /*
+        |--------------------------------------------------------------------------
+        | Mensaje de respuesta
+        |--------------------------------------------------------------------------
+        */
 
-            \Log::error('Error al crear contacto de emergencia desde sidebar', [
+        if ($accion === 'creado') {
+            $mensaje =
+                'Contacto de emergencia registrado correctamente.';
+        } elseif ($pacienteTeniaRelacion) {
+            $mensaje =
+                'Contacto de emergencia actualizado correctamente.';
+        } else {
+            $mensaje =
+                'El contacto existente fue asociado correctamente al paciente.';
+        }
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => $mensaje,
+            'accion' => $accion,
+
+            'contacto' => [
+                'id' => $contacto->id,
+                'rut' => $contacto->rut,
+                'nombre' => $contacto->nombre,
+                'apellido_uno' => $contacto->apellido_uno,
+                'apellido_dos' => $contacto->apellido_dos,
+                'fecha_nac' => $contacto->fecha_nac,
+                'sexo' => $contacto->sexo,
+
+                /*
+                 * Para la tarjeta debe utilizarse la relación específica
+                 * con el paciente.
+                 */
+                'parentezco' => $relacion->relacion,
+
+                'email' => $contacto->email,
+                'telefono' => $contacto->telefono,
+
+                'direccion' => $direccion
+                    ? $direccion->direccion
+                    : null,
+
+                'numero_dir' => $direccion
+                    ? $direccion->numero_dir
+                    : null,
+
+                'ciudad' => $nombreCiudad,
+                'region' => $nombreRegion,
+            ],
+        ]);
+    } catch (\Throwable $e) {
+        DB::rollBack();
+
+        Log::error(
+            'Error al guardar contacto de emergencia desde sidebar',
+            [
                 'id_paciente' => $request->id_paciente,
                 'error' => $e->getMessage(),
                 'archivo' => $e->getFile(),
                 'linea' => $e->getLine(),
-            ]);
+            ]
+        );
 
-            return response()->json([
-                'estado' => 0,
-                'msj' => 'No se pudo registrar el contacto de emergencia.',
-            ], 500);
-        }
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'No se pudo guardar el contacto de emergencia.',
+        ], 500);
     }
+}
 
     public function getPacienteUser(Request $request)
     {

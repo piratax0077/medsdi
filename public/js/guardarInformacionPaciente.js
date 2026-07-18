@@ -234,33 +234,218 @@
                 if (typeof data === 'string') data = JSON.parse(data);
             } catch (e) {}
 
-            if (data && data.estado == 1) {
-                var contacto = data.contacto || data.contactoEmergencia || {};
+            if (data && Number(data.estado) === 1) {
 
-                var direccionTexto = 'Sin información';
-                if (data.direccion && data.direccion.direccion) {
-                    // respuesta antigua con estructura anidada
-                    try {
-                        direccionTexto = data.direccion.direccion.direccion || direccionTexto;
-                    } catch (e) {}
-                } else if (contacto) {
-                    direccionTexto = getDireccionPaciente(contacto);
+                var contacto =
+                    data.contacto ||
+                    data.contactoEmergencia ||
+                    data.registro ||
+                    {};
+
+                /*
+                * El backend podría utilizar "nombre" o "nombres".
+                */
+                var nombreContacto =
+                    contacto.nombre ||
+                    contacto.nombres ||
+                    nombre ||
+                    '';
+
+                var apellidoUnoContacto =
+                    contacto.apellido_uno ||
+                    apellido_uno ||
+                    '';
+
+                var apellidoDosContacto =
+                    contacto.apellido_dos ||
+                    apellido_dos ||
+                    '';
+
+                var rutContacto =
+                    contacto.rut ||
+                    rut ||
+                    '';
+
+                var telefonoContacto =
+                    contacto.telefono ||
+                    contacto.telefono_uno ||
+                    telefono ||
+                    '';
+
+                var emailContacto =
+                    contacto.email ||
+                    email ||
+                    '';
+
+                var parentezcoContacto =
+                    contacto.parentezco ||
+                    contacto.parentesco ||
+                    parentezco ||
+                    '';
+
+                /*
+                * Dirección.
+                */
+                var direccionTexto = direccion || '';
+                var ciudadTexto = '';
+                var regionTexto = '';
+
+                /*
+                * Estructura posible:
+                *
+                * contacto.direccion.direccion
+                * contacto.direccion.numero_dir
+                * contacto.direccion.ciudad.nombre
+                * contacto.direccion.ciudad.region.nombre
+                */
+                if (
+                    contacto.direccion &&
+                    typeof contacto.direccion === 'object'
+                ) {
+                    var direccionObjeto = contacto.direccion;
+
+                    direccionTexto = [
+                        direccionObjeto.direccion || '',
+                        direccionObjeto.numero_dir || ''
+                    ]
+                    .filter(function(valor) {
+                        return valor && String(valor).trim() !== '';
+                    })
+                    .join(' ')
+                    .trim();
+
+                    var ciudadObjeto =
+                        direccionObjeto.ciudad ||
+                        direccionObjeto.Ciudad ||
+                        null;
+
+                    if (ciudadObjeto) {
+                        ciudadTexto = ciudadObjeto.nombre || '';
+
+                        var regionObjeto =
+                            ciudadObjeto.region ||
+                            ciudadObjeto.Region ||
+                            null;
+
+                        if (regionObjeto) {
+                            regionTexto = regionObjeto.nombre || '';
+                        }
+                    }
                 }
 
-                $('#nombre_completo_contacto').text((contacto.nombres || '') + ' ' + (contacto.apellido_uno || ''));
-                $('#apellidos_contacto').text((contacto.apellido_uno || '') + ' ' + (contacto.apellido_dos || ''));
-                $('#direccion_contacto').text(direccionTexto);
-                $('#email_contacto_').text(contacto.email || '');
-                $('#telefono_contacto').text(contacto.telefono_uno || '');
-                $('#comuna_region_contacto').html((contacto.ciudad || '') + '<br> ' + (contacto.region || ''));
+                /*
+                * Si el backend devuelve ciudad y región como texto plano.
+                */
+                if (!ciudadTexto) {
+                    ciudadTexto =
+                        contacto.ciudad ||
+                        data.ciudad ||
+                        $('#contacto_comuna_edit option:selected').text() ||
+                        '';
+                }
+
+                if (!regionTexto) {
+                    regionTexto =
+                        contacto.region ||
+                        data.region ||
+                        $('#contacto_region_edit option:selected').text() ||
+                        '';
+                }
+
+                /*
+                * Evitar mostrar el texto de las opciones iniciales.
+                */
+                if (ciudadTexto === 'Seleccione comuna') {
+                    ciudadTexto = '';
+                }
+
+                if (regionTexto === 'Seleccione región') {
+                    regionTexto = '';
+                }
+
+                /*
+                * Actualizar toda la tarjeta.
+                */
+                $('#rut_contacto').text(
+                    rutContacto || 'Sin RUT registrado'
+                );
+
+                $('#nombre_completo_contacto').text(
+                    nombreContacto || 'Sin nombre registrado'
+                );
+
+                $('#apellidos_contacto').text(
+                    [
+                        apellidoUnoContacto,
+                        apellidoDosContacto
+                    ]
+                    .filter(function(valor) {
+                        return valor && String(valor).trim() !== '';
+                    })
+                    .join(' ') || 'Sin apellidos registrados'
+                );
+
+                $('#parentezco_contacto').text(
+                    parentezcoContacto || 'Sin registro'
+                );
+
+                $('#direccion_contacto').text(
+                    direccionTexto || 'Sin dirección registrada'
+                );
+
+                var comunaRegionHtml = '';
+
+                if (ciudadTexto) {
+                    comunaRegionHtml += $('<div>').text(ciudadTexto).html();
+                }
+
+                if (regionTexto) {
+                    if (comunaRegionHtml !== '') {
+                        comunaRegionHtml += '<br>';
+                    }
+
+                    comunaRegionHtml += $('<div>').text(regionTexto).html();
+                }
+
+                $('#comuna_region_contacto').html(
+                    comunaRegionHtml ||
+                    'Sin comuna o región registrada'
+                );
+
+                $('#email_contacto_').text(
+                    emailContacto || 'Sin email registrado'
+                );
+
+                $('#telefono_contacto').text(
+                    telefonoContacto || 'Sin teléfono registrado'
+                );
+
+                /*
+                * El contacto ahora existe.
+                */
+                $('#alerta_sin_contacto').hide();
+
+                $('#texto_boton_contacto').text(
+                    'Editar contacto'
+                );
+
+                /*
+                * Actualizar también el atributo utilizado en el formulario.
+                */
+                $('#contacto_rut_edit').attr(
+                    'data-contacto-existe',
+                    '1'
+                );
 
                 swal({
                     title: 'Actualización de Contacto',
-                    text: 'Actualización Exitosa',
+                    text: data.msj || 'Contacto guardado correctamente.',
                     icon: 'success',
+                    buttons: 'Aceptar'
                 });
 
                 window.cancelarInformacionContacto();
+
                 return;
             }
 
@@ -271,14 +456,48 @@
                 icon: 'error',
             });
         })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            var mensaje = getErrorMessageFromResponse(jqXHR);
-            console.log(jqXHR, ajaxOptions, thrownError);
+        .fail(function(jqXHR) {
+            console.error('Error completo:', jqXHR);
+            console.error('Respuesta JSON:', jqXHR.responseJSON);
+
+            var mensaje = 'No se pudo guardar el contacto.';
+
+            if (
+                jqXHR.responseJSON &&
+                jqXHR.responseJSON.msj
+            ) {
+                mensaje = jqXHR.responseJSON.msj;
+            } else if (
+                jqXHR.responseJSON &&
+                jqXHR.responseJSON.message
+            ) {
+                mensaje = jqXHR.responseJSON.message;
+            }
+
+            if (
+                jqXHR.status === 422 &&
+                jqXHR.responseJSON &&
+                jqXHR.responseJSON.errors
+            ) {
+                var errores = [];
+
+                $.each(
+                    jqXHR.responseJSON.errors,
+                    function(campo, mensajes) {
+                        errores = errores.concat(mensajes);
+                    }
+                );
+
+                if (errores.length > 0) {
+                    mensaje = errores.join('\n');
+                }
+            }
 
             swal({
-                title: 'Actualización de Contacto',
+                title: 'No fue posible guardar',
                 text: mensaje,
                 icon: 'error',
+                buttons: 'Aceptar'
             });
         });
     };
@@ -325,7 +544,7 @@
         })
         .done(function(response) {
             let data = response;
-
+            console.log('Respuesta del servidor:', response);
             if (typeof response === 'string') {
                 try {
                     data = JSON.parse(response);
@@ -333,6 +552,8 @@
                     data = null;
                 }
             }
+
+            console.log('Datos del paciente:', data);
 
             if (!data || data === 'null' || data === null) {
                 limpiarCamposContactoEmergencia(true);
@@ -367,32 +588,54 @@
 
             let direccion = '';
             let numeroDir = '';
-            let ciudad = null;
-            let regionId = null;
-            let ciudadId = null;
+            let ciudadId = '';
+            let ciudadNombre = '';
+            let regionId = '';
 
-            if (data.Direccion) {
-                const direccionData = Array.isArray(data.Direccion) ? data.Direccion[0] : data.Direccion;
-                if (direccionData) {
-                    direccion = direccionData.direccion || '';
-                    numeroDir = direccionData.numero_dir || '';
-                    ciudad = direccionData.Ciudad || direccionData.ciudad || null;
+            const direccionData = data.direccion || null;
+
+            if (direccionData) {
+                direccion = direccionData.direccion || '';
+                numeroDir = direccionData.numero_dir || '';
+
+                const ciudadData = direccionData.ciudad || null;
+
+                if (ciudadData) {
+                    ciudadId = ciudadData.id || '';
+                    ciudadNombre = ciudadData.nombre || '';
+                    regionId = ciudadData.id_region || '';
                 }
             }
 
-            if (ciudad) {
-                ciudadId = ciudad.id || '';
-                regionId = ciudad.id_region || (ciudad.Region ? ciudad.Region.id : null);
-            }
+            /*
+            * Mostrar dirección completa.
+            */
+            let direccionCompleta = [direccion, numeroDir]
+                .filter(function(valor) {
+                    return valor && String(valor).trim() !== '';
+                })
+                .join(' ')
+                .trim();
 
-            $('#contacto_dir_edit').val([direccion, numeroDir].filter(Boolean).join(' ').trim());
+            $('#contacto_dir_edit').val(direccionCompleta);
 
+            /*
+            * Seleccionar región y luego cargar sus comunas.
+            */
             if (regionId) {
-                $('#contacto_region_edit').val(regionId);
+                $('#contacto_region_edit')
+                    .val(String(regionId))
+                    .trigger('change.select2');
+
                 buscarCiudadContactoEmergencia(ciudadId);
             } else {
-                $('#contacto_region_edit').val('0');
-                $('#contacto_comuna_edit').html('<option value="0">Seleccione comuna</option>');
+                $('#contacto_region_edit')
+                    .val('0')
+                    .trigger('change.select2');
+
+                $('#contacto_comuna_edit').html(
+                    '<option value="0">Seleccione comuna</option>'
+                );
             }
 
             $('#mensaje_busqueda_contacto').text('Datos del paciente cargados correctamente.').removeClass('text-muted text-danger').addClass('text-success');
@@ -403,6 +646,66 @@
             limpiarCamposContactoEmergencia(true);
             $('#mensaje_busqueda_contacto').text('No se pudo completar la búsqueda.').removeClass('text-muted').addClass('text-danger');
             swal({ title: 'Error al buscar el paciente', icon: 'error', buttons: 'Aceptar' });
+        });
+    }
+
+    function buscarCiudadContactoEmergencia(ciudadSeleccionada = null) {
+        const regionId = $('#contacto_region_edit').val();
+
+        $('#contacto_comuna_edit').html(
+            '<option value="0">Cargando comunas...</option>'
+        );
+
+        if (!regionId || regionId === '0') {
+            $('#contacto_comuna_edit').html(
+                '<option value="0">Seleccione comuna</option>'
+            );
+            return;
+        }
+
+        $.ajax({
+            url: window.BUSCAR_CIUDADES_CONTACTO_URL,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                region_id: regionId
+            }
+        })
+        .done(function(response) {
+            let ciudades = [];
+
+            if (Array.isArray(response)) {
+                ciudades = response;
+            } else if (response && Array.isArray(response.ciudades)) {
+                ciudades = response.ciudades;
+            } else if (response && Array.isArray(response.registros)) {
+                ciudades = response.registros;
+            }
+
+            let options = '<option value="0">Seleccione comuna</option>';
+
+            ciudades.forEach(function(ciudad) {
+                options += `
+                    <option value="${ciudad.id}">
+                        ${ciudad.nombre}
+                    </option>
+                `;
+            });
+
+            $('#contacto_comuna_edit').html(options);
+
+            if (ciudadSeleccionada) {
+                $('#contacto_comuna_edit')
+                    .val(String(ciudadSeleccionada))
+                    .trigger('change.select2');
+            }
+        })
+        .fail(function(xhr) {
+            console.error('Error al cargar comunas:', xhr);
+
+            $('#contacto_comuna_edit').html(
+                '<option value="0">No fue posible cargar las comunas</option>'
+            );
         });
     }
 

@@ -926,77 +926,155 @@
                                             });
                                         },
 
-                                        events: function(start, end, callback){
-                                            var arrayTemp = [];
+                                        events: function(fetchInfo, successCallback, failureCallback) {
+
                                             let url = "{{ route('hora_medica.ver') }}";
+
+                                            /*
+                                            * FullCalendar entrega:
+                                            *
+                                            * fetchInfo.startStr = inicio visible
+                                            * fetchInfo.endStr   = término visible exclusivo
+                                            *
+                                            * Ejemplo:
+                                            * 2026-07-13T00:00:00-04:00
+                                            * 2026-07-20T00:00:00-04:00
+                                            */
+                                            let fechaInicio = fetchInfo.startStr.split('T')[0];
+                                            let fechaTermino = fetchInfo.endStr.split('T')[0];
 
                                             $.ajax({
                                                 url: url,
                                                 type: "GET",
+                                                dataType: "json",
                                                 data: {
                                                     id_profesional: id_profesional,
                                                     id_lugar_atencion: id_lugar_atencion,
-                                                },
-                                                success:function(data){
-                                                    console.log(data);
-                                                            if (data !== 'null')
-                                                            {
-                                                                //data = JSON.parse(data);
-                                                                console.log('---------evento--------------');
-                                                                console.log(data);
-                                                                console.log('-----------------------');
-                                                                if(data.estado == 1)
-                                                                {
-                                                                    // var arraytemp = [];
-                                                                    // arraytemp.push([id=>'11']);
-                                                                    // console.log(arraytemp)
-                                                                    var arrayTemp = [];
-                                                                    data.registros.forEach(element => {
-                                                                        var rut = element.paciente.rut+' | '
-                                                                        var valor = element.estado.valor+' | '
-                                                                        var comentarios_confirmacion = '';
-                                                                        if(comentarios_confirmacion != 'null')
-                                                                            comentarios_confirmacion = element.comentarios_confirmacion+' | '
-                                                                        var nombre = element.paciente.prevision.nombre
-                                                                        var descripcion = '';
+                                                    fecha_inicio: fechaInicio,
+                                                    fecha_termino: fechaTermino
+                                                }
+                                            })
+                                            .done(function(data) {
 
-                                                                        if(element.tipo_hora_medica == 'B')
-                                                                        {
-                                                                            descripcion += valor;
-                                                                            arrayTemp.push({
-                                                                                            id: element.id,
-                                                                                            title: element.descripcion,
-                                                                                            description: descripcion ,
-                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                            backgroundColor: element.estado.color
-                                                                            });
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            descripcion += rut;
-                                                                            descripcion += valor;
-                                                                            descripcion += comentarios_confirmacion;
-                                                                            descripcion += nombre;
-                                                                            arrayTemp.push({
-                                                                                            id: element.id,
-                                                                                            title: element.tipo_hora_medica+' - '+element.descripcion,
-                                                                                            description: descripcion ,
-                                                                                            start: element.fecha_consulta + 'T' + element.hora_inicio,
-                                                                                            end: element.fecha_consulta + 'T' + element.hora_termino,
-                                                                                            backgroundColor: element.estado.color
-                                                                            });
-                                                                        }
-                                                                    });
-                                                                    end(arrayTemp);
-                                                                }
-                                                                else
-                                                                {
-                                                                    console.log('falla en carga');
-                                                                }
-                                                            }
+                                                let eventos = [];
 
-                                                        }
+                                                if (!data || Number(data.estado) !== 1) {
+                                                    successCallback(eventos);
+                                                    return;
+                                                }
+
+                                                let registros = Array.isArray(data.registros)
+                                                    ? data.registros
+                                                    : [];
+
+                                                registros.forEach(function(element) {
+
+                                                    let paciente = element.paciente || {};
+                                                    let estado = element.estado || {};
+                                                    let prevision = paciente.prevision || {};
+
+                                                    let rut = paciente.rut
+                                                        ? paciente.rut + ' | '
+                                                        : '';
+
+                                                    let valorEstado = estado.valor
+                                                        ? estado.valor + ' | '
+                                                        : '';
+
+                                                    let comentarios = '';
+
+                                                    if (
+                                                        element.comentarios_confirmacion !== null &&
+                                                        element.comentarios_confirmacion !== undefined &&
+                                                        String(element.comentarios_confirmacion).trim() !== ''
+                                                    ) {
+                                                        comentarios =
+                                                            element.comentarios_confirmacion + ' | ';
+                                                    }
+
+                                                    let nombrePrevision = prevision.nombre || '';
+                                                    let descripcion = '';
+
+                                                    if (element.tipo_hora_medica === 'B') {
+
+                                                        descripcion = valorEstado;
+
+                                                        eventos.push({
+                                                            id: element.id,
+                                                            title: element.descripcion || '',
+                                                            description: descripcion,
+                                                            start:
+                                                                element.fecha_consulta +
+                                                                'T' +
+                                                                element.hora_inicio,
+                                                            end:
+                                                                element.fecha_consulta +
+                                                                'T' +
+                                                                element.hora_termino,
+                                                            backgroundColor: estado.color || ''
+                                                        });
+
+                                                    } else {
+
+                                                        descripcion += rut;
+                                                        descripcion += valorEstado;
+                                                        descripcion += comentarios;
+                                                        descripcion += nombrePrevision;
+
+                                                        eventos.push({
+                                                            id: element.id,
+                                                            title:
+                                                                (element.tipo_hora_medica || '') +
+                                                                ' - ' +
+                                                                (element.descripcion || ''),
+                                                            description: descripcion,
+                                                            start:
+                                                                element.fecha_consulta +
+                                                                'T' +
+                                                                element.hora_inicio,
+                                                            end:
+                                                                element.fecha_consulta +
+                                                                'T' +
+                                                                element.hora_termino,
+                                                            backgroundColor: estado.color || ''
+                                                        });
+                                                    }
+                                                });
+
+                                                /*
+                                                * Entrega los eventos a FullCalendar.
+                                                */
+                                                successCallback(eventos);
+                                            })
+                                            .fail(function(jqXHR, textStatus, errorThrown) {
+
+                                                console.error(
+                                                    'Error al cargar la agenda:',
+                                                    jqXHR,
+                                                    textStatus,
+                                                    errorThrown
+                                                );
+
+                                                /*
+                                                * Informa a FullCalendar que la carga falló.
+                                                */
+                                                failureCallback(errorThrown);
+
+                                                let mensaje = 'No fue posible cargar la agenda del profesional.';
+
+                                                if (
+                                                    jqXHR.responseJSON &&
+                                                    jqXHR.responseJSON.msj
+                                                ) {
+                                                    mensaje = jqXHR.responseJSON.msj;
+                                                }
+
+                                                swal({
+                                                    title: "Agenda del Profesional",
+                                                    text: mensaje,
+                                                    icon: "error",
+                                                    buttons: "Aceptar"
+                                                });
                                             });
                                         },
 
@@ -1046,7 +1124,7 @@
                                                         $('#estado_id_paciente').val(data.paciente.id);
                                                         $('#id_hora_medica').val(id_hora_medica);
 
-                                                        console.log('carga datos');
+                                                        console.log('carga datos2');
                                                         console.log(data);
                                                         if(data.paciente?.["direccion"] !== undefined)
                                                         {
