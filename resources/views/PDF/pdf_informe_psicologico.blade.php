@@ -6,160 +6,75 @@
     <title>Informe psicológico</title>
     {{-- <link rel="stylesheet" href="{{ asset('css/pdf.css') }}"> --}}
     <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        body,
+        p,
+        td,
+        th,
+        div,
+        span,
         h1,
         h2,
         h3,
-        h4,
-        h5,
-        h6,
-        span,
-        p,
-        td,
-        th {
+        h4 {
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        h1 {
-            text-align: center;
-            text-transform: uppercase;
+        body {
+            color: #252b35;
+            font-size: 12px;
+            line-height: 1.45;
         }
 
-        span {
-            text-transform: uppercase;
-        }
-
-        /*Tablas*/
         table {
             width: 100%;
+            border-collapse: collapse;
         }
 
-        .tabla-receta table {
-            font-size: 1rem;
-        }
-
-        .tabla-receta thead {
-            background-color: #FAFAFA;
-            font-size: 0.7rem;
-        }
-
-        .tabla-receta td,
-        th {
-            padding: 10px 15px;
-        }
-
-        .tabla-receta tbody {
-            font-size: 0.7rem;
-        }
-
-        .tabla-receta tbody tr:nth-child(odd) {
-            background-color: #fff
-        }
-
-        .tabla-receta tbody tr:nth-child(even) {
-            background-color: #FAFAFA;
-        }
-
-        .tabla-receta tr {
-            padding: 10px;
-        }
-
-        hr {
-            border: 1px solid #3C63AD;
-            margin-bottom: 0.5rem !important;
-            margin-top: 0.5rem !important;
-        }
-
-        /*Margin*/
-        .mb-5 {
-            margin-bottom: 2rem;
-        }
-
-        .mt-3 {
-            margin-top: 1.2rem;
-        }
-
-        /*Padding*/
-        .pl-3 {
-            padding-left: 1.4rem;
-        }
-
-        .pr-3 {
-            padding-right: 1.4rem;
-        }
-
-        /*Colors*/
-        .text-blue {
-            color: #3C63AD;
-        }
-
-        .text-gray {
-            color: #FAFAFA;
-        }
-
-        .text-gray {
-            background-color: #FAFAFA;
-        }
-
-        /*Contenedores*/
         .contenido-encabezado-uno {
-            /* font-size: 0.9rem; */
-            /* width: 1000px; */
             height: 124px;
             margin: auto;
-            margin-bottom: 0;
         }
 
         .contenido-encabezado-dos {
-            font-size: 0.8rem;
-            /* width: 1000px; */
             height: 110px;
             margin: auto;
-            padding-right: 1rem;
-            padding-left: 1rem;
+            padding: 0 1rem;
+            font-size: 0.8rem;
         }
-
 
         .contenido-body {
             margin: auto;
-            padding-right: 1rem;
-            padding-left: 1rem;
-            /* width: 1000px; */
-            /* height: 1000px; */
+            padding: 0 1rem;
         }
 
         .contenido-footer {
-            font-size: 0.8rem;
-            /* align-item: flex-end; */
-            /* width: 1000px; */
             height: 150px;
-            /* margin: auto; */
             margin: auto;
+            font-size: 0.8rem;
         }
-
 
         .contenido-infoprof {
             float: right;
-            height: auto;
-            line-height: 3px;
-            font-size: 0.7rem;
-            margin-top: 10px;
-            padding-top: 5px;
-            padding-right: 100px;
-            padding-left: 10px;
             width: auto;
+            height: auto;
+            margin-top: 10px;
+            padding: 5px 100px 0 10px;
             border-left: 4px solid #3366CC;
+            font-size: 0.7rem;
+            line-height: 3px;
         }
 
         .contenido-logo {
             float: left;
-            vertical-align: middle;
             width: 150px;
             height: auto;
             padding-top: 28px;
+            vertical-align: middle;
         }
-
-        /*Otros*/
 
         .logo {
             width: 200px;
@@ -167,12 +82,7 @@
         }
 
         img {
-            align-items: center;
             width: 18%;
-        }
-
-        .centrar {
-            text-align: center;
         }
 
         .text-center {
@@ -186,63 +96,145 @@
         header {
             position: fixed;
             top: -285px;
-            left: 0px;
-            right: 0px;
+            right: 0;
+            left: 0;
             height: 250px;
         }
 
         footer {
             position: fixed;
+            right: 0;
             bottom: -100px;
-            left: 0px;
-            right: 0px;
+            left: 0;
             height: 150px;
         }
 
         .texto-vertical-2 {
-            font-size: 0.75em;
             position: fixed;
-            writing-mode: vertical-lr;
-            transform: rotate(270deg);
-            right: -325px;
-            /* right: -300px; */
             top: 400px;
-            font-family: Arial;
+            right: -325px;
+            transform: rotate(270deg);
+            writing-mode: vertical-lr;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 0.75em;
         }
 
-        .fecha {
-            font-size: 0.9rem;
-            text-align: right;
-            font-family: Arial;
+        .cabecera-informe {
+            margin-bottom: 18px;
+            text-align: center;
         }
 
-        .div-qr {
-            border: 4px solid #3366CC;
-            border-radius: 10px;
-            width: 90px;
-            margin: auto;
-            padding: 2px;
-        }
-
-        .seccion-examen {
-            border: 1px solid #3366CC;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1.5rem;
-            background-color: #f8f9fa;
-            font-size: 0.8rem;
-        }
-
-        .titulo-seccion {
-            color: #3366CC;
+        .titulo-principal {
+            margin: 0;
+            color: #315fae;
+            font-size: 21px;
             font-weight: bold;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
         }
 
-        .desc{
-            font-size: 13px;
+        .linea-titulo {
+            width: 74px;
+            margin: 8px auto 0;
+            border-top: 3px solid #315fae;
         }
 
+        .resumen-atencion {
+            margin-bottom: 15px;
+            padding: 11px 14px;
+            border-left: 4px solid #315fae;
+            background-color: #f3f6fb;
+        }
+
+        .resumen-atencion td {
+            padding: 3px 8px 3px 0;
+            vertical-align: top;
+        }
+
+        .etiqueta {
+            color: #556170;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .valor {
+            margin-top: 2px;
+            color: #202631;
+            font-size: 12px;
+        }
+
+        .seccion {
+            margin-top: 13px;
+            padding: 0;
+            border: 1px solid #d5dfef;
+            border-radius: 7px;
+            page-break-inside: avoid;
+        }
+
+        .seccion-titulo {
+            padding: 8px 12px;
+            border-bottom: 1px solid #d5dfef;
+            background-color: #f5f8fc;
+            color: #315fae;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .seccion-contenido {
+            min-height: 32px;
+            padding: 11px 13px;
+            background-color: #ffffff;
+            font-size: 12px;
+            line-height: 1.55;
+        }
+
+        .seccion-contenido p {
+            margin: 0 0 7px;
+        }
+
+        .seccion-contenido p:last-child {
+            margin-bottom: 0;
+        }
+
+        .sesiones td {
+            width: 50%;
+            padding: 10px 13px;
+            vertical-align: middle;
+        }
+
+        .sesiones td + td {
+            border-left: 1px solid #e1e7f0;
+        }
+
+        .numero-sesion {
+            display: block;
+            margin-top: 3px;
+            color: #315fae;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .informe-principal {
+            margin-top: 16px;
+            border-color: #aebfdb;
+        }
+
+        .informe-principal .seccion-titulo {
+            background-color: #315fae;
+            color: #ffffff;
+        }
+
+        .informe-principal .seccion-contenido {
+            min-height: 145px;
+            font-size: 12.5px;
+        }
+
+        .sin-informacion {
+            color: #7a8491;
+            font-style: italic;
+        }
     </style>
 </head>
 <div class="texto-vertical-2">Este documento lo puedes validar en www.med-sdi.cl - Cód. Indetificador
@@ -253,159 +245,86 @@
 
 <main>
     <div class="contenido-body" style="page-break-after: auto;">
-        <h3 class="titulo-seccion text-center">{{ $titulo ?? 'INFORME PSICOLÓGICO' }}</h3>
+        <div class="cabecera-informe">
+            <h2 class="titulo-principal">{{ $titulo ?? 'Informe psicológico' }}</h2>
+            <div class="linea-titulo"></div>
+        </div>
 
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Datos del paciente</div>
+        {{--
+            Los datos del paciente y del profesional no se repiten aquí,
+            porque ya forman parte del encabezado y pie institucional.
+        --}}
 
+        <div class="resumen-atencion">
             <table>
                 <tr>
-                    <td width="50%">
-                        <strong>Nombre:</strong>
-                        {{ $cuerpo['array_paciente']['nombre'] ?? 'Sin información' }}
+                    <td width="25%">
+                        <div class="etiqueta">Fecha del informe</div>
+                        <div class="valor">
+                            {{ $cuerpo['arrayInforme']['fecha_informe'] ?? ($cuerpo['array_ficha_atencion']['created_at'] ?? 'Sin información') }}
+                        </div>
                     </td>
-                    <td width="50%">
-                        <strong>RUT:</strong>
-                        {{ $cuerpo['array_paciente']['rut'] ?? 'Sin información' }}
+                    <td width="25%">
+                        <div class="etiqueta">Procedencia</div>
+                        <div class="valor">
+                            {{ $cuerpo['arrayInforme']['procedencia'] ?? 'No indicada' }}
+                        </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Fecha de nacimiento:</strong>
-                        {{ $cuerpo['array_paciente']['fecha_nac'] ?? 'Sin información' }}
+                    <td width="25%">
+                        <div class="etiqueta">Lugar de atención</div>
+                        <div class="valor">
+                            {{ $cuerpo['array_lugar_atencion']['nombre'] ?? 'Sin información' }}
+                        </div>
                     </td>
-                    <td>
-                        <strong>Sexo:</strong>
-                        @php
-                            $sexoPaciente = $cuerpo['array_paciente']['sexo'] ?? '';
-                        @endphp
-
-                        @if ($sexoPaciente === 'M')
-                            Masculino
-                        @elseif ($sexoPaciente === 'F')
-                            Femenino
-                        @else
-                            Sin información
-                        @endif
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <strong>Dirección:</strong>
-                        {{ $cuerpo['array_paciente']['direccion'] ?? 'Sin información' }}
+                    <td width="25%">
+                        <div class="etiqueta">Próximo control</div>
+                        <div class="valor">
+                            {{ $cuerpo['arrayInforme']['proximo_control'] ?? 'No indicado' }}
+                        </div>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Datos de la atención</div>
-
-            <table>
-                <tr>
-                    <td width="50%">
-                        <strong>Fecha del informe:</strong>
-                        {{ $cuerpo['arrayInforme']['fecha_informe'] ?? ($cuerpo['array_ficha_atencion']['created_at'] ?? 'Sin información') }}
-                    </td>
-                    <td width="50%">
-                        <strong>Procedencia:</strong>
-                        {{ $cuerpo['arrayInforme']['procedencia'] ?? 'Sin información' }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Lugar de atención:</strong>
-                        {{ $cuerpo['array_lugar_atencion']['nombre'] ?? 'Sin información' }}
-                    </td>
-                    <td>
-                        <strong>Próximo control:</strong>
-                        {{ $cuerpo['arrayInforme']['proximo_control'] ?? 'No indicado' }}
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Diagnóstico</div>
-            <p class="desc">
+        <div class="seccion">
+            <div class="seccion-titulo">Diagnóstico</div>
+            <div class="seccion-contenido">
                 {!! nl2br(e($cuerpo['arrayInforme']['diagnostico'] ?? 'Sin información')) !!}
-            </p>
+            </div>
         </div>
 
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Sesiones</div>
-
+        <div class="seccion sesiones">
+            <div class="seccion-titulo">Sesiones</div>
             <table>
                 <tr>
-                    <td width="50%">
-                        <strong>Sesiones realizadas:</strong>
-                        {{ $cuerpo['arrayInforme']['sesiones_realizadas'] ?? 0 }}
+                    <td>
+                        <span class="etiqueta">Realizadas</span>
+                        <span class="numero-sesion">
+                            {{ $cuerpo['arrayInforme']['sesiones_realizadas'] ?? 0 }}
+                        </span>
                     </td>
-                    <td width="50%">
-                        <strong>Sesiones pendientes:</strong>
-                        {{ $cuerpo['arrayInforme']['sesiones_pendientes'] ?? 0 }}
+                    <td>
+                        <span class="etiqueta">Pendientes</span>
+                        <span class="numero-sesion">
+                            {{ $cuerpo['arrayInforme']['sesiones_pendientes'] ?? 0 }}
+                        </span>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Tratamiento realizado</div>
-            <p class="desc">
+        <div class="seccion">
+            <div class="seccion-titulo">Tratamiento realizado</div>
+            <div class="seccion-contenido">
                 {!! nl2br(e($cuerpo['arrayInforme']['tratamiento_realizado'] ?? 'Sin información')) !!}
-            </p>
+            </div>
         </div>
 
-        <div class="seccion-examen">
-            <div class="titulo-seccion">Informe psicológico</div>
-            <p class="desc">
-                {!! $cuerpo['arrayInforme']['informe'] ?? '<p>Sin información</p>' !!}
-            </p>
-        </div>
-
-        <div class="seccion-examen" style="margin-top: 2rem;">
-            <div class="titulo-seccion">Profesional responsable</div>
-
-            <table>
-                <tr>
-                    <td width="60%">
-                        <strong>Nombre:</strong>
-                        {{ $cuerpo['array_profesional']['nombre'] ?? 'Sin información' }}
-                    </td>
-                    <td width="40%">
-                        <strong>RUT:</strong>
-                        {{ $cuerpo['array_profesional']['rut'] ?? 'Sin información' }}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Especialidad:</strong>
-                        {{ $cuerpo['array_profesional']['especialidad'] ?? 'Psicología' }}
-                    </td>
-                    <td>
-                        <strong>N.º de colegio:</strong>
-                        {{ $cuerpo['array_profesional']['num_colegio'] ?? 'Sin información' }}
-                    </td>
-                </tr>
-            </table>
-
-            @php
-                $qrProfesional = $cuerpo['array_profesional']['qr'] ?? null;
-            @endphp
-
-            @if (is_string($qrProfesional) && trim($qrProfesional) !== '')
-                <div class="text-center mt-3">
-                    <div class="div-qr">
-                        <img
-                            style="width: 85px;"
-                            src="data:image/png;base64,{{ $qrProfesional }}"
-                            alt="Código QR profesional">
-                    </div>
-                    <p style="font-size: 0.65rem;">
-                        Validación del profesional
-                    </p>
-                </div>
-            @endif
+        <div class="seccion informe-principal">
+            <div class="seccion-titulo">Informe psicológico</div>
+            <div class="seccion-contenido">
+                {!! $cuerpo['arrayInforme']['informe'] ?? '<p class="sin-informacion">Sin información</p>' !!}
+            </div>
         </div>
     </div>
 </main>

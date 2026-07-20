@@ -12,6 +12,7 @@ use App\Http\Controllers\ExamenesPPFController;
 use App\Http\Controllers\ficha_atencionController;
 use App\Http\Controllers\HoraMedicaController;
 use App\Http\Controllers\InformeMedicoController;
+use App\Http\Controllers\LlamadoPacienteController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\UsoPersonalController;
 use Illuminate\Support\Facades\Auth;
@@ -945,11 +946,11 @@ Route::group([
     Route::get('control_acceso',[App\Http\Controllers\EscritorioProfesional::class, 'control_acceso'])->name('app.profesional.control_acceso');
 
     /** llamado pantalla  */
-    Route::post('llamado/registrar', [\App\Http\Controllers\LlamadoPacienteController::class, 'registrar'])->name('llamado_paciente.registrar');
-    Route::post('llamado/modificar', [\App\Http\Controllers\LlamadoPacienteController::class, 'modificar'])->name('llamado_paciente.modificar');
-    Route::get('llamado/ver_registro', [\App\Http\Controllers\LlamadoPacienteController::class, 'verRegistro'])->name('llamado_paciente.ver_registro');
-    Route::get('llamado/ver_registros', [\App\Http\Controllers\LlamadoPacienteController::class, 'verRegistros'])->name('llamado_paciente.ver_registros');
-    Route::post('llamado/paciente', [\App\Http\Controllers\LlamadoPacienteController::class, 'llamarPaciente'])->name('llamado_paciente.llamarPaciente');
+    Route::post('llamado/registrar', [App\Http\Controllers\LlamadoPacienteController::class, 'registrar'])->name('llamado_paciente.registrar');
+    Route::post('llamado/modificar', [App\Http\Controllers\LlamadoPacienteController::class, 'modificar'])->name('llamado_paciente.modificar');
+    Route::get('llamado/ver_registro', [App\Http\Controllers\LlamadoPacienteController::class, 'verRegistro'])->name('llamado_paciente.ver_registro');
+    Route::get('llamado/ver_registros', [App\Http\Controllers\LlamadoPacienteController::class, 'verRegistros'])->name('llamado_paciente.ver_registros');
+    Route::post('llamado/paciente', [App\Http\Controllers\LlamadoPacienteController::class, 'llamarPaciente'])->name('llamado_paciente.llamarPaciente');
 
     // Route::post('/registro_receta', [App\Http\Controllers\DetalleRecetaController::class, 'registroRecetaInterna'])->name('detalle_receta.registro_receta');
     Route::post('/registro_manual_receta', [App\Http\Controllers\DetalleRecetaController::class, 'registroRecetaManualInterna'])->name('detalle_receta.registro_manual_receta');

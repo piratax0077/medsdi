@@ -265,11 +265,11 @@ class EscritorioPaciente extends Controller
 
     public function reservarBono()
     {
-        if (empty(session('lic_token')) || session('lic_estado') != 1) {
-            return redirect()
-                ->route('paciente.home')
-                ->with('warning', 'Debe autorizar el acceso desde la aplicación móvil para reservar bonos.');
-        }
+        // if (empty(session('lic_token')) || session('lic_estado') != 1) {
+        //     return redirect()
+        //         ->route('paciente.home')
+        //         ->with('warning', 'Debe autorizar el acceso desde la aplicación móvil para reservar bonos.');
+        // }
 
         $usuario = User::where('id', Auth::user()->id)->first();
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
