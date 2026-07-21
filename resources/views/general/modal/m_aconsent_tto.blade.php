@@ -38,7 +38,7 @@
                                         {{-- <span style="color:red; font-size: 10px" id="msj_consentimiento"></span> --}}
                 					</div>
                 				</div>
-                                
+
                                 <div id="div_informacion_general_cons" style="display: none;">
                                     <div class="form-row">
                                         <div class="col-12">
@@ -153,7 +153,7 @@
                             search: request.term
                         },
                         success: function(data) {
-                            // console.log(data);
+                            console.log(data);
                             response(data);
                         }
                     });

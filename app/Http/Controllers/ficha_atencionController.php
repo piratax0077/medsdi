@@ -69,6 +69,7 @@ use App\Models\FichaCirugiaGeneralTipo;
 use App\Models\FichaNeuro;
 use App\Models\FichaOtorrino;
 use App\Models\FichaOrl;
+use App\Models\PlantillaFichaMedica;
 use App\Models\FichaOtorrinoTipo;
 use App\Models\GesRegistros;
 use App\Models\Hipertension;
@@ -579,6 +580,10 @@ class ficha_atencionController extends Controller
 
         $ruta_blade = '';
 
+        $plantillaFicha = $this->obtenerPlantillaFichaActiva(
+            $profesional
+        );
+
         $cns_tipo = '';
         $cns_tipo_template = '';
         $cns_registros = '';
@@ -636,6 +641,7 @@ class ficha_atencionController extends Controller
             //otorrinolaringologia
             $ruta_blade = 'atencion_medica.atencion_medica_otorrinolaringologia';
 
+
             $fichaTipoTipos = FichaOtorrinoTipo::where('id_profesional', $profesional->id)->pluck('tipo')->toArray();
             $fichaTipo = array();
             foreach ($fichaTipoTipos as $key => $value)
@@ -644,7 +650,9 @@ class ficha_atencionController extends Controller
             }
 
             $examen_tipo = ExamenEspecialidadTipo::where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)->with('ExamenEspecialidadTemplate')->first();
-            $examen = $examen_tipo->ExamenEspecialidadTemplate->cuerpo;
+            $examen = ($examen_tipo && $examen_tipo->ExamenEspecialidadTemplate)
+                ? $examen_tipo->ExamenEspecialidadTemplate->cuerpo
+                : '';
             $lista_examen_especial = '';
 
             /** examenes de la especialidad */
@@ -2854,6 +2862,8 @@ class ficha_atencionController extends Controller
 
         if(!$paciente->id_direccion) $paciente->id_direccion = 7365; // sin direccion
 
+
+
         return view($ruta_blade)->with(
             [
                 'adjuntos_ficha' => $adjuntos_ficha,
@@ -2870,6 +2880,7 @@ class ficha_atencionController extends Controller
                 'placeholder_examen_fisico' => $placeholder_examen_fisico,
                 'url_tratamientos_autocomplete' => $url_tratamientos_autocomplete,
                 'paciente' => $paciente,
+                'plantillaFicha' => $plantillaFicha,
                 'permisos_profesional' => $permisos_profesional,
                 'proxima_fecha_atencion' => $proxima_fecha_atencion,
                 'tons_dental' => $tons_dental,
@@ -3065,6 +3076,39 @@ class ficha_atencionController extends Controller
                 'laboratorios' => $laboratorios,
             ]
         );
+    }
+
+    private function obtenerPlantillaFichaActiva(Profesional $profesional)
+    {
+        return PlantillaFichaMedica::with([
+            'secciones' => function ($query) {
+                $query->orderBy('orden');
+            },
+            'secciones.campos' => function ($query) {
+                $query->orderBy('orden');
+            },
+            'secciones.subsecciones' => function ($query) {
+                $query->orderBy('orden');
+            },
+            'secciones.subsecciones.campos' => function ($query) {
+                $query->orderBy('orden');
+            },
+        ])
+            ->where('id_profesional', $profesional->id)
+            ->where(
+                'id_especialidad',
+                $profesional->id_especialidad
+            )
+            ->where(
+                'id_tipo_especialidad',
+                $profesional->id_tipo_especialidad
+            )
+            ->where(
+                'id_sub_tipo_especialidad',
+                $profesional->id_sub_tipo_especialidad
+            )
+            ->where('activa', 1)
+            ->first();
     }
 
     public function dame_comunas_contacto_emergencia($id_paciente){

@@ -53,12 +53,40 @@
                         </ul>
                     </li>
                     <li class="nav-item pcoded-hasmenu">
-                        <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-settings"></i></span><span class="pcoded-mtext text-center">Configuraciones</span></a>
-                        <ul class="pcoded-submenu">
-                            <li><a href="{{ route('profesional.mi_perfil') }}">Editar Perfil</a></li>
-                            <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
-                        </ul>
-                    </li>
+    <a href="javascript:void(0)" class="nav-link">
+        <span class="pcoded-micon">
+            <i class="feather icon-settings"></i>
+        </span>
+
+        <span class="pcoded-mtext text-center">
+            Configuraciones
+        </span>
+    </a>
+
+    <ul class="pcoded-submenu">
+        <li>
+            <a href="{{ route('profesional.mi_perfil') }}">
+                Editar perfil
+            </a>
+        </li>
+
+        <li>
+            @if(isset($id_ficha_atencion) && !empty($id_ficha_atencion))
+                <a href="javascript:void(0)"
+                   onclick="menuValidarSalidaFicha(
+                       '{{ route('profesional.personalizar_mi_ficha') }}',
+                       'Personalizar ficha de atención'
+                   )">
+                    Personalizar ficha de atención
+                </a>
+            @else
+                <a href="{{ route('profesional.personalizar_mi_ficha') }}">
+                    Personalizar ficha de atención
+                </a>
+            @endif
+        </li>
+    </ul>
+</li>
                     <li class="nav-item pcoded-hasmenu">
                         <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-video"></i></span><span class="pcoded-mtext text-center">Tutoriales</span></a>
                         <ul class="pcoded-submenu">
@@ -75,7 +103,7 @@
                             <li><a href="https://vimeo.com/1087894569" target="_blank">Funciones Flujo de Caja</a></li>
                             @if($profesional->id_especialidad != 2)
                             <li><a href="https://vimeo.com/1087895020" target="_blank">Funciones Transcripción <br>de exámenes</a></li>
-                            
+
                             @endif
                             @if($profesional->id_especialidad == 2 && $profesional->id_tipo_especialidad == 16)
                             <li><a href="https://vimeo.com/1087377134" target="_blank">Aranceles y Procedimientos<br> Dentales</a></li>
@@ -83,10 +111,10 @@
                             @endif
                             @if($profesional->id_especialidad == 2)
                             <li><a href="https://vimeo.com/1097556293/8e50b4f658" target="_blank">Uso TONS</a></li>
-                           
+
                             @endif
                             <li><a href="https://vimeo.com/1085548556" target="_blank">Descarga la App SDI</a></li>
-                            
+
                         </ul>
                     </li>
                 </ul>
@@ -174,10 +202,38 @@
                         </ul>
                     </li>
                     <li class="nav-item pcoded-hasmenu">
-                        <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-settings"></i></span><span class="pcoded-mtext text-center">Configuraciones</span></a>
+                        <a href="javascript:void(0)" class="nav-link">
+                            <span class="pcoded-micon">
+                                <i class="feather icon-settings"></i>
+                            </span>
+
+                            <span class="pcoded-mtext text-center">
+                                Configuraciones
+                            </span>
+                        </a>
+
                         <ul class="pcoded-submenu">
-                            <li><a href="{{ route('profesional.mi_perfil') }}">Editar Perfil</a></li>
-                            <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
+                            <li>
+                                <a href="{{ route('profesional.mi_perfil') }}">
+                                    Editar perfil
+                                </a>
+                            </li>
+
+                            <li>
+                                @if(isset($id_ficha_atencion) && !empty($id_ficha_atencion))
+                                    <a href="javascript:void(0)"
+                                    onclick="menuValidarSalidaFicha(
+                                        '{{ route('profesional.personalizar_mi_ficha') }}',
+                                        'Personalizar ficha de atención'
+                                    )">
+                                        Personalizar ficha de atención
+                                    </a>
+                                @else
+                                    <a href="{{ route('profesional.personalizar_mi_ficha') }}">
+                                        Personalizar ficha de atención
+                                    </a>
+                                @endif
+                            </li>
                         </ul>
                     </li>
                      <li class="nav-item pcoded-hasmenu">
@@ -196,7 +252,7 @@
                             <li><a href="https://vimeo.com/1087894569" target="_blank">Funciones Flujo de Caja</a></li>
                             @if($profesional->id_especialidad != 2)
                             <li><a href="https://vimeo.com/1087895020" target="_blank">Funciones Transcripción <br>de exámenes</a></li>
-                            
+
                             @endif
                             @if($profesional->id_especialidad == 2 && $profesional->id_tipo_especialidad == 16)
                             <li><a href="https://vimeo.com/1087377134" target="_blank">Aranceles y Procedimientos<br> Dentales</a></li>

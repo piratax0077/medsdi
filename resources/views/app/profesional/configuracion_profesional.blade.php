@@ -114,7 +114,7 @@
                                 </a>
                             </div>
                         </div>
-                       
+
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">
                                 <a href="#">
@@ -162,8 +162,8 @@
                         </div>
                         @endif
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
-                            <div class="card subir py-3" onclick="en_construccion()">
-                                {{-- <a href="#"> --}}
+                            <div class="card subir py-3">
+                                <a href="{{ route('profesional.personalizar_mi_ficha') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-3"
                                         src="{{ asset('images/iconos/configurar-ficha-medica.png') }}"
@@ -174,10 +174,10 @@
                                         </h5>
                                         <h6>
                                     </div>
-                                {{-- </a> --}}
+                                </a>
                             </div>
                         </div>
-                    
+
                         @if($profesional->id_especialidad == 2)
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
                             <div class="card subir py-3">

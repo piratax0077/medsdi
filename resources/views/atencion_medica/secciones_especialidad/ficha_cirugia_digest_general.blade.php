@@ -2,7 +2,7 @@
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="cirugia_digestiva_tabs" role="tablist">
                     @if(count($procedimientoCentro) > 0)
                         @foreach ($procedimientoCentro as $procedimiento)
                             @php
@@ -21,7 +21,7 @@
 
                     @else
                         <li class="nav-item-secciones">
-                            <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_orl" aria-selected="true">Atención Especialidad</a>
+                            <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_cirugia_gen" aria-selected="true">Atención Especialidad</a>
                         </li>
                     @endif
 
@@ -78,7 +78,7 @@
                     @endphp
 
                     @csrf
-                    <div class="tab-content" id="orl-contenido">
+                    <div class="tab-content" id="cirugia_digestiva_contenido">
                         @if(count($procedimientoCentro) > 0)
                             @foreach ($procedimientoCentro as $procedimiento)
                                 @php
@@ -608,7 +608,7 @@
                                         <!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
 										<!--cierre CIRUGIA GENERAL-->
-{{--  
+{{--
                                         <!-- Hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
@@ -633,7 +633,7 @@
                                         {{-- @include('general.secciones_ficha.signos_vitales') --}}
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
-                                       
+
                                         <!--CRONICOS / GES / CONFIDENCIAL -->
                                         @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <!-- cierre ges -->

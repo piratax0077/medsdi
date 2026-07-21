@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <label class="floating-label-activo-sm">Edad</label>
-                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq" value="">
+                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}">
                     </div>
                 </div>
                 {{--  PESTAÑA DE SOLICITUD  --}}

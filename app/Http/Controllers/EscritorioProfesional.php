@@ -99,6 +99,7 @@ use App\Models\PagosPresupuestoDental;
 use App\Models\PermisoProfesional;
 use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\PlanTratamientoOtrosProfesionales;
+use App\Models\PlantillaFichaMedica;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\ProfesionalTons;
@@ -8390,6 +8391,873 @@ return $ficha;
                 // 'pass' => $pass,
             ]
         );
+    }
+
+    /**
+     * Consulta la plantilla activa del profesional para la combinación exacta
+     * de especialidad, tipo y subtipo de especialidad.
+     */
+    private function consultarPlantillaFichaProfesional($profesional, $conRelaciones = true, $bloquear = false)
+    {
+        $consulta = PlantillaFichaMedica::query()
+            ->where('id_profesional', $profesional->id)
+            ->where('id_especialidad', $profesional->id_especialidad)
+            ->where('id_tipo_especialidad', $profesional->id_tipo_especialidad)
+            ->where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)
+            ->where('activa', 1);
+
+        if ($conRelaciones) {
+            $consulta->with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ]);
+        }
+
+        if ($bloquear) {
+            $consulta->lockForUpdate();
+        }
+
+        return $consulta->first();
+    }
+
+    /**
+     * Devuelve la configuración base según la subespecialidad del profesional.
+     * Los códigos deben coincidir con los utilizados por cada Blade.
+     */
+    private function obtenerSeccionesBasePlantilla(
+        int $idEspecialidad,
+        int $idTipoEspecialidad,
+        int $idSubTipoEspecialidad
+    ): array {
+        switch ($idSubTipoEspecialidad) {
+            case 21:
+                return $this->seccionesBaseOrl();
+
+            case 11:
+                return $this->seccionesBaseCirugiaDigestiva();
+
+            default:
+                return $this->seccionesBaseGeneral();
+        }
+    }
+
+    private function seccionesBaseGeneral(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de consulta',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'antecedentes',
+                'nombre' => 'Antecedentes',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'antecedentes_generales',
+                        'nombre' => 'Antecedentes generales',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'examen_fisico',
+                'nombre' => 'Examen físico',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'descripcion_examen',
+                        'nombre' => 'Descripción',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatorio' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hipotesis_diagnostica',
+                        'nombre' => 'Hipótesis diagnóstica',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function seccionesBaseCirugiaDigestiva(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta_examen_fisico',
+                'nombre' => 'Motivo de consulta y examen físico',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo_consulta',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'antecedentes_especialidad',
+                        'nombre' => 'Antecedentes digestivos',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examen_fisico',
+                        'nombre' => 'Examen físico',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'cirugia_general_adulto',
+                'nombre' => 'Evaluación de cirugía digestiva',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'evaluacion_digestiva',
+                        'nombre' => 'Evaluación digestiva',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'urgencia_quirurgica',
+                        'nombre' => 'Urgencia quirúrgica',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'plan_tratamiento',
+                        'nombre' => 'Plan de tratamiento',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'hospitalizacion_control_postquirurgico',
+                'nombre' => 'Hospitalización y control postquirúrgico',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hospitalizacion',
+                        'nombre' => 'Hospitalización',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'control_postquirurgico',
+                        'nombre' => 'Control postquirúrgico',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges',
+                'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true,
+                'tipo' => 'switches',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'agregar_antecedente',
+                        'nombre' => 'Agregar antecedente',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'control_cronico',
+                        'nombre' => 'Control crónico',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'ges',
+                        'nombre' => 'GES',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'confidencial',
+                        'nombre' => 'Confidencial',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatorio' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hipotesis_diagnostica',
+                        'nombre' => 'Hipótesis diagnóstica',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'diagnostico_cie10',
+                        'nombre' => 'Diagnóstico CIE-10',
+                        'visible' => true,
+                        'tipo' => 'autocomplete',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'recetas_examenes_generales',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'medicamentos',
+                        'nombre' => 'Medicamentos',
+                        'visible' => true,
+                        'tipo' => 'tabla',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examenes',
+                        'nombre' => 'Exámenes',
+                        'visible' => true,
+                        'tipo' => 'tabla',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function seccionesBaseOrl(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta_examen_fisico',
+                'nombre' => 'Motivo de la consulta y examen físico',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo_consulta',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'antecedentes_especialidad',
+                        'nombre' => 'Antecedentes de la especialidad',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examen_fisico',
+                        'nombre' => 'Examen físico',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'detalle_examen_especialidad',
+                'nombre' => 'Detalle examen especialidad',
+                'visible' => true,
+                'tipo' => 'tabs',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'oido',
+                        'nombre' => 'Oído',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'nariz',
+                        'nombre' => 'Nariz y fosas nasales',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'cavidad_oral',
+                        'nombre' => 'Cavidad oral y orofaringe',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'faringe',
+                        'nombre' => 'Faringe',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'laringe',
+                        'nombre' => 'Laringe',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'cuello',
+                        'nombre' => 'Cuello',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges',
+                'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true,
+                'tipo' => 'switches',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'agregar_antecedente',
+                        'nombre' => 'Agregar antecedente',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'control_cronico',
+                        'nombre' => 'Control crónico',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'ges',
+                        'nombre' => 'GES',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'confidencial',
+                        'nombre' => 'Confidencial',
+                        'visible' => true,
+                        'tipo' => 'switch',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatorio' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hipotesis_diagnostica',
+                        'nombre' => 'Hipótesis diagnóstica',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'diagnostico_cie10',
+                        'nombre' => 'Diagnóstico CIE-10',
+                        'visible' => true,
+                        'tipo' => 'autocomplete',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'textarea',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    private function nombrePlantillaProfesional($profesional)
+    {
+        $nombreSubespecialidad = SubTipoEspecialidad::where('id', $profesional->id_sub_tipo_especialidad)
+            ->value('nombre');
+
+        return 'Ficha ' . ($nombreSubespecialidad ?: 'médica') . ' personalizada';
+    }
+
+    public function personalizarMiFichaMedica()
+    {
+        $profesional = Profesional::where(
+                'id_usuario',
+                Auth::id()
+            )
+            ->first();
+
+        if (!$profesional) {
+            return redirect()
+                ->route('profesional.home')
+                ->with(
+                    'error',
+                    'No se encontró el perfil profesional.'
+                );
+        }
+
+        $especialidadActual = Especialidad::find(
+            $profesional->id_especialidad
+        );
+
+        $tipoEspecialidadActual = TipoEspecialidad::find(
+            $profesional->id_tipo_especialidad
+        );
+
+        $subTipoEspecialidadActual = SubTipoEspecialidad::find(
+            $profesional->id_sub_tipo_especialidad
+        );
+
+        /*
+        * Nombre visible de la ficha.
+        * Se prioriza la subespecialidad porque identifica la ficha concreta.
+        */
+        $nombreEspecialidadFicha =
+            optional($subTipoEspecialidadActual)->nombre
+            ?? optional($tipoEspecialidadActual)->nombre
+            ?? optional($especialidadActual)->nombre
+            ?? 'Ficha médica';
+
+        $codigoEspecialidadFicha = \Illuminate\Support\Str::slug(
+            $nombreEspecialidadFicha,
+            '_'
+        );
+
+        /*
+        * Plantilla personalizada guardada para la combinación exacta.
+        */
+        $plantilla = PlantillaFichaMedica::with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ])
+            ->where(
+                'id_profesional',
+                $profesional->id
+            )
+            ->where(
+                'id_especialidad',
+                $profesional->id_especialidad
+            )
+            ->where(
+                'id_tipo_especialidad',
+                $profesional->id_tipo_especialidad
+            )
+            ->where(
+                'id_sub_tipo_especialidad',
+                $profesional->id_sub_tipo_especialidad
+            )
+            ->where('activa', 1)
+            ->first();
+
+        /*
+        * Solo se usa cuando todavía no existe una plantilla guardada.
+        */
+        $seccionesBase = $this->obtenerSeccionesBasePlantilla(
+            (int) $profesional->id_especialidad,
+            (int) $profesional->id_tipo_especialidad,
+            (int) $profesional->id_sub_tipo_especialidad
+        );
+
+        return view(
+            'app.profesional.personalizacion_ficha.index',
+            compact(
+                'profesional',
+                'plantilla',
+                'especialidadActual',
+                'tipoEspecialidadActual',
+                'subTipoEspecialidadActual',
+                'nombreEspecialidadFicha',
+                'codigoEspecialidadFicha',
+                'seccionesBase'
+            )
+        );
+    }
+
+
+    public function obtenerConfiguracionFicha($idEspecialidad)
+    {
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::id())->first();
+
+            if (!$profesional) {
+                return response()->json([
+                    'estado' => 0,
+                    'mensaje' => 'No se encontró el perfil profesional.',
+                ], 404);
+            }
+
+            if ((int) $profesional->id_especialidad !== (int) $idEspecialidad) {
+                return response()->json([
+                    'estado' => 0,
+                    'mensaje' => 'No tiene permisos para consultar esta especialidad.',
+                ], 403);
+            }
+
+            $plantilla = $this->consultarPlantillaFichaProfesional($profesional);
+
+            if ($plantilla) {
+                return response()->json([
+                    'estado' => 1,
+                    'mensaje' => 'Configuración encontrada.',
+                    'especialidad_id' => (int) $idEspecialidad,
+                    'tipo_especialidad_id' => (int) $profesional->id_tipo_especialidad,
+                    'sub_tipo_especialidad_id' => (int) $profesional->id_sub_tipo_especialidad,
+                    'plantilla' => $plantilla,
+                    'secciones' => $plantilla->secciones,
+                ]);
+            }
+
+            return response()->json([
+                'estado' => 1,
+                'mensaje' => 'Se cargó la configuración inicial.',
+                'especialidad_id' => (int) $idEspecialidad,
+                'tipo_especialidad_id' => (int) $profesional->id_tipo_especialidad,
+                'sub_tipo_especialidad_id' => (int) $profesional->id_sub_tipo_especialidad,
+                'plantilla' => null,
+                'secciones' => $this->obtenerSeccionesBasePlantilla($profesional),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Error al obtener configuración de ficha médica', [
+                'usuario_id' => Auth::id(),
+                'especialidad_id' => $idEspecialidad,
+                'error' => $e->getMessage(),
+                'linea' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No fue posible cargar la configuración de la ficha.',
+                'detalle' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
+    }
+
+    public function guardarConfiguracionFicha(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_especialidad' => 'required|integer|exists:especialidades,id',
+            'nombre' => 'nullable|string|max:150',
+            'secciones' => 'required|array|min:1',
+            'secciones.*.codigo' => 'nullable|string|max:100',
+            'secciones.*.nombre' => 'required|string|max:150',
+            'secciones.*.tipo' => 'nullable|string|max:50',
+            'secciones.*.visible' => 'required|boolean',
+            'secciones.*.obligatoria' => 'nullable|boolean',
+            'secciones.*.personalizada' => 'nullable|boolean',
+            'secciones.*.orden' => 'nullable|integer|min:0',
+            'secciones.*.campos' => 'nullable|array',
+            'secciones.*.subsecciones' => 'nullable|array',
+            'secciones.*.subsecciones.*.codigo' => 'nullable|string|max:100',
+            'secciones.*.subsecciones.*.nombre' => 'required_with:secciones.*.subsecciones|string|max:150',
+            'secciones.*.subsecciones.*.visible' => 'nullable|boolean',
+            'secciones.*.subsecciones.*.personalizada' => 'nullable|boolean',
+            'secciones.*.subsecciones.*.orden' => 'nullable|integer|min:0',
+            'secciones.*.subsecciones.*.campos' => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'Revise los datos enviados.',
+                'errores' => $validator->errors(),
+            ], 422);
+        }
+
+        $datos = $validator->validated();
+        $profesional = Profesional::where('id_usuario', Auth::id())->first();
+
+        if (!$profesional) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No se encontró el perfil profesional.',
+            ], 404);
+        }
+
+        if ((int) $profesional->id_especialidad !== (int) $datos['id_especialidad']) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No tiene permisos para modificar esta especialidad.',
+            ], 403);
+        }
+
+        if (empty($profesional->id_tipo_especialidad) || empty($profesional->id_sub_tipo_especialidad)) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'El profesional debe tener configurados el tipo y subtipo de especialidad.',
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $plantilla = $this->consultarPlantillaFichaProfesional($profesional, false, true);
+
+            if (!$plantilla) {
+                $plantilla = new PlantillaFichaMedica();
+            }
+
+            // Se asignan siempre para evitar plantillas antiguas o ambiguas.
+            $plantilla->id_profesional = $profesional->id;
+            $plantilla->id_especialidad = $profesional->id_especialidad;
+            $plantilla->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+            $plantilla->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+
+            $columnasPlantilla = \Illuminate\Support\Facades\Schema::getColumnListing($plantilla->getTable());
+
+            if (in_array('nombre', $columnasPlantilla, true)) {
+                $plantilla->nombre = !empty($datos['nombre'])
+                    ? $datos['nombre']
+                    : $this->nombrePlantillaProfesional($profesional);
+            }
+
+            if (in_array('activa', $columnasPlantilla, true)) {
+                $plantilla->activa = 1;
+            }
+
+            if (in_array('predeterminada', $columnasPlantilla, true) && $plantilla->predeterminada === null) {
+                $plantilla->predeterminada = 0;
+            }
+
+            if (in_array('version', $columnasPlantilla, true) && empty($plantilla->version)) {
+                $plantilla->version = 1;
+            }
+
+            $plantilla->save();
+
+            // Eliminación ordenada para no depender de ON DELETE CASCADE.
+            $seccionesAnteriores = $plantilla->secciones()->with([
+                'campos',
+                'subsecciones.campos',
+            ])->get();
+
+            foreach ($seccionesAnteriores as $seccionAnterior) {
+                if (method_exists($seccionAnterior, 'campos')) {
+                    $seccionAnterior->campos()->delete();
+                }
+
+                if (method_exists($seccionAnterior, 'subsecciones')) {
+                    foreach ($seccionAnterior->subsecciones as $subseccionAnterior) {
+                        if (method_exists($subseccionAnterior, 'campos')) {
+                            $subseccionAnterior->campos()->delete();
+                        }
+                        $subseccionAnterior->delete();
+                    }
+                }
+
+                $seccionAnterior->delete();
+            }
+
+            $modeloSeccion = $plantilla->secciones()->getRelated();
+            $columnasSeccion = \Illuminate\Support\Facades\Schema::getColumnListing($modeloSeccion->getTable());
+
+            foreach ($datos['secciones'] as $indiceSeccion => $datosSeccion) {
+                $datosSeccion['orden'] = isset($datosSeccion['orden'])
+                    ? $datosSeccion['orden']
+                    : ($indiceSeccion + 1);
+
+                $atributosSeccion = array_intersect_key($datosSeccion, array_flip($columnasSeccion));
+                unset($atributosSeccion['campos'], $atributosSeccion['subsecciones']);
+
+                $seccion = $plantilla->secciones()->create($atributosSeccion);
+
+                if (method_exists($seccion, 'campos')) {
+                    $modeloCampoSeccion = $seccion->campos()->getRelated();
+                    $columnasCampoSeccion = \Illuminate\Support\Facades\Schema::getColumnListing($modeloCampoSeccion->getTable());
+
+                    foreach (($datosSeccion['campos'] ?? []) as $indiceCampo => $datosCampo) {
+                        $datosCampo['orden'] = isset($datosCampo['orden'])
+                            ? $datosCampo['orden']
+                            : ($indiceCampo + 1);
+
+                        $atributosCampo = array_intersect_key($datosCampo, array_flip($columnasCampoSeccion));
+                        $seccion->campos()->create($atributosCampo);
+                    }
+                }
+
+                if (!method_exists($seccion, 'subsecciones')) {
+                    continue;
+                }
+
+                $modeloSubseccion = $seccion->subsecciones()->getRelated();
+                $columnasSubseccion = \Illuminate\Support\Facades\Schema::getColumnListing($modeloSubseccion->getTable());
+
+                foreach (($datosSeccion['subsecciones'] ?? []) as $indiceSubseccion => $datosSubseccion) {
+                    $datosSubseccion['orden'] = isset($datosSubseccion['orden'])
+                        ? $datosSubseccion['orden']
+                        : ($indiceSubseccion + 1);
+                    $datosSubseccion['visible'] = isset($datosSubseccion['visible'])
+                        ? $datosSubseccion['visible']
+                        : true;
+
+                    $atributosSubseccion = array_intersect_key($datosSubseccion, array_flip($columnasSubseccion));
+                    unset($atributosSubseccion['campos']);
+
+                    $subseccion = $seccion->subsecciones()->create($atributosSubseccion);
+
+                    if (!method_exists($subseccion, 'campos')) {
+                        continue;
+                    }
+
+                    $modeloCampoSubseccion = $subseccion->campos()->getRelated();
+                    $columnasCampoSubseccion = \Illuminate\Support\Facades\Schema::getColumnListing($modeloCampoSubseccion->getTable());
+
+                    foreach (($datosSubseccion['campos'] ?? []) as $indiceCampo => $datosCampo) {
+                        $datosCampo['orden'] = isset($datosCampo['orden'])
+                            ? $datosCampo['orden']
+                            : ($indiceCampo + 1);
+
+                        $atributosCampo = array_intersect_key($datosCampo, array_flip($columnasCampoSubseccion));
+                        $subseccion->campos()->create($atributosCampo);
+                    }
+                }
+            }
+
+            DB::commit();
+
+            $plantilla->load([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ]);
+
+            return response()->json([
+                'estado' => 1,
+                'mensaje' => 'Plantilla guardada correctamente.',
+                'plantilla' => $plantilla,
+                'secciones' => $plantilla->secciones,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error('Error al guardar plantilla de ficha médica', [
+                'usuario_id' => Auth::id(),
+                'profesional_id' => $profesional->id,
+                'especialidad_id' => $profesional->id_especialidad,
+                'tipo_especialidad_id' => $profesional->id_tipo_especialidad,
+                'sub_tipo_especialidad_id' => $profesional->id_sub_tipo_especialidad,
+                'error' => $e->getMessage(),
+                'archivo' => $e->getFile(),
+                'linea' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'No fue posible guardar la plantilla.',
+                'detalle' => config('app.debug') ? $e->getMessage() : null,
+            ], 500);
+        }
     }
 
     public function index_receta()

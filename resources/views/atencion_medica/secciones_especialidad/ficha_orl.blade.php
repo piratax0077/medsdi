@@ -27,6 +27,118 @@
 </style>
 
 
+
+@php
+    /*
+     * Configuración de visibilidad de la plantilla.
+     *
+     * Compatibilidad:
+     * - Si no existe una plantilla activa, se muestra la ficha completa.
+     * - Si una sección no está declarada en la plantilla, se mantiene visible.
+     * - Se aceptan las propiedades: clave, codigo, slug, alias o nombre.
+     * - Se aceptan los estados: visible, activo o estado.
+     */
+    $normalizarClavePlantilla = function ($valor) {
+        $valor = \Illuminate\Support\Str::ascii((string) $valor);
+        $valor = mb_strtolower(trim($valor));
+        return preg_replace('/[^a-z0-9]+/', '_', $valor);
+    };
+
+    $plantillaMapa = [];
+
+    if (!empty($plantillaFicha) && !empty($plantillaFicha->secciones)) {
+        foreach ($plantillaFicha->secciones as $seccionPlantilla) {
+            $claveSeccion = $seccionPlantilla->clave
+                ?? $seccionPlantilla->codigo
+                ?? $seccionPlantilla->slug
+                ?? $seccionPlantilla->alias
+                ?? $seccionPlantilla->nombre
+                ?? null;
+
+            if ($claveSeccion !== null) {
+                $claveNormalizada = $normalizarClavePlantilla($claveSeccion);
+                $plantillaMapa[$claveNormalizada] = $seccionPlantilla;
+            }
+
+            if (!empty($seccionPlantilla->subsecciones)) {
+                foreach ($seccionPlantilla->subsecciones as $subseccionPlantilla) {
+                    $claveSubseccion = $subseccionPlantilla->clave
+                        ?? $subseccionPlantilla->codigo
+                        ?? $subseccionPlantilla->slug
+                        ?? $subseccionPlantilla->alias
+                        ?? $subseccionPlantilla->nombre
+                        ?? null;
+
+                    if ($claveSubseccion !== null) {
+                        $claveNormalizada = $normalizarClavePlantilla($claveSubseccion);
+                        $plantillaMapa[$claveNormalizada] = $subseccionPlantilla;
+                    }
+                }
+            }
+        }
+    }
+
+    $seccionVisible = function ($claves, $predeterminado = true) use ($plantillaFicha, $plantillaMapa, $normalizarClavePlantilla) {
+        if (empty($plantillaFicha)) {
+            return true;
+        }
+
+        foreach ((array) $claves as $clave) {
+            $claveNormalizada = $normalizarClavePlantilla($clave);
+
+            if (!array_key_exists($claveNormalizada, $plantillaMapa)) {
+                continue;
+            }
+
+            $elemento = $plantillaMapa[$claveNormalizada];
+
+            if (isset($elemento->visible)) {
+                return (bool) $elemento->visible;
+            }
+
+            if (isset($elemento->activo)) {
+                return (bool) $elemento->activo;
+            }
+
+            if (isset($elemento->estado)) {
+                return (bool) $elemento->estado;
+            }
+
+            return true;
+        }
+
+        return $predeterminado;
+    };
+
+    $mostrarMotivo = $seccionVisible(['motivo_consulta', 'motivo', 'motivo de consulta']);
+    $mostrarDetalleOrl = $seccionVisible(['detalle_examen_especialidad', 'detalle_orl', 'examen especialidad']);
+    $mostrarOidos = $seccionVisible(['oidos', 'oido']);
+    $mostrarNariz = $seccionVisible(['nariz']);
+    $mostrarFaringo = $seccionVisible(['faringo_laringe', 'faringolaringe', 'faringe', 'laringe']);
+    $mostrarCuello = $seccionVisible(['cuello', 'glandulas_anexas', 'cuello glandulas anexas']);
+    $mostrarCronicos = $seccionVisible(['antecedentes_cronicos_ges','cronicos_ges_confidencial','cronicos','ges']);
+    $mostrarHospitalizacion = $seccionVisible(['hospitalizacion_control_postquirurgico','hospitalizacion_control_post_quirurgico','hospitalizacion','hospitalizar_paciente','control_postquirurgico','control_post_quirurgico']);
+    $mostrarDiagnostico = $seccionVisible(['diagnostico']);
+    $mostrarRecetasGenerales = $seccionVisible(['recetas_examenes_generales', 'receta_examen_comunes']);
+    $mostrarRecetasOrl = $seccionVisible(['recetas_examenes_especialidad', 'receta_examen_orl']);
+
+    $primeraPestanaOrl = collect([
+        'orl_oido' => $mostrarOidos,
+        'orl_ex_nariz' => $mostrarNariz,
+        'orl_flaringe' => $mostrarFaringo,
+        'cuello' => $mostrarCuello,
+    ])->first(function ($visible) {
+        return $visible;
+    }, false);
+
+    $primeraPestanaOrl = collect([
+        'orl_oido' => $mostrarOidos,
+        'orl_ex_nariz' => $mostrarNariz,
+        'orl_flaringe' => $mostrarFaringo,
+        'cuello' => $mostrarCuello,
+    ])->filter()->keys()->first();
+@endphp
+
 <div style=" display: flex; flex-direction: row;">
 
     @include('general.secciones_ficha.video_llamada.seccion_jaas_container')
@@ -87,7 +199,9 @@
                                     <!--Formulario / Menor de edad-->
                                     @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                     <!--Cierre: Formulario / Menor de edad-->
-                                    @include('general.secciones_ficha.motivo')
+                                    @if($mostrarMotivo)
+                                        @include('general.secciones_ficha.motivo')
+                                    @endif
                                     <!--MOTIVO CONSULTA-->
                                     {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
@@ -121,6 +235,8 @@
                                     </div> --}}
 
                                     <!--EXAMEN ESPECIALIDAD - DETALLES-->
+                                    @if($mostrarDetalleOrl)
+
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="exam_esp_orl">
@@ -134,26 +250,35 @@
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                 <ul class="nav nav-tabs-aten nav-fill mb-2" id="orl_adulto" role="tablist">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset active" id="orl_oido_tab" data-toggle="tab" href="#orl_oido" role="tab" aria-controls="orl_oido" aria-selected="true">Oídos</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="ex_nariz-tab" data-toggle="tab" href="#orl_ex_nariz" role="tab" aria-controls="orl_ex_nariz" aria-selected="true">Nariz</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="orl_flaringe-tab" data-toggle="tab" href="#orl_flaringe" role="tab" aria-controls="orl_flaringe" aria-selected="true">Faringo-laringe</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="cuello-tab" data-toggle="tab" href="#cuello" role="tab" aria-controls="cuello" aria-selected="true">Cuello-Gl.anexas-otros</a>
-                                                                    </li>
+                                                                    @if($mostrarOidos)
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset {{ $primeraPestanaOrl === 'orl_oido' ? 'active' : '' }}" id="orl_oido_tab" data-toggle="tab" href="#orl_oido" role="tab" aria-controls="orl_oido" aria-selected="{{ $primeraPestanaOrl === 'orl_oido' ? 'true' : 'false' }}">Oídos</a>
+                                                                        </li>
+                                                                    @endif
+                                                                    @if($mostrarNariz)
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset {{ $primeraPestanaOrl === 'orl_ex_nariz' ? 'active' : '' }}" id="ex_nariz-tab" data-toggle="tab" href="#orl_ex_nariz" role="tab" aria-controls="orl_ex_nariz" aria-selected="{{ $primeraPestanaOrl === 'orl_ex_nariz' ? 'true' : 'false' }}">Nariz</a>
+                                                                        </li>
+                                                                    @endif
+                                                                    @if($mostrarFaringo)
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset {{ $primeraPestanaOrl === 'orl_flaringe' ? 'active' : '' }}" id="orl_flaringe-tab" data-toggle="tab" href="#orl_flaringe" role="tab" aria-controls="orl_flaringe" aria-selected="{{ $primeraPestanaOrl === 'orl_flaringe' ? 'true' : 'false' }}">Faringo-laringe</a>
+                                                                        </li>
+                                                                    @endif
+                                                                    @if($mostrarCuello)
+                                                                        <li class="nav-item">
+                                                                            <a class="nav-link-aten text-reset {{ $primeraPestanaOrl === 'cuello' ? 'active' : '' }}" id="cuello-tab" data-toggle="tab" href="#cuello" role="tab" aria-controls="cuello" aria-selected="{{ $primeraPestanaOrl === 'cuello' ? 'true' : 'false' }}">Cuello-Gl.anexas-otros</a>
+                                                                        </li>
+                                                                    @endif
                                                                 </ul>
                                                             </div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                 <div class="tab-content" id="orl_adulto">
-                                                                    <!--OIDO-->
-                                                                    <div class="tab-pane fade show active" id="orl_oido" role="tabpanel" aria-labelledby="orl_oido_tab">
+                                                                    @if($mostrarOidos)
+<!--OIDO-->
+                                                                    <div class="tab-pane fade {{ $primeraPestanaOrl === 'orl_oido' ? 'show active' : '' }}" id="orl_oido" role="tabpanel" aria-labelledby="orl_oido_tab">
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <div class="tab-content" id="v-pills-tabContent">
@@ -227,8 +352,11 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <!--EXAMEN  NARIZ-->
-                                                                    <div class="tab-pane fade show" id="orl_ex_nariz" role="tabpanel" aria-labelledby="orl_ex_nariz_tab">
+
+@endif
+@if($mostrarNariz)
+<!--EXAMEN  NARIZ-->
+                                                                    <div class="tab-pane fade {{ $primeraPestanaOrl === 'orl_ex_nariz' ? 'show active' : '' }}" id="orl_ex_nariz" role="tabpanel" aria-labelledby="orl_ex_nariz_tab">
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <h6 class="t-aten">Nariz</h6>
@@ -287,8 +415,11 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <!--EXAMEN  FARIGO-LARIGE-->
-                                                                    <div class="tab-pane fade show" id="orl_flaringe" role="tabpanel" aria-labelledby="orl_flaringe-tab">
+
+@endif
+@if($mostrarFaringo)
+<!--EXAMEN  FARIGO-LARIGE-->
+                                                                    <div class="tab-pane fade {{ $primeraPestanaOrl === 'orl_flaringe' ? 'show active' : '' }}" id="orl_flaringe" role="tabpanel" aria-labelledby="orl_flaringe-tab">
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <h6 class="t-aten">Faringo - Laringe</h6>
@@ -354,8 +485,11 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <!--EXAMEN CUELLO-->
-                                                                    <div class="tab-pane fade show" id="cuello" role="tabpanel" aria-labelledby="cuello-tab">
+
+@endif
+<!--EXAMEN CUELLO-->
+                                                                    @if($mostrarCuello)
+<div class="tab-pane fade {{ $primeraPestanaOrl === 'cuello' ? 'show active' : '' }}" id="cuello" role="tabpanel" aria-labelledby="cuello-tab">
                                                                         <div class="row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <h6 class="t-aten">Cuello Glándulas Anexas y otros</h6>
@@ -420,6 +554,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
+@endif
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -429,15 +564,22 @@
                                         </div>
                                     </div>
 
+
+                                    @endif
+
                                     <!--Formulario / Signos vitales y otros-->
                                     {{--  @include('general.secciones_ficha.signos_vitales')  --}}
                                     <!--Cierre: Formulario / Signos vitales y otros-->
 
                                      <!--CRONICOS / GES / CONFIDENCIAL -->
-                                    @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                    @if($mostrarCronicos)
+                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                    @endif
                                     <!--Diagnóstico-->
 
                                     <!--HOSPITALIZACION-->
+                                    @if($mostrarHospitalizacion)
+
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="hospitalizar_paciente">
@@ -480,8 +622,78 @@
                                         </div>
                                     </div>
 
+
+                                    @endif
+
+                                    @php
+                                        $seccionesPersonalizadas = collect(
+                                            $plantillaFicha->secciones ?? []
+                                        )->filter(function ($seccion) {
+                                            return (bool) ($seccion->personalizada ?? false)
+                                                && (bool) ($seccion->visible ?? true);
+                                        })->sortBy('orden');
+                                    @endphp
+
+                                    @foreach($seccionesPersonalizadas as $seccionPersonalizada)
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-a">
+                                                <div
+                                                    class="card-header-a"
+                                                    id="seccion_{{ $seccionPersonalizada->id }}"
+                                                >
+                                                    <button
+                                                        class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open"
+                                                        type="button"
+                                                        data-toggle="collapse"
+                                                        data-target="#seccion_contenido_{{ $seccionPersonalizada->id }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="seccion_contenido_{{ $seccionPersonalizada->id }}"
+                                                    >
+                                                        {{ $seccionPersonalizada->nombre }}
+                                                    </button>
+                                                </div>
+
+                                                <div
+                                                    id="seccion_contenido_{{ $seccionPersonalizada->id }}"
+                                                    class="collapse"
+                                                    aria-labelledby="seccion_{{ $seccionPersonalizada->id }}"
+                                                >
+                                                    <div class="card-body-aten-a">
+                                                        <div class="row">
+                                                            @foreach(
+                                                                collect($seccionPersonalizada->subsecciones ?? [])
+                                                                    ->filter(function ($subseccion) {
+                                                                        return (bool) ($subseccion->visible ?? true);
+                                                                    })
+                                                                    ->sortBy('orden')
+                                                                as $subseccion
+                                                            )
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label class="floating-label-activo-sm">
+                                                                        {{ $subseccion->nombre }}
+                                                                    </label>
+
+                                                                    <textarea
+                                                                        class="form-control caja-texto form-control-sm"
+                                                                        name="campo_personalizado[{{ $subseccion->codigo }}]"
+                                                                        id="campo_personalizado_{{ $subseccion->id }}"
+                                                                        rows="2"
+                                                                    >{{ old(
+                                                                        'campo_personalizado.' . $subseccion->codigo
+                                                                    ) }}</textarea>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
                                     <!--Diagnóstico-->
-                                    @include('general.secciones_ficha.diagnostico')
+                                    @if($mostrarDiagnostico)
+                                        @include('general.secciones_ficha.diagnostico')
+                                    @endif
                                     <!--Diagnóstico-->
 
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -489,12 +701,16 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                                    @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                    @if($mostrarRecetasGenerales)
+                                                        @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                    @endif
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
 
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD -->
-                                                    @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
+                                                    @if($mostrarRecetasOrl)
+                                                        @include('atencion_medica.secciones_especialidad.seccion_receta_examen_esp_orl')
+                                                    @endif
                                                     <!--SECCION DE MEDICAMENTOS Y EXAMENES ESPECIALIDAD FIN  -->
                                                 </div>
                                             </div>

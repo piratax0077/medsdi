@@ -18,24 +18,42 @@ class ConsentimientosController extends Controller
 {
     public function ver_consentimiento_autocomplete(Request $request)
     {
-        $datos = array();
-        $filtro = array();
-        $response = array();
+        try {
+            //code...
+            $datos = array();
+            $filtro = array();
+            $response = array();
 
-        if(!empty($request->search))
-        {
-            $filtro[] = array('nombre', 'like', '%'.$request->search.'%');
+            if(!empty($request->search))
+            {
+                $filtro[] = array('nombre', 'like', '%'.$request->search.'%');
+            }
+
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            if($profesional->id_especialidad == 2 || $profesional->id_especialidad == 6){
+                $filtro[] = array('especialidad', $profesional->id_especialidad);
+            }else{
+                $filtro[] = array('especialidad', 0);
+            }
+
+            $filtro[] = array('estado', 1);
+
+            $registros = ConConsentimientos::where($filtro)->get();
+
+            foreach ($registros as $registro) {
+                $response[] = array("value" => $registro->id, "label" => $registro->nombre);
+            }
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            //throw $th;
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Error al buscar consentimiento: '.$e->getMessage(),
+                'error' => $e->getMessage()
+            ]);
         }
 
-        $filtro[] = array('estado', 1);
-
-        $registros = ConConsentimientos::where($filtro)->get();
-
-        foreach ($registros as $registro) {
-            $response[] = array("value" => $registro->id, "label" => $registro->nombre);
-        }
-
-        return response()->json($response);
     }
 
     public function cargar_consentimiento(Request $request)

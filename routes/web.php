@@ -548,6 +548,10 @@ Route::group(
         Route::get('Check_sdi_token',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('check_sdi_token');
         Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
         Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.mi_ficha');
+        Route::get('/Profesional/personalizar-ficha-atencion',[App\Http\Controllers\EscritorioProfesional::class, 'personalizarMiFichaMedica'])->name('profesional.personalizar_mi_ficha');
+        Route::post('/personalizar-ficha-atencion/guardar',[App\Http\Controllers\EscritorioProfesional::class, 'guardarConfiguracionFicha'])->name('profesional.personalizar_ficha.guardar');
+        Route::get('/Profesional/personalizar-ficha-atencion/especialidad/{idEspecialidad}',[App\Http\Controllers\EscritorioProfesional::class, 'obtenerConfiguracionFicha'])->name('profesional.personalizar_ficha.especialidad');
+        Route::post('/personalizar-ficha-atencion/guardar',[App\Http\Controllers\EscritorioProfesional::class, 'guardarConfiguracionFicha'])->name('profesional.personalizar_ficha.guardar');
         Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 		Route::get('confidencial/solitar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacionConfidencial'])->name('solicitud.aprobacion.fmu.confidencial');
         Route::get('confidencial/validar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacionConfidencial'])->name('validar.aprobacion.fmu.confidencial');
