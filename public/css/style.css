@@ -2890,9 +2890,9 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary-light-c {
-    color: #2353b5;
-    background-color: #d0e0ff;
-    border-color: #618ade;
+    color: #2955b2;
+    background-color: #f1f7ff;
+    border-color: #99b4f1;
 }
 
 .btn-primary {
@@ -3380,9 +3380,9 @@ select{
 }
 
 .btn-outline-primary {
-    color: #2353b5;
-    background-color: #d0e0ff;
-    border-color: #618ade;
+    color: #2955b2;
+    background-color: #f1f7ff;
+    border-color: #99b4f1;
 }
 .btn-outline-primary:hover {
     color: #fff;
@@ -6070,8 +6070,8 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .alert-primary {
-    color: #244385;
-    background-color: #dae6ff;
+    color: #2955b2;
+    background-color: #f1f7ff;
     border-color: #cbdbff;
 }
 
@@ -34062,9 +34062,9 @@ font-family: 'Nunito', sans-serif;
   /*BTN CONTORNO*/
 
   .btn-primary-light-c {
-    color: #1a49a3;
-    background-color: #e2ebf5;
-    border-color: #83a7e1;
+    color: #2955b2;
+    background-color: #f1f7ff;
+    border-color: #99b4f1;
   }
 
   .btn-primary-light-c:hover {
@@ -34080,10 +34080,10 @@ font-family: 'Nunito', sans-serif;
     box-shadow: 0 0 0 0rem rgba(255, 108, 108, 0.5);
   }
 
-  .btn-warning-light-c {
-    color: #e88e18;
-    background-color: #ffecd0;
-    border-color: #f1a848;
+    .btn-warning-light-c {
+    color: #f09d31;
+    background-color: #fff7ec;
+    border-color: #e8aa5a;
   }
 
   .btn-warning-light-c:hover {
@@ -34138,11 +34138,10 @@ font-family: 'Nunito', sans-serif;
     box-shadow: 0 0 0 0rem rgba(255, 108, 108, 0.5);
   }
 
-
   .btn-success-light-c {
-    color: #319e6a;
-    background-color: #daefe3;
-    border-color: #56b487;
+    color: #339c7d;
+    background-color: #e6fdea;
+    border-color: #8ac4a9;
   }
 
   .btn-success-light-c:hover {
@@ -34179,9 +34178,9 @@ font-family: 'Nunito', sans-serif;
   }
 
   .btn-info-light-c {
-    color: #1c9693;
-    background-color: #d2f0f7;
-    border-color: #5ebdba;
+    color: #1ca7a7;
+    background-color: #ecffff;
+    border-color: #5bcbcb;
   }
 
   .btn-info-light-c:hover {

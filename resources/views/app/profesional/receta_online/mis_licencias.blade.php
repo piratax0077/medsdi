@@ -9,7 +9,6 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis documentos e indicaciones</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip"
@@ -17,7 +16,7 @@
                                             class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.index_receta_online') }}" data-toggle="tooltip"
                                         data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="#">Mis documentos e indicaciones</a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis licencias emitidas</a></li>
 
                             </ul>
                         </div>
@@ -28,8 +27,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                         <div class="card-header">
-                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis documentos e indicaciones</h4>
+                        <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-plus icono-primary"></i> Mis licencias emitidas</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -39,13 +38,13 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th class="text-center align-middle">Fecha Registro</th>
-                                                <th class="text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">F. Inicio</th>
-                                                <th class="text-center align-middle">F. Termino</th>
-                                                <th class="text-center align-middle">Diagnóstico</th>
-                                                <th class="text-center align-middle">Lugar Atención</th>
-                                                <th class="text-center align-middle">ver documento</th>
+                                                <th class="align-middle">Fecha Registro</th>
+                                                <th class="align-middle">Paciente</th>
+                                                <th class="align-middle">F. Inicio</th>
+                                                <th class="align-middle">F. Término</th>
+                                                <th class="align-middle">Diagnóstico</th>
+                                                <th class="align-middle">Lugar de Atención</th>
+                                                <th class="align-middle">Ver documento</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,17 +54,17 @@
                                                     @endphp --}}
                                                 @foreach ($licencias as $f)
                                                     <tr>
-                                                        <td class="text-wrap text-center align-middle"
+                                                        <td class="text-wrap align-middle"
     data-order="{{ \Carbon\Carbon::parse($f->created_at)->format('Y-m-d H:i:s') }}">
     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
 </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             {{ $f->paciente->nombres }} {{ $f->paciente->apellido_uno }} {{ $f->paciente->apellido_dos }}<br/>
                                                             {{ $f->paciente->rut }}
                                                         </td>
-                                                        <td class="align-middle text-center">{{ $f->fecha_inicio }}</td>
-                                                        <td class="align-middle text-center">{{ $f->fecha_termino }}</td>
-                                                        <td class="align-middle text-center">{{ $f->descripcion_hipotesis }}</td>
+                                                        <td class="align-middle">{{ $f->fecha_inicio }}</td>
+                                                        <td class="align-middle">{{ $f->fecha_termino }}</td>
+                                                        <td class="align-middle">{{ $f->descripcion_hipotesis }}</td>
                                                         <td class="align-middle text-center">{{ $f->LugarAtencion->nombre }}</td>
 
                                                         <td class="text-center align-middle">

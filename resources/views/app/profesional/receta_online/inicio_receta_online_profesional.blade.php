@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Receta Online</h5>
+                                <h5 class="m-b-10"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -33,7 +33,7 @@
                                 <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/recetas-ro.svg') }}"
                                     alt="Mis recetas">
                                 <h5 class="titulos_tarjetas">
-                                    Mis recetas
+                                    Mis recetas emitidas
                                 </h5>
                             </div>
                         </a>
@@ -46,7 +46,7 @@
                                 <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/examenes-ro.svg') }}"
                                     alt="Mis exámenes">
                                 <h5 class="titulos_tarjetas">
-                                    Mis exámenes
+                                    Mis órdenes de exámenes
                                 </h5>
                             </div>
                         </a>
@@ -71,7 +71,7 @@
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
                                 <h5 class="titulos_tarjetas">
-                                    Mis documentos
+                                    Mis documentos e indicaciones
                                 </h5>
                             </div>
                         </a>
@@ -84,7 +84,7 @@
                                 <img class="wid-60 text-center mb-3"
                                     src="{{ asset('images/iconos/msje.png') }}" alt="Mis documentos">
                                 <h5>
-                                    Mis mensajes
+                                    Centro de mensajes
                                 </h5>
                             </div>
                         </a>
@@ -97,7 +97,7 @@
                                 <img class="wid-60 text-center mb-3"
                                     src="{{ asset('images/iconos/licencia-ro.svg') }}" alt="Mis Licencias">
                                 <h5>
-                                    Mis Licencias
+                                    Mis Licencias emitidas
                                 </h5>
                             </div>
                         </a>

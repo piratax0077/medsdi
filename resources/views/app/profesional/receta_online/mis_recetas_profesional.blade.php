@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis recetas</h5>
+                                <h5 class="m-b-10 "></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip"
@@ -18,7 +18,7 @@
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.index_receta_online') }}"
                                         data-toggle="tooltip" data-placement="top"
                                         title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="mis_recetas_profesional.blade.php">Mis recetas</a></li>
+                                <li class="breadcrumb-item"><a href="mis_recetas_profesional.blade.php">Mis recetas emitidas</a></li>
                             </ul>
                         </div>
                     </div>
@@ -28,10 +28,8 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="card">
-                        <div class="card-header bg-light">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <h4 class="text-c-blue f-22">Mis recetas</h4>
-                            </div>
+                        <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-text icono-primary"></i> Mis recetas emitidas</h5>
                         </div>
                         <div class="card-body">
                             <table id="tabla_recetas_profesional_ro"
