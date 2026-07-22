@@ -77,7 +77,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h6 class="modal-title text-primary f-18">Reservar hora médica</h6>
+                    <h5 class="modal-title f-18"><i class="feather icon-calendar icono-agenda"></i>Reservar hora médica</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#reservar_hora').modal('hide');">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -86,11 +86,16 @@
                     <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
                     <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
                     <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-primary" role="alert">
+                              <i class="feather icon-info"></i> Seleccione el lugar de atención, elija una fecha y haga clic en un horario disponible para reservar.
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
-                                    <label class="floating-label-active-sm mb-0">Lugar de atención</label>
-                                    <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional();">
+                                    <label class="text-dark font-weight-bold mb-2">Lugar de atención</label>
+                                    <select class="form-control" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional();">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
@@ -98,43 +103,27 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="mt-4">El Profesional atiende los dias <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
-                            {{--  <div class="form-row">
-                                <div class="form-group col-md-12 mb-2 mt-0">
-                                </div>
-                            </div>  --}}
+                            <label></label>
+                            <div class="alert alert-secondary p-1" role="alert">
+                          <i class="feather icon-calendar mr-2"></i>El Profesional atiende los días: <br><span id="modal_reserva_dias_atencion" class="hljs-strong text-c-blue "></span>
+                        </div>
+                            
                         </div>
 
                         <div class="col-md-12">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
-                                    <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
-                                    <input class="form-control form-control-sm" type="text" name="modal_reserva_fecha" id="modal_reserva_fecha" placeholder="Seleccione una fecha" disabled />
+                                    <label class="text-dark font-weight-bold mb-0 mb-2">Seleccione una fecha</label>
+                                    <input class="form-control" type="text" name="modal_reserva_fecha" id="modal_reserva_fecha" placeholder="Seleccione una fecha" disabled />
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-4">
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
-                                </div>
-                                <div class="col-md-12 mx-auto" >
-                                    <div class="row" id="modal_reserva_hora_lista_horas" style="margin-left: 20px;">
-                                        {{--  <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
-                                            8:00
-                                        </div>  --}}
-                                    </div>
-                                </div>
+                            <div class="col-md-12 text-center mt-4">
+                                <h6 class="text-dark f-16 mb-3" id="modal_reserva_fecha_seleccionada"></h6>
                             </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            {{--  <button type="button" class="btn btn-info"><i class="feather icon-check-circle"></i>
-                                Reservar hora</button>  --}}
-                            <label class="label">Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</label>
-                        </div>
+                            <div class="col-md-12 "  id="modal_reserva_hora_lista_horas">
+
+                            </div>
                     </div>
                 </div>
             </div>
@@ -147,7 +136,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                    <h5 class="modal-title text-white"><i class="feather icon-calendar icono-agenda"></i>Reservar hora médica</h5></h5>
                     <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -186,70 +175,53 @@
                         <input type="hidden" id="reserva_hora_id_asistente" name="reserva_hora_id_asistente" value="2">
 
                         {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
-                        <div id="reserva_datos_paciente" class="row mx-3">
-                            <table class="table table-borderless table-xs">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Rut</strong>
-                                        </th>
-                                        <td><span id="reserva_rut_paciente"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Nombre</strong>
-                                        </th>
-                                        <td><span id="reserva_hora_nombre"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Fecha Nacimiento</strong>
-                                        </th>
-                                        <td><span id="reserva_fecha_nacimiento"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Sexo</strong>
-                                        </th>
-                                        <td><span id="reserva_sexo"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Convenio</strong>
-                                        </th>
-                                        <td><span id="reserva_convenio"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Dirección</strong>
-                                        </th>
-                                        <td><span id="reserva_direccion"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Correo Electrónico</strong>
-                                        </th>
-                                        <td id="reserva_hora_email"></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Teléfono</strong>
-                                        </th>
-                                        <td><span id="reserva_hora_telefono"></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div id="reserva_datos_paciente" class="row px-2 text-uppercase">
+                            <div class="col-md-12 mb-2 text-uppercasse">
+                                <small class="text-c-blue font-weight-bold">Paciente</small><br>
+                                <strong><span class="text-dark" id="reserva_hora_nombre"></span></strong>
+                            </div>
 
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">RUT</small><br>
+                                <strong><span class="text-dark" id="reserva_rut_paciente"></span></strong>
+                            </div>
+
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Fecha Nacimiento</small><br>
+                                <strong><span class="text-dark" id="reserva_fecha_nacimiento"></span></strong>
+                            </div>
+                             <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Sexo</small><br>
+                                <strong><span class="text-dark" id="reserva_sexo"></span></strong>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Convenio</small><br>
+                                <strong><span class="text-dark" id="reserva_convenio"></span></strong>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Dirección</small><br>
+                                <strong><span class="text-dark" id="reserva_direccion"></span></strong>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Correo electrónico</small><br>
+                                <strong><span class="text-dark" id="reserva_hora_email"></span></strong>
+                            </div>
+
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <small class="text-c-blue font-weight-bold">Teléfono</small><br>
+                                <strong><span class="text-dark" id="reserva_hora_telefono"></span></strong>
+                            </div>
+                             <div class="col-sm-12 col-md-12 mt-3">
                                 <div class="form-group">
-                                    <label class="floating-label">Descripción Reserva</label>
+                                    <label class="floating-label-activo-sm">Descripción Reserva</label>
                                     <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
-                                <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
-
+                        </div>
+                             <div class="modal-footer justify-content-center">
+                                <button type="button" onclick="agendar_hora();"class="btn btn-info mt-3 px-5">
+                                    <i class="feather icon-check-circle"></i> Reservar Hora
+                                </button>
                             </div>
                         </div>
 
@@ -330,17 +302,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-3 col-md-3">
-                                    <div class="form-group">
-                                        <label class="floating-label-activo-sm">N&uacute;mero</label>
-                                        <input type="address" class="form-control form-control-sm" name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
-                                    </div>
-                                </div>
-
-
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Region</label>
+                                        <label class="floating-label-activo-sm">Región</label>
                                         <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control" required>
                                             <option value="0">Seleccione Regi&oacute;n</option>
                                             @if (isset($region))
@@ -406,11 +370,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger close_agenda_agregar_paciente"  onclick="$('#agenda_agregar_paciente').modal('hide');">Cancelar</button>
-                                <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
-                                    Tomar Hora
-                                </button>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-danger close_agenda_agregar_paciente"  onclick="$('#agenda_agregar_paciente').modal('hide');">Cancelar</button>
+                                    <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
+                                        Agendar Hora
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -808,7 +774,7 @@
         else
         {
             swal({
-                title: "Busqueda por especialidad, campos Minimos Requeridos",
+                title: "Busqueda por especialidad, campos Mínimos Requeridos",
                 text: error,
                 icon: "error",
                 // buttons: "Aceptar",
@@ -894,7 +860,7 @@
                     if(data.registros.horario_agenda_laboral != '')
                     {
                         console.log(data);
-                        let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                        let dias = ['','LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
                         var dias_activos = data.registros.horario_agenda_laboral.split(',');
                         console.log(dias_activos);
                         var dias_texto = '';
@@ -944,7 +910,7 @@
                     }
                     else
                     {
-                        $('#modal_reserva_dias_atencion').html('NO INFORMADOS');
+                        $('#modal_reserva_dias_atencion').html('Selecciona un lugar para cargar la información');
                         $('#modal_reserva_fecha').prop('disabled',true);
                         $('#modal_reserva_fecha_seleccionada').html('');
                     }
@@ -1018,8 +984,8 @@
                     if(value.className == 'fc-non-business')
                     {
                         swal({
-                            title: "Toma de Hora",
-                            text: "Dia No disponible para toma de Hora",
+                            title: "Toma de hora",
+                            text: "Día no disponible para toma de hora",
                             icon: "error",
                             buttons: "Aceptar",
                             DangerMode: true,
@@ -1049,8 +1015,8 @@
                         else
                         {
                             swal({
-                                title: "Toma de Hora",
-                                text: "Dia No disponible para toma de Hora",
+                                title: "Toma de hora",
+                                text: "Día no disponible para toma de hora",
                                 icon: "error",
                                 buttons: "Aceptar",
                                 DangerMode: true,
@@ -1060,8 +1026,8 @@
                     else
                     {
                         swal({
-                            title: "Toma de Hora",
-                            text: "No se puede tomar Hora para Dias previos.",
+                            title: "Toma de hora",
+                            text: "No se puede tomar hora para días previos.",
                             icon: "error",
                             buttons: "Aceptar",
                             DangerMode: true,
@@ -1100,14 +1066,16 @@
         .done(function(data) {
             console.log(data);
             if (data.estado == 1) {
-                $('#modal_reserva_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
+               $('#modal_reserva_fecha_seleccionada').html(
+    '<i class="feather icon-calendar mr-2 text-c-blue"></i>Horas disponibles para el día: <span class="text-c-blue">' + data.text_fecha + '</span>'
+);
 
                 $('#modal_reserva_hora_lista_horas').html('');
                 $.each(data.registros, function(index, value)
                 {
                     var hr1 = moment(value.hora,'HH:mm:ss').format('HH:mm');
                     var html = '';
-                    html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
+                    html += '<div class="col-sm-12 col-md-2 col-lg-1 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
                     html += ''+hr1;
                     html += '</div>';
 
@@ -1115,8 +1083,8 @@
                 });
 
             } else {
-                // alert('No se pudo Cargar las ciudades');
-                $('#modal_reserva_hora_lista_horas').html('<span style="font-weight: bold; text-align: center;">"Sin disponibilidad de Horas"</span>');
+                // alert('NO HAY HORAS DISPONIBLES PARA EL DIA SELECCIONADO');
+                $('#modal_reserva_hora_lista_horas').html('<span style="color=#ff5252; font-size="16px;" font-weight: bold; text-align: center;">"Sin disponibilidad de horas"</span>');
             }
 
         })
@@ -1194,7 +1162,7 @@
             else
             {
                 swal({
-                    title: "Debe completar los datos de Inscripción",
+                    title: "Debe completar los datos de inscripción",
                     text: error,
                     icon: "error",
                     // buttons: "Aceptar",
