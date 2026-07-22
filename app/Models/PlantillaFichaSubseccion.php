@@ -12,6 +12,7 @@ class PlantillaFichaSubseccion extends Model
         'id_seccion',
         'codigo',
         'nombre',
+        'tipo',
         'visible',
         'personalizada',
         'orden',

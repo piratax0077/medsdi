@@ -482,6 +482,11 @@
                 }
 
                 return seccionesGuardadas.map(function (seccion, indice) {
+                    const esObligatoria = normalizarBooleano(
+                        seccion.obligatoria,
+                        normalizarBooleano(seccion.obligatorio, false)
+                    );
+
                     return {
                         id: seccion.id || null,
                         codigo: seccion.codigo || '',
@@ -489,14 +494,7 @@
                         visible: normalizarBooleano(seccion.visible, true),
                         orden: seccion.orden || (indice + 1),
                         tipo: seccion.tipo || 'campos',
-                        obligatoria: normalizarBooleano(
-                            seccion.obligatoria,
-                            false
-                        ),
-                        obligatorio: normalizarBooleano(
-                            seccion.obligatorio,
-                            false
-                        ),
+                        obligatoria: esObligatoria,
                         personalizada: normalizarBooleano(
                             seccion.personalizada,
                             false
@@ -524,6 +522,27 @@
                     plantillaGuardada.secciones
                 );
             }
+
+            /*
+             * Las secciones obligatorias se definen en la configuración base
+             * de cada especialidad. Se vuelven a aplicar sobre plantillas
+             * antiguas para impedir que una configuración previamente guardada
+             * permita desactivarlas.
+             */
+            const codigosSeccionesObligatorias = normalizarSecciones(
+                seccionesPredeterminadas
+            ).filter(function (seccion) {
+                return seccion.obligatoria;
+            }).map(function (seccion) {
+                return seccion.codigo;
+            });
+
+            secciones.forEach(function (seccion) {
+                if (codigosSeccionesObligatorias.indexOf(seccion.codigo) !== -1) {
+                    seccion.obligatoria = true;
+                    seccion.visible = true;
+                }
+            });
 
             function escaparHtml(valor) {
                 return String(valor || '')
@@ -562,7 +581,7 @@
                                     <div>
                                         <strong>${escaparHtml(seccion.nombre)}</strong>
                                         ${badge}
-                                        ${seccion.obligatorio ? '<span class="badge badge-warning ml-1">Obligatoria</span>' : ''}
+                                        ${seccion.obligatoria ? '<span class="badge badge-warning ml-1">Obligatoria</span>' : ''}
                                         <div class="ayuda-texto">${Array.isArray(seccion.subsecciones) ? seccion.subsecciones.length : 0} subsección(es)</div>
                                     </div>
                                 </div>
@@ -577,7 +596,7 @@
                                     <label class="switch-personalizado" title="Mostrar u ocultar sección">
                                         <input type="checkbox"
                                                ${seccion.visible ? 'checked' : ''}
-                                               ${seccion.obligatorio ? 'disabled' : ''}
+                                               ${seccion.obligatoria ? 'disabled' : ''}
                                                onchange="cambiarVisibilidadSeccion(${indice}, this.checked)">
                                         <span class="switch-slider"></span>
                                     </label>
@@ -760,7 +779,9 @@
             };
 
             window.cambiarVisibilidadSeccion = function (indice, visible) {
-                if (secciones[indice].obligatorio) {
+                if (secciones[indice].obligatoria) {
+                    secciones[indice].visible = true;
+                    renderizarConfiguracion();
                     return;
                 }
 
@@ -994,7 +1015,8 @@
         return {
             codigo: seccion.codigo || null,
             nombre: seccion.nombre,
-            visible: Boolean(seccion.visible),
+            visible: seccion.obligatoria ? true : Boolean(seccion.visible),
+            obligatoria: Boolean(seccion.obligatoria),
             orden: indiceSeccion + 1,
             tipo: seccion.tipo || null,
             personalizada: Boolean(seccion.personalizada),
@@ -1120,6 +1142,7 @@
         return data;
     })
     .then(function (data) {
+        console.log(data);
         /*
          * Se actualizan las secciones locales con la respuesta persistida,
          * cuando el controlador las devuelve.

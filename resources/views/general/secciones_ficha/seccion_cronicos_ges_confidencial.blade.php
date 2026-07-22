@@ -1,15 +1,75 @@
+@php
+    /*
+     * Por compatibilidad, si no existe una plantilla personalizada se
+     * conserva el comportamiento anterior y se muestran todos los controles.
+     */
+    $mostrarSeccionCronicos = true;
+    $visibilidadCronicos = [
+        'agregar_antecedente' => true,
+        'control_cronico' => true,
+        'ges' => true,
+        'confidencial' => true,
+    ];
+
+    if (isset($plantillaFicha) && $plantillaFicha) {
+        $seccionCronicos = $plantillaFicha->secciones
+            ->firstWhere('codigo', 'antecedentes_cronicos_ges');
+
+        if ($seccionCronicos) {
+            $mostrarSeccionCronicos = (bool) $seccionCronicos->visible;
+
+            foreach ($visibilidadCronicos as $codigoSubseccion => $visible) {
+                $subseccionConfigurada = $seccionCronicos->subsecciones
+                    ->firstWhere('codigo', $codigoSubseccion);
+
+                if ($subseccionConfigurada) {
+                    $visibilidadCronicos[$codigoSubseccion] =
+                        (bool) $subseccionConfigurada->visible;
+                }
+            }
+        }
+    }
+
+    $cantidadCronicosVisibles = collect($visibilidadCronicos)
+        ->filter()
+        ->count();
+    $mostrarBloqueCronicos = $mostrarSeccionCronicos
+        && $cantidadCronicosVisibles > 0;
+    $anchoColumnaCronicos = $cantidadCronicosVisibles > 0
+        ? (int) (12 / $cantidadCronicosVisibles)
+        : 12;
+    $titulosCronicosVisibles = [];
+
+    if ($visibilidadCronicos['agregar_antecedente']) {
+        $titulosCronicosVisibles[] = 'Nuevo antecedente';
+    }
+    if ($visibilidadCronicos['control_cronico']) {
+        $titulosCronicosVisibles[] = 'Crónicos';
+    }
+    if ($visibilidadCronicos['ges']) {
+        $titulosCronicosVisibles[] = 'GES';
+    }
+    if ($visibilidadCronicos['confidencial']) {
+        $titulosCronicosVisibles[] = 'Confidencial';
+    }
+
+    $tituloBloqueCronicos = implode(' / ', $titulosCronicosVisibles);
+@endphp
+
+@if($mostrarBloqueCronicos)
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a" style=" border: 1px solid #6c9bd5;">
         <div class="card-header-a" id="cgc" >
         <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button"  data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
-              Nuevo Antecedente / Crónicos / GES / Confidencial
+              {{ $tituloBloqueCronicos }}
             </button>
         </div>
         <div id="cgc-c" class="collapse show" aria-labelledby="cgc" data-parent="#cgc">
             <div class="card-body-aten-a">
                 <div class="row">
+                    @if($visibilidadCronicos['agregar_antecedente'])
                     <!--NUEVO ANTECEDENTE-->
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-sm-12 col-md-{{ $anchoColumnaCronicos }} col-lg-{{ $anchoColumnaCronicos }} col-xl-{{ $anchoColumnaCronicos }}">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
@@ -55,8 +115,11 @@
                             </div>
                         </div>
                     </div>
+                    @endif
+
+                    @if($visibilidadCronicos['control_cronico'])
                     {{-- CRONICO --}}
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-sm-12 col-md-{{ $anchoColumnaCronicos }} col-lg-{{ $anchoColumnaCronicos }} col-xl-{{ $anchoColumnaCronicos }}">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
@@ -102,8 +165,11 @@
                             </div>
                         </div>
                     </div>
+                    @endif
+
+                    @if($visibilidadCronicos['ges'])
                     {{-- GES --}}
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-sm-12 col-md-{{ $anchoColumnaCronicos }} col-lg-{{ $anchoColumnaCronicos }} col-xl-{{ $anchoColumnaCronicos }}">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
@@ -134,7 +200,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    @endif
+
+                    @if($visibilidadCronicos['confidencial'])
+                    <div class="col-sm-12 col-md-{{ $anchoColumnaCronicos }} col-lg-{{ $anchoColumnaCronicos }} col-xl-{{ $anchoColumnaCronicos }}">
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
@@ -155,11 +224,13 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endif
 
 
 <!-- MODAL CRONICO -->

@@ -8397,59 +8397,164 @@ return $ficha;
      * Consulta la plantilla activa del profesional para la combinación exacta
      * de especialidad, tipo y subtipo de especialidad.
      */
-    private function consultarPlantillaFichaProfesional($profesional, $conRelaciones = true, $bloquear = false)
-    {
-        $consulta = PlantillaFichaMedica::query()
-            ->where('id_profesional', $profesional->id)
-            ->where('id_especialidad', $profesional->id_especialidad)
-            ->where('id_tipo_especialidad', $profesional->id_tipo_especialidad)
-            ->where('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad)
-            ->where('activa', 1);
+    private function consultarPlantillaFichaProfesional(
+    $profesional,
+    bool $soloActiva = true,
+    bool $bloquear = false
+) {
+    $query = PlantillaFichaMedica::where(
+            'id_profesional',
+            $profesional->id
+        )
+        ->where(
+            'id_especialidad',
+            $profesional->id_especialidad
+        )
+        ->where(
+            'id_tipo_especialidad',
+            $profesional->id_tipo_especialidad
+        );
 
-        if ($conRelaciones) {
-            $consulta->with([
-                'secciones' => function ($query) {
-                    $query->orderBy('orden');
-                },
-                'secciones.campos' => function ($query) {
-                    $query->orderBy('orden');
-                },
-                'secciones.subsecciones' => function ($query) {
-                    $query->orderBy('orden');
-                },
-                'secciones.subsecciones.campos' => function ($query) {
-                    $query->orderBy('orden');
-                },
-            ]);
-        }
-
-        if ($bloquear) {
-            $consulta->lockForUpdate();
-        }
-
-        return $consulta->first();
+    if (!empty($profesional->id_sub_tipo_especialidad)) {
+        $query->where(
+            'id_sub_tipo_especialidad',
+            $profesional->id_sub_tipo_especialidad
+        );
+    } else {
+        $query->whereNull(
+            'id_sub_tipo_especialidad'
+        );
     }
+
+    if ($soloActiva) {
+        $query->where('activa', 1);
+    }
+
+    if ($bloquear) {
+        $query->lockForUpdate();
+    }
+
+    return $query->first();
+}
 
     /**
      * Devuelve la configuración base según la subespecialidad del profesional.
      * Los códigos deben coincidir con los utilizados por cada Blade.
      */
     private function obtenerSeccionesBasePlantilla(
-        int $idEspecialidad,
-        int $idTipoEspecialidad,
-        int $idSubTipoEspecialidad
-    ): array {
-        switch ($idSubTipoEspecialidad) {
-            case 21:
-                return $this->seccionesBaseOrl();
-
-            case 11:
-                return $this->seccionesBaseCirugiaDigestiva();
-
-            default:
-                return $this->seccionesBaseGeneral();
-        }
+    $profesional
+): array {
+    if ((int) $profesional->id_especialidad === 6) {
+        return $this->seccionesBasePsicologia();
     }
+
+    if ((int) $profesional->id_sub_tipo_especialidad === 21) {
+        return $this->seccionesBaseOrl();
+    }
+
+    if ((int) $profesional->id_sub_tipo_especialidad === 11) {
+        return $this->seccionesBaseCirugiaDigestiva();
+    }
+
+    return $this->seccionesBaseGeneral();
+}
+
+    private function seccionesBasePsicologia(): array
+{
+    return [
+        [
+            'codigo' => 'motivo_consulta',
+            'nombre' => 'Motivo de consulta',
+            'visible' => true,
+            'tipo' => 'campos',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'motivo_consulta',
+                    'nombre' => 'Motivo de consulta',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'plan_trabajo',
+            'nombre' => 'Plan de trabajo',
+            'visible' => true,
+            'tipo' => 'campos',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'plan_tratamiento',
+                    'nombre' => 'Plan de tratamiento',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'interconsulta_psiquiatria',
+                    'nombre' => 'Interconsulta Psiquiatría',
+                    'visible' => true,
+                    'tipo' => 'switch',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'informe_psicologico',
+                    'nombre' => 'Informe psicológico',
+                    'visible' => true,
+                    'tipo' => 'switch',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'diagnostico_indicaciones',
+            'nombre' => 'Diagnóstico e indicaciones',
+            'visible' => true,
+            'obligatoria' => true,
+            'tipo' => 'campos',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'hipotesis',
+                    'nombre' => 'Hipótesis diagnóstica',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'indicaciones',
+                    'nombre' => 'Indicaciones',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'pronostico',
+                    'nombre' => 'Pronóstico',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'descripcion_cie',
+                    'nombre' => 'Diagnóstico CIE-10',
+                    'visible' => true,
+                    'tipo' => 'autocomplete',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'descripcion_dsm5',
+                    'nombre' => 'Diagnóstico DSM-5',
+                    'visible' => true,
+                    'tipo' => 'textarea',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+    ];
+}
 
     private function seccionesBaseGeneral(): array
     {
@@ -8506,7 +8611,7 @@ return $ficha;
                 'codigo' => 'diagnostico',
                 'nombre' => 'Diagnóstico',
                 'visible' => true,
-                'obligatorio' => true,
+                'obligatoria' => true,
                 'tipo' => 'campos',
                 'personalizada' => false,
                 'subsecciones' => [
@@ -8536,6 +8641,7 @@ return $ficha;
                 'codigo' => 'motivo_consulta_examen_fisico',
                 'nombre' => 'Motivo de consulta y examen físico',
                 'visible' => true,
+                'obligatoria' => true,
                 'tipo' => 'campos',
                 'personalizada' => false,
                 'subsecciones' => [
@@ -8656,7 +8762,7 @@ return $ficha;
                 'codigo' => 'diagnostico',
                 'nombre' => 'Diagnóstico',
                 'visible' => true,
-                'obligatorio' => true,
+                'obligatoria' => true,
                 'tipo' => 'campos',
                 'personalizada' => false,
                 'subsecciones' => [
@@ -8687,6 +8793,7 @@ return $ficha;
                 'codigo' => 'recetas_examenes_generales',
                 'nombre' => 'Recetas y exámenes',
                 'visible' => true,
+                'obligatoria' => true,
                 'tipo' => 'campos',
                 'personalizada' => false,
                 'subsecciones' => [
@@ -8834,7 +8941,7 @@ return $ficha;
                 'codigo' => 'diagnostico',
                 'nombre' => 'Diagnóstico',
                 'visible' => true,
-                'obligatorio' => true,
+                'obligatoria' => true,
                 'tipo' => 'campos',
                 'personalizada' => false,
                 'subsecciones' => [
@@ -8866,6 +8973,9 @@ return $ficha;
 
     private function nombrePlantillaProfesional($profesional)
     {
+        if ((int) $profesional->id_especialidad === 6 && empty($profesional->id_sub_tipo_especialidad)) {
+            return 'Ficha Psicología personalizada';
+        }
         $nombreSubespecialidad = SubTipoEspecialidad::where('id', $profesional->id_sub_tipo_especialidad)
             ->value('nombre');
 
@@ -8956,9 +9066,7 @@ return $ficha;
         * Solo se usa cuando todavía no existe una plantilla guardada.
         */
         $seccionesBase = $this->obtenerSeccionesBasePlantilla(
-            (int) $profesional->id_especialidad,
-            (int) $profesional->id_tipo_especialidad,
-            (int) $profesional->id_sub_tipo_especialidad
+            $profesional
         );
 
         return view(
@@ -9052,6 +9160,7 @@ return $ficha;
             'secciones.*.subsecciones' => 'nullable|array',
             'secciones.*.subsecciones.*.codigo' => 'nullable|string|max:100',
             'secciones.*.subsecciones.*.nombre' => 'required_with:secciones.*.subsecciones|string|max:150',
+            'secciones.*.subsecciones.*.tipo' => 'nullable|string|max:50',
             'secciones.*.subsecciones.*.visible' => 'nullable|boolean',
             'secciones.*.subsecciones.*.personalizada' => 'nullable|boolean',
             'secciones.*.subsecciones.*.orden' => 'nullable|integer|min:0',
@@ -9083,11 +9192,51 @@ return $ficha;
             ], 403);
         }
 
-        if (empty($profesional->id_tipo_especialidad) || empty($profesional->id_sub_tipo_especialidad)) {
+        if (empty($profesional->id_tipo_especialidad)) {
             return response()->json([
                 'estado' => 0,
-                'mensaje' => 'El profesional debe tener configurados el tipo y subtipo de especialidad.',
+                'mensaje' =>
+                    'El profesional debe tener configurado el tipo de especialidad.',
             ], 422);
+        }
+
+        /*
+         * La obligatoriedad se define en el servidor según la ficha base de
+         * cada especialidad. De esta forma no puede alterarse manipulando el
+         * JavaScript o enviando manualmente una sección como invisible.
+         */
+        $seccionesBaseProfesional = $this->obtenerSeccionesBasePlantilla(
+            $profesional
+        );
+
+        foreach ($seccionesBaseProfesional as $seccionBase) {
+            $esObligatoria = !empty($seccionBase['obligatoria'])
+                || !empty($seccionBase['obligatorio']);
+
+            if (!$esObligatoria || empty($seccionBase['codigo'])) {
+                continue;
+            }
+
+            $indiceSeccion = null;
+
+            foreach ($datos['secciones'] as $indice => $seccionEnviada) {
+                if (($seccionEnviada['codigo'] ?? null) === $seccionBase['codigo']) {
+                    $indiceSeccion = $indice;
+                    break;
+                }
+            }
+
+            if ($indiceSeccion === null) {
+                $seccionBase['visible'] = true;
+                $seccionBase['obligatoria'] = true;
+                unset($seccionBase['obligatorio']);
+                $seccionBase['orden'] = count($datos['secciones']) + 1;
+                $datos['secciones'][] = $seccionBase;
+                continue;
+            }
+
+            $datos['secciones'][$indiceSeccion]['visible'] = true;
+            $datos['secciones'][$indiceSeccion]['obligatoria'] = true;
         }
 
         DB::beginTransaction();

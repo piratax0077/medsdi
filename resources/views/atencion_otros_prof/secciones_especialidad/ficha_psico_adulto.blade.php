@@ -1,3 +1,154 @@
+@php
+    /*
+     * Personalización dinámica de la ficha de Psicología.
+     * Si no existe una plantilla guardada, las secciones se muestran por defecto.
+     */
+    $seccionesPlantilla = collect();
+
+    if (isset($plantillaFicha) && $plantillaFicha && isset($plantillaFicha->secciones)) {
+        $seccionesPlantilla = collect($plantillaFicha->secciones);
+    }
+
+    $seccionVisible = function ($codigos, $valorPorDefecto = true) use ($seccionesPlantilla) {
+        $codigos = is_array($codigos) ? $codigos : [$codigos];
+
+        foreach ($codigos as $codigo) {
+            $seccion = $seccionesPlantilla->first(function ($item) use ($codigo) {
+                return isset($item->codigo) && $item->codigo === $codigo;
+            });
+
+            if ($seccion) {
+                return (bool) $seccion->visible;
+            }
+        }
+
+        return $valorPorDefecto;
+    };
+
+    $mostrarResponsableMenor = $seccionVisible([
+        'responsable_menor_edad',
+        'menor_edad',
+        'responsable',
+    ]);
+
+    $mostrarMotivoConsulta = $seccionVisible([
+        'motivo_consulta',
+        'motivo_consulta_psicologia',
+        'informacion_consulta',
+    ]);
+
+    $mostrarPlanTrabajo = $seccionVisible([
+        'plan_trabajo',
+        'plan_tratamiento',
+    ]);
+
+    $mostrarDiagnosticoIndicaciones = $seccionVisible([
+        'diagnostico_indicaciones',
+        'diagnostico',
+    ]);
+
+    $mostrarEvaluacionPsicosocial = $seccionVisible([
+        'evaluacion_psicosocial',
+        'atencion_sicosocial',
+    ]);
+
+    $mostrarEvolucion = $seccionVisible([
+        'evolucion',
+        'control_psicologico',
+    ]);
+
+    $mostrarHistorialEvolucion = $seccionVisible([
+        'historial_evolucion',
+        'historial_controles',
+    ]);
+@endphp
+
+@php
+    /*
+     * Busca una subsección dentro de una o varias secciones principales.
+     */
+    $subseccionVisible = function (
+        $codigosSeccion,
+        $codigosSubseccion,
+        $valorPorDefecto = true
+    ) use ($seccionesPlantilla) {
+        $codigosSeccion = is_array($codigosSeccion)
+            ? $codigosSeccion
+            : [$codigosSeccion];
+
+        $codigosSubseccion = is_array($codigosSubseccion)
+            ? $codigosSubseccion
+            : [$codigosSubseccion];
+
+        foreach ($codigosSeccion as $codigoSeccion) {
+            $seccion = $seccionesPlantilla->first(function (
+                $item
+            ) use ($codigoSeccion) {
+                return isset($item->codigo) &&
+                    $item->codigo === $codigoSeccion;
+            });
+
+            if (!$seccion) {
+                continue;
+            }
+
+            /*
+             * Si la sección principal está desactivada,
+             * ninguna subsección debe mostrarse.
+             */
+            if (!(bool) $seccion->visible) {
+                return false;
+            }
+
+            $subsecciones = collect(
+                $seccion->subsecciones ?? []
+            );
+
+            foreach ($codigosSubseccion as $codigoSubseccion) {
+                $subseccion = $subsecciones->first(function (
+                    $item
+                ) use ($codigoSubseccion) {
+                    return isset($item->codigo) &&
+                        $item->codigo === $codigoSubseccion;
+                });
+
+                if ($subseccion) {
+                    return (bool) $subseccion->visible;
+                }
+            }
+        }
+
+        return $valorPorDefecto;
+    };
+
+    /*
+     * Subsecciones del Plan de trabajo.
+     */
+    $mostrarPlanTratamiento = $subseccionVisible(
+        ['plan_trabajo'],
+        ['plan_tratamiento'],
+        true
+    );
+
+    $mostrarInterconsultaPsiquiatria = $subseccionVisible(
+        ['plan_trabajo'],
+        [
+            'interconsulta_psiquiatria',
+            'interconsulta_psiquiatrica',
+        ],
+        true
+    );
+
+    $mostrarInformePsicologico = $subseccionVisible(
+        ['plan_trabajo'],
+        [
+            'informe_psicologico',
+            'informe_psicologia',
+        ],
+        true
+    );
+@endphp
+
 <div class="videocall">
 
 @include('general.secciones_ficha.video_llamada.seccion_jaas_container')
@@ -8,19 +159,23 @@
 		<div class="row mx-0" style="background-color: #ecf0f5!important;">
 
 			<div class="col-sm-12 col-md-12">
-				<ul class="nav nav-tabs-secciones mb-3 mt-1" id="orl" role="tablist">
+				<ul class="nav nav-tabs-secciones mb-3 mt-1" id="psicologia-tabs" role="tablist">
 					<li class="nav-item-secciones">
 						<a  class="nav-secciones active text-uppercase" id="atencion-diagnostica-tab" data-toggle="tab" href="#atencion-diagnostica" role="tab" aria-controls="atencion-diagnostica" aria-selected="true">Atención especialidad</a>
 					</li>
+                    @if($mostrarEvaluacionPsicosocial)
 					<li class="nav-item-secciones">
 						<a onclick="dame_atencion_sico()" class="nav-secciones text-uppercase" id="atencion_sicosocial-tab" data-toggle="tab" href="#atencion_sicosocial" role="tab" aria-controls="atencion_sicosocial" aria-selected="false">Evaluación Psicosocial</a>
 					</li>
-                    @if($tiene_controles == 1)
+                    @endif
+                    @if($tiene_controles == 1 && $mostrarEvolucion)
 					<li class="nav-item-secciones">
-							<a class="nav-secciones  text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="true">Evolución</a>
+							<a class="nav-secciones text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="false">Evolución</a>
 					</li>
+                    @endif
+                    @if($tiene_controles == 1 && $mostrarHistorialEvolucion)
                     <li class="nav-item-secciones">
-							<a class="nav-secciones  text-uppercase" onclick="dame_historial_controles()" id="historial-evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="true">Historial Evolución</a>
+							<a class="nav-secciones text-uppercase" onclick="dame_historial_controles()" id="historial-evolucion-tab" data-toggle="tab" href="#historial_evolucion" role="tab" aria-controls="historial_evolucion" aria-selected="false">Historial Evolución</a>
 					</li>
                     @endif
 				</ul>
@@ -83,10 +238,14 @@
 										<!--MOTIVO CONSULTA-->
 										<!--RESPONSABLE-->
 										<!--Formulario / Menor de edad-->
-										@include('general.secciones_ficha.seccion_menor')
+										@if($mostrarResponsableMenor)
+											@include('general.secciones_ficha.seccion_menor')
+										@endif
 										<!--Cierre: Formulario / Menor de edad-->
 										<!--INFORMACIÓN-->
-										@include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
+										@if($mostrarMotivoConsulta)
+											@include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
+										@endif
 										<!--ANTECEDENTES FAMILIARES-->
 										{{--  @include('atencion_otros_prof.secciones_especialidad.includes.generales.antecedentes')  --}}
 										<!--ANTECEDENTES PSICO-SOCIALES-->
@@ -388,6 +547,7 @@
 												</div>
 											</div>
 										</div>  --}}
+										@if($mostrarPlanTrabajo)
 										<!--PLAN DE TRABAJO-->
 										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="card-a">
@@ -399,28 +559,76 @@
 												<div id="plan-trabajo-c" class="collapse show" aria-labelledby="plan-trabajo" data-parent="#plan-trabajo">
 													<div class="card-body-aten-a">
 
-														<div class="form-row">
-															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																{{-- <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="ind_terapia();"><i class="feather icon-plus"></i> Plan de tratamiento</button> --}}
-                                                                <button type="button"
-                                                                class="btn btn-outline-primary btn-block btn-sm "
-                                                                onclick="hora_medica_pedir({{ $profesional->id }},{{ $id_lugar_atencion }}); dame_plan_tratamiento({{ $id_ficha_atencion }})"><i
-                                                                    class="feather icon-edit-1"></i> Plan de
-                                                                Tratamiento</button>
-															</div>
+														 <div class="form-row">
 
-															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="ind_ic_psi();"><i class="feather icon-edit-1"></i> Indicar Interconsulta Psiquiatría</button>
-															</div>
-															<div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-																<button type="button" class="btn btn-primary-light-c btn-block btn-sm" onclick="informe_psi();"><i class="feather icon-edit-1"></i> Enviar Informe</button>
-															</div>
-														</div>
+                                            @if($mostrarPlanTratamiento)
+                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-primary btn-block btn-sm"
+                                                        onclick="
+                                                            hora_medica_pedir(
+                                                                {{ $profesional->id }},
+                                                                {{ $id_lugar_atencion }}
+                                                            );
+                                                            dame_plan_tratamiento(
+                                                                {{ $id_ficha_atencion }}
+                                                            );
+                                                        "
+                                                    >
+                                                        <i class="feather icon-edit-1"></i>
+                                                        Plan de Tratamiento
+                                                    </button>
+                                                </div>
+                                            @endif
+
+                                            @if($mostrarInterconsultaPsiquiatria)
+                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-primary-light-c btn-block btn-sm"
+                                                        onclick="ind_ic_psi();"
+                                                    >
+                                                        <i class="feather icon-edit-1"></i>
+                                                        Indicar Interconsulta Psiquiatría
+                                                    </button>
+                                                </div>
+                                            @endif
+
+                                            @if($mostrarInformePsicologico)
+                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-primary-light-c btn-block btn-sm"
+                                                        onclick="informe_psi();"
+                                                    >
+                                                        <i class="feather icon-edit-1"></i>
+                                                        Enviar Informe
+                                                    </button>
+                                                </div>
+                                            @endif
+
+                                            @if(
+                                                !$mostrarPlanTratamiento &&
+                                                !$mostrarInterconsultaPsiquiatria &&
+                                                !$mostrarInformePsicologico
+                                            )
+                                                <div class="col-12">
+                                                    <div class="alert alert-light border mb-0">
+                                                        No hay acciones activas en esta sección.
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                        </div>
 
 													</div>
 												</div>
 											</div>
 										</div>
+										@endif
+
+										@if($mostrarDiagnosticoIndicaciones)
 										<!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
 										<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 											<div class="card-a">
@@ -467,6 +675,7 @@
 												</div>
 											</div>
 										</div>
+										@endif
 									</div>
 									<div class="row">
 										<!--GUARDAR O IMPRIMIR FICHA-->
@@ -483,17 +692,23 @@
 							</div>
 						</div>
 
-						<div class="tab-pane fade" id="atencion_sicosocial" role="tabpanel" aria-labelledby="atencion_sicosocial">
+                        @if($mostrarEvaluacionPsicosocial)
+						<div class="tab-pane fade" id="atencion_sicosocial" role="tabpanel" aria-labelledby="atencion_sicosocial-tab">
 							@include('general.secciones_ficha.siquiatria.eval_sicosocial')
 						</div>
+                        @endif
+                        @if($mostrarEvolucion)
 						<!--EVOLUCION-->
-						<div class="tab-pane fade" id="evolucion" role="tabpanel" aria-labelledby="evolucion">
+						<div class="tab-pane fade" id="evolucion" role="tabpanel" aria-labelledby="evolucion-tab">
 							@include('atencion_otros_prof.secciones_especialidad.includes.generales.evolucion')
 						</div>
-                        <!--EVOLUCION-->
+                        @endif
+                        @if($mostrarHistorialEvolucion)
+                        <!--HISTORIAL EVOLUCIÓN-->
 						<div class="tab-pane fade" id="historial_evolucion" role="tabpanel" aria-labelledby="historial-evolucion-tab">
 							@include('atencion_otros_prof.secciones_especialidad.includes.generales.historial_evolucion')
 						</div>
+                        @endif
 					</div>
 				</form>
 			</div>

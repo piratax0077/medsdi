@@ -3078,35 +3078,46 @@ class ficha_atencionController extends Controller
         );
     }
 
-    private function obtenerPlantillaFichaActiva(Profesional $profesional)
-    {
-        return PlantillaFichaMedica::with([
+    private function obtenerPlantillaFichaActiva($profesional) {
+        $query = PlantillaFichaMedica::with([
             'secciones' => function ($query) {
                 $query->orderBy('orden');
             },
-            'secciones.campos' => function ($query) {
+            'secciones.subsecciones' => function ($query) {
                 $query->orderBy('orden');
             },
-            'secciones.subsecciones' => function ($query) {
+            'secciones.campos' => function ($query) {
                 $query->orderBy('orden');
             },
             'secciones.subsecciones.campos' => function ($query) {
                 $query->orderBy('orden');
             },
         ])
-            ->where('id_profesional', $profesional->id)
-            ->where(
-                'id_especialidad',
-                $profesional->id_especialidad
-            )
-            ->where(
-                'id_tipo_especialidad',
-                $profesional->id_tipo_especialidad
-            )
-            ->where(
+        ->where(
+            'id_profesional',
+            $profesional->id
+        )
+        ->where(
+            'id_especialidad',
+            $profesional->id_especialidad
+        )
+        ->where(
+            'id_tipo_especialidad',
+            $profesional->id_tipo_especialidad
+        );
+
+        if (!empty($profesional->id_sub_tipo_especialidad)) {
+            $query->where(
                 'id_sub_tipo_especialidad',
                 $profesional->id_sub_tipo_especialidad
-            )
+            );
+        } else {
+            $query->whereNull(
+                'id_sub_tipo_especialidad'
+            );
+        }
+
+        return $query
             ->where('activa', 1)
             ->first();
     }

@@ -1,3 +1,44 @@
+@php
+    /*
+     * Compatibilidad con fichas antiguas:
+     * si el profesional todavía no tiene una plantilla personalizada,
+     * se conserva el comportamiento original y se muestran las secciones.
+     */
+    $visibilidadSeccionesFicha = [
+        'motivo_consulta_examen_fisico' => true,
+        'cirugia_general_adulto' => true,
+        'hospitalizacion_control_postquirurgico' => true,
+        'antecedentes_cronicos_ges' => true,
+        'diagnostico' => true,
+        'recetas_examenes_generales' => true,
+    ];
+
+    if (isset($plantillaFicha) && $plantillaFicha) {
+        foreach ($visibilidadSeccionesFicha as $codigoSeccion => $visible) {
+            $seccionConfigurada = $plantillaFicha->secciones
+                ->firstWhere('codigo', $codigoSeccion);
+
+            if ($seccionConfigurada) {
+                $visibilidadSeccionesFicha[$codigoSeccion] =
+                    (bool) $seccionConfigurada->visible;
+            }
+        }
+    }
+
+    $mostrarMotivoConsulta =
+        $visibilidadSeccionesFicha['motivo_consulta_examen_fisico'];
+    $mostrarEvaluacionCirugia =
+        $visibilidadSeccionesFicha['cirugia_general_adulto'];
+    $mostrarHospitalizacionControl =
+        $visibilidadSeccionesFicha['hospitalizacion_control_postquirurgico'];
+    $mostrarAntecedentesCronicos =
+        $visibilidadSeccionesFicha['antecedentes_cronicos_ges'];
+    $mostrarDiagnostico =
+        $visibilidadSeccionesFicha['diagnostico'];
+    $mostrarRecetasExamenes =
+        $visibilidadSeccionesFicha['recetas_examenes_generales'];
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -415,7 +456,7 @@
                             <!--GUARDAR EXAMEN-->
                             <div class="row">
                                 <div class="col-md-12 text-center mb-3">
-                                    <button type="button" class="btn btn-info mt-1" onclick="guardar_ficha_eda();agregar_medicamentos_ficha(); agregar_examenes_ficha(); ">Guardar examen e ir a su agenda </button>
+                                    <button type="button" class="btn btn-info mt-1" onclick="guardar_ficha_eda(); procesarRecetasExamenesFicha();">Guardar examen e ir a su agenda </button>
                                     <button type="button" class="btn btn-primary mt-1" onclick="visualizar_pdf_examen('eda');">Ver examen PDF</button>
                                 </div>
                             </div>
@@ -433,8 +474,10 @@
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
 
-                                        <!--Motivo consulta-->
-                                        @include('general.secciones_ficha.motivo')
+                                        @if($mostrarMotivoConsulta)
+                                            <!--Motivo consulta-->
+                                            @include('general.secciones_ficha.motivo')
+                                        @endif
 
                                         <!-- Examen especialidad cirugia digestivo -->
                                         {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -605,9 +648,11 @@
                                                 </div>
                                             </div>
                                         </div>  --}}
-                                        <!--CIRUGIA GENERAL-->
-                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
-										<!--cierre CIRUGIA GENERAL-->
+                                        @if($mostrarEvaluacionCirugia)
+                                            <!--CIRUGIA GENERAL-->
+                                            @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
+										    <!--cierre CIRUGIA GENERAL-->
+                                        @endif
 {{--
                                         <!-- Hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -625,39 +670,47 @@
                                             </div>
                                         </div>  --}}
 
-                                        <!-- control post qx -->
-                                        @include('general.secciones_ficha.control_cirugia_gen')
-                                        <!-- cierre control post qx -->
+                                        @if($mostrarHospitalizacionControl)
+                                            <!-- control post qx -->
+                                            @include('general.secciones_ficha.control_cirugia_gen')
+                                            <!-- cierre control post qx -->
+                                        @endif
 
                                         <!--Formulario / Signos vitales y otros-->
                                         {{-- @include('general.secciones_ficha.signos_vitales') --}}
                                         <!--Cierre: Formulario / Signos vitales y otros-->
 
 
-                                        <!--CRONICOS / GES / CONFIDENCIAL -->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-                                        <!-- cierre ges -->
+                                        @if($mostrarAntecedentesCronicos)
+                                            <!--CRONICOS / GES / CONFIDENCIAL -->
+                                            @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                            <!-- cierre ges -->
+                                        @endif
 
-                                        <hr>
-                                        <!-- Diagnóstico -->
-                                        @include('general.secciones_ficha.diagnostico')
-                                        <!-- cierre Diagnóstico -->
+                                        @if($mostrarDiagnostico)
+                                            <hr>
+                                            <!-- Diagnóstico -->
+                                            @include('general.secciones_ficha.diagnostico')
+                                            <!-- cierre Diagnóstico -->
+                                        @endif
                                     </div>
-									{{--  div de botones  --}}
-									<div class="card">
-										<div class="card-body">
-											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-											@include('general.secciones_ficha.seccion_receta_examen_comunes')
-											<!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
-										</div>
-									</div>
+                                    @if($mostrarRecetasExamenes)
+									    {{-- div de botones --}}
+									    <div class="card">
+										    <div class="card-body">
+											    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+											    @include('general.secciones_ficha.seccion_receta_examen_comunes')
+											    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+										    </div>
+									    </div>
+                                    @endif
                                 </div>
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row mb-3">
                                         <div class="col-md-12 text-center">
-                                            <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-                                            <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+                                            <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1'); procesarRecetasExamenesFicha();" value="Guardar ficha y finalizar su consulta">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="procesarRecetasExamenesFicha();" value="Guardar ficha e ir a su agenda">
                                         </div>
                                     </div>
                                 </div>
@@ -676,6 +729,17 @@
 
 @section('page-script-ficha-atencion')
     <script>
+        const recetasExamenesActivos = @json($mostrarRecetasExamenes);
+
+        function procesarRecetasExamenesFicha() {
+            if (!recetasExamenesActivos) {
+                return;
+            }
+
+            agregar_medicamentos_ficha();
+            agregar_examenes_ficha();
+        }
+
         function showContentTmcdg() {
             console.log('probando');
             element = document.getElementById("contentTto_cdg");
@@ -1998,5 +2062,3 @@
     </script>
 
 @endsection
-
-
