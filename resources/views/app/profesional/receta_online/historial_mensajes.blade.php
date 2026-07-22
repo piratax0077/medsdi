@@ -83,7 +83,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Centro de mensajes</h5>
+                            <h5 class="m-b-10 "></h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
@@ -154,15 +154,28 @@
         </div>
 
         <div class="card">
-            <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center">
+            <div class="card-header-principal bg-white">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12 align-botton">
+                                <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-mail icono-primary"></i> Centro de mensajes entre profesionales</h5>
+                              
+                                <button type="button" class="btn btn-info  d-inline float-right mr-4"onclick="enviar_mensaje_a_profesional()">
+                                    <i class="feather icon-mail"></i> Nuevo mensaje
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{--<div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center">
                 <div>
-                    <h4 class="text-c-blue f-22 mb-1">Mensajería profesional</h4>
-                    <small class="text-muted">Administre mensajes recibidos, enviados y comunicaciones entre profesionales.</small>
+                    <h5 class="text-c-blue f-22 mb-1">Centro de mensajes</h5>
+                    <small class="text-dark font-weight-bold">Administre mensajes recibidos, enviados y comunicaciones entre profesionales.</small>
                 </div>
                 <button class="btn btn-primary btn-sm mt-2 mt-md-0" onclick="enviar_mensaje_a_profesional()">
                     <i class="feather icon-edit-3"></i> Nuevo mensaje
                 </button>
-            </div>
+            </div>--}}
 
             <div class="card-body">
                 <ul class="nav nav-pills mb-3" id="tabsMensajes" role="tablist">
@@ -184,7 +197,7 @@
 
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-recibidos" role="tabpanel">
-                        <table id="historial_mensajes" class="display table table-hover dt-responsive nowrap table-xs" style="width:100%">
+                        <table id="historial_mensajes" class="display table dt-responsive nowrap table-xs" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Mensaje</th>

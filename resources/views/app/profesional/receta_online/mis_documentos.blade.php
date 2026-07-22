@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis documentos e indicaciones</h5>
+                                <h5 class="m-b-10 "></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip"
@@ -28,8 +28,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                         <div class="card-header">
-                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis documentos e indicaciones</h4>
+                         <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-text icono-primary"></i> Mis documentos e indicaciones</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -39,11 +39,11 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th class="text-center align-middle">Fecha</th>
-                                                <th class="text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">Diagnóstico</th>
-                                                <th class="text-center align-middle">Tipo</th>
-                                                <th class="text-center align-middle">ver documento</th>
+                                                <th class="align-middle">Fecha</th>
+                                                <th class="align-middle">Paciente</th>
+                                                <th class="align-middle">Diagnóstico</th>
+                                                <th class="align-middle">Tipo</th>
+                                                <th class="align-middle">ver documento</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -51,19 +51,19 @@
                                                 @foreach ($fichas as $f)
                                                     @foreach ($f->Recetas()->get() as $r)
                                                         <tr>
-                                                            <td class="text-wrap text-center align-middle"
+                                                            <td class="text-wrap align-middle"
                                                                 data-order="{{ \Carbon\Carbon::parse($r->created_at)->format('Y-m-d H:i:s') }}">
                                                                 {{ \Carbon\Carbon::parse($r->created_at)->format('d/m/Y') }}
                                                             </td>
 
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 {{ $f->Paciente()->first()->nombres }}
                                                                 {{ $f->Paciente()->first()->apellido_uno }}
                                                                 {{ $f->Paciente()->first()->apellido_dos }}
                                                             </td>
-                                                            <td class="align-middle text-center">{{ $f->hipotesis_diagnostico }}
+                                                            <td class="align-middle">{{ $f->hipotesis_diagnostico }}
                                                             </td>
-                                                            <td class="align-middle text-center">Enviado</td>
+                                                            <td class="align-middle">Enviado</td>
                                                             <td class="text-center align-middle">
                                                                 <button href="#!" class="btn btn-danger-light-c btn-xxs" data-toggle="modal" data-target="#m_cons_receta"><i class="feather icon-file-plus"></i> Ver </button>
                                                             </td>

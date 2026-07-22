@@ -9,12 +9,12 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis certificados</h5>
+                                <h5 class="m-b-10"></h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.index_receta_online') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="mis_certificados_profesional.php">Mis certificados</a></li>
+                                <li class="breadcrumb-item"><a href="#">Mis certificados</a></li>
                             </ul>
                         </div>
                     </div>
@@ -24,8 +24,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header bg-light">
-                            <h4 class="text-c-blue f-22">Mis certificados</h4>
+                        <div class="card-header-principal bg-white">
+                            <h5 class=" f-20 d-inline mt-1 float-left"><i class="feather icon-file-text icono-primary"></i> Mis certificados</h5>
                         </div>
                             <div class="card-body">
                                 <table id="tabla_certificado_profesional_ro"
@@ -34,9 +34,9 @@
                                     <thead>
                                         <tr>
                                             <th class="align-middle">Fecha</th>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Tipo de certificado</th>
-                                            <th class="text-center align-middle">Certificado</th>
+                                            <th class="align-middle">Paciente</th>
+                                            <th class="align-middle">Tipo de certificado</th>
+                                            <th class="align-middle">Certificado</th>
                                         </tr>
                                     </thead>
                                     <tbody>
