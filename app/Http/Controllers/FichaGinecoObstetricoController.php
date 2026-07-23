@@ -30,7 +30,9 @@ use App\Models\GinemodalOtrosProcedimientos;
 use App\Models\Hipertension;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Services\CamposPersonalizadosFichaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FichaGinecoObstetricoController extends Controller
 {
@@ -179,6 +181,20 @@ class FichaGinecoObstetricoController extends Controller
             }
             else
             {
+                $valoresPersonalizados = $request->input(
+                    'campos_personalizados',
+                    []
+                );
+
+                if (is_array($valoresPersonalizados)) {
+                    app(CamposPersonalizadosFichaService::class)->guardar(
+                        Profesional::where('id_usuario', Auth::id())->first(),
+                        'ficha_gineco_obstetrica',
+                        (int) $ficha->id,
+                        $valoresPersonalizados
+                    );
+                }
+
                 $tipo_mensaje = 'success';
                 $mensaje = 'Ficha Clínica guardada de forma correcta';
 

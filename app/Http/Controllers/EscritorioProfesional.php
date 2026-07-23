@@ -8456,6 +8456,14 @@ return $ficha;
         return $this->seccionesBaseCirugiaDigestiva();
     }
 
+    if ((int) $profesional->id_sub_tipo_especialidad === 19) {
+        return $this->seccionesBaseDermatologia();
+    }
+
+    if ((int) $profesional->id_sub_tipo_especialidad === 27) {
+        return $this->seccionesBaseGinecoObstetricia();
+    }
+
     return $this->seccionesBaseGeneral();
 }
 
@@ -8555,6 +8563,225 @@ return $ficha;
         ],
     ];
 }
+
+    private function seccionesBaseDermatologia(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de consulta y examen físico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'motivo', 'nombre' => 'Motivo de consulta', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'antecedentes', 'nombre' => 'Antecedentes', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examen_fisico', 'nombre' => 'Examen físico', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'imagenes_biopsia',
+                'nombre' => 'Imágenes y toma de biopsia',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'imagenes_pre', 'nombre' => 'Imágenes pre', 'visible' => true, 'tipo' => 'imagenes', 'personalizada' => false],
+                    ['codigo' => 'imagenes_post', 'nombre' => 'Imágenes post', 'visible' => true, 'tipo' => 'imagenes', 'personalizada' => false],
+                    ['codigo' => 'biopsia', 'nombre' => 'Biopsia', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'procedimientos_dermatologia',
+                'nombre' => 'Exámenes y procedimientos de la especialidad',
+                'visible' => true,
+                'tipo' => 'tabs',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'cicatrices', 'nombre' => 'Cicatrices', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'piel_danada', 'nombre' => 'Piel dañada', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'exfoliacion_quimica', 'nombre' => 'Exfoliación química', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'dermoabrasion', 'nombre' => 'Dermoabrasión y dermaplaning', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'cirugia_laser', 'nombre' => 'Cirugía láser', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'otro_tratamiento', 'nombre' => 'Otro tratamiento', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'control_postquirurgico',
+                'nombre' => 'Control postquirúrgico',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [],
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges',
+                'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true,
+                'tipo' => 'switches',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'agregar_antecedente', 'nombre' => 'Agregar antecedente', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'control_cronico', 'nombre' => 'Control crónico', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'ges', 'nombre' => 'GES', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'confidencial', 'nombre' => 'Confidencial', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'hipotesis_diagnostica', 'nombre' => 'Hipótesis diagnóstica', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'diagnostico_cie10', 'nombre' => 'Diagnóstico CIE-10', 'visible' => true, 'tipo' => 'autocomplete', 'personalizada' => false],
+                    ['codigo' => 'indicaciones', 'nombre' => 'Indicaciones', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'venereas',
+                'nombre' => 'Enfermedades venéreas',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [],
+            ],
+            [
+                'codigo' => 'recetas_examenes_generales',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'medicamentos', 'nombre' => 'Medicamentos', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examenes', 'nombre' => 'Exámenes', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+        ];
+    }
+
+    private function seccionesBaseGinecoObstetricia(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de la consulta',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'motivo', 'nombre' => 'Motivo', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'menstruacion', 'nombre' => 'Menstruación', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'fur', 'nombre' => 'FUR', 'visible' => true, 'tipo' => 'date', 'personalizada' => false],
+                    ['codigo' => 'tipo_menstruacion', 'nombre' => 'Tipo de menstruación', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'examen_ginecologico',
+                'nombre' => 'Examen ginecológico y control de natalidad',
+                'visible' => true,
+                'tipo' => 'tabs',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'desarrollo', 'nombre' => 'Crecimiento y desarrollo', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examen_ginecologico_general', 'nombre' => 'Examen ginecológico', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examen_mamas', 'nombre' => 'Examen de mamas', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'control_natalidad', 'nombre' => 'Control de natalidad', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'examen_obstetrico',
+                'nombre' => 'Examen obstétrico',
+                'visible' => true,
+                'tipo' => 'tabs',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'antecedentes_obstetricos', 'nombre' => 'Antecedentes obstétricos', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'embarazo_actual', 'nombre' => 'Embarazo actual', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'planificacion', 'nombre' => 'Planificación', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'alto_riesgo_obstetrico',
+                'nombre' => 'Alto riesgo obstétrico materno-fetal',
+                'visible' => true,
+                'tipo' => 'tabs',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'factores_maternos', 'nombre' => 'Factores maternos', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'factores_gestacion', 'nombre' => 'Factores de la gestación', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'control_embarazo_actual', 'nombre' => 'Control de embarazo actual', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'puerperio',
+                'nombre' => 'Puerperio',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [],
+            ],
+            [
+                'codigo' => 'hospitalizacion',
+                'nombre' => 'Hospitalización',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [],
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges',
+                'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true,
+                'tipo' => 'switches',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'agregar_antecedente', 'nombre' => 'Agregar antecedente', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'control_cronico', 'nombre' => 'Control crónico', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'ges', 'nombre' => 'GES', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'confidencial', 'nombre' => 'Confidencial', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'hipotesis_diagnostica', 'nombre' => 'Hipótesis diagnóstica', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'diagnostico_cie10', 'nombre' => 'Diagnóstico CIE-10', 'visible' => true, 'tipo' => 'autocomplete', 'personalizada' => false],
+                    ['codigo' => 'indicaciones', 'nombre' => 'Indicaciones', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'examenes_procedimientos',
+                'nombre' => 'Exámenes y procedimientos',
+                'visible' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [],
+            ],
+            [
+                'codigo' => 'recetas_examenes_generales',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'campos',
+                'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'medicamentos', 'nombre' => 'Medicamentos', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examenes', 'nombre' => 'Exámenes', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+        ];
+    }
 
     private function seccionesBaseGeneral(): array
     {
@@ -9230,6 +9457,12 @@ return $ficha;
                 $seccionBase['visible'] = true;
                 $seccionBase['obligatoria'] = true;
                 unset($seccionBase['obligatorio']);
+
+                foreach (($seccionBase['subsecciones'] ?? []) as &$subseccionBase) {
+                    $subseccionBase['visible'] = true;
+                }
+                unset($subseccionBase);
+
                 $seccionBase['orden'] = count($datos['secciones']) + 1;
                 $datos['secciones'][] = $seccionBase;
                 continue;
@@ -9237,6 +9470,11 @@ return $ficha;
 
             $datos['secciones'][$indiceSeccion]['visible'] = true;
             $datos['secciones'][$indiceSeccion]['obligatoria'] = true;
+
+            foreach (($datos['secciones'][$indiceSeccion]['subsecciones'] ?? []) as &$datosSubseccion) {
+                $datosSubseccion['visible'] = true;
+            }
+            unset($datosSubseccion);
         }
 
         DB::beginTransaction();

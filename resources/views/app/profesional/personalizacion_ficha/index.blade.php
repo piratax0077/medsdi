@@ -511,7 +511,10 @@
                 });
             }
 
-            let secciones = clonar(seccionesPredeterminadas);
+            const seccionesBaseNormalizadas = normalizarSecciones(
+                seccionesPredeterminadas
+            );
+            let secciones = clonar(seccionesBaseNormalizadas);
 
             if (
                 plantillaGuardada &&
@@ -521,6 +524,18 @@
                 secciones = normalizarSecciones(
                     plantillaGuardada.secciones
                 );
+
+                seccionesBaseNormalizadas.forEach(function (seccionBase) {
+                    const existeEnPlantilla = secciones.some(function (seccion) {
+                        return seccion.codigo === seccionBase.codigo;
+                    });
+
+                    if (!existeEnPlantilla) {
+                        const nuevaSeccionBase = clonar(seccionBase);
+                        nuevaSeccionBase.orden = secciones.length + 1;
+                        secciones.push(nuevaSeccionBase);
+                    }
+                });
             }
 
             /*
@@ -529,9 +544,7 @@
              * antiguas para impedir que una configuración previamente guardada
              * permita desactivarlas.
              */
-            const codigosSeccionesObligatorias = normalizarSecciones(
-                seccionesPredeterminadas
-            ).filter(function (seccion) {
+            const codigosSeccionesObligatorias = seccionesBaseNormalizadas.filter(function (seccion) {
                 return seccion.obligatoria;
             }).map(function (seccion) {
                 return seccion.codigo;
@@ -541,6 +554,10 @@
                 if (codigosSeccionesObligatorias.indexOf(seccion.codigo) !== -1) {
                     seccion.obligatoria = true;
                     seccion.visible = true;
+
+                    (seccion.subsecciones || []).forEach(function (subseccion) {
+                        subseccion.visible = true;
+                    });
                 }
             });
 
@@ -649,6 +666,12 @@
                     seccion.subsecciones = [];
                 }
 
+                if (seccion.obligatoria) {
+                    seccion.subsecciones.forEach(function (subseccion) {
+                        subseccion.visible = true;
+                    });
+                }
+
                 if (!seccion.subsecciones.length) {
                     return '<p class="text-muted mb-0">Esta sección todavía no tiene subsecciones.</p>';
                 }
@@ -672,6 +695,7 @@
                                 <label class="switch-personalizado">
                                     <input type="checkbox"
                                            ${subseccion.visible ? 'checked' : ''}
+                                           ${seccion.obligatoria ? 'disabled' : ''}
                                            onchange="cambiarVisibilidadSubseccion(${indiceSeccion}, ${indiceSubseccion}, this.checked)">
                                     <span class="switch-slider"></span>
                                 </label>
@@ -759,6 +783,17 @@
             }
 
             function sincronizarConfiguracion() {
+                secciones.forEach(function (seccion) {
+                    if (!seccion.obligatoria) {
+                        return;
+                    }
+
+                    seccion.visible = true;
+                    (seccion.subsecciones || []).forEach(function (subseccion) {
+                        subseccion.visible = true;
+                    });
+                });
+
                 const configuracion = {
                     especialidad: codigoEspecialidadFicha,
                     id_especialidad: idEspecialidadFicha,
@@ -790,6 +825,12 @@
             };
 
             window.cambiarVisibilidadSubseccion = function (indiceSeccion, indiceSubseccion, visible) {
+                if (secciones[indiceSeccion].obligatoria) {
+                    secciones[indiceSeccion].subsecciones[indiceSubseccion].visible = true;
+                    renderizarConfiguracion();
+                    return;
+                }
+
                 secciones[indiceSeccion].subsecciones[indiceSubseccion].visible = visible;
                 renderizarVistaPrevia();
                 sincronizarConfiguracion();
@@ -1039,7 +1080,9 @@
                     return {
                         codigo: subseccion.codigo || null,
                         nombre: subseccion.nombre,
-                        visible: subseccion.visible !== false,
+                        visible: seccion.obligatoria
+                            ? true
+                            : subseccion.visible !== false,
                         orden: indiceSubseccion + 1,
                         tipo: subseccion.tipo || 'textarea',
                         personalizada: Boolean(subseccion.personalizada),
