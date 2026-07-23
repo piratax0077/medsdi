@@ -178,6 +178,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Services\CamposPersonalizadosFichaService;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\CorreoGenerico;
 use PDF;
@@ -3120,6 +3121,25 @@ class ficha_atencionController extends Controller
         return $query
             ->where('activa', 1)
             ->first();
+    }
+
+    private function guardarCamposPersonalizadosFicha(
+        Request $request,
+        FichaAtencion $ficha,
+        $profesional
+    ) {
+        $valoresEnviados = $request->input('campos_personalizados', []);
+
+        if (!is_array($valoresEnviados) || !$profesional) {
+            return;
+        }
+
+        app(CamposPersonalizadosFichaService::class)->guardar(
+            $profesional,
+            'ficha_atencion',
+            (int) $ficha->id,
+            $valoresEnviados
+        );
     }
 
     public function dame_comunas_contacto_emergencia($id_paciente){
@@ -10154,6 +10174,12 @@ class ficha_atencionController extends Controller
             }
             else
             {
+                $this->guardarCamposPersonalizadosFicha(
+                    $request,
+                    $ficha,
+                    Profesional::where('id_usuario', Auth::id())->first()
+                );
+
                 $tipo_mensaje = 'success';
                 $mensaje = 'Ficha Clínica guardada de forma correcta\n';
 
@@ -11781,6 +11807,12 @@ class ficha_atencionController extends Controller
             }
             else
             {
+                $this->guardarCamposPersonalizadosFicha(
+                    $request,
+                    $ficha,
+                    Profesional::where('id_usuario', Auth::id())->first()
+                );
+
                 $tipo_mensaje = 'success';
                 $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
 
