@@ -124,6 +124,8 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'legacy_key' => env('LEGACY_APP_KEY'),
+
     'cipher' => 'AES-256-CBC',
 
     /*

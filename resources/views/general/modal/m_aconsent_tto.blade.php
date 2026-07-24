@@ -171,7 +171,8 @@
                     dataType: "json",
                     data: {
                         id: ui.item.value,
-                        id_profesional: $('#id_profesional_fc').val()
+                        id_profesional: $('#id_profesional_fc').val(),
+                        id_paciente: $('#id_paciente_fc').val()
                     },
                     success: function(data) {
                         console.log(data);
@@ -180,11 +181,17 @@
                             // console.log(data.registro.texto);
                             var texto = data.registro.texto;
                             var profesional = data.profesional;
+                            var paciente = data.paciente;
+                            var responsable = data.responsable;
                             console.log(profesional);
-                            texto = texto.replace('{diagnostico}', '<span style="font-size: 15px;font-weight: bold;">'+$('#diagnostico_cons').val()+'</span>');
-                            texto = texto.replace('{cirugia}', '<span style="font-size: 15px;font-weight: bold;">'+$('#cirugia_cons').val()+'</span>');
-                            texto = texto.replace('{nombre_dependiente}', '<span style="font-size: 15px;font-weight: bold;">'+$('#cirugia_cons').val()+'</span>');
-                            texto = texto.replace('{nombre_profesional}', '<span style="font-size: 15px;font-weight: bold;">' + profesional.nombre + ' ' + profesional.apellido_uno + ' ' + profesional.apellido_dos + '</span>');
+
+                            texto = completarDatosConsentimiento(
+                                texto,
+                                data.registro,
+                                profesional,
+                                paciente,
+                                responsable
+                            );
                             $('#m_aconsentcirm_contenido').html('');
                             $('#m_aconsentcirm_contenido').html(texto);
 
@@ -209,6 +216,76 @@
         });
 
     });
+
+    function completarDatosConsentimiento(texto, consentimiento, profesional, paciente, responsable)
+    {
+        var escaparHtml = function(valor) {
+            return $('<div>').text(valor || '').html();
+        };
+        var nombreCompleto = function(persona) {
+            if(!persona) {
+                return '';
+            }
+
+            return [
+                persona.nombres || persona.nombre || '',
+                persona.apellido_uno || '',
+                persona.apellido_dos || ''
+            ].filter(Boolean).join(' ').trim();
+        };
+        var destacado = function(valor) {
+            return '<span style="font-size: 15px;font-weight: bold;">' + escaparHtml(valor) + '</span>';
+        };
+        var reemplazarTodos = function(contenido, marcador, valor) {
+            return contenido.split(marcador).join(destacado(valor));
+        };
+
+        var nombreProfesional = nombreCompleto(profesional);
+        var nombrePaciente = nombreCompleto(paciente);
+        var nombreResponsable = nombreCompleto(responsable);
+        var fechaActual = new Date().toLocaleDateString('es-CL');
+
+        var valores = {
+            '{diagnostico}': $('#diagnostico_cons').val(),
+            '{cirugia}': $('#cirugia_cons').val(),
+            '{nombre_profesional}': nombreProfesional,
+            '{rut_profesional}': profesional ? profesional.rut : '',
+            '{nombre_paciente}': nombrePaciente,
+            '{nombre_dependiente}': nombrePaciente,
+            '{rut_paciente}': paciente ? paciente.rut : '',
+            '{fecha_nacimiento}': paciente ? paciente.fecha_nac : '',
+            '{nombre_representante}': nombreResponsable,
+            '{rut_representante}': responsable ? responsable.rut : '',
+            '{fecha_actual}': fechaActual
+        };
+
+        Object.keys(valores).forEach(function(marcador) {
+            texto = reemplazarTodos(texto, marcador, valores[marcador]);
+        });
+
+        var nombreConsentimiento = (consentimiento.nombre || '').toLowerCase();
+        if(nombreConsentimiento.indexOf('telepsicolog') !== -1)
+        {
+            texto = texto.replace(
+                /Que el Psicólogo\/a\.\s*/i,
+                'Que el Psicólogo/a ' + destacado(nombreProfesional) + ' '
+            );
+            texto = texto.replace(
+                /niño, niña o adolescente \(NNA\) arriba individualizado/i,
+                'niño, niña o adolescente (NNA) ' + destacado(nombrePaciente) + ', arriba individualizado'
+            );
+
+            if(nombreResponsable)
+            {
+                texto = texto.replace(
+                    /yo,\s*declaro que he sido informado/i,
+                    'yo, ' + destacado(nombreResponsable) + ', declaro que he sido informado'
+                );
+            }
+        }
+
+        return texto;
+    }
 
     /** consentimientos informados**/
     function cons_tto() {

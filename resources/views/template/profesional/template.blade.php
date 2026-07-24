@@ -3827,7 +3827,7 @@
 
         function opcion_confirmar_hora() {
 
-
+            $('#confirmar_hora_comentario').val('0').prop('disabled', false);
             $('#datos_hora_medica').hide();
             $('#cancelacion_hora_medica').hide();
             $('#cabecera_hora_medica').text('Confirmar Hora Medica');
@@ -3961,6 +3961,19 @@
             let id_hora_medica = $('#id_hora_medica').val();
             let id_profesional = $('#estado_id_profesional').val();
 
+            if (!comentario || comentario === '0') {
+                swal({
+                    title: "Vía de confirmación requerida",
+                    text: "Seleccione cómo fue confirmada la hora antes de continuar.",
+                    type: "warning",
+                    confirmButtonText: "Aceptar"
+                });
+                return;
+            }
+
+            $('#confirmar_hora_comentario').prop('disabled', true);
+            $('#confirmacion_hora').prop('disabled', true);
+
             $.ajax({
 
                     url: url,
@@ -4009,6 +4022,8 @@
 
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    $('#confirmar_hora_comentario').prop('disabled', false);
+                    $('#confirmacion_hora').prop('disabled', false);
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
 

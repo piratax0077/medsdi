@@ -8,14 +8,79 @@ use App\Models\ConConsentimientosPcte;
 use App\Models\FichaAtencion;
 use App\Models\LogUsersDevices;
 use App\Models\LugarAtencion;
+use App\Models\MobilePushDevice;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Profesional;
+use App\Services\FirebaseCloudMessaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ConsentimientosController extends Controller
 {
+    private function completarTextoConsentimiento($texto, $registro, $paciente, $profesional, $consentimiento)
+    {
+        $dependencia = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+        $responsable = $dependencia
+            ? Paciente::find($dependencia->id_responsable)
+            : null;
+
+        $nombrePaciente = trim($paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos);
+        $nombreProfesional = trim($profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos);
+        $nombreResponsable = $responsable
+            ? trim($responsable->nombres.' '.$responsable->apellido_uno.' '.$responsable->apellido_dos)
+            : '';
+
+        $destacar = function ($valor) {
+            return '<span style="font-size: 15px;font-weight: bold;">'.e($valor ?? '').'</span>';
+        };
+
+        $valores = [
+            '{diagnostico}' => $registro->diagnostico_cons,
+            '{cirugia}' => $registro->cirugia_cons,
+            '{nombre_profesional}' => $nombreProfesional,
+            '{rut_profesional}' => $profesional->rut,
+            '{nombre_paciente}' => $nombrePaciente,
+            '{nombre_dependiente}' => $nombrePaciente,
+            '{rut_paciente}' => $paciente->rut,
+            '{fecha_nacimiento}' => $paciente->fecha_nac,
+            '{nombre_representante}' => $nombreResponsable,
+            '{rut_representante}' => $responsable ? $responsable->rut : '',
+            '{fecha_actual}' => now()->format('d/m/Y'),
+        ];
+
+        foreach ($valores as $marcador => $valor) {
+            $texto = str_replace($marcador, $destacar($valor), $texto);
+        }
+
+        if (stripos($consentimiento->nombre ?? '', 'telepsicolog') !== false) {
+            $texto = preg_replace(
+                '/Que el Psicólogo\/a\.\s*/iu',
+                'Que el Psicólogo/a '.$destacar($nombreProfesional).' ',
+                $texto,
+                1
+            );
+            $texto = preg_replace(
+                '/niño, niña o adolescente \(NNA\) arriba individualizado/iu',
+                'niño, niña o adolescente (NNA) '.$destacar($nombrePaciente).', arriba individualizado',
+                $texto,
+                1
+            );
+
+            if ($nombreResponsable !== '') {
+                $texto = preg_replace(
+                    '/yo,\s*declaro que he sido informado/iu',
+                    'yo, '.$destacar($nombreResponsable).', declaro que he sido informado',
+                    $texto,
+                    1
+                );
+            }
+        }
+
+        return $texto;
+    }
+
     public function ver_consentimiento_autocomplete(Request $request)
     {
         try {
@@ -73,10 +138,26 @@ class ConsentimientosController extends Controller
             $registro = ConConsentimientos::find($request->id);
             if($registro)
             {
+                $paciente = !empty($request->id_paciente)
+                    ? Paciente::find($request->id_paciente)
+                    : null;
+                $responsable = null;
+
+                if($paciente)
+                {
+                    $paciente_dependiente = PacientesDependientes::where('id_paciente', $paciente->id)->first();
+                    if($paciente_dependiente)
+                    {
+                        $responsable = Paciente::find($paciente_dependiente->id_responsable);
+                    }
+                }
+
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Registro';
                 $datos['registro'] = $registro;
                 $datos['profesional'] = Profesional::find($request->id_profesional);
+                $datos['paciente'] = $paciente;
+                $datos['responsable'] = $responsable;
             }
             else
             {
@@ -304,6 +385,45 @@ class ConsentimientosController extends Controller
                             'fecha_exp' => $log_users_devices->fecha_exp,
                         );
 
+                        $tiene_dispositivo_movil = MobilePushDevice::where('user_id', $id_usuario_envio_noti)
+                            ->where('enabled', true)
+                            ->whereNotNull('fcm_token')
+                            ->where('fcm_token', '<>', '')
+                            ->exists();
+
+                        $datos['notificacion_app'] = array(
+                            'dispositivo_registrado' => $tiene_dispositivo_movil,
+                            'enviada' => false,
+                        );
+
+                        if($tiene_dispositivo_movil)
+                        {
+                            try
+                            {
+                                $dispositivos_notificados = app(FirebaseCloudMessaging::class)
+                                    ->sendAuthorizationRequest($log_users_devices);
+
+                                $datos['notificacion_app']['enviada'] = $dispositivos_notificados > 0;
+                                $datos['notificacion_app']['dispositivos_notificados'] = $dispositivos_notificados;
+                                $datos['notificacion_app']['msj'] = $dispositivos_notificados > 0
+                                    ? 'Notificación enviada a la app del paciente.'
+                                    : 'La solicitud fue creada, pero Firebase no pudo entregar la notificación móvil.';
+                            }
+                            catch(\Throwable $exception)
+                            {
+                                $datos['notificacion_app']['msj'] = 'La solicitud fue creada, pero no se pudo enviar la notificación móvil.';
+
+                                Log::warning('El consentimiento fue creado, pero no se pudo enviar la notificación FCM.', [
+                                    'authorization_id' => $log_users_devices->id,
+                                    'user_id' => $id_usuario_envio_noti,
+                                    'error' => $exception->getMessage(),
+                                ]);
+                            }
+                        }
+                        else
+                        {
+                            $datos['notificacion_app']['msj'] = 'El paciente no tiene un dispositivo activo registrado en la app.';
+                        }
                     }
                     else
                     {
@@ -593,10 +713,13 @@ class ConsentimientosController extends Controller
             $consentimiento = ConConsentimientos::find($consentimientoPcte->id_consent);
             $texto_consentimiento = '';
 
-            $texto_consentimiento = $consentimiento->texto;
-            $texto_consentimiento = str_replace('{diagnostico}','<span style="font-size: 15px;font-weight: bold;">'.$consentimientoPcte->diagnostico_cons.'</span>', $texto_consentimiento);
-            $texto_consentimiento = str_replace('{cirugia}','<span style="font-size: 15px;font-weight: bold;">'.$consentimientoPcte->cirugia_cons.'</span>', $texto_consentimiento);
-            $texto_consentimiento = str_replace('{nombre_dependiente}','<span style="font-size: 15px;font-weight: bold;">'.$paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos.'</span>', $texto_consentimiento);
+            $texto_consentimiento = $this->completarTextoConsentimiento(
+                $consentimiento->texto,
+                $consentimientoPcte,
+                $paciente,
+                $profesional,
+                $consentimiento
+            );
 
 
 
@@ -685,11 +808,14 @@ class ConsentimientosController extends Controller
 
             $profesional = Profesional::find($registro->id_profesional);
 
-            $texto_consentimiento = $consentimiento->texto;
-            $texto_consentimiento = str_replace('{diagnostico}','<span style="font-size: 15px;font-weight: bold;">'.$registro->diagnostico_cons.'</span>', $texto_consentimiento);
-            $texto_consentimiento = str_replace('{cirugia}','<span style="font-size: 15px;font-weight: bold;">'.$registro->cirugia_cons.'</span>', $texto_consentimiento);
-            $texto_consentimiento = str_replace('{nombre_dependiente}','<span style="font-size: 15px;font-weight: bold;">'.$registro->Paciente->nombres.' '.$registro->Paciente->apellido_uno.' '.$registro->Paciente->apellido_dos.'</span>', $texto_consentimiento);
-            $texto_consentimiento = str_replace('{nombre_profesional}','<span style="font-size: 15px;font-weight: bold;">'.$profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos.'</span>', $texto_consentimiento);
+            $paciente = Paciente::find($registro->id_paciente);
+            $texto_consentimiento = $this->completarTextoConsentimiento(
+                $consentimiento->texto,
+                $registro,
+                $paciente,
+                $profesional,
+                $consentimiento
+            );
 
             if($registro)
             {

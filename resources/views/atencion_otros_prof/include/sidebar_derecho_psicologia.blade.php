@@ -25,8 +25,24 @@
                     </div>
                 </div>
             </div>
-            <!-- SECCION CONSENTIMIENTOS -->
+        <!-- SECCION CONSENTIMIENTOS -->
+        <div class="card-sidebar">
+            <div class="card-header-sidebar" id="heading_consentimientos_informados">
+                <h2 class="mb-0">
+                    <button class="btn btn-light btn-block text-left collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapse_consentimientos_informados"
+                            aria-expanded="false"
+                            aria-controls="collapse_consentimientos_informados">
+                        <i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                        CONSENTIMIENTOS INFORMADOS
+                    </button>
+                </h2>
+            </div>
+
             @include('general.sidebar.seccion_consentimientos')
+        </div>
             <div class="card-sidebar">
                 <div class="card-header-sidebar" id="heading_utilidades">
                     <h2 class="mb-0">

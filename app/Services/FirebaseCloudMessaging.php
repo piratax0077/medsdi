@@ -77,11 +77,13 @@ class FirebaseCloudMessaging
         $devices = MobilePushDevice::where('user_id', $authorization->id_user_recept)
             ->where('enabled', true)
             ->get();
+        $sentDevices = 0;
 
         $messageData = json_decode($authorization->msg, true) ?: [];
         $isPrescriptionBook = (int) $authorization->tipo === 12
             && ($messageData['evento'] ?? '') === 'Apertura de talonarios';
         $isBonusPurchase = (int) $authorization->tipo === 13;
+        $isInformedConsent = (int) $authorization->tipo === 4;
 
         if ($isPrescriptionBook) {
             $title = 'Autoriza la apertura de tus talonarios';
@@ -89,13 +91,19 @@ class FirebaseCloudMessaging
         } elseif ($isBonusPurchase) {
             $title = 'Autoriza la compra de tu bono';
             $body = 'Tienes una solicitud de compra de bono pendiente en MED-SDI.';
+        } elseif ($isInformedConsent) {
+            $title = 'Consentimiento informado pendiente';
+            $consentName = trim((string) ($messageData['nombre_consentimiento'] ?? ''));
+            $body = $consentName !== ''
+                ? 'Tienes pendiente autorizar el consentimiento '.$consentName.' en MED-SDI.'
+                : 'Tienes un consentimiento informado pendiente de autorización en MED-SDI.';
         } else {
             $title = 'Nueva solicitud de autorización';
             $body = 'Tienes una solicitud pendiente de aprobación en MED-SDI.';
         }
 
         foreach ($devices as $device) {
-            $this->sendToDevice($device, [
+            if ($this->sendToDevice($device, [
                 'message' => [
                     'token' => $device->fcm_token,
                     'notification' => [
@@ -123,8 +131,12 @@ class FirebaseCloudMessaging
                         ],
                     ],
                 ],
-            ]);
+            ])) {
+                $sentDevices++;
+            }
         }
+
+        return $sentDevices;
     }
 
     private function sendToDevice(MobilePushDevice $device, array $payload)
@@ -143,6 +155,8 @@ class FirebaseCloudMessaging
                     'timeout' => 8,
                 ]
             );
+
+            return true;
         } catch (RequestException $exception) {
             $body = $exception->hasResponse()
                 ? (string) $exception->getResponse()->getBody()
@@ -156,6 +170,8 @@ class FirebaseCloudMessaging
                 'device_id' => $device->id,
                 'response' => $body,
             ]);
+
+            return false;
         }
     }
 

@@ -179,6 +179,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Services\CamposPersonalizadosFichaService;
+use App\Services\LegacyPayloadDecrypter;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\CorreoGenerico;
 use PDF;
@@ -1936,10 +1937,17 @@ class ficha_atencionController extends Controller
         $fecha_actual = date("d-m-Y");
         $regisrto_result = array();
 
-        // Paciente 741: se omiten las recetas/medicamentos para evitar error al desencriptar
-        // registros antiguos cifrados con una APP_KEY distinta.
-        if ((int) $paciente->id !== 741)
+        // Cuenta de prueba con recetas históricas cifradas usando otra APP_KEY.
+        // Se omiten sólo sus medicamentos para que la ficha pueda abrirse.
+        $omitir_medicamentos_prueba =
+            (int) Auth::id() === 741 ||
+            (int) $paciente->id_usuario === 741 ||
+            (int) $paciente->id === 827;
+
+        if (!$omitir_medicamentos_prueba)
         {
+            $payloadDecrypter = app(LegacyPayloadDecrypter::class);
+
             $lista_recetas = Recomendacion::where('activo', $paciente->id)
                 ->whereDate('created_at', '>=', date("Y-m-d", strtotime($fecha_actual . "- 1 year")))
                 ->pluck('id')
@@ -1993,23 +2001,23 @@ class ficha_atencionController extends Controller
                                 $detalle_temp[] = array(
                                     'id' => $value_det->id,
                                     'id_receta' => $value_det->id_recomendacion,
-                                    'id_tipo_control' => decrypt($value_det->control),
-                                    'id_producto' => decrypt($value_det->id_articulo),
-                                    'producto' => decrypt($value_det->articulo),
-                                    'farmaco' => decrypt($value_det->componente),
-                                    'id_presentacion' => decrypt($value_det->id_apariencia),
-                                    'presentacion' => decrypt($value_det->apariencia),
-                                    'id_receta_dosis' => decrypt($value_det->id_cuota),
-                                    'posologia' => decrypt($value_det->cuota),
-                                    'id_via_administracion' => decrypt($value_det->id_regimen),
-                                    'via_administracion' => decrypt($value_det->regimen),
-                                    'id_periodo' => decrypt($value_det->id_lapso),
-                                    'periodo' => decrypt($value_det->lapso),
-                                    'uso_cronico' => decrypt($value_det->uso_frecuente),
-                                    'cantidad_compra' => decrypt($value_det->volumen_compra),
-                                    'cantidad' => decrypt($value_det->volumen),
-                                    'cantidad_vendida' => decrypt($value_det->volumen_entregado),
-                                    'comentario' => decrypt($value_det->comentario),
+                                    'id_tipo_control' => $payloadDecrypter->decrypt($value_det->control),
+                                    'id_producto' => $payloadDecrypter->decrypt($value_det->id_articulo),
+                                    'producto' => $payloadDecrypter->decrypt($value_det->articulo),
+                                    'farmaco' => $payloadDecrypter->decrypt($value_det->componente),
+                                    'id_presentacion' => $payloadDecrypter->decrypt($value_det->id_apariencia),
+                                    'presentacion' => $payloadDecrypter->decrypt($value_det->apariencia),
+                                    'id_receta_dosis' => $payloadDecrypter->decrypt($value_det->id_cuota),
+                                    'posologia' => $payloadDecrypter->decrypt($value_det->cuota),
+                                    'id_via_administracion' => $payloadDecrypter->decrypt($value_det->id_regimen),
+                                    'via_administracion' => $payloadDecrypter->decrypt($value_det->regimen),
+                                    'id_periodo' => $payloadDecrypter->decrypt($value_det->id_lapso),
+                                    'periodo' => $payloadDecrypter->decrypt($value_det->lapso),
+                                    'uso_cronico' => $payloadDecrypter->decrypt($value_det->uso_frecuente),
+                                    'cantidad_compra' => $payloadDecrypter->decrypt($value_det->volumen_compra),
+                                    'cantidad' => $payloadDecrypter->decrypt($value_det->volumen),
+                                    'cantidad_vendida' => $payloadDecrypter->decrypt($value_det->volumen_entregado),
+                                    'comentario' => $payloadDecrypter->decrypt($value_det->comentario),
                                     'token_doc' => $value_det->cod_doc,
                                     'estado' => $value_det->estado,
                                     'fecha_administrado' => $value_det->fecha_administrado,
@@ -2049,7 +2057,6 @@ class ficha_atencionController extends Controller
                 }
             }
         }
-
 
         /** Control enfermedades Cronicas */
         $control_enfer_cronicas = array();

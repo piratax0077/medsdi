@@ -272,15 +272,15 @@
                             <div class="form-group ">
                                 <label class="floating-label-activo-sm">Vía de Confirmación</label>
                                 {{--  <input type="text" class="form-control" id="confirmar_hora_comentario" name="confirmar_hora_comentario">  --}}
-                                <select class="form-control" name="confirmar_hora_comentario" id="confirmar_hora_comentario">
+                                <select class="form-control" name="confirmar_hora_comentario_paso_anterior"
+                                    id="confirmar_hora_comentario_paso_anterior">
+                                    <option value="0" selected>Seleccione vía de confirmación</option>
                                     @if (isset($reg_confirmacion_hora))
                                         @foreach ($reg_confirmacion_hora as $reg)
                                             <option value="{{ $reg->nombre }}">
                                                 {{ $reg->nombre }}
                                             </option>
                                         @endforeach
-                                    @else
-                                        <option value="0">Seleccione</option>
                                     @endif
                                 </select>
                             </div>
@@ -298,8 +298,19 @@
                         <option>Seleccione vía de confirmación</option>
                     </select>
                 </div>-->
+                <div id="contenedor_via_confirmacion">
+                    <select class="form-control form-control-sm" name="confirmar_hora_comentario"
+                        id="confirmar_hora_comentario">
+                        <option value="0" selected>Seleccione vía de confirmación</option>
+                        @if (isset($reg_confirmacion_hora))
+                            @foreach ($reg_confirmacion_hora as $reg)
+                                <option value="{{ $reg->nombre }}">{{ $reg->nombre }}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
                 <div>
-                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
+                    <button type="button" onclick="confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
                         Hora
                     </button>
                 </div>
