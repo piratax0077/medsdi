@@ -1,3 +1,29 @@
+@php
+    $codigosSeccionesBroncopulmonar = [
+        'motivo_consulta',
+        'evaluacion_torax_respiracion',
+        'antecedentes_cronicos_ges',
+        'diagnostico',
+        'recetas_examenes_generales',
+    ];
+    $visibilidadSeccionesBroncopulmonar = array_fill_keys($codigosSeccionesBroncopulmonar, true);
+
+    if (!empty($plantillaFicha)) {
+        foreach ($codigosSeccionesBroncopulmonar as $codigoSeccion) {
+            $seccionConfigurada = $plantillaFicha->secciones->firstWhere('codigo', $codigoSeccion);
+            if ($seccionConfigurada) {
+                $visibilidadSeccionesBroncopulmonar[$codigoSeccion] = (bool) $seccionConfigurada->visible;
+            }
+        }
+    }
+
+    $seccionesPersonalizadasBroncopulmonar = collect($plantillaFicha->secciones ?? [])
+        ->filter(function ($seccion) {
+            return (bool) ($seccion->personalizada ?? false)
+                && (bool) ($seccion->visible ?? true);
+        })->sortBy('orden');
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -71,10 +97,12 @@
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
 
-                                        <!--Motivo consulta-->
-                                        @include('general.secciones_ficha.motivo')
-                                            <!--    evaluacion torax y respiratoria->
-                                        @include('general.secciones_ficha.comun_neuro_trauma_kine.torax')
+                                        @if($visibilidadSeccionesBroncopulmonar['motivo_consulta'])
+                                            @include('general.secciones_ficha.motivo')
+                                        @endif
+                                        @if($visibilidadSeccionesBroncopulmonar['evaluacion_torax_respiracion'])
+                                            @include('general.secciones_ficha.comun_neuro_trauma_kine.torax')
+                                        @endif
                                         {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="form-row mb-1">
                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
@@ -106,7 +134,9 @@
                                      
                                         <!-- cierre hospitalizacion -->
                                         <!-- ges -->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                        @if($visibilidadSeccionesBroncopulmonar['antecedentes_cronicos_ges'])
+                                            @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                        @endif
                                         <!-- cierre ges -->
                                          {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
@@ -125,11 +155,40 @@
                                         <hr>
 
                                         <!-- Diagnóstico -->
-                                        @include('general.secciones_ficha.diagnostico')
+                                        @foreach($seccionesPersonalizadasBroncopulmonar as $seccionPersonalizada)
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div class="card-a">
+                                                    <div class="card-header-a" id="seccion_personalizada_{{ $seccionPersonalizada->id }}">
+                                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}" aria-expanded="false" aria-controls="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}">
+                                                            {{ $seccionPersonalizada->nombre }}
+                                                        </button>
+                                                    </div>
+                                                    <div id="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}" class="collapse" aria-labelledby="seccion_personalizada_{{ $seccionPersonalizada->id }}">
+                                                        <div class="card-body-aten-a">
+                                                            <div class="row">
+                                                                @foreach(collect($seccionPersonalizada->subsecciones ?? [])->filter(function ($subseccion) {
+                                                                    return (bool) ($subseccion->visible ?? true);
+                                                                })->sortBy('orden') as $subseccionPersonalizada)
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <label class="floating-label-activo-sm" for="campo_personalizado_{{ $subseccionPersonalizada->id }}">{{ $subseccionPersonalizada->nombre }}</label>
+                                                                        <textarea class="form-control caja-texto form-control-sm{{ $subseccionPersonalizada->tipo === 'summernote' ? ' summernote' : '' }}" name="campos_personalizados[{{ $subseccionPersonalizada->id }}]" id="campo_personalizado_{{ $subseccionPersonalizada->id }}" rows="2">{{ old('campos_personalizados.' . $subseccionPersonalizada->id) }}</textarea>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+                                        @if($visibilidadSeccionesBroncopulmonar['diagnostico'])
+                                            @include('general.secciones_ficha.diagnostico')
+                                        @endif
                                         <!-- cierre Diagnóstico -->
                                     </div>
 
                                     {{--  div de botones  --}}
+                                    @if($visibilidadSeccionesBroncopulmonar['recetas_examenes_generales'])
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
@@ -139,6 +198,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

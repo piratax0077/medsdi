@@ -8464,8 +8464,68 @@ return $ficha;
         return $this->seccionesBaseGinecoObstetricia();
     }
 
+    if (
+        (int) $profesional->id_especialidad === 1
+        && (int) $profesional->id_sub_tipo_especialidad === 40
+    ) {
+        return $this->seccionesBaseBroncopulmonar();
+    }
+
     return $this->seccionesBaseGeneral();
 }
+
+    private function seccionesBaseBroncopulmonar(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta', 'nombre' => 'Motivo de consulta y examen físico',
+                'visible' => true, 'tipo' => 'campos', 'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'motivo', 'nombre' => 'Motivo de consulta', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'antecedentes', 'nombre' => 'Antecedentes de la especialidad', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examen_fisico', 'nombre' => 'Examen físico', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'evaluacion_torax_respiracion', 'nombre' => 'Evaluación de tórax y respiración',
+                'visible' => true, 'tipo' => 'tabs', 'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'inspeccion', 'nombre' => 'Inspección', 'visible' => true, 'tipo' => 'campos', 'personalizada' => false],
+                    ['codigo' => 'palpacion', 'nombre' => 'Palpación', 'visible' => true, 'tipo' => 'campos', 'personalizada' => false],
+                    ['codigo' => 'percusion', 'nombre' => 'Percusión', 'visible' => true, 'tipo' => 'campos', 'personalizada' => false],
+                    ['codigo' => 'auscultacion', 'nombre' => 'Auscultación', 'visible' => true, 'tipo' => 'campos', 'personalizada' => false],
+                    ['codigo' => 'resumen_evaluacion', 'nombre' => 'Resumen evaluación', 'visible' => true, 'tipo' => 'campos', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'antecedentes_cronicos_ges', 'nombre' => 'Antecedentes, crónicos, GES y confidencial',
+                'visible' => true, 'tipo' => 'switches', 'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'agregar_antecedente', 'nombre' => 'Agregar antecedente', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'control_cronico', 'nombre' => 'Control crónico', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'ges', 'nombre' => 'GES', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                    ['codigo' => 'confidencial', 'nombre' => 'Confidencial', 'visible' => true, 'tipo' => 'switch', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico', 'nombre' => 'Diagnóstico', 'visible' => true,
+                'obligatoria' => true, 'tipo' => 'campos', 'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'hipotesis_diagnostica', 'nombre' => 'Hipótesis diagnóstica', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'diagnostico_cie10', 'nombre' => 'Diagnóstico CIE-10', 'visible' => true, 'tipo' => 'autocomplete', 'personalizada' => false],
+                    ['codigo' => 'indicaciones', 'nombre' => 'Indicaciones', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+            [
+                'codigo' => 'recetas_examenes_generales', 'nombre' => 'Recetas y exámenes', 'visible' => true,
+                'obligatoria' => true, 'tipo' => 'campos', 'personalizada' => false,
+                'subsecciones' => [
+                    ['codigo' => 'medicamentos', 'nombre' => 'Medicamentos', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                    ['codigo' => 'examenes', 'nombre' => 'Exámenes', 'visible' => true, 'tipo' => 'textarea', 'personalizada' => false],
+                ],
+            ],
+        ];
+    }
 
     private function seccionesBasePsicologia(): array
 {
