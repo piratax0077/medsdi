@@ -72,7 +72,7 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass"
-                                            role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseña</a>
+                                            role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseña y seguridad</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="info-liquidacion-tab" data-toggle="tab"
@@ -523,7 +523,26 @@
 
                         <!--CONTRASEÑA-->
                         <div class="tab-pane fade" id="pass" role="tabpanel" aria-labelledby="pass-tab">
-                            @include('app.general.perfil.cambio_contrasena')
+                            <div class="row">
+                                @include('app.general.perfil.cambio_contrasena')
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex">
+                                    <div class="card flex-fill mb-4">
+                                        <div class="card-header bg-primary">
+                                            <h5 class="mb-0 text-white">Autenticación en dos pasos</h5>
+                                        </div>
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="pr-3">
+                                                <div class="font-weight-bolder">Aprobación desde la aplicación móvil</div>
+                                                <small class="text-muted">Primero inicia sesión en la app. Luego, cada acceso web deberá aprobarse desde ese teléfono.</small>
+                                            </div>
+                                            <div class="custom-control custom-switch flex-shrink-0">
+                                                <input type="checkbox" class="custom-control-input" id="mobile-two-factor" {{ auth()->user()->mobile_two_factor_enabled ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="mobile-two-factor"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!--ANTECEDENTES ACADÉMICOS-->
@@ -705,6 +724,21 @@
 
 @section('page-script')
     <script>
+        $('#mobile-two-factor').on('change', function () {
+            const control = this;
+            $.ajax({
+                url: @json(route('profesional.mobile-2fa.update')),
+                method: 'POST',
+                data: {_token: @json(csrf_token()), enabled: control.checked ? 1 : 0}
+            }).done(function () {
+                swal('Configuración guardada', control.checked ? 'La aprobación móvil quedó activada.' : 'La aprobación móvil quedó desactivada.', 'success');
+            }).fail(function (xhr) {
+                control.checked = !control.checked;
+                const message = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Inténtalo nuevamente.';
+                swal('No fue posible guardar la configuración', message, 'error');
+            });
+        });
+
         function eliminar_info_academica(id)
         {
             let url = "{{ route('profesional.eliminar_antecedente_academico') }}";

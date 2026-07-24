@@ -1807,6 +1807,7 @@ class EscritorioPaciente extends Controller
 
         $id_usuario = Auth::user()->id;
         $userData = Funciones::userData($id_usuario);
+        $completitud_perfil = $paciente->completitudPerfil($direccion_paciente);
 
         $log_datos_medicos = PacienteHistoricoDatosMedicos::select( 'paciente_historico_datos_medicos.id', 'paciente_historico_datos_medicos.id_paciente', 'paciente_historico_datos_medicos.id_profesional', 'paciente_historico_datos_medicos.datos', 'paciente_historico_datos_medicos.created_at',
                                                         'profesionales.nombre', 'profesionales.apellido_uno', 'profesionales.apellido_dos', 'profesionales.rut',
@@ -1826,6 +1827,7 @@ class EscritorioPaciente extends Controller
         return view('app.paciente.perfil_paciente',
             [
                 'userData' => $userData,
+                'completitud_perfil' => $completitud_perfil,
                 'paciente' => $paciente,
                 'direccion_paciente' => $direccion_paciente,
                 'direccion_id_ciudad_paciente' => $direccion_id_ciudad_paciente,

@@ -37,23 +37,31 @@
                                 justify-content:center;
                                 font-weight:700;
                                 font-size:18px;">
-                                82%
+                                {{ $completitud_perfil['porcentaje'] }}%
                             </div>
                         </div>
 
                         <div class="col">
                             <h6 class="mb-1 text-white">
-                                Perfil Incompleto
+                                {{ $completitud_perfil['porcentaje'] === 100 ? 'Perfil completo' : 'Perfil incompleto' }}
                             </h6>
 
                             <div class="progress mb-2" style="height:8px;">
-                                <div class="progress-bar bg-info"
-                                     style="width:82%;">
+                                <div class="progress-bar {{ $completitud_perfil['porcentaje'] === 100 ? 'bg-success' : 'bg-info' }}"
+                                     role="progressbar"
+                                     aria-valuenow="{{ $completitud_perfil['porcentaje'] }}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     style="width:{{ $completitud_perfil['porcentaje'] }}%;">
                                 </div>
                             </div>
 
                             <small class="text-white">
-                               Complete su perfil para facilitar su atención médica.
+                                @if ($completitud_perfil['porcentaje'] === 100)
+                                    Sus datos principales están completos.
+                                @else
+                                    Faltan: {{ implode(', ', $completitud_perfil['faltantes']) }}.
+                                @endif
                             </small>
                         </div>
                         </div>
@@ -109,7 +117,7 @@
                                         <a class="nav-link text-reset" id="datmedicos-tab" data-toggle="tab" href="#datmedicos" role="tab" aria-controls="datmedicos" aria-selected="false"><i class="feather icon-plus-circle"></i> Datos médicos</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass" role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseñas</a>
+                                        <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass" role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock"></i> Contraseña y seguridad</a>
                                     </li>
                                 </ul>
                                 <!--<ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
@@ -1393,6 +1401,23 @@
                                     </div>
                                     <!--CIERRE: CARD CONTRASEÑA CONFIDENCIAL-->
                                 </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex">
+                                    <div class="card flex-fill">
+                                        <div class="card-header bg-primary">
+                                            <h5 class="mb-0 text-white">Autenticación en dos pasos</h5>
+                                        </div>
+                                        <div class="card-body d-flex align-items-center justify-content-between">
+                                            <div class="pr-3">
+                                                <div class="font-weight-bolder">Aprobación desde la aplicación móvil</div>
+                                                <small class="text-muted">Primero inicia sesión en la app MED-SDI. Luego, cada acceso web deberá aprobarse desde ese teléfono.</small>
+                                            </div>
+                                            <div class="custom-control custom-switch flex-shrink-0">
+                                                <input type="checkbox" class="custom-control-input" id="patient-mobile-two-factor" {{ auth()->user()->mobile_two_factor_enabled ? 'checked' : '' }}>
+                                                <label class="custom-control-label" for="patient-mobile-two-factor"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!--CIERRE: TAB CAMBIAR CONTRASEÑAS-->
@@ -1416,6 +1441,34 @@
     <script src="{{ asset('js/pages/ac-lightbox.js') }}"></script>
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+        $('#patient-mobile-two-factor').on('change', function () {
+            const control = this;
+
+            $.ajax({
+                url: @json(route('paciente.mobile-2fa.update')),
+                method: 'POST',
+                data: {
+                    _token: @json(csrf_token()),
+                    enabled: control.checked ? 1 : 0
+                }
+            }).done(function () {
+                swal(
+                    'Configuración guardada',
+                    control.checked
+                        ? 'La aprobación móvil quedó activada.'
+                        : 'La aprobación móvil quedó desactivada.',
+                    'success'
+                );
+            }).fail(function (xhr) {
+                control.checked = !control.checked;
+                const message = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'Inténtalo nuevamente.';
+                swal('No fue posible guardar la configuración', message, 'error');
+            });
+        });
+
         // [ customer-scroll ] start
         // var px = new PerfectScrollbar('.cust-scroll', {
         //     wheelSpeed: .5,

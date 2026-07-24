@@ -40,14 +40,42 @@ class HomeController extends Controller
 
         $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
 
-		if(Auth::user()->id == 3)
-			return redirect('/Acceso');
-		else
-			$roles_principal = $usuario->roles()->orderBy('id', 'DESC')->first();
+		// if(Auth::user()->id == 3)
+		// 	return redirect('/Acceso');
+		// else
+        // Los perfiles clínicos tienen prioridad sobre roles secundarios
+        // (por ejemplo, Vendedor). Si posee ambos, se prioriza Profesional.
+        $roles_principal = $roles->firstWhere('name', 'Profesional')
+            ?? $roles->firstWhere('name', 'Paciente')
+            ?? $roles->first();
+
+        if (!$roles_principal) {
+            return redirect('/Acceso');
+        }
 
         switch ($roles_principal->name) {
             case 'Admin':
                 return redirect('/Acceso');
+                break;
+            case 'Profesional':
+                $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+
+                /** laboratorio */
+                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                /** laboratorio Rayo */
+                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                else
+                {
+                    return redirect()->route('profesional.home');
+                }
                 break;
             case 'Asistente': //asistente consulta
                 return redirect()->route('asistente.home');
@@ -98,26 +126,7 @@ class HomeController extends Controller
                     ->header('Pragma', 'no-cache')
                     ->header('Expires', '0');
                 break;
-            case 'Profesional':
-                $profesional = Profesional::where('id_usuario', $usuario->id)->first();
 
-                /** laboratorio */
-                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
-                {
-                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
-                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
-                }
-                /** laboratorio Rayo */
-                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
-                {
-                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
-                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
-                }
-                else
-                {
-                    return redirect()->route('profesional.home');
-                }
-                break;
             case 'Servicio':
                 return redirect()->route('servicio.home');
                 break;
