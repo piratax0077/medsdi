@@ -30,6 +30,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mobile_two_factor_enabled',
     ];
 
     /**
@@ -51,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'mobile_two_factor_enabled' => 'boolean',
     ];
 
     /**

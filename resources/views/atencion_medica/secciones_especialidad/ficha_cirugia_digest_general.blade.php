@@ -37,6 +37,13 @@
         $visibilidadSeccionesFicha['diagnostico'];
     $mostrarRecetasExamenes =
         $visibilidadSeccionesFicha['recetas_examenes_generales'];
+
+    $seccionesPersonalizadas = collect(
+        $plantillaFicha->secciones ?? []
+    )->filter(function ($seccion) {
+        return (bool) ($seccion->personalizada ?? false)
+            && (bool) ($seccion->visible ?? true);
+    })->sortBy('orden');
 @endphp
 
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
@@ -686,6 +693,60 @@
                                             @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                             <!-- cierre ges -->
                                         @endif
+
+                                        @foreach($seccionesPersonalizadas as $seccionPersonalizada)
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div class="card-a">
+                                                    <div class="card-header-a" id="seccion_personalizada_{{ $seccionPersonalizada->id }}">
+                                                        <button
+                                                            class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open"
+                                                            type="button"
+                                                            data-toggle="collapse"
+                                                            data-target="#seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                        >
+                                                            {{ $seccionPersonalizada->nombre }}
+                                                        </button>
+                                                    </div>
+
+                                                    <div
+                                                        id="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                        class="collapse"
+                                                        aria-labelledby="seccion_personalizada_{{ $seccionPersonalizada->id }}"
+                                                    >
+                                                        <div class="card-body-aten-a">
+                                                            <div class="row">
+                                                                @foreach(
+                                                                    collect($seccionPersonalizada->subsecciones ?? [])
+                                                                        ->filter(function ($subseccion) {
+                                                                            return (bool) ($subseccion->visible ?? true);
+                                                                        })
+                                                                        ->sortBy('orden')
+                                                                    as $subseccionPersonalizada
+                                                                )
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <label
+                                                                            class="floating-label-activo-sm"
+                                                                            for="campo_personalizado_{{ $subseccionPersonalizada->id }}"
+                                                                        >
+                                                                            {{ $subseccionPersonalizada->nombre }}
+                                                                        </label>
+
+                                                                        <textarea
+                                                                            class="form-control caja-texto form-control-sm{{ $subseccionPersonalizada->tipo === 'summernote' ? ' summernote' : '' }}"
+                                                                            name="campos_personalizados[{{ $subseccionPersonalizada->id }}]"
+                                                                            id="campo_personalizado_{{ $subseccionPersonalizada->id }}"
+                                                                            rows="2"
+                                                                        >{{ old('campos_personalizados.' . $subseccionPersonalizada->id) }}</textarea>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
 
                                         @if($mostrarDiagnostico)
                                             <hr>

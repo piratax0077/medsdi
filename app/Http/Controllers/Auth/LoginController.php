@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\MobilePushDevice;
 use App\Models\Paciente;
+use App\Models\Profesional;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -70,21 +72,55 @@ class LoginController extends Controller
             {
                 if (Auth::attempt(['email' => $user, 'password' => $pass]))
                 {
-                    // Generar token Sanctum para API
-                    $token = $userModel->createToken('mobile-app')->plainTextToken;
+                    if ($userModel->mobile_two_factor_enabled && !app()->environment('local')) {
+                        $deviceToken = (string) $request->input('device_token', '');
+                        $trustedDevice = $deviceToken !== '' && MobilePushDevice::where([
+                            'user_id' => $userModel->id,
+                            'token_hash' => hash('sha256', $deviceToken),
+                            'enabled' => true,
+                        ])->exists();
+
+                        if (!$trustedDevice) {
+                            Auth::logout();
+                            return response()->json([
+                                'estado' => 2,
+                                'msj' => 'La autenticación móvil está activa. Ingresa desde el teléfono vinculado o recupera el acceso desde la web.',
+                            ]);
+                        }
+                    }
 
                     $paciente = Paciente::where('id_usuario', $userModel->id)->first();
-                    if($paciente){
-                        $userModel->foto_perfil = $paciente->foto_perfil;
-                    }else{
-                        $userModel->foto_perfil = null;
+                    $profesional = Profesional::where('id_usuario', $userModel->id)->first();
+                    $rolesPermitidos = $userModel->roles()
+                        ->whereIn('name', ['Paciente', 'Profesional'])
+                        ->orderBy('name')
+                        ->get(['roles.id', 'roles.name'])
+                        ->values();
+
+                    if ($rolesPermitidos->isEmpty()) {
+                        Auth::logout();
+                        return response()->json([
+                            'estado' => 0,
+                            'msj' => 'Esta cuenta no posee un perfil Paciente o Profesional habilitado para la aplicación.',
+                        ]);
                     }
+
+                    // El token se emite solo a perfiles admitidos por la aplicación.
+                    $token = $userModel->createToken('mobile-app')->plainTextToken;
+
+                    $userModel->foto_perfil = optional($paciente)->foto_perfil
+                        ?: optional($profesional)->foto_perfil;
 
                     $datos['estado'] = 1;
                     $datos['msj'] = 'registro';
                     $datos['user'] = $userModel;
                     $datos['paciente'] = $paciente ?: null;
-                    $datos['roles'] = $userModel->roles()->get();
+                    $datos['profesional'] = $profesional ?: null;
+                    $datos['roles'] = $rolesPermitidos;
+                    $datos['requiere_seleccion_rol'] = $rolesPermitidos->count() > 1;
+                    $datos['rol_sugerido'] = $rolesPermitidos->count() === 1
+                        ? $rolesPermitidos->first()->name
+                        : null;
                     $datos['token'] = $token; // Token para acceder a rutas protegidas
                 }
                 else

@@ -49,6 +49,41 @@ class Paciente extends Model
         return $this->hasOne(Direccion::class, 'id', 'id_direccion');
     }
 
+    /**
+     * Calcula el avance del perfil usando únicamente los datos necesarios
+     * para identificar, contactar y ubicar al paciente.
+     */
+    public function completitudPerfil($direccion = null)
+    {
+        $direccion = $direccion ?: $this->Direccion()->first();
+
+        $campos = [
+            'RUT' => !empty(trim((string) $this->rut)),
+            'nombre' => !empty(trim((string) $this->nombres)),
+            'primer apellido' => !empty(trim((string) $this->apellido_uno)),
+            'sexo' => in_array($this->sexo, ['M', 'F'], true),
+            'fecha de nacimiento' => !empty($this->fecha_nac),
+            'previsión' => !empty($this->id_prevision),
+            'correo electrónico' => filter_var($this->email, FILTER_VALIDATE_EMAIL) !== false,
+            'teléfono principal' => !empty(trim((string) $this->telefono_uno)),
+            'dirección' => $direccion && !empty(trim((string) $direccion->direccion)),
+            'número de dirección' => $direccion && !empty(trim((string) $direccion->numero_dir)),
+            'comuna' => $direccion && !empty($direccion->id_ciudad),
+        ];
+
+        $completados = count(array_filter($campos));
+        $total = count($campos);
+
+        return [
+            'porcentaje' => $total > 0 ? (int) round(($completados / $total) * 100) : 0,
+            'completados' => $completados,
+            'total' => $total,
+            'faltantes' => array_keys(array_filter($campos, function ($completo) {
+                return !$completo;
+            })),
+        ];
+    }
+
     public function Antecedentes()
     {
         return $this->hasOne(AntecedentesPaciente::class, 'id', 'id_antecedente');

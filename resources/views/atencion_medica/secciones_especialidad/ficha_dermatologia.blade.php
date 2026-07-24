@@ -1,3 +1,40 @@
+@php
+    $codigosSeccionesDermatologia = [
+        'motivo_consulta',
+        'imagenes_biopsia',
+        'procedimientos_dermatologia',
+        'control_postquirurgico',
+        'antecedentes_cronicos_ges',
+        'diagnostico',
+        'venereas',
+        'recetas_examenes_generales',
+    ];
+
+    $visibilidadSeccionesDermatologia = array_fill_keys(
+        $codigosSeccionesDermatologia,
+        true
+    );
+
+    if (!empty($plantillaFicha)) {
+        foreach ($codigosSeccionesDermatologia as $codigoSeccion) {
+            $seccionConfigurada = $plantillaFicha->secciones
+                ->firstWhere('codigo', $codigoSeccion);
+
+            if ($seccionConfigurada) {
+                $visibilidadSeccionesDermatologia[$codigoSeccion] =
+                    (bool) $seccionConfigurada->visible;
+            }
+        }
+    }
+
+    $seccionesPersonalizadasDermatologia = collect(
+        $plantillaFicha->secciones ?? []
+    )->filter(function ($seccion) {
+        return (bool) ($seccion->personalizada ?? false)
+            && (bool) ($seccion->visible ?? true);
+    })->sortBy('orden');
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -59,9 +96,13 @@
 								@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
 								<!--Cierre: Formulario / Menor de edad-->
 
-                                <!--Motivo consulta-->
-                                @include('general.secciones_ficha.motivo')
-                                <!--Motivo consulta-->
+                                @if($visibilidadSeccionesDermatologia['motivo_consulta'])
+                                    <!--Motivo consulta-->
+                                    @include('general.secciones_ficha.motivo')
+                                    <!--Motivo consulta-->
+                                @endif
+
+                                @if($visibilidadSeccionesDermatologia['imagenes_biopsia'])
                                 {{-- Imagenes Toma de Biópsia --}}
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -113,6 +154,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesDermatologia['procedimientos_dermatologia'])
                                 <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -410,30 +454,98 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
                                 <!-- control post qx -->
-                                @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+                                @if($visibilidadSeccionesDermatologia['control_postquirurgico'])
+                                    @include('general.secciones_ficha.cirugia_control.control_cirugia_general')
+                                @endif
+
                                 <!--ENFERMO CRÓNICO O GES-->
-                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                @if($visibilidadSeccionesDermatologia['antecedentes_cronicos_ges'])
+                                    @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                @endif
+
+                                @foreach($seccionesPersonalizadasDermatologia as $seccionPersonalizada)
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="seccion_personalizada_{{ $seccionPersonalizada->id }}">
+                                                <button
+                                                    class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open"
+                                                    type="button"
+                                                    data-toggle="collapse"
+                                                    data-target="#seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                >
+                                                    {{ $seccionPersonalizada->nombre }}
+                                                </button>
+                                            </div>
+
+                                            <div
+                                                id="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                class="collapse"
+                                                aria-labelledby="seccion_personalizada_{{ $seccionPersonalizada->id }}"
+                                            >
+                                                <div class="card-body-aten-a">
+                                                    <div class="row">
+                                                        @foreach(
+                                                            collect($seccionPersonalizada->subsecciones ?? [])
+                                                                ->filter(function ($subseccion) {
+                                                                    return (bool) ($subseccion->visible ?? true);
+                                                                })
+                                                                ->sortBy('orden')
+                                                            as $subseccionPersonalizada
+                                                        )
+                                                            <div class="col-md-12 mb-3">
+                                                                <label
+                                                                    class="floating-label-activo-sm"
+                                                                    for="campo_personalizado_{{ $subseccionPersonalizada->id }}"
+                                                                >
+                                                                    {{ $subseccionPersonalizada->nombre }}
+                                                                </label>
+
+                                                                <textarea
+                                                                    class="form-control caja-texto form-control-sm{{ $subseccionPersonalizada->tipo === 'summernote' ? ' summernote' : '' }}"
+                                                                    name="campos_personalizados[{{ $subseccionPersonalizada->id }}]"
+                                                                    id="campo_personalizado_{{ $subseccionPersonalizada->id }}"
+                                                                    rows="2"
+                                                                >{{ old('campos_personalizados.' . $subseccionPersonalizada->id) }}</textarea>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
                                 <!--Diagnóstico-->
-                                @include('general.secciones_ficha.diagnostico')
+                                @if($visibilidadSeccionesDermatologia['diagnostico'])
+                                    @include('general.secciones_ficha.diagnostico')
+                                @endif
                             </div>
                         </div>
 
                         @php
                             $seccion_tipo = 'dermo';
                         @endphp
-                        @include('general.venereas.venereas')
+                        @if($visibilidadSeccionesDermatologia['venereas'])
+                            @include('general.venereas.venereas')
+                        @endif
 
                     </div>
 
                     {{--  div de botones  --}}
-                    <div class="card">
-                        <div class="card-body">
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                    @if($visibilidadSeccionesDermatologia['recetas_examenes_generales'])
+                        <div class="card">
+                            <div class="card-body">
+                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     <!--GUARDAR O IMPRIMIR FICHA-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

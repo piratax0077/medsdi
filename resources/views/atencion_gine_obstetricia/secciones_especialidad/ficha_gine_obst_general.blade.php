@@ -1,3 +1,41 @@
+@php
+    $codigosSeccionesGinecoObstetricia = [
+        'motivo_consulta',
+        'examen_ginecologico',
+        'examen_obstetrico',
+        'alto_riesgo_obstetrico',
+        'puerperio',
+        'hospitalizacion',
+        'antecedentes_cronicos_ges',
+        'diagnostico',
+        'examenes_procedimientos',
+        'recetas_examenes_generales',
+    ];
+    $visibilidadSeccionesGinecoObstetricia = array_fill_keys(
+        $codigosSeccionesGinecoObstetricia,
+        true
+    );
+
+    if (!empty($plantillaFicha)) {
+        foreach ($codigosSeccionesGinecoObstetricia as $codigoSeccion) {
+            $seccionConfigurada = $plantillaFicha->secciones
+                ->firstWhere('codigo', $codigoSeccion);
+
+            if ($seccionConfigurada) {
+                $visibilidadSeccionesGinecoObstetricia[$codigoSeccion] =
+                    (bool) $seccionConfigurada->visible;
+            }
+        }
+    }
+
+    $seccionesPersonalizadasGinecoObstetricia = collect(
+        $plantillaFicha->secciones ?? []
+    )->filter(function ($seccion) {
+        return (bool) ($seccion->personalizada ?? false)
+            && (bool) ($seccion->visible ?? true);
+    })->sortBy('orden');
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -6,9 +44,11 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_gine_obst_gen-tab" data-toggle="tab" href="#atencion_gine_obst_gen" role="tab" aria-controls="atencion_gine_obst_gen" aria-selected="true">Atención Especialidad</a>
                     </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="examen_proced-tab" data-toggle="tab" href="#examen_proced" role="tab" aria-controls="examen_proced" onclick="$('#tipo_proced').select2();" aria-selected="false">Exámenes y Procedimientos</a>
-                    </li>
+                    @if($visibilidadSeccionesGinecoObstetricia['examenes_procedimientos'])
+                        <li class="nav-item-secciones">
+                            <a class="nav-secciones text-uppercase" id="examen_proced-tab" data-toggle="tab" href="#examen_proced" role="tab" aria-controls="examen_proced" onclick="$('#tipo_proced').select2();" aria-selected="false">Exámenes y Procedimientos</a>
+                        </li>
+                    @endif
 				</ul>
             </div>
             <!--ALERTA-->
@@ -52,6 +92,7 @@
                                 @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "3"])
                                 <!--Cierre: Formulario / Menor de edad-->
 
+                                @if($visibilidadSeccionesGinecoObstetricia['motivo_consulta'])
                                 <!--Motivo consulta-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -131,6 +172,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesGinecoObstetricia['examen_ginecologico'])
                                 <!--EXAMEN ESPECIALIDAD GINECOLOGIA - PARAMETROS DE CONTROL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -389,6 +433,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesGinecoObstetricia['examen_obstetrico'])
                                 <!--EXAMEN ESPECIALIDAD OBSTETRICO - PARAMETROS DE CONTROL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -1000,6 +1047,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesGinecoObstetricia['alto_riesgo_obstetrico'])
                                 <!--EXAMEN OBSTÉTRICO ALTO RIESGO MATERNO-FETAL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -1494,6 +1544,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesGinecoObstetricia['puerperio'])
                                 <!--EXAMEN ESPECIALIDAD PUERPERIO - PARAMETROS DE CONTROL-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -1563,6 +1616,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if($visibilidadSeccionesGinecoObstetricia['hospitalizacion'])
                                 <!--HOSPITALIZACION-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card-a">
@@ -1578,25 +1634,84 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 <!--Formulario / Signos vitales y otros-->
                                 {{--  @include('atencion_pediatrica.generales.signos_vitales')  --}}
                                 <!--Cierre: Formulario / Signos vitales y otros-->
                                 <!--CRONICOS / GES / CONFIDENCIAL -->
-                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                @if($visibilidadSeccionesGinecoObstetricia['antecedentes_cronicos_ges'])
+                                    @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                @endif
+
+                                @foreach($seccionesPersonalizadasGinecoObstetricia as $seccionPersonalizada)
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="seccion_personalizada_{{ $seccionPersonalizada->id }}">
+                                                <button
+                                                    class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open"
+                                                    type="button"
+                                                    data-toggle="collapse"
+                                                    data-target="#seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                >
+                                                    {{ $seccionPersonalizada->nombre }}
+                                                </button>
+                                            </div>
+                                            <div
+                                                id="seccion_personalizada_contenido_{{ $seccionPersonalizada->id }}"
+                                                class="collapse"
+                                                aria-labelledby="seccion_personalizada_{{ $seccionPersonalizada->id }}"
+                                            >
+                                                <div class="card-body-aten-a">
+                                                    <div class="row">
+                                                        @foreach(
+                                                            collect($seccionPersonalizada->subsecciones ?? [])
+                                                                ->filter(function ($subseccion) {
+                                                                    return (bool) ($subseccion->visible ?? true);
+                                                                })
+                                                                ->sortBy('orden')
+                                                            as $subseccionPersonalizada
+                                                        )
+                                                            <div class="col-md-12 mb-3">
+                                                                <label class="floating-label-activo-sm" for="campo_personalizado_{{ $subseccionPersonalizada->id }}">
+                                                                    {{ $subseccionPersonalizada->nombre }}
+                                                                </label>
+                                                                <textarea
+                                                                    class="form-control caja-texto form-control-sm{{ $subseccionPersonalizada->tipo === 'summernote' ? ' summernote' : '' }}"
+                                                                    name="campos_personalizados[{{ $subseccionPersonalizada->id }}]"
+                                                                    id="campo_personalizado_{{ $subseccionPersonalizada->id }}"
+                                                                    rows="2"
+                                                                >{{ old('campos_personalizados.' . $subseccionPersonalizada->id) }}</textarea>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
                                 <!--Diagnóstico-->
-                                @include('general.secciones_ficha.diagnostico')
+                                @if($visibilidadSeccionesGinecoObstetricia['diagnostico'])
+                                    @include('general.secciones_ficha.diagnostico')
+                                @endif
 
                             </div>
                         </div>
-                        <div class="tab-pane fade show " id="examen_proced" role="tabpanel" aria-labelledby="examen_proced-tab">
-                            @include('atencion_gine_obstetricia.secciones_especialidad.examenes_consulta')
-                        </div>
+                        @if($visibilidadSeccionesGinecoObstetricia['examenes_procedimientos'])
+                            <div class="tab-pane fade show " id="examen_proced" role="tabpanel" aria-labelledby="examen_proced-tab">
+                                @include('atencion_gine_obstetricia.secciones_especialidad.examenes_consulta')
+                            </div>
+                        @endif
                         <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                         {{--  div de botones  --}}
                         <div class="bg-white shadow-none rounded mx-1 p-15">
+                            @if($visibilidadSeccionesGinecoObstetricia['recetas_examenes_generales'])
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
                             @include('general.secciones_ficha.seccion_receta_examen_comunes_gine')
                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                            @endif
                             <!--GUARDAR O IMPRIMIR FICHA-->
                             <div class="row mb-3 m-t-10">
                                 <div class="col-md-12 text-center">

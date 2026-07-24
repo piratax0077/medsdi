@@ -1,7 +1,6 @@
-<div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex">
         <!--CARD CONTRASEÑA PERSONAL-->
-        <div class="card">
+        <div class="card flex-fill mb-4">
             <div class="card-header d-flex align-items-center justify-content-between bg-primary">
                 <h5 class="mb-0 text-white">Contraseña personal</h5>
                 <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
@@ -83,7 +82,6 @@
             <!--CIERRE: (EDITAR)CONTRASEÑA PERSONAL-->
         </div>
         <!--CIERRE: CARD CONTRASEÑA PERSONAL-->
-    </div>
 </div>
 
 

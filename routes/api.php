@@ -13,6 +13,8 @@ use App\Http\Controllers\JitsiController;
 use App\Http\Controllers\VentaManualRecetaController;
 use App\Http\Controllers\DentalController;
 use App\Http\Controllers\CentroMedicoController;
+use App\Http\Controllers\MobileTwoFactorController;
+use App\Http\Controllers\MobilePushDeviceController;
 
 
 
@@ -34,6 +36,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //login
 Route::post('user/login',[LoginController::class, 'login']);
 Route::post('user/login_farmacia',[LoginController::class, 'login_farmacia']);
+
+Route::middleware('auth:api')->prefix('mobile-2fa')->group(function () {
+    Route::get('/challenges', [MobileTwoFactorController::class, 'pending']);
+    Route::post('/challenges/{challenge}/decision', [MobileTwoFactorController::class, 'decide']);
+});
+
+Route::middleware('auth:api')->prefix('mobile/devices')->group(function () {
+    Route::post('/', [MobilePushDeviceController::class, 'store']);
+    Route::delete('/', [MobilePushDeviceController::class, 'destroy']);
+});
 
 //USER DEVICES - CRUD
 Route::post('/user_devices/registrar',    [UsersDevicesController::class, 'registrar']);

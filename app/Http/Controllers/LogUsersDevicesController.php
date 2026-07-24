@@ -559,29 +559,29 @@ class LogUsersDevicesController extends Controller
 
                     break;
 
-                    case 12: //  autorizacion licencia profesional autorizacion abrir documentos del profesional
+                    case 12: // autorización para abrir talonarios del profesional
                         $data = json_decode($value['msg'],false);
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
                         $profesional = $data->profesional;
                         /** peticion */
-                       $value['msg_estado'] = "Licencia desde <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
+                       $value['msg_estado'] = "El profesional <span class='color-azul txt_bold'>{$profesional}</span> solicita abrir sus talonarios de receta y licencia en <span class='color-azul txt_bold'>{$data->lugar_atencion}</span>";
 
                         /** resultado */
                         switch($value['estado'])
                         {
                             case 1:
-                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha} </span>con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
+                                $value['msg_body'] = "Talonarios de receta y licencia autorizados con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
                             break;
                             case 2:
-                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
+                                $value['msg_body'] = "Apertura de talonarios de receta y licencia rechazada con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
                             break;
                             case 3:
-                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
+                                $value['msg_body'] = "Solicitud de apertura de talonarios cancelada con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
                             break;
                             case 4:
-                                $value['msg_body'] = "Profesional ".$profesional." por iniciar una Liciencia con fecha <span class='color-azul txt_bold'>{$fecha}</span> con el Dr. <span class='color-azul txt_bold'>{$profesional}</span>";
+                                $value['msg_body'] = "Autorización de talonarios expirada con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
                             break;
                         }
 
@@ -589,16 +589,16 @@ class LogUsersDevicesController extends Controller
                         switch($value['estado'])
                         {
                            case 1:
-                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Talonarios autorizados</span> con fecha {$fecha}</p><br>";
                            break;
                            case 2:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Apertura de talonarios rechazada</span> con fecha {$fecha}</p><br>";
                            break;
                            case 3:
-                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Creacion de Licencia</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud de talonarios cancelada</span> con fecha {$fecha}</p><br>";
                            break;
                            case 4:
-                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Creacion de Licencia <span class='color-rojo txt_bold'>Expirada</span> con fecha {$fecha} con el Dr. <span class='color-azul txt_bold'>{$profesional}</span></span></p><br>";
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorización de talonarios expirada</span> con fecha {$fecha}</p><br>";
                            break;
                         }
 
