@@ -41,7 +41,12 @@ class UsersDevicesController extends Controller
             $datos['request'] = $request->all();
 
             // Generamos la consulta
-            $datos['registros'] = $registros = UsersDevices::where($filtros)->get();
+            // Si existen registros antiguos duplicados para el mismo equipo,
+            // prioriza siempre el que ya fue activado y luego el más reciente.
+            $datos['registros'] = $registros = UsersDevices::where($filtros)
+                ->orderByDesc('estado')
+                ->orderByDesc('id')
+                ->get();
             $datos['password'] = $registros[0]->password;
 
         }else{
@@ -126,9 +131,6 @@ class UsersDevicesController extends Controller
         $error = array();
         $campos_requeridos = 0;
 
-        $registro = new UsersDevices();
-
-
         /* VALIDACION CAMPOS */
         if($request->id_user=='')
         {
@@ -173,19 +175,35 @@ class UsersDevicesController extends Controller
 
         if($campos_requeridos==0)
         {
+            // Un dispositivo es único por usuario y UUID. Reutilizar el registro
+            // evita generar múltiples solicitudes de activación para el mismo equipo.
+            $registro = UsersDevices::where('id_user', $request->id_user)
+                ->where('uuid', $request->uuid)
+                ->orderByDesc('estado')
+                ->orderByDesc('id')
+                ->first();
+
+            $registroYaActivo = $registro && (int) $registro->estado === 1;
+
+            if(!$registro)
+                $registro = new UsersDevices();
+
             $registro->id_user = $request->id_user;
             $registro->alias = $request->alias;
             $registro->uuid = $request->uuid;
             $registro->password = $request->password;
 
-            $registro->estado = $request->estado;
+            // Una nueva clave no debe desactivar un equipo que ya fue enlazado.
+            if(!$registroYaActivo)
+                $registro->estado = $request->estado;
             $registro->fecha_ingreso = $request->fecha_ingreso;
             $registro->fecha_termino = $request->fecha_termino;
 
             if($registro->save())
             {
                 $datos['estado'] = 1;
-                $datos['msg'] = 'Registros Creado';
+                $datos['requiere_activacion'] = (int) $registro->estado !== 1;
+                $datos['msg'] = $registro->wasRecentlyCreated ? 'Registro Creado' : 'Registro Actualizado';
                 $datos['request_data'] = $request->all();
             }else{
                 $datos['estado'] = 0;
@@ -363,12 +381,21 @@ class UsersDevicesController extends Controller
             $error['uuid'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+        if(empty($request->id_user))
+        {
+            $error['id_user'] = 'campo requerido';
+            $campos_requeridos = 1;
+        }
 
 
         if($campos_requeridos==0)
         {
             /** buscar user divices */
-            $user_divices = UsersDevices::where('uuid', $request->uuid)->first();
+            $user_divices = UsersDevices::where('id_user', $request->id_user)
+                ->where('uuid', $request->uuid)
+                ->orderByDesc('estado')
+                ->orderByDesc('id')
+                ->first();
 
             if($user_divices)
             {
@@ -412,12 +439,31 @@ class UsersDevicesController extends Controller
                         $correo = $persona->email;
                     }
 
+                    // El correo debe identificar la cuenta que inició sesión.
+                    $nombre = trim((string) $usuario->name) ?: $nombre;
+                    $correo = trim((string) $usuario->email) ?: $correo;
+
+                    if((int) $user_divices->estado === 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['ya_enlazado'] = true;
+                        $datos['msg'] = 'El dispositivo ya se encuentra enlazado.';
+
+                        return response($datos)->header('Content-Type', 'application/json');
+                    }
+
                     $token_id = encrypt($user_divices->id);
                     $url = url('/registro/equipo?t='.$token_id);
 
                     /** envio de correo */
                     $blade = 'registrar_app';
-                    $to = array(array('email' => $correo,'name' => $nombre));
+                    // Desvío temporal para pruebas de activación de dispositivos.
+                    // No modifica el correo almacenado en la cuenta del usuario.
+                    $correo_pruebas_activacion = 'francisco.rojo.gallardo@gmail.com';
+                    $to = array(array(
+                        'email' => $correo_pruebas_activacion,
+                        'name' => $nombre
+                    ));
                     $cc = array();
                     $bcc = array();
                     $asunto = 'MED-SDI - Solicitud de Registro de Equipo';
@@ -517,24 +563,30 @@ class UsersDevicesController extends Controller
                         $correo = $persona->email;
                     }
 
-                    $nombre_cliente = $nombre;
+                    $nombre_cliente = trim((string) $usuario->name) ?: $nombre;
 
-                    if($registro->estado == 1)
+                    $equipoYaEnlazado = (int) $registro->estado === 1;
+
+                    // Versiones antiguas podían crear más de un registro para el
+                    // mismo usuario y UUID. El enlace debe activar el equipo
+                    // completo para que la app no vuelva a encontrar uno pendiente.
+                    $registrosActualizados = UsersDevices::where('id_user', $registro->id_user)
+                        ->where('uuid', $registro->uuid)
+                        ->update([
+                            'estado' => 1,
+                            'code' => date('YmdHis'),
+                            'updated_at' => now(),
+                        ]);
+
+                    if($registrosActualizados > 0)
                     {
-                        $mensaje_resultado = 'Su Equipo ya se encuentra Enlazado.';
+                        $mensaje_resultado = $equipoYaEnlazado
+                            ? 'Su Equipo ya se encuentra Enlazado.'
+                            : 'Su Equipo ha sido registrado con exito.';
                     }
                     else
                     {
-                        $registro->estado = 1;
-                        $registro->code = date('YmdHis');
-                        if($registro->save())
-                        {
-                            $mensaje_resultado = 'Su Equipo ha sido registrado con exito.';
-                        }
-                        else
-                        {
-                            $mensaje_resultado = 'Se presento un problema al enlazar el Equipo, intente de nuevo.';
-                        }
+                        $mensaje_resultado = 'Se presento un problema al enlazar el Equipo, intente de nuevo.';
                     }
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MobilePushDevice;
+use App\Models\UsersDevices;
 use Illuminate\Http\Request;
 
 class MobilePushDeviceController extends Controller
@@ -16,17 +17,40 @@ class MobilePushDeviceController extends Controller
         ]);
 
         $tokenHash = hash('sha256', $data['token']);
-        $device = MobilePushDevice::updateOrCreate(
-            ['token_hash' => $tokenHash],
-            [
-                'user_id' => $request->user()->id,
-                'fcm_token' => $data['token'],
-                'platform' => $data['platform'] ?? 'android',
-                'device_uuid' => $data['device_uuid'] ?? null,
-                'enabled' => true,
-                'last_seen_at' => now(),
-            ]
-        );
+
+        // Un teléfono solo debe recibir notificaciones de la cuenta que
+        // mantiene la sesión actual. Deshabilita asociaciones anteriores
+        // del mismo UUID para evitar avisos cruzados entre usuarios.
+        $userIds = collect([$request->user()->id]);
+
+        if (!empty($data['device_uuid'])) {
+            $userIds = $userIds->merge(
+                UsersDevices::where('uuid', $data['device_uuid'])
+                    ->where('estado', 1)
+                    ->pluck('id_user')
+            );
+        }
+
+        $device = null;
+        foreach ($userIds->filter()->unique() as $userId) {
+            $registeredDevice = MobilePushDevice::updateOrCreate(
+                [
+                    'user_id' => $userId,
+                    'token_hash' => $tokenHash,
+                ],
+                [
+                    'fcm_token' => $data['token'],
+                    'platform' => $data['platform'] ?? 'android',
+                    'device_uuid' => $data['device_uuid'] ?? null,
+                    'enabled' => true,
+                    'last_seen_at' => now(),
+                ]
+            );
+
+            if ((int) $userId === (int) $request->user()->id) {
+                $device = $registeredDevice;
+            }
+        }
 
         return response()->json(['registered' => true, 'device_id' => $device->id]);
     }

@@ -1213,9 +1213,15 @@ class LogUsersDevicesController extends Controller
         if($campos_requeridos==0)
         {
 
-            $registro = LogUsersDevices::find($request->id);
+            $consulta = LogUsersDevices::where('id', $request->id);
 
-            if($registro->count()>0)
+            if (!empty($request->id_user_recept)) {
+                $consulta->where('id_user_recept', $request->id_user_recept);
+            }
+
+            $registro = $consulta->first();
+
+            if($registro)
             {
                 if($registro->estado == 0)
                 {

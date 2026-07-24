@@ -180,7 +180,42 @@
                                     </li>
                                 @endif
 
-                                @if(Auth::user()->hasRole('Asistente') || Auth::user()->hasRole('Admin'))
+                                @php
+                                    $escritoriosAsistente = [
+                                        'Asistente' => ['route' => 'asistente.home', 'label' => 'Escritorio asistente'],
+                                        'AsistenteAdm' => ['route' => 'asistente_adm.home', 'label' => 'Escritorio asistente administrativa'],
+                                        'AsistenteJefaCaja' => ['route' => 'asistentejcm.home', 'label' => 'Escritorio asistente jefa de caja'],
+                                        'AsistenteLaboratorio' => ['route' => 'asistente.lab.home', 'label' => 'Escritorio asistente laboratorio'],
+                                        'AsistenteCaja' => ['route' => 'asistentecm.home', 'label' => 'Escritorio asistente institución'],
+                                        'AsistenteDentalTecn' => ['route' => 'asistentedentaltecn.home', 'label' => 'Escritorio asistente técnico dental'],
+                                        'AsistenteDental' => ['route' => 'asistentedental.home', 'label' => 'Escritorio asistente dental'],
+                                        'AsistenteOnline' => ['route' => 'asistenteon.home', 'label' => 'Escritorio asistente online'],
+                                        'AsistenteManejoAgenda' => ['route' => 'asistentecm.ma.home', 'label' => 'Escritorio asistente manejo de agenda'],
+                                        'AsistenteCargaExamenExterno' => ['route' => 'lab.exa.asistente.home', 'label' => 'Escritorio asistente carga de exámenes'],
+                                        'AsistenteEnfermeria' => ['route' => 'asistente.enfermeria.home', 'label' => 'Escritorio asistente enfermería'],
+                                    ];
+
+                                    $rolesAsistente = Auth::user()->getRoleNames()
+                                        ->filter(function ($rol) {
+                                            return stripos($rol, 'asistente') !== false;
+                                        });
+                                @endphp
+
+                                @foreach($rolesAsistente as $rolAsistente)
+                                    @if(
+                                        isset($escritoriosAsistente[$rolAsistente])
+                                        && \Illuminate\Support\Facades\Route::has($escritoriosAsistente[$rolAsistente]['route'])
+                                    )
+                                        <li>
+                                            <a href="{{ route($escritoriosAsistente[$rolAsistente]['route']) }}" class="dropdown-item">
+                                                <i class="feather icon-user"></i>
+                                                {{ $escritoriosAsistente[$rolAsistente]['label'] }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+
+                                @if(Auth::user()->hasRole('Admin') && $rolesAsistente->isEmpty())
                                     <li>
                                         <a href="{{ route('asistente.home') }}" class="dropdown-item">
                                             <i class="feather icon-user"></i>

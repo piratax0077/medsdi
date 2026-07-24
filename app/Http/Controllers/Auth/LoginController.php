@@ -7,6 +7,7 @@ use App\Models\MobilePushDevice;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\User;
+use App\Models\UsersDevices;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -72,13 +73,39 @@ class LoginController extends Controller
             {
                 if (Auth::attempt(['email' => $user, 'password' => $pass]))
                 {
+                    $deviceToken = trim((string) $request->input('device_token', ''));
+                    $deviceUuid = trim((string) $request->input('device_uuid', ''));
+
+                    // Si la app no dispone del plugin nativo de dispositivo,
+                    // recupera el UUID previamente asociado a este token FCM.
+                    if ($deviceUuid === '' && $deviceToken !== '') {
+                        $deviceUuid = (string) MobilePushDevice::where(
+                                'token_hash',
+                                hash('sha256', $deviceToken)
+                            )
+                            ->whereNotNull('device_uuid')
+                            ->where('device_uuid', '<>', '')
+                            ->latest('id')
+                            ->value('device_uuid');
+                    }
+
                     if ($userModel->mobile_two_factor_enabled && !app()->environment('local')) {
-                        $deviceToken = (string) $request->input('device_token', '');
-                        $trustedDevice = $deviceToken !== '' && MobilePushDevice::where([
-                            'user_id' => $userModel->id,
-                            'token_hash' => hash('sha256', $deviceToken),
-                            'enabled' => true,
-                        ])->exists();
+                        $trustedPushDevice = $deviceToken !== '' && MobilePushDevice::where([
+                                'user_id' => $userModel->id,
+                                'token_hash' => hash('sha256', $deviceToken),
+                                'enabled' => true,
+                            ])->exists();
+
+                        // Permite migrar de forma segura un equipo que ya estaba
+                        // vinculado en users_devices antes de incorporar FCM.
+                        $trustedLegacyDevice = $deviceToken !== ''
+                            && $deviceUuid !== ''
+                            && UsersDevices::where('id_user', $userModel->id)
+                                ->where('uuid', $deviceUuid)
+                                ->where('estado', 1)
+                                ->exists();
+
+                        $trustedDevice = $trustedPushDevice || $trustedLegacyDevice;
 
                         if (!$trustedDevice) {
                             Auth::logout();
@@ -108,6 +135,36 @@ class LoginController extends Controller
                     // El token se emite solo a perfiles admitidos por la aplicación.
                     $token = $userModel->createToken('mobile-app')->plainTextToken;
 
+                    // Guarda el token FCM durante el login para que el segundo factor
+                    // no dependa solamente de la petición posterior de la aplicación.
+                    if ($deviceToken !== '') {
+                        $pushUserIds = collect([$userModel->id]);
+
+                        if ($deviceUuid !== '') {
+                            $pushUserIds = $pushUserIds->merge(
+                                UsersDevices::where('uuid', $deviceUuid)
+                                    ->where('estado', 1)
+                                    ->pluck('id_user')
+                            );
+                        }
+
+                        foreach ($pushUserIds->filter()->unique() as $pushUserId) {
+                            MobilePushDevice::updateOrCreate(
+                                [
+                                    'user_id' => $pushUserId,
+                                    'token_hash' => hash('sha256', $deviceToken),
+                                ],
+                                [
+                                    'fcm_token' => $deviceToken,
+                                    'platform' => 'android',
+                                    'device_uuid' => $deviceUuid !== '' ? $deviceUuid : null,
+                                    'enabled' => true,
+                                    'last_seen_at' => now(),
+                                ]
+                            );
+                        }
+                    }
+
                     $userModel->foto_perfil = optional($paciente)->foto_perfil
                         ?: optional($profesional)->foto_perfil;
 
@@ -121,6 +178,7 @@ class LoginController extends Controller
                     $datos['rol_sugerido'] = $rolesPermitidos->count() === 1
                         ? $rolesPermitidos->first()->name
                         : null;
+                    $datos['device_uuid'] = $deviceUuid !== '' ? $deviceUuid : null;
                     $datos['token'] = $token; // Token para acceder a rutas protegidas
                 }
                 else

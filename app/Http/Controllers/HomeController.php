@@ -46,6 +46,9 @@ class HomeController extends Controller
         // Los perfiles clínicos tienen prioridad sobre roles secundarios
         // (por ejemplo, Vendedor). Si posee ambos, se prioriza Profesional.
         $roles_principal = $roles->firstWhere('name', 'Profesional')
+            ?? $roles->first(function ($rol) {
+                return stripos($rol->name, 'asistente') !== false;
+            })
             ?? $roles->firstWhere('name', 'Paciente')
             ?? $roles->first();
 

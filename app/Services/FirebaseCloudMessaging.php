@@ -51,6 +51,7 @@ class FirebaseCloudMessaging
                     'data' => [
                         'type' => 'login_approval',
                         'challenge_id' => (string) $challenge->id,
+                        'target_user_id' => (string) $challenge->user_id,
                         'notification_foreground' => 'true',
                         'notification_title' => 'Nuevo acceso a MED-SDI',
                         'notification_body' => 'Tienes una solicitud de acceso pendiente de aprobación.',
@@ -77,21 +78,38 @@ class FirebaseCloudMessaging
             ->where('enabled', true)
             ->get();
 
+        $messageData = json_decode($authorization->msg, true) ?: [];
+        $isPrescriptionBook = (int) $authorization->tipo === 12
+            && ($messageData['evento'] ?? '') === 'Apertura de talonarios';
+        $isBonusPurchase = (int) $authorization->tipo === 13;
+
+        if ($isPrescriptionBook) {
+            $title = 'Autoriza la apertura de tus talonarios';
+            $body = 'Tienes una solicitud de apertura de recetarios y licencias pendiente en MED-SDI.';
+        } elseif ($isBonusPurchase) {
+            $title = 'Autoriza la compra de tu bono';
+            $body = 'Tienes una solicitud de compra de bono pendiente en MED-SDI.';
+        } else {
+            $title = 'Nueva solicitud de autorización';
+            $body = 'Tienes una solicitud pendiente de aprobación en MED-SDI.';
+        }
+
         foreach ($devices as $device) {
             $this->sendToDevice($device, [
                 'message' => [
                     'token' => $device->fcm_token,
                     'notification' => [
-                        'title' => 'Autoriza la compra de tu bono',
-                        'body' => 'Tienes una solicitud de compra de bono pendiente en MED-SDI.',
+                        'title' => $title,
+                        'body' => $body,
                     ],
                     'data' => [
                         'type' => 'authorization_request',
                         'authorization_id' => (string) $authorization->id,
                         'authorization_type' => (string) $authorization->tipo,
+                        'target_user_id' => (string) $authorization->id_user_recept,
                         'notification_foreground' => 'true',
-                        'notification_title' => 'Autoriza la compra de tu bono',
-                        'notification_body' => 'Tienes una solicitud de compra de bono pendiente en MED-SDI.',
+                        'notification_title' => $title,
+                        'notification_body' => $body,
                         'notification_android_channel_id' => 'medsdi_security',
                         'notification_android_sound' => 'default',
                     ],

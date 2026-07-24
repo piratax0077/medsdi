@@ -1,6 +1,15 @@
 <x-guest-layout>
     <x-jet-authentication-card>
-        <x-slot name="logo"><x-jet-authentication-card-logo /></x-slot>
+        <x-slot name="logo">
+            <a href="{{ url('/') }}" aria-label="Ir al inicio de MedSDI">
+                <img
+                    src="{{ asset('images/logo_pais_vertical.png') }}"
+                    alt="MedSDI - Salud Digital Integrada"
+                    class="h-32 w-auto"
+                    style="max-width: 180px;"
+                >
+            </a>
+        </x-slot>
         <div class="text-center">
             <h2 class="text-xl font-semibold text-gray-800">Aprueba este acceso desde tu teléfono</h2>
             <p class="mt-3 text-sm text-gray-600">Abre MED-SDI y revisa “Desafíos de acceso”. Esta solicitud vence en 5 minutos.</p>

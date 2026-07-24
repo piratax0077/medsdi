@@ -355,7 +355,7 @@ class Funciones{
 
             // La compra de bonos (tipo 13) se aprueba desde la app del paciente.
             // El fallo de Firebase no debe impedir que la solicitud quede creada.
-            if ((int) $id_tipo === 13) {
+            if (in_array((int) $id_tipo, [12, 13], true)) {
                 try {
                     app(FirebaseCloudMessaging::class)->sendAuthorizationRequest($log_users_devices);
                 } catch (\Throwable $exception) {
