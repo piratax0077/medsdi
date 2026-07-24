@@ -209,11 +209,10 @@
         <div class="pcoded-content">
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center">
+                    <div class="row align-items-center mt-3">
                         <div class="col-md-12">
                             <div class="page-header-title">
                                 <h5 class="text-white mb-0">
-                                    <strong>PERSONALIZAR FICHA DE ATENCIÓN</strong>
                                 </h5>
                             </div>
                             <ul class="breadcrumb mt-2 mb-0">
@@ -223,22 +222,14 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item"><a href="#">Configuraciones</a> </li>
-                                <li class="breadcrumb-item active"><a href="#">Ficha {{ $nombreEspecialidadFicha }}</a></li>
+                                <li class="breadcrumb-item active"><a href="#">Personalización de Ficha {{ $nombreEspecialidadFicha }}</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="alert alert-info border-0 shadow-sm">
-                <div class="d-flex align-items-start">
-                    <i class="feather icon-info mr-2 mt-1"></i>
-                    <div>
-                        <strong>Personalización de {{ $nombreEspecialidadFicha }}.</strong>
-                        Active u oculte secciones y subsecciones. Los cambios se aplicarán a las nuevas fichas de atención.
-                    </div>
-                </div>
-            </div>
+            
 
             <form id="form_personalizacion_ficha"
                   method="POST"
@@ -251,24 +242,34 @@
                 <input type="hidden" name="configuracion" id="configuracion_ficha" value="">
 
                 <div class="row">
+
                     <div class="col-lg-8">
+                        <div class="alert alert-primary border-0 shadow-sm">
+                <div class="d-flex align-items-start">
+                    <i class="fas fa-info-circle f-18 mr-2 mt-1"></i>
+                    <div>
+                        <h4 class="f-18 text-c-blue"><strong>Personalización de Ficha {{ $nombreEspecialidadFicha }}</strong></h4>
+                        <p class="text-dark font-weight-normal">Configure la estructura de la ficha habilitando o deshabilitando secciones y subsecciones según sus necesidades. Los cambios se reflejarán automáticamente en las nuevas fichas de atención.</p>
+                    </div>
+                </div>
+            </div>
                         <div class="card personalizador-card mb-3">
-                            <div class="card-header">
-                                <div class="row align-items-center">
-                                    <div class="col-md-6">
-                                        <h5 class="mb-1 titulo-bloque">Plantilla clínica</h5>
+                            <div class="card-body">
+                                <div class="form-row align-items-center">
+                                    <div class="col-md-4">
+                                        <h6 class="mb-1 f-20 text-c-blue">Plantilla clínica</h6>
                                         <p class="mb-0 ayuda-texto">Seleccione la especialidad y asigne un nombre a esta configuración.</p>
                                     </div>
-                                    <div class="col-md-6 mt-3 mt-md-0">
+                                    <div class="col-md-8 mt-3 mt-md-0">
                                         <div class="form-row">
                                             <div class="col-sm-6">
-                                                <label class="mb-1">Especialidad</label>
+                                                <label class="mb-1 font-weight-bold text-dark">Especialidad</label>
                                                 <select class="form-control form-control-sm" id="especialidad_selector" disabled>
                                                     <option value="{{ $codigoEspecialidadFicha }}" selected>{{ $nombreEspecialidadFicha }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label class="mb-1">Nombre de plantilla</label>
+                                                <label class="mb-1 font-weight-bold text-dark">Nombre de plantilla</label>
                                                 <input type="text"
                                                        class="form-control form-control-sm"
                                                        name="nombre_plantilla"
@@ -283,36 +284,36 @@
                         </div>
 
                         <div class="card personalizador-card mb-3">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header-principal d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h5 class="mb-1 titulo-bloque">Secciones visibles en la ficha</h5>
+                                    <h6 class="mb-0 f-18 text-c-blue">Secciones visibles en la ficha</h6>
                                     <p class="mb-0 ayuda-texto">Use el interruptor para mostrar u ocultar cada sección de la ficha de {{ $nombreEspecialidadFicha }}.</p>
                                 </div>
-                                <span class="badge badge-primary" id="contador_secciones">0 activas</span>
+                                <span class="badge badge-success" id="contador_secciones">0 activas</span>
                             </div>
                             <div class="card-body" id="contenedor_secciones"></div>
                         </div>
 
                         <div class="card personalizador-card mb-3">
-                            <div class="card-header">
-                                <h5 class="mb-1 titulo-bloque">Agregar nueva sección</h5>
+                            <div class="card-header-principal">
+                                <h6 class="mb-1 f-18 titulo-bloque">Agregar nueva sección</h6>
                                 <p class="mb-0 ayuda-texto">Cree una card adicional para la ficha de atención.</p>
                             </div>
                             <div class="card-body">
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="nueva_seccion_nombre">Nombre de la sección</label>
+                                        <label class="text-dark font-weight-bold" for="nueva_seccion_nombre">Nombre de la sección</label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                id="nueva_seccion_nombre"
-                                               placeholder="Ej.: Evaluación vestibular">
+                                               placeholder="ESCRIBA TÍTULO GENERAL DE LA SECCIÓN">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="nueva_seccion_tipo">Contenido principal</label>
+                                        <label class="text-dark font-weight-bold" for="nueva_seccion_tipo">Contenido principal</label>
                                         <select class="form-control form-control-sm" id="nueva_seccion_tipo">
                                             <option value="textarea">Campo para escribir</option>
                                             <option value="summernote">Editor de texto enriquecido</option>
-                                            <option value="imagenes">Adjuntar imágenes</option>
+                                            <option value="imagenes">Adjuntador de imágenes o archivos</option>
                                             <option value="texto_imagenes">Texto e imágenes</option>
                                             <option value="subsecciones">Subsecciones en pestañas</option>
                                         </select>
@@ -343,11 +344,11 @@
                                 <div id="bloque_subsecciones_nueva" class="border rounded p-3 mb-3" style="display:none;">
                                     <div class="form-row align-items-end">
                                         <div class="form-group col-md-9 mb-md-0">
-                                            <label for="nueva_subseccion_temporal">Nombre de la subsección</label>
+                                            <label class="text-dark font-weight-bold" for="nueva_subseccion_temporal">Nombre de la subsección</label>
                                             <input type="text"
                                                    class="form-control form-control-sm"
                                                    id="nueva_subseccion_temporal"
-                                                   placeholder="Ej.: Pruebas vestibulares">
+                                                   placeholder="Escriba título de la subsección">
                                         </div>
                                         <div class="form-group col-md-3 mb-0">
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-block" id="btn_agregar_subseccion_temporal">
@@ -365,10 +366,10 @@
                         </div>
 
                         <div class="d-flex flex-column flex-sm-row justify-content-end mb-4">
-                            <a href="{{ route('profesional.home') }}" class="btn btn-light mr-sm-2 mb-2 mb-sm-0">
+                            <a href="{{ route('profesional.home') }}" class="btn btn-secondary mr-sm-2 mb-2 mb-sm-0">
                                 Cancelar
                             </a>
-                            <button type="button" class="btn btn-success" id="btn_guardar_configuracion">
+                            <button type="button" class="btn btn-info" id="btn_guardar_configuracion">
                                 <i class="feather icon-save"></i> Guardar personalización
                             </button>
                         </div>
@@ -376,8 +377,8 @@
 
                     <div class="col-lg-4">
                         <div class="card personalizador-card preview-ficha">
-                            <div class="card-header">
-                                <h5 class="mb-1 titulo-bloque">Vista previa</h5>
+                            <div class="card-header-principal">
+                                <h6 class="mb-1 f-20 text-c-blue">Vista previa</h6>
                                 <p class="mb-0 ayuda-texto">Representación aproximada de la ficha de {{ $nombreEspecialidadFicha }}.</p>
                             </div>
                             <div class="card-body" id="vista_previa_ficha"></div>
@@ -718,8 +719,8 @@
 
                 let html = `
                     <div class="mb-3">
-                        <small class="text-muted">Plantilla</small>
-                        <h6 class="mb-0">${escaparHtml(document.getElementById('nombre_plantilla').value || nombrePlantillaPredeterminado)}</h6>
+                        <small class="text-c-blue font-weight-bold">Plantilla</small>
+                        <h6 class="mb-0 f-16 text-dark">${escaparHtml(document.getElementById('nombre_plantilla').value || nombrePlantillaPredeterminado)}</h6>
                     </div>
                 `;
 
