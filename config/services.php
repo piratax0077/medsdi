@@ -41,4 +41,11 @@ return [
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'firebase' => [
+        'credentials' => env(
+            'FIREBASE_CREDENTIALS',
+            storage_path('app/firebase/medsdi-firebase.json')
+        ),
+    ],
+
 ];

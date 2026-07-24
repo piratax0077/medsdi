@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
+Route::get('/acceso/aprobacion-movil', [App\Http\Controllers\MobileTwoFactorController::class, 'showWebChallenge'])->name('mobile-2fa.challenge');
+Route::get('/acceso/aprobacion-movil/estado', [App\Http\Controllers\MobileTwoFactorController::class, 'checkWebChallenge'])->name('mobile-2fa.check');
+
 Route::get('/Acceso_Profesional_NI/{token}', [App\Http\Controllers\EscritorioProfesional::class, 'acceso_pni'])->name('anonymous.acceso_pni');
 Route::get('/Check_sdi_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('anonymous.check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
 Route::get('/Check_sdi_token_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdiToken'])->name('anonymous.check_sdi_token');
@@ -386,6 +389,7 @@ Route::group([
     Route::get('Acceso_Profesional_NI', [App\Http\Controllers\EscritorioPaciente::class, 'acceso_pni'])->name('paciente.acceso_pni');
 
     Route::get('Perfil', [App\Http\Controllers\EscritorioPaciente::class, 'perfil'])->name('paciente.perfil');
+    Route::post('seguridad/aprobacion-movil', [App\Http\Controllers\MobileTwoFactorController::class, 'updateSettings'])->name('paciente.mobile-2fa.update');
     Route::get('RompeClave', [App\Http\Controllers\EscritorioPaciente::class, 'rompeclave'])->name('paciente.rompeclave');
     Route::get('Suscripcion', [App\Http\Controllers\EscritorioPaciente::class, 'subcripcion'])->name('paciente.subcripcion');
 
@@ -581,6 +585,7 @@ Route::group([
     Route::post('editar_datos_personales_perfil', [App\Http\Controllers\EscritorioProfesional::class, 'editar_datos_personales_perfil'])->name('profesional.editar_datos_personales_perfil');
     Route::post('editar_datos_contacto_perfil', [App\Http\Controllers\EscritorioProfesional::class, 'editar_datos_contacto_perfil'])->name('profesional.editar_datos_contacto_perfil');
 	Route::post('editar_datos_residencia_perfil', [App\Http\Controllers\EscritorioProfesional::class, 'editar_datos_residencia_perfil'])->name('profesional.editar_datos_residencia_perfil');
+    Route::post('seguridad/aprobacion-movil', [App\Http\Controllers\MobileTwoFactorController::class, 'updateSettings'])->name('profesional.mobile-2fa.update');
 
     /** web */
     Route::get('especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_especialidad'])->name('web.profesional.buscar_especialidad');
