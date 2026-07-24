@@ -11,6 +11,8 @@ use App\Models\Paciente;
 use App\Models\Asistente;
 use App\Models\Mensajes;
 use App\Models\AdminInstServ;
+use App\Services\FirebaseCloudMessaging;
+use Illuminate\Support\Facades\Log;
 
 class Funciones{
     function __construct()
@@ -18,7 +20,7 @@ class Funciones{
 
     }
 
-    public function userData($id_usuario)
+    public static function userData($id_usuario)
     {
         /*
         * profesionales
@@ -329,39 +331,9 @@ class Funciones{
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
 
-		if($id_user_recept==6 || $id_user_recept==38 || $id_user_recept==4529 || $id_user_recept== 1627 || $id_user_recept==1629 || $id_user_recept== 1630 || $id_user_recept== 1631 || $id_user_recept== 1632 || $id_user_recept== 1633 || $id_user_recept == 1634 || $id_user_recept == 1635 || $id_user_recept == 1636 || $id_user_recept == 1637 || $id_user_recept == 1639 || $id_user_recept == 1641 || $id_user_recept == 1642 || $id_user_recept == 1644 || $id_user_recept == 1645 || $id_user_recept == 1646 || $id_user_recept == 1647 || $id_user_recept == 1651)
-        {
-
-            $log_users_devices->estado = 1;
-        }
-        else
-        {
-
-            if($id_tipo != 12)
-            {
-
-                if( ($id_tipo == 8) && ($id_user_recept==83 || $id_user_recept==3 || $id_user_recept==6 || $id_user_recept==38 || $id_user_recept==4529 || $id_user_recept==1627 || $id_user_recept== 1629 || $id_user_recept == 1630 || $id_user_recept == 1631 || $id_user_recept == 1632 || $id_user_recept == 1633 || $id_user_recept == 1634 || $id_user_recept == 1635 || $id_user_recept == 1636 || $id_user_recept == 1637 || $id_user_recept == 1639 || $id_user_recept == 1641 || $id_user_recept == 1642 || $id_user_recept == 1644 || $id_user_recept == 1645 || $id_user_recept == 1646 || $id_user_recept == 1647 || $id_user_recept == 1651) )
-                {
-                    $log_users_devices->estado = 1;
-                }
-                else if( ($id_tipo == 2 ) && ($id_user_recept==83 || $id_user_recept==3 || $id_user_recept==6 || $id_user_recept==38 || $id_user_recept==4529 || $id_user_recept==1627 || $id_user_recept==1629 || $id_user_recept== 1630 || $id_user_recept== 1631 || $id_user_recept== 1632 || $id_user_recept== 1633 || $id_user_recept== 1634 || $id_user_recept== 1635 || $id_user_recept== 1636 || $id_user_recept== 1637 || $id_user_recept== 1639 || $id_user_recept== 1641 || $id_user_recept== 1642 || $id_user_recept== 1644 || $id_user_recept== 1645 || $id_user_recept== 1646 || $id_user_recept== 1647 || $id_user_recept== 1651) )
-                {
-                    $log_users_devices->estado = 1;
-                }
-                else
-                {
-
-                    if($id_user_create == $id_user_recept)
-                        $log_users_devices->estado = 0;
-                    else
-                        $log_users_devices->estado = 0;
-                }
-            }
-            else
-            {
-                $log_users_devices->estado = 0;
-            }
-        }
+        // Toda solicitud debe ser resuelta explícitamente por su receptor.
+        // Se elimina el antiguo bypass por IDs de usuario que las aprobaba al crearlas.
+        $log_users_devices->estado = 0;
 
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
@@ -380,6 +352,20 @@ class Funciones{
             $datos['app']['tiempo'] = env('TIEMPO_ESPERA');
             $datos['app']['last_id'] = $log_users_devices->id;
             $datos['app']['token'] = $log_users_devices->token;
+
+            // La compra de bonos (tipo 13) se aprueba desde la app del paciente.
+            // El fallo de Firebase no debe impedir que la solicitud quede creada.
+            if ((int) $id_tipo === 13) {
+                try {
+                    app(FirebaseCloudMessaging::class)->sendAuthorizationRequest($log_users_devices);
+                } catch (\Throwable $exception) {
+                    Log::warning('La autorización de bono fue creada, pero no se pudo enviar la notificación push.', [
+                        'authorization_id' => $log_users_devices->id,
+                        'user_id' => $id_user_recept,
+                        'error' => $exception->getMessage(),
+                    ]);
+                }
+            }
 
             $resp = Funciones::envioCorreoNotificacion($id_tipo, $id_user_create, $id_user_recept, $token_temp);
             if(isset($resp['mail']['institucion']['estado']) && $resp['mail']['institucion']['estado'] == 1)

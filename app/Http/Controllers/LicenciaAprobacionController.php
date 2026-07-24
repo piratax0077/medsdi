@@ -109,25 +109,32 @@ class LicenciaAprobacionController extends Controller
         {
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
-            $ficha = FichaAtencion::find($request->id_ficha_atencion);
-            $paciente = Paciente::find($ficha->id_paciente);
 
-            if($profesional)
+            if($profesional && $lugar_atencion)
             {
                 $id_user_create = Auth::user()->id;
                 $id_user_recept = Auth::user()->id;
-                $evento = 'Licencia';
+                $evento = 'Apertura de talonarios';
                 $nombre = $profesional->nombre;
                 $apellido_p = $profesional->apellido_uno;
                 $apellido_m = $profesional->apellido_dos;
                 $lugar = $lugar_atencion->nombre;
                 $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
-                $tipo = 'Licencia';
+                $tipo = 'Talonarios de receta y licencia';
                 $tipo_id = '12';
 
-                // $log_users_devices = new LogUsersDevices();
-                $funcion = new Funciones();
-                $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+                $log_users_devices = (object) Funciones::generatePermApp(
+                    $id_user_create,
+                    $id_user_recept,
+                    $evento,
+                    $nombre,
+                    $apellido_p,
+                    $apellido_m,
+                    $lugar,
+                    $profesional_log,
+                    $tipo,
+                    $tipo_id
+                );
 
                 $datos['log_users_devices'] = $log_users_devices->app;
 
@@ -149,7 +156,9 @@ class LicenciaAprobacionController extends Controller
             else
             {
                 $datos['estado'] = 0;
-                $datos['msj'] = 'Profesional no encontrado.';
+                $datos['msj'] = !$profesional
+                    ? 'Profesional no encontrado.'
+                    : 'Lugar de atención no encontrado.';
                 session(['lic_token' => '']);
                 session(['lic_log_id' => '']);
             }
