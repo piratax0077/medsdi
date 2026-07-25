@@ -118,37 +118,138 @@
                         </ul>
                     </li>
                 </ul>
-                <div id="info_cliente" class="mt-5 p-3" style="color:#1c9693; border: 1px solid  #5ebdba; margin: 8px;padding: 8px; margin-top: 125px; border-radius:15px; background-color:#d2f0f7; overflow: hidden;">
-                    <h6 class="mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">INFORMACION DEL PACIENTE</h6>
-                    <p style="color:#137370;" class="text-uppercase">{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</p>
-                    <p style="color:#137370;">{{ $paciente->edad }}</p>
-                    <p style="color:#137370; font-weight: bold;">{{ $paciente->rut }}</p>
-                    <p style="color:#137370;">{{ $paciente->prevision->nombre }}</p>
-                    <input type="hidden" name="id_pruebas" id="id_pruebas" value="SI HAY PRIUEBAS">
-                    {{-- @if(isset($control_peso) && count($control_peso) > 0)
-                    <p style="color:#137370;">Obesidad</p>
-                    @endif
-                    @if (isset($hipertension) && count($hipertension) > 0)
-                    <p style="color:#137370;">Hipertensión</p>
-                    @endif
-                    @if (isset($diabetes) && count($diabetes) > 0)
-                    <p style="color:#137370;">Diabetes</p>
-                    @endif
-                    @if (isset($contro) && count($contro) > 0)
-                    <p style="color:#137370;">Insuficiencia renal</p>
-                    @endif --}}
-                    <hr>
-                    <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
-                    <ul id="listado_patologias_paciente">
-                        @foreach ($antecedentes as $a)
-                        @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
-                            <li>{{ $a->antecedente_data->nombre }}</li>
-                        @endif
-                         @endforeach
-                    </ul>
 
+                <div id="info_cliente"
+                    class="mt-3"
+                    style="
+                        margin:9px;
+                        margin-top:125px;
+                        background:#fff;
+                        border:1px solid #e8edf2;
+                    
+                        border-radius:14px;
+                        box-shadow:0 8px 25px rgba(15,23,42,.08);
+                        overflow:hidden;">
+
+                    <!-- CABECERA -->
+                    <div style="
+                        padding:14px 18px;
+                        background:linear-gradient(180deg,#f3fbfb 0%,#ffffff 100%);
+                        border-bottom:1px solid #edf2f6;">
+
+                        <div style="
+                            font-size:10px;
+                            font-weight:700;
+                            text-transform:uppercase;
+                            letter-spacing:1px;
+                            color:#18a7a4;
+                            margin-bottom:4px;">
+                            PACIENTE
+                        </div>
+
+                        <div style="
+                            font-size:13px;
+                            font-weight:600;
+                            color:#243746;
+                            line-height:1.35;">
+                            {{ $paciente->nombres }}
+                            {{ $paciente->apellido_uno }}
+                            {{ $paciente->apellido_dos }}
+                        </div>
+
+                        <div class="d-flex flex-wrap mt-3">
+
+                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:11px;color:#51606d;font-weight:600;">
+                                <i class="fa fa-id-card mr-1"></i>
+                                {{ $paciente->rut }}
+                            </span>
+
+                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:11px;color:#158982;font-weight:600;">
+                                <i class="fa fa-birthday-cake mr-1"></i>
+                                {{ $paciente->edad }}
+                            </span>
+
+                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:11px;color:#3f68af;font-weight:600;">
+                                <i class="fa fa-shield mr-1"></i>
+                                {{ $paciente->prevision->nombre }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" name="id_pruebas" id="id_pruebas" value="SI HAY PRIUEBAS">
+
+                    <!-- PATOLOGÍAS -->
+                    <div style="padding:16px;">
+
+                        <div class="d-flex align-items-center mb-3">
+
+                            <div style="width:24px;height:24px;border-radius:6px;background:#fff3f3;color:#dc3545;display:flex;align-items:center;justify-content:center;margin-right:8px;font-size:12px;">
+                                <i class="fa fa-heartbeat"></i>
+                            </div>
+
+                            <div style="font-size:13px;font-weight:600;color:#34495e;">
+                                Patologías Crónicas
+                            </div>
+
+                        </div>
+
+                        @php
+                            $hayPatologias = false;
+                        @endphp
+
+                        @foreach ($antecedentes as $a)
+
+                            @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
+
+                                @php
+                                    $hayPatologias = true;
+                                @endphp
+
+                                <div style="
+                                    background:#fafcfd;
+                                    border:1px solid #e5ebef;
+                                    border-left:4px solid #60c6c4;
+                                    border-radius:8px;
+                                    padding:3px 6px;
+                                    margin-bottom:6px;
+                                    font-size:12px;
+                                    font-weight:500; 
+                                    overflow-wrap: break-word;
+                                    color:#43515c;">
+
+
+                                    {{ $a->antecedente_data->nombre }}
+
+                                </div>
+
+                            @endif
+
+                        @endforeach
+
+                        @if(!$hayPatologias)
+
+                            <div style="
+                                padding:14px;
+                                text-align:center;
+                                border:1px dashed #d8e1e8;
+                                border-radius:8px;
+                                background:#fafcfd;
+                                color:#7c8a96;
+                                font-size:12px;">
+
+                                <i class="fa fa-check-circle mr-1"></i>
+                                No registra patologías crónicas.
+
+                            </div>
+
+                        @endif
+
+                    </div>
 
                 </div>
+
             </div>
         </div>
     </nav>
@@ -305,7 +406,7 @@
                         <ul id="listado_patologias_paciente">
                             @foreach ($antecedentes as $a)
                             @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
-                                <li>{{ $a->antecedente_data->nombre }}</li>
+                                <li><span class="badge badge-success">{{ $a->antecedente_data->nombre }}</span></li>
                             @endif
                             @endforeach
                         </ul>
