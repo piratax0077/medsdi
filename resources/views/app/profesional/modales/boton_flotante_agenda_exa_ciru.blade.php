@@ -326,7 +326,9 @@
                                                     $('#estado_id_profesional').val(data.profesional.id);
                                                     $('#estado_id_paciente').val(data.paciente.id);
                                                     $('#id_hora_medica').val(id_hora_medica);
-                                                    $('#confirmar_hora_comentario').val('0').prop('disabled', false);
+                                                    $('#confirmar_hora_comentario')
+                                                        .prop('selectedIndex', $('#confirmar_hora_comentario option').length > 1 ? 1 : 0)
+                                                        .prop('disabled', false);
                                                     $('#contenedor_via_confirmacion').hide();
 
                                                     //celeste

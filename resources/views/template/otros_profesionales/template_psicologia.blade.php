@@ -206,7 +206,8 @@
         @yield('page-script-btn-autorizacion')
 
         <script>
-            var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            var CSRF_TOKEN = csrfMeta ? csrfMeta.getAttribute('content') : '{{ csrf_token() }}';
 
 			/** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){

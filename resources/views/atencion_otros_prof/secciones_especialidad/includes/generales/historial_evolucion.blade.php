@@ -32,9 +32,9 @@
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Sesión</th>
-                                        {{-- <th>Peso</th> --}}
-                                        <th>Trabajo en</th>
-                                        <th>Objetivo</th>
+                                        <th>Evolución / trabajo realizado</th>
+                                        <th>Objetivo logrado</th>
+                                        <th>Detalle</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>

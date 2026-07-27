@@ -3827,7 +3827,9 @@
 
         function opcion_confirmar_hora() {
 
-            $('#confirmar_hora_comentario').val('0').prop('disabled', false);
+            $('#confirmar_hora_comentario')
+                .prop('selectedIndex', $('#confirmar_hora_comentario option').length > 1 ? 1 : 0)
+                .prop('disabled', false);
             $('#datos_hora_medica').hide();
             $('#cancelacion_hora_medica').hide();
             $('#cabecera_hora_medica').text('Confirmar Hora Medica');

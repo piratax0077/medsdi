@@ -77,7 +77,7 @@
                         <!--Atenciones previas-->
                         <div class="tab-pane fade mb-3" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
                             {{--  @include('atencion_medica.secciones_ficha.atenciones_previas')  --}}
-                            @include('general.secciones_ficha.atenciones_previas_form')
+                            @include('general.secciones_ficha.atenciones_previas_form', ['modoHistorial' => 'psicologia'])
                         </div>
                         <!--Hospitalización-->
                         <div class="tab-pane fade" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
@@ -113,5 +113,4 @@
     });
 </script>
 @endsection
-
 

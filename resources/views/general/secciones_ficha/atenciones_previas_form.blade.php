@@ -1,3 +1,6 @@
+        @php
+            $esHistorialPsicologia = ($modoHistorial ?? null) === 'psicologia';
+        @endphp
         <div class="user-profile user-card mt-0 bg-fondo-gris">
             <div class="col-md-12 py-0 px-2 shadow-none">
                 <div class="row mx-0">
@@ -23,6 +26,13 @@
                                                     <tr>
                                                         <th class="d-none">ID</th>
                                                         <th>Fecha</th>
+                                                        @if($esHistorialPsicologia)
+                                                        <th>Atención</th>
+                                                        <th>Sesión</th>
+                                                        <th>Resumen clínico</th>
+                                                        <th>Plan</th>
+                                                        <th>Evolución</th>
+                                                        @else
                                                         <th>Diagnóstico</th>
                                                         <th>Ficha clínica</th>
                                                         @if($profesional->id_tipo_especialidad != 8 && $profesional->id_especialidad != 16 && $profesional->id_sub_tipo_especialidad != 121)
@@ -39,6 +49,7 @@
                                                         @endif
                                                         @if ($profesional->id_especialidad == 2)
                                                             <th>Evoluciones </th>
+                                                        @endif
                                                         @endif
 
                                                     </tr>
@@ -60,6 +71,47 @@
                                                                     {{ \Carbon\Carbon::parse($f->created_at)->format('d/m/Y') }}
                                                                 </td>
 
+                                                                @if($esHistorialPsicologia)
+                                                                <td>
+                                                                    <span class="badge {{ $f->historial_psicologia_control_id ? 'badge-primary' : 'badge-info' }}">
+                                                                        {{ $f->historial_psicologia_tipo ?? 'Atención psicológica' }}
+                                                                    </span>
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if(!empty($f->historial_psicologia_sesion))
+                                                                        <strong>{{ $f->historial_psicologia_sesion }}</strong>
+                                                                        @if(!empty($f->historial_psicologia_plan_sesiones))
+                                                                            <span class="text-muted">de {{ $f->historial_psicologia_plan_sesiones }}</span>
+                                                                        @endif
+                                                                    @else
+                                                                        <span class="text-muted">—</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-wrap" style="min-width: 280px;">
+                                                                    {{ \Illuminate\Support\Str::limit($f->historial_psicologia_evolucion ?: 'Sin resumen clínico registrado', 150) }}
+                                                                </td>
+                                                                <td>
+                                                                    @if(!empty($f->historial_psicologia_plan_id))
+                                                                        <div><strong>Plan N° {{ $f->historial_psicologia_plan_id }}</strong></div>
+                                                                        <small class="{{ $f->historial_psicologia_plan_estado === 'Activo' ? 'text-success' : 'text-muted' }}">
+                                                                            {{ $f->historial_psicologia_plan_estado }}
+                                                                        </small>
+                                                                    @else
+                                                                        <span class="text-muted">Sin plan asociado</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if(!empty($f->historial_psicologia_control_id))
+                                                                        <button type="button"
+                                                                            class="btn btn-xxs btn-outline-primary"
+                                                                            onclick="dame_control({{ $f->id }});">
+                                                                            <i class="feather icon-eye"></i> Ver
+                                                                        </button>
+                                                                    @else
+                                                                        <span class="text-muted">No corresponde</span>
+                                                                    @endif
+                                                                </td>
+                                                                @else
                                                                 <td>{{ $f->hipotesis_diagnostico }}</td>
 
                                                                 <td>
@@ -112,6 +164,7 @@
                                                                             class="btn btn-xxs btn-primary-light-c"
                                                                             onclick="buscar_evoluciones({{ $f->id }})">Evoluciones</button>
                                                                     </td>
+                                                                @endif
                                                                 @endif
                                                             </tr>
                                                         @endforeach

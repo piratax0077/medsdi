@@ -1,3 +1,106 @@
+<style>
+    #indicar_terapia .horas-disponibles-panel {
+        background: #f5f9ff;
+        border: 1px solid #d9e7f7;
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    #indicar_terapia .horas-disponibles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+
+    #indicar_terapia .hora-disponible-btn {
+        background: #fff;
+        border: 1px solid #1f62bd;
+        border-radius: 9px;
+        color: #1f62bd;
+        cursor: pointer;
+        font-weight: 600;
+        padding: 9px 12px;
+        transition: background-color .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    #indicar_terapia .hora-disponible-btn:hover,
+    #indicar_terapia .hora-disponible-btn:focus {
+        background: #1f62bd;
+        color: #fff;
+        outline: none;
+        transform: translateY(-1px);
+    }
+
+    #indicar_terapia .sin-horas-disponibles {
+        color: #6c757d;
+        grid-column: 1 / -1;
+        margin: 0;
+        padding: 10px;
+        text-align: center;
+    }
+
+    #indicar_terapia .plan-status-panel {
+        align-items: center;
+        background: #eef6ff;
+        border: 1px solid #cfe2f7;
+        border-left: 4px solid #2878c7;
+        border-radius: 10px;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 12px 14px;
+    }
+
+    #indicar_terapia .plan-status-panel.is-final {
+        background: #fff8e8;
+        border-color: #f2d38b;
+        border-left-color: #e6a521;
+    }
+
+    #indicar_terapia .plan-status-panel.is-empty {
+        background: #f6f7f9;
+        border-color: #dfe3e8;
+        border-left-color: #7b8794;
+    }
+
+    #indicar_terapia .plan-status-content {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    #indicar_terapia .plan-status-label {
+        color: #6b7785;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .05em;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+    }
+
+    #indicar_terapia #numero_sesion {
+        color: #163f73;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    #indicar_terapia .plan-status-action {
+        white-space: nowrap;
+    }
+
+    @media (max-width: 767px) {
+        #indicar_terapia .plan-status-panel {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        #indicar_terapia .plan-status-action {
+            width: 100%;
+        }
+    }
+</style>
 
 <!--Modal reservar hora -->
 <div class="modal fade" id="indicar_terapia" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="indicar_terapia" aria-hidden="true">
@@ -11,15 +114,17 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" name="modal_reserva_hora_id_profesional" id="modal_reserva_hora_id_profesional" value="">
-                <input type="hidden" name="modal_reserva_hora_tipo_agenda" id="modal_reserva_hora_tipo_agenda" value="1">
                 <form id="form_plan_nutri">
                     <div id="planificacion" class="form-row">
                         <div class="col-sm-12 mt-2">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="tit-gen">INDICACIONES AL PACIENTE</h6>
-                                <span id="numero_sesion" class="badge badge-warning" style="font-size: 15px;"></span>
+                            <h6 class="tit-gen mb-3">INDICACIONES AL PACIENTE</h6>
+                            <div id="plan_estado_tratamiento" class="plan-status-panel">
+                                <div class="plan-status-content">
+                                    <span class="plan-status-label">Estado del tratamiento</span>
+                                    <span id="numero_sesion"></span>
+                                </div>
+                                <div id="consulta" class="plan-status-action"></div>
                             </div><br>
-                            <span id="consulta" class="badge badge-warning float-right mb-4" style="font-size: 15px;"></span>
                         </div>
                     </div>
                     <div class="form-row">
@@ -64,18 +169,35 @@
                 </form>
                 <div id="contenedor_agendar_hora">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-row">
+                                <div class="form-group col-md-12 mb-2 mt-0">
+                                    <label class="floating-label-active-sm mb-0">Tipo de agenda</label>
+                                    <select
+                                        class="form-control form-control-sm"
+                                        id="modal_reserva_hora_tipo_agenda"
+                                        name="modal_reserva_hora_tipo_agenda"
+                                        onchange="carga_calendario_profesional_pedir();"
+                                    >
+                                        <option value="1">Consulta presencial</option>
+                                        <option value="3">Telemedicina</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
                             <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
                                     <label class="floating-label-active-sm mb-0">Lugar de atención</label>
-                                    <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional();">
+                                    <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional_pedir();">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="mt-4">Usted atiende los días <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
                             {{--  <div class="form-row">
                                 <div class="form-group col-md-12 mb-2 mt-0">
@@ -92,17 +214,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-4">
-                            <div class="row">
+                        <div class="col-md-12 mt-3">
+                            <div class="horas-disponibles-panel">
                                 <div class="col-md-12 text-center">
-                                    <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
+                                    <h6 class="text-petroleo mb-3" id="modal_reserva_fecha_seleccionada"></h6>
                                 </div>
-                                <div class="col-md-12 mx-auto" >
-                                    <div class="row" id="modal_reserva_hora_lista_horas">
-                                        {{--  <div class="col-md-2 btn btn-outline-primary btn-sm btn-block">
-                                            8:00
-                                        </div>  --}}
-                                    </div>
+                                <div class="horas-disponibles-grid" id="modal_reserva_hora_lista_horas">
                                 </div>
                             </div>
                         </div>

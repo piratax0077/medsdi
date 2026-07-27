@@ -525,23 +525,12 @@
                         <div class="tab-pane fade" id="pass" role="tabpanel" aria-labelledby="pass-tab">
                             <div class="row">
                                 @include('app.general.perfil.cambio_contrasena')
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex">
-                                    <div class="card flex-fill mb-4">
-                                        <div class="card-header bg-primary">
-                                            <h5 class="mb-0 text-white">Autenticación en dos pasos</h5>
-                                        </div>
-                                        <div class="card-body d-flex align-items-center justify-content-between">
-                                            <div class="pr-3">
-                                                <div class="font-weight-bolder">Aprobación desde la aplicación móvil</div>
-                                                <small class="text-muted">Primero inicia sesión en la app. Luego, cada acceso web deberá aprobarse desde ese teléfono.</small>
-                                            </div>
-                                            <div class="custom-control custom-switch flex-shrink-0">
-                                                <input type="checkbox" class="custom-control-input" id="mobile-two-factor" {{ auth()->user()->mobile_two_factor_enabled ? 'checked' : '' }}>
-                                                <label class="custom-control-label" for="mobile-two-factor"></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @include('includes.mobile_two_factor', [
+                                    'switchId' => 'professional-mobile-two-factor',
+                                    'updateUrl' => route('profesional.mobile-2fa.update'),
+                                    'enabled' => auth()->user()->mobile_two_factor_enabled,
+                                    'role' => 'profesional',
+                                ])
                             </div>
                         </div>
 
@@ -789,7 +778,7 @@
         function cambiar_foto_perfil(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
-                
+
                 // Validar tipo de archivo
                 if (!file.type.startsWith('image/')) {
                     swal({
@@ -800,7 +789,7 @@
                     })
                     return;
                 }
-                
+
                 // Validar tamaño (ejemplo: máximo 5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     swal({
@@ -811,24 +800,24 @@
                     });
                     return;
                 }
-                
+
                 // Mostrar preview
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('profile-image').src = e.target.result;
                 };
                 reader.readAsDataURL(file);
-                
+
                 // Enviar al servidor
                 subir_foto_perfil(file);
             }
         }
-        
+
         function subir_foto_perfil(file) {
             const formData = new FormData();
             formData.append('foto_perfil', file);
             formData.append('_token', '{{ csrf_token() }}');
-            
+
             $.ajax({
                 url: '{{ route("profesional.actualizar.foto") }}', // Necesitas crear esta ruta
                 method: 'POST',
@@ -844,7 +833,7 @@
                             icon: "success",
                             buttons: "Aceptar",
                         });
-                        
+
                         // Actualizar la imagen con la nueva URL si es necesario
                         if (response.foto_url) {
                             document.getElementById('profile-image').src = response.foto_url;
@@ -866,13 +855,13 @@
                         icon: "error",
                         buttons: "Aceptar",
                     });
-                    
+
                     // Revertir la imagen si hay error
                     document.getElementById('profile-image').src = '{{ $profesional->foto_perfil ? asset("storage/" . $profesional->foto_perfil) : asset("images/iconos/usuario_profesional.svg") }}';
                 }
             });
         }
-        
+
         function eliminar_foto_perfil() {
             swal({
                 title: "¿Eliminar foto de perfil?",

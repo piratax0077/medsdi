@@ -51,6 +51,7 @@ use App\Models\ExamenPPF;
 use App\Models\ExamenMedico;
 use App\Models\ExamenSolicitudServicio;
 use App\Models\FichaAtencion;
+use App\Models\FichaOtrosProfesionales;
 use App\Models\FichaAtencionEnfermeria;
 use App\Models\FichaCirugiaDigestivaTipo;
 use App\Models\FichaCirugiaGeneral;
@@ -4069,12 +4070,30 @@ class EscritorioProfesional extends Controller
     public function continuarTratamientoNutricional(Request $request){
 
         $plan = PlanTratamientoOtrosProfesionales::find($request->id_plan);
-        $plan->numero_sesiones = intval($request->nuevas_sesiones) + $plan->numero_sesiones;
+
+        if (!$plan) {
+            return response()->json([
+                'mensaje' => 'error',
+                'detalle' => 'Plan de tratamiento no encontrado'
+            ], 404);
+        }
+
+        $nuevasSesiones = intval($request->nuevas_sesiones);
+        if ($nuevasSesiones < 1) {
+            return response()->json([
+                'mensaje' => 'error',
+                'detalle' => 'Debe agregar al menos una sesión'
+            ], 422);
+        }
+
+        $plan->numero_sesiones = $nuevasSesiones + $plan->numero_sesiones;
+        $plan->estado = 1;
 
         if($plan->save()){
             return response()->json([
                 'mensaje' => 'success',
-                'detalle' => 'Sesiones agregadas al plan'
+                'detalle' => 'Sesiones agregadas al plan',
+                'numero_sesiones' => $plan->numero_sesiones,
             ]);
         }else{
              return response()->json([
@@ -4088,8 +4107,11 @@ class EscritorioProfesional extends Controller
 
     public function damePlanTratamiento(Request $request){
 
-        // Validar si existe la ficha
-        $ficha = FichaAtencion::find($request->id_ficha_atencion);
+        // Psicología y otras especialidades no médicas trabajan con
+        // ficha_otros_profesionales. Mantener el fallback para las vistas
+        // antiguas que todavía envían una ficha médica general.
+        $ficha = FichaOtrosProfesionales::find($request->id_ficha_atencion)
+            ?? FichaAtencion::find($request->id_ficha_atencion);
 
         if (!$ficha) {
             return response()->json([
@@ -4240,7 +4262,9 @@ class EscritorioProfesional extends Controller
     public function dameHistorialControlNutricional(Request $request)
     {
         $controles = ControlNutricion::where('id_paciente', $request->id_paciente)
-            // ->where('id_profesional', $request->id_profesional)
+            ->when($request->id_profesional, function ($query, $idProfesional) {
+                $query->where('id_profesional', $idProfesional);
+            })
             // ->where('id_lugar_atencion', $request->id_lugar_atencion)
             ->where('estado', 1)
             ->orderBy('id', 'asc')
@@ -4258,25 +4282,23 @@ class EscritorioProfesional extends Controller
         // Si quieres traer todos los planes asociados al paciente
         $planes = PlanTratamientoOtrosProfesionales::select('plan_tratamiento_otros_profesionales.*', 'profesionales.nombre as profesional_nombre', 'profesionales.apellido_uno as profesional_apellido')
             ->where('id_paciente', $request->id_paciente)
-            // ->where('id_profesional', $request->id_profesional)
+            ->when($request->id_profesional, function ($query, $idProfesional) {
+                $query->where('plan_tratamiento_otros_profesionales.id_profesional', $idProfesional);
+            })
             // ->where('id_lugar_atencion', $request->id_lugar_atencion)
             ->join('profesionales', 'plan_tratamiento_otros_profesionales.id_profesional', '=', 'profesionales.id')
             ->get();
 
-        if ($controles->isEmpty()) {
-            return response()->json([
-                'mensaje' => 'error',
-                'detalle' => 'No se encontraron controles nutricionales para este paciente'
-            ], 404);
-        } else {
-            return response()->json([
-                'mensaje' => 'ok',
-                'controles_agrupados' => $controles,
-                'planes' => $planes,
-                'tiene_obesidad' => $tieneObesidad,
-                'registros_obesidad' => $registros
-            ]);
-        }
+        return response()->json([
+            'mensaje' => 'ok',
+            'controles_agrupados' => $controles,
+            'planes' => $planes,
+            'tiene_obesidad' => $tieneObesidad,
+            'registros_obesidad' => $registros,
+            'detalle' => $controles->isEmpty()
+                ? 'El plan todavía no tiene evoluciones registradas.'
+                : null,
+        ]);
     }
 
     public function dameHistorialControlHipertension(Request $request)

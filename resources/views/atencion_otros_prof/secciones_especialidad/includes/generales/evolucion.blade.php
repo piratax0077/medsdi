@@ -156,6 +156,18 @@
 <script>
 function guardar_evolucion() {
     let datos_control = {};
+    const evaluacionActual = ($('#evaluacion_control').val() || '').trim();
+    const resultados = ($('#evol_result').val() || '').trim();
+
+    if (!evaluacionActual && !resultados) {
+        swal({
+            title: 'Información requerida',
+            text: 'Ingrese la evaluación actual o los resultados de la sesión antes de guardar la evolución.',
+            icon: 'warning',
+            button: 'Aceptar'
+        });
+        return;
+    }
 
     $('#evoluciones').find('input, select, textarea').each(function() {
         let name = $(this).attr('name');
@@ -175,7 +187,7 @@ function guardar_evolucion() {
     // Agrega los identificadores adicionales
     const payload = {
         id_ficha_atencion: $('#id_fc').val(),
-        id_paciente: $('#id_paciente').val(),
+        id_paciente: $('#id_paciente_fc').val() || $('#id_paciente').val(),
         id_profesional: $('#id_profesional_fc').val(),
         id_lugar_atencion: $('#id_lugar_atencion').val(),
         objetivo_logrado: $('#objetivo_logrado').is(':checked') ? 1 : 0,
@@ -192,9 +204,10 @@ function guardar_evolucion() {
          data: payload,
         success: function (response) {
             console.log(response);
+                $('#evolucion_guardada').val(1);
                 swal({
                     title: 'Éxito',
-                    text: response.detalle || 'Evaluación psicologica guardada correctamente.',
+                    text: response.detalle || 'Evolución psicológica guardada correctamente.',
                     icon: 'success'
                 });
         },

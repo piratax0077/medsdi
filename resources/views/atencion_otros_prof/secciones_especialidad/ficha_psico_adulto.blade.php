@@ -170,7 +170,7 @@
                     @endif
                     @if($tiene_controles == 1 && $mostrarEvolucion)
 					<li class="nav-item-secciones">
-							<a class="nav-secciones text-uppercase" onclick="dame_control()" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="false">Evolución</a>
+							<a class="nav-secciones text-uppercase" onclick="dame_control(); dame_plan_tratamiento({{ $id_ficha_atencion }});" id="evolucion-tab" data-toggle="tab" href="#evolucion" role="tab" aria-controls="evolucion" aria-selected="false">Evolución</a>
 					</li>
                     @endif
                     @if($tiene_controles == 1 && $mostrarHistorialEvolucion)
@@ -210,6 +210,8 @@
                     <input type="hidden" name="hora_agendada" id="hora_agendada" value="0">
                     <input type="hidden" name="finalizando_sesiones" id="finalizando_sesiones" value="0">
                     <input type="hidden" name="id_plan" id="id_plan" value="0">
+                    <input type="hidden" id="evolucion_guardada" value="0">
+                    <input type="hidden" id="es_ficha_origen_plan" value="0">
 					@csrf
 					<div class="tab-content" id="ficha-ad-psico">
                         @if (session('error'))
@@ -569,7 +571,8 @@
                                                         onclick="
                                                             hora_medica_pedir(
                                                                 {{ $profesional->id }},
-                                                                {{ $id_lugar_atencion }}
+                                                                {{ $id_lugar_atencion }},
+                                                                1
                                                             );
                                                             dame_plan_tratamiento(
                                                                 {{ $id_ficha_atencion }}
@@ -734,6 +737,28 @@
         }
 
         formularioFicha.addEventListener('submit', function (event) {
+            var numeroSesion = document.getElementById('sesion_n_dex');
+            var evolucionGuardada = document.getElementById('evolucion_guardada');
+            var esFichaOrigenPlan = document.getElementById('es_ficha_origen_plan');
+
+            if (
+                numeroSesion &&
+                numeroSesion.value !== '' &&
+                evolucionGuardada &&
+                evolucionGuardada.value !== '1' &&
+                (!esFichaOrigenPlan || esFichaOrigenPlan.value !== '1')
+            ) {
+                event.preventDefault();
+                $('#evolucion-tab').trigger('click');
+                swal({
+                    title: 'Evolución pendiente',
+                    text: 'Debe registrar y guardar la evolución clínica de esta sesión antes de finalizar la atención.',
+                    icon: 'warning',
+                    button: 'Ir a Evolución'
+                });
+                return;
+            }
+
             if (formularioFicha.dataset.enviando === '1') {
                 event.preventDefault();
                 return;
@@ -1041,30 +1066,22 @@
     </div>
 </div>
 <!-- FIN MODAL AGREGAR HORA MEDICA -->
-<!-- MODAL CONTROL NUTRICIONAL HISTORIAL -->
+<!-- MODAL DETALLE EVOLUCIÓN PSICOLÓGICA -->
 <div class="modal fade" id="modalControlPsicologica" tabindex="-1" role="dialog" aria-labelledby="modalControlPsicologica" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-light">
-                <h6 class="modal-title text-primary f-18">Control Psicológico</h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modalControlPsicologica').modal('hide');">
+            <div class="modal-header bg-info text-white">
+                <div>
+                    <h6 class="modal-title text-white f-18 mb-0">Detalle de evolución psicológica</h6>
+                    <small class="text-white">Información clínica registrada durante la sesión</small>
+                </div>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                        <h6 class="text-c-blue f-20">Historial de controles</h6>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                        <div class="card-informacion">
-                            <div class="card-body" id="contenido_control_nutricional_historial">
-
-                            </div>
-                        </div>
-                    </div>
+                <div class="card border-0 bg-light mb-0">
+                    <div class="card-body" id="contenido_control_nutricional_historial"></div>
                 </div>
             </div>
         </div>
@@ -1548,6 +1565,11 @@
         /*-Agendar hora medica-*/
         function hora_medica_pedir(id_profesional, id_lugar_atencion, tipo_agenda = null){
 
+            // En psicología la reserva corresponde a una consulta general.
+            // Normalizar el valor evita consultar todos los tipos de agenda
+            // cuando el llamado antiguo no informa el tercer parámetro.
+            tipo_agenda = tipo_agenda || 1;
+
             $('#modal_reserva_hora_lugar_atencion').val('');
             $('#modal_reserva_dias_atencion').val('');
             $('#modal_reserva_fecha').val('');
@@ -1573,7 +1595,7 @@
 
             let id_profesional = $('#modal_reserva_hora_id_profesional').val();
             let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
-            let tipo_agenda = 1;
+            let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val() || 1;
             let url = "{{ route('profesional.DiasLaboralesProfesionaLugarAtencionBuscador') }}";
 
             $.ajax({
@@ -1583,6 +1605,7 @@
                     //_token: _token,
                     id_profesional: id_profesional,
                     lugar_atencion: id_lugar_atencion,
+                    tipo_agenda: tipo_agenda,
                 },
             })
             .done(function(data) {
@@ -1697,11 +1720,16 @@
                 });
         }
 
-        function cargar_horas_disponibles_calendario_profesion(dia)
+    function cargar_horas_disponibles_calendario_profesion(dia)
     {
 
         let id_profesional = $('#modal_reserva_hora_id_profesional').val();
         let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+        let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val() || 1;
+        $('#modal_reserva_fecha_seleccionada').html('Buscando horas disponibles...');
+        $('#modal_reserva_hora_lista_horas').html(
+            '<p class="sin-horas-disponibles"><i class="fa fa-spinner fa-spin mr-1"></i> Cargando disponibilidad</p>'
+        );
         console.log('cargar_horas_disponibles_calendario_profesion');
         console.log(dia);
 
@@ -1714,28 +1742,33 @@
                 id_profesional: id_profesional,
                 id_lugar_atencion: id_lugar_atencion,
                 dia: dia,
+                tipo_agenda: tipo_agenda,
             },
         })
         .done(function(data) {
             console.log(data);
             if (data.estado == 1) {
-                $('#modal_reserva_fecha_seleccionada').html('Horas disponibles para el dia: '+data.text_fecha);
+                $('#modal_reserva_fecha_seleccionada').html(
+                    '<i class="feather icon-clock mr-1"></i> Horas disponibles para el día '+data.text_fecha
+                );
 
                 $('#modal_reserva_hora_lista_horas').html('');
                 $.each(data.registros, function(index, value)
                 {
                     var hr1 = moment(value.hora,'HH:mm:ss').format('HH:mm');
                     var html = '';
-                    html += '<div class="col-md-2 btn btn-outline-primary btn-sm my-1 mx-1" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
-                    html += ''+hr1;
-                    html += '</div>';
+                    html += '<button type="button" class="hora-disponible-btn" data-hora="'+value.hora+'" onclick="generar_reserva_cita(\''+value.hora+'\');">';
+                    html += '<i class="feather icon-clock mr-1"></i>'+hr1;
+                    html += '</button>';
 
                     $('#modal_reserva_hora_lista_horas').append(html);
                 });
 
             } else {
-                // alert('No se pudo Cargar las ciudades');
-                $('#modal_reserva_hora_lista_horas').html('<span style="font-weight: bold; text-align: center;">"Sin disponibilidad de Horas"</span>');
+                $('#modal_reserva_fecha_seleccionada').html('Sin horas disponibles para el día seleccionado');
+                $('#modal_reserva_hora_lista_horas').html(
+                    '<p class="sin-horas-disponibles"><i class="feather icon-calendar mr-1"></i> Pruebe con otra fecha o tipo de agenda.</p>'
+                );
             }
 
         })
@@ -1945,6 +1978,22 @@
         });
     };
 
+    function obtener_sesion_actual_visual(plan, id_ficha_atencion) {
+        let sesionActual = parseInt(plan.sesion_actual, 10) || 0;
+        const esFichaInicial = String(plan.id_ficha_atencion) === String(id_ficha_atencion);
+
+        // Si estamos atendiendo una ficha posterior, ya corresponde a la
+        // primera sesión aunque aún no se haya guardado su evolución.
+        if (sesionActual === 0 && !esFichaInicial) {
+            sesionActual = 1;
+        }
+
+        return {
+            numero: sesionActual,
+            esFichaInicial: esFichaInicial
+        };
+    }
+
     function dame_plan_tratamiento(id_ficha_atencion){
         let url = "{{ route('profesional.dame_plan_tratamiento') }}";
         $.ajax({
@@ -1963,37 +2012,62 @@
             if (data.mensaje == 'ok') {
                 var numero_sesion;
                 var consulta = '';
-                if(data.registro.sesion_actual == null || data.registro.sesion_actual == 0){
-                    numero_sesion = 0 + ' de ' + data.registro.numero_sesiones + ' (No se ha iniciado tratamiento)';
-                }else if(data.registro.sesion_actual == data.registro.numero_sesiones){
-                    numero_sesion = 'Estamos finalizando el tratamiento con un total de ' + data.registro.numero_sesiones + ' sesiones';
-                    consulta = '¿Desea continuar con mas sesiones? Presione <a href="javascript:void(0)" onclick="agregar_sesiones()"> aquí </a>';
+                const sesionVisual = obtener_sesion_actual_visual(data.registro, id_ficha_atencion);
+                const sesionActual = sesionVisual.numero;
+                const $estadoPlan = $('#plan_estado_tratamiento');
+
+                $('#es_ficha_origen_plan').val(sesionVisual.esFichaInicial ? 1 : 0);
+                $estadoPlan.removeClass('is-final is-empty');
+                $('#finalizando_sesiones').val(0);
+
+                if (sesionActual === 0) {
+                    numero_sesion = 'Sesión 1 de '+data.registro.numero_sesiones+' programada';
+                } else if (sesionActual == data.registro.numero_sesiones) {
+                    numero_sesion = 'Sesión '+sesionActual+' de '+data.registro.numero_sesiones+' · Última sesión del plan';
+                    consulta = '<button type="button" class="btn btn-sm btn-outline-warning plan-status-action" onclick="agregar_sesiones()"><i class="feather icon-plus-circle mr-1"></i> Extender plan</button>';
+                    $estadoPlan.addClass('is-final');
                     $('#finalizando_sesiones').val(1);
                     $('#contenedor_agendar_hora').addClass('d-none', true);
                 }
                 else{
                     $('#contenedor_agendar_hora').removeClass('d-none', true);
                     $('#contenedor_agendar_hora').css('display','block');
-                    numero_sesion = 'Vamos en la sesión '+parseInt(data.registro.sesion_actual) + ' de ' + data.registro.numero_sesiones + ' sesiones';
+                    numero_sesion = 'Sesión '+sesionActual+' de '+data.registro.numero_sesiones+' en curso';
                 }
                 $('#id_plan').val(data.registro.id);
                 $('#numero_sesion').html(numero_sesion);
                 $('#consulta').html(consulta);
-                $('#num_sesion_obesidad').val(parseInt(data.registro.sesion_actual));
-                $('#num_sesion_diabetes').val(parseInt(data.registro.sesion_actual));
-                $('#num_sesion_hipertension').val(parseInt(data.registro.sesion_actual));
-                $('#num_sesion_dislipidemia').val(parseInt(data.registro.sesion_actual));
-                $('#num_sesion_irenal').val(parseInt(data.registro.sesion_actual));
-                $('#num_sesion_hiperuric').val(parseInt(data.registro.sesion_actual));
+                $('#sesion_n_dex').val(sesionActual > 0 ? sesionActual : 1);
+                $('#num_sesion_obesidad').val(sesionActual);
+                $('#num_sesion_diabetes').val(sesionActual);
+                $('#num_sesion_hipertension').val(sesionActual);
+                $('#num_sesion_dislipidemia').val(sesionActual);
+                $('#num_sesion_irenal').val(sesionActual);
+                $('#num_sesion_hiperuric').val(sesionActual);
                 $('#diagnostico_tratamiento').val(data.registro.diagnostico);
                 $('#hipotesis').val(data.registro.diagnostico);
-                $('#tratamiento_seguir').val(data.registro.tratamiento);
+                let tratamiento = data.registro.tratamiento || '';
+                if (typeof tratamiento === 'string') {
+                    try {
+                        const tratamientoDecodificado = JSON.parse(tratamiento);
+                        if (typeof tratamientoDecodificado === 'string') {
+                            tratamiento = tratamientoDecodificado;
+                        }
+                    } catch (e) {
+                        // El registro ya está guardado como texto normal.
+                    }
+                }
+                $('#tratamiento_seguir').val(tratamiento);
                 $('#numero_sesiones').val(data.registro.numero_sesiones);
                 $('#objetivos').val(data.registro.objetivos);
             } else {
-                var numero_sesion = ' (No se ha iniciado tratamiento)';
+                var numero_sesion = 'Sin plan de tratamiento activo';
 
+                $('#plan_estado_tratamiento').removeClass('is-final').addClass('is-empty');
+                $('#es_ficha_origen_plan').val(0);
                 $('#numero_sesion').html(numero_sesion);
+                $('#consulta').html('');
+                $('#sesion_n_dex').val('');
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -2284,6 +2358,12 @@
                     const tablaPlanes = $('#tabla_planes tbody');
                     tablaPlanes.empty();
 
+                    if (!planes || planes.length === 0) {
+                        tablaPlanes.append(
+                            '<tr><td colspan="5" class="text-center text-muted">No existen planes de tratamiento registrados.</td></tr>'
+                        );
+                    }
+
                     planes.forEach(plan => {
                         const estado = plan.estado == 1 ? 'Activo' : 'Finalizado';
 
@@ -2303,7 +2383,7 @@
                     });
 
                     // Evento al hacer clic en "Ver controles"
-                    $('#tabla_planes').on('click', '.ver-controles', function () {
+                    $('#tabla_planes').off('click', '.ver-controles').on('click', '.ver-controles', function () {
                         const planId = $(this).data('plan');
                         const controles = controlesAgrupados[planId];
 
@@ -2316,6 +2396,7 @@
                         }
                         console.log(controles);
                         controles.forEach(ctrl => {
+                            const datosControl = ctrl.datos_control || {};
                              // Convertir la fecha a objeto Date solo si existe
                             let fechaFormateada = '-';
                             if (ctrl.fecha) {
@@ -2333,8 +2414,8 @@
                             tablaControles.append(`
                                 <tr>
                                     <td>${fechaFormateada ?? '-'}</td>
-                                    <td>${ctrl.num_sesion_obesidad ?? '-'}</td>
-                                    <td>${ctrl.trabajo_en_obesidad ?? '-'}</td>
+                                    <td>${datosControl.sesion_n_dex ?? '-'}</td>
+                                    <td>${datosControl.evaluacion_control ?? datosControl.plan_prop_evol ?? '-'}</td>
                                     <td>${ctrl.objetivo_logrado == 1 ? '✔️' : '❌'}</td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-outline-info ver-detalle-control"
@@ -2396,6 +2477,7 @@
         .done(function(data) {
             console.log(data);
             if (data.mensaje == 'ok') {
+                $('#evolucion_guardada').val(1);
                 let registros = data.registro.datos_control;
                 console.log(registros);
                 if(!historial){
@@ -2414,10 +2496,27 @@
                         }
                     }
                 }else{
-                    // Abrimos modal
-                    $('#modalControlPsicologica').modal('show');
+                    // El modal vive originalmente dentro de la pestaña
+                    // "Atender". Moverlo al body permite abrirlo también
+                    // cuando la pestaña visible es "Historial de consultas".
+                    const $modalEvolucion = $('#modalControlPsicologica');
+                    if (!$modalEvolucion.parent().is('body')) {
+                        $modalEvolucion.appendTo(document.body);
+                    }
 
                     let html = '';
+                    const etiquetas = {
+                        historia_ingreso_sico: 'Historia de ingreso',
+                        evaluacion_control: 'Evaluación actual',
+                        plan_prop_evol: 'Plan propuesto',
+                        sesion_n_dex: 'Número de sesión',
+                        evol_result: 'Resultados',
+                        evol_indicaciones: 'Indicaciones',
+                        objetivo_logrado: 'Objetivo logrado'
+                    };
+                    const escaparTexto = function (valor) {
+                        return $('<div>').text(valor == null ? '' : String(valor)).html();
+                    };
 
                     for (let key in registros) {
                         if (registros.hasOwnProperty(key)) {
@@ -2446,11 +2545,13 @@
                             // Filtrar nulls, vacíos y "0"
                             if (valor !== null && valor !== '' && valor !== '0') {
                                 // Opcional: formatear claves para mostrar como texto legible
-                                let label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                let label = etiquetas[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                                let valorSeguro = escaparTexto(valor).replace(/\n/g, '<br>');
 
                                 html += `
-                                    <div class="mb-2">
-                                        <strong>${label}:</strong> ${valor}
+                                    <div class="mb-3 pb-2 border-bottom">
+                                        <small class="d-block text-muted font-weight-bold text-uppercase mb-1">${label}</small>
+                                        <div class="text-dark">${valorSeguro}</div>
                                     </div>
                                 `;
                             }
@@ -2464,17 +2565,17 @@
 
 
                     $('#contenido_control_nutricional_historial').html(html);
+                    $modalEvolucion.modal('show');
                 }
 
 
             } else {
+                $('#evolucion_guardada').val(0);
                 console.log('No se pudo cargar el control nutricional.');
-                $('#num_sesion_obesidad').val(data.num_sesion);
-                $('#num_sesion_diabetes').val(data.num_sesion);
-                $('#num_sesion_hipertension').val(data.num_sesion);
-                $('#num_sesion_dislipidemia').val(data.num_sesion);
-                $('#num_sesion_irenal').val(data.num_sesion);
-                $('#num_sesion_hiperuric').val(data.num_sesion);
+                if (data.plan) {
+                    const sesionVisual = obtener_sesion_actual_visual(data.plan, id_ficha_atencion);
+                    $('#sesion_n_dex').val(sesionVisual.numero > 0 ? sesionVisual.numero : 1);
+                }
             }
         })
 
@@ -2689,9 +2790,14 @@
             },
             success: function(response) {
                 console.log('Sesiones agregadas correctamente:', response);
+                $('#numero_sesiones').val(response.numero_sesiones);
+                $('#finalizando_sesiones').val(0);
+                $('#input_sesiones_adicionales').val('');
+                $('#contenedor_agendar_hora').removeClass('d-none').show();
+                dame_plan_tratamiento(id_ficha_atencion);
                 swal({
                     title: "Sesiones actualizadas",
-                    text: "Se han agregado " + cantidad + " sesiones al tratamiento.",
+                    text: "El plan ahora contempla " + response.numero_sesiones + " sesiones.",
                     icon: "success",
                     buttons: "Aceptar"
                 });

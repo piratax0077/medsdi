@@ -1328,15 +1328,36 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Contraseña actual</label>
-                                                        <input type="text" class="form-control form-control-sm" id="contrasena_actual" name="contrasena_actual">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="contrasena_actual" name="contrasena_actual" autocomplete="current-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="contrasena_actual" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Nueva contraseña</label>
-                                                        <input type="text" class="form-control form-control-sm" id="password_registro" name="password_registro">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="password_registro" name="password_registro" autocomplete="new-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="password_registro" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Repita nueva contraseña</label>
-                                                        <input type="text" class="form-control form-control-sm" id="password_confirmacion_registro" name="password_confirmacion_registro">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="password_confirmacion_registro" name="password_confirmacion_registro" autocomplete="new-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="password_confirmacion_registro" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
@@ -1378,15 +1399,36 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Contraseña actual</label>
-                                                        <input type="text" class="form-control form-control-sm" id="" name="">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="contrasena_confidencial_actual" name="contrasena_confidencial_actual" autocomplete="current-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="contrasena_confidencial_actual" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Nueva contraseña</label>
-                                                        <input type="text" class="form-control form-control-sm" id="" name="">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="contrasena_confidencial_nueva" name="contrasena_confidencial_nueva" autocomplete="new-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="contrasena_confidencial_nueva" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="floating-label-activo">Repita nueva contraseña</label>
-                                                        <input type="text" class="form-control form-control-sm" id="" name="">
+                                                        <div class="input-group input-group-sm">
+                                                            <input type="password" class="form-control medsdi-password-input" id="contrasena_confidencial_confirmacion" name="contrasena_confidencial_confirmacion" autocomplete="new-password">
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-outline-secondary medsdi-toggle-password" data-target="contrasena_confidencial_confirmacion" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+                                                                    <i class="feather icon-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
@@ -1401,23 +1443,12 @@
                                     </div>
                                     <!--CIERRE: CARD CONTRASEÑA CONFIDENCIAL-->
                                 </div>
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex">
-                                    <div class="card flex-fill">
-                                        <div class="card-header bg-primary">
-                                            <h5 class="mb-0 text-white">Autenticación en dos pasos</h5>
-                                        </div>
-                                        <div class="card-body d-flex align-items-center justify-content-between">
-                                            <div class="pr-3">
-                                                <div class="font-weight-bolder">Aprobación desde la aplicación móvil</div>
-                                                <small class="text-muted">Primero inicia sesión en la app MED-SDI. Luego, cada acceso web deberá aprobarse desde ese teléfono.</small>
-                                            </div>
-                                            <div class="custom-control custom-switch flex-shrink-0">
-                                                <input type="checkbox" class="custom-control-input" id="patient-mobile-two-factor" {{ auth()->user()->mobile_two_factor_enabled ? 'checked' : '' }}>
-                                                <label class="custom-control-label" for="patient-mobile-two-factor"></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @include('includes.mobile_two_factor', [
+                                    'switchId' => 'patient-mobile-two-factor',
+                                    'updateUrl' => route('paciente.mobile-2fa.update'),
+                                    'enabled' => auth()->user()->mobile_two_factor_enabled,
+                                    'role' => 'paciente',
+                                ])
                             </div>
                         </div>
                         <!--CIERRE: TAB CAMBIAR CONTRASEÑAS-->
@@ -1442,31 +1473,26 @@
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-        $('#patient-mobile-two-factor').on('change', function () {
-            const control = this;
+        // Mostrar u ocultar contraseñas en el perfil del paciente.
+        $(document).on('click', '.medsdi-toggle-password', function () {
+            const button = $(this);
+            const targetId = button.data('target');
+            const input = document.getElementById(targetId);
 
-            $.ajax({
-                url: @json(route('paciente.mobile-2fa.update')),
-                method: 'POST',
-                data: {
-                    _token: @json(csrf_token()),
-                    enabled: control.checked ? 1 : 0
-                }
-            }).done(function () {
-                swal(
-                    'Configuración guardada',
-                    control.checked
-                        ? 'La aprobación móvil quedó activada.'
-                        : 'La aprobación móvil quedó desactivada.',
-                    'success'
-                );
-            }).fail(function (xhr) {
-                control.checked = !control.checked;
-                const message = xhr.responseJSON && xhr.responseJSON.message
-                    ? xhr.responseJSON.message
-                    : 'Inténtalo nuevamente.';
-                swal('No fue posible guardar la configuración', message, 'error');
-            });
+            if (!input) {
+                return;
+            }
+
+            const showPassword = input.type === 'password';
+            input.type = showPassword ? 'text' : 'password';
+
+            const icon = button.find('i');
+            icon.toggleClass('icon-eye', !showPassword);
+            icon.toggleClass('icon-eye-off', showPassword);
+
+            const label = showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña';
+            button.attr('aria-label', label);
+            button.attr('title', label);
         });
 
         // [ customer-scroll ] start

@@ -43,6 +43,7 @@ use App\Models\Paciente;
 use App\Models\ProcedimientosCentro;
 use App\Models\Profesional;
 use App\Models\PlanTratamientoOtrosProfesionales;
+use App\Models\ControlNutricion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -644,8 +645,43 @@ class FichaAtencionOtrosProfController extends Controller
             $mensaje .= 'No se encontró un plan de tratamiento psicológico activo para este paciente.<br>';
         }
 
-        // Corregir sesion_actual = 0 de planes antiguos
-        if ($plan && ($plan->sesion_actual == 0 || $plan->sesion_actual == null)) {
+        $esFichaOrigenDelPlan = $plan
+            && (int) $plan->id_ficha_atencion === (int) $request->id_fc;
+
+        // La ficha donde se define el plan es la evaluación inicial. Agendar
+        // desde ella la próxima hora no debe consumir la sesión 1.
+        $esFichaInicialDelPlan = $plan
+            && $esFichaOrigenDelPlan
+            && ($plan->sesion_actual == 0 || $plan->sesion_actual == null);
+
+        // Toda sesión terapéutica debe tener su evolución clínica antes de
+        // finalizar la hora o avanzar el contador del plan.
+        if ($plan && !$esFichaOrigenDelPlan) {
+            $evolucionGuardada = ControlNutricion::where('id_ficha_atencion', $request->id_fc)
+                ->where('id_paciente', $request->id_paciente_fc)
+                ->where('id_profesional', $request->id_profesional_fc)
+                ->where('estado', 1)
+                ->first();
+
+            $datosEvolucion = $evolucionGuardada ? ($evolucionGuardada->datos_control ?? []) : [];
+            $tieneContenidoClinico = collect([
+                $datosEvolucion['historia_ingreso_sico'] ?? null,
+                $datosEvolucion['evaluacion_control'] ?? null,
+                $datosEvolucion['plan_prop_evol'] ?? null,
+                $datosEvolucion['evol_result'] ?? null,
+                $datosEvolucion['evol_indicaciones'] ?? null,
+            ])->contains(function ($valor) {
+                return is_string($valor) && trim($valor) !== '';
+            });
+
+            if (!$evolucionGuardada || !$tieneContenidoClinico) {
+                $campos_requeridos = 0;
+                $mensaje .= 'Debe guardar una evolución clínica con información de la sesión antes de finalizar la hora médica.<br>';
+            }
+        }
+
+        // En una ficha posterior comienza efectivamente la primera sesión.
+        if ($campos_requeridos && $plan && !$esFichaInicialDelPlan && ($plan->sesion_actual == 0 || $plan->sesion_actual == null)) {
             $plan->sesion_actual = 1;
             $plan->save();
         }
@@ -669,7 +705,7 @@ class FichaAtencionOtrosProfController extends Controller
         if($campos_requeridos)
         {
 
-            if($plan->sesion_actual == 1){
+            if($esFichaInicialDelPlan || $plan->sesion_actual == 1){
                 /** FICHA OTROS PROFESIONALES - PSICOLOGÍA */
 
                 $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
@@ -713,20 +749,25 @@ class FichaAtencionOtrosProfController extends Controller
                     $mensaje .= 'Ficha Clínica guardada de forma correcta\n';
                 }
 
-                // Incrementar sesión si se agendó próxima hora
-                $sesion_completada = $plan->sesion_actual;
-                $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
+                if ($esFichaInicialDelPlan) {
+                    $mensaje .= $request->hora_agendada == 1
+                        ? ' Evaluación inicial completada. La sesión 1 quedó agendada.'
+                        : ' Evaluación inicial completada. El tratamiento aún no ha iniciado.';
+                } else {
+                    $sesion_completada = $plan->sesion_actual;
+                    $mensaje .= " Sesión {$sesion_completada}/{$plan->numero_sesiones} completada.";
 
-                // Incrementar a próxima sesión si se agendó hora y no es la última
-                if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
-                    $plan->sesion_actual += 1;
-                    $plan->save();
-                    $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
-                }
-                else if ($plan->sesion_actual >= $plan->numero_sesiones) {
-                    $plan->estado = 0;
-                    $plan->save();
-                    $mensaje .= " Plan de tratamiento finalizado.";
+                    // Incrementar a próxima sesión si se agendó hora y no es la última
+                    if ($plan->sesion_actual < $plan->numero_sesiones && $request->hora_agendada == 1) {
+                        $plan->sesion_actual += 1;
+                        $plan->save();
+                        $mensaje .= " Próxima sesión ({$plan->sesion_actual}) agendada.";
+                    }
+                    else if ($plan->sesion_actual >= $plan->numero_sesiones) {
+                        $plan->estado = 0;
+                        $plan->save();
+                        $mensaje .= " Plan de tratamiento finalizado.";
+                    }
                 }
 
                 $hora_medica->id_estado = 6;
@@ -736,6 +777,21 @@ class FichaAtencionOtrosProfController extends Controller
             }
             // Sesiones posteriores (controles)
             else {
+                $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+                if (!$ficha) {
+                    return back()->with('error', 'No se encontró la ficha psicológica de esta sesión.')->withInput();
+                }
+
+                $ficha->estado = 1;
+                $ficha->finalizada = 1;
+                $ficha->hipotesis = $request->hipotesis;
+                $ficha->indicaciones = $request->indicaciones;
+                $ficha->datos = json_encode($request->all());
+
+                if (!$ficha->save()) {
+                    return back()->with('error', 'No fue posible finalizar la ficha psicológica de esta sesión.')->withInput();
+                }
+
                 // Registrar control/evolución
                 if ($request->finalizando_sesiones == 1) {
                     $plan->estado = 0; // Finalizar plan si es la última sesión
@@ -1593,11 +1649,22 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-     public function guardar_planificacion(Request $request)
+    public function guardar_planificacion(Request $request)
     {
 
         $ficha = FichaOtrosProfesionales::find($request->id_ficha_atencion);
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $tratamiento = $request->tratamiento;
+
+        // Versiones anteriores guardaban el texto con json_encode(), dejando
+        // valores como "\"sesiones\"". Normalizar también esos datos al editar.
+        if (is_string($tratamiento)) {
+            $tratamientoDecodificado = json_decode($tratamiento, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_string($tratamientoDecodificado)) {
+                $tratamiento = $tratamientoDecodificado;
+            }
+        }
+
         if (!$ficha) {
             return response()->json([
                 'mensaje' => 'error',
@@ -1618,7 +1685,7 @@ class FichaAtencionOtrosProfController extends Controller
 
             // Actualizar los datos del plan existente
             $plan->diagnostico = $request->diagnostico;
-            $plan->tratamiento = json_encode($request->tratamiento);
+            $plan->tratamiento = $tratamiento;
             $plan->numero_sesiones = $request->numero_sesiones;
             $plan->tipo_sesiones = $request->tipo_sesiones;
             $plan->objetivos = $request->objetivos;
@@ -1636,7 +1703,7 @@ class FichaAtencionOtrosProfController extends Controller
             // $plan->fecha_inicio = Carbon::now()->format('Y-m-d');
             $plan->fecha = Carbon::now()->format('Y-m-d');
             $plan->diagnostico = $request->diagnostico;
-            $plan->tratamiento = json_encode($request->tratamiento);
+            $plan->tratamiento = $tratamiento;
             $plan->numero_sesiones = $request->numero_sesiones;
             $plan->sesion_actual = 0; // Empezar desde sesión 0 para un nuevo plan
             $plan->tipo_sesiones = $request->tipo_sesiones;

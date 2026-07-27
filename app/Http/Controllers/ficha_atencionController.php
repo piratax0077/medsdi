@@ -489,12 +489,29 @@ class ficha_atencionController extends Controller
                 }
 
                 $recetas_por_ficha = [];
+                $controles_psicologia_por_ficha = collect();
+                $planes_psicologia = collect();
                 if (!empty($ids_fichas_previas)) {
                     $recetas_por_ficha = Recomendacion::whereIn('atencion', $ids_fichas_previas)
                         ->selectRaw('atencion, COUNT(*) as total')
                         ->groupBy('atencion')
                         ->pluck('total', 'atencion')
                         ->toArray();
+
+                    if ((int) $profesional->id_especialidad === 6) {
+                        $controles_psicologia_por_ficha = ControlNutricion::whereIn('id_ficha_atencion', $ids_fichas_previas)
+                            ->where('id_paciente', $paciente->id)
+                            ->where('id_profesional', $profesional->id)
+                            ->where('estado', 1)
+                            ->get()
+                            ->keyBy('id_ficha_atencion');
+
+                        $planes_psicologia = PlanTratamientoOtrosProfesionales::where('id_paciente', $paciente->id)
+                            ->where('id_profesional', $profesional->id)
+                            ->orderBy('id')
+                            ->get()
+                            ->keyBy('id');
+                    }
                 }
 
                 foreach ($fichas as $ficha_previa) {
@@ -504,6 +521,34 @@ class ficha_atencionController extends Controller
                     $tiene_recetas = isset($recetas_por_ficha[$ficha_previa->id]) && intval($recetas_por_ficha[$ficha_previa->id]) > 0;
                     $ficha_previa->tiene_recetas = $tiene_recetas;
                     $ficha_previa->btn_class_receta = $tiene_recetas ? 'btn-success-light-c' : 'btn-warning-light-c';
+
+                    if ((int) $profesional->id_especialidad === 6) {
+                        $control = $controles_psicologia_por_ficha->get($ficha_previa->id);
+                        $plan = null;
+
+                        if ($control && $control->id_plan_tratamiento) {
+                            $plan = $planes_psicologia->get($control->id_plan_tratamiento);
+                        }
+
+                        if (!$plan) {
+                            $plan = $planes_psicologia->firstWhere('id_ficha_atencion', $ficha_previa->id);
+                        }
+
+                        $datos_control = $control ? ($control->datos_control ?? []) : [];
+                        $ficha_previa->historial_psicologia_tipo = $control ? 'Sesión terapéutica' : 'Evaluación inicial';
+                        $ficha_previa->historial_psicologia_sesion = $datos_control['sesion_n_dex'] ?? null;
+                        $ficha_previa->historial_psicologia_evolucion =
+                            $datos_control['evaluacion_control']
+                            ?? $datos_control['evol_result']
+                            ?? $ficha_previa->hipotesis
+                            ?? null;
+                        $ficha_previa->historial_psicologia_control_id = $control->id ?? null;
+                        $ficha_previa->historial_psicologia_plan_id = $plan->id ?? null;
+                        $ficha_previa->historial_psicologia_plan_sesiones = $plan->numero_sesiones ?? null;
+                        $ficha_previa->historial_psicologia_plan_estado = isset($plan)
+                            ? ((int) $plan->estado === 1 ? 'Activo' : 'Finalizado')
+                            : null;
+                    }
                 }
             }
 
@@ -16613,8 +16658,20 @@ $titulo = mb_strtoupper($tipo_informe->titulo, 'UTF-8');
                         $filtro_previas = array();
                         $filtro_previas[] = array('id_paciente', $paciente->id);
                         $filtro_previas[] = array('id_profesional', $profesional->id);
-                        $filtro_previas[] = array('finalizada', 1);
-                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
+                        $ids_fichas_con_evolucion = ControlNutricion::where('id_paciente', $paciente->id)
+                            ->where('id_profesional', $profesional->id)
+                            ->where('estado', 1)
+                            ->pluck('id_ficha_atencion');
+
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)
+                            ->where(function ($query) use ($ids_fichas_con_evolucion) {
+                                $query->where('finalizada', 1);
+                                if ($ids_fichas_con_evolucion->isNotEmpty()) {
+                                    $query->orWhereIn('id', $ids_fichas_con_evolucion);
+                                }
+                            })
+                            ->orderBy('created_at', 'desc')
+                            ->get();
 
                         $datos['ficha_previas'] = $ficha_previas;
 
