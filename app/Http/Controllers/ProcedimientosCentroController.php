@@ -7,6 +7,7 @@ use App\Models\Profesional;
 use App\Models\ProcedimientosCentro;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProcedimientosCentroController extends Controller
 {
@@ -252,22 +253,53 @@ class ProcedimientosCentroController extends Controller
     // }
     public function verRegistros_r(Request $request)
 {
-    // puedes filtrar sólo por lugar de atención y estado activo
-    $resp = static::verRegistros(
-        $request->id,
-        $request->id_lugar_atencion,
-        $request->nombre,
-        $request->descripcion,
-        $request->minutos_bloque,
-        $request->cantidad_bloques,
-        $request->valor,
-        $request->otros,
-        $request->estado,
-        $request->tipo_ficha_atencion
-    );
+    $profesional = Profesional::where('id_usuario', Auth::id())->first();
 
-    // devolver JSON “bonito” para tu $.ajax
-    return response()->json($resp);
+    if (!$profesional) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'No se encontró el profesional autenticado.',
+            'registro' => [],
+        ], 403);
+    }
+
+    $request->validate([
+        'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+    ]);
+
+    $tieneLugar = $profesional->LugaresAtencion()
+        ->where('lugares_atencion.id', $request->id_lugar_atencion)
+        ->exists();
+
+    if (!$tieneLugar) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'El lugar de atención no pertenece al profesional.',
+            'registro' => [],
+        ], 403);
+    }
+
+    $registro = ProcedimientosCentro::where('id_lugar_atencion', $request->id_lugar_atencion)
+        ->where('estado', 1)
+        ->where('id_especialidad', $profesional->id_especialidad)
+        ->where(function ($query) use ($profesional) {
+            $query->whereNull('id_tipo_especialidad')
+                ->orWhere('id_tipo_especialidad', '')
+                ->orWhere('id_tipo_especialidad', $profesional->id_tipo_especialidad);
+        })
+        ->where(function ($query) use ($profesional) {
+            $query->whereNull('id_sub_tipo_especialidad')
+                ->orWhere('id_sub_tipo_especialidad', '')
+                ->orWhere('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad);
+        })
+        ->orderBy('nombre')
+        ->get();
+
+    return response()->json([
+        'estado' => 1,
+        'msj' => $registro->isEmpty() ? 'sin_registros' : 'registros',
+        'registro' => $registro,
+    ]);
 }
 
 static public function verRegistros(

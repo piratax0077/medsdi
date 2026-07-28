@@ -11,7 +11,7 @@
                 <div id="div_informacion_pasos_cons">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="alert alert-primary text-c-blue" role="alert">
+                            <div class="alert alert-primary text-c-blue" id="instruccion_consentimiento" role="alert">
                                  Complete el Diagnóstico, Cirugía a realizar y luego busque el Consentimiento Informado que necesita.
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                 						<label class="floating-label-activo-sm">Diagnóstico</label>
                 						<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_hipotesis,descripcion_hipotesis" id="diagnostico_cons" name="diagnostico_cons" value="" onchange="validarDiagnostico('diagnostico_cons','consentimiento');cargarIgual('diagnostico_cons');" >
                 					</div>
-                                    <div class="form-group fill col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group fill col-sm-12 col-md-6 col-lg-6 col-xl-6" id="grupo_cirugia_cons">
                 						<label class="floating-label-activo-sm">Cirugía o procedimiento</label>
                 						<input type="text" class="form-control form-control-sm" id="cirugia_cons" name="cirugia_cons" value="">
                 					</div>
@@ -136,7 +136,36 @@
 </div>
 
 <script>
+    var ocultarCirugiaPorEspecialidad = {{ (int) ($profesional->id_especialidad ?? 0) === 6 ? 'true' : 'false' }};
+
+    function configurarCampoCirugia(ocultar)
+    {
+        var $diagnosticoGrupo = $('#diagnostico_cons').closest('.form-group');
+
+        if(ocultar)
+        {
+            $('#grupo_cirugia_cons').hide();
+            $('#cirugia_cons').val('').prop('disabled', true);
+            $diagnosticoGrupo.removeClass('col-md-6 col-lg-6 col-xl-6')
+                .addClass('col-md-12 col-lg-12 col-xl-12');
+            $('#instruccion_consentimiento').text(
+                'Complete el diagnóstico y luego busque el Consentimiento Informado que necesita.'
+            );
+        }
+        else
+        {
+            $('#grupo_cirugia_cons').show();
+            $('#cirugia_cons').prop('disabled', false);
+            $diagnosticoGrupo.removeClass('col-md-12 col-lg-12 col-xl-12')
+                .addClass('col-md-6 col-lg-6 col-xl-6');
+            $('#instruccion_consentimiento').text(
+                'Complete el diagnóstico, cirugía o procedimiento y luego busque el Consentimiento Informado que necesita.'
+            );
+        }
+    }
+
     $(document).ready(function () {
+        configurarCampoCirugia(ocultarCirugiaPorEspecialidad);
 
         $("#consentimiento").autocomplete({
             source: function(request, response) {
@@ -172,12 +201,16 @@
                     data: {
                         id: ui.item.value,
                         id_profesional: $('#id_profesional_fc').val(),
-                        id_paciente: $('#id_paciente_fc').val()
+                        id_paciente: $('#id_paciente_fc').val(),
+                        id_lugar_atencion: $('#id_lugar_atencion').val()
                     },
                     success: function(data) {
                         console.log(data);
                         if(data.estado == 1)
                         {
+                            configurarCampoCirugia(
+                                ocultarCirugiaPorEspecialidad || data.ocultar_cirugia === true
+                            );
                             // console.log(data.registro.texto);
                             var texto = data.registro.texto;
                             var profesional = data.profesional;
@@ -190,7 +223,8 @@
                                 data.registro,
                                 profesional,
                                 paciente,
-                                responsable
+                                responsable,
+                                data.procedimiento_mapeado
                             );
                             $('#m_aconsentcirm_contenido').html('');
                             $('#m_aconsentcirm_contenido').html(texto);
@@ -217,7 +251,7 @@
 
     });
 
-    function completarDatosConsentimiento(texto, consentimiento, profesional, paciente, responsable)
+    function completarDatosConsentimiento(texto, consentimiento, profesional, paciente, responsable, procedimiento)
     {
         var escaparHtml = function(valor) {
             return $('<div>').text(valor || '').html();
@@ -244,6 +278,9 @@
         var nombrePaciente = nombreCompleto(paciente);
         var nombreResponsable = nombreCompleto(responsable);
         var fechaActual = new Date().toLocaleDateString('es-CL');
+        var arancel = procedimiento && procedimiento.valor !== null
+            ? Number(procedimiento.valor).toLocaleString('es-CL')
+            : '';
 
         var valores = {
             '{diagnostico}': $('#diagnostico_cons').val(),
@@ -256,12 +293,21 @@
             '{fecha_nacimiento}': paciente ? paciente.fecha_nac : '',
             '{nombre_representante}': nombreResponsable,
             '{rut_representante}': responsable ? responsable.rut : '',
-            '{fecha_actual}': fechaActual
+            '{fecha_actual}': fechaActual,
+            '{arancel}': arancel
         };
 
         Object.keys(valores).forEach(function(marcador) {
             texto = reemplazarTodos(texto, marcador, valores[marcador]);
         });
+
+        if(arancel)
+        {
+            texto = texto.replace(
+                /(Arancel\s+de\s+cada\s+Sesi[oó]n,\s*ser[aá]\s+de\s+\$)\s*[_-]+/i,
+                '$1' + destacado(arancel)
+            );
+        }
 
         var nombreConsentimiento = (consentimiento.nombre || '').toLowerCase();
         if(nombreConsentimiento.indexOf('telepsicolog') !== -1)
@@ -602,7 +648,7 @@
         mostrar_consentimientos_paciente();
 
         $('#diagnostico_cons').attr('disabled', false);
-        $('#cirugia_cons').attr('disabled', false);
+        configurarCampoCirugia(ocultarCirugiaPorEspecialidad);
         $('#consentimiento').attr('disabled', false);
 
         $('#div_informacion_pasos_cons').show();

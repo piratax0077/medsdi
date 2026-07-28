@@ -12,13 +12,97 @@ use App\Models\MobilePushDevice;
 use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Profesional;
+use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Services\FirebaseCloudMessaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ConsentimientosController extends Controller
 {
+    private function consentimientoSinCirugia($consentimiento, $profesional)
+    {
+        if ($profesional && (int) $profesional->id_especialidad === 6) {
+            return true;
+        }
+
+        $nombre = strtolower(Str::ascii($consentimiento->nombre ?? ''));
+
+        return str_contains($nombre, 'telepsiquiatr')
+            || str_contains($nombre, 'videollamada psiquiatr')
+            || (str_contains($nombre, 'psiquiatr') && str_contains($nombre, 'online'));
+    }
+
+    private function procedimientoParaConsentimiento($consentimiento, $idProfesional, $idLugarAtencion = null)
+    {
+        if (!$consentimiento || empty($idProfesional)) {
+            return null;
+        }
+
+        $normalizar = function ($valor) {
+            return trim(preg_replace('/[^a-z0-9]+/', ' ', strtolower(Str::ascii($valor ?? ''))));
+        };
+
+        $referencia = $normalizar($consentimiento->descripcion ?: $consentimiento->nombre);
+        if ($referencia === '') {
+            return null;
+        }
+
+        $query = ProcedimientosCentroLugarAtencionProfesional::query()
+            ->select(
+                'procedimientos_lugar_atencion_profesional.id',
+                'procedimientos_lugar_atencion_profesional.nombre',
+                'procedimientos_lugar_atencion_profesional.descripcion',
+                'procedimientos_lugar_atencion_profesional.id_procedimiento_centro',
+                'procedimientos_centro.nombre as nombre_base',
+                'procedimientos_centro.descripcion as descripcion_base',
+                'procedimientos_centro.valor'
+            )
+            ->join(
+                'procedimientos_centro',
+                'procedimientos_centro.id',
+                '=',
+                'procedimientos_lugar_atencion_profesional.id_procedimiento_centro'
+            )
+            ->where('procedimientos_lugar_atencion_profesional.id_profesional', $idProfesional)
+            ->where('procedimientos_lugar_atencion_profesional.estado', 1)
+            ->where('procedimientos_centro.estado', 1);
+
+        if (!empty($idLugarAtencion)) {
+            $query->where('procedimientos_lugar_atencion_profesional.id_lugar_atencion', $idLugarAtencion);
+        }
+
+        $mejorCoincidencia = null;
+        $mejorPuntaje = 0;
+
+        foreach ($query->get() as $procedimiento) {
+            $campos = array_unique(array_filter([
+                $normalizar($procedimiento->nombre),
+                $normalizar($procedimiento->descripcion),
+                $normalizar($procedimiento->nombre_base),
+                $normalizar($procedimiento->descripcion_base),
+            ]));
+
+            foreach ($campos as $campo) {
+                $puntaje = 0;
+
+                if ($campo === $referencia) {
+                    $puntaje = 10000 + strlen($campo);
+                } elseif (str_contains($referencia, $campo) || str_contains($campo, $referencia)) {
+                    $puntaje = strlen($campo);
+                }
+
+                if ($puntaje > $mejorPuntaje) {
+                    $mejorPuntaje = $puntaje;
+                    $mejorCoincidencia = $procedimiento;
+                }
+            }
+        }
+
+        return $mejorCoincidencia;
+    }
+
     private function completarTextoConsentimiento($texto, $registro, $paciente, $profesional, $consentimiento)
     {
         $dependencia = PacientesDependientes::where('id_paciente', $paciente->id)->first();
@@ -155,9 +239,22 @@ class ConsentimientosController extends Controller
                 $datos['estado'] = 1;
                 $datos['msj'] = 'Registro';
                 $datos['registro'] = $registro;
-                $datos['profesional'] = Profesional::find($request->id_profesional);
+                $profesional = Profesional::find($request->id_profesional);
+                $procedimiento = $this->procedimientoParaConsentimiento(
+                    $registro,
+                    $profesional ? $profesional->id : null,
+                    $request->id_lugar_atencion
+                );
+
+                $datos['profesional'] = $profesional;
                 $datos['paciente'] = $paciente;
                 $datos['responsable'] = $responsable;
+                $datos['ocultar_cirugia'] = $this->consentimientoSinCirugia($registro, $profesional);
+                $datos['procedimiento_mapeado'] = $procedimiento ? [
+                    'id' => $procedimiento->id,
+                    'nombre' => $procedimiento->nombre_base ?: $procedimiento->nombre,
+                    'valor' => $procedimiento->valor,
+                ] : null;
             }
             else
             {
@@ -179,6 +276,12 @@ class ConsentimientosController extends Controller
         $datos = array();
         $error = array();
         $valido = 1;
+        $consentimientoSeleccionado = ConConsentimientos::find($request->id_consentimiento);
+        $profesionalSeleccionado = Profesional::find($request->id_profesional);
+        $omitirCirugia = $this->consentimientoSinCirugia(
+            $consentimientoSeleccionado,
+            $profesionalSeleccionado
+        );
 
         if(empty($request->id_consentimiento))
         {
@@ -205,7 +308,7 @@ class ConsentimientosController extends Controller
             $error['diagnostico_cons'] = 'campo requerido';
             $valido = 0;
         }
-        if(empty($request->cirugia_cons))
+        if(!$omitirCirugia && empty($request->cirugia_cons))
         {
             $error['cirugia_cons'] = 'campo requerido';
             $valido = 0;
@@ -226,7 +329,7 @@ class ConsentimientosController extends Controller
             $registro->id_paciente = $request->id_paciente;
             $registro->id_profesional = $request->id_profesional;
             $registro->diagnostico_cons = $request->diagnostico_cons;
-            $registro->cirugia_cons = $request->cirugia_cons;
+            $registro->cirugia_cons = $omitirCirugia ? '' : $request->cirugia_cons;
             $registro->num_consentimiento = $request->num_consentimiento;
             $registro->fecha_cons = date('Y-m-d');
             $registro->observaciones_con = $request->observaciones_con;

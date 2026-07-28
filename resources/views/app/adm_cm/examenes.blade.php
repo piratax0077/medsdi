@@ -63,12 +63,12 @@
                                         <td>{{ $examen->nombre }}</td>
                                         <td>{{ $examen->descripcion }}</td>
                                         <td>{{ $examen->cantidad_bloques }}</td>
-                                        <td>${{ number_format($examen->valor,0,',','.') }}</td>
                                         <td>
                                             <span class="badge badge-{{ $examen->estado == 1 ? 'success' : 'secondary' }}">
                                                 {{ $examen->estado == 1 ? 'Activo' : 'Inactivo' }}
                                             </span>
                                         </td>
+                                        <td>${{ number_format($examen->valor,0,',','.') }}</td>
                                         <td>
                                             <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
                                             <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
@@ -516,7 +516,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_procedimiento()">Añadir</button>
+                    <button type="button" id="btn_anadir_procedimiento" class="btn btn-info btn-sm mx-auto" onclick="guardar_procedimiento()">Añadir</button>
                 </div>
             </div>
         </div>
@@ -549,11 +549,10 @@
                             </select>
                         </div>
 
-                        <!-- Profesional -->
+                        <!-- Profesionales -->
                         <div class="form-group fill">
-                            <label class="floating-label-activo-sm">Profesional</label>
-                            <select class="form-control form-control-sm" name="asignar_id_profesional" id="asignar_id_profesional" required>
-                                <option value="">Seleccionar...</option>
+                            <label class="floating-label-activo-sm">Profesional(es)</label>
+                            <select class="form-control form-control-sm" name="asignar_id_profesional[]" id="asignar_id_profesional" multiple="multiple" required>
                                 @if(isset($profesionales_lugar_atencion))
                                     @foreach($profesionales_lugar_atencion as $prof)
                                         <option value="{{ $prof->id }}">{{ $prof->nombre }} {{ $prof->apellido_uno }}</option>
@@ -694,10 +693,65 @@
             $('#lista_examenes_laboratorio').DataTable({
                 responsive: true,
             });
+
+            $('#asignar_id_profesional').select2({
+                placeholder: 'Seleccione uno o más profesionales...',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#asignar_procedimiento_modal'),
+                language: {
+                    noResults: function() {
+                        return 'No se encontraron profesionales';
+                    },
+                    searching: function() {
+                        return 'Buscando...';
+                    }
+                }
+            });
         });
 
+    function escaparHtml(valor) {
+        return $('<div>').text(valor == null ? '' : valor).html();
+    }
+
+    function cargarTablaProcedimientos(registros) {
+        let tabla = $('#lista_examenes_laboratorio').DataTable();
+
+        tabla.clear();
+
+        $(registros || []).each(function(i, procedimiento) {
+            let id = Number(procedimiento.id);
+            let estado = Number(procedimiento.estado) === 1
+                ? '<span class="badge badge-success">Activo</span>'
+                : '<span class="badge badge-secondary">Inactivo</span>';
+            let valor = Number(procedimiento.valor || 0).toLocaleString('es-CL');
+
+            tabla.row.add([
+                escaparHtml(procedimiento.cod_examen),
+                escaparHtml(procedimiento.nombre),
+                escaparHtml(procedimiento.descripcion),
+                escaparHtml(procedimiento.cantidad_bloques),
+                estado,
+                '$' + valor,
+                `
+                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen(${id})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento(${id})" title="Editar"><i class="feather icon-edit"></i></button>
+                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento(${id})" title="Asignar"><i class="fas fa-user"></i></button>
+                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento(${id})" title="Eliminar"><i class="feather icon-x"></i></button>
+                `
+            ]);
+        });
+
+        tabla.draw(false);
+        tabla.columns.adjust();
+
+        if (tabla.responsive) {
+            tabla.responsive.recalc();
+        }
+    }
+
     function guardar_procedimiento(){
-        let nombre = $('#a_procedimeinto_nombre').val();
+        let nombre = $('#a_procedimeinto_nombre').val().trim();
         let descripcion = $('#a_procedimeinto_descripcion').val();
         let cantidad_bloques = $('#a_procedimeinto_cantidad_bloques').val();
         let valor = $('#a_procedimeinto_valor').val();
@@ -723,6 +777,9 @@
 
         if(valido == 1)
         {
+            let botonGuardar = $('#btn_anadir_procedimiento');
+            botonGuardar.prop('disabled', true);
+
             let data = {
                 id_lugar_atencion : '{{ $institucion->id_lugar_atencion }}',
                 nombre : nombre,
@@ -746,22 +803,15 @@
                 if (data != null) {
                     if(data.estado == 1)
                     {
-                        // cerrar modal
+                        cargarTablaProcedimientos(data.registros);
                         $('#a_procedimiento').modal('hide');
-                        let registros = data.registros;
-                        $('#lista_examenes_laboratorio tbody').empty();
-                        $(registros).each(function(i, v) { // indice, valor
-                            $('#lista_examenes_laboratorio tbody').append(`
-                            <tr>
-                                <td class="align-items-left text-left">${v.nombre}s</td>
-                                <td class="align-items-left text-left">${v.descripcion}</td>
-                                <td class="align-items-left text-left">${v.cantidad_bloques}</td>
-                                <td class="align-items-left text-left">${v.valor}</td>
-                                <td class="align-items-left text-left">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            `);
+                        $('#a_procedimeinto_nombre, #a_procedimeinto_descripcion, #a_procedimeinto_cantidad_bloques, #a_procedimeinto_valor').val('');
+
+                        swal({
+                            title: "Éxito",
+                            text: "Procedimiento añadido correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
                         });
                     }
                     else
@@ -786,6 +836,18 @@
                     });
                 }
             })
+            .fail(function() {
+                swal({
+                    title: "Error",
+                    text: "No fue posible guardar el procedimiento",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            })
+            .always(function() {
+                botonGuardar.prop('disabled', false);
+            });
 
         }
         else
@@ -1148,7 +1210,6 @@
         }
 
         function confirmar_eliminar_procedimiento(id){
-            console.log(id);
             let data = {
                 id: id,
                 _token: CSRF_TOKEN,
@@ -1161,70 +1222,34 @@
                 url: url,
                 data: data,
                 success: function(response){
-                    console.log(response);
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.procedimientos;
-                    var table_procedimientos_propios = $('#table_procedimientos_propios_dental').DataTable();
-
-                    // Limpia los datos de la tabla
-                    table_procedimientos_propios.clear();
-
-                    // Agrega las nuevas filas
-                    procedimientos.forEach(p => {
-                        p.valor = parseFloat(p.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                        const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
-                        table_procedimientos_propios.row.add([
-                            p.descripcion,
-                            p.cantidad_uco,
-                            '$'+p.valor,
-                            `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
-                                <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                    ¿Laboratorio?
-                                </label>
-                            </div>
-                            `,
-                            p.cantidad_bloques,
-                            `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
-                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
-                        ]);
-                    });
-
-                    // Redibuja la tabla
-                    table_procedimientos_propios.draw();
-
-                    // Actualizar la tabla DataTable
-                    let trabajos = response.trabajos;
-                    let table = $('#table_aranceles_dental').DataTable(); // Accede a la instancia de DataTable
-
-                    // Limpia los datos de la tabla correctamente
-                    table.clear();
-
-                    // Agrega las nuevas filas
-                    trabajos.forEach(trabajo => {
-                        const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
-                        table.row.add([
-                            trabajo.descripcion,
-                            trabajo.valor,
-                            trabajo.uco,
-                            `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
-                                <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}">
-                                    ¿Laboratorio?
-                                </label>
-                            </div>
-                            `,
-                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
-                        ]);
-                    });
-
-                    // Dibuja la tabla nuevamente
-                    table.draw();
+                    if(response.estado == 1){
+                        cargarTablaProcedimientos(response.registros);
+                        swal({
+                            title: 'Eliminado',
+                            text: response.mensaje,
+                            icon: 'success',
+                            buttons: 'Aceptar'
+                        });
+                    } else {
+                        swal({
+                            title: 'Error',
+                            text: response.mensaje || 'No fue posible eliminar el examen',
+                            icon: 'error',
+                            buttons: 'Aceptar'
+                        });
+                    }
                 },
-                error: function(error){
-                    console.log(error.responseText);
+                error: function(xhr){
+                    let mensaje = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'No fue posible eliminar el examen';
+
+                    swal({
+                        title: 'Error',
+                        text: mensaje,
+                        icon: 'error',
+                        buttons: 'Aceptar'
+                    });
                 }
             });
         }
@@ -1344,6 +1369,7 @@
                 if(response.estado == 1){
                     // Limpiar el formulario
                     $('#form_asignar_procedimiento')[0].reset();
+                    $('#asignar_id_profesional').val(null).trigger('change');
 
                     // Guardar el ID del procedimiento
                     $('#asignar_id_procedimiento').val(id);
@@ -1377,7 +1403,7 @@
     function guardar_asignacion_procedimiento(){
         let id_procedimiento = $('#asignar_id_procedimiento').val();
         let id_lugar_atencion = $('#asignar_id_lugar_atencion').val();
-        let id_profesional = $('#asignar_id_profesional').val();
+        let ids_profesionales = $('#asignar_id_profesional').val() || [];
 
         // Validaciones
         if(!id_procedimiento){
@@ -1400,10 +1426,10 @@
             return;
         }
 
-        if(!id_profesional){
+        if(ids_profesionales.length === 0){
             swal({
                 title: 'Error',
-                text: 'Debe seleccionar un profesional',
+                text: 'Debe seleccionar al menos un profesional',
                 icon: 'error',
                 buttons: 'Aceptar'
             });
@@ -1413,7 +1439,7 @@
         let data = {
             id_procedimiento: id_procedimiento,
             id_lugar_atencion: id_lugar_atencion,
-            id_profesional: id_profesional,
+            ids_profesionales: ids_profesionales,
             _token: CSRF_TOKEN,
         };
 
@@ -1426,9 +1452,15 @@
             success: function(response){
                 console.log(response);
                 if(response.estado == 1){
+                    let mensaje = response.asignados + ' asignación(es) realizada(s)';
+
+                    if(response.omitidos > 0){
+                        mensaje += '. ' + response.omitidos + ' ya existía(n) y se omitió(eron)';
+                    }
+
                     swal({
                         title: 'Éxito',
-                        text: response.mensaje || 'Procedimiento asignado correctamente',
+                        text: mensaje,
                         icon: 'success',
                         buttons: 'Aceptar'
                     }).then(() => {
@@ -1446,11 +1478,15 @@
                     });
                 }
             },
-            error: function(error){
-                console.log(error.responseText);
+            error: function(xhr){
+                console.log(xhr.responseText);
+                let mensaje = xhr.responseJSON && xhr.responseJSON.message
+                    ? xhr.responseJSON.message
+                    : 'Error en la solicitud';
+
                 swal({
                     title: 'Error',
-                    text: 'Error en la solicitud',
+                    text: mensaje,
                     icon: 'error',
                     buttons: 'Aceptar'
                 });

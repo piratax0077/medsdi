@@ -61,6 +61,11 @@ class ProcedimientosProfesionalController extends Controller
         $procedimiento->otros = $request->otros;
         $procedimiento->save();
 
+        $procedimiento->lugar_nombre = LugarAtencion::where('id', $procedimiento->id_lugar_atencion)
+            ->value('nombre');
+        $procedimiento->procedimiento_base = ProcedimientosCentro::where('id', $procedimiento->id_procedimiento_centro)
+            ->value('nombre');
+
         return response()->json([
             'estado' => 1,
             'mensaje' => 'Procedimiento actualizado con éxito.',
@@ -95,7 +100,29 @@ class ProcedimientosProfesionalController extends Controller
             ], 422);
         }
 
-        $procedimientoBase = ProcedimientosCentro::find($request->id_procedimiento_centro);
+        $procedimientoBase = ProcedimientosCentro::where('id', $request->id_procedimiento_centro)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->where('estado', 1)
+            ->where('id_especialidad', $profesional->id_especialidad)
+            ->where(function ($query) use ($profesional) {
+                $query->whereNull('id_tipo_especialidad')
+                    ->orWhere('id_tipo_especialidad', '')
+                    ->orWhere('id_tipo_especialidad', $profesional->id_tipo_especialidad);
+            })
+            ->where(function ($query) use ($profesional) {
+                $query->whereNull('id_sub_tipo_especialidad')
+                    ->orWhere('id_sub_tipo_especialidad', '')
+                    ->orWhere('id_sub_tipo_especialidad', $profesional->id_sub_tipo_especialidad);
+            })
+            ->first();
+
+        if (!$procedimientoBase) {
+            return response()->json([
+                'estado' => 0,
+                'mensaje' => 'El procedimiento seleccionado no corresponde a tu especialidad o lugar de atención.',
+            ], 422);
+        }
+
         $lugar = LugarAtencion::find($request->id_lugar_atencion);
 
         $nuevo = new ProcedimientosCentroLugarAtencionProfesional();

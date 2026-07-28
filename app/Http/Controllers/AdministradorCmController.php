@@ -3893,28 +3893,40 @@ class AdministradorCmController extends Controller
 
     public function examen_eliminar(Request $request){
 
+        $request->validate([
+            'id' => 'required|integer|exists:procedimientos_centro,id',
+        ]);
+
         $examen = ProcedimientosCentro::where('id', $request->id)->first();
         if($examen)
         {
+            $idLugarAtencion = $examen->id_lugar_atencion;
+
             // Primero eliminar los asignamentos en la tabla procedimientos_lugar_atencion_profesional
             DB::table('procedimientos_lugar_atencion_profesional')
                 ->where('id_procedimiento_centro', $examen->id)
                 ->delete();
 
-            $examenes = ProcedimientosCentro::where('id_lugar_atencion', $examen->id_lugar_atencion)->get();
             if($examen->delete())
             {
+                $examenes = ProcedimientosCentro::where('id_lugar_atencion', $idLugarAtencion)
+                    ->where('estado', 1)
+                    ->get();
 
-                return ['estado' => 1, 'mensaje' => 'Examen eliminado', 'procedimientos' => $examenes];
+                return [
+                    'estado' => 1,
+                    'mensaje' => 'Examen eliminado correctamente',
+                    'registros' => $examenes,
+                ];
             }
             else
             {
-                return ['estado' => 0, 'mensaje' => 'Error al eliminar examen', 'procedimientos' => $examenes];
+                return ['estado' => 0, 'mensaje' => 'Error al eliminar examen', 'registros' => []];
             }
         }
         else
         {
-            return ['estado' => 0, 'mensaje' => 'Examen no encontrado', 'procedimientos' => []];
+            return ['estado' => 0, 'mensaje' => 'Examen no encontrado', 'registros' => []];
         }
     }
 

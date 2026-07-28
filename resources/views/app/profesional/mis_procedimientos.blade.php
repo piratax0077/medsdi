@@ -152,7 +152,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="edit_id_lugar_atencion" class="floating-label-activo-sm">Lugar de atención</label>
-                            <select class="form-control form-control-sm" id="edit_id_lugar_atencion" name="id_lugar_atencion" required>
+                            <select class="form-control form-control-sm" id="edit_id_lugar_atencion" name="id_lugar_atencion" disabled>
                                 <option value="">Seleccione</option>
                                 @foreach($lugares as $lugar)
                                     <option value="{{ $lugar->id }}">{{ $lugar->nombre }}</option>
@@ -161,7 +161,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="edit_id_procedimiento_centro" class="floating-label-activo-sm">Procedimiento base</label>
-                            <select class="form-control form-control-sm" id="edit_id_procedimiento_centro" name="id_procedimiento_centro" required>
+                            <select class="form-control form-control-sm" id="edit_id_procedimiento_centro" name="id_procedimiento_centro" disabled>
                                 <option value="">Seleccione un lugar para cargar los procedimientos</option>
                             </select>
                         </div>
@@ -220,10 +220,15 @@
         })
         .done(function(data) {
             $select.empty().append('<option value="">Seleccione</option>');
-            if (data && data.estado === 1 && data.registro) {
+            if (data && data.estado === 1 && data.registro && data.registro.length > 0) {
                 $.each(data.registro, function(_, value) {
-                    $select.append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                    $select.append($('<option>', {
+                        value: value.id,
+                        text: value.nombre
+                    }));
                 });
+            } else {
+                $select.empty().append('<option value="">No hay procedimientos configurados para tu especialidad en este lugar</option>');
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -352,38 +357,15 @@
         }
 
         // Event listener para el lugar de atención en el modal de edición
-        $('#edit_id_lugar_atencion').on('change', function() {
-            cargarProcedimientosParaEdicion(this.value);
-        });
     });
 
     // Función para actualizar procedimiento
     function actualizarProcedimiento() {
         const id = $('#id_procedimiento_profesional').val();
 
-        // Validar campos requeridos
-        const lugarAtencion = $('#edit_id_lugar_atencion').val();
-        const procedimientoCentro = $('#edit_id_procedimiento_centro').val();
+        // En edición, lugar y procedimiento base son solo informativos.
         const minutosBloque = $('#edit_minutos_bloque').val();
         const cantidadBloques = $('#edit_cantidad_bloques').val();
-
-        if (!lugarAtencion) {
-            swal({
-                title: 'Campos requeridos',
-                text: 'Por favor seleccione un lugar de atención',
-                icon: 'warning'
-            });
-            return;
-        }
-
-        if (!procedimientoCentro) {
-            swal({
-                title: 'Campos requeridos',
-                text: 'Por favor seleccione un procedimiento',
-                icon: 'warning'
-            });
-            return;
-        }
 
         if (!minutosBloque || minutosBloque < 1) {
             swal({
@@ -405,8 +387,6 @@
 
         // Recopilar datos del formulario
         const datos = {
-            id_lugar_atencion: lugarAtencion,
-            id_procedimiento_centro: procedimientoCentro,
             minutos_bloque: minutosBloque,
             cantidad_bloques: cantidadBloques,
             otros: $('#edit_otros').val() || '',
@@ -529,7 +509,7 @@
         });
     }
 
-    function cargarProcedimientosParaEdicion(idLugar) {
+    function cargarProcedimientosParaEdicion(idLugar, procedimientoActual) {
         const $select = $('#edit_id_procedimiento_centro');
         $select.empty().append('<option value="">Cargando...</option>');
 
@@ -545,10 +525,28 @@
         })
         .done(function(data) {
             $select.empty().append('<option value="">Seleccione</option>');
-            if (data && data.estado === 1 && data.registro) {
+            if (data && data.estado === 1 && data.registro && data.registro.length > 0) {
                 $.each(data.registro, function(_, value) {
-                    $select.append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                    $select.append($('<option>', {
+                        value: value.id,
+                        text: value.nombre
+                    }));
                 });
+            } else {
+                $select.empty().append('<option value="">No hay procedimientos configurados para tu especialidad en este lugar</option>');
+            }
+
+            if (procedimientoActual && procedimientoActual.id_procedimiento_centro) {
+                const selectorActual = 'option[value="' + procedimientoActual.id_procedimiento_centro + '"]';
+
+                if ($select.find(selectorActual).length === 0) {
+                    $select.append($('<option>', {
+                        value: procedimientoActual.id_procedimiento_centro,
+                        text: procedimientoActual.procedimiento_base || procedimientoActual.nombre || 'Procedimiento asignado'
+                    }));
+                }
+
+                $select.val(String(procedimientoActual.id_procedimiento_centro));
             }
         })
         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -578,7 +576,7 @@
             if (procedimiento.id_lugar_atencion) {
                 $('#edit_id_lugar_atencion').val(procedimiento.id_lugar_atencion);
                 // Cargar los procedimientos del centro después de seleccionar el lugar
-                cargarProcedimientosParaEdicion(procedimiento.id_lugar_atencion);
+                cargarProcedimientosParaEdicion(procedimiento.id_lugar_atencion, procedimiento);
 
                 // Esperar un poco para que se carguen los procedimientos y luego seleccionar el correcto
                 setTimeout(function() {
