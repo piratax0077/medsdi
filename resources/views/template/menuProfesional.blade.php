@@ -148,7 +148,7 @@
                         </div>
 
                         <div style="
-                            font-size:15px;
+                            font-size:14px;
                             font-weight:600;
                             color:#243746;
                             text-transform:capitalize;
@@ -160,17 +160,17 @@
 
                         <div class="d-flex flex-wrap mt-2">
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:14px;color:#51606d;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:12px;color:#51606d;font-weight:600;">
                                 <i class="fa fa-id-card mr-1"></i>
                                 {{ $paciente->rut }}
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:14px;color:#158982;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:12px;color:#158982;font-weight:600;">
                                 <i class="fa fa-birthday-cake mr-1"></i>
                                 {{ $paciente->edad }}
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:14px;color:#3f68af;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:12px;color:#3f68af;font-weight:600;">
                                 <i class="fa fa-shield mr-1"></i>
                                 {{ $paciente->prevision->nombre }}
                             </span>
