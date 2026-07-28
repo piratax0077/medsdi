@@ -262,6 +262,12 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div id="aviso_requisitos_receta_cronica"
+                    class="alert mb-3"
+                    role="alert"
+                    aria-live="polite">
+                </div>
+
                 <!--CONTROL DE OBESIDAD-->
                 <div id="control_peso_div"  style="display:">
                     <div class="row">
@@ -1302,6 +1308,141 @@
     </div>r
 </div>
 
+<!-- MODAL EDITAR MEDICAMENTO CRÓNICO -->
+<div id="modal_editar_medicamento_cronico" class="modal fade" tabindex="-1"
+    role="dialog" aria-labelledby="titulo_editar_medicamento_cronico"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 id="titulo_editar_medicamento_cronico"
+                    class="modal-title text-white">
+                    Editar medicamento crónico
+                </h5>
+                <button type="button" class="close text-white"
+                    data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editar_med_cronico_id">
+                <input type="hidden" id="editar_med_cronico_tipo">
+
+                <div class="alert alert-info">
+                    <i class="feather icon-info mr-1"></i>
+                    El nombre del medicamento no puede modificarse.
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="editar_med_cronico_nombre">
+                            Medicamento
+                        </label>
+                        <input type="text" id="editar_med_cronico_nombre"
+                            class="form-control form-control-sm" readonly>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editar_med_cronico_presentacion">
+                            Presentación
+                        </label>
+                        <select
+                            id="editar_med_cronico_presentacion"
+                            class="form-control form-control-sm"
+                            onchange="cargarDependenciasPresentacionEdicion()">
+                            <option value="0">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editar_med_cronico_posologia">
+                            Posología
+                        </label>
+                        <select id="editar_med_cronico_posologia"
+                            class="form-control form-control-sm" disabled>
+                            <option value="0">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editar_med_cronico_cantidad">
+                            Cantidad
+                        </label>
+                        <select id="editar_med_cronico_cantidad"
+                            class="form-control form-control-sm"
+                            onchange="alternarOtroValorEdicion('cantidad')"
+                            disabled>
+                            <option value="0">Seleccione</option>
+                        </select>
+                        <input type="text"
+                            id="editar_med_cronico_cantidad_otro"
+                            class="form-control form-control-sm mt-2 d-none"
+                            placeholder="Ingrese otra cantidad">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editar_med_cronico_via">
+                            Vía de administración
+                        </label>
+                        <select id="editar_med_cronico_via"
+                            class="form-control form-control-sm"
+                            onchange="alternarOtroValorEdicion('via')">
+                            <option value="0">Seleccione</option>
+                            <option value="Vía Oral">Vía Oral</option>
+                            <option value="Vía Sublingual">Vía Sublingual</option>
+                            <option value="Vía Tópica">Vía Tópica</option>
+                            <option value="Vía Oftalmológica">Vía Oftalmológica</option>
+                            <option value="Vía Ótica">Vía Ótica</option>
+                            <option value="Vía Inhalatoria">Vía Inhalatoria</option>
+                            <option value="Vía Nasal">Vía Nasal</option>
+                            <option value="Vía Rectal">Vía Rectal</option>
+                            <option value="Vía Vaginal">Vía Vaginal</option>
+                            <option value="Vía parental">Vía parental</option>
+                            <option value="__otro__">Otra vía</option>
+                        </select>
+                        <input type="text" id="editar_med_cronico_via_otro"
+                            class="form-control form-control-sm mt-2 d-none"
+                            placeholder="Ingrese otra vía">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="editar_med_cronico_periodo">
+                            Período
+                        </label>
+                        <select id="editar_med_cronico_periodo"
+                            class="form-control form-control-sm"
+                            onchange="alternarOtroValorEdicion('periodo')">
+                            <option value="0">Seleccione</option>
+                            <option value="SOS">SOS</option>
+                            <option value="Dosis unica">Dosis única</option>
+                            <option value="3 días">3 días</option>
+                            <option value="5 días">5 días</option>
+                            <option value="7 días">7 días</option>
+                            <option value="10 días">10 días</option>
+                            <option value="15 días">15 días</option>
+                            <option value="30 días">30 días</option>
+                            <option value="Permanente">Permanente</option>
+                            <option value="Vía parental">Vía parental</option>
+                            <option value="__otro__">Otro período</option>
+                        </select>
+                        <input type="text"
+                            id="editar_med_cronico_periodo_otro"
+                            class="form-control form-control-sm mt-2 d-none"
+                            placeholder="Ingrese otro período">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                    data-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-info"
+                    id="btn_guardar_edicion_med_cronico"
+                    onclick="guardar_edicion_med_cronico()">
+                    <i class="feather icon-save mr-1"></i>
+                    Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL AÑADIR ANTECEDENTE-->
 <div id="m_agregar_antecedente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
@@ -1601,6 +1742,82 @@
 
 
 
+        window.actualizarAvisoRequisitosRecetaCronica = function() {
+            var aviso = $('#aviso_requisitos_receta_cronica');
+
+            if (!aviso.length) {
+                return;
+            }
+
+            var permisoAplicacion =
+                typeof lic_token !== 'undefined' &&
+                String(lic_token).trim() !== '' &&
+                typeof lic_estado !== 'undefined' &&
+                Number(lic_estado) === 1;
+            var diagnosticoIngresado =
+                $.trim($('#descripcion_hipotesis').val() || '') !== '';
+            var requisitosPendientes = [];
+
+            if (!permisoAplicacion) {
+                requisitosPendientes.push(
+                    'Autorizar la emisión de documentos desde la app móvil.'
+                );
+            }
+
+            if (!diagnosticoIngresado) {
+                requisitosPendientes.push(
+                    'Escribir una hipótesis diagnóstica en la sección Diagnóstico.'
+                );
+            }
+
+            aviso
+                .removeClass('alert-warning alert-success')
+                .empty();
+
+            if (requisitosPendientes.length === 0) {
+                aviso
+                    .addClass('alert-success')
+                    .append($('<i>', {
+                        class: 'feather icon-check-circle mr-2'
+                    }))
+                    .append(document.createTextNode(
+                        'Requisitos cumplidos. Seleccione uno o más medicamentos y agréguelos a la receta.'
+                    ));
+                return;
+            }
+
+            aviso
+                .addClass('alert-warning')
+                .append(
+                    $('<div>', {
+                        class: 'font-weight-bold mb-1',
+                        text: 'Para agregar medicamentos a la receta debe:'
+                    })
+                );
+
+            var lista = $('<ul>', {
+                class: 'mb-0 pl-4'
+            });
+
+            requisitosPendientes.forEach(function(requisito) {
+                lista.append($('<li>', {
+                    text: requisito
+                }));
+            });
+
+            aviso.append(lista);
+        };
+
+        $('#form_enfermedad_cronica').on('shown.bs.modal', function() {
+            window.actualizarAvisoRequisitosRecetaCronica();
+        });
+
+        $(document).on(
+            'input change keyup',
+            '#descripcion_hipotesis',
+            window.actualizarAvisoRequisitosRecetaCronica
+        );
+
         /** accion check confidencial */
         $('#confidencial').change(function() {
             if ($('#confidencial').is(':checked')) {
@@ -1677,7 +1894,6 @@
             $('#diabetes_div').hide();
 
             $('#cronicos').val('cpeso');
-            ver_medicamento_cronico();
             // $('.medicamento_cronico_div').show();
             // $('#senal_med_cronico').removeClass('fa-angle-down');
             // $('#senal_med_cronico').addClass('fa-angle-up');
@@ -1703,7 +1919,7 @@
             // $('#senal_med_cronico').addClass('fa-angle-down');
             // $('#senal_med_cronico').removeClass('fa-angle-up');
 
-            ver_medicamento_cronico();
+            ver_medicamento_cronico_por_tipo($('#cronicos').val());
 
             switch ($('#cronicos').val()) {
                 case 'cpeso':
@@ -2083,7 +2299,10 @@
                         html += '    <td class="align-middle">' + (value.via_administracion || 'N/A') + '</td>';
                         html += '    <td class="align-middle">' + (value.periodo || 'N/A') + '</td>';
                         html += '    <td class="align-middle text-center">';
-                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(' + value.id + ')" title="Eliminar medicamento">';
+                        html += '        <button type="button" class="btn btn-warning btn-sm mr-1" onclick="editar_med_cronico_patologia(' + value.id + ', \'' + tipo_enfermedad_param + '\')" title="Editar medicamento">';
+                        html += '            <i class="feather icon-edit"></i>';
+                        html += '        </button>';
+                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(' + value.id + ', \'' + tipo_enfermedad_param + '\')" title="Eliminar medicamento">';
                         html += '            <i class="feather icon-trash-2"></i>';
                         html += '        </button>';
                         html += '    </td>';
@@ -2678,7 +2897,7 @@
                         // buttons: "Aceptar",
                         //SuccessMode: true,
                     });
-                    ver_medicamento_cronico(tipo_enfermedad);
+                    ver_medicamento_cronico_por_tipo(tipo_enfermedad);
                 }
                 else{
 
@@ -3144,6 +3363,379 @@
             $('#otra_cantidad_a_comprar_'+tipo).attr('disabled','disabled');
             $('#otra_cantidad_a_comprar_'+tipo).val('');
         }
+    }
+
+    function normalizarTextoEdicion(valor) {
+        return String(valor || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim()
+            .toLowerCase();
+    }
+
+    function convertirRespuestaCatalogo(data) {
+        if (typeof data === 'string') {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                return [];
+            }
+        }
+
+        return Array.isArray(data) ? data : [];
+    }
+
+    function seleccionarOpcionPorTexto(select, texto) {
+        var textoNormalizado = normalizarTextoEdicion(texto);
+        var encontrada = false;
+
+        select.find('option').each(function() {
+            if (
+                normalizarTextoEdicion($(this).text()) === textoNormalizado
+            ) {
+                select.val($(this).val());
+                encontrada = true;
+                return false;
+            }
+        });
+
+        return encontrada;
+    }
+
+    function establecerSelectConOtro(campo, valor) {
+        var select = $('#editar_med_cronico_' + campo);
+        var inputOtro = $('#editar_med_cronico_' + campo + '_otro');
+        var encontrada = seleccionarOpcionPorTexto(select, valor);
+
+        if (encontrada) {
+            inputOtro.addClass('d-none').val('');
+            return;
+        }
+
+        select.val('__otro__');
+        inputOtro.removeClass('d-none').val(valor || '');
+    }
+
+    function alternarOtroValorEdicion(campo) {
+        var esOtro =
+            $('#editar_med_cronico_' + campo).val() === '__otro__';
+
+        $('#editar_med_cronico_' + campo + '_otro')
+            .toggleClass('d-none', !esOtro)
+            .prop('disabled', !esOtro);
+    }
+
+    function valorSelectEdicion(campo) {
+        var select = $('#editar_med_cronico_' + campo);
+
+        if (select.val() === '__otro__') {
+            return $.trim(
+                $('#editar_med_cronico_' + campo + '_otro').val()
+            );
+        }
+
+        return $.trim(select.find('option:selected').text());
+    }
+
+    function cargarDependenciasPresentacionEdicion(
+        posologiaActual,
+        cantidadActual
+    ) {
+        var presentacion = $('#editar_med_cronico_presentacion');
+        var posologia = $('#editar_med_cronico_posologia');
+        var cantidad = $('#editar_med_cronico_cantidad');
+        var idDosis = presentacion.val();
+        var cantComp = presentacion
+            .find('option:selected')
+            .attr('data-cant-comp');
+
+        posologia
+            .prop('disabled', true)
+            .html('<option value="0">Cargando...</option>');
+        cantidad
+            .prop('disabled', true)
+            .html('<option value="0">Cargando...</option>');
+
+        if (!idDosis || idDosis === '0') {
+            posologia.html('<option value="0">Seleccione presentación</option>');
+            cantidad.html('<option value="0">Seleccione presentación</option>');
+            return;
+        }
+
+        var solicitudPosologias = $.ajax({
+            url: "{{ route('dental.getFrecuencia') }}",
+            type: 'GET',
+            data: {
+                id_dosis: idDosis
+            }
+        });
+        var solicitudCantidades = $.ajax({
+            url: "{{ route('presentacion.getCantComp') }}",
+            type: 'GET',
+            data: {
+                cant_comp: cantComp
+            }
+        });
+
+        $.when(solicitudPosologias, solicitudCantidades)
+            .done(function(respuestaPosologias, respuestaCantidades) {
+                var posologias = convertirRespuestaCatalogo(
+                    respuestaPosologias[0]
+                );
+                var cantidades = convertirRespuestaCatalogo(
+                    respuestaCantidades[0]
+                );
+
+                posologia
+                    .empty()
+                    .append('<option value="0">Seleccione</option>');
+                posologias.forEach(function(opcion) {
+                    posologia.append($('<option>', {
+                        value: opcion.id,
+                        text: opcion.indic
+                    }));
+                });
+
+                cantidad
+                    .empty()
+                    .append('<option value="0">Seleccione</option>');
+                cantidades.forEach(function(opcion) {
+                    cantidad.append($('<option>', {
+                        value: opcion.cantidad || opcion.id,
+                        text: opcion.cant
+                    }));
+                });
+                cantidad.append($('<option>', {
+                    value: '__otro__',
+                    text: 'Otra cantidad'
+                }));
+
+                posologia.prop('disabled', false);
+                cantidad.prop('disabled', false);
+
+                if (
+                    posologiaActual &&
+                    !seleccionarOpcionPorTexto(posologia, posologiaActual)
+                ) {
+                    posologia.append($('<option>', {
+                        value: '__actual__',
+                        text: posologiaActual
+                    })).val('__actual__');
+                }
+
+                if (
+                    cantidadActual &&
+                    !seleccionarOpcionPorTexto(cantidad, cantidadActual)
+                ) {
+                    cantidad.val('__otro__');
+                    $('#editar_med_cronico_cantidad_otro')
+                        .removeClass('d-none')
+                        .prop('disabled', false)
+                        .val(cantidadActual);
+                } else {
+                    alternarOtroValorEdicion('cantidad');
+                }
+            })
+            .fail(function() {
+                posologia
+                    .prop('disabled', false)
+                    .html('<option value="0">No fue posible cargar</option>');
+                cantidad
+                    .prop('disabled', false)
+                    .html('<option value="0">No fue posible cargar</option>');
+            });
+    }
+
+    function cargarPresentacionesEdicion(medicamento) {
+        var select = $('#editar_med_cronico_presentacion');
+
+        select
+            .prop('disabled', true)
+            .html('<option value="0">Cargando...</option>');
+
+        $.ajax({
+            url: "{{ route('dental.getDosis') }}",
+            type: 'GET',
+            data: {
+                id_medicamento: medicamento.id_articulo
+            }
+        })
+        .done(function(data) {
+            var presentaciones = convertirRespuestaCatalogo(data);
+
+            select
+                .empty()
+                .append('<option value="0">Seleccione</option>');
+
+            presentaciones.forEach(function(opcion) {
+                select.append($('<option>', {
+                    value: opcion.dosis,
+                    text: opcion.present
+                }).attr('data-cant-comp', opcion.cant_comp));
+            });
+
+            if (
+                !seleccionarOpcionPorTexto(
+                    select,
+                    medicamento.presentacion
+                )
+            ) {
+                select.append($('<option>', {
+                    value: '__actual__',
+                    text: medicamento.presentacion
+                })).val('__actual__');
+            }
+
+            select.prop('disabled', false);
+            cargarDependenciasPresentacionEdicion(
+                medicamento.posologia,
+                medicamento.cantidad
+            );
+        })
+        .fail(function() {
+            select
+                .prop('disabled', false)
+                .html($('<option>', {
+                    value: '__actual__',
+                    text: medicamento.presentacion
+                }));
+            cargarDependenciasPresentacionEdicion(
+                medicamento.posologia,
+                medicamento.cantidad
+            );
+        });
+    }
+
+    function editar_med_cronico_patologia(id, tipo) {
+        let url = "{{ route('medicamento_cronico.getRegsitro') }}";
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                id: id,
+                id_paciente: $('#id_paciente_fc').val()
+            }
+        })
+        .done(function(data) {
+            if (!data || data.estado != 1 || !data.registros) {
+                swal({
+                    title: 'No fue posible editar',
+                    text: 'No se encontró el medicamento seleccionado.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            var medicamento = data.registros;
+
+            $('#editar_med_cronico_id').val(medicamento.id);
+            $('#editar_med_cronico_tipo').val(
+                tipo || medicamento.tipo_enfermedad
+            );
+            $('#editar_med_cronico_nombre').val(
+                medicamento.nombre_medicamento || ''
+            );
+            establecerSelectConOtro(
+                'via',
+                medicamento.via_administracion
+            );
+            establecerSelectConOtro('periodo', medicamento.periodo);
+            alternarOtroValorEdicion('via');
+            alternarOtroValorEdicion('periodo');
+            cargarPresentacionesEdicion(medicamento);
+
+            $('#modal_editar_medicamento_cronico').modal('show');
+        })
+        .fail(function() {
+            swal({
+                title: 'No fue posible editar',
+                text: 'Ocurrió un error al cargar el medicamento.',
+                icon: 'error'
+            });
+        });
+    }
+
+    function guardar_edicion_med_cronico() {
+        var campos = {
+            presentacion: valorSelectEdicion('presentacion'),
+            posologia: valorSelectEdicion('posologia'),
+            cantidad: valorSelectEdicion('cantidad'),
+            via_administracion: valorSelectEdicion('via'),
+            periodo: valorSelectEdicion('periodo')
+        };
+        var camposVacios = [];
+
+        $.each(campos, function(nombre, valor) {
+            if (valor === '') {
+                camposVacios.push(nombre.replace('_', ' '));
+            }
+        });
+
+        if (camposVacios.length > 0) {
+            swal({
+                title: 'Datos incompletos',
+                text: 'Complete los siguientes campos: ' +
+                    camposVacios.join(', ') + '.',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        var boton = $('#btn_guardar_edicion_med_cronico');
+        var tipo = $('#editar_med_cronico_tipo').val();
+
+        boton.prop('disabled', true);
+
+        $.ajax({
+            url: "{{ route('medicamento_cronico.actualizar') }}",
+            type: 'POST',
+            data: $.extend({
+                _token: CSRF_TOKEN,
+                id: $('#editar_med_cronico_id').val(),
+                id_paciente: $('#id_paciente_fc').val()
+            }, campos)
+        })
+        .done(function(data) {
+            if (!data || data.estado != 1) {
+                swal({
+                    title: 'No fue posible actualizar',
+                    text: data && data.msj
+                        ? data.msj
+                        : 'Intente nuevamente.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            $('#modal_editar_medicamento_cronico').modal('hide');
+            ver_medicamento_cronico_por_tipo(tipo);
+
+            swal({
+                title: 'Medicamento actualizado',
+                text: data.msj,
+                icon: 'success'
+            });
+        })
+        .fail(function(jqXHR) {
+            var mensaje = 'No fue posible actualizar el medicamento.';
+
+            if (jqXHR.responseJSON) {
+                mensaje =
+                    jqXHR.responseJSON.message ||
+                    jqXHR.responseJSON.msj ||
+                    mensaje;
+            }
+
+            swal({
+                title: 'No fue posible actualizar',
+                text: mensaje,
+                icon: 'error'
+            });
+        })
+        .always(function() {
+            boton.prop('disabled', false);
+        });
     }
 
     // Función mejorada para eliminar medicamentos por tipo específico
@@ -3881,6 +4473,14 @@
                     $('#tabla_antecedentes tbody').html(html_);
                     if(tipo == 1){
                         $('#listado_patologias_paciente').html(html_patologias);
+
+                        if (
+                            typeof window.actualizarPatologiasMenuProfesional === 'function'
+                        ) {
+                            window.actualizarPatologiasMenuProfesional(
+                                resp.registros
+                            );
+                        }
                     }
 
                 }
@@ -3890,6 +4490,12 @@
                     $('#tabla_antecedentes tbody').html('');
                     if(tipo == 1){
                         $('#listado_patologias_paciente').html('');
+
+                        if (
+                            typeof window.actualizarPatologiasMenuProfesional === 'function'
+                        ) {
+                            window.actualizarPatologiasMenuProfesional([]);
+                        }
                     }
                 }
             },

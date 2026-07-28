@@ -737,9 +737,18 @@ class MedicamentoUsoCronicoGeneralController extends Controller
         }
 
         if($valido == 0){
-             $medicamento = Medicamentousocronicogeneral::find($request->id);
+            $consulta = Medicamentousocronicogeneral::where(
+                'id',
+                $request->id
+            );
 
-            if($medicamento->count() > 0) {
+            if ($request->filled('id_paciente')) {
+                $consulta->where('id_paciente', $request->id_paciente);
+            }
+
+            $medicamento = $consulta->first();
+
+            if($medicamento) {
                 $datos['estado'] = 1;
                 $datos['msj'] = 'busqueda exitosa';
                 $datos['registros'] = $medicamento;
@@ -761,6 +770,49 @@ class MedicamentoUsoCronicoGeneralController extends Controller
         }
 
         return $datos;
+    }
+
+    public function actualizar(Request $request)
+    {
+        $datosValidados = $request->validate([
+            'id'                 => 'required|integer',
+            'id_paciente'        => 'required|integer',
+            'presentacion'       => 'required|string|max:255',
+            'posologia'          => 'required|string|max:255',
+            'cantidad'           => 'required|string|max:255',
+            'via_administracion' => 'required|string|max:255',
+            'periodo'            => 'required|string|max:255',
+        ]);
+
+        $medicamento = MedicamentoUsoCronicoGeneral::where(
+                'id',
+                $datosValidados['id']
+            )
+            ->where('id_paciente', $datosValidados['id_paciente'])
+            ->first();
+
+        if (!$medicamento) {
+            return response()->json([
+                'estado' => 0,
+                'msj'    => 'El medicamento crónico no fue encontrado.',
+            ], 404);
+        }
+
+        // El nombre y el artículo asociado no se modifican desde este flujo.
+        $medicamento->presentacion = trim($datosValidados['presentacion']);
+        $medicamento->posologia = trim($datosValidados['posologia']);
+        $medicamento->cantidad = trim($datosValidados['cantidad']);
+        $medicamento->via_administracion = trim(
+            $datosValidados['via_administracion']
+        );
+        $medicamento->periodo = trim($datosValidados['periodo']);
+        $medicamento->save();
+
+        return response()->json([
+            'estado'   => 1,
+            'msj'      => 'Medicamento crónico actualizado correctamente.',
+            'registro' => $medicamento->fresh(),
+        ]);
     }
 
     public function deleteRegsitro(Request $request)

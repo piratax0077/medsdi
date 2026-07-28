@@ -147,7 +147,7 @@
                             PACIENTE
                         </div>
 
-                        <div style="
+                        <div id="nombre_paciente_menu" style="
                             font-size:14px;
                             font-weight:600;
                             color:#243746;
@@ -162,12 +162,12 @@
 
                             <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:12px;color:#51606d;font-weight:600;">
                                 <i class="fa fa-id-card mr-1"></i>
-                                {{ $paciente->rut }}
+                                <span id="rut_paciente_menu">{{ $paciente->rut }}</span>
                             </span>
 
                             <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:12px;color:#158982;font-weight:600;">
                                 <i class="fa fa-birthday-cake mr-1"></i>
-                                {{ $paciente->edad }}
+                                <span id="edad_paciente_menu">{{ $paciente->edad }}</span>
                             </span>
 
                             <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:12px;color:#3f68af;font-weight:600;">
@@ -200,6 +200,7 @@
                             $hayPatologias = false;
                         @endphp
 
+                        <div id="patologias_paciente_menu">
                         @foreach ($antecedentes as $a)
 
                             @if($a->estado == 1 && $a->id_tipo_antecedente == 1)
@@ -247,6 +248,7 @@
                             </div>
 
                         @endif
+                        </div>
 
                     </div>
 

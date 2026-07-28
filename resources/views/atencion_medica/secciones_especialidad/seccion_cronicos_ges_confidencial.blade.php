@@ -3292,6 +3292,64 @@
         });
     }
 
+    const actualizarPatologiasSidebar = (registros) => {
+        const contenedor = $('#patologias_paciente_menu');
+
+        if (!contenedor.length) {
+            return;
+        }
+
+        contenedor.empty();
+
+        const patologias = (registros || []).filter((registro) => {
+            return registro &&
+                Number(registro.estado) !== 0 &&
+                registro.antecedente_data &&
+                registro.antecedente_data.nombre;
+        });
+
+        if (patologias.length === 0) {
+            const mensaje = $('<div>').css({
+                padding: '14px',
+                textAlign: 'center',
+                border: '1px dashed #d8e1e8',
+                borderRadius: '8px',
+                background: '#fafcfd',
+                color: '#7c8a96',
+                fontSize: '12px'
+            });
+
+            mensaje.append($('<i>', {
+                class: 'fa fa-check-circle mr-1'
+            }));
+            mensaje.append(document.createTextNode(
+                'No registra patologías crónicas.'
+            ));
+            contenedor.append(mensaje);
+            return;
+        }
+
+        patologias.forEach((registro) => {
+            $('<div>', {
+                text: registro.antecedente_data.nombre
+            })
+            .css({
+                background: '#fafcfd',
+                border: '1px solid #e5ebef',
+                borderLeft: '4px solid #60c6c4',
+                borderRadius: '8px',
+                padding: '3px 6px',
+                marginBottom: '6px',
+                fontSize: '14px',
+                fontWeight: '500',
+                overflowWrap: 'break-word',
+                color: '#43515c',
+                textTransform: 'capitalize'
+            })
+            .appendTo(contenedor);
+        });
+    };
+
      const cargarRegistrosAntecedentes = (tipo) => {
 
         var data = {};
@@ -3495,6 +3553,10 @@
                     $('#tabla_antecedentes_modal tbody').html(html_);
                     if(tipo == 1){
                         $('#listado_patologias_paciente').html(html_patologias);
+                    }
+
+                    if (String(tipo) === '1') {
+                        actualizarPatologiasSidebar(resp.registros);
                     }
 
                 }

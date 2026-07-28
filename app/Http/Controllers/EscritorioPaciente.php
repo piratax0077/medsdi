@@ -4248,6 +4248,7 @@ class EscritorioPaciente extends Controller
     {
         $request->validate([
             'id'               => 'required|integer',
+            'rut'              => 'nullable|string|max:20',
             'email'            => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|string',
         ]);
@@ -4354,6 +4355,24 @@ class EscritorioPaciente extends Controller
             | Datos generales
             |--------------------------------------------------------------------------
             */
+
+            if ($request->filled('rut')) {
+                $rut = trim($request->rut);
+                $rutPerteneceAOtroPaciente = Paciente::where('rut', $rut)
+                    ->where('id', '<>', $paciente->id)
+                    ->exists();
+
+                if ($rutPerteneceAOtroPaciente) {
+                    DB::rollBack();
+
+                    return response()->json([
+                        'estado' => 0,
+                        'msj'    => 'El RUT ingresado ya pertenece a otro paciente.',
+                    ], 422);
+                }
+
+                $paciente->rut = $rut;
+            }
 
             if ($request->filled('nombre')) {
                 $paciente->nombres = trim($request->nombre);

@@ -17,6 +17,12 @@
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.laboratorio') }}">Área de Laboratorios {{ mb_strtoupper($institucion->nombre) }}</a></li>
                                 <li class="breadcrumb-item"><a href="#">Exámenes y/o procedimientos</a></li>
                             </ul>
+                            <div class="text-right mt-2">
+                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#solicitudesPrestacionesCentro">
+                                    <i class="feather icon-bell"></i> Solicitudes pendientes
+                                    <span class="badge badge-light">{{ $solicitudes_prestaciones->count() }}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,6 +40,62 @@
                               </div>
                             </div>
                         </div>
+                        @if(false)
+                        <!--OTRAS PRESTACIONES-->
+                        <div class="tab-pane fade" id="otras-prestaciones" role="tabpanel" aria-labelledby="otras-prestaciones-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header-principal">
+                                            <div class="row">
+                                                <div class="col-md-12 align-botton">
+                                                    <h5 class="text-white d-inline"><i class="feather icon-activity icono-primary"></i>Catálogo de otras prestaciones</h5>
+                                                    <button type="button" class="btn btn-sm btn-info float-right" onclick="ag_procedimiento();"><i class="fa fa-plus"></i> Agregar prestación</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table id="lista_otras_prestaciones" class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código</th>
+                                                            <th>Prestación</th>
+                                                            <th>Tipo de prestación</th>
+                                                            <th>Descripción</th>
+                                                            <th>Cantidad de bloques</th>
+                                                            <th>Estado</th>
+                                                            <th>Valor</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach ($otras_prestaciones as $prestacion)
+                                                            <tr>
+                                                                <td>{{ $prestacion->cod_examen }}</td>
+                                                                <td class="wrap-column">{{ $prestacion->nombre }}</td>
+                                                                <td>{{ optional($prestacion->tipoPrestacion)->nombre ?? 'Sin clasificar' }}</td>
+                                                                <td class="wrap-column">{{ $prestacion->descripcion }}</td>
+                                                                <td>{{ $prestacion->cantidad_bloques }}</td>
+                                                                <td><span class="badge badge-{{ $prestacion->estado == 1 ? 'success' : 'secondary' }}">{{ $prestacion->estado == 1 ? 'Activo' : 'Inactivo' }}</span></td>
+                                                                <td>${{ number_format($prestacion->valor, 0, ',', '.') }}</td>
+                                                                <td>
+                                                                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $prestacion->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $prestacion->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $prestacion->id }})" title="Asignar"><i class="feather icon-user"></i></button>
+                                                                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $prestacion->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -50,6 +112,11 @@
                                  <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="proc-cm-tab" data-toggle="pill" href="#proc-cm" role="tab" aria-controls="proc-cm" aria-selected="false">
                                        Procedimientos
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link-aten text-reset" id="otras-prestaciones-tab" data-toggle="pill" href="#otras-prestaciones" role="tab" aria-controls="otras-prestaciones" aria-selected="false">
+                                        Otras prestaciones
                                     </a>
                                 </li>
                             </ul>
@@ -92,6 +159,7 @@
                                                         <tr>
                                                             <th>Código</th>
                                                             <th>Nombre del Examen</th>
+                                                            <th>Tipo de prestación</th>
                                                             <th>Descripción</th>
                                                             <th>Cantidad de bloques</th>
                                                             <th>Estado</th>
@@ -105,14 +173,15 @@
                                                             <tr>
                                                                 <td>{{ $examen->cod_examen }}</td>
                                                                 <td class="wrap-column">{{ $examen->nombre }}</td>
+                                                                <td>{{ optional($examen->tipoPrestacion)->nombre ?? 'Sin clasificar' }}</td>
                                                                 <td class="wrap-column">{{ $examen->descripcion }}</td>
                                                                 <td>{{ $examen->cantidad_bloques }}</td>
-                                                                <td>${{ number_format($examen->valor,0,',','.') }}</td>
                                                                 <td>
                                                                     <span class="badge badge-{{ $examen->estado == 1 ? 'success' : 'secondary' }}">
                                                                         {{ $examen->estado == 1 ? 'Activo' : 'Inactivo' }}
                                                                     </span>
                                                                 </td>
+                                                                <td>${{ number_format($examen->valor,0,',','.') }}</td>
                                                                 <td>
                                                                     <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
                                                                     <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
@@ -161,9 +230,9 @@
                                                     <thead>
                                                         <tr>
                                                             <th>Código</th>
-                                                            <th>Procedimiento</th>
-                                                            <th>Tipo</th>
-                                                            <th>Min. por bloques</th>
+                                                            <th>Prestación</th>
+                                                            <th>Tipo de prestación</th>
+                                                            <th>Descripción</th>
                                                             <th>Cantidad de bloques</th>
                                                             <th>Estado</th>
                                                             <th>Valor</th>
@@ -171,6 +240,24 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @foreach ($procedimientos as $procedimiento)
+                                                            <tr>
+                                                                <td>{{ $procedimiento->cod_examen }}</td>
+                                                                <td class="wrap-column">{{ $procedimiento->nombre }}</td>
+                                                                <td>{{ optional($procedimiento->tipoPrestacion)->nombre }}</td>
+                                                                <td class="wrap-column">{{ $procedimiento->descripcion }}</td>
+                                                                <td>{{ $procedimiento->cantidad_bloques }}</td>
+                                                                <td><span class="badge badge-{{ $procedimiento->estado == 1 ? 'success' : 'secondary' }}">{{ $procedimiento->estado == 1 ? 'Activo' : 'Inactivo' }}</span></td>
+                                                                <td>${{ number_format($procedimiento->valor, 0, ',', '.') }}</td>
+                                                                <td>
+                                                                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $procedimiento->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $procedimiento->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $procedimiento->id }})" title="Asignar"><i class="feather icon-user"></i></button>
+                                                                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $procedimiento->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        @if(false)
                                                         <tr>
                                                             <td>777</td>
                                                             <td>Retiro de puntos</td>
@@ -252,6 +339,7 @@
                                                                 <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
                                                             </td>
                                                         </tr>
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -260,6 +348,7 @@
                                 </div>
                             </div>
                         </div>
+                        @include('app.adm_cm.partials.otras_prestaciones')
                     </div>
                 </div>
             </div>
@@ -663,6 +752,11 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Código de la prestación</label>
+                                    <input class="form-control form-control-sm" type="text" id="a_procedimiento_codigo" maxlength="100">
+                                </div>
+
+                                <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Nombre</label>
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="text" name="a_procedimeinto_nombre" id="a_procedimeinto_nombre" value="">
@@ -681,6 +775,40 @@
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="number" name="a_procedimeinto_cantidad_bloques" id="a_procedimeinto_cantidad_bloques" step="1" max="24" value="">
                                     </div>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo de prestación</label>
+                                    <select class="form-control form-control-sm" id="a_procedimiento_tipo_prestacion">
+                                        <option value="">Seleccione un tipo de prestación</option>
+                                        @foreach($tipos_prestacion as $tipoPrestacion)
+                                            <option value="{{ $tipoPrestacion->id }}">{{ $tipoPrestacion->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Especialidad</label>
+                                    <select class="form-control form-control-sm" id="a_procedimiento_especialidad">
+                                        <option value="">Seleccione una especialidad</option>
+                                        @foreach($especialidades as $especialidad)
+                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo de especialidad</label>
+                                    <select class="form-control form-control-sm" id="a_procedimiento_tipo_especialidad" disabled>
+                                        <option value="">Seleccione primero una especialidad</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Subtipo de especialidad (si aplica)</label>
+                                    <select class="form-control form-control-sm" id="a_procedimiento_sub_tipo_especialidad" disabled>
+                                        <option value="">Seleccione primero un tipo de especialidad</option>
+                                    </select>
                                 </div>
 
                                 <div class="form-group fill">
@@ -797,6 +925,12 @@
         <div class="modal-body">
             <input type="hidden" id="id_prestacion_editar" name="id_prestacion_editar" value="">
             <div class="form-row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="codigo_prestacion">Código de la prestación</label>
+                        <input type="text" name="codigo_prestacion" id="codigo_prestacion" class="form-control form-control-sm" maxlength="100">
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm" for="nombre_prestacion">Nombre del procedimiento</label>
@@ -815,6 +949,44 @@
                         <input type="number" name="valor_prestacion" id="valor_prestacion" class="form-control form-control-sm">
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="tipo_prestacion_editar">Tipo de prestación</label>
+                        <select id="tipo_prestacion_editar" class="form-control form-control-sm">
+                            <option value="">Sin clasificar</option>
+                            @foreach($tipos_prestacion as $tipoPrestacion)
+                                <option value="{{ $tipoPrestacion->id }}">{{ $tipoPrestacion->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="especialidad_prestacion">Especialidad</label>
+                        <select id="especialidad_prestacion" class="form-control form-control-sm">
+                            <option value="">Sin especialidad asignada</option>
+                            @foreach($especialidades as $especialidad)
+                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="tipo_especialidad_prestacion">Tipo de especialidad</label>
+                        <select id="tipo_especialidad_prestacion" class="form-control form-control-sm" disabled>
+                            <option value="">Seleccione primero una especialidad</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="floating-label-activo-sm" for="sub_tipo_especialidad_prestacion">Subtipo (si aplica)</label>
+                        <select id="sub_tipo_especialidad_prestacion" class="form-control form-control-sm" disabled>
+                            <option value="">Seleccione primero un tipo</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm" for="indicaciones_prestacion">Indicaciones del procedimiento para el paciente</label>
@@ -824,7 +996,7 @@
             </div>
 
 
-            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="editar_prestacion()"><i class="fas fa-plus"></i>  Agregar otro diagnóstico</button>
+            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="editar_prestacion()"><i class="fas fa-save"></i> Guardar cambios</button>
             {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -864,12 +1036,98 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="solicitudesPrestacionesCentro" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title text-white">Solicitudes de nuevas prestaciones</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead><tr><th>Profesional</th><th>Prestación</th><th>Tipo</th><th>Bloques</th><th>Valores propuestos</th><th>Observación</th><th>Acciones</th></tr></thead>
+                        <tbody>
+                            @forelse($solicitudes_prestaciones as $solicitud)
+                                <tr id="solicitud-prestacion-{{ $solicitud->id }}">
+                                    <td>{{ optional($solicitud->profesional)->nombre }} {{ optional($solicitud->profesional)->apellido_uno }}</td>
+                                    <td><strong>{{ $solicitud->cod_examen }}</strong><br>{{ $solicitud->nombre }}<br><small>{{ $solicitud->descripcion }}</small></td>
+                                    <td>{{ optional($solicitud->tipoPrestacion)->nombre }}</td>
+                                    <td>{{ $solicitud->minutos_bloque }} min × {{ $solicitud->cantidad_bloques }}</td>
+                                    <td>Profesional: ${{ number_format($solicitud->valor_profesional,0,',','.') }}<br>Centro: ${{ number_format($solicitud->valor_centro_propuesto ?? 0,0,',','.') }}</td>
+                                    <td>{{ $solicitud->observacion_profesional }}</td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm" onclick="resolverSolicitudPrestacion({{ $solicitud->id }}, 'aprobar', {{ $solicitud->valor_centro_propuesto ?? 0 }})"><i class="feather icon-check"></i> Aprobar</button>
+                                        <button class="btn btn-danger btn-sm" onclick="resolverSolicitudPrestacion({{ $solicitud->id }}, 'rechazar')"><i class="feather icon-x"></i> Rechazar</button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="7" class="text-center">No hay solicitudes pendientes.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @section('page-script')
     <script>
+        function resolverSolicitudPrestacion(id, accion, valorSugerido) {
+            let valorCentro = null;
+            let observacion = '';
+
+            if (accion === 'aprobar') {
+                valorCentro = window.prompt('Valor que tendrá la prestación para el centro:', valorSugerido || 0);
+                if (valorCentro === null || valorCentro === '' || Number(valorCentro) < 0) {
+                    return;
+                }
+                observacion = window.prompt('Observación para el profesional (opcional):', '') || '';
+            } else {
+                observacion = window.prompt('Indique el motivo del rechazo:');
+                if (!observacion) {
+                    return;
+                }
+            }
+
+            const rutaAprobar = "{{ route('adm_cm.solicitudes_prestaciones.aprobar', ['solicitud' => '__ID__']) }}";
+            const rutaRechazar = "{{ route('adm_cm.solicitudes_prestaciones.rechazar', ['solicitud' => '__ID__']) }}";
+
+            $.ajax({
+                url: (accion === 'aprobar' ? rutaAprobar : rutaRechazar).replace('__ID__', id),
+                type: 'POST',
+                data: {
+                    valor_centro: valorCentro,
+                    observacion_administrador: observacion,
+                    _token: CSRF_TOKEN
+                }
+            }).done(function(resp) {
+                swal({ title: 'Listo', text: resp.mensaje, icon: 'success' })
+                    .then(function() { location.reload(); });
+            }).fail(function(xhr) {
+                let mensaje = xhr.responseJSON && xhr.responseJSON.mensaje
+                    ? xhr.responseJSON.mensaje
+                    : 'No fue posible resolver la solicitud.';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    mensaje = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                }
+                swal({ title: 'Error', text: mensaje, icon: 'error' });
+            });
+        }
+
         $(document).ready(function() {
             $('#lista_procedimientos_cm').DataTable({
                 responsive: true,
+            });
+            $('#lista_otras_prestaciones').DataTable({
+                responsive: true,
+            });
+
+            $('a[data-toggle="pill"]').on('shown.bs.tab', function() {
+                $.fn.dataTable.tables({ visible: true, api: true })
+                    .columns.adjust()
+                    .responsive.recalc();
             });
         });
 
@@ -877,6 +1135,22 @@
         $(document).ready(function() {
             $('#lista_examenes_laboratorio').DataTable({
                 responsive: true,
+            });
+
+            $('#a_procedimiento_especialidad').on('change', function() {
+                cargarTiposProcedimiento($(this).val());
+            });
+
+            $('#a_procedimiento_tipo_especialidad').on('change', function() {
+                cargarSubTiposProcedimiento($(this).val());
+            });
+
+            $('#especialidad_prestacion').on('change', function() {
+                cargarTiposEdicionPrestacion($(this).val());
+            });
+
+            $('#tipo_especialidad_prestacion').on('change', function() {
+                cargarSubTiposEdicionPrestacion($(this).val());
             });
 
             $('#asignar_id_profesional').select2({
@@ -895,14 +1169,145 @@
             });
         });
 
+    function reemplazarOpcionesProcedimiento(selector, texto, registros) {
+        let select = $(selector).empty();
+        select.append($('<option>', { value: '', text: texto }));
+        (registros || []).forEach(function(registro) {
+            select.append($('<option>', { value: registro.id, text: registro.nombre }));
+        });
+    }
+
+    function cargarTiposProcedimiento(idEspecialidad) {
+        reemplazarOpcionesProcedimiento(
+            '#a_procedimiento_tipo_especialidad',
+            idEspecialidad ? 'Cargando...' : 'Seleccione primero una especialidad',
+            []
+        );
+        reemplazarOpcionesProcedimiento(
+            '#a_procedimiento_sub_tipo_especialidad',
+            'Seleccione primero un tipo de especialidad',
+            []
+        );
+        $('#a_procedimiento_tipo_especialidad, #a_procedimiento_sub_tipo_especialidad').prop('disabled', true);
+
+        if (!idEspecialidad) {
+            return;
+        }
+
+        $.get("{{ route('web.profesional.buscar_tipo_especialidad') }}", {
+            id_especialidad: idEspecialidad
+        }).done(function(data) {
+            reemplazarOpcionesProcedimiento(
+                '#a_procedimiento_tipo_especialidad',
+                'Seleccione un tipo de especialidad',
+                data.registros
+            );
+            $('#a_procedimiento_tipo_especialidad').prop('disabled', false);
+        }).fail(function() {
+            reemplazarOpcionesProcedimiento(
+                '#a_procedimiento_tipo_especialidad',
+                'No fue posible cargar los tipos',
+                []
+            );
+        });
+    }
+
+    function cargarSubTiposProcedimiento(idTipoEspecialidad) {
+        reemplazarOpcionesProcedimiento(
+            '#a_procedimiento_sub_tipo_especialidad',
+            idTipoEspecialidad ? 'Cargando...' : 'Seleccione primero un tipo de especialidad',
+            []
+        );
+        $('#a_procedimiento_sub_tipo_especialidad').prop('disabled', true);
+
+        if (!idTipoEspecialidad) {
+            return;
+        }
+
+        $.get("{{ route('web.profesional.buscar_sub_tipo_especialidad') }}", {
+            id_tipo_especialidad: idTipoEspecialidad
+        }).done(function(data) {
+            let registros = data.registros || [];
+            reemplazarOpcionesProcedimiento(
+                '#a_procedimiento_sub_tipo_especialidad',
+                registros.length ? 'Seleccione un subtipo (opcional)' : 'No aplica subtipo',
+                registros
+            );
+            $('#a_procedimiento_sub_tipo_especialidad').prop('disabled', registros.length === 0);
+        }).fail(function() {
+            reemplazarOpcionesProcedimiento(
+                '#a_procedimiento_sub_tipo_especialidad',
+                'No fue posible cargar los subtipos',
+                []
+            );
+        });
+    }
+
+    function cargarTiposEdicionPrestacion(idEspecialidad, idSeleccionado) {
+        reemplazarOpcionesProcedimiento(
+            '#tipo_especialidad_prestacion',
+            idEspecialidad ? 'Cargando...' : 'Seleccione primero una especialidad',
+            []
+        );
+        reemplazarOpcionesProcedimiento('#sub_tipo_especialidad_prestacion', 'Seleccione primero un tipo', []);
+        $('#tipo_especialidad_prestacion, #sub_tipo_especialidad_prestacion').prop('disabled', true);
+
+        if (!idEspecialidad) {
+            return $.Deferred().resolve().promise();
+        }
+
+        return $.get("{{ route('web.profesional.buscar_tipo_especialidad') }}", {
+            id_especialidad: idEspecialidad
+        }).done(function(data) {
+            reemplazarOpcionesProcedimiento(
+                '#tipo_especialidad_prestacion',
+                'Seleccione un tipo de especialidad',
+                data.registros
+            );
+            $('#tipo_especialidad_prestacion').prop('disabled', false).val(idSeleccionado || '');
+        });
+    }
+
+    function cargarSubTiposEdicionPrestacion(idTipoEspecialidad, idSeleccionado) {
+        reemplazarOpcionesProcedimiento(
+            '#sub_tipo_especialidad_prestacion',
+            idTipoEspecialidad ? 'Cargando...' : 'Seleccione primero un tipo',
+            []
+        );
+        $('#sub_tipo_especialidad_prestacion').prop('disabled', true);
+
+        if (!idTipoEspecialidad) {
+            return $.Deferred().resolve().promise();
+        }
+
+        return $.get("{{ route('web.profesional.buscar_sub_tipo_especialidad') }}", {
+            id_tipo_especialidad: idTipoEspecialidad
+        }).done(function(data) {
+            let registros = data.registros || [];
+            reemplazarOpcionesProcedimiento(
+                '#sub_tipo_especialidad_prestacion',
+                registros.length ? 'Seleccione un subtipo (opcional)' : 'No aplica subtipo',
+                registros
+            );
+            $('#sub_tipo_especialidad_prestacion')
+                .prop('disabled', registros.length === 0)
+                .val(idSeleccionado || '');
+        });
+    }
+
     function escaparHtml(valor) {
         return $('<div>').text(valor == null ? '' : valor).html();
     }
 
     function cargarTablaProcedimientos(registros) {
-        let tabla = $('#lista_examenes_laboratorio').DataTable();
-
-        tabla.clear();
+        let tablas = {
+            EXAMEN: $('#lista_examenes_laboratorio').DataTable(),
+            PROCEDIMIENTO: $('#lista_procedimientos_cm').DataTable(),
+            OTROS: $('#lista_otras_prestaciones').DataTable()
+        };
+        Object.values(tablas).forEach(function(tabla) {
+            tabla.clear();
+        });
 
         $(registros || []).each(function(i, procedimiento) {
             let id = Number(procedimiento.id);
@@ -910,10 +1315,17 @@
                 ? '<span class="badge badge-success">Activo</span>'
                 : '<span class="badge badge-secondary">Inactivo</span>';
             let valor = Number(procedimiento.valor || 0).toLocaleString('es-CL');
+            let codigoTipo = procedimiento.tipo_prestacion
+                ? procedimiento.tipo_prestacion.codigo
+                : null;
+            let tabla = codigoTipo === 'EXAMEN'
+                ? tablas.EXAMEN
+                : (codigoTipo === 'PROCEDIMIENTO' ? tablas.PROCEDIMIENTO : tablas.OTROS);
 
             tabla.row.add([
                 escaparHtml(procedimiento.cod_examen),
                 escaparHtml(procedimiento.nombre),
+                escaparHtml(procedimiento.tipo_prestacion ? procedimiento.tipo_prestacion.nombre : 'Sin clasificar'),
                 escaparHtml(procedimiento.descripcion),
                 escaparHtml(procedimiento.cantidad_bloques),
                 estado,
@@ -927,22 +1339,33 @@
             ]);
         });
 
-        tabla.draw(false);
-        tabla.columns.adjust();
-
-        if (tabla.responsive) {
-            tabla.responsive.recalc();
-        }
+        Object.values(tablas).forEach(function(tabla) {
+            tabla.draw(false);
+            tabla.columns.adjust();
+            if (tabla.responsive) {
+                tabla.responsive.recalc();
+            }
+        });
     }
 
     function guardar_procedimiento(){
+        let cod_examen = $('#a_procedimiento_codigo').val().trim();
         let nombre = $('#a_procedimeinto_nombre').val().trim();
         let descripcion = $('#a_procedimeinto_descripcion').val();
         let cantidad_bloques = $('#a_procedimeinto_cantidad_bloques').val();
         let valor = $('#a_procedimeinto_valor').val();
+        let id_especialidad = $('#a_procedimiento_especialidad').val();
+        let id_tipo_especialidad = $('#a_procedimiento_tipo_especialidad').val();
+        let id_sub_tipo_especialidad = $('#a_procedimiento_sub_tipo_especialidad').val();
+        let id_tipo_prestacion = $('#a_procedimiento_tipo_prestacion').val();
         let valido = 1;
         let mensaje = '';
         // validar campos
+        if(!cod_examen)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido código de la prestación\n';
+        }
         if(nombre == 0)
         {
             valido = 0;
@@ -958,6 +1381,21 @@
             valido = 0;
             mensaje += 'Campo requerido cantidad bloques\n';
         }
+        if(!id_especialidad)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido especialidad\n';
+        }
+        if(!id_tipo_prestacion)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido tipo de prestación\n';
+        }
+        if(!id_tipo_especialidad)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido tipo de especialidad\n';
+        }
 
 
         if(valido == 1)
@@ -967,11 +1405,16 @@
 
             let data = {
                 id_lugar_atencion : '{{ $institucion->id_lugar_atencion }}',
+                cod_examen : cod_examen,
                 nombre : nombre,
                 descripcion : descripcion,
                 minutos_bloque : 15,
                 cantidad_bloques : cantidad_bloques,
                 valor : valor,
+                id_especialidad : id_especialidad,
+                id_tipo_especialidad : id_tipo_especialidad,
+                id_sub_tipo_especialidad : id_sub_tipo_especialidad,
+                id_tipo_prestacion : id_tipo_prestacion,
                 otros : '',
                 _token: CSRF_TOKEN,
             }
@@ -990,7 +1433,9 @@
                     {
                         cargarTablaProcedimientos(data.registros);
                         $('#a_procedimiento').modal('hide');
-                        $('#a_procedimeinto_nombre, #a_procedimeinto_descripcion, #a_procedimeinto_cantidad_bloques, #a_procedimeinto_valor').val('');
+                        $('#a_procedimiento_codigo, #a_procedimeinto_nombre, #a_procedimeinto_descripcion, #a_procedimeinto_cantidad_bloques, #a_procedimeinto_valor').val('');
+                        $('#a_procedimiento_especialidad').val('').trigger('change');
+                        $('#a_procedimiento_tipo_prestacion').val('');
 
                         swal({
                             title: "Éxito",
@@ -1021,10 +1466,15 @@
                     });
                 }
             })
-            .fail(function() {
+            .fail(function(xhr) {
+                let mensajeError = xhr.responseJSON && xhr.responseJSON.msj
+                    ? xhr.responseJSON.msj
+                    : (xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'No fue posible guardar el procedimiento');
                 swal({
                     title: "Error",
-                    text: "No fue posible guardar el procedimiento",
+                    text: mensajeError,
                     icon: "error",
                     buttons: "Aceptar",
                     DangerMode: true,
@@ -1100,10 +1550,11 @@
                         <tr>
                             <td>${v.cod_examen || ''}</td>
                             <td>${v.nombre}</td>
+                            <td>${v.tipo_prestacion ? v.tipo_prestacion.nombre : 'Sin clasificar'}</td>
                             <td>${v.descripcion}</td>
                             <td>${v.cantidad_bloques}</td>
-                            <td>$${new Intl.NumberFormat('es-CL').format(v.valor)}</td>
                             <td>${estadoBadge}</td>
+                            <td>$${new Intl.NumberFormat('es-CL').format(v.valor)}</td>
                             <td>
                                 <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen(${v.id})" title="Ver detalles"><i class="feather icon-eye"></i></button>
                                 <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="editar_examen(${v.id})" title="Editar"><i class="feather icon-edit"></i></button>
@@ -1355,10 +1806,22 @@
                         // Guardar el ID de la prestación
                         $('#id_prestacion_editar').val(id);
                         // Llenar los campos del modal
+                        $('#codigo_prestacion').val(response.procedimiento.cod_examen || '');
                         $('#nombre_prestacion').val(response.procedimiento.nombre);
                         $('#cantidad_uco').val(response.procedimiento.cantidad_uco);
                         $('#cantidad_bloques_prestacion').val(response.procedimiento.cantidad_bloques);
                         $('#valor_prestacion').val(response.procedimiento.valor);
+                        $('#tipo_prestacion_editar').val(response.procedimiento.id_tipo_prestacion || '');
+                        $('#especialidad_prestacion').val(response.procedimiento.id_especialidad || '');
+                        cargarTiposEdicionPrestacion(
+                            response.procedimiento.id_especialidad,
+                            response.procedimiento.id_tipo_especialidad
+                        ).done(function() {
+                            cargarSubTiposEdicionPrestacion(
+                                response.procedimiento.id_tipo_especialidad,
+                                response.procedimiento.id_sub_tipo_especialidad
+                            );
+                        });
                         // Cargar indicaciones en Summernote
                         $('#indicaciones_prestacion').summernote('code', response.procedimiento.indicaciones || '');
 
@@ -1446,10 +1909,15 @@
 
         function editar_prestacion(){
         let id = $('#id_prestacion_editar').val();
+        let cod_examen = $('#codigo_prestacion').val().trim();
         let nombre = $('#nombre_prestacion').val();
         let cantidad_bloques = $('#cantidad_bloques_prestacion').val();
         let valor = $('#valor_prestacion').val();
         let indicaciones = $('#indicaciones_prestacion').summernote('code');
+        let id_especialidad = $('#especialidad_prestacion').val();
+        let id_tipo_especialidad = $('#tipo_especialidad_prestacion').val();
+        let id_sub_tipo_especialidad = $('#sub_tipo_especialidad_prestacion').val();
+        let id_tipo_prestacion = $('#tipo_prestacion_editar').val();
 
         // Validaciones
         if(!id || id == ''){
@@ -1465,6 +1933,15 @@
             swal({
                 title: 'Error',
                 text: 'El nombre del procedimiento es requerido',
+                icon: 'error'
+            });
+            return;
+        }
+
+        if(!cod_examen){
+            swal({
+                title: 'Error',
+                text: 'El código de la prestación es requerido',
                 icon: 'error'
             });
             return;
@@ -1488,12 +1965,26 @@
             return;
         }
 
+        if(id_especialidad && !id_tipo_especialidad){
+            swal({
+                title: 'Error',
+                text: 'Debe seleccionar el tipo de especialidad',
+                icon: 'error'
+            });
+            return;
+        }
+
         let data = {
             id: id,
+            cod_examen: cod_examen,
             nombre: nombre,
             cantidad_bloques: cantidad_bloques,
             valor: valor,
             indicaciones: indicaciones,
+            id_especialidad: id_especialidad,
+            id_tipo_especialidad: id_tipo_especialidad,
+            id_sub_tipo_especialidad: id_sub_tipo_especialidad,
+            id_tipo_prestacion: id_tipo_prestacion,
             _token: CSRF_TOKEN,
         }
 

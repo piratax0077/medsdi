@@ -6,6 +6,8 @@ use App\Models\LugarAtencion;
 use App\Models\ProcedimientosCentro;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Models\Profesional;
+use App\Models\SolicitudPrestacionCentro;
+use App\Models\TipoPrestacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,17 +25,25 @@ class ProcedimientosProfesionalController extends Controller
         $procedimientos = ProcedimientosCentroLugarAtencionProfesional::select(
                 'procedimientos_lugar_atencion_profesional.*',
                 'lugares_atencion.nombre as lugar_nombre',
-                'procedimientos_centro.nombre as procedimiento_base'
+                'procedimientos_centro.nombre as procedimiento_base',
+                'procedimientos_centro.valor as valor_centro'
             )
             ->leftJoin('lugares_atencion', 'procedimientos_lugar_atencion_profesional.id_lugar_atencion', '=', 'lugares_atencion.id')
             ->leftJoin('procedimientos_centro', 'procedimientos_lugar_atencion_profesional.id_procedimiento_centro', '=', 'procedimientos_centro.id')
             ->where('procedimientos_lugar_atencion_profesional.id_profesional', $profesional->id)
+            ->get();
+        $tiposPrestacion = TipoPrestacion::where('estado', 1)->orderBy('nombre')->get();
+        $solicitudes = SolicitudPrestacionCentro::with(['lugarAtencion', 'tipoPrestacion'])
+            ->where('id_profesional', $profesional->id)
+            ->latest()
             ->get();
 
         return view('app.profesional.mis_procedimientos', [
             'profesional' => $profesional,
             'lugares' => $lugares,
             'procedimientos' => $procedimientos,
+            'tipos_prestacion' => $tiposPrestacion,
+            'solicitudes' => $solicitudes,
         ]);
     }
 
@@ -53,11 +63,13 @@ class ProcedimientosProfesionalController extends Controller
         $request->validate([
             'minutos_bloque' => 'required|integer|min:1',
             'cantidad_bloques' => 'required|integer|min:1',
+            'valor' => 'required|numeric|min:0|max:9999999999.99',
             'otros' => 'nullable|string',
         ]);
 
         $procedimiento->minutos_bloque = $request->minutos_bloque;
         $procedimiento->cantidad_bloques = $request->cantidad_bloques;
+        $procedimiento->valor = $request->valor;
         $procedimiento->otros = $request->otros;
         $procedimiento->save();
 
@@ -65,6 +77,8 @@ class ProcedimientosProfesionalController extends Controller
             ->value('nombre');
         $procedimiento->procedimiento_base = ProcedimientosCentro::where('id', $procedimiento->id_procedimiento_centro)
             ->value('nombre');
+        $procedimiento->valor_centro = ProcedimientosCentro::where('id', $procedimiento->id_procedimiento_centro)
+            ->value('valor');
 
         return response()->json([
             'estado' => 1,
@@ -85,6 +99,7 @@ class ProcedimientosProfesionalController extends Controller
             'id_procedimiento_centro' => 'required|exists:procedimientos_centro,id',
             'minutos_bloque' => 'required|integer|min:1',
             'cantidad_bloques' => 'required|integer|min:1',
+            'valor' => 'required|numeric|min:0|max:9999999999.99',
             'otros' => 'nullable|string',
         ]);
 
@@ -133,12 +148,14 @@ class ProcedimientosProfesionalController extends Controller
         $nuevo->descripcion = $procedimientoBase->descripcion;
         $nuevo->minutos_bloque = $request->minutos_bloque;
         $nuevo->cantidad_bloques = $request->cantidad_bloques;
+        $nuevo->valor = $request->valor;
         $nuevo->otros = $request->otros;
         $nuevo->estado = 1;
         $nuevo->save();
 
         $nuevo->lugar_nombre = $lugar->nombre;
         $nuevo->procedimiento_base = $procedimientoBase->nombre;
+        $nuevo->valor_centro = $procedimientoBase->valor;
 
         return response()->json([
             'estado' => 1,

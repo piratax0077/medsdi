@@ -30,6 +30,7 @@
                     <div class="card-header bg-info">
                         <h6 class="text-white font-weight-bolder f-20 d-inline">Mis Procedimientos (Exámenes)</h6>
                         <button class="btn btn-light btn-sm d-inline float-md-right" data-toggle="modal" data-target="#nuevoProcedimientoProfesional"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo procedimiento</button>
+                        <button class="btn btn-outline-light btn-sm d-inline float-md-right mr-2" data-toggle="modal" data-target="#misSolicitudesPrestaciones"><i class="feather icon-clock"></i> Solicitudes ({{ $solicitudes->where('estado', 'PENDIENTE')->count() }})</button>
                     </div>
                     <div class="card-body" id="card_body_procedimientos_profesional">
                         <table id="tabla_procedimientos_profesional" class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">
@@ -39,6 +40,7 @@
                                     <th class="align-middle">Lugar de atención</th>
                                     <th class="align-middle">Min. por bloque</th>
                                     <th class="align-middle">Cantidad de bloques</th>
+                                    <th class="align-middle">Valor profesional</th>
                                     <th class="align-middle">Estado</th>
 
                                     <th class="align-middle">Acción</th>
@@ -51,6 +53,7 @@
                                         <td class="align-middle">{{ $procedimiento->lugar_nombre }}</td>
                                         <td class="align-middle">{{ $procedimiento->minutos_bloque }}</td>
                                         <td class="align-middle">{{ $procedimiento->cantidad_bloques }}</td>
+                                        <td class="align-middle">${{ number_format($procedimiento->valor ?? $procedimiento->valor_centro ?? 0, 0, ',', '.') }}</td>
                                         <td class="align-middle">
                                             @if($procedimiento->estado == 1)
                                                 <span class="badge badge-info">Activo</span>
@@ -122,11 +125,17 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="valor" class="floating-label-activo-sm">Valor cobrado por el profesional</label>
+                        <input type="number" class="form-control form-control-sm" id="valor" name="valor" min="0" step="1" required>
+                        <small class="form-text text-muted">Se sugiere el valor definido por el centro, pero puedes modificarlo.</small>
+                    </div>
+                    <div class="form-group">
                         <label for="otros" class="floating-label-activo-sm">Observaciones</label>
                         <textarea class="form-control form-control-sm" id="otros" name="otros" rows="2" placeholder="Notas u observaciones adicionales"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-warning btn-sm mr-auto" data-dismiss="modal" data-toggle="modal" data-target="#solicitarPrestacionCentro"><i class="feather icon-plus-circle"></i> No encuentro la prestación</button>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                     <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar procedimiento</button>
                 </div>
@@ -135,6 +144,64 @@
     </div>
 </div>
 <!-- Cierre Modal: nuevo procedimiento -->
+<div class="modal fade" id="solicitarPrestacionCentro" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="form-solicitar-prestacion">
+                @csrf
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title text-white">Solicitar nueva prestación al centro</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">La prestación quedará pendiente hasta que la administración del centro la apruebe.</div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="floating-label-activo-sm">Lugar de atención</label>
+                            <select class="form-control form-control-sm" name="id_lugar_atencion" required>
+                                <option value="">Seleccione</option>
+                                @foreach($lugares as $lugar)<option value="{{ $lugar->id }}">{{ $lugar->nombre }}</option>@endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="floating-label-activo-sm">Tipo de prestación</label>
+                            <select class="form-control form-control-sm" name="id_tipo_prestacion" required>
+                                <option value="">Seleccione</option>
+                                @foreach($tipos_prestacion as $tipo)<option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>@endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4"><label class="floating-label-activo-sm">Código</label><input class="form-control form-control-sm" name="cod_examen" maxlength="100" required></div>
+                        <div class="form-group col-md-8"><label class="floating-label-activo-sm">Nombre</label><input class="form-control form-control-sm" name="nombre" required></div>
+                    </div>
+                    <div class="form-group"><label class="floating-label-activo-sm">Descripción</label><textarea class="form-control form-control-sm" name="descripcion" rows="2"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3"><label class="floating-label-activo-sm">Minutos por bloque</label><input type="number" class="form-control form-control-sm" name="minutos_bloque" value="15" min="1" required></div>
+                        <div class="form-group col-md-3"><label class="floating-label-activo-sm">Cantidad de bloques</label><input type="number" class="form-control form-control-sm" name="cantidad_bloques" value="1" min="1" required></div>
+                        <div class="form-group col-md-3"><label class="floating-label-activo-sm">Mi valor</label><input type="number" class="form-control form-control-sm" name="valor_profesional" min="0" required></div>
+                        <div class="form-group col-md-3"><label class="floating-label-activo-sm">Valor sugerido al centro</label><input type="number" class="form-control form-control-sm" name="valor_centro_propuesto" min="0"></div>
+                    </div>
+                    <div class="form-group"><label class="floating-label-activo-sm">Observación para administración</label><textarea class="form-control form-control-sm" name="observacion_profesional" rows="2"></textarea></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-warning btn-sm"><i class="feather icon-send"></i> Enviar solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="misSolicitudesPrestaciones" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document"><div class="modal-content">
+        <div class="modal-header bg-info"><h5 class="modal-title text-white">Mis solicitudes de prestaciones</h5><button class="close" data-dismiss="modal"><span>&times;</span></button></div>
+        <div class="modal-body"><div class="table-responsive"><table class="table table-sm table-striped">
+            <thead><tr><th>Prestación</th><th>Lugar</th><th>Tipo</th><th>Valor</th><th>Estado</th><th>Respuesta</th></tr></thead>
+            <tbody>@forelse($solicitudes as $solicitud)<tr><td>{{ $solicitud->cod_examen }} - {{ $solicitud->nombre }}</td><td>{{ optional($solicitud->lugarAtencion)->nombre }}</td><td>{{ optional($solicitud->tipoPrestacion)->nombre }}</td><td>${{ number_format($solicitud->valor_profesional,0,',','.') }}</td><td><span class="badge badge-{{ $solicitud->estado === 'APROBADA' ? 'success' : ($solicitud->estado === 'RECHAZADA' ? 'danger' : 'warning') }}">{{ $solicitud->estado }}</span></td><td>{{ $solicitud->observacion_administrador }}</td></tr>@empty<tr><td colspan="6" class="text-center">No tienes solicitudes registradas.</td></tr>@endforelse</tbody>
+        </table></div></div>
+    </div></div>
+</div>
 <!-- Modal: cargar procedimiento -->
 <div class="modal fade" id="cargarProcedimientoProfesional" tabindex="-1" role="dialog" aria-labelledby="cargarProcedimientoProfesionalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -175,6 +242,11 @@
                             <label for="edit_cantidad_bloques" class="floating-label-activo-sm">Cantidad de bloques</label>
                             <input type="number" class="form-control form-control-sm" id="edit_cantidad_bloques" name="cantidad_bloques" min="1" required>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_valor" class="floating-label-activo-sm">Valor cobrado por el profesional</label>
+                        <input type="number" class="form-control form-control-sm" id="edit_valor" name="valor" min="0" step="1" required>
+                        <small class="form-text text-muted">Valor del centro: $<span id="valor_centro_info">0</span>. Este cambio solo afecta tu prestación.</small>
                     </div>
                     <div class="form-group">
                         <label for="edit_otros" class="floating-label-activo-sm">Observaciones</label>
@@ -222,10 +294,12 @@
             $select.empty().append('<option value="">Seleccione</option>');
             if (data && data.estado === 1 && data.registro && data.registro.length > 0) {
                 $.each(data.registro, function(_, value) {
-                    $select.append($('<option>', {
+                    const $option = $('<option>', {
                         value: value.id,
                         text: value.nombre
-                    }));
+                    });
+                    $option.attr('data-valor', value.valor || 0);
+                    $select.append($option);
                 });
             } else {
                 $select.empty().append('<option value="">No hay procedimientos configurados para tu especialidad en este lugar</option>');
@@ -240,14 +314,16 @@
     function agregarFila(procedimiento) {
         const estado = procedimiento.estado === 1 ? '<span class="badge badge-info">Activo</span>' : '<span class="badge badge-secondary">Inactivo</span>';
         const toggleBtn = '<button type="button" class="btn btn-icon ' + (procedimiento.estado === 1 ? 'btn-success' : 'btn-secondary') + '" onclick="toggleEstadoProcedimiento(' + procedimiento.id + ',' + procedimiento.estado + ')" title="' + (procedimiento.estado === 1 ? 'Desactivar' : 'Activar') + '"><i class="feather ' + (procedimiento.estado === 1 ? 'icon-toggle-right' : 'icon-toggle-left') + '"></i></button>';
-        const acciones = '<button type="button" class="btn btn-danger btn-icon" onclick="eliminarProcedimiento(' + procedimiento.id + ')"><i class="feather icon-x"></i></button>';
+        const acciones = toggleBtn +
+            ' <button type="button" class="btn btn-warning btn-icon" onclick="cargarProcedimiento(' + JSON.stringify(procedimiento).replace(/"/g, '&quot;') + ')"><i class="feather icon-edit"></i></button>' +
+            ' <button type="button" class="btn btn-danger btn-icon" onclick="eliminarProcedimiento(' + procedimiento.id + ')"><i class="feather icon-x"></i></button>';
         const rowNode = tablaProcedimientos.row.add([
             procedimiento.nombre || '-',
             procedimiento.lugar_nombre || '-',
             procedimiento.minutos_bloque || '',
             procedimiento.cantidad_bloques || '',
+            '$' + Number(procedimiento.valor || 0).toLocaleString('es-CL'),
             estado,
-            toggleBtn,
             acciones
         ]).draw().node();
         $(rowNode).attr('data-proc-id', procedimiento.id);
@@ -311,6 +387,11 @@
             cargarProcedimientosCentro(this.value);
         });
 
+        $('#id_procedimiento_centro').on('change', function() {
+            const valorCentro = $(this).find('option:selected').attr('data-valor');
+            $('#valor').val(valorCentro !== undefined ? valorCentro : '');
+        });
+
         $('#form-nuevo-procedimiento').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
@@ -351,6 +432,29 @@
             });
         });
 
+        $('#form-solicitar-prestacion').on('submit', function(e) {
+            e.preventDefault();
+            const formulario = this;
+            $.ajax({
+                url: "{{ route('profesional.solicitudes_prestaciones.store') }}",
+                type: 'POST',
+                data: $(formulario).serialize()
+            }).done(function(resp) {
+                $('#solicitarPrestacionCentro').modal('hide');
+                formulario.reset();
+                swal({ title: 'Solicitud enviada', text: resp.mensaje, icon: 'success' })
+                    .then(function() { location.reload(); });
+            }).fail(function(xhr) {
+                let mensaje = xhr.responseJSON && xhr.responseJSON.mensaje
+                    ? xhr.responseJSON.mensaje
+                    : 'No fue posible enviar la solicitud.';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    mensaje = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                }
+                swal({ title: 'Error', text: mensaje, icon: 'error' });
+            });
+        });
+
         const primerLugar = $('#id_lugar_atencion').val();
         if (primerLugar) {
             cargarProcedimientosCentro(primerLugar);
@@ -366,6 +470,7 @@
         // En edición, lugar y procedimiento base son solo informativos.
         const minutosBloque = $('#edit_minutos_bloque').val();
         const cantidadBloques = $('#edit_cantidad_bloques').val();
+        const valor = $('#edit_valor').val();
 
         if (!minutosBloque || minutosBloque < 1) {
             swal({
@@ -385,10 +490,20 @@
             return;
         }
 
+        if (valor === '' || Number(valor) < 0) {
+            swal({
+                title: 'Campos requeridos',
+                text: 'El valor debe ser igual o mayor a 0',
+                icon: 'warning'
+            });
+            return;
+        }
+
         // Recopilar datos del formulario
         const datos = {
             minutos_bloque: minutosBloque,
             cantidad_bloques: cantidadBloques,
+            valor: valor,
             otros: $('#edit_otros').val() || '',
             _token: "{{ csrf_token() }}",
             _method: 'PUT'
@@ -417,7 +532,8 @@
                     const proc = resp.procedimiento;
                     const estado = proc.estado === 1 ? '<span class="badge badge-info">Activo</span>' : '<span class="badge badge-secondary">Inactivo</span>';
                     const toggleBtn = '<button type="button" class="btn btn-icon ' + (proc.estado === 1 ? 'btn-success' : 'btn-secondary') + '" onclick="toggleEstadoProcedimiento(' + proc.id + ',' + proc.estado + ')" title="' + (proc.estado === 1 ? 'Desactivar' : 'Activar') + '"><i class="feather ' + (proc.estado === 1 ? 'icon-toggle-right' : 'icon-toggle-left') + '"></i></button>';
-                    const acciones = '<button type="button" class="btn btn-warning btn-icon" onclick="cargarProcedimiento(' + JSON.stringify(proc).replace(/"/g, '&quot;') + ')"><i class="feather icon-edit"></i></button> ' +
+                    const acciones = toggleBtn +
+                                    ' <button type="button" class="btn btn-warning btn-icon" onclick="cargarProcedimiento(' + JSON.stringify(proc).replace(/"/g, '&quot;') + ')"><i class="feather icon-edit"></i></button> ' +
                                     '<button type="button" class="btn btn-danger btn-icon" onclick="eliminarProcedimiento(' + proc.id + ')"><i class="feather icon-x"></i></button>';
 
                     row.data([
@@ -425,8 +541,8 @@
                         proc.lugar_nombre || '-',
                         proc.minutos_bloque || '',
                         proc.cantidad_bloques || '',
+                        '$' + Number(proc.valor || 0).toLocaleString('es-CL'),
                         estado,
-                        toggleBtn,
                         acciones
                     ]).draw();
                 }
@@ -494,8 +610,11 @@
                     if (row.length) {
                         const rowData = row.data();
                         const nuevoEstado = resp.nuevo_estado;
-                        rowData[4] = nuevoEstado === 1 ? '<span class="badge badge-info">Activo</span>' : '<span class="badge badge-secondary">Inactivo</span>';
-                        rowData[5] = '<button type="button" class="btn btn-icon ' + (nuevoEstado === 1 ? 'btn-success' : 'btn-secondary') + '" onclick="toggleEstadoProcedimiento(' + id + ',' + nuevoEstado + ')" title="' + (nuevoEstado === 1 ? 'Desactivar' : 'Activar') + '"><i class="feather ' + (nuevoEstado === 1 ? 'icon-toggle-right' : 'icon-toggle-left') + '"></i></button>';
+                        rowData[5] = nuevoEstado === 1 ? '<span class="badge badge-info">Activo</span>' : '<span class="badge badge-secondary">Inactivo</span>';
+                        rowData[6] = rowData[6].replace(
+                            /<button type="button" class="btn btn-icon [^"]+" onclick="toggleEstadoProcedimiento\([^)]*\)"[^>]*>.*?<\/button>/,
+                            '<button type="button" class="btn btn-icon ' + (nuevoEstado === 1 ? 'btn-success' : 'btn-secondary') + '" onclick="toggleEstadoProcedimiento(' + id + ',' + nuevoEstado + ')" title="' + (nuevoEstado === 1 ? 'Desactivar' : 'Activar') + '"><i class="feather ' + (nuevoEstado === 1 ? 'icon-toggle-right' : 'icon-toggle-left') + '"></i></button>'
+                        );
                         row.data(rowData).draw();
                     }
                     swal({ title: 'Listo', text: resp.mensaje, icon: 'success', timer: 1500, buttons: false });
@@ -589,6 +708,10 @@
             // Cargar valores numéricos con validación
             $('#edit_minutos_bloque').val(procedimiento.minutos_bloque || 15);
             $('#edit_cantidad_bloques').val(procedimiento.cantidad_bloques || 1);
+            $('#edit_valor').val(procedimiento.valor !== null && procedimiento.valor !== undefined
+                ? procedimiento.valor
+                : (procedimiento.valor_centro || 0));
+            $('#valor_centro_info').text(Number(procedimiento.valor_centro || 0).toLocaleString('es-CL'));
 
             // Cargar observaciones (puede ser null)
             $('#edit_otros').val(procedimiento.otros || '');

@@ -26,7 +26,7 @@
                                 <div class="col-1"><img class="wid-30 pl-1 mr-2" src="{{ asset('images/sdi-iconos/rut-info.png') }}"></div>
                                 <div class="col-10  ml-2 text-secondary">
                                     <h6 class="text-dark">RUT</h6>
-                                    <p>{{ $paciente->rut }}
+                                    <p id="rut_paciente_sidebar">{{ $paciente->rut }}
                                     </p>
                                 </div>
                             </div>
@@ -975,4 +975,3 @@
         </div>
     </div>
 </div>
-

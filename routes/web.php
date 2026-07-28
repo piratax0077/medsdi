@@ -604,6 +604,7 @@ Route::group([
     Route::put('mis_procedimientos/{procedimiento}',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'update'])->name('profesional.mis_procedimientos.update');
     Route::patch('mis_procedimientos/{procedimiento}/toggle',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'toggleEstado'])->name('profesional.mis_procedimientos.toggle');
     Route::delete('mis_procedimientos/{procedimiento}',[App\Http\Controllers\ProcedimientosProfesionalController::class, 'destroy'])->name('profesional.mis_procedimientos.destroy');
+    Route::post('mis_procedimientos/solicitudes',[App\Http\Controllers\SolicitudPrestacionCentroController::class, 'store'])->name('profesional.solicitudes_prestaciones.store');
 
     Route::get('examenes_frecuentes', [App\Http\Controllers\EscritorioProfesional::class, 'examenes_frecuentes'])->name('profesional.examenes_frecuentes');
 
@@ -1983,6 +1984,8 @@ Route::group([
     Route::post('/procedimientos/institucion/ver', [App\Http\Controllers\ProcedimientosCentroController::class, 'verRegistro_r'])->name('adm_cm.procedimiento.ver');
     Route::post('/procedimientos/institucion/registros', [App\Http\Controllers\ProcedimientosCentroController::class, 'verRegistros_r'])->name('adm_cm.procedimiento.registros');
     Route::post('/procedimientos/institucion/asignar', [App\Http\Controllers\ProcedimientosCentroController::class, 'asignarProcedimiento'])->name('adm_cm.procedimiento.asignar');
+    Route::post('/procedimientos/solicitudes/{solicitud}/aprobar', [App\Http\Controllers\SolicitudPrestacionCentroController::class, 'aprobar'])->name('adm_cm.solicitudes_prestaciones.aprobar');
+    Route::post('/procedimientos/solicitudes/{solicitud}/rechazar', [App\Http\Controllers\SolicitudPrestacionCentroController::class, 'rechazar'])->name('adm_cm.solicitudes_prestaciones.rechazar');
 
 	Route::get('/Profesionales', [App\Http\Controllers\AdministradorCmController::class, 'profesionales'])->name('adm_cm.profesionales');
     Route::get('/Profesionales/{id}', [App\Http\Controllers\AdministradorCmController::class, 'profesionales_id'])->name('adm_cm.profesionales_id');
@@ -2577,6 +2580,7 @@ Route::group([
     Route::post('/registrar',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'registrar'])->name('medicamento_cronico.registrar');
     Route::get('/getRegsitros',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitros'])->name('medicamento_cronico.getRegsitros');
     Route::get('/getRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'getRegsitro'])->name('medicamento_cronico.getRegsitro');
+    Route::post('/actualizar',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'actualizar'])->name('medicamento_cronico.actualizar');
     Route::post('/deleteRegsitro',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'deleteRegsitro'])->name('medicamento_cronico.deleteRegsitro');
 	Route::post('/regitrar/receta',[App\Http\Controllers\MedicamentoUsoCronicoGeneralController::class, 'pasarMedicamentoCronicoAReceta'])->name('medicamento_cronico.pasar_a_receta');
 });

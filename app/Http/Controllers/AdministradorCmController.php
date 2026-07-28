@@ -73,9 +73,11 @@ use App\Models\TipoCuentaBancaria;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
+use App\Models\TipoPrestacion;
 use App\Models\TiposLaboratorio;
 use App\Models\TipoProductoConvenios;
 use App\Models\SubTipoEspecialidad;
+use App\Models\SolicitudPrestacionCentro;
 use App\Models\User;
 
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -3867,14 +3869,40 @@ class AdministradorCmController extends Controller
         $filtro_prodce  = array();
         $filtro_prodce[]  = array('id_lugar_atencion', $institucion->id_lugar_atencion);
         $filtro_prodce[]  = array('estado', 1);
-        $procedimientos = ProcedimientosCentro::where($filtro_prodce)->get();
+        $prestaciones = ProcedimientosCentro::with('tipoPrestacion')->where($filtro_prodce)->get();
+        $examenes = $prestaciones->filter(function ($prestacion) {
+            return optional($prestacion->tipoPrestacion)->codigo === 'EXAMEN';
+        })->values();
+        $procedimientos = $prestaciones->filter(function ($prestacion) {
+            return optional($prestacion->tipoPrestacion)->codigo === 'PROCEDIMIENTO';
+        })->values();
+        $otrasPrestaciones = $prestaciones->filter(function ($prestacion) {
+            return !in_array(optional($prestacion->tipoPrestacion)->codigo, ['EXAMEN', 'PROCEDIMIENTO'], true);
+        })->values();
         $profesionales = LugarAtencion::where('id', $institucion->id_lugar_atencion)->first()->Profesionales()->orderBy('nombre')->get();
+        $especialidades = Especialidad::select('id', 'nombre')
+            ->where('estado', 1)
+            ->orderBy('nombre')
+            ->get();
+        $tiposPrestacion = TipoPrestacion::where('estado', 1)
+            ->orderBy('nombre')
+            ->get();
+        $solicitudesPrestaciones = SolicitudPrestacionCentro::with(['profesional', 'tipoPrestacion'])
+            ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+            ->where('estado', 'PENDIENTE')
+            ->latest()
+            ->get();
 
         return view('app.adm_cm.examenes',[
             'institucion' => $institucion,
             'tipo_institucion' => $tipo_institucion,
-            'examenes' => $procedimientos,
-            'profesionales_lugar_atencion' => $profesionales
+            'examenes' => $examenes,
+            'procedimientos' => $procedimientos,
+            'otras_prestaciones' => $otrasPrestaciones,
+            'profesionales_lugar_atencion' => $profesionales,
+            'especialidades' => $especialidades,
+            'tipos_prestacion' => $tiposPrestacion,
+            'solicitudes_prestaciones' => $solicitudesPrestaciones
         ]);
     }
 	public function vacunatorio_instalaciones(){

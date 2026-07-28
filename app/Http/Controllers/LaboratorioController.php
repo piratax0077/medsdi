@@ -3909,6 +3909,33 @@ class LaboratorioController extends Controller
     public function actualizarPrestacionLab(Request $request)
     {
         try {
+            $request->validate([
+                'id' => 'required|exists:procedimientos_centro,id',
+                'nombre' => 'required|string|max:255',
+                'cod_examen' => 'nullable|string|max:100',
+                'cantidad_bloques' => 'required|integer|min:1',
+                'valor' => 'required|numeric|min:0',
+                'id_especialidad' => 'nullable|required_with:id_tipo_especialidad|exists:especialidades,id',
+                'id_tipo_especialidad' => 'nullable|required_with:id_especialidad,id_sub_tipo_especialidad|exists:tipos_especialidad,id',
+                'id_sub_tipo_especialidad' => 'nullable|exists:sub_tipo_especialidad,id',
+                'id_tipo_prestacion' => 'nullable|exists:tipo_prestaciones,id',
+            ]);
+
+            $tipoValido = empty($request->id_especialidad)
+                || TipoEspecialidad::where('id', $request->id_tipo_especialidad)
+                    ->where('id_especialidad', $request->id_especialidad)
+                    ->exists();
+            $subTipoValido = empty($request->id_sub_tipo_especialidad)
+                || SubTipoEspecialidad::where('id', $request->id_sub_tipo_especialidad)
+                    ->where('id_tipo_especialidad', $request->id_tipo_especialidad)
+                    ->exists();
+
+            if (!$tipoValido || !$subTipoValido) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'La especialidad, tipo y subtipo seleccionados no corresponden entre sí.'
+                ], 422);
+            }
 
             $prestacion = ProcedimientosCentro::find($request->id);
 
@@ -3919,10 +3946,15 @@ class LaboratorioController extends Controller
                 ]);
             }
             $prestacion->nombre = $request->nombre;
+            $prestacion->cod_examen = $request->cod_examen;
             $prestacion->descripcion = $request->descripcion;
             $prestacion->cantidad_bloques = $request->cantidad_bloques;
             $prestacion->valor = $request->valor;
             $prestacion->indicaciones = $request->indicaciones;
+            $prestacion->id_especialidad = $request->id_especialidad ?: null;
+            $prestacion->id_tipo_especialidad = $request->id_tipo_especialidad ?: null;
+            $prestacion->id_sub_tipo_especialidad = $request->id_sub_tipo_especialidad ?: null;
+            $prestacion->id_tipo_prestacion = $request->id_tipo_prestacion ?: null;
             $prestacion->save();
 
             return response()->json([

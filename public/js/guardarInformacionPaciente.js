@@ -74,9 +74,152 @@
         return direccion || 'Sin información';
     }
 
+    function calcularEdad(fechaNacimiento) {
+        if (!fechaNacimiento) {
+            return '';
+        }
+
+        var partes = String(fechaNacimiento).substring(0, 10).split(/[-/]/);
+        var anio;
+        var mes;
+        var dia;
+
+        if (partes.length !== 3) {
+            return '';
+        }
+
+        if (partes[0].length === 4) {
+            anio = Number(partes[0]);
+            mes = Number(partes[1]);
+            dia = Number(partes[2]);
+        } else {
+            dia = Number(partes[0]);
+            mes = Number(partes[1]);
+            anio = Number(partes[2]);
+        }
+
+        var nacimiento = new Date(anio, mes - 1, dia);
+
+        if (
+            isNaN(nacimiento.getTime()) ||
+            nacimiento.getFullYear() !== anio ||
+            nacimiento.getMonth() !== mes - 1 ||
+            nacimiento.getDate() !== dia
+        ) {
+            return '';
+        }
+
+        var hoy = new Date();
+        var edad = hoy.getFullYear() - anio;
+
+        if (
+            hoy.getMonth() < mes - 1 ||
+            (hoy.getMonth() === mes - 1 && hoy.getDate() < dia)
+        ) {
+            edad--;
+        }
+
+        return edad >= 0 ? edad : '';
+    }
+
+    function actualizarIdentificacionPaciente(paciente, valoresFormulario) {
+        paciente = paciente || {};
+        valoresFormulario = valoresFormulario || {};
+
+        var rut = paciente.rut || valoresFormulario.rut || '';
+        var fechaNacimiento =
+            paciente.fecha_nac ||
+            paciente.fecha_nacimiento ||
+            valoresFormulario.fecha_nacimiento ||
+            '';
+        var nombreCompleto = [
+            paciente.nombres || paciente.nombre || valoresFormulario.nombre,
+            paciente.apellido_uno || valoresFormulario.apellido_uno,
+            paciente.apellido_dos || valoresFormulario.apellido_dos
+        ]
+        .filter(function(valor) {
+            return valor && String(valor).trim() !== '';
+        })
+        .join(' ')
+        .trim();
+        var edad = calcularEdad(fechaNacimiento);
+        var fechaConEdad = fechaNacimiento;
+
+        if (edad !== '') {
+            fechaConEdad += ' - (' + edad + ' años)';
+        }
+
+        $('#rut_paciente_sidebar, #rut_paciente_menu').text(rut);
+        $('#nombre_completo_paciente, #nombre_paciente_menu').text(nombreCompleto);
+        $('#fecha_nac_paciente').text(fechaConEdad);
+        $('#edad_paciente_menu').text(edad);
+
+        // Mantener sincronizados otros campos usados durante la atención.
+        $('#paciente_rut_edit, #rut_paciente_fc').val(rut);
+    }
+
+    window.actualizarPatologiasMenuProfesional = function(registros) {
+        var contenedor = $('#patologias_paciente_menu');
+
+        if (!contenedor.length) {
+            return;
+        }
+
+        contenedor.empty();
+
+        var patologias = (registros || []).filter(function(registro) {
+            return registro &&
+                Number(registro.estado) !== 0 &&
+                registro.antecedente_data &&
+                registro.antecedente_data.nombre;
+        });
+
+        if (patologias.length === 0) {
+            var mensaje = $('<div>').css({
+                padding: '14px',
+                textAlign: 'center',
+                border: '1px dashed #d8e1e8',
+                borderRadius: '8px',
+                background: '#fafcfd',
+                color: '#7c8a96',
+                fontSize: '12px'
+            });
+
+            mensaje.append($('<i>', {
+                class: 'fa fa-check-circle mr-1'
+            }));
+            mensaje.append(document.createTextNode(
+                'No registra patologías crónicas.'
+            ));
+            contenedor.append(mensaje);
+            return;
+        }
+
+        patologias.forEach(function(registro) {
+            $('<div>', {
+                text: registro.antecedente_data.nombre
+            })
+            .css({
+                background: '#fafcfd',
+                border: '1px solid #e5ebef',
+                borderLeft: '4px solid #60c6c4',
+                borderRadius: '8px',
+                padding: '3px 6px',
+                marginBottom: '6px',
+                fontSize: '14px',
+                fontWeight: '500',
+                overflowWrap: 'break-word',
+                color: '#43515c',
+                textTransform: 'capitalize'
+            })
+            .appendTo(contenedor);
+        });
+    };
+
     window.guardarInformacionPaciente = function() {
         var CSRF_TOKEN = getCsrfToken();
         var id_paciente = $('#id_paciente').val();
+        var rut = $('#paciente_rut_edit').val().trim();
         var nombres = $('#paciente_nombre_edit').val();
         var apellido_uno = $('#paciente_apellido_uno_edit').val();
         var apellido_dos = $('#paciente_apellido_dos_edit').val();
@@ -91,6 +234,7 @@
 
         var data = {
             id: id_paciente,
+            rut: rut,
             nombre: nombres,
             apellido_uno: apellido_uno,
             apellido_dos: apellido_dos,
@@ -123,8 +267,13 @@
                 var paciente = data.paciente;
                 var direccion = getDireccionPaciente(paciente);
 
-                $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
-                $('#fecha_nac_paciente').text(paciente.fecha_nac);
+                actualizarIdentificacionPaciente(paciente, {
+                    rut: rut,
+                    nombre: nombres,
+                    apellido_uno: apellido_uno,
+                    apellido_dos: apellido_dos,
+                    fecha_nacimiento: fecha_nac
+                });
                 $('#sexo_paciente').text(paciente.sexo == 'M' ? 'Masculino' : 'Femenino');
                 $('#email_paciente_').text(paciente.email);
                 $('#telefono_paciente_').text(paciente.telefono_uno);
