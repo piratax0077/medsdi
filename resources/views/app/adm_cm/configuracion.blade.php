@@ -282,6 +282,14 @@
                                                         <label class="font-weight-bolder ml-0 mb-0">Sitio web</label>
                                                         <div id="ver_sitio_web">{{ $institucion->sitio_web }}</div>
                                                     </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Instagram</label>
+                                                        <div id="ver_instagram">No hay registro</div>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="font-weight-bolder ml-0 mb-0">Facebook</label>
+                                                        <div id="ver_facebook">No hay registro</div>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -313,6 +321,18 @@
                                                         <input type="text" class="form-control form-control-sm"
                                                             id="editar_sitio_web" placeholder="Sitio web"
                                                             value="{{ $institucion->sitio_web }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm">Instagram</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="editar_instagram" placeholder="https://instagram.com/usuario"
+                                                            value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="floating-label-activo-sm">Facebook</label>
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="editar_facebook" placeholder="https://facebook.com/usuario"
+                                                            value="">
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <div class="d-flex justify-content-end">
@@ -361,7 +381,7 @@
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="font-weight-bolder ml-0 mb-0">Dirección</label>
                                                         <div>
-                                                            {{ $institucion->Direccion()->first()->direccion . ' ' . $institucion->Direccion()->first()->numero_dir }}
+                                                             {{ $institucion->Direccion()->first()->direccion }}
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -417,18 +437,18 @@
                                                             @endif
                                                         </select>
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                                    <div class="form-group col-12">
                                                         <label class="floating-label-activo-sm">Dirección</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             name="editar_direccion" id="editar_direccion"
                                                             value="{{ $institucion->Direccion()->first()->direccion }}">
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                    {{--<div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <label class="floating-label-activo-sm">Nº</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             name="editar_numero_dir" id="editar_numero_dir"
                                                             value="{{ $institucion->Direccion()->first()->numero_dir }}">
-                                                    </div>
+                                                    </div>--}}
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="col-form-label font-weight-bolder">Sucursal</label>
                                                         <div class="form-group">

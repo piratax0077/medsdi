@@ -349,7 +349,7 @@
                                                         <label class="font-weight-bolder ml-0 mb-0">Dirección</label>
                                                         <div>
                                                             @if ($direccion_paciente)
-                                                                {{ $direccion_paciente->direccion }} {{ $direccion_paciente->numero_dir }}
+                                                                {{ $direccion_paciente->direccion }}
                                                             @endif
                                                         </div>
                                                     </div>
@@ -406,10 +406,10 @@
                                                         <label class="floating-label-activo">Dirección</label>
                                                         <input type="text" class="form-control form-control-sm" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{ $paciente->Direccion()->first()->direccion }}">
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                    {{--<div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <label class="floating-label-activo">Nº</label>
                                                         <input type="text" class="form-control form-control-sm" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{ $paciente->Direccion()->first()->numero_dir }}">
-                                                    </div>
+                                                    </div>--}}
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="col-sm-12 d-flex justify-content-end">
