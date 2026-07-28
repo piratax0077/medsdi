@@ -11,7 +11,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
                             <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN DERMATOLOGÍA</strong></h5>
-                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
+                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right"><i class="feather icon-calendar mr-1"></i>
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -54,7 +54,7 @@
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam_tab" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
+                                        <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
                                     {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>

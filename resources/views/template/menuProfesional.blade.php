@@ -138,7 +138,7 @@
                         border-bottom:1px solid #edf2f6;">
 
                         <div style="
-                            font-size:10px;
+                            font-size:12px;
                             font-weight:700;
                             text-transform:uppercase;
                             letter-spacing:1px;
@@ -148,28 +148,29 @@
                         </div>
 
                         <div style="
-                            font-size:13px;
+                            font-size:15px;
                             font-weight:600;
                             color:#243746;
+                            text-transform:capitalize;
                             line-height:1.35;">
                             {{ $paciente->nombres }}
                             {{ $paciente->apellido_uno }}
                             {{ $paciente->apellido_dos }}
                         </div>
 
-                        <div class="d-flex flex-wrap mt-3">
+                        <div class="d-flex flex-wrap mt-2">
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:11px;color:#51606d;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:14px;color:#51606d;font-weight:600;">
                                 <i class="fa fa-id-card mr-1"></i>
                                 {{ $paciente->rut }}
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:11px;color:#158982;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:14px;color:#158982;font-weight:600;">
                                 <i class="fa fa-birthday-cake mr-1"></i>
                                 {{ $paciente->edad }}
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:5px 11px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:11px;color:#3f68af;font-weight:600;">
+                            <span style="display:inline-flex;align-items:center;padding:5px 13px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:14px;color:#3f68af;font-weight:600;">
                                 <i class="fa fa-shield mr-1"></i>
                                 {{ $paciente->prevision->nombre }}
                             </span>
@@ -189,7 +190,7 @@
                                 <i class="fa fa-heartbeat"></i>
                             </div>
 
-                            <div style="font-size:13px;font-weight:600;color:#34495e;">
+                            <div style="font-size:14px;font-weight:600;color:#34495e;">
                                 Patologías Crónicas
                             </div>
 
@@ -214,10 +215,11 @@
                                     border-radius:8px;
                                     padding:3px 6px;
                                     margin-bottom:6px;
-                                    font-size:12px;
+                                    font-size:14px;
                                     font-weight:500; 
                                     overflow-wrap: break-word;
-                                    color:#43515c;">
+                                    color:#43515c;
+                                    text-transform:capitalize;">
 
 
                                     {{ $a->antecedente_data->nombre }}

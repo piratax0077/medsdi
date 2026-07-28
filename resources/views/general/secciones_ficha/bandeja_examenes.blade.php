@@ -1,8 +1,14 @@
 <div class="user-profile user-card mt-0 bg-fondo-gris">
     <div class="col-md-12 py-0 px-2 shadow-none">
         <div class="row mx-0">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h4 class="text-c-blue mt-3 f-20 mb-0">Exámenes</h4>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3 mb-1">
+                <div class="media">
+                  <i class="feather icon-file-plus bg-white shadow-sm p-3 mr-3 f-18 text-c-blue rounded-circle"></i>
+                      <div class="media-body">
+                        <h4 class="text-dark  f-22 mb-0">Exámenes</h4>
+                        <p>Accede al historial de exámenes y sus resultados.</p>
+                      </div>
+                </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <ul class="nav nav-tabs-secciones mb-2" id="pediatria_general" role="tablist">
@@ -10,7 +16,7 @@
                         <a class="nav-secciones active text-uppercase" id="bandeja-entrada-tab" data-toggle="tab" href="#bandeja-entrada" role="tab" aria-controls="bandeja-entrada" aria-selected="false">Bandeja de entrada</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="ex-esp-rev-tab" data-toggle="tab" href="#ex-esp-rev" role="tab" aria-controls="ex-esp-rev" aria-selected="false">Examenes especialidad</a>
+                        <a class="nav-secciones text-uppercase" id="ex-esp-rev-tab" data-toggle="tab" href="#ex-esp-rev" role="tab" aria-controls="ex-esp-rev" aria-selected="false">Exámenes especialidad</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="ex-rx-tab" data-toggle="tab" href="#ex-rx" role="tab" aria-controls="ex-rx" aria-selected="false">Exámenes radiológicos</a>
@@ -25,9 +31,9 @@
                     <!--BANDEJA DE ENTRADA-->
                     <div class="tab-pane fade show active" id="bandeja-entrada" role="tabpanel" aria-labelledby="bandeja-entrada-tab">
                         <div class="card">
-                            <div class="card-top">
-                                    <h6>Bandeja de entrada</h6>
-                                </div>
+                            <div class="card-header-principal">
+                                <h6 class="f-16 text-dark">Bandeja de entrada</h6>
+                            </div>
                             <div class="card-body pt-2">
                                 <div class="dt-responsive table-responsive">
                                     <table id="bandeja_entrada" class="display table dt-responsive nowrap table-xs align-middle" style="width:100%">
@@ -181,8 +187,8 @@
                     <!-- EXAMEN ESPECIALIDAD  -->
                     <div class="tab-pane fade" id="ex-esp-rev" role="tabpanel" aria-labelledby="ex-esp-rev-tab">
                         <div class="card">
-                            <div class="card-top">
-                                    <h6>Exámenes especialidad</h6>
+                            <div class="card-header-principal">
+                                    <h6 class="f-16 text-dark">Exámenes especialidad</h6>
                                 </div>
                             <div class="card-body">
                                 <div class="dt-responsive table-responsive">
@@ -254,8 +260,8 @@
                     <div class="tab-pane fade show" id="ex-rx" role="tabpanel" aria-labelledby="ex-rx-tab">
                        <div class="dt-responsive table-responsive">
                             <div class="card">
-                                <div class="card-top">
-                                    <h6>Exámenes radiológicos</h6>
+                                <div class="card-header-principal">
+                                    <h6 class="f-16 text-dark">Exámenes radiológicos</h6>
                                 </div>
                                 <div class="card-body">
                                     <table id="exam_radiologicos" class="display table dt-responsive nowrap table-xs" style="width:100%">
@@ -313,10 +319,10 @@
                                                                 {{ $result_rayo->nombre_procedimientos }}
                                                             </td>
                                                             <td>
-                                                                RADIOLOGIA
+                                                                RADIOLOGÍA
                                                             </td>
                                                             <td>
-                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenRayo_{{ $result_rayo->id }}" onclick="carga_detalle_rayo('{{ $result_rayo->id }}');"><i class="feather icon-activity"></i> Revisar</button>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenRayo_{{ $result_rayo->id }}" onclick="carga_detalle_rayo('{{ $result_rayo->id }}');"><i class="feather icon-activity"></i> Ver</button>
                                                             </td>
                                                         </tr>
                                                     @endif
@@ -336,8 +342,8 @@
                     <div class="tab-pane fade show" id="ex-generales" role="tabpanel" aria-labelledby="ex-generales-tab">
                        <div class="dt-responsive table-responsive">
                             <div class="card">
-                                <div class="card-top">
-                                    <h6>Exámenes generales</h6>
+                                <div class="card-header-principal">
+                                    <h6 class="f-16 text-dark">Exámenes generales</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="dt-responsive table-responsive pb-4">

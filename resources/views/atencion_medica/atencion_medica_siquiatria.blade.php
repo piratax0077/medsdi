@@ -11,7 +11,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
                             <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN PSIQUIÁTRICA</strong></h5>
-                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
+                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right"><i class="feather icon-calendar mr-1"></i>
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -100,7 +100,9 @@
         </div>
 
         <!-- SIDE BAR ORL -->
+           @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+
         @include("atencion_medica.include.sidebar_derecho_siquiatria"){{-- modales y data de sidebar especialidad --}}
 
         <!--Modals de especialidad -->
@@ -110,7 +112,7 @@
         {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
         <!--Modals formularios generales-->
-        @include('general.secciones_ficha.receta_examen.modal_recetario_sdi')
+
        @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
 
 

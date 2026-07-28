@@ -68,7 +68,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="info-academico-tab" data-toggle="tab"
                                             href="#info-academico" role="tab" aria-controls="info-academico"
-                                            aria-selected="false"><i class="feather icon-book"></i> Antecedentes académicos</a>
+                                            aria-selected="false"><i class="feather icon-book"></i> Perfil profesional</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="pass-tab" data-toggle="tab" href="#pass"
@@ -445,7 +445,9 @@
                                                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <label class="font-weight-bolder ml-0 mb-0">Dirección</label>
                                                         <div>
-                                                            {{ $profesional->Direccion()->first()->direccion . ' ' . $profesional->Direccion()->first()->numero_dir }}
+                                                            <div>
+    {{ $profesional->Direccion()->first()->direccion }}
+</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -488,19 +490,19 @@
                                                             @endif
                                                         </select>
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                                                    <div class="form-group col-12">
                                                         <label class="floating-label-activo">Dirección</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             placeholder="Dirección" name="perfil_dire" id="perfil_dire"
                                                             value="{{ $profesional->Direccion()->first()->direccion }}">
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                    {{--<div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                         <label class="floating-label-activo">Nº</label>
                                                         <input type="text" class="form-control form-control-sm"
                                                             placeholder="n&uacute;mero #" name="perfil_numero_dir"
                                                             id="perfil_numero_dir"
                                                             value="{{ $profesional->Direccion()->first()->numero_dir }}">
-                                                    </div>
+                                                    </div>--}}
                                                 </div>
                                                 <div class="form-row">
                                                     <div
