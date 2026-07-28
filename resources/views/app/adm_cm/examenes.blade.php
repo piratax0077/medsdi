@@ -8,78 +8,258 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Gestión de Exámenes del Centro Médico</h5>
+                                <h5></h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_admin_general_laboratorio.php"
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}"
                                         data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i
                                             class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#">Exámenes Médicos</a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.laboratorio') }}">Área de Laboratorios {{ mb_strtoupper($institucion->nombre) }}</a></li>
+                                <li class="breadcrumb-item"><a href="#">Exámenes y/o procedimientos</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header bg-info">
-                        <div class="row">
-                            <div class="col-md-12 align-botton">
-                                <h4 class="text-white f-20 d-inline ml-4 mt-3">Catálogo de Exámenes</h4>
-                                <div class="btn-group mr-2 float-right mt- mb-">
-                                    <button type="button" class="btn btn-sm btn-outline-light" onclick="ag_procedimiento();"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Examen</button>
-                                    <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                    <div class="dropdown-menu">
-                                        <button class="dropdown-item" type="button" class="btn  btn-primary" >Exámenes Activos</button>
-                                        <button class="dropdown-item" type="button" class="btn  btn-primary">Exámenes Inactivos</button>
+            <!--TITULO CON DESCRIPCIÓN-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media">
+                                <img class="wid-60 align-self-start mr-3"  src="{{ asset('images/iconos/procedimiento-medico.png') }}">
+                              <div class="media-body">
+                               <h4 class="text-c-blue">Exámenes y/o procedimientos</h4>
+                               <p>Administra la información de los exámenes y procedimientos.</p>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                    <div class="card py-0">
+                        <div class="card-body pb-2 pt-2">
+                            <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link-aten text-reset active" id="examenes-cm-tab" data-toggle="pill" href="#examenes-cm" role="tab" aria-controls="examenes-cm" aria-selected="false">
+                                        Exámenes
+                                    </a>
+                                </li>
+                                 <li class="nav-item">
+                                    <a class="nav-link-aten text-reset" id="proc-cm-tab" data-toggle="pill" href="#proc-cm" role="tab" aria-controls="proc-cm" aria-selected="false">
+                                       Procedimientos
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <!--EXÁMENES-->
+                        <div class="tab-pane show active" id="examenes-cm" role="tabpanel" aria-labelledby="examenes-cm-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header-principal">
+                                            <div class="row">
+                                                <div class="col-md-12 align-botton">
+                                                    <h5 class="text-white  d-inline "><i class="feather icon-file-text icono-primary"></i>Catálogo de Exámenes</h5>
+                                                    <div class="btn-group mr-2 float-right mt- mb-">
+                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_procedimiento();"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Examen</button>
+                                                        <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                        <div class="dropdown-menu">
+                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" >Exámenes Activos</button>
+                                                            <button class="dropdown-item" type="button" class="btn  btn-primary">Exámenes Inactivos</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive-sm">
+                                                <table id="lista_examenes_laboratorio"
+                                                    class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código</th>
+                                                            <th>Nombre del Examen</th>
+                                                            <th>Descripción</th>
+                                                            <th>Cantidad de bloques</th>
+                                                            <th>Estado</th>
+                                                            <th>Valor</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if(isset($examenes))
+                                                        @foreach ($examenes as $examen)
+                                                            <tr>
+                                                                <td>{{ $examen->cod_examen }}</td>
+                                                                <td class="wrap-column">{{ $examen->nombre }}</td>
+                                                                <td class="wrap-column">{{ $examen->descripcion }}</td>
+                                                                <td>{{ $examen->cantidad_bloques }}</td>
+                                                                <td>${{ number_format($examen->valor,0,',','.') }}</td>
+                                                                <td>
+                                                                    <span class="badge badge-{{ $examen->estado == 1 ? 'success' : 'secondary' }}">
+                                                                        {{ $examen->estado == 1 ? 'Activo' : 'Inactivo' }}
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $examen->id }})" title="Asignar"><i class="feather icon-user"></i> </button>
+                                                                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
+                         <!--PROCEDIMIENTOS-->
+                        <div class="tab-pane fade" id="proc-cm" role="tabpanel" aria-labelledby="proc-cm-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header-principal">
+                                            <div class="row">
+                                                <div class="col-md-12 align-botton">
+                                                    <h5 class="text-white  d-inline "><i class="feather icon-file-text icono-primary"></i>Catálogo de procedimientos</h5>
+                                                    <div class="btn-group mr-2 float-right mt- mb-">
+                                                        <button type="button" class="btn btn-sm btn-info" onclick="ag_procedimiento();"><i class="fa fa-plus" aria-hidden="true"></i> Agregar Procedimientos</button>
+                                                        <button type="button" class="btn btn-sm btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                        <div class="dropdown-menu">
+                                                            <button class="dropdown-item" type="button" class="btn  btn-info">Procedimientos Activos</button>
+                                                            <button class="dropdown-item" type="button" class="btn  btn-info">Procedimientos Inactivos</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                </div>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="lista_procedimientos_cm"
+                                                    class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código</th>
+                                                            <th>Procedimiento</th>
+                                                            <th>Tipo</th>
+                                                            <th>Min. por bloques</th>
+                                                            <th>Cantidad de bloques</th>
+                                                            <th>Estado</th>
+                                                            <th>Valor</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>777</td>
+                                                            <td>Retiro de puntos</td>
+                                                            <td>Enfermería</td>
+                                                            <td>15 min</td>
+                                                            <td>2 bloques</td>
+                                                            <td>
+                                                                <label class="switch-moderno">
+                                                                    <input type="checkbox" id="switchEstado">
+                                                                    <span class="switch-slider">
+                                                                            <span class="switch-text off">
+                                                                             Inactivo
+                                                                            </span>
+                                                                            <span class="switch-text on">
+                                                                            Activo
+                                                                            </span>
+                                                                    </span>
+                                                                </label>
+                                                            </td>
+                                                            <td>$0</td>
+                                                              <td>
+                                                                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $examen->id }})" title="Asignar"><i class="fas fa-user"></i> </button>
+                                                                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                                </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>423443</td>
+                                                            <td>Lavado de oídos</td>
+                                                            <td>Otorrinolaringología</td>
+                                                            <td>15 min</td>
+                                                            <td>1 bloques</td>
+                                                            <td>
+                                                                <label class="switch-moderno">
+                                                                    <input type="checkbox" id="switchEstado">
+                                                                    <span class="switch-slider">
+                                                                            <span class="switch-text off">
+                                                                             Inactivo
+                                                                            </span>
+                                                                            <span class="switch-text on">
+                                                                            Activo
+                                                                            </span>
+                                                                    </span>
+                                                                </label>
+                                                            </td>
+                                                            <td>$30.000</td>
+                                                              <td>
+                                                                    <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                    <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                    <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $examen->id }})" title="Asignar"><i class="fas fa-user"></i> </button>
+                                                                    <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                                </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>2443</td>
+                                                            <td class="wrap-column">Dejar acá cualquier procedimiento que no pertenezca a las categorías anteriores</td>
+                                                            <td>Otros procedimientos</td>
+                                                            <td>15 min</td>
+                                                            <td>1 bloques</td>
+                                                            <td>
+                                                                <label class="switch-moderno">
+                                                                    <input type="checkbox" id="switchEstado">
+                                                                    <span class="switch-slider">
+                                                                            <span class="switch-text off">
+                                                                             Inactivo
+                                                                            </span>
+                                                                            <span class="switch-text on">
+                                                                            Activo
+                                                                            </span>
+                                                                    </span>
+                                                                </label>
+                                                            </td>
+                                                            <td>$30.000</td>
+                                                            <td>
+                                                                <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
+                                                                <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
+                                                                <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $examen->id }})" title="Asignar"><i class="feather icon-user"></i> </button>
+                                                                <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <table id="lista_examenes_laboratorio"
-                            class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre del Examen</th>
-                                    <th>Descripcion</th>
-                                    <th>Cantidad de bloques</th>
-                                    <th>Estado</th>
-                                    <th>Valor</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if(isset($examenes))
-                                @foreach ($examenes as $examen)
-                                    <tr>
-                                        <td>{{ $examen->cod_examen }}</td>
-                                        <td>{{ $examen->nombre }}</td>
-                                        <td>{{ $examen->descripcion }}</td>
-                                        <td>{{ $examen->cantidad_bloques }}</td>
-                                        <td>${{ number_format($examen->valor,0,',','.') }}</td>
-                                        <td>
-                                            <span class="badge badge-{{ $examen->estado == 1 ? 'success' : 'secondary' }}">
-                                                {{ $examen->estado == 1 ? 'Activo' : 'Inactivo' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-info btn-icon btn-sm" type="button" onclick="ver_examen({{ $examen->id }})" title="Ver detalles"><i class="feather icon-eye"></i></button>
-                                            <button class="btn btn-warning btn-icon btn-sm" type="button" onclick="mostrar_procedimiento({{ $examen->id }})" title="Editar"><i class="feather icon-edit"></i></button>
-                                            <button class="btn btn-success btn-icon btn-sm" type="button" onclick="asignar_procedimiento({{ $examen->id }})" title="Asignar"><i class="fas fa-user"></i> </button>
-                                            <button class="btn btn-danger btn-icon btn-sm" type="button" onclick="eliminar_procedimiento({{ $examen->id }})" title="Eliminar"><i class="feather icon-x"></i></button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                @endif
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -103,21 +283,21 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label">Código del examen</label>
+                                    <label class="floating-label-activo-sm">Código del examen</label>
                                     <input class="form-control form-control-sm" name="direccion"
                                         id="direccion_lugar_atencion" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Nombre del examen</label>
+                                    <label class="floating-label-activo-sm">Nombre del examen</label>
                                     <input class="form-control form-control-sm" name="nombre_examen" id="nombre_examen"
                                         type="text">
                                 </div>
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label">Plazo de entrega</label>
+                                    <label class="floating-label-activo-sm">Plazo de entrega</label>
                                     <input class="form-control form-control-sm" name="numero" id="numero_lugar_atencion"
                                         type="text">
                                 </div>
@@ -127,7 +307,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Preparación del examen</label>
+                                    <label class="floating-label-activo-sm">Preparación del examen</label>
                                     <textarea class="form-control form-control-sm" id="preparacion_examen" rows="3"></textarea>
                                 </div>
                             </div>
@@ -205,7 +385,7 @@
                             <!-- Código del Examen -->
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Código del Examen</label>
+                                    <label class="floating-label-activo-sm">Código del Examen</label>
                                     <input class="form-control form-control-sm" type="text" name="e_examen_codigo" id="e_examen_codigo" placeholder="EJ: HEM-001">
                                 </div>
                             </div>
@@ -213,9 +393,9 @@
                             <!-- Tipo de Examen -->
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Tipo de Examen</label>
+                                    <label class="floating-label-activo-sm">Tipo de Examen</label>
                                     <select class="form-control form-control-sm" name="e_examen_tipo" id="e_examen_tipo">
-                                        <option value="">Seleccionar...</option>
+                                        <option value="">Seleccione</option>
                                         <option value="Laboratorio">Laboratorio</option>
                                         <option value="Imagenología">Imagenología</option>
                                         <option value="Cardiología">Cardiología</option>
@@ -227,7 +407,7 @@
                             <!-- Nombre del Examen -->
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Nombre del Examen</label>
+                                    <label class="floating-label-activo-sm">Nombre del Examen</label>
                                     <input class="form-control form-control-sm" type="text" name="e_examen_nombre" id="e_examen_nombre" placeholder="Ej: Hemograma Completo">
                                 </div>
                             </div>
@@ -235,7 +415,7 @@
                             <!-- Descripción -->
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Descripción</label>
+                                    <label class="floating-label-activo-sm">Descripción</label>
                                     <textarea class="form-control form-control-sm" name="e_examen_descripcion" id="e_examen_descripcion" rows="2" placeholder="Descripción breve del examen"></textarea>
                                 </div>
                             </div>
@@ -243,7 +423,7 @@
                             <!-- Cantidad de Bloques -->
                             <div class="col-sm-4">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Cantidad de Bloques</label>
+                                    <label class="floating-label-activo-sm">Cantidad de Bloques</label>
                                     <input class="form-control form-control-sm" type="number" name="e_examen_cantidad_bloques" id="e_examen_cantidad_bloques" step="1" min="1" max="24" value="1">
                                 </div>
                             </div>
@@ -251,7 +431,7 @@
                             <!-- Plazo de Entrega -->
                             <div class="col-sm-4">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Plazo de Entrega (días)</label>
+                                    <label class="floating-label-activo-sm">Plazo de Entrega (días)</label>
                                     <input class="form-control form-control-sm" type="number" name="e_examen_plazo" id="e_examen_plazo" step="1" min="0" value="1">
                                 </div>
                             </div>
@@ -259,7 +439,7 @@
                             <!-- Valor -->
                             <div class="col-sm-4">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Valor $</label>
+                                    <label class="floating-label-activo-sm">Valor $</label>
                                     <input class="form-control form-control-sm" type="number" name="e_examen_valor" id="e_examen_valor" step="100" value="0">
                                 </div>
                             </div>
@@ -267,7 +447,7 @@
                             <!-- Estado -->
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Estado</label>
+                                    <label class="floating-label-activo-sm">Estado</label>
                                     <select class="form-control form-control-sm" name="e_examen_estado" id="e_examen_estado">
                                         <option value="1">Activo</option>
                                         <option value="0">Inactivo</option>
@@ -278,7 +458,7 @@
                             <!-- Separador -->
                             <div class="col-sm-12 mt-2">
                                 <hr>
-                                <h6 class="text-c-blue font-weight-bold">Instructivo para la Preparación del Paciente</h6>
+                                <h6 class="text-c-blue font-weight-bold">Instructivo para la preparación del paciente</h6>
                             </div>
 
                             <!-- Instructivo de Preparación -->
@@ -483,28 +663,28 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label">Nombre</label>
+                                    <label class="floating-label-activo-sm">Nombre</label>
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="text" name="a_procedimeinto_nombre" id="a_procedimeinto_nombre" value="">
                                     </div>
                                 </div>
 
                                 <div class="form-group fill">
-                                    <label class="floating-label">Descripción</label>
+                                    <label class="floating-label-activo-sm">Descripción</label>
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="text" name="a_procedimeinto_descripcion" id="a_procedimeinto_descripcion" value="">
                                     </div>
                                 </div>
 
                                 <div class="form-group fill">
-                                    <label class="floating-label">Cantidad Bloques</label>
+                                    <label class="floating-label-activo-sm">Cantidad Bloques</label>
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="number" name="a_procedimeinto_cantidad_bloques" id="a_procedimeinto_cantidad_bloques" step="1" max="24" value="">
                                     </div>
                                 </div>
 
                                 <div class="form-group fill">
-                                    <label class="floating-label">Valor $</label>
+                                    <label class="floating-label-activo-sm">Valor $</label>
                                     <div class="d-flex justify-content-between">
                                         <input class="form-control form-control-sm" type="number" name="a_procedimeinto_valor" id="a_procedimeinto_valor" step="1"  value="0">
                                     </div>
@@ -516,7 +696,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_procedimiento()">Añadir</button>
+                    <button type="button" class="btn btn-info mx-auto" onclick="guardar_procedimiento()"><i class="feather icon-check"></i> Agregar</button>
                 </div>
             </div>
         </div>
@@ -544,7 +724,7 @@
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Lugar de Atención</label>
                             <select class="form-control form-control-sm" name="asignar_id_lugar_atencion" id="asignar_id_lugar_atencion" required>
-                                <option value="">Seleccionar...</option>
+                                <option value="">Seleccione</option>
                                 <option value="{{ $institucion->id_lugar_atencion }}" selected>{{ $institucion->nombre }}</option>
                             </select>
                         </div>
@@ -604,12 +784,10 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalMostrarPrestacion" tabindex="-1" aria-labelledby="modalMostrarPrestacionLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
@@ -647,7 +825,7 @@
             </div>
 
 
-            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="editar_prestacion()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
+            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="editar_prestacion()"><i class="fas fa-plus"></i>  Agregar otro diagnóstico</button>
             {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -690,6 +868,13 @@
 @endsection
 @section('page-script')
     <script>
+        $(document).ready(function() {
+            $('#lista_procedimientos_cm').DataTable({
+                responsive: true,
+            });
+        });
+
+
         $(document).ready(function() {
             $('#lista_examenes_laboratorio').DataTable({
                 responsive: true,
@@ -753,12 +938,12 @@
                         $(registros).each(function(i, v) { // indice, valor
                             $('#lista_examenes_laboratorio tbody').append(`
                             <tr>
-                                <td class="align-items-left text-left">${v.nombre}s</td>
-                                <td class="align-items-left text-left">${v.descripcion}</td>
-                                <td class="align-items-left text-left">${v.cantidad_bloques}</td>
-                                <td class="align-items-left text-left">${v.valor}</td>
-                                <td class="align-items-left text-left">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                <td>${v.nombre}s</td>
+                                <td>${v.descripcion}</td>
+                                <td>${v.cantidad_bloques}</td>
+                                <td>${v.valor}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-x"></i></button>
                                 </td>
                             </tr>
                             `);

@@ -8,32 +8,32 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Laboratorios del centro médico</h5>
+                            <h5 class="m-b-10 font-weight-bold"></h5>
                         </div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="escritorio_admin_general_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather       icon-home"></i></a></li>
-                            <!--<li class="breadcrumb-item"><a href="sucursales_cm.php">Sucursales del centro médico</a></li>-->
+                         <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}"
+                                    data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i
+                                        class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.laboratorio') }}">Área de Laboratorios {{ mb_strtoupper($institucion->nombre) }}</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header bg-info">
-                    <div class="col-md-12">
-                        <div class="row">
-                           <div class="col-md-6 d-inline">
-                                <h4 class="text-white f-20 mt-2 mb-1">Mis Laboratorios</h4>
-                            </div>
-                            <div class="col-md-6 d-inline">
-                                <div class="float-right">
-                                    <div class="btn-group mr-2">
-                                        <button type="button" class="btn  btn-sm btn-outline-light" onclick="ag_laboratorio();"><i class="fa fa-plus" aria-hidden="true"></i> Agregar nuevo Laboratorio</button>
-                                        <button type="button" class="btn  btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                        <div class="dropdown-menu">
-                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="agregar_desasociar ();">Desasociar o Agregar Laboratorio existente</button>
-                                        </div>
+                <div class="card-header-principal">
+                    <div class="row">
+                       <div class="col-md-6 d-inline">
+                            <h5> <i class="feather icon-home icono-primary"></i>Laboratorios de {{ mb_strtoupper($institucion->nombre) }}</h5>
+                        </div>
+                        <div class="col-md-6 d-inline">
+                            <div class="float-right">
+                                <div class="btn-group mr-2">
+                                    <button type="button" class="btn  btn-sm btn-info" onclick="ag_laboratorio();"><i class="fa fa-plus" aria-hidden="true"></i> Agregar laboratorio</button>
+                                    <button type="button" class="btn  btn-sm btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item" type="button" class="btn btn-info" onclick="agregar_desasociar ();">Deshabilitar o habilitar Laboratorio existente</button>
                                     </div>
                                 </div>
                             </div>
@@ -45,76 +45,76 @@
                         <div class="col-md-12 mb-3">
                         </div>
                     </div>
-                    <table id="sucursales_cm" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                    <table id="sucursales_cm" class="display table table-striped dt-responsive nowrap" style="width:100%">
                         <thead>
-                                                                            <tr>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Rut</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Laboratorio</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Ubicación</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Tipo Laboratorio</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Ciudad</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Dirección</th>
-                                                                                <th
-                                                                                    class="text-wrap text-left align-middle">
-                                                                                    Acción</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            @if (isset($laboratorios))
-                                                                                @foreach ($laboratorios as $laboratorio)
-                                                                                    <tr>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->rut }}</td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->nombre }}
-                                                                                        </td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->ubicacion == 1 ? 'Laboratorio Físico' : 'Solo toma de muestra' }}
-                                                                                        </td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->tipo_sucursal_nombre }}
-                                                                                        </td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->ciudad }}
-                                                                                        </td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            {{ $laboratorio->direccion }}
-                                                                                            {{ $laboratorio->numero_dir }}
-                                                                                        </td>
-                                                                                        <td
-                                                                                            class="align-middle text-left">
-                                                                                            <button type="button"
-                                                                                                class="btn btn-warning btn-icon"
-                                                                                                onclick="dame_laboratorio_cm({{ $laboratorio->id }})"><i
-                                                                                                    class="feather icon-edit"></i></button>
-                                                                                            <button type="button"
-                                                                                                class="btn btn-danger btn-icon"
-                                                                                                onclick="eliminar_laboratorio_cm({{ $laboratorio->id }});"><i
-                                                                                                    class="feather icon-x"></i></button>
-                                                                                            <button type="button" class="btn btn-primary btn-icon" onclick="horario_laboratorio_cm({{ $laboratorio->id }});"><i class="feather icon-clock"></i></button>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </tbody>
+                            <tr>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Rut</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Laboratorio</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Ubicación</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Tipo Laboratorio</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Ciudad</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Dirección</th>
+                                <th
+                                    class="text-wrap text-left align-middle">
+                                    Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (isset($laboratorios))
+                                @foreach ($laboratorios as $laboratorio)
+                                    <tr>
+                                        <td
+                                            class="align-middle text-left">
+                                            {{ $laboratorio->rut }}</td>
+                                        <td
+                                            class="align-middle text-left wrap-column">
+                                            {{ $laboratorio->nombre }}
+                                        </td>
+                                        <td
+                                            class="align-middle text-left">
+                                            {{ $laboratorio->ubicacion == 1 ? 'Laboratorio Físico' : 'Solo toma de muestra' }}
+                                        </td>
+                                        <td
+                                            class="align-middle text-left">
+                                            {{ $laboratorio->tipo_sucursal_nombre }}
+                                        </td>
+                                        <td
+                                            class="align-middle text-left">
+                                            {{ $laboratorio->ciudad }}
+                                        </td>
+                                        <td
+                                            class="align-middle text-left">
+                                            {{ $laboratorio->direccion }}
+                                            {{ $laboratorio->numero_dir }}
+                                        </td>
+                                        <td
+                                            class="align-middle text-left">
+                                            <button type="button"
+                                                class="btn btn-warning btn-icon"
+                                                onclick="dame_laboratorio_cm({{ $laboratorio->id }})"><i
+                                                    class="feather icon-edit"></i></button>
+                                            <button type="button"
+                                                class="btn btn-danger btn-icon"
+                                                onclick="eliminar_laboratorio_cm({{ $laboratorio->id }});"><i
+                                                    class="feather icon-x"></i></button>
+                                            <button type="button" class="btn btn-primary btn-icon" onclick="horario_laboratorio_cm({{ $laboratorio->id }});"><i class="feather icon-clock"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -146,14 +146,8 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label">Dirección / Calle</label>
+                                <label class="floating-label">Dirección</label>
                                 <input class="form-control form-control-sm" name="direccion" id="direccion_lugar_atencion" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label">Número</label>
-                                <input class="form-control form-control-sm" name="numero" id="numero_lugar_atencion" type="text">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -181,25 +175,10 @@
                                 <input class="form-control form-control-sm" name="telefono_1" id="telefono_1" type="text">
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label">Teléfono (opcional)</label>
-                                <input class="form-control form-control-sm" name="telefono_2" id="telefono_2" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="switch switch-success d-inline m-r-10">
-                                    <input type="checkbox" id="not_pacientes_1">
-                                    <label for="not_pacientes_1" class="cr"></label>
-                                    <label>Notificar a pacientes</label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger mb-0" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-info mb-0" >Agregar nueva sucursal</button>
+                        <button type="button" class="btn btn-danger mb-0" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                        <button type="submit" class="btn btn-info mb-0"><i class="feather icon-plus"></i> Agregar nueva sucursal</button>
                     </div>
                 </form>
             </div>
@@ -234,14 +213,8 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="floating-label">Dirección / Calle</label>
+                                <label class="floating-label">Dirección</label>
                                 <input class="form-control form-control-sm" name="direccion" id="direccion_lugar_atencion" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label">Número</label>
-                                <input class="form-control form-control-sm" name="numero" id="numero_lugar_atencion" type="text">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -300,7 +273,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center" id="">Desasociar o Agregar Laboratorio existente</h5>
+                <h5 class="modal-title text-white text-center" id="">Acciones a Laboratorio existente</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -309,26 +282,33 @@
                         <table id="config_sucursal" class="display table table-striped table-hover dt-responsive nowrap text-center align-middle table-sm" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center align-middle">Desasociar /Agregar</th>
-                                    <th class="text-center align-middle">Nombre</th>
-                                    <th class="text-center align-middle">Dirección</th>
-                                    <th class="text-center align-middle">Tipo</th>
+                                    <th>Acción</th>
+                                    <th>Nombre</th>
+                                    <th>Dirección</th>
+                                    <th>Tipo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-center align-middle">
-                                        <div class="switch switch-success d-inline m-r-10">
-                                            <input type="checkbox" id="agregar-1">
-                                            <label for="agregar-1" class="cr"></label>
-                                        </div>
+                                     <td>
+                                        <label class="switch-moderno">
+                                            <input type="checkbox" id="switchEstado">
+                                            <span class="switch-slider">
+                                                    <span class="switch-text off">
+                                                     Inactivo
+                                                    </span>
+                                                    <span class="switch-text on">
+                                                    Activo
+                                                    </span>
+                                            </span>
+                                        </label>
                                     </td>
                                     <td>
                                         <span><strong>Nombre de centro médico</strong></span><br>
                                         <span>72.378.384-2</span>
                                     </td>
-                                    <td class="text-center align-middle">Villanelo,123,Viña del Mar</td>
-                                    <td class="text-center align-middle">Laboratorio Cínico</td>
+                                    <td>Villanelo,123,Viña del Mar</td>
+                                    <td>Laboratorio Cínico</td>
                                 </tr>
                                 <tr>
                             </tbody>
@@ -349,8 +329,8 @@
                 </div>
             </div>
             <div class="modal-footer mb-0 pb-0">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info" >Guardar Cambios</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
+                <button type="submit" class="btn btn-info"><i class="feather icon-save"></i> Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -657,7 +637,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Laboratorios</h5>
+                    <h5 class="modal-title text-white text-center">Agregar laboratorio</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">×</span></button>
                 </div>
@@ -767,8 +747,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="agregar_laboratorio()"><i
-                            class="fas fa-plus"></i> Añadir</button>
+                    <button type="button" class="btn btn-info mx-auto" onclick="agregar_laboratorio()"><i
+                            class="feather icon-plus"></i> Añadir</button>
                 </div>
 
             </div>
@@ -892,7 +872,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_laboratorio()"><i
+                    <button type="button" class="btn btn-info mx-auto" onclick="editar_laboratorio()"><i
                             class="feather icon-save"></i> Guardar cambios</button>
                 </div>
 
