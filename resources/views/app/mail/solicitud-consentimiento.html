@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <meta name="color-scheme" content="light" />
+    <meta name="supported-color-schemes" content="light" />
+    <title>Consentimiento Informado – Solicitud de Autorización</title>
+
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #eef3f9;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            display: block;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        /* Tablet y notebook: el contenedor es fluido (width:100%) con tope
+           en max-width:620px, así que se centra y respira solo sin
+           necesidad de reglas extra entre 600px y el ancho de escritorio. */
+
+        @media only screen and (max-width:600px) {
+
+            .container {
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+
+            .px-pad {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+
+            .mobile-title {
+                font-size: 18px !important;
+                line-height: 25px !important;
+            }
+
+            .header-cell {
+                display: block !important;
+                width: 100% !important;
+                text-align: center !important;
+                padding-bottom: 8px !important;
+            }
+
+            .header-cell img {
+                margin: 0 auto !important;
+            }
+
+            .header-title-cell {
+                display: block !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .stack {
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .stack a {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- PREHEADER -->
+    <div style="display:none; max-height:0; overflow:hidden; mso-hide:all; font-size:1px; line-height:1px; color:#eef3f9;">
+        Consentimiento informado para tu procedimiento de {{ $detalle['body']['procedimiento'] }}. Revisa el documento y responde.
+        &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+    </div>
+
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" bgcolor="#eef3f9">
+        <tr>
+            <td align="center" style="padding:24px 15px;">
+
+                <table class="container"
+                       width="100%"
+                       cellpadding="0"
+                       cellspacing="0"
+                       role="presentation"
+                       style="
+                            max-width:620px;
+                            background:#ffffff;
+                            border-radius:22px;
+                            overflow:hidden;
+                            box-shadow:0 20px 60px rgba(15,23,42,.08);
+                       ">
+
+                    <!-- Barra superior -->
+                    <tr>
+                        <td height="6"
+                            style="background-color:#1a49a3;background-image:linear-gradient(90deg,#1a49a3 0%,#31bebe 100%);">
+                        </td>
+                    </tr>
+
+                    <!-- HEADER -->
+                    <tr>
+                        <td class="px-pad" style="padding:20px 26px 12px 26px;">
+
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
+                                <tr>
+
+                                    <!-- LOGO -->
+                                    <td class="header-cell" align="left" valign="middle" width="130">
+                                        <img
+                                        src="https://www.med-sdi.cl/images/sdi-color-h.svg"
+                                        width="100"
+                                        alt="Salud Digital Integrada"
+                                        style="width:100px; display:block;">
+                                    </td>
+
+                                    <!-- TITULO -->
+                                    <td class="header-title-cell" align="right" valign="middle">
+                                        <p style="margin:0;font-size:12px; font-family:Helvetica, Arial, sans-serif;letter-spacing:2px;text-transform:uppercase;color:#31bebe;font-weight:700;">
+                                            Consentimiento Informado
+                                        </p>
+                                    </td>
+
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- HERO -->
+                    <tr>
+                        <td class="px-pad" align="center"
+                            style="padding:6px 26px 12px 26px;">
+
+                            <h1 class="mobile-title" style="
+                                margin:0 0 10px 0;
+                                font-family:Helvetica, Arial, sans-serif;
+                                font-size:20px;
+                                line-height:26px;
+                                color:#0f172a;
+                                font-weight:700;
+                            ">
+                                Hola {{ $detalle['body']['nombre_paciente'] }}
+                            </h1>
+
+                            <p style="
+                                margin:0;
+                                font-family:Helvetica,Arial,sans-serif;
+                                font-size:14px;
+                                line-height:22px;
+                                color:#475569;
+                                text-align:justify;
+                            ">
+
+                                Junto con saludarle, le enviamos el documento correspondiente al
+                                <strong>Consentimiento Informado</strong> para su pr&oacute;ximo procedimiento m&eacute;dico de
+                                <strong>{{ $detalle['body']['procedimiento'] }}</strong>.
+
+                                <br><br>
+
+                                Este documento contiene informaci&oacute;n relevante sobre el procedimiento, incluyendo sus beneficios, riesgos, alternativas y cuidados asociados. Le solicitamos leerlo detenidamente antes de su atenci&oacute;n.
+
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- INFO-->
+                    <tr>
+                        <td class="px-pad" style="padding:0 26px 26px 26px;">
+
+                            <!-- Caja informativa -->
+                            <table width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                                style="
+                                    background-color:#eaf1fb;
+                        
+                                    border-radius:12px;
+                                ">
+
+                                <tr>
+
+                                    <td style="
+                                        padding:16px 20px;
+                                        font-family:Helvetica,Arial,sans-serif;
+                                        font-size:13px;
+                                        line-height:21px;
+                                        color:#1e293b;
+                                    ">
+
+                                        <p style="font-size:15px; margin:0 0 8px 0;font-weight:700;color:#1a49a3;">
+                                             Antes de continuar, revise el documento adjunto
+                                        </p>
+
+                                        <p style="margin:0 0 4px 0;">
+                                            <strong style="color:#1a49a3;">&#10003;</strong>&nbsp; Si est&aacute; de acuerdo &rarr; presione <strong>"Aceptar"</strong>
+                                        </p>
+
+                                        <p style="margin:0;">
+                                            <strong style="color:#dc2626;">&#10007;</strong>&nbsp; Si no est&aacute; de acuerdo &rarr; presione <strong>"No estoy de acuerdo"</strong>
+                                        </p>
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                            <!-- BOTONES -->
+                            <table width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                                style="margin-top:18px;">
+
+                                <tr>
+
+                                    <td class="stack"
+                                        align="center"
+                                        width="50%"
+                                        style="padding:6px;">
+
+                                        <!--[if mso]>
+                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ $detalle['body']['url_aceptar'] }}" style="height:46px;v-text-anchor:middle;width:200px;" arcsize="20%" strokecolor="#31bebe" fillcolor="#31bebe">
+                                        <w:anchorlock/>
+                                        <center style="color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;">&#10003; Aceptar</center>
+                                        </v:roundrect>
+                                        <![endif]-->
+                                        <!--[if !mso]><!-->
+                                        <a href="{{ $detalle['body']['url_aceptar'] }}"
+                                        style="
+                                            background-color:#31bebe;
+                                            background-image:linear-gradient(135deg,#31bebe 0%, #1a49a3 100%);
+                                            display:inline-block;
+                                            width:100%;
+                                            padding:15px 20px;
+                                            font-family:Helvetica,Arial,sans-serif;
+                                            font-size:15px;
+                                            font-weight:bold;
+                                            color:#ffffff;
+                                            text-decoration:none;
+                                            border-radius:10px;
+                                            box-sizing:border-box;
+                                            box-shadow:0 6px 16px rgba(49,190,190,0.32);
+                                            mso-hide:all;
+                                        ">
+
+                                        &#10003; Aceptar
+
+                                        </a>
+                                        <!--<![endif]-->
+
+                                    </td>
+
+                                    <td class="stack"
+                                        align="center"
+                                        width="50%"
+                                        style="padding:6px;">
+
+                                        <!--[if mso]>
+                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{ $detalle['body']['url_rechazar'] }}" style="height:46px;v-text-anchor:middle;width:200px;" arcsize="20%" strokecolor="#dc2626" fillcolor="#dc2626">
+                                        <w:anchorlock/>
+                                        <center style="color:#ffffff;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;">&#10007; No estoy de acuerdo</center>
+                                        </v:roundrect>
+                                        <![endif]-->
+                                        <!--[if !mso]><!-->
+                                        <a href="{{ $detalle['body']['url_rechazar'] }}"
+                                        style="
+                                            background-color:#dc2626;
+                                            background-image:linear-gradient(135deg,#ef4444 0%, #b91c1c 100%);
+                                            display:inline-block;
+                                            width:100%;
+                                            padding:15px 16px;
+                                            font-family:Helvetica,Arial,sans-serif;
+                                            font-size:15px;
+                                            font-weight:bold;
+                                            color:#ffffff;
+                                            text-decoration:none;
+                                            border-radius:10px;
+                                            box-sizing:border-box;
+                                            box-shadow:0 6px 16px rgba(220,38,38,0.24);
+                                            mso-hide:all;
+                                        ">
+
+                                        &#10007; No estoy de acuerdo
+
+                                        </a>
+                                        <!--<![endif]-->
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="
+                            background:#f8fafc;
+                            border-top:1px solid #e2e8f0;
+                            padding:20px;
+                            text-align:center;
+                        ">
+
+                            <p style="
+                                margin:0;
+                                font-family:Helvetica,Arial,sans-serif;
+                                font-size:11px;
+                                line-height:16px;
+                                color:#64748b;
+                            ">
+
+                                Este correo fue enviado por <strong style="color:#334155;">SDI</strong>
+                                <br>
+                                <span style="font-size:11px;color:#94a3b8;">
+                                    &copy; {{ date('Y') }} SDI &middot; Todos los derechos reservados
+                                </span>
+
+                            </p>
+
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
