@@ -31,6 +31,11 @@ class Orden extends Model
         return $this->belongsTo(Paciente::class, 'id_paciente', 'id');
     }
 
+    public function detalles()
+    {
+        return $this->hasMany(OrdenDetalle::class, 'id_orden', 'id');
+    }
+
     public function LugarAtencion()
     {
         return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
@@ -49,7 +54,7 @@ class Orden extends Model
     public function getEstadoBadgeAttribute()
     {
         $badges = [
-            0 => 'success',
+            0 => 'danger',
             1 => 'warning',
         ];
 

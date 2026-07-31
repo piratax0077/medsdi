@@ -60,67 +60,87 @@ class CodigoFonasaController extends Controller
 
     public function buscarPorNombre(Request $request)
     {
-        $datos = array();
-        $error = array();
-        $valido = 1;
+        $valor = trim((string) $request->valor);
 
-        if(empty($request->valor))
-        {
-            $error['valor'] = 'campo requerido';
-            $valido = 0;
+        if ($valor === '') {
+            return response()->json([
+                'estado' => 0,
+                'error' => ['valor' => 'campo requerido'],
+                'msj' => 'Campo requerido',
+            ]);
         }
 
-        if($valido)
-        {
-            $filtro = array();
-            $filtro[] = array('nombre', 'like', '%'.$request->valor.'%');
-            $registros_a = CodigoFonasa::select('id', 'nombre as nombre', 'codigo as codigo')->where($filtro);
+        $registrosFonasa = CodigoFonasa::select('id', 'nombre', 'codigo')
+            ->where(function ($query) use ($valor) {
+                $query->where('nombre', 'like', '%'.$valor.'%')
+                    ->orWhere('codigo', 'like', '%'.$valor.'%');
+            })
+            ->addSelect(\DB::raw("'codigo_fonasa' as origen"));
 
-            $filtro_2 = array();
-            $filtro_2[] = array('nombre_examen', 'like', '%'.$request->valor.'%');
-            $registros_b = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo as codigo')->where($filtro_2);
+        $registrosExamenes = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo')
+            ->where(function ($query) use ($valor) {
+                $query->where('nombre_examen', 'like', '%'.$valor.'%')
+                    ->orWhere('codigo', 'like', '%'.$valor.'%');
+            })
+            ->addSelect(\DB::raw("'examen_medico' as origen"));
 
-            $registros = $registros_a->union($registros_b)->get();
+        $registros = $registrosFonasa->union($registrosExamenes)->limit(30)->get();
 
-            if($registros)
-            {
-                $datos['estado'] = 1;
-                $datos['registros'] = $registros;
-                $datos['cantidad'] = $registros->count();
-                $datos['msj'] = 'Registro';
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'Registro no encontrado';
-            }
-        }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['error'] = $error;
-            $datos['msj'] = 'Campo requerido';
-        }
-
-        return $datos;
+        return response()->json([
+            'estado' => 1,
+            'registros' => $registros,
+            'cantidad' => $registros->count(),
+            'msj' => $registros->isEmpty() ? 'Registro no encontrado' : 'Registros encontrados',
+        ]);
     }
 
     public function buscarPorNombreAutocomplete(Request $request)
     {
-        $search = $request->search;
-        if ($search == '')
-        {
-            $registros = CodigoFonasa::orderby('nombre', 'asc')->select('id', 'nombre', 'codigo')->limit(15)->get();
+        $search = trim((string) $request->search);
+        if (mb_strlen($search) < 2) {
+            return response()->json([]);
         }
-        else
-        {
-            $registros = CodigoFonasa::orderby('nombre', 'asc')->select('id', 'nombre','codigo')->where('nombre', 'like', '%'.$search.'%')->limit(15)->get();
-        }
+
+        $registrosFonasa = CodigoFonasa::select('id', 'nombre', 'codigo')
+            ->where(function ($query) use ($search) {
+                $query->where('nombre', 'like', '%'.$search.'%')
+                    ->orWhere('codigo', 'like', '%'.$search.'%');
+            })
+            ->orderBy('nombre')
+            ->limit(15)
+            ->get();
+
+        $registrosExamenes = ExamenMedico::select('id', 'nombre_examen as nombre', 'codigo')
+            ->where(function ($query) use ($search) {
+                $query->where('nombre_examen', 'like', '%'.$search.'%')
+                    ->orWhere('codigo', 'like', '%'.$search.'%');
+            })
+            ->orderBy('nombre_examen')
+            ->limit(15)
+            ->get();
+
+        $registros = $registrosFonasa
+            ->map(function ($registro) {
+                $registro->origen = 'codigo_fonasa';
+                return $registro;
+            })
+            ->concat($registrosExamenes->map(function ($registro) {
+                $registro->origen = 'examen_medico';
+                return $registro;
+            }))
+            ->sortBy('nombre')
+            ->take(15);
 
         $response = array();
         foreach ($registros as $registro)
         {
-            $response[] = array("value" => $registro->id, "label" => $registro->codigo.' - '.$registro->nombre, "codigo" => $registro->codigo);
+            $response[] = [
+                'value' => $registro->id,
+                'label' => $registro->codigo.' - '.$registro->nombre,
+                'codigo' => $registro->codigo,
+                'nombre' => $registro->nombre,
+                'origen' => $registro->origen,
+            ];
         }
         return response()->json($response);
     }

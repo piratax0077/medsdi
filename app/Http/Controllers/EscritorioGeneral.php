@@ -221,6 +221,20 @@ class EscritorioGeneral extends Controller
                 $sql .= " AND profesionales.id IN (SELECT id_profesional FROM profesionales_lugares_atencion WHERE id_lugar_atencion = ".$request->id_lugar_atencion." AND estado=1)";
             }
 
+            // La reserva de bonos FONASA sólo debe mostrar profesionales con
+            // un convenio FONASA activo y vigente en al menos uno de sus lugares.
+            if($request->solo_prevision == '1' && strtolower((string) $request->prevision_tipo) === 'fonasa') {
+                $sql .= " AND EXISTS (
+                    SELECT 1
+                    FROM profesional_convenios pc_fonasa
+                    WHERE pc_fonasa.id_profesional = profesionales.id
+                      AND pc_fonasa.estado = 1
+                      AND LOWER(pc_fonasa.convenios) LIKE '%fonasa%'
+                      AND (pc_fonasa.fecha_inicio IS NULL OR pc_fonasa.fecha_inicio <= CURDATE())
+                      AND (pc_fonasa.fecha_fin IS NULL OR pc_fonasa.fecha_fin >= CURDATE())
+                )";
+            }
+
             // 1 -> Atención General
             // 2 -> Atención Dental
             // 3 -> Atención Telemedicina

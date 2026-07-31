@@ -201,7 +201,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                         <label class="font-weight-bolder ml-0 mb-0">Previsión</label>
-                                                        <div> Fonasa </div>
+                                                        <div>{{ optional($paciente->Prevision)->nombre ?? 'No informada' }}</div>
                                                     </div>
                                                 </div>
                                             </form>

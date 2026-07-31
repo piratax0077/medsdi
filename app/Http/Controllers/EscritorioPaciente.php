@@ -265,11 +265,12 @@ class EscritorioPaciente extends Controller
 
     public function reservarBono()
     {
-        // if (empty(session('lic_token')) || session('lic_estado') != 1) {
-        //     return redirect()
-        //         ->route('paciente.home')
-        //         ->with('warning', 'Debe autorizar el acceso desde la aplicación móvil para reservar bonos.');
-        // }
+        if (!app()->environment('local')
+            && (empty(session('lic_token')) || (int) session('lic_estado') !== 1)) {
+            return redirect()
+                ->route('paciente.home')
+                ->with('warning', 'Debe autorizar el acceso desde la aplicación móvil para reservar bonos.');
+        }
 
         $usuario = User::where('id', Auth::user()->id)->first();
         $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
@@ -279,6 +280,15 @@ class EscritorioPaciente extends Controller
                 ->route('paciente.home')
                 ->with('error', 'No se encontró el paciente asociado al usuario.');
         }
+
+        $dependientes = PacientesDependientes::with('Paciente')
+            ->where('id_responsable', $paciente->id)
+            ->where('estado', 1)
+            ->get()
+            ->pluck('Paciente')
+            ->filter()
+            ->unique('id')
+            ->values();
 
         $professionals = Professional::all();
         $beneficiaries = Beneficiary::all();
@@ -291,13 +301,22 @@ class EscritorioPaciente extends Controller
             ->whereNotIn('id_especialidad', [8, 10, 11, 12])
             ->get();
 
-        $formas_pago = FormasPago::where('activo', 1)->get();
+        $formas_pago = FormasPago::where('activo', 1)
+            ->where('pago_online', 1)
+            ->orderBy('nombre')
+            ->get();
 
-        $ordenes_voucher = Orden::where('id_paciente', $paciente->id)
+        $ordenes_voucher = Orden::where(function ($query) use ($paciente) {
+                $query->where('id_paciente', $paciente->id);
+                if (Schema::hasColumn('orden', 'id_paciente_responsable')) {
+                    $query->orWhere('id_paciente_responsable', $paciente->id);
+                }
+            })
             ->with([
-                'profesional',
+                'profesional.TipoEspecialidad',
                 'paciente',
-                'lugarAtencion'
+                'lugarAtencion',
+                'detalles'
             ])
             ->orderBy('id', 'desc')
             ->get();
@@ -306,6 +325,7 @@ class EscritorioPaciente extends Controller
 
         return view('app.general.reservar_bono')->with([
             'paciente' => $paciente,
+            'dependientes' => $dependientes,
             'professionals' => $professionals,
             'beneficiaries' => $beneficiaries,
             'profesiones' => $profesiones,
@@ -5352,23 +5372,30 @@ class EscritorioPaciente extends Controller
     public function validarBeneficiario(Request $request)
     {
         $request->validate([
-            'beneficiary_id' => 'required|integer',
+            'paciente_beneficiario_id' => 'required|integer|exists:pacientes,id',
         ]);
 
-        $beneficiario = Beneficiary::find($request->beneficiary_id);
+        $responsable = $this->pacienteActualReservaBono();
+        $beneficiario = Paciente::find($request->paciente_beneficiario_id);
 
-        if (!$beneficiario) {
+        if (!$responsable || !$beneficiario) {
             return response()->json([
                 'estado' => 0,
                 'msj' => 'Beneficiario no encontrado.'
-            ]);
+            ], 404);
         }
 
-        if ((int) $beneficiario->enabled !== 1) {
+        $esTitular = (int) $beneficiario->id === (int) $responsable->id;
+        $esDependiente = PacientesDependientes::where('id_responsable', $responsable->id)
+            ->where('id_paciente', $beneficiario->id)
+            ->where('estado', 1)
+            ->exists();
+
+        if (!$esTitular && !$esDependiente) {
             return response()->json([
                 'estado' => 0,
-                'msj' => 'El beneficiario no se encuentra habilitado.'
-            ]);
+                'msj' => 'El paciente seleccionado no pertenece a tus cargas autorizadas.'
+            ], 403);
         }
 
         /*
@@ -5376,7 +5403,10 @@ class EscritorioPaciente extends Controller
         * Como aún no existe API real, usamos Fonasa por defecto.
         * Después esto se reemplaza por la respuesta real de Fonasa/Isapre.
         */
-        $prevision = Prevision::where('tipo', 'fonasa')->first();
+        $prevision = $beneficiario->id_prevision
+            ? Prevision::find($beneficiario->id_prevision)
+            : null;
+        $prevision = $prevision ?: Prevision::where('tipo', 'fonasa')->first();
 
         if (!$prevision) {
             return response()->json([
@@ -5385,7 +5415,19 @@ class EscritorioPaciente extends Controller
             ]);
         }
 
-        if (!$prevision->permite_bonos) {
+        if (strtolower((string) $prevision->tipo) !== 'fonasa') {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'La compra de bonos en esta sección está disponible sólo para beneficiarios FONASA.',
+                'prevision' => [
+                    'id' => $prevision->id,
+                    'nombre' => $prevision->nombre,
+                    'tipo' => $prevision->tipo,
+                ],
+            ], 422);
+        }
+
+        if (isset($prevision->permite_bonos) && !$prevision->permite_bonos) {
             return response()->json([
                 'estado' => 0,
                 'msj' => 'La previsión configurada no permite compra de bonos.'
@@ -5405,9 +5447,10 @@ class EscritorioPaciente extends Controller
             'beneficiario' => [
                 'id' => $beneficiario->id,
                 'rut' => $beneficiario->rut,
-                'nombre' => $beneficiario->name,
+                'nombre' => trim($beneficiario->nombres.' '.$beneficiario->apellido_uno.' '.$beneficiario->apellido_dos),
                 'email' => $beneficiario->email,
-                'phone' => $beneficiario->phone,
+                'phone' => $beneficiario->telefono_uno,
+                'es_dependiente' => !$esTitular,
             ],
             'simulacion' => true
         ]);
@@ -5426,7 +5469,7 @@ class EscritorioPaciente extends Controller
             return null;
         }
 
-        return Orden::with(['paciente', 'profesional', 'lugarAtencion'])
+        return Orden::with(['paciente', 'profesional', 'lugarAtencion', 'detalles'])
             ->where('id', $ordenId)
             ->where('id_paciente', $paciente->id)
             ->first();
@@ -5445,9 +5488,11 @@ class EscritorioPaciente extends Controller
 
     private function payloadVoucher(Orden $orden)
     {
+        $orden->loadMissing(['paciente', 'profesional', 'lugarAtencion', 'detalles']);
         $paciente = $orden->paciente;
         $profesional = $orden->profesional;
         $lugar = $orden->lugarAtencion;
+        $detalle = $orden->detalles->first();
 
         return [
             'id' => $orden->id,
@@ -5462,6 +5507,7 @@ class EscritorioPaciente extends Controller
 
             'id_lugar_atencion' => $orden->id_lugar_atencion ?? optional($lugar)->id,
             'lugar_nombre' => optional($lugar)->nombre,
+            'prestacion_nombre' => optional($detalle)->nombre,
 
             'fecha_pagado_cap' => $orden->fecha_pagado_cap ?? ($orden->fecha_pagado ?? $orden->created_at),
             'monto' => $orden->monto ?? $orden->total ?? 0,
@@ -5487,6 +5533,7 @@ class EscritorioPaciente extends Controller
         $mensaje .= "Orden: ".$payload['orden_id']."\n";
         $mensaje .= "Paciente: ".($payload['paciente_nombre'] ?: 'N/A')."\n";
         $mensaje .= "Profesional: ".($payload['profesional_nombre'] ?: 'N/A')."\n";
+        $mensaje .= "Prestación: ".($payload['prestacion_nombre'] ?: 'No informada')."\n";
         $mensaje .= "Fecha: ".($payload['fecha_pagado_cap'] ?: 'N/A')."\n";
         $mensaje .= "Lugar: ".($payload['lugar_nombre'] ?: 'N/A')."\n";
         $mensaje .= "Valor: $ ".number_format((int) $payload['total'], 0, ',', '.')."\n";

@@ -10678,21 +10678,49 @@ class AdministradorCmController extends Controller
     }
 
     public function dame_convenio_profesional(Request $request){
-        $filtros = [];
-        $filtros['id_profesional'] = $request->id_profesional;
+        $query = ProfesionalConvenio::where('id_profesional', $request->id_profesional);
+
         if($request->id_lugar_atencion){
-            $filtros['id_lugar_atencion'] = $request->id_lugar_atencion;
+            $query->where('id_lugar_atencion', $request->id_lugar_atencion);
         }
 
-        $profesional_convenios = ProfesionalConvenio::where($filtros)->get();
-        if($profesional_convenios)
-        {
-            return ['estado' => 1, 'profesional_convenios' => $profesional_convenios];
+        if(strtolower((string) $request->prevision_tipo) === 'fonasa') {
+            $query->where('estado', 1)
+                ->whereRaw('LOWER(convenios) LIKE ?', ['%fonasa%'])
+                ->where(function ($vigencia) {
+                    $vigencia->whereNull('fecha_inicio')
+                        ->orWhereDate('fecha_inicio', '<=', now());
+                })
+                ->where(function ($vigencia) {
+                    $vigencia->whereNull('fecha_fin')
+                        ->orWhereDate('fecha_fin', '>=', now());
+                });
         }
-        else
-        {
-            return ['estado' => 0, 'msj' => 'No se encontraron convenios'];
+
+        $profesional_convenios = $query->get()->map(function ($convenio) {
+            $copagoEspecifico = (float) ($convenio->valor_copago_fonasa ?: 0);
+            $valorGeneral = (float) ($convenio->valor ?: 0);
+
+            $convenio->copago_fonasa_calculado = $copagoEspecifico > 0
+                ? $copagoEspecifico
+                : $valorGeneral;
+            $convenio->bonificacion_fonasa_calculada = (float) ($convenio->valor_bon_fonasa ?: 0);
+            $convenio->fuente_valor_fonasa = $copagoEspecifico > 0
+                ? 'tarifa_fonasa'
+                : 'valor_general';
+
+            return $convenio;
+        })->values();
+
+        if($profesional_convenios->isEmpty()) {
+            return [
+                'estado' => 0,
+                'msj' => 'El profesional no posee un convenio FONASA activo y vigente.',
+                'profesional_convenios' => [],
+            ];
         }
+
+        return ['estado' => 1, 'profesional_convenios' => $profesional_convenios];
     }
 
     public function registrar_convenio(Request $req){

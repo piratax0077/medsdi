@@ -1,5 +1,177 @@
 @extends('template.paciente.template')
 
+@section('page-styles')
+    <style>
+        .ui-autocomplete-input {
+            z-index: 1 !important;
+        }
+        .btn-bono-mode {
+            background: #f4fafb;
+            border: 1px solid #b9dfe3;
+            color: #39747a;
+            font-weight: 600;
+            box-shadow: none;
+        }
+        .btn-bono-mode:hover,
+        .btn-bono-mode:focus,
+        .btn-bono-mode.is-active {
+            background: #dff2f4;
+            border-color: #79c2c8;
+            color: #185f66;
+            box-shadow: none;
+        }
+        .btn-bono-action {
+            background: #55afb5;
+            border-color: #55afb5;
+            color: #fff;
+            font-weight: 600;
+        }
+        .btn-bono-action:hover,
+        .btn-bono-action:focus {
+            background: #469ca2;
+            border-color: #469ca2;
+            color: #fff;
+        }
+        .btn-bono-clear {
+            background: #fff;
+            border: 1px solid #cbd9dc;
+            color: #60777b;
+            font-weight: 600;
+        }
+        .btn-bono-clear:hover,
+        .btn-bono-clear:focus {
+            background: #f3f7f8;
+            border-color: #aebfc2;
+            color: #405b60;
+        }
+        .bono-search-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: .75rem;
+            margin-top: 1rem;
+        }
+        .prestacion-result-panel {
+            height: 100%;
+            padding: 1rem;
+            background: #f8fbfc;
+            border: 1px solid #dbe7e9;
+            border-radius: .5rem;
+        }
+        .historial-vouchers-card .card-body {
+            padding: .75rem;
+        }
+        .historial-vouchers-card .card-header {
+            gap: .75rem;
+        }
+        .historial-filtro {
+            width: auto;
+            min-width: 118px;
+            height: 31px;
+            padding: .2rem 1.6rem .2rem .55rem;
+            font-size: .72rem;
+        }
+        #tabla_historial_vouchers {
+            width: 100%;
+            margin-bottom: 0;
+            font-size: .78rem;
+        }
+        #tabla_historial_vouchers thead {
+            display: none;
+        }
+        #tabla_historial_vouchers tbody {
+            display: block;
+        }
+        #tabla_historial_vouchers tbody tr {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                "profesional profesional"
+                "fecha estado"
+                "acciones acciones";
+            gap: .55rem .75rem;
+            padding: .75rem;
+            border-bottom: 1px solid #e2e8ee;
+            background: #fff;
+        }
+        #tabla_historial_vouchers tbody tr:nth-child(odd) {
+            background: #f8fafc;
+        }
+        #tabla_historial_vouchers tbody td {
+            display: block;
+            min-width: 0;
+            padding: 0;
+            border: 0;
+            vertical-align: middle;
+        }
+        #tabla_historial_vouchers tbody td:nth-child(1) {
+            grid-area: fecha;
+        }
+        #tabla_historial_vouchers tbody td:nth-child(2) {
+            grid-area: profesional;
+        }
+        #tabla_historial_vouchers tbody td:nth-child(3) {
+            grid-area: estado;
+            align-self: center;
+            text-align: right;
+        }
+        #tabla_historial_vouchers tbody td:nth-child(4) {
+            grid-area: acciones;
+        }
+        .historial-fecha {
+            line-height: 1.15;
+            white-space: nowrap;
+            color: #536273;
+            font-size: .75rem;
+        }
+        .historial-fecha .hora {
+            display: block;
+            margin-top: .2rem;
+            color: #7a8793;
+            font-size: .68rem;
+            text-transform: lowercase;
+        }
+        .historial-profesional {
+            color: #34445a;
+            font-size: .8rem;
+            font-weight: 600;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+        .historial-especialidad {
+            display: block;
+            margin-top: .2rem;
+            color: #788794;
+            font-size: .69rem;
+            font-weight: 400;
+            line-height: 1.25;
+        }
+        #tabla_historial_vouchers .btn-group {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: flex-end;
+        }
+        #tabla_historial_vouchers .btn-group .btn {
+            min-width: 32px;
+            padding: .28rem .45rem;
+            font-size: .72rem;
+        }
+        #tabla_historial_vouchers .badge {
+            padding: .3rem .45rem;
+            font-size: .64rem;
+            white-space: nowrap;
+        }
+        #tabla_historial_vouchers tbody td[colspan="4"] {
+            grid-area: profesional;
+            padding: .75rem;
+            text-align: center;
+        }
+        @media (max-width: 575.98px) {
+            .bono-search-actions { flex-direction: column-reverse; }
+            .bono-search-actions .btn { width: 100%; }
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -61,42 +233,28 @@
                                     <div class="card-header bg-light">
                                         <h6 class="mb-0 font-weight-bold">
                                             <span class="badge badge-primary mr-1">1</span>
-                                            Beneficiario automático
+                                            Beneficiario del bono
                                         </h6>
                                     </div>
 
                                     <div class="card-body">
-                                        <div class="form-row align-items-end">
-                                            <div class="col-sm-12 col-md-8 mb-3">
-                                                {{-- Beneficiario oculto:
-                                                     Se envía siempre 1 para mantener compatibilidad con el backend actual. --}}
-                                                <input type="hidden" id="beneficiary_id" name="beneficiary_id" value="1">
-
-                                                <div class="alert alert-light border mb-0">
-                                                    <div class="d-flex align-items-start">
-                                                        <div class="mr-2 text-primary">
-                                                            <i class="feather icon-user-check" style="font-size: 20px;"></i>
-                                                        </div>
-                                                        <div>
-                                                            <strong>Beneficiario principal seleccionado automáticamente.</strong>
-                                                            <br>
-                                                            <span class="text-muted">
-                                                                Para este flujo se omite la selección manual del beneficiario y se utiliza el beneficiario principal del paciente.
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 col-md-4 mb-3">
-                                                <button
-                                                    type="button"
-                                                    id="btn_validar_prevision"
-                                                    class="btn btn-sm btn-outline-primary btn-block"
-                                                    onclick="validarBeneficiarioPrevision();"
-                                                >
-                                                    <i class="feather icon-search"></i> Validar beneficiario
-                                                </button>
+                                        <div class="form-row">
+                                            <div class="col-12 mb-3">
+                                                <label for="beneficiary_id" class="font-weight-bold">¿Para quién es el bono?</label>
+                                                <select id="beneficiary_id" name="beneficiary_id" class="form-control"
+                                                    onchange="cambiarBeneficiarioBono();">
+                                                    <option value="{{ $paciente->id }}">
+                                                        Para mí — {{ $paciente->nombres }} {{ $paciente->apellido_uno }} ({{ $paciente->rut }})
+                                                    </option>
+                                                    @foreach ($dependientes ?? [] as $dependiente)
+                                                        <option value="{{ $dependiente->id }}">
+                                                            Carga — {{ $dependiente->nombres }} {{ $dependiente->apellido_uno }} ({{ $dependiente->rut }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <small class="text-muted d-block mt-1">
+                                                    Si eliges una carga, el bono quedará emitido para ella y también aparecerá en tu historial como responsable.
+                                                </small>
                                             </div>
                                         </div>
 
@@ -120,62 +278,68 @@
 
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-6 mb-3">
-                                                <label for="prestacion_fonasa_busqueda">Tipo de bono / Prestación FONASA</label>
+                                                <label for="prestacion_fonasa_busqueda" class="font-weight-bold">Buscar prestación FONASA</label>
 
                                                 <div class="input-group input-group-sm">
                                                     <input type="text"
                                                         id="prestacion_fonasa_busqueda"
                                                         class="form-control"
-                                                        placeholder="Ingrese código FONASA, ej: 0101001"
+                                                        placeholder="Escribe el nombre o código, ej: Consulta médica"
                                                         autocomplete="off"
                                                         onkeyup="limpiarPrestacionFonasaSiCambia(); resetResultadoProfesionales();">
 
                                                     <div class="input-group-append">
-                                                        <button type="button" class="btn btn-info" onclick="buscarFonasaReservaBono();">
+                                                        <button type="button" class="btn btn-bono-action" onclick="buscarFonasaReservaBono();">
                                                             <i class="feather icon-search"></i> Buscar
                                                         </button>
                                                     </div>
                                                 </div>
 
-                                                <input type="text"
-                                                    id="prestacion_fonasa_texto"
-                                                    class="form-control form-control-sm mt-2"
-                                                    placeholder="Prestación seleccionada"
-                                                    readonly>
-
-                                                <small class="text-muted">
-                                                    Busca por código FONASA y selecciona la prestación antes de buscar profesionales.
+                                                <small class="text-muted d-block mt-2">
+                                                    Escribe al menos 2 caracteres y selecciona una prestación de la lista.
                                                 </small>
-
-                                                <div id="resultado_fonasa_reserva_bono" class="mt-2"></div>
                                             </div>
 
-                                            <div class="col-sm-12 col-md-3 mb-3 d-flex align-items-end">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="buscar_especialidad_hora24" onchange="resetResultadoProfesionales();">
-                                                    <label class="form-check-label" for="buscar_especialidad_hora24">
-                                                        Solo 24 hrs
-                                                    </label>
+                                            <div class="col-sm-12 col-md-6 mb-3">
+                                                <div class="prestacion-result-panel">
+                                                    <label for="prestacion_fonasa_texto" class="font-weight-bold">Prestación seleccionada</label>
+                                                    <input type="text"
+                                                        id="prestacion_fonasa_texto"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Aún no has seleccionado una prestación"
+                                                        readonly>
+
+                                                    <div id="resultado_fonasa_reserva_bono" class="mt-2"></div>
+
+                                                    <div class="form-check mt-3">
+                                                        <input class="form-check-input" type="checkbox" id="buscar_especialidad_hora24" onchange="resetResultadoProfesionales();">
+                                                        <label class="form-check-label" for="buscar_especialidad_hora24">
+                                                            Mostrar sólo profesionales con disponibilidad en 24 hrs
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-12 col-md-3 mb-3 d-flex align-items-end">
-                                                <button type="button" class="btn btn-primary btn-block" onclick="buscar_profesional_especialidad();">
-                                                    <i class="feather icon-search"></i> Buscar profesionales
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="d-block font-weight-bold mb-2">¿Cómo quieres buscar al profesional?</label>
+                                            <div class="btn-group w-100" role="group" aria-label="Modo de búsqueda">
+                                                <button type="button" id="btn_modo_directo" class="btn btn-bono-mode"
+                                                    onclick="cambiarModoBusquedaProfesional('directo');">
+                                                    <i class="feather icon-user mr-1"></i> Por RUT o nombre
+                                                </button>
+                                                <button type="button" id="btn_modo_especialidad" class="btn btn-bono-mode is-active"
+                                                    onclick="cambiarModoBusquedaProfesional('especialidad');">
+                                                    <i class="feather icon-filter mr-1"></i> Por especialidad
                                                 </button>
                                             </div>
                                         </div>
 
-                                        <div class="card border shadow-sm mb-3">
-                                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                                <h6 class="mb-0 font-weight-bold">
-                                                    <i class="feather icon-user-check mr-1 text-primary"></i> Buscar profesional directo
-                                                </h6>
-                                                <span id="badge_busqueda_directa" class="badge badge-secondary">Opcional</span>
-                                            </div>
+                                        <div id="panel_busqueda_directa" class="card border shadow-sm mb-3" style="display:none;">
                                             <div class="card-body">
                                                 <div class="form-row align-items-end">
-                                                    <div class="col-sm-12 col-md-8 mb-3 mb-md-0">
+                                                    <div class="col-12">
                                                         <label for="nombre_rut_profesional">RUT, nombre o apellido del profesional</label>
                                                         <input type="text"
                                                             id="nombre_rut_profesional"
@@ -187,22 +351,19 @@
                                                             Si completas este campo, la búsqueda no obligará a seleccionar profesión ni especialidad.
                                                         </small>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm btn-block" onclick="limpiarBusquedaDirectaProfesional();">
-                                                            <i class="feather icon-x-circle"></i> Limpiar búsqueda directa
-                                                        </button>
-                                                    </div>
+                                                </div>
+                                                <div class="bono-search-actions">
+                                                    <button type="button" class="btn btn-bono-clear px-4" onclick="limpiarBusquedaDirectaProfesional();">
+                                                        <i class="feather icon-x mr-1"></i> Limpiar
+                                                    </button>
+                                                    <button type="button" id="btn_buscar_profesional_directo" class="btn btn-bono-action px-4" onclick="buscar_profesional_especialidad();">
+                                                        <i class="feather icon-search mr-1"></i> Buscar profesional
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="card border shadow-sm mb-0">
-                                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                                                <h6 class="mb-0 font-weight-bold">
-                                                    <i class="feather icon-filter mr-1 text-primary"></i> Filtrar por profesión y especialidad
-                                                </h6>
-                                                <span id="badge_busqueda_especialidad" class="badge badge-primary">Activo si no buscas por RUT/nombre</span>
-                                            </div>
+                                        <div id="panel_busqueda_especialidad" class="card border shadow-sm mb-3">
                                             <div class="card-body">
                                                 <div class="form-row">
                                                     <div class="col-sm-12 col-md-4 mb-3">
@@ -238,7 +399,12 @@
                                                 </div>
 
                                                 <div id="ayuda_modo_busqueda" class="alert alert-light border mb-0 small">
-                                                    <strong>Modo actual:</strong> búsqueda por especialidad. Debes seleccionar profesión y especialidad, salvo que busques por RUT/nombre.
+                                                    Selecciona la profesión y especialidad del profesional que necesitas.
+                                                </div>
+                                                <div class="bono-search-actions">
+                                                    <button type="button" id="btn_buscar_profesional_especialidad" class="btn btn-bono-action px-4" onclick="buscar_profesional_especialidad();">
+                                                        <i class="feather icon-search mr-1"></i> Buscar profesionales
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -285,27 +451,62 @@
                         </div>
                     </div>
 
-                    <div class="card mt-3">
-                        <div class="card-header">
+                    <div class="card mt-3 historial-vouchers-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">Historial</h5>
+                            <select id="filtro_estado_historial" class="form-control form-control-sm historial-filtro"
+                                aria-label="Filtrar historial por estado" onchange="filtrarHistorialVouchers();">
+                                <option value="todos">Todos</option>
+                                <option value="pendiente">Pendientes</option>
+                                <option value="pagado">Pagados</option>
+                                <option value="anulado">Anulados</option>
+                            </select>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <div>
                                 <table class="table table-sm table-striped" id="tabla_historial_vouchers">
                                     <thead>
                                         <tr>
-                                            <th>Fecha</th>
+                                            <th class="historial-fecha-col">Fecha</th>
                                             <th>Profesional</th>
-                                            <th>Estado</th>
-                                            <th>Acciones</th>
+                                            <th class="historial-estado-col">Estado</th>
+                                            <th class="historial-acciones-col"><span class="sr-only">Acciones</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @if (isset($ordenes_voucher) && count($ordenes_voucher) > 0)
                                             @foreach ($ordenes_voucher ?? [] as $reserva)
-                                                <tr id="voucher_row_{{ $reserva->id }}">
-                                                    <td>{{ $reserva->fecha_pagado_cap }}</td>
-                                                    <td>{{ $reserva->profesional_nombre }}</td>
+                                                @php
+                                                    $fechaHistorial = $reserva->fecha_pagado_cap ?: ($reserva->fecha_pagado ?: $reserva->created_at);
+                                                    try {
+                                                        $fechaHistorialCarbon = $fechaHistorial ? \Carbon\Carbon::parse($fechaHistorial) : null;
+                                                    } catch (\Throwable $e) {
+                                                        $fechaHistorialCarbon = null;
+                                                    }
+                                                    $profesionalHistorial = trim(implode(' ', array_filter([
+                                                        optional($reserva->profesional)->nombre,
+                                                        optional($reserva->profesional)->apellido_uno,
+                                                        optional($reserva->profesional)->apellido_dos,
+                                                    ])));
+                                                    $especialidadHistorial = optional(optional($reserva->profesional)->TipoEspecialidad)->nombre;
+                                                    $prestacionHistorial = optional($reserva->detalles->first())->nombre;
+                                                @endphp
+                                                <tr id="voucher_row_{{ $reserva->id }}" class="voucher-historial-item"
+                                                    data-voucher-estado="{{ strtolower(trim($reserva->estado_voucher)) }}">
+                                                    <td class="historial-fecha">
+                                                        @if ($fechaHistorialCarbon)
+                                                            <span>{{ $fechaHistorialCarbon->format('d-m-Y') }}</span>
+                                                            <span class="hora">{{ $fechaHistorialCarbon->format('H:i') }} hrs</span>
+                                                        @else
+                                                            <span class="text-muted">Sin fecha</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="historial-profesional">
+                                                        {{ $profesionalHistorial ?: 'No informado' }}
+                                                        <span class="historial-especialidad">
+                                                            {{ $especialidadHistorial ?: 'Especialidad no informada' }}
+                                                        </span>
+                                                    </td>
                                                     <td>
                                                         <span class="badge badge-{{ $reserva->estado_badge }}">
                                                             {{ $reserva->estado_voucher }}
@@ -323,6 +524,7 @@
                                                                 data-estado="{{ e($reserva->estado_voucher) }}"
                                                                 data-tipo="{{ e($reserva->tipo) }}"
                                                                 data-lugar="{{ e(optional($reserva->lugarAtencion)->nombre) }}"
+                                                                data-prestacion="{{ e($prestacionHistorial ?: 'Prestación no informada') }}"
                                                                 data-lugar-id="{{ $reserva->id_lugar_atencion ?? optional($reserva->lugarAtencion)->id ?? '' }}"
                                                                 onclick="mostrarQrOrden(this);">
                                                                 QR
@@ -338,6 +540,7 @@
                                                                 data-estado="{{ e($reserva->estado_voucher) }}"
                                                                 data-tipo="{{ e($reserva->tipo) }}"
                                                                 data-lugar="{{ e(optional($reserva->lugarAtencion)->nombre) }}"
+                                                                data-prestacion="{{ e($prestacionHistorial ?: 'Prestación no informada') }}"
                                                                 data-lugar-id="{{ $reserva->id_lugar_atencion ?? optional($reserva->lugarAtencion)->id ?? '' }}"
                                                                 onclick="abrirModalEditarVoucher(this);">
                                                                 <i class="feather icon-edit"></i>
@@ -354,6 +557,7 @@
                                                                 data-estado="{{ e($reserva->estado_voucher) }}"
                                                                 data-tipo="{{ e($reserva->tipo) }}"
                                                                 data-lugar="{{ e(optional($reserva->lugarAtencion)->nombre) }}"
+                                                                data-prestacion="{{ e($prestacionHistorial ?: 'Prestación no informada') }}"
                                                                 data-lugar-id="{{ $reserva->id_lugar_atencion ?? optional($reserva->lugarAtencion)->id ?? '' }}"
                                                                 onclick="abrirModalCompartirVoucher(this);">
                                                                 <i class="feather icon-share-2"></i>
@@ -384,6 +588,9 @@
                                         @endif
                                     </tbody>
                                 </table>
+                                <div id="historial_filtro_vacio" class="text-muted text-center small py-3" style="display:none;">
+                                    No hay vouchers para el estado seleccionado.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -413,6 +620,7 @@
                 <div class="modal-body bg-light">
                     <input type="hidden" id="id_profesional_modal" value="0">
                     <input type="hidden" id="id_lugar_modal" value="0">
+                    <input type="hidden" id="convenio_profesional_id" value="">
                     <input type="hidden" id="profesional_rut" value="">
                     <input type="hidden" id="cotizacion_id" value="">
 
@@ -522,7 +730,7 @@
                             <div class="card border-0 shadow-sm mb-3">
                                 <div class="card-header bg-white">
                                     <h6 class="mb-0 font-weight-bold">
-                                        <i class="feather icon-credit-card mr-1 text-primary"></i> Forma de pago
+                                        <i class="feather icon-credit-card mr-1 text-primary"></i> Pago online
                                     </h6>
                                 </div>
 
@@ -541,13 +749,16 @@
                                                     >
 
                                                     <label class="form-check-label" for="forma_pago_{{ $fp->id }}" style="cursor:pointer;">
-                                                        {{ $fp->nombre }}
+                                                        <strong>{{ $fp->nombre }}</strong>
+                                                        @if ($fp->descripcion)
+                                                            <small class="d-block text-muted">{{ $fp->descripcion }}</small>
+                                                        @endif
                                                     </label>
                                                 </div>
                                             @endforeach
                                         @else
                                             <div class="alert alert-warning mb-0">
-                                                No hay formas de pago disponibles.
+                                                No hay formas de pago online disponibles.
                                             </div>
                                         @endif
                                     </div>
@@ -621,6 +832,7 @@
                                     <tbody>
                                         <tr><th class="bg-light">Paciente</th><td id="orden_qr_paciente"></td></tr>
                                         <tr><th class="bg-light">Profesional</th><td id="orden_qr_profesional"></td></tr>
+                                        <tr><th class="bg-light">Prestación</th><td id="orden_qr_prestacion"></td></tr>
                                         <tr><th class="bg-light">Fecha</th><td id="orden_qr_fecha"></td></tr>
                                         <tr>
                                             <th class="bg-light">Valor</th>
@@ -700,6 +912,7 @@
                                         <tr><th class="bg-light">Orden</th><td id="compartir_voucher_orden"></td></tr>
                                         <tr><th class="bg-light">Paciente</th><td id="compartir_voucher_paciente"></td></tr>
                                         <tr><th class="bg-light">Profesional</th><td id="compartir_voucher_profesional"></td></tr>
+                                        <tr><th class="bg-light">Prestación</th><td id="compartir_voucher_prestacion"></td></tr>
                                         <tr><th class="bg-light">Fecha</th><td id="compartir_voucher_fecha"></td></tr>
                                         <tr><th class="bg-light">Lugar</th><td id="compartir_voucher_lugar"></td></tr>
                                         <tr><th class="bg-light">Valor</th><td><strong>$ <span id="compartir_voucher_total"></span></strong></td></tr>
@@ -942,12 +1155,16 @@
         $(document).ready(function () {
             $('#form_reservar_bono').on('submit', function(e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
+                return false;
             });
 
             $('#nombre_rut_profesional').on('keydown', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    buscar_profesional_especialidad();
+                    e.stopImmediatePropagation();
+                    $('#btn_buscar_profesional_directo').trigger('click');
+                    return false;
                 }
             });
 
@@ -958,7 +1175,22 @@
                 }
             });
 
-            actualizarModoBusquedaProfesional();
+            $('#prestacion_fonasa_busqueda').autocomplete({
+                minLength: 2,
+                delay: 250,
+                source: function(request, response) {
+                    $.getJSON("{{ route('fonasa.buscar.por.nombre.autocomplete') }}", {
+                        search: request.term
+                    }).done(response).fail(function() { response([]); });
+                },
+                select: function(event, ui) {
+                    seleccionarPrestacionFonasaDatos(ui.item);
+                    return false;
+                }
+            });
+
+            cambiarModoBusquedaProfesional('especialidad');
+            validarBeneficiarioPrevision();
         });
 
         /*
@@ -1029,6 +1261,7 @@
                 orden_id: ordenId,
                 paciente: element.dataset.paciente || '',
                 profesional: element.dataset.profesional || '',
+                prestacion: element.dataset.prestacion || 'Prestación no informada',
                 fecha: element.dataset.fecha || '',
                 total: element.dataset.total || element.dataset.monto || '0',
                 estado: element.dataset.estado || '',
@@ -1040,6 +1273,7 @@
             $('#orden_qr_numero').text(payload.orden_id);
             $('#orden_qr_paciente').text(payload.paciente);
             $('#orden_qr_profesional').text(payload.profesional);
+            $('#orden_qr_prestacion').text(payload.prestacion);
             $('#orden_qr_fecha').text(payload.fecha);
             $('#orden_qr_total').text(formatMonto(payload.total));
             $('#orden_qr_estado').text(payload.estado);
@@ -1065,6 +1299,7 @@
             let mensaje = `Hola, te envío los datos de tu voucher:%0A%0A`;
             mensaje += `Orden: ${ultimoPayloadQrHistorial.orden_id}%0A`;
             mensaje += `Profesional: ${ultimoPayloadQrHistorial.profesional}%0A`;
+            mensaje += `Prestación: ${ultimoPayloadQrHistorial.prestacion || 'No informada'}%0A`;
             mensaje += `Fecha: ${ultimoPayloadQrHistorial.fecha}%0A`;
             mensaje += `Tipo: Voucher%0A%0A`;
             mensaje += `Puedes presentar estos datos al momento de la atención.`;
@@ -1083,6 +1318,7 @@
                 paciente: element.dataset.paciente || '',
                 profesional: element.dataset.profesional || '',
                 profesional_id: element.dataset.profesionalId || '',
+                prestacion: element.dataset.prestacion || 'Prestación no informada',
                 fecha: element.dataset.fecha || '',
                 total: element.dataset.total || element.dataset.monto || '0',
                 estado: element.dataset.estado || '',
@@ -1108,6 +1344,7 @@
             $('#compartir_voucher_orden').text(payload.orden_id);
             $('#compartir_voucher_paciente').text(payload.paciente || 'N/A');
             $('#compartir_voucher_profesional').text(payload.profesional || 'N/A');
+            $('#compartir_voucher_prestacion').text(payload.prestacion || 'Prestación no informada');
             $('#compartir_voucher_fecha').text(payload.fecha || 'N/A');
             $('#compartir_voucher_lugar').text(payload.lugarAtencion || 'N/A');
             $('#compartir_voucher_total').text(formatMonto(payload.total));
@@ -1124,6 +1361,7 @@
             mensaje += `Orden: ${payload.orden_id}\n`;
             mensaje += `Paciente: ${payload.paciente || 'N/A'}\n`;
             mensaje += `Profesional: ${payload.profesional || 'N/A'}\n`;
+            mensaje += `Prestación: ${payload.prestacion || 'Prestación no informada'}\n`;
             mensaje += `Fecha: ${payload.fecha || 'N/A'}\n`;
             mensaje += `Lugar: ${payload.lugarAtencion || 'N/A'}\n`;
             mensaje += `Valor: $ ${formatMonto(payload.total)}\n`;
@@ -1299,6 +1537,8 @@
             $('#cm_prof_cobro_valor').val('');
             $('#cm_bonificacion').val('0');
             $('#cm_copago').val('');
+            $('#convenio_profesional_id').val('');
+            $('#cotizacion_validada').val(0);
 
             $('#resultado_cotizacion').html(`
                 <div class="alert alert-warning mb-0">
@@ -1347,20 +1587,8 @@
 
         function actualizarModoBusquedaProfesional() {
             const nombreRut = getNombreRutProfesional();
-            const profesion = $('#agregar_profesional_nuevo_profesion').val();
-            const especialidad = $('#agregar_profesional_nuevo_especialidad').val();
 
             if (nombreRut !== '') {
-                $('#badge_busqueda_directa')
-                    .removeClass('badge-secondary badge-light')
-                    .addClass('badge-success')
-                    .text('Activo');
-
-                $('#badge_busqueda_especialidad')
-                    .removeClass('badge-primary badge-success')
-                    .addClass('badge-light')
-                    .text('Opcional');
-
                 $('#ayuda_modo_busqueda').html(`
                     <strong>Modo actual:</strong> búsqueda directa por RUT, nombre o apellido.
                     No es obligatorio seleccionar profesión ni especialidad.
@@ -1368,24 +1596,35 @@
                 return;
             }
 
-            $('#badge_busqueda_directa')
-                .removeClass('badge-success')
-                .addClass('badge-secondary')
-                .text('Opcional');
-
-            $('#badge_busqueda_especialidad')
-                .removeClass('badge-light')
-                .addClass(profesion || especialidad ? 'badge-success' : 'badge-primary')
-                .text(profesion || especialidad ? 'En uso' : 'Activo si no buscas por RUT/nombre');
-
             $('#ayuda_modo_busqueda').html(`
                 <strong>Modo actual:</strong> búsqueda por especialidad.
-                Debes seleccionar profesión y especialidad, salvo que busques por RUT/nombre.
+                Debes seleccionar profesión y especialidad.
             `);
         }
 
         function limpiarBusquedaDirectaProfesional() {
             $('#nombre_rut_profesional').val('');
+            actualizarModoBusquedaProfesional();
+            resetResultadoProfesionales();
+        }
+
+        function cambiarModoBusquedaProfesional(modo) {
+            const directo = modo === 'directo';
+
+            $('#panel_busqueda_directa').toggle(directo);
+            $('#panel_busqueda_especialidad').toggle(!directo);
+            $('#btn_modo_directo').toggleClass('is-active', directo);
+            $('#btn_modo_especialidad').toggleClass('is-active', !directo);
+
+            if (directo) {
+                $('#agregar_profesional_nuevo_profesion').val('');
+                $('#agregar_profesional_nuevo_especialidad').html('<option value="">Seleccione especialidad</option>');
+                $('#agregar_profesional_nuevo_sub_tipo_especialidad').html('<option value="">Seleccione subtipo</option>');
+                setTimeout(function() { $('#nombre_rut_profesional').focus(); }, 100);
+            } else {
+                $('#nombre_rut_profesional').val('');
+            }
+
             actualizarModoBusquedaProfesional();
             resetResultadoProfesionales();
         }
@@ -1400,7 +1639,7 @@
 
         /*
         |--------------------------------------------------------------------------
-        | Buscador código FONASA para reserva de bono
+        | Buscador inteligente FONASA para reserva de bono
         |--------------------------------------------------------------------------
         */
         function limpiarPrestacionFonasaSiCambia() {
@@ -1438,7 +1677,7 @@
             if (valor === '') {
                 $('#resultado_fonasa_reserva_bono').html(`
                     <div class="alert alert-danger p-2 mb-0">
-                        Debe ingresar un código FONASA para buscar.
+                        Escribe el nombre o código de la prestación.
                     </div>
                 `);
                 return;
@@ -1452,7 +1691,7 @@
             `);
 
             $.ajax({
-                url: "{{ route('fonasa.buscar.por.codigo') }}",
+                url: "{{ route('fonasa.buscar.por.nombre') }}",
                 type: "GET",
                 data: { valor: valor }
             })
@@ -1462,7 +1701,7 @@
                 if (!resp || resp.estado != 1 || !resp.registros || resp.registros.length === 0) {
                     $('#resultado_fonasa_reserva_bono').html(`
                         <div class="alert alert-warning p-2 mb-0">
-                            No se encontraron prestaciones asociadas al código ingresado.
+                            No se encontraron prestaciones por ese nombre o código.
                         </div>
                     `);
                     return;
@@ -1506,19 +1745,21 @@
 
                 $('#resultado_fonasa_reserva_bono').html(`
                     <div class="alert alert-danger p-2 mb-0">
-                        Error al buscar código FONASA.
+                        No fue posible buscar prestaciones FONASA.
                     </div>
                 `);
             });
         }
 
         function seleccionarFonasaReservaBono(button) {
+            seleccionarPrestacionFonasaDatos(button.dataset || {});
+        }
 
-            const item = button.dataset || {};
+        function seleccionarPrestacionFonasaDatos(item) {
 
-            const id = item.id || '';
+            const id = item.id || item.value || '';
             const codigo = item.codigo || '';
-            const nombre = item.nombre || '';
+            const nombre = item.nombre || String(item.label || '').replace(/^.*?\s+-\s+/, '');
             const origen = item.origen || 'fonasa';
             const texto = `${codigo} - ${nombre}`;
 
@@ -1549,12 +1790,8 @@
         */
         function validarBeneficiarioPrevision() {
 
-            let beneficiario = $('#beneficiary_id').val() || 1;
-            $('#beneficiary_id').val(beneficiario);
-
-            $('#btn_validar_prevision')
-                .prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm mr-1"></span> Validando...');
+            const beneficiario = $('#beneficiary_id').val();
+            if (!beneficiario) return;
 
             $('#resultado_validacion_prevision').html(`
                 <div class="alert alert-info mb-0">
@@ -1569,7 +1806,7 @@
                 type: "POST",
                 data: {
                     _token: CSRF_TOKEN,
-                    beneficiary_id: beneficiario
+                    paciente_beneficiario_id: beneficiario
                 }
             })
             .done(function(resp) {
@@ -1578,6 +1815,7 @@
 
                 if (resp && resp.estado == 1) {
                     const prevision = resp.prevision || {};
+                    const datosBeneficiario = resp.beneficiario || {};
                     $('#beneficiario_validado').val(1);
                     $('#prevision_id').val(prevision.id || '');
                     $('#prevision_tipo').val(prevision.tipo || '');
@@ -1593,7 +1831,7 @@
 
                     $('#resultado_validacion_prevision').html(`
                         <div class="alert alert-success mb-0">
-                            <strong>Beneficiario validado.</strong><br>
+                            <strong>${escapeHtml(datosBeneficiario.nombre || 'Beneficiario')} validado.</strong><br>
                             ${escapeHtml(resp.msj || 'El beneficiario figura vigente para compra de bono según su previsión.')}
                             ${detallePrevision}
                         </div>
@@ -1610,24 +1848,23 @@
             })
             .fail(function(jqXHR) {
                 console.log(jqXHR);
-
-                // Fallback temporal para desarrollo. Eliminar cuando exista API real.
-                $('#beneficiario_validado').val(1);
-                $('#prevision_id').val('0');
-                $('#prevision_tipo').val('simulada');
-                $('#prevision_nombre').val('Validación simulada');
+                $('#beneficiario_validado').val(0);
                 $('#resultado_validacion_prevision').html(`
-                    <div class="alert alert-warning mb-0">
-                        <strong>Validación simulada.</strong><br>
-                        No existe la integración real todavía, pero se deja el beneficiario como validado para pruebas.
+                    <div class="alert alert-danger mb-0">
+                        <strong>No fue posible validar al beneficiario.</strong><br>
+                        ${escapeHtml(jqXHR.responseJSON?.msj || 'Intenta nuevamente o selecciona otro beneficiario.')}
                     </div>
                 `);
             })
-            .always(function() {
-                $('#btn_validar_prevision')
-                    .prop('disabled', false)
-                    .html('<i class="feather icon-search"></i> Validar beneficiario');
-            });
+            .always(function() {});
+        }
+
+        function cambiarBeneficiarioBono() {
+            $('#beneficiario_validado').val(0);
+            $('#prevision_id, #prevision_tipo, #prevision_nombre').val('');
+            $('#cotizacion_validada').val(0);
+            resetResultadoProfesionales();
+            validarBeneficiarioPrevision();
         }
 
         /*
@@ -1806,10 +2043,13 @@
                 contenedor.empty();
 
                 if (!data || data.estado != 1 || !data.registros || data.registros.length === 0) {
+                    const detalleSinResultados = hora24
+                        ? 'No encontramos profesionales con disponibilidad dentro de 24 horas. Desactiva ese filtro para ver otras fechas.'
+                        : 'Sin profesionales habilitados para esta previsión y búsqueda.';
                     contenedor.html(`
                         <div class="col-md-12">
                             <div class="alert alert-warning mb-0">
-                                Sin profesionales habilitados para esta previsión y búsqueda.
+                                ${detalleSinResultados}
                             </div>
                         </div>
                     `);
@@ -1962,39 +2202,11 @@
                 $('#profesional_info').val(nombreProfesional);
                 $('#profesional_rut').val(data.rut || '');
                 $('#cm_prof_cobro').val('bono_prevision');
-
-                const valor = data.valor_prestacion || data.valor_copago_fonasa || 0;
-                const bonificacion = data.bonificacion || 0;
-                const copago = data.copago || valor;
-
-                $('#cm_prof_cobro_valor').val(formatMonto(valor));
-                $('#cm_bonificacion').val(formatMonto(bonificacion));
-                $('#cm_copago').val(formatMonto(copago));
-                $('#cotizacion_id').val(data.cotizacion_id || '');
-                $('#cotizacion_validada').val(data.cotizacion_valida == 0 ? 0 : 1);
-
-                $('#resultado_cotizacion').html(`
-                    <div class="alert alert-success mb-0">
-                        Cotización cargada. Revisa el copago antes de confirmar.
-                    </div>
-                `);
+                limpiarValoresCotizacion('Selecciona el lugar para cargar el convenio FONASA.');
 
                 const convenios = data.profesional_convenios || data.professional_convenios || data.profesional_convenios_list || [];
 
-                if (data.valor_prestacion || data.valor) {
-                    const valor = data.valor_prestacion || data.valor || 0;
-                    const bonificacion = data.bonificacion || 0;
-                    const copago = data.copago || valor;
-
-                    $('#cm_prof_cobro_valor').val(formatMonto(valor));
-                    $('#cm_bonificacion').val(formatMonto(bonificacion));
-                    $('#cm_copago').val(formatMonto(copago));
-                } else {
-                    asignarValorPrimerConvenio(convenios);
-                }
-
                 $('#cotizacion_id').val(data.cotizacion_id || '');
-                $('#cotizacion_validada').val(data.cotizacion_valida == 0 ? 0 : 1);
 
                 renderConveniosProfesional(idProfesional, convenios);
             })
@@ -2014,23 +2226,30 @@
                 $('#cm_prof_cobro_valor').val(formatMonto(0));
                 $('#cm_bonificacion').val(formatMonto(0));
                 $('#cm_copago').val(formatMonto(0));
+                $('#convenio_profesional_id').val('');
+                $('#cotizacion_validada').val(0);
                 return;
             }
 
             const primerConvenio = convenios[0];
 
-            const valor = primerConvenio.valor_copago_fonasa || 0;
+            const valor = Number(primerConvenio.copago_fonasa_calculado || 0);
+            const bonificacion = Number(primerConvenio.bonificacion_fonasa_calculada || 0);
 
             $('#cm_prof_cobro_valor').val(formatMonto(valor));
-
-            // Por ahora, como no hay cálculo real de bonificación,
-            // dejamos bonificación en 0 y copago igual al valor.
-            $('#cm_bonificacion').val(formatMonto(0));
+            $('#cm_bonificacion').val(formatMonto(bonificacion));
             $('#cm_copago').val(formatMonto(valor));
+            $('#convenio_profesional_id').val(primerConvenio.id || '');
+            $('#cotizacion_validada').val(valor > 0 ? 1 : 0);
+
+            const usaTarifaEspecifica = primerConvenio.fuente_valor_fonasa === 'tarifa_fonasa';
+            const mensaje = usaTarifaEspecifica
+                ? 'Copago cargado desde la tarifa FONASA del profesional.'
+                : 'Convenio FONASA válido. Se está usando temporalmente el valor general porque falta configurar el copago FONASA específico.';
 
             $('#resultado_cotizacion').html(`
-                <div class="alert alert-success mb-0">
-                    Valor cargado desde el primer convenio disponible.
+                <div class="alert alert-${usaTarifaEspecifica ? 'success' : 'warning'} mb-0">
+                    ${mensaje}
                 </div>
             `);
         }
@@ -2098,7 +2317,7 @@
 
             // Cargar valor del primer convenio del lugar seleccionado que tenga valor > 0
             const convenioConValor = filtrados.find(function(convenio) {
-                return Number(convenio.valor_copago_fonasa || 0) > 0;
+                return Number(convenio.copago_fonasa_calculado || 0) > 0;
             });
 
             if (convenioConValor) {
@@ -2114,9 +2333,8 @@
                             <tr>
                                 <th>Tipo atención</th>
                                 <th>Convenio</th>
-                                <th>Nombre</th>
-                                <th>Valor</th>
-                                <th>Observaciones</th>
+                                <th>Nivel</th>
+                                <th>Copago</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -2126,10 +2344,9 @@
                 tabla += `
                     <tr data-convenio-id="${escapeHtml(convenio.id || '')}">
                         <td>${escapeHtml(convenio.tipo_atencion || '')}</td>
-                        <td>${escapeHtml(convenio.convenios || '')}</td>
-                        <td>${escapeHtml(convenio.nombre_convenio || '')}</td>
-                        <td>${escapeHtml(convenio.valor || '')}</td>
-                        <td>${escapeHtml(convenio.observaciones || '')}</td>
+                        <td>FONASA</td>
+                        <td>${escapeHtml(convenio.nivel_fonasa || 'No informado')}</td>
+                        <td>$${escapeHtml(formatMonto(convenio.copago_fonasa_calculado || 0))}</td>
                     </tr>
                 `;
             });
@@ -2236,6 +2453,7 @@
             const idPrestacion = $('#id_prestacion').val();
             const codigoPrestacion = $('#codigo_prestacion').val();
             const cotizacionId = $('#cotizacion_id').val();
+            const convenioProfesionalId = $('#convenio_profesional_id').val();
 
             if (!beneficiaryId) {
                 swal('Error', 'No se encontró el beneficiario seleccionado', 'error');
@@ -2262,6 +2480,11 @@
                 return;
             }
 
+            if (!convenioProfesionalId || $('#cotizacion_validada').val() != 1) {
+                swal('Error', 'El profesional no tiene un convenio FONASA con copago válido para este lugar.', 'error');
+                return;
+            }
+
             const btnConfirmar = $('#convenio_usuario .modal-footer .btn-primary');
 
             btnConfirmar
@@ -2284,6 +2507,7 @@
                     data: {
                         _token: CSRF_TOKEN,
                         beneficiary_id: beneficiaryId,
+                        paciente_beneficiario_id: beneficiaryId,
                         prevision_id: $('#prevision_id').val(),
                         prevision_tipo: $('#prevision_tipo').val(),
                         id_profesional: idProfesional,
@@ -2295,7 +2519,13 @@
                         id_prestacion: idPrestacion,
                         codigo_prestacion: codigoPrestacion,
                         cotizacion_id: cotizacionId,
-                        valor: valor
+                        convenio_profesional_id: convenioProfesionalId,
+                        valor: valor,
+                        nombre_detalle: getPrestacionTexto(),
+                        cantidad: 1,
+                        unitario: valor,
+                        descuento: 0,
+                        total: valor
                     },
                 })
                 .done(function(data) {
@@ -2319,7 +2549,8 @@
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError);
-                    swal('Error', 'Error en el servidor', 'error');
+                    const respuesta = jqXHR.responseJSON || {};
+                    swal('Error', respuesta.msj || respuesta.message || 'Error en el servidor', 'error');
                 })
                 .always(function() {
                     btnConfirmar
@@ -2330,28 +2561,27 @@
         }
 
         function habilitarPagoSinConvenio() {
-            $('#cm_prof_cobro').prop('disabled', false);
-            $('#cm_prof_cobro').val('hora_medica');
+            $('#cm_prof_cobro').prop('disabled', true);
+            $('#cm_prof_cobro').val('bono_prevision');
 
             $('input[name="forma_pago_id"]')
-                .prop('disabled', false)
-                .removeAttr('disabled');
+                .prop('disabled', true);
 
             $('#cm_prof_cobro_valor')
-                .prop('readonly', false)
+                .prop('readonly', true)
                 .val('');
 
             $('#cm_bonificacion')
-                .prop('readonly', false)
+                .prop('readonly', true)
                 .val('0');
 
             $('#cm_copago')
-                .prop('readonly', false)
+                .prop('readonly', true)
                 .val('');
 
             $('#resultado_cotizacion').html(`
                 <div class="alert alert-warning mb-0">
-                    Profesional sin convenio. Ingrese manualmente el valor y copago particular.
+                    Este profesional no tiene un convenio FONASA activo para emitir el bono.
                 </div>
             `);
         }
@@ -2723,6 +2953,22 @@
             });
         }
 
+        function fechaHistorialHtml(fechaValor) {
+            const texto = String(fechaValor || '').trim();
+            const partes = texto.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+
+            if (!partes) {
+                return '<span class="text-muted">Sin fecha</span>';
+            }
+
+            const fecha = `${partes[3]}-${partes[2]}-${partes[1]}`;
+            const hora = partes[4] && partes[5]
+                ? `<span class="hora">${partes[4]}:${partes[5]} hrs</span>`
+                : '';
+
+            return `<span>${fecha}</span>${hora}`;
+        }
+
         function agregarFilaHistorialVoucher(orden) {
             const totalRaw = orden.total || orden.monto || 0;
             const total = formatMonto(totalRaw);
@@ -2732,9 +2978,13 @@
 
 
             const fila = `
-                <tr id="voucher_row_${escapeHtml(orden.id)}">
-                    <td>${escapeHtml(orden.fecha_pagado_cap || '')}</td>
-                    <td>${escapeHtml(orden.profesional_nombre || '')}</td>
+                <tr id="voucher_row_${escapeHtml(orden.id)}" class="voucher-historial-item"
+                    data-voucher-estado="${escapeHtml(String(orden.estado_texto || 'PAGADO').toLowerCase())}">
+                    <td class="historial-fecha">${fechaHistorialHtml(orden.fecha_pagado_cap)}</td>
+                    <td class="historial-profesional">
+                        ${escapeHtml(orden.profesional_nombre || 'No informado')}
+                        <span class="historial-especialidad">${escapeHtml(orden.profesional_especialidad || 'Especialidad no informada')}</span>
+                    </td>
                     <td>
                         <span class="badge badge-${escapeHtml(orden.estado_badge || 'success')}">
                             ${escapeHtml(orden.estado_texto || 'PAGADO')}
@@ -2752,6 +3002,7 @@
                                 data-estado="${escapeHtml(orden.estado_texto || 'PAGADO')}"
                                 data-tipo="${escapeHtml(orden.tipo || 'voucher')}"
                                 data-lugar="${escapeHtml(orden.lugar_nombre || '')}"
+                                data-prestacion="${escapeHtml(orden.prestacion_nombre || 'Prestación no informada')}"
                                 data-lugar-id="${escapeHtml(orden.id_lugar_atencion || orden.lugar_id || '')}"
                                 onclick="mostrarQrOrden(this);">
                                 QR
@@ -2767,6 +3018,7 @@
                                 data-estado="${escapeHtml(orden.estado_texto || 'PAGADO')}"
                                 data-tipo="${escapeHtml(orden.tipo || 'voucher')}"
                                 data-lugar="${escapeHtml(orden.lugar_nombre || '')}"
+                                data-prestacion="${escapeHtml(orden.prestacion_nombre || 'Prestación no informada')}"
                                 data-lugar-id="${escapeHtml(orden.id_lugar_atencion || orden.lugar_id || '')}"
                                 onclick="abrirModalEditarVoucher(this);">
                                 <i class="feather icon-edit"></i>
@@ -2783,6 +3035,7 @@
                                 data-estado="${escapeHtml(orden.estado_texto || 'PAGADO')}"
                                 data-tipo="${escapeHtml(orden.tipo || 'voucher')}"
                                 data-lugar="${escapeHtml(orden.lugar_nombre || '')}"
+                                data-prestacion="${escapeHtml(orden.prestacion_nombre || 'Prestación no informada')}"
                                 data-lugar-id="${escapeHtml(orden.id_lugar_atencion || orden.lugar_id || '')}"
                                 onclick="abrirModalCompartirVoucher(this);">
                                 <i class="feather icon-share-2"></i>
@@ -2808,6 +3061,22 @@
             `;
 
             tbody.prepend(fila);
+            filtrarHistorialVouchers();
+        }
+
+        function filtrarHistorialVouchers() {
+            const estadoSeleccionado = String($('#filtro_estado_historial').val() || 'todos').toLowerCase();
+            let visibles = 0;
+            const filas = $('#tabla_historial_vouchers tbody tr.voucher-historial-item');
+
+            filas.each(function() {
+                const estadoFila = String($(this).data('voucher-estado') || '').toLowerCase();
+                const mostrar = estadoSeleccionado === 'todos' || estadoFila === estadoSeleccionado;
+                $(this).toggle(mostrar);
+                if (mostrar) visibles++;
+            });
+
+            $('#historial_filtro_vacio').toggle(filas.length > 0 && visibles === 0);
         }
     </script>
 @endsection

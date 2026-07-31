@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use App\Helpers\Funciones;
 use App\Models\Bono;
 use App\Models\FichaAtencion;
+use App\Models\FormasPago;
 use App\Models\HoraMedica;
 use App\Models\LugarAtencion;
 use App\Models\Orden;
 use App\Models\OrdenDetalle;
 use App\Models\Paciente;
+use App\Models\PacientesDependientes;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\ProfesionalConvenio;
 use App\Models\TipoBono;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Support\Str;
 
@@ -227,8 +231,78 @@ class VentaBonoController extends Controller
 
         if($valido)
         {
-            $monto = $request->monto ?? $request->valor ?? 0;
-            $monto = (int) str_replace(['.', ',', '$', ' '], '', $monto);
+            $responsable = Paciente::where('id_usuario', Auth::user()->id)->first();
+            $beneficiarioId = (int) ($request->paciente_beneficiario_id ?: $request->beneficiary_id);
+            $beneficiario = Paciente::find($beneficiarioId);
+
+            $esTitular = $responsable && $beneficiario
+                && (int) $responsable->id === (int) $beneficiario->id;
+            $esDependiente = $responsable && $beneficiario
+                && PacientesDependientes::where('id_responsable', $responsable->id)
+                    ->where('id_paciente', $beneficiario->id)
+                    ->where('estado', 1)
+                    ->exists();
+
+            if (!$esTitular && !$esDependiente) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El beneficiario no pertenece al titular autenticado.',
+                ], 403);
+            }
+
+            $prevision = $beneficiario->id_prevision
+                ? Prevision::find($beneficiario->id_prevision)
+                : Prevision::where('tipo', 'fonasa')->first();
+
+            if (!$prevision || strtolower((string) $prevision->tipo) !== 'fonasa') {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El beneficiario seleccionado no pertenece a FONASA.',
+                ], 422);
+            }
+
+            $convenio = ProfesionalConvenio::where('id', $request->convenio_profesional_id)
+                ->where('id_profesional', $request->id_profesional)
+                ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                ->where('estado', 1)
+                ->whereRaw('LOWER(convenios) LIKE ?', ['%fonasa%'])
+                ->where(function ($vigencia) {
+                    $vigencia->whereNull('fecha_inicio')
+                        ->orWhereDate('fecha_inicio', '<=', now());
+                })
+                ->where(function ($vigencia) {
+                    $vigencia->whereNull('fecha_fin')
+                        ->orWhereDate('fecha_fin', '>=', now());
+                })
+                ->first();
+
+            if (!$convenio) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'Selecciona un convenio FONASA activo y vigente para este profesional.',
+                ], 422);
+            }
+
+            $formaPago = FormasPago::where('id', $request->forma_pago_id)
+                ->where('activo', 1)
+                ->where('pago_online', 1)
+                ->first();
+
+            if (!$formaPago) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'Selecciona una forma de pago online válida.',
+                ], 422);
+            }
+
+            $monto = (int) ($convenio->valor_copago_fonasa ?: $convenio->valor ?: 0);
+
+            if ($monto <= 0) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El convenio FONASA no tiene un copago válido configurado.',
+                ], 422);
+            }
 
             $orden = new Orden();
 
@@ -237,13 +311,31 @@ class VentaBonoController extends Controller
             $orden->origen = $request->origen ?? 1;
             $orden->tipo_movimiento = $request->tipo_movimiento ?? 'bono';
             $orden->id_profesional = $request->id_profesional;
-            $orden->id_paciente = Paciente::where('id_usuario', Auth::user()->id)->first()->id;
+            $orden->id_paciente = $beneficiario->id;
+            if (Schema::hasColumn('orden', 'id_paciente_responsable')) {
+                $orden->id_paciente_responsable = $responsable->id;
+            }
+            if (Schema::hasColumn('orden', 'id_forma_pago')) {
+                $orden->id_forma_pago = $formaPago->id;
+            }
+            if (Schema::hasColumn('orden', 'id_profesional_convenio')) {
+                $orden->id_profesional_convenio = $convenio->id;
+            }
+            $orden->rut = $beneficiario->rut;
+            $orden->nombre = $beneficiario->nombres;
+            $orden->apellido_uno = $beneficiario->apellido_uno;
+            $orden->apellido_dos = $beneficiario->apellido_dos;
+            $orden->email = $beneficiario->email;
             $orden->monto = $monto;
             $orden->estado_orden = $request->estado_orden ?? 'PAGADO';
             $orden->fecha_pagado_cap = date('Y-m-d H:i:s');
             $orden->qr_token = (string) Str::uuid();
-
-
+            // qr_payload es obligatorio en la tabla. Se guarda inicialmente
+            // con el token y se completa con el ID una vez insertada la orden.
+            $orden->qr_payload = json_encode([
+                'token' => $orden->qr_token,
+                'tipo' => 'voucher_bono',
+            ]);
 
             if($orden->save())
             {
@@ -253,6 +345,7 @@ class VentaBonoController extends Controller
                     'token' => $orden->qr_token,
                     'tipo' => 'voucher_bono'
                 ]);
+                $orden->save();
                 $datos['orden_id'] = $orden->id;
                 $datos['qr_token'] = $orden->qr_token;
                 $datos['qr_payload'] = json_decode($orden->qr_payload, true);
@@ -264,11 +357,12 @@ class VentaBonoController extends Controller
                 $orden_detalle->id_orden = $orden->id;
                 $orden_detalle->id_lugar_atencion = $request->id_lugar_atencion;
                 $orden_detalle->id_hora_medica = $request->id_hora_medica;
-                $orden_detalle->nombre = $request->nombre_detalle;
-                $orden_detalle->cantidad = $request->cantidad;
-                $orden_detalle->unitario = $request->unitario;
-                $orden_detalle->descuento = $request->descuento;
-                $orden_detalle->total = $request->total;
+                $orden_detalle->nombre = $request->nombre_detalle ?: 'Bono de prestación médica';
+                $orden_detalle->cantidad = $request->cantidad ?: 1;
+                $orden_detalle->unitario = $request->unitario ?? $monto;
+                $orden_detalle->descuento = $request->descuento ?? 0;
+                $orden_detalle->total = $request->total ?? $monto;
+                $orden_detalle->estado = $request->estado ?? 1;
 
                 if($orden_detalle->save())
                 {
