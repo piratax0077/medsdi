@@ -37291,4 +37291,133 @@ CARD TRASPASO CAJA
 .select2-container--default .select2-selection--multiple {
     border-radius: 8px;
 }
-</style>
+
+
+
+
+/**ESTADISTICAS DEL PERFIL PROFESIONAL**/
+
+.reportes-titulo {
+                    font-weight: 700;
+                    color: #2b2f3a;
+                    margin-bottom: 2px;
+                }
+                .reportes-subtitulo {
+                    color: #8b93a7;
+                    font-size: 0.95rem;
+                }
+                .kpi-card {
+                    border: none;
+                    border-radius: 14px;
+                    transition: box-shadow .2s ease, transform .2s ease;
+                }
+                .kpi-card:hover {
+                    box-shadow: 0 10px 25px rgba(30, 40, 80, .08);
+                    transform: translateY(-2px);
+                }
+                .kpi-icon {
+                    width: 54px;
+                    height: 54px;
+                    min-width: 54px;
+                    border-radius: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.4rem;
+                }
+                .kpi-dot {
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+                .bg-c-teal {
+                    background-color: #17a2b8;
+                }
+                .text-c-teal {
+                    color: #17a2b8;
+                }
+                .reportes-card {
+                    border: none;
+                    border-radius: 14px;
+                }
+                .reportes-card .card-header {
+                    background-color: #fff;
+                    border-bottom: 1px solid #f0f1f5;
+                    border-radius: 14px 14px 0 0 !important;
+                }
+
+                .stat-mini-card {
+                    background-color: #f8f9fc;
+                    border-radius: 12px;
+                    padding: 14px 16px;
+                    height: 100%;
+                }
+                .stat-mini-card h3 {
+                    font-weight: 700;
+                    margin-bottom: 2px;
+                }
+                .doc-list-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #f0f1f5;
+                }
+                .doc-list-item:last-of-type {
+                    border-bottom: none;
+                }
+                .doc-icon {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 12px;
+                    font-size: .95rem;
+                }
+                .filtros-reportes {
+                    gap: 10px;
+                }
+                .filtro-item {
+                    min-width: 180px;
+                }
+                .select-filtro-reportes {
+                    border: 1px solid #1a49a3;
+                    border-radius: 8px;
+                    color: #333333;
+                    background-color: #fff;
+                    width: 100%;
+                }
+                .select-filtro-reportes:focus {
+                    border-color: #1a49a3;
+                    box-shadow: 0 0 0 .2rem rgba(26, 73, 163, .15);
+                    outline: none;
+                }
+                @media (max-width: 767.98px) {
+                    .filtros-reportes {
+                        width: 100%;
+                    }
+                    .filtro-item {
+                        min-width: 0;
+                        width: 100%;
+                    }
+                }
+                .filtro-item-icon {
+                    position: relative;
+                }
+                .filtro-item-icon .filtro-icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 12px;
+                    transform: translateY(-50%);
+                    color: #1a49a3;
+                    pointer-events: none;
+                    z-index: 2;
+                    font-size: 0.9rem;
+                }
+                .filtro-item-icon select.select-filtro-reportes {
+                    padding-left: 34px;
+                }
