@@ -536,18 +536,309 @@
                             </div>
                         </div>
 
-                        <!--ANTECEDENTES ACADÉMICOS-->
+                        <!--PERFIL PROFESIONAL-->
                         <div class="tab-pane fade" id="info-academico" role="tabpanel"
                             aria-labelledby="info-academico-tab">
                             {{-- formulario para agregar  --}}
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h5 class="f-20 text-c-blue d-inline mr-2 pt-1">Antecedentes acedémicos</h5>
-                                    <button type="button" class="btn btn-info btn-sm d-inline float-right mb-2"
+                                    <h5 class="f-20 text-c-blue d-inline mr-2 pl-0 pt-1">Antecedentes acedémicos</h5>
+                                    <button type="button" class="btn btn-light btn-sm d-inline float-right mb-2"
                                         onclick="info_academica_m();"><i class="fas fa-plus"></i> Añadir</button>
                                 </div>
                             </div>
                             <div class="row">
+
+                                <!--PERFIL PROFESIONAL, PARA CONECTAR LA INFO A LA WEB Y BUSCADORES-->
+                                <div class="col-12">
+    <div class="card">
+        <div class="card-header-principal d-flex align-items-center justify-content-between">
+            <h5 class="mb-0 text-white text-dark"><i class="feather icon-user icono-primary"></i>Perfil profesional</h5>
+            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse"
+                data-target=".info_perfil" aria-expanded="false"
+                aria-controls="perfil_profesional_ver perfil_profesional_editar">
+                <i class="feather icon-edit"></i>
+            </button>
+        </div>
+
+        <!--Ver: PERFIL PROFESIONAL-->
+        <div class="card-body info_perfil collapse show" id="perfil_profesional_ver">
+
+            <div class="d-flex align-items-start mb-3 flex-wrap">
+                <div class="flex-grow-1">
+                    <h4 class="mb-1 text-c-blue text-capitalize">{{ $profesional->nombre }} {{ $profesional->apellido }}</h4>
+                    <span class="badge badge-light-primary py-1 px-3 rounded-pill text-capitalize">
+                        <i class="feather icon-briefcase mr-1"></i>{{ $profesional->titulo_profesional }}
+                    </span>
+                    <div class="mt-1">
+                        @if($profesional->numero_registro_sis)
+                            <span class="badge badge-light-success py-1 px-2 mr-1 mb-1">
+                                <i class="feather icon-check-circle mr-1"></i>Reg. SIS {{ $profesional->numero_registro_sis }}
+                            </span>
+                        @endif
+                        @if($profesional->num_colegio)
+                            <span class="badge badge-light-info py-1 px-2 mb-1">
+                                <i class="feather icon-award mr-1"></i>N° Colegio {{ $profesional->num_colegio }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Sobre mí</h6>
+                <p class="mb-0 text-muted">{{ $profesional->resena }}</p>
+            </div>
+
+            <div class="mb-3">
+                <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Especialista en</h6>
+                <div>
+                    @foreach(explode(',', $profesional->especialidades) as $especialidad)
+                        <span class="badge badge-light-primary py-1 px-2 mr-1 mb-1">{{ trim($especialidad) }}</span>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="form-row">
+                <h6 class="tit-gen">Atención médica</h6>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+                    <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Atención a</h6>
+                    <div>
+                        @if($profesional->atiende_adultos)
+                            <span class="mr-3"><i class="feather icon-user mr-1"></i>Adultos</span>
+                        @endif
+                        @if($profesional->atiende_ninos)
+                            <span><i class="feather icon-smile mr-1"></i>Niños</span>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+                    <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Modalidad de atención</h6>
+                    <div>
+                        @if($profesional->modalidad_presencial)
+                            <span class="mr-3"><i class="feather icon-map-pin mr-1"></i>Presencial</span>
+                        @endif
+                        @if($profesional->modalidad_teleconsulta)
+                            <span><i class="feather icon-video mr-1"></i>Teleconsulta</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+                    <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Idiomas</h6>
+                    <div>{{ $profesional->idiomas }}</div>
+                </div>
+                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
+                    <h6 class="font-weight-bolder tit-gen ml-0 mb-1">Redes Sociales profesional</h6>
+                    <div>
+                        @if($profesional->instagram_url)
+                            <a href="{{ $profesional->instagram_url }}" target="_blank" class="mr-2" title="Instagram"><i class="feather icon-instagram"></i></a>
+                        @endif
+                        @if($profesional->facebook_url)
+                            <a href="{{ $profesional->facebook_url }}" target="_blank" class="mr-2" title="Facebook"><i class="feather icon-facebook"></i></a>
+                        @endif
+                        @if($profesional->linkedin_url)
+                            <a href="{{ $profesional->linkedin_url }}" target="_blank" title="LinkedIn"><i class="feather icon-linkedin"></i></a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--Cierre: Ver PERFIL PROFESIONAL-->
+
+        <!--(Editar) PERFIL PROFESIONAL-->
+        <div class="card-body info_perfil collapse" id="perfil_profesional_editar">
+            <form>
+                <div class="form-row">
+                    <div class="col-12">
+                        <h6 class="tit-gen">Información profesional</h6>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                        <label class="floating-label-activo">Profesión</label>
+                        <select class="form-control form-control-sm" id="id_especialidad"
+                            name="id_especialidad"
+                            onchange="carga_tipo_especialidad('id_especialidad', 'id_tipo_especialidad', '');">
+                            <option>Seleccione</option>
+                            @foreach ($especialidades as $especialidad)
+                                @if ($especialidad->id == $profesional->id_especialidad)
+                                    <option value="{{ $especialidad->id }}" selected>
+                                        {{ $especialidad->nombre }}
+                                    </option>
+                                @else
+                                    <option value="{{ $especialidad->id }}">
+                                        {{ $especialidad->nombre }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                        <label class="floating-label-activo">Especialidad</label>
+                        <select class="form-control form-control-sm"
+                            id="id_tipo_especialidad" name="id_tipo_especialidad"
+                            onchange="carga_sub_tipo_especialidad('id_tipo_especialidad', 'id_sub_tipo_especialidad', '');">
+                            <option>Seleccione</option>
+                            @foreach ($tipo_especialidades as $tipo)
+                                @if ($tipo->id == $profesional->id_tipo_especialidad)
+                                    <option value="{{ $tipo->id }}" selected>
+                                        {{ $tipo->nombre }}
+                                    </option>
+                                @else
+                                    <option value="{{ $especialidad->id }}">
+                                        {{ $tipo->nombre }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                        <label class="floating-label-activo">Sub Especialidad</label>
+                        <select class="form-control form-control-sm"
+                            id="id_sub_tipo_especialidad" name="id_sub_tipo_especialidad">
+                            <option value="">Seleccione</option>
+                            @foreach ($sub_tipo_especialidades as $sub_tipo)
+                                @if ($sub_tipo->id == $profesional->id_sub_tipo_especialidad)
+                                    <option value="{{ $sub_tipo->id }}" selected>
+                                        {{ $sub_tipo->nombre }}
+                                    </option>
+                                @else
+                                    <option value="{{ $sub_tipo->id }}">
+                                        {{ $sub_tipo->nombre }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label class="floating-label-activo">N° SIS</label>
+                        <input type="text" class="form-control form-control-sm" value="{{ $profesional->numero_registro_sis }}"
+                            id="editar_numero_registro_sis" name="editar_numero_registro_sis">
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <label class="floating-label-activo">Número de colegio</label>
+                        <input type="text" class="form-control form-control-sm"
+                            id="editar_numero_colegio" name="editar_numero_colegio"
+                            value="{{ $profesional->num_colegio }}">
+                    </div>
+                </div>
+                <style>
+                    #editar_resena {
+                        height: 100%;
+                        min-height: 90px;
+                    }
+                    #editar_especialidades + .select2-container {
+                        height: 100%;
+                    }
+                    #editar_especialidades + .select2-container .select2-selection--multiple {
+                        height: 100%;
+                        min-height: 90px;
+                    }
+                </style>
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 d-flex flex-column">
+                        <label class="floating-label-activo">Reseña sobre mí</label>
+                        <textarea class="form-control form-control-sm" rows="3" id="editar_resena"
+                            name="editar_resena" placeholder="Cuéntales a tus pacientes quién eres, tu experiencia, tu forma de trabajar y qué pueden esperar de la atención.">{{ $profesional->resena }}</textarea>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 d-flex flex-column">
+                        <label class="floating-label-activo">Me especializo en</label>
+                        <select class="form-control form-control-sm select2-especialidades" id="editar_especialidades"
+                            name="editar_especialidades[]" multiple="multiple" placeholder="Escribe y presiona Enter para agregar">
+                            @if ($profesional->especialidades)
+                                @foreach (explode(',', $profesional->especialidades) as $especialidad_libre)
+                                    @if (trim($especialidad_libre) !== '')
+                                        <option value="{{ trim($especialidad_libre) }}" selected>{{ trim($especialidad_libre) }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label class="font-weight-bolder ml-0 mb-1 d-block">Atiendo a</label>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" id="editar_atiende_adultos"
+                                name="editar_atiende_adultos" {{ $profesional->atiende_adultos ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="editar_atiende_adultos">Adultos</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" id="editar_atiende_ninos"
+                                name="editar_atiende_ninos" {{ $profesional->atiende_ninos ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="editar_atiende_ninos">Niños</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                        <label class="font-weight-bolder ml-0 mb-1 d-block">Modalidad</label>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" id="editar_modalidad_presencial"
+                                name="editar_modalidad_presencial" {{ $profesional->modalidad_presencial ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="editar_modalidad_presencial">Presencial</label>
+                        </div>
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" id="editar_modalidad_teleconsulta"
+                                name="editar_modalidad_teleconsulta" {{ $profesional->modalidad_teleconsulta ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="editar_modalidad_teleconsulta">Teleconsulta</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                        <label class="floating-label-activo">Idiomas</label>
+                        <select class="form-control form-control-sm select2-idiomas" id="editar_idiomas"
+                            name="editar_idiomas[]" multiple="multiple" placeholder="Escribe y presiona Enter para agregar">
+                            @if ($profesional->idiomas)
+                                @foreach (explode(',', $profesional->idiomas) as $idioma_libre)
+                                    @if (trim($idioma_libre) !== '')
+                                        <option value="{{ trim($idioma_libre) }}" selected>{{ trim($idioma_libre) }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col-12">
+                        <h6 class="tit-gen">Redes profesionales</h6>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label class="floating-label-activo">Instagram</label>
+                        <input type="text" class="form-control form-control-sm" value="{{ $profesional->instagram_url }}"
+                            id="editar_instagram_url" name="editar_instagram_url">
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label class="floating-label-activo">Facebook</label>
+                        <input type="text" class="form-control form-control-sm" value="{{ $profesional->facebook_url }}"
+                            id="editar_facebook_url" name="editar_facebook_url">
+                    </div>
+                    <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label class="floating-label-activo">LinkedIn</label>
+                        <input type="text" class="form-control form-control-sm" value="{{ $profesional->linkedin_url }}"
+                            id="editar_linkedin_url" name="editar_linkedin_url">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
+                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                        <button type="button" onclick="editar_perfil_profesional();" class="btn btn-info btn-sm">
+                            <i class="feather icon-save"></i> Guardar cambios
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--(Editar) PERFIL PROFESIONAL-->
+    </div>
+</div>
+
+                                <!--INFO ACADÉMICA-->
                                 @if ($perfil_academico != null)
                                     @foreach ($perfil_academico as $key_academico => $value_academico)
                                         {{-- CAJA DE REGISTRO ACADEMICO  --}}
@@ -715,6 +1006,32 @@
 
 @section('page-script')
     <script>
+        $(document).ready(function () {
+            $('.select2-especialidades').select2({
+                tags: true,
+                width: '100%',
+                tokenSeparators: [','],
+                placeholder: 'Escribe una especialidad y presiona Enter',
+                language: {
+                    noResults: function () {
+                        return 'Escribe y presiona Enter para agregar';
+                    }
+                }
+            });
+
+            $('.select2-idiomas').select2({
+                tags: true,
+                width: '100%',
+                tokenSeparators: [','],
+                placeholder: 'Escribe un idioma y presiona Enter',
+                language: {
+                    noResults: function () {
+                        return 'Escribe y presiona Enter para agregar';
+                    }
+                }
+            });
+        });
+
         $('#mobile-two-factor').on('change', function () {
             const control = this;
             $.ajax({

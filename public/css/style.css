@@ -37285,4 +37285,10 @@ CARD TRASPASO CAJA
     word-wrap: break-word!important;
     overflow-wrap: break-word!important;
 }
+
+/** BORDES REDONDEADOS PARA TODOS LOS SELECT2 DEL PROYECTO **/
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    border-radius: 8px;
+}
 </style>
