@@ -25,49 +25,43 @@
                     @csrf
                     <input type="hidden" name="contrasena_mail" id="contrasena_mail" value="{{ Auth::user()->email }}">
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group col-12">
                             <label class="floating-label-activo">Contraseña actual</label>
-                            <div class="input-group input-group-sm">
-                                <input type="password" class="form-control" id="contrasena_actual" name="contrasena_actual">
-                                <div class="input-group-append">
-                                    <button type="button"
-                                        class="btn btn-outline-secondary btn-toggle-password"
-                                        data-target="contrasena_actual"
-                                        aria-label="Mostrar contraseña"
-                                        title="Mostrar contraseña">
-                                        <i class="feather icon-eye"></i>
-                                    </button>
-                                </div>
+                            <div class="position-relative">
+                                <input type="password" class="form-control form-control-sm pr-5" id="contrasena_actual" name="contrasena_actual">
+                                <button type="button"
+                                    class="btn btn-toggle-password btn-eye-inside"
+                                    data-target="contrasena_actual"
+                                    aria-label="Mostrar contraseña"
+                                    title="Mostrar contraseña">
+                                    <i class="feather icon-eye"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group col-12">
                             <label class="floating-label-activo">Nueva contraseña</label>
-                            <div class="input-group input-group-sm">
-                                <input type="password" class="form-control" id="password_registro" name="password_registro">
-                                <div class="input-group-append">
-                                    <button type="button"
-                                        class="btn btn-outline-secondary btn-toggle-password"
-                                        data-target="password_registro"
-                                        aria-label="Mostrar contraseña"
-                                        title="Mostrar contraseña">
-                                        <i class="feather icon-eye"></i>
-                                    </button>
-                                </div>
+                            <div class="position-relative">
+                                <input type="password" class="form-control form-control-sm pr-5" id="password_registro" name="password_registro">
+                                <button type="button"
+                                    class="btn btn-toggle-password btn-eye-inside"
+                                    data-target="password_registro"
+                                    aria-label="Mostrar contraseña"
+                                    title="Mostrar contraseña">
+                                    <i class="feather icon-eye"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group col-12">
                             <label class="floating-label-activo">Repita nueva contraseña</label>
-                            <div class="input-group input-group-sm">
-                                <input type="password" class="form-control" id="password_confirmacion_registro" name="password_confirmacion_registro">
-                                <div class="input-group-append">
-                                    <button type="button"
-                                        class="btn btn-outline-secondary btn-toggle-password"
-                                        data-target="password_confirmacion_registro"
-                                        aria-label="Mostrar contraseña"
-                                        title="Mostrar contraseña">
-                                        <i class="feather icon-eye"></i>
-                                    </button>
-                                </div>
+                            <div class="position-relative">
+                                <input type="password" class="form-control form-control-sm pr-5" id="password_confirmacion_registro" name="password_confirmacion_registro">
+                                <button type="button"
+                                    class="btn btn-toggle-password btn-eye-inside"
+                                    data-target="password_confirmacion_registro"
+                                    aria-label="Mostrar contraseña"
+                                    title="Mostrar contraseña">
+                                    <i class="feather icon-eye"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -84,6 +78,27 @@
         <!--CIERRE: CARD CONTRASEÑA PERSONAL-->
 </div>
 
+<style>
+    .btn-eye-inside {
+        position: absolute;
+        top: 0;
+        right: 6px;
+        height: calc(1.5em + 0.75rem + 2px);
+        display: flex;
+        align-items: center;
+        background: transparent;
+        border: none;
+        padding: 0 6px;
+        margin: 0;
+        line-height: 1;
+        color: #6c757d;
+        z-index: 4;
+    }
+    .btn-eye-inside:hover,
+    .btn-eye-inside:focus {
+        color: #495057;
+    }
+</style>
 
 <script>
     (function () {
