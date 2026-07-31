@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LoginApprovalChallenge;
+use App\Models\UsersDevices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -47,11 +48,28 @@ class MobileTwoFactorController extends Controller
                 return [
                     'id' => $challenge->id,
                     'ip_address' => $challenge->ip_address,
+                    'location' => $this->challengeLocation($challenge),
                     'device' => Str::limit($challenge->user_agent ?: 'Dispositivo desconocido', 120),
                     'requested_at' => $challenge->created_at->toIso8601String(),
                     'expires_at' => $challenge->expires_at->toIso8601String(),
                 ];
             }));
+    }
+
+    private function challengeLocation(LoginApprovalChallenge $challenge)
+    {
+        if (in_array($challenge->ip_address, ['127.0.0.1', '::1'], true)) {
+            return 'Este equipo · red local';
+        }
+
+        $parts = array_filter([
+            $challenge->location_city,
+            $challenge->location_country,
+        ]);
+
+        return !empty($parts)
+            ? implode(', ', $parts)
+            : 'Ubicación aproximada no disponible';
     }
 
     public function decide(Request $request, LoginApprovalChallenge $challenge)
@@ -62,15 +80,37 @@ class MobileTwoFactorController extends Controller
             'Esta acción requiere un perfil Profesional o Paciente.'
         );
 
-        $data = $request->validate(['decision' => 'required|in:approved,rejected']);
+        $data = $request->validate([
+            'decision' => 'required|in:approved,rejected',
+            'auth_method' => 'required|in:device_pin,biometric',
+            'credential' => ['required', 'string', 'regex:/^\d{4}$/'],
+            'uuid' => 'required|string|max:255',
+        ]);
         abort_unless((int) $challenge->user_id === (int) $request->user()->id, 404);
 
         if (!$challenge->isPending()) {
             return response()->json(['message' => 'El desafío ya fue resuelto o expiró.'], 409);
         }
 
+        $device = UsersDevices::where('id_user', $request->user()->id)
+            ->where('uuid', $data['uuid'])
+            ->where('estado', 1)
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$device || !hash_equals((string) $device->password, $data['credential'])) {
+            return response()->json([
+                'message' => 'La clave SDI no es correcta o el dispositivo no está activo.',
+                'errors' => ['credential' => ['La clave SDI no es correcta.']],
+            ], 422);
+        }
+
         $challenge->update(['status' => $data['decision'], 'decided_at' => now()]);
-        return response()->json(['status' => $challenge->status]);
+
+        return response()->json([
+            'status' => $challenge->status,
+            'auth_method' => $data['auth_method'],
+        ]);
     }
 
     public function showWebChallenge(Request $request)

@@ -20,6 +20,10 @@ class LoginResponse implements LoginResponseContract
                 'id' => (string) Str::uuid(),
                 'user_id' => $user->id,
                 'ip_address' => $request->ip(),
+                'location_city' => $request->header('CF-IPCity')
+                    ?: $request->header('X-Geo-City'),
+                'location_country' => $request->header('CF-IPCountry')
+                    ?: $request->header('X-Geo-Country'),
                 'user_agent' => $request->userAgent(),
                 'expires_at' => now()->addMinutes(5),
             ]);

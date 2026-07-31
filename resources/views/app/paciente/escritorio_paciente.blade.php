@@ -78,7 +78,12 @@
             </div>
             <div class="col mb-3">
                 <div class="card subir mb-2 h-100 text-center pt-2" style="cursor:pointer">
-                    <a href="{{ ROUTE('check_sdi') }}?urla=Inicio&urln=Mi_Ficha_Medica">
+                    <a href="{{ ROUTE('check_sdi', [
+                        'urla' => 'Inicio',
+                        'urln' => 'Mi_Ficha_Medica',
+                        'id_tipo' => 2,
+                        'evento' => 'Acceso a Ficha Médica Única',
+                    ]) }}">
                             <img class="wid-50 text-center" src="{{ asset('images/iconos/fmu.svg') }}">
                             <h5 class="mt-1"> Mi Ficha Médica Única </h5>
                     </a>

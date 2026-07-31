@@ -165,8 +165,10 @@ class LoginController extends Controller
                         }
                     }
 
-                    $userModel->foto_perfil = optional($paciente)->foto_perfil
-                        ?: optional($profesional)->foto_perfil;
+                    // La foto pertenece al perfil seleccionado en la aplicación.
+                    // No usar aquí la foto de otro rol como respaldo, porque una
+                    // cuenta puede ser Paciente y Profesional al mismo tiempo.
+                    $userModel->foto_perfil = null;
 
                     $datos['estado'] = 1;
                     $datos['msj'] = 'registro';

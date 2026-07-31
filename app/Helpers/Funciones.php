@@ -353,9 +353,10 @@ class Funciones{
             $datos['app']['last_id'] = $log_users_devices->id;
             $datos['app']['token'] = $log_users_devices->token;
 
-            // La compra de bonos (tipo 13) se aprueba desde la app del paciente.
+            // La Ficha Médica Única (tipo 2), los talonarios/licencias (tipo 12)
+            // y la compra de bonos (tipo 13) se autorizan desde la app.
             // El fallo de Firebase no debe impedir que la solicitud quede creada.
-            if (in_array((int) $id_tipo, [12, 13], true)) {
+            if (in_array((int) $id_tipo, [2, 12, 13], true)) {
                 try {
                     app(FirebaseCloudMessaging::class)->sendAuthorizationRequest($log_users_devices);
                 } catch (\Throwable $exception) {

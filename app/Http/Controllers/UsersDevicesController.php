@@ -13,6 +13,32 @@ use Illuminate\Http\Request;
 
 class UsersDevicesController extends Controller
 {
+    public function mobileDevice(Request $request)
+    {
+        $request->validate([
+            'uuid' => ['required', 'string', 'max:255'],
+        ]);
+
+        $registro = UsersDevices::where('id_user', $request->user()->id)
+            ->where('uuid', $request->uuid)
+            ->orderByDesc('estado')
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$registro) {
+            return response()->json([
+                'estado' => 0,
+                'msg' => 'Este dispositivo no está registrado para la cuenta.',
+            ]);
+        }
+
+        return response()->json([
+            'estado' => 1,
+            'registros' => [$registro],
+            'password' => $registro->password,
+        ]);
+    }
+
     public function verRegistros(Request $request)
     {
         $datos = array();

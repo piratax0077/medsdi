@@ -25,7 +25,7 @@
                                             $cantidad_ante_discapacidad = 0;
                                         @endphp
                                         @foreach ($antecedentes as $data)
-                                            @if($data->id_tipo_antecedente==2)
+                                            @if($data->id_tipo_antecedente==1 && $data->estado==1)
                                                 @php
                                                     $cantidad_ante_cronicos++;
                                                 @endphp
@@ -45,7 +45,14 @@
                                         <div class="row px-2 py-3">
                                             <div class="col-sm-12 col-md-12">
                                                 <div class="media">
-                                                  <img class="img-radius img-fluid wid-70 mr-3 align-self-center" id="profile-image" src="{{ $paciente->foto_perfil ? $paciente->foto_perfil : asset('images/iconos/usuario_profesional.svg') }}" alt="User image">
+                                                  <img class="img-radius img-fluid wid-70 mr-3 align-self-center"
+                                                       id="profile-image"
+                                                       src="{{ $paciente->foto_perfil
+                                                            ? (\Illuminate\Support\Str::startsWith($paciente->foto_perfil, ['http://', 'https://'])
+                                                                ? $paciente->foto_perfil
+                                                                : asset('storage/'.ltrim($paciente->foto_perfil, '/')))
+                                                            : asset('images/iconos/usuario.svg') }}"
+                                                       alt="Foto de perfil del paciente">
                                                     <div class="media-body">
                                                         <div class="row">
                                                             <div class="col-12 mb-3">
@@ -85,7 +92,9 @@
                                               <img src="{{ asset('images/iconos/gruposanguineo.png') }}"  class="wid-35 rounded-xl mr-3 align-self-center mr-3" alt="...">
                                               <div class="media-body">
                                                 <h5 class="mt-0 mb-1 pt-1 text-danger">Grupo Sanguíneo</h5>
-                                                <h5 class="mt-0 text-danger">B+</h5>
+                                                <h5 class="mt-0 text-danger">
+                                                    {{ $grupo_sanguineo->nombre_gs ?? 'N/A' }}
+                                                </h5>
                                               </div>
                                             </div>
                                         </div>
@@ -98,7 +107,9 @@
                                               <img src="{{ asset('images/iconos/alergias.png') }}"  class="wid-35 rounded-xl mr-3 align-self-center mr-3" alt="...">
                                               <div class="media-body">
                                                 <h5 class="mt-0 mb-1 pt-1">Alergias</h5>
-                                                <h5 class="mt-0 text-danger">SI</h5>
+                                                <h5 class="mt-0 {{ $cantidad_ante_alergias > 0 ? 'text-danger' : 'text-c-blue' }}">
+                                                    {{ $cantidad_ante_alergias > 0 ? 'SI' : 'NO' }}
+                                                </h5>
                                               </div>
                                             </div>
                                         </div>
@@ -111,7 +122,9 @@
                                                   <img src="{{ asset('images/iconos/enfermedad-cronica.png') }}"  class="wid-35 rounded-xl mr-3 align-self-center mr-3" alt="...">
                                                   <div class="media-body">
                                                     <h5 class="mt-0 mb-1 pt-1">Paciente crónico</h5>
-                                                    <h5 class="mt-0 text-c-blue">NO</h5>
+                                                    <h5 class="mt-0 {{ $cantidad_ante_cronicos > 0 ? 'text-danger' : 'text-c-blue' }}">
+                                                        {{ $cantidad_ante_cronicos > 0 ? 'SI' : 'NO' }}
+                                                    </h5>
                                                   </div>
                                                 </div>
                                         </div>
@@ -124,7 +137,9 @@
                                             <img src="{{ asset('images/iconos/transfusion.jpg') }}"  class="wid-35 rounded-xl mr-3 align-self-center mr-3" alt="...">
                                               <div class="media-body">
                                                 <h5 class="mt-0 mb-1 pt-1">Transfusiones</h5>
-                                                <h5 class="mt-0 text-danger">SI</h5>
+                                                <h5 class="mt-0 {{ (string) ($antecedentes_paciente->transfusion ?? '0') === '1' ? 'text-danger' : 'text-c-blue' }}">
+                                                    {{ (string) ($antecedentes_paciente->transfusion ?? '0') === '1' ? 'SI' : 'NO' }}
+                                                </h5>
                                               </div>
                                             </div>
                                         </div>
@@ -137,7 +152,9 @@
                                             <img src="{{ asset('images/iconos/discapacidad.jpg') }}"  class="wid-35 rounded-xl mr-3 align-self-center mr-3" alt="...">
                                               <div class="media-body">
                                                 <h5 class="mt-0 mb-1 pt-1">Discapacidad</h5>
-                                                <h5 class="mt-0">-</h5>
+                                                <h5 class="mt-0 {{ $cantidad_ante_discapacidad > 0 ? 'text-danger' : 'text-c-blue' }}">
+                                                    {{ $cantidad_ante_discapacidad > 0 ? 'SI' : 'NO' }}
+                                                </h5>
                                               </div>
                                             </div>
                                         </div>
@@ -162,7 +179,7 @@
                                             $cantidad_ante_discapacidad = 0;
                                         @endphp
                                         @foreach ($antecedentes as $data)
-                                            @if($data->id_tipo_antecedente==2)
+                                            @if($data->id_tipo_antecedente==1 && $data->estado==1)
                                                 @php
                                                     $cantidad_ante_cronicos++;
                                                 @endphp
@@ -263,7 +280,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach ($antecedentes as $data)
-                                                                            @if($data->id_tipo_antecedente==2)
+                                                                            @if($data->id_tipo_antecedente==1 && $data->estado==1)
                                                                                 <tr>
                                                                                     <td>{{ $data->antecedente_data->nombre }} </td>
                                                                                     <td>{{ $data->comentario }} </td>

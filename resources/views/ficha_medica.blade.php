@@ -1,5 +1,5 @@
 <!-- BASE -->
-@extends('layouts.base')
+@extends($layoutFicha ?? 'layouts.base')
 
 @section('content')
     <div class="pcoded-main-container">
@@ -13,7 +13,7 @@
                             </div>
                             <ul class="breadcrumb float-right">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio" style="font-size: 14px!important;"><i class="feather icon-home"></i> Volver a mi escritorio</a>
+                                    <a href="{{ $rutaEscritorioFicha ?? route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio" style="font-size: 14px!important;"><i class="feather icon-home"></i> Volver a mi escritorio</a>
                                 </li>
                             </ul>
                         </div>

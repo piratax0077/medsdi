@@ -542,7 +542,21 @@ class EscritorioPaciente extends Controller
             }
         }
 
-        $permiso = Funciones::generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$id_tipo);
+        // generatePermApp recibe primero el contexto opcional ($tipo) y luego
+        // el identificador de autorización. Pasar $id_tipo en la novena
+        // posición hacía que conservara el valor predeterminado 1 (rendición).
+        $permiso = Funciones::generatePermApp(
+            $id_user_create,
+            $id_user_recept,
+            $evento,
+            $nombre,
+            $apellido_p,
+            $apellido_m,
+            $lugar,
+            $profesional,
+            null,
+            $id_tipo
+        );
 
         \Log::info('checkSdi: Nuevo token generado', [
             'token' => substr($permiso['app']['token'], 0, 5),
@@ -592,6 +606,9 @@ class EscritorioPaciente extends Controller
 
         //capturamos el id_usuario receptor
         $id_usuario = $registro['id_user_recept'];
+        $esFichaPropiaPaciente = (int) Auth::id() === (int) $id_usuario
+            && Auth::user()->hasRole('Paciente')
+            && $request->input('contexto') !== 'profesional';
 
         /* PACIENTE */
         $paciente = Paciente::where('id_usuario', $id_usuario)->first();
@@ -706,7 +723,10 @@ class EscritorioPaciente extends Controller
         }
 
         /* ANTECEDENTES */
-        $antecedentes = Antecedente::where('id_paciente',$paciente->id)->with('users','paciente','tipo_antecendente','profesional')->get();
+        $antecedentes = Antecedente::where('id_paciente', $paciente->id)
+            ->where('estado', 1)
+            ->with('users', 'paciente', 'tipo_antecendente', 'profesional')
+            ->get();
         foreach ($antecedentes as $valor)
         {
             $valor['antecedente_data'] = json_decode($valor['data']);
@@ -1012,6 +1032,12 @@ class EscritorioPaciente extends Controller
         $odontograma = $this->dameOdontogramaPaciente($paciente->id);
 
         return view('ficha_medica', [
+            'layoutFicha' => $esFichaPropiaPaciente
+                ? 'template.paciente.template'
+                : 'layouts.base',
+            'rutaEscritorioFicha' => $esFichaPropiaPaciente
+                ? route('paciente.home')
+                : route('profesional.home'),
             'id_usuario' => $id_usuario,
             'odontograma' => $odontograma,
             'paciente' => $paciente,

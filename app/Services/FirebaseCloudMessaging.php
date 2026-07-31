@@ -84,8 +84,12 @@ class FirebaseCloudMessaging
             && ($messageData['evento'] ?? '') === 'Apertura de talonarios';
         $isBonusPurchase = (int) $authorization->tipo === 13;
         $isInformedConsent = (int) $authorization->tipo === 4;
+        $isMedicalRecordAccess = (int) $authorization->tipo === 2;
 
-        if ($isPrescriptionBook) {
+        if ($isMedicalRecordAccess) {
+            $title = 'Acceso a tu Ficha Médica Única';
+            $body = 'Tienes una solicitud pendiente para autorizar el acceso a tu ficha médica en MED-SDI.';
+        } elseif ($isPrescriptionBook) {
             $title = 'Autoriza la apertura de tus talonarios';
             $body = 'Tienes una solicitud de apertura de recetarios y licencias pendiente en MED-SDI.';
         } elseif ($isBonusPurchase) {
@@ -114,6 +118,7 @@ class FirebaseCloudMessaging
                         'type' => 'authorization_request',
                         'authorization_id' => (string) $authorization->id,
                         'authorization_type' => (string) $authorization->tipo,
+                        'authorization_context' => $isMedicalRecordAccess ? 'medical_record_access' : '',
                         'target_user_id' => (string) $authorization->id_user_recept,
                         'notification_foreground' => 'true',
                         'notification_title' => $title,
@@ -128,6 +133,102 @@ class FirebaseCloudMessaging
                             'icon' => 'ic_stat_medsdi',
                             'sound' => 'default',
                             'color' => '#1450BD',
+                        ],
+                    ],
+                ],
+            ])) {
+                $sentDevices++;
+            }
+        }
+
+        return $sentDevices;
+    }
+
+    public function sendDirectMessage($message, int $recipientUserId)
+    {
+        $devices = MobilePushDevice::where('user_id', $recipientUserId)
+            ->where('enabled', true)
+            ->get();
+        $sentDevices = 0;
+        $messageData = json_decode($message->datos_mensaje, true) ?: [];
+        $title = trim((string) ($messageData['asunto'] ?? $messageData['titulo'] ?? 'Nuevo mensaje'));
+        $body = trim((string) ($messageData['mensaje'] ?? 'Tienes un nuevo mensaje en MED-SDI.'));
+
+        if (mb_strlen($body) > 160) {
+            $body = mb_substr($body, 0, 157).'...';
+        }
+
+        foreach ($devices as $device) {
+            if ($this->sendToDevice($device, [
+                'message' => [
+                    'token' => $device->fcm_token,
+                    'notification' => [
+                        'title' => $title,
+                        'body' => $body,
+                    ],
+                    'data' => [
+                        'type' => 'direct_message',
+                        'message_id' => (string) $message->id,
+                        'target_user_id' => (string) $recipientUserId,
+                        'notification_foreground' => 'true',
+                        'notification_title' => $title,
+                        'notification_body' => $body,
+                        'notification_android_channel_id' => 'medsdi_messages',
+                        'notification_android_sound' => 'default',
+                    ],
+                    'android' => [
+                        'priority' => 'high',
+                        'notification' => [
+                            'channel_id' => 'medsdi_messages',
+                            'icon' => 'ic_stat_medsdi',
+                            'sound' => 'default',
+                            'color' => '#35AFB7',
+                        ],
+                    ],
+                ],
+            ])) {
+                $sentDevices++;
+            }
+        }
+
+        return $sentDevices;
+    }
+
+    public function sendEmergencyAlert($alert, $patient)
+    {
+        $devices = MobilePushDevice::where('user_id', $alert->professional_user_id)
+            ->where('enabled', true)->get();
+        $sentDevices = 0;
+        $patientName = $patient
+            ? trim($patient->nombres.' '.$patient->apellido_uno)
+            : 'Un paciente';
+
+        foreach ($devices as $device) {
+            if ($this->sendToDevice($device, [
+                'message' => [
+                    'token' => $device->fcm_token,
+                    'notification' => [
+                        'title' => 'Alerta SOS de paciente',
+                        'body' => $patientName.' activó su contacto médico de emergencia.',
+                    ],
+                    'data' => [
+                        'type' => 'patient_emergency',
+                        'alert_id' => (string) $alert->id,
+                        'patient_user_id' => (string) $alert->patient_user_id,
+                        'target_user_id' => (string) $alert->professional_user_id,
+                        'notification_foreground' => 'true',
+                        'notification_title' => 'Alerta SOS de paciente',
+                        'notification_body' => $patientName.' necesita ser contactado.',
+                        'notification_android_channel_id' => 'medsdi_emergency',
+                        'notification_android_sound' => 'default',
+                    ],
+                    'android' => [
+                        'priority' => 'high',
+                        'notification' => [
+                            'channel_id' => 'medsdi_emergency',
+                            'icon' => 'ic_stat_medsdi',
+                            'sound' => 'default',
+                            'color' => '#D93645',
                         ],
                     ],
                 ],

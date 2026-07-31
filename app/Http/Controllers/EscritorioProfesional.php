@@ -145,6 +145,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 use App\Services\WhatsAppService;
+use App\Services\FirebaseCloudMessaging;
 
 use App\Mail\ExamenesPorRealizar;
 
@@ -2037,10 +2038,26 @@ class EscritorioProfesional extends Controller
             return ['estado' => 0, 'mensaje' => 'Debe ingresar el mensaje'];
         }
 
+        $req->validate([
+            'asunto' => ['required', 'string', 'max:150'],
+            'mensaje' => ['required', 'string', 'max:2000'],
+            'archivos' => ['nullable', 'array', 'max:5'],
+            'archivos.*' => ['file', 'max:5120', 'mimes:jpg,jpeg,png,webp,pdf'],
+        ]);
+
         $paciente = Paciente::find($id_paciente);
 
         if (!$paciente) {
             return ['estado' => 0, 'mensaje' => 'Paciente no encontrado'];
+        }
+
+        $profesional = Profesional::where('id_usuario', Auth::id())->first();
+        $esPacienteDelProfesional = $profesional && FichaAtencion::where('id_profesional', $profesional->id)
+            ->where('id_paciente', $paciente->id)
+            ->exists();
+
+        if (!$esPacienteDelProfesional) {
+            return ['estado' => 0, 'mensaje' => 'No tiene permiso para enviar mensajes a este paciente'];
         }
 
         $archivos = [];
@@ -2084,10 +2101,23 @@ class EscritorioProfesional extends Controller
         $nuevo_mensaje->fecha_envio = Carbon::now();
         $nuevo_mensaje->save();
 
+        $dispositivosNotificados = 0;
+        try {
+            $dispositivosNotificados = app(FirebaseCloudMessaging::class)
+                ->sendDirectMessage($nuevo_mensaje, (int) $nuevo_mensaje->id_receptor);
+        } catch (\Throwable $e) {
+            Log::warning('El mensaje fue guardado, pero no se pudo enviar la notificación móvil.', [
+                'mensaje_id' => $nuevo_mensaje->id,
+                'id_receptor' => $nuevo_mensaje->id_receptor,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
         return [
             'estado' => 1,
             'mensaje' => 'Mensaje enviado correctamente',
             'archivos' => $archivos,
+            'dispositivos_notificados' => $dispositivosNotificados,
         ];
 
     } catch (\Exception $e) {

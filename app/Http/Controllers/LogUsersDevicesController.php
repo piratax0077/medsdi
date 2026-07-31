@@ -4,11 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\LogLogUsersDevices;
 use App\Models\LogUsersDevices;
+use App\Models\UsersDevices;
 use App\Helpers\Funciones;
 use Illuminate\Http\Request;
 
 class LogUsersDevicesController extends Controller
 {
+    public function mobileRequests(Request $request)
+    {
+        $request->merge([
+            'id_user_recept' => $request->user()->id,
+        ]);
+
+        return $this->verRegistros($request);
+    }
+
+    public function mobileDecision(Request $request, LogUsersDevices $solicitud)
+    {
+        $request->validate([
+            'estado' => ['required', 'integer', 'in:1,2'],
+            'credential' => ['required', 'string', 'regex:/^\d{4}$/'],
+            'uuid' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ((int) $solicitud->id_user_recept !== (int) $request->user()->id) {
+            return response()->json([
+                'estado' => 0,
+                'msg' => 'La solicitud no pertenece al usuario autenticado.',
+            ], 403);
+        }
+
+        if ((int) $solicitud->estado !== 0) {
+            return response()->json([
+                'estado' => 2,
+                'estado_registro' => (int) $solicitud->estado,
+                'msg' => 'Esta solicitud ya fue procesada.',
+            ], 409);
+        }
+
+        $device = UsersDevices::where('id_user', $request->user()->id)
+            ->where('uuid', $request->uuid)
+            ->where('estado', 1)
+            ->orderByDesc('id')
+            ->first();
+
+        if (!$device || !hash_equals((string) $device->password, (string) $request->credential)) {
+            return response()->json([
+                'estado' => 0,
+                'msg' => 'La clave SDI no es correcta o el dispositivo no está activo.',
+                'errors' => ['credential' => ['La clave SDI no es correcta.']],
+            ], 422);
+        }
+
+        $solicitud->estado = (int) $request->estado;
+        $solicitud->save();
+
+        return response()->json([
+            'estado' => 1,
+            'msg' => $solicitud->estado === 1
+                ? 'Solicitud autorizada.'
+                : 'Solicitud rechazada.',
+        ]);
+    }
+
     public function verRegistros(Request $request)
     {
         $datos = array();
@@ -102,23 +160,27 @@ class LogUsersDevicesController extends Controller
                         $id = $data->id;
                         $nombre = $data->nombre;
                         $fecha = $data->fecha;
+                        $esSolicitudPropia = (int) $value['id_user_create'] === (int) $value['id_user_recept'];
+                        $detalleFicha = $esSolicitudPropia
+                            ? "Solicitud para acceder a tu Ficha Médica Única con fecha <span class='color-azul txt_bold'>{$fecha}</span>"
+                            : "<span class='color-azul txt_bold'>{$nombre}</span> solicita autorización para acceder a tu Ficha Médica Única con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
                         /** peticion */
-                        $value['msg_estado'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                        $value['msg_estado'] = $detalleFicha;
 
                         /** resultado */
                         switch($value['estado'])
                         {
                             case 1:
-                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = $detalleFicha;
                             break;
                             case 2:
-                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = $detalleFicha;
                             break;
                             case 3:
-                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = $detalleFicha;
                             break;
                             case 4:
-                                $value['msg_body'] = "El Profesional <span class='color-azul txt_bold'>{$nombre}</span> esta solicitando ver su ficha unica con fecha <span class='color-azul txt_bold'>{$fecha}</span>";
+                                $value['msg_body'] = $detalleFicha;
                             break;
                         }
 
@@ -126,16 +188,16 @@ class LogUsersDevicesController extends Controller
                         switch($value['estado'])
                         {
                             case 1:
-                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Acceso autorizado</span> a la Ficha Médica Única con fecha {$fecha}</p><br>";
                             break;
                             case 2:
-                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Rechazada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Acceso rechazado</span> a la Ficha Médica Única con fecha {$fecha}</p><br>";
                             break;
                             case 3:
-                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud Cancelada</span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Solicitud cancelada</span> de acceso a la Ficha Médica Única con fecha {$fecha}</p><br>";
                             break;
                             case 4:
-                                $msg_html_estructura = "<p><span class='color-verde txt_bold'>Solicitud Autorizada <span class='color-rojo txt_bold'>Expirada</span></span> El Profesional {$nombre} esta solicitando ver su ficha unica con fecha {$fecha}</p><br>";
+                                $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Autorización expirada</span> para acceder a la Ficha Médica Única con fecha {$fecha}</p><br>";
                             break;
                         }
 

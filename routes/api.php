@@ -15,6 +15,7 @@ use App\Http\Controllers\DentalController;
 use App\Http\Controllers\CentroMedicoController;
 use App\Http\Controllers\MobileTwoFactorController;
 use App\Http\Controllers\MobilePushDeviceController;
+use App\Http\Controllers\EmergencyDoctorController;
 
 
 
@@ -45,6 +46,21 @@ Route::middleware('auth:api')->prefix('mobile-2fa')->group(function () {
 Route::middleware('auth:api')->prefix('mobile/devices')->group(function () {
     Route::post('/', [MobilePushDeviceController::class, 'store']);
     Route::delete('/', [MobilePushDeviceController::class, 'destroy']);
+});
+
+Route::middleware('auth:api')->prefix('emergency-doctor')->group(function () {
+    Route::get('/', [EmergencyDoctorController::class, 'overview']);
+    Route::get('/professionals', [EmergencyDoctorController::class, 'searchProfessionals']);
+    Route::post('/links', [EmergencyDoctorController::class, 'requestLink']);
+    Route::post('/links/{link}/decision', [EmergencyDoctorController::class, 'decide']);
+    Route::delete('/links/{link}', [EmergencyDoctorController::class, 'revoke']);
+    Route::post('/alerts', [EmergencyDoctorController::class, 'alert']);
+});
+
+Route::middleware('auth:api')->prefix('mobile-authorization')->group(function () {
+    Route::get('/device', [UsersDevicesController::class, 'mobileDevice']);
+    Route::get('/requests', [LogUsersDevicesController::class, 'mobileRequests']);
+    Route::post('/requests/{solicitud}/decision', [LogUsersDevicesController::class, 'mobileDecision']);
 });
 
 //USER DEVICES - CRUD
@@ -153,19 +169,68 @@ Route::post('/profesionales/buscar_profesionales', [App\Http\Controllers\AppPaci
 Route::get('/profesionales/perfil_profesional', [App\Http\Controllers\AppPacienteController::class, 'getPerfilProfesional']);
 
 //RECETAS ONLINE
-Route::get('/paciente/mis_examenes', [App\Http\Controllers\AppPacienteController::class, 'getMisExamenes']);
-Route::get('/paciente/mis_recetas', [App\Http\Controllers\AppPacienteController::class, 'getMisRecetas']);
+Route::middleware('auth:api')->get(
+    '/paciente/mis_examenes',
+    [App\Http\Controllers\AppPacienteController::class, 'getMisExamenes']
+);
+Route::middleware('signed:relative')->get(
+    '/paciente/mis_examenes/orden/{ficha}/pdf',
+    [App\Http\Controllers\AppPacienteController::class, 'verMiOrdenExamenPdf']
+)->name('api.paciente.examenes.orden.pdf');
+Route::middleware('signed:relative')->get(
+    '/paciente/mis_examenes/resultado/{resultado}/archivo/{archivo}',
+    [App\Http\Controllers\AppPacienteController::class, 'verMiResultadoExamen']
+)->name('api.paciente.examenes.resultado');
+Route::middleware('auth:api')->get(
+    '/paciente/mis_recetas',
+    [App\Http\Controllers\AppPacienteController::class, 'getMisRecetas']
+);
+Route::middleware('signed:relative')->get(
+    '/paciente/mis_recetas/{receta}/pdf',
+    [App\Http\Controllers\AppPacienteController::class, 'verMiRecetaPdf']
+)->name('api.paciente.recetas.pdf');
 Route::get('/paciente/mis_licencias', [App\Http\Controllers\AppPacienteController::class, 'getMisLicencias']);
 Route::get('/paciente/mis_certificados', [App\Http\Controllers\AppPacienteController::class, 'getMisCertificados']);
 Route::get('/paciente/mis_documentos', [App\Http\Controllers\AppPacienteController::class, 'getMisDocumentos']);
 Route::get('/paciente/mis_controles', [App\Http\Controllers\AppPacienteController::class, 'getMisControles']);
+Route::middleware('auth:api')->get('/paciente/agenda', [App\Http\Controllers\AppPacienteController::class, 'getAgendaPacienteApp']);
+Route::middleware('auth:api')->get('/profesional/agenda', [App\Http\Controllers\AppPacienteController::class, 'getAgendaProfesionalApp']);
+Route::middleware('auth:api')->get('/perfil', [App\Http\Controllers\AppPacienteController::class, 'getPerfilApp']);
+Route::middleware('auth:api')->put('/perfil', [App\Http\Controllers\AppPacienteController::class, 'actualizarPerfilApp']);
+Route::middleware('auth:api')->get('/perfil/datos', [App\Http\Controllers\AppPacienteController::class, 'getPerfilApp']);
+Route::middleware('auth:api')->put('/perfil/datos', [App\Http\Controllers\AppPacienteController::class, 'actualizarPerfilApp']);
+Route::middleware('auth:api')->post('/perfil/foto', [App\Http\Controllers\AppPacienteController::class, 'actualizarFotoPerfilApp']);
+Route::middleware('auth:api')->put('/perfil/clave-dispositivo', [App\Http\Controllers\AppPacienteController::class, 'cambiarClaveDispositivoApp']);
+Route::middleware('auth:api')->get('/mensajes', [App\Http\Controllers\AppPacienteController::class, 'getMensajesApp']);
+Route::middleware('auth:api')->put('/mensajes/{mensaje}/leer', [App\Http\Controllers\AppPacienteController::class, 'leerMensajeApp']);
+Route::middleware('signed:relative')->get(
+    '/mensajes/{mensaje}/adjuntos/{archivo}',
+    [App\Http\Controllers\AppPacienteController::class, 'descargarAdjuntoMensajeApp']
+)->name('api.mensajes.adjunto');
+Route::middleware('signed:relative')->get(
+    '/agenda/videollamada/{hora}/{rol}',
+    [App\Http\Controllers\AppPacienteController::class, 'ingresarVideollamadaApp']
+)->name('api.agenda.videollamada');
+Route::middleware('auth:api')->get(
+    '/paciente/mis_consentimientos',
+    [App\Http\Controllers\AppPacienteController::class, 'getMisConsentimientos']
+);
+Route::middleware('signed:relative')->get(
+    '/paciente/mis_consentimientos/{consentimiento}/pdf',
+    [App\Http\Controllers\AppPacienteController::class, 'verMiConsentimientoPdf']
+)->name('api.paciente.consentimientos.pdf');
 
 Route::get('/profesionales/mis_lugares_atencion', [App\Http\Controllers\AppPacienteController::class, 'getLugaresAtencionProfesional']);
 Route::get('/profesionales/dias_laborales_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getDiasLaboralesLugarAtencionProfesional']);
+Route::get('/profesionales/tipos_agenda_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getTiposAgendaLugarAtencionProfesional']);
+Route::get('/profesionales/prestaciones_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getPrestacionesLugarAtencionProfesional']);
 Route::get('/profesionales/horas_disponibles_profesional_lugar_atencion', [App\Http\Controllers\AppPacienteController::class, 'getHorasDisponiblesProfesionalLugarAtencionBuscador']);
 Route::post('/paciente/agendar_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'agendarHoraMedica']);
 Route::post('/paciente/anular_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'anularHoraMedica']);
-Route::post('/paciente/confirmar_hora_medica', [App\Http\Controllers\AppPacienteController::class, 'confirmarHoraMedica']);
+Route::middleware('auth:api')->post(
+    '/paciente/confirmar_hora_medica',
+    [App\Http\Controllers\AppPacienteController::class, 'confirmarHoraMedica']
+);
 Route::get('/paciente/dame_regiones', [App\Http\Controllers\AppPacienteController::class, 'dameRegiones']);
 Route::get('/paciente/dame_ciudades', [App\Http\Controllers\AppPacienteController::class, 'dameCiudades']);
 
