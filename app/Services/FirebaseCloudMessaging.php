@@ -240,6 +240,86 @@ class FirebaseCloudMessaging
         return $sentDevices;
     }
 
+    public function sendRestControlRequest($control, $patient)
+    {
+        $devices = MobilePushDevice::where('user_id', $control->patient_user_id)
+            ->where('enabled', true)->get();
+        $sentDevices = 0;
+        $patientName = $patient ? trim($patient->nombres.' '.$patient->apellido_uno) : 'Paciente';
+
+        foreach ($devices as $device) {
+            if ($this->sendToDevice($device, [
+                'message' => [
+                    'token' => $device->fcm_token,
+                    'notification' => [
+                        'title' => 'Control de reposo solicitado',
+                        'body' => $patientName.', tu profesional solicitó una verificación de reposo.',
+                    ],
+                    'data' => [
+                        'type' => 'rest_control_request',
+                        'rest_control_id' => (string) $control->id,
+                        'target_user_id' => (string) $control->patient_user_id,
+                        'notification_foreground' => 'true',
+                        'notification_title' => 'Control de reposo solicitado',
+                        'notification_body' => 'Abre MED-SDI para revisar y aceptar la solicitud.',
+                        'notification_android_channel_id' => 'medsdi_rest_control',
+                        'notification_android_sound' => 'default',
+                    ],
+                    'android' => [
+                        'priority' => 'high',
+                        'notification' => [
+                            'channel_id' => 'medsdi_rest_control',
+                            'icon' => 'ic_stat_medsdi',
+                            'sound' => 'default',
+                            'color' => '#35AFB7',
+                        ],
+                    ],
+                ],
+            ])) $sentDevices++;
+        }
+        return $sentDevices;
+    }
+
+    public function sendRestControlReminder($control): int
+    {
+        $devices = MobilePushDevice::where('user_id', $control->patient_user_id)
+            ->where('enabled', true)->get();
+        $sentDevices = 0;
+
+        foreach ($devices as $device) {
+            if ($this->sendToDevice($device, [
+                'message' => [
+                    'token' => $device->fcm_token,
+                    'notification' => [
+                        'title' => 'Verificación de reposo pendiente',
+                        'body' => 'Es momento de realizar tu control de reposo en MED-SDI.',
+                    ],
+                    'data' => [
+                        'type' => 'rest_control_reminder',
+                        'rest_control_id' => (string) $control->id,
+                        'target_user_id' => (string) $control->patient_user_id,
+                        'notification_foreground' => 'true',
+                        'notification_title' => 'Verificación de reposo pendiente',
+                        'notification_body' => 'Abre MED-SDI para realizar la verificación.',
+                        'notification_android_channel_id' => 'medsdi_rest_control',
+                        'notification_android_sound' => 'default',
+                    ],
+                    'android' => [
+                        'priority' => 'high',
+                        'notification' => [
+                            'channel_id' => 'medsdi_rest_control',
+                            'icon' => 'ic_stat_medsdi',
+                            'sound' => 'default',
+                            'color' => '#35AFB7',
+                        ],
+                    ],
+                ],
+            ])) $sentDevices++;
+        }
+
+        return $sentDevices;
+    }
+
     private function sendToDevice(MobilePushDevice $device, array $payload)
     {
         $projectId = $this->credentials['project_id'];

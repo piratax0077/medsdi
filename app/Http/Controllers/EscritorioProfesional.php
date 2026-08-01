@@ -141,8 +141,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Services\WhatsAppService;
 use App\Services\FirebaseCloudMessaging;
@@ -11120,6 +11122,37 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $tipo_paciente = 1;
         $paciente = Paciente::where('rut', $request->rut)->with('Prevision')->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
         if ($paciente == null) {
+            $personaRapida = $this->buscarPersonaRapidaExterna($request->rut);
+
+            if ($personaRapida) {
+                return response()->json([
+                    'id' => null,
+                    'rut' => $personaRapida['rut'] ?? $request->rut,
+                    'nombres' => $personaRapida['nombre1'] ?? '',
+                    'apellido_uno' => $personaRapida['appaterno'] ?? '',
+                    'apellido_dos' => $personaRapida['apmaterno'] ?? '',
+                    'fecha_nac' => null,
+                    'sexo' => null,
+                    'email' => $personaRapida['email'] ?? '',
+                    'telefono_uno' => $personaRapida['telefono'] ?? '',
+                    'tipo_paciente' => 'NO',
+                    'origen_datos' => 'personas_rapidas',
+                    'edad' => 99,
+                    'nombre_responsable' => '',
+                    'id_responsable' => '',
+                    'regiones' => Region::all(),
+                    'direccion' => [
+                        'direccion' => $personaRapida['direccion'] ?? '',
+                        'numero_dir' => '',
+                        'id_ciudad' => null,
+                        'ciudad' => [
+                            'id_region' => null,
+                            'nombre' => '',
+                        ],
+                    ],
+                ]);
+            }
+
             $tipo_paciente++;
             $paciente = Asistente::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
             if ($paciente == null) {
@@ -11131,6 +11164,33 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 }
             }
         }
+
+        if ($paciente == null) {
+            return response()->json([
+                'id' => null,
+                'rut' => $request->rut,
+                'nombres' => '',
+                'apellido_uno' => '',
+                'apellido_dos' => '',
+                'fecha_nac' => null,
+                'sexo' => null,
+                'email' => '',
+                'telefono_uno' => '',
+                'tipo_paciente' => 'NO',
+                'origen_datos' => 'sin_resultados',
+                'edad' => 99,
+                'nombre_responsable' => '',
+                'id_responsable' => '',
+                'regiones' => Region::all(),
+                'direccion' => [
+                    'direccion' => '',
+                    'numero_dir' => '',
+                    'id_ciudad' => null,
+                    'ciudad' => ['id_region' => null, 'nombre' => ''],
+                ],
+            ]);
+        }
+
         if(isset($paciente))
             $paciente['code'] = Crypt::encryptString( $paciente['email'] );
         else
@@ -11283,6 +11343,54 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $paciente['fecha_ultima_atencion'] = $paciente->fecha_ultima_atencion;
 
         return json_encode($paciente);
+    }
+
+    private function buscarPersonaRapidaExterna(?string $rut): ?array
+    {
+        $clientId = config('services.personas_rapidas.client_id');
+        $sharedSecret = config('services.personas_rapidas.shared_secret');
+
+        if (!$clientId || !$sharedSecret || !$rut) {
+            return null;
+        }
+
+        try {
+            $url = rtrim(config('services.personas_rapidas.url'), '/').'/personas-rapidas/buscar';
+            $query = ['rut' => $rut];
+            ksort($query);
+            $timestamp = (string) time();
+            $nonce = (string) Str::uuid();
+            $userReference = (string) Auth::id();
+            $canonical = implode("\n", [
+                'GET',
+                parse_url($url, PHP_URL_PATH),
+                http_build_query($query, '', '&', PHP_QUERY_RFC3986),
+                hash('sha256', ''),
+                $timestamp,
+                $nonce,
+                $userReference,
+            ]);
+
+            $response = Http::acceptJson()
+                ->withHeaders([
+                    'X-PR-Client-Id' => $clientId,
+                    'X-PR-Timestamp' => $timestamp,
+                    'X-PR-Nonce' => $nonce,
+                    'X-PR-Signature' => hash_hmac('sha256', $canonical, $sharedSecret),
+                    'X-PR-User-Reference' => $userReference,
+                ])
+                ->timeout(30)
+                ->get($url, $query);
+
+            if (!$response->successful() || !$response->json('ok') || !$response->json('found')) {
+                return null;
+            }
+
+            return $response->json('persona');
+        } catch (\Throwable $exception) {
+            report($exception);
+            return null;
+        }
     }
 
     /** METODO PARA VALIDAR EL TIPO AGENDA POR HORA SELECCIONADA Y RPOFESIONAL */

@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
     {
         // Desactivar vacaciones expiradas todos los días a las 00:01
         $schedule->command('vacaciones:desactivar-expiradas')->dailyAt('00:01');
+        $schedule->command('reposo:enviar-recordatorios')->everyMinute()->withoutOverlapping();
     }
 
     /**

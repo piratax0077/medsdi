@@ -2055,6 +2055,7 @@ Route::group([
     Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
     Route::get('/Administracion/Contratos', [App\Http\Controllers\AdministradorCmController::class, 'areaContratosNuevos'])->name('adm_cm.area_contratos_nuevos');
+    Route::get('/Administracion/Contratos/personas-rapidas/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscarPersonaRapida'])->name('adm_cm.personas_rapidas.buscar');
     Route::post('/Administracion/Contratos/registrar', [App\Http\Controllers\ContratoDependienteController::class, 'registrar'])->name('adm_cm.contrato.registrar');
     Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
     Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
