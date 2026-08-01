@@ -23,8 +23,15 @@
                 </div>
             </div>
             <!--Cierre: Header-->
+            <div class="mt-3 pt-2 pb-3 bg-gris referidos-fondo-full">
 
             <style>
+                .referidos-fondo-full {
+                    margin-left: -22px;
+                    margin-right: -22px;
+                    padding-left: 22px;
+                    padding-right: 22px;
+                }
                 .referidos-titulo {
                     font-weight: 700;
                     color: #2b2f3a;
@@ -227,11 +234,12 @@
             </style>
 
             <!--Título + Créditos disponibles-->
-            <div class="row mb-3">
+            <div class="row mb-3 mt-2">
                 <div class="col-sm-12 col-md-7 col-lg-8 mb-3 mb-md-0 d-flex align-items-center">
                     <div>
-                        <h3 class="referidos-titulo">Programa de referidos</h3>
-                        <p class="referidos-subtitulo mb-0">Invita a más profesionales y gana créditos</p>
+                        <h3 class="referidos-titulo text-dark">
+¡Invita colegas y obtén créditos!</h3>
+                        <p class="referidos-subtitulo text-dark mb-0">Cuando un profesional se registre con tu enlace y compre un plan, te regalamos créditos que puedes usar en el sistema.</p>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-5 col-lg-4">
@@ -251,33 +259,6 @@
                 </div>
             </div>
 
-            <!--Banner invitación-->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="invita-banner">
-                        <div class="row align-items-center">
-                            <div class="col-sm-12 col-md-2 mb-3 mb-md-0">
-                                <div class="invita-banner-avatares">
-                                    <div class="invita-banner-avatar avatar-1"><i class="feather icon-user"></i></div>
-                                    <div class="invita-banner-avatar avatar-2"><i class="feather icon-user"></i></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-8 mb-3 mb-md-0">
-                                <h4 class="font-weight-bold text-dark mb-1">¡Invita colegas y obtén créditos!</h4>
-                                <p class="mb-0 text-muted">
-                                    Cuando un profesional se registre con tu enlace y compre un plan,
-                                    <strong>te regalamos créditos</strong> que puedes usar en el sistema.
-                                </p>
-                            </div>
-                            <div class="col-sm-12 col-md-2 text-md-center">
-                                <div class="invita-banner-regalo d-inline-flex">
-                                    <i class="feather icon-gift"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!--Estadísticas-->
             <div class="row">
@@ -288,7 +269,7 @@
                                 <i class="feather icon-user-plus"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold">8</h4>
+                                <h4 class="mb-0 font-weight-bold text-dark">8</h4>
                                 <div class="small text-dark">Referidos registrados</div>
                                 <div class="text-muted" style="font-size:.75rem;">Total de profesionales invitados</div>
                             </div>
@@ -302,7 +283,7 @@
                                 <i class="feather icon-check-circle"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold">5</h4>
+                                <h4 class="mb-0 font-weight-bold text-dark">5</h4>
                                 <div class="small text-dark">Clientes activos</div>
                                 <div class="text-muted" style="font-size:.75rem;">Profesionales que ya compraron</div>
                             </div>
@@ -316,7 +297,7 @@
                                 <i class="feather icon-credit-card"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold">$20.000</h4>
+                                <h4 class="mb-0 font-weight-bold text-dark">$20.000</h4>
                                 <div class="small text-dark">Créditos acumulados</div>
                                 <div class="text-muted" style="font-size:.75rem;">Equivale a 200 créditos</div>
                             </div>
@@ -343,8 +324,8 @@
             <div class="row">
                 <div class="col-sm-12 col-lg-4 mb-3">
                     <div class="card referidos-card h-100">
-                        <div class="card-header bg-white">
-                            <h6 class="mb-0 font-weight-bold text-dark">Tu enlace de referido</h6>
+                        <div class="card-header-principal bg-white">
+                            <h6 class="mb-0 f-18 text-dark">Tu enlace de referido</h6>
                             <div class="small text-muted">Comparte tu código o enlace único</div>
                         </div>
                         <div class="card-body">
@@ -363,23 +344,14 @@
                                     <i class="feather icon-copy"></i>
                                 </button>
                             </div>
-
-                            <p class="text-muted small mb-2">Comparte tu enlace</p>
-                            <div class="d-flex">
-                                <a href="#" class="compartir-icono" style="background-color:#25D366;" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                                <a href="#" class="compartir-icono" style="background-color:#1877F2;" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#" class="compartir-icono" style="background-color:#0A66C2;" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#" class="compartir-icono" style="background-color:#8b93a7;" title="Correo"><i class="fas fa-envelope"></i></a>
-                                <a href="#" class="compartir-icono" style="background-color:#1a49a3;" title="Compartir"><i class="fas fa-share-alt"></i></a>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-sm-12 col-lg-4 mb-3">
                     <div class="card referidos-card h-100">
-                        <div class="card-header bg-white">
-                            <h6 class="mb-0 font-weight-bold text-dark">Cómo funciona</h6>
+                        <div class="card-header-principal bg-white">
+                            <h6 class="mb-0 f-18 text-dark">Cómo funciona</h6>
                         </div>
                         <div class="card-body">
                             <ul class="pasos-lista">
@@ -418,8 +390,8 @@
 
                 <div class="col-sm-12 col-lg-4 mb-3">
                     <div class="card referidos-card h-100">
-                        <div class="card-header bg-white d-flex align-items-center justify-content-between">
-                            <h6 class="mb-0 font-weight-bold text-dark">Actividad reciente</h6>
+                        <div class="card-header-principal bg-white d-flex align-items-center justify-content-between">
+                            <h6 class="mb-0 f-18 text-dark">Actividad reciente</h6>
                             <a href="#" class="small text-c-blue">Ver todas</a>
                         </div>
                         <div class="card-body">
@@ -447,32 +419,11 @@
                             <div class="actividad-item">
                                 <div class="actividad-avatar"><i class="feather icon-user"></i></div>
                                 <div class="flex-grow-1">
-                                    <div class="font-weight-bold text-dark">Dra. Fernanda Chile</div>
-                                    <span class="badge badge-light-primary">Registrado</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-muted small">09 Jul 2026</div>
-                                </div>
-                            </div>
-                            <div class="actividad-item">
-                                <div class="actividad-avatar"><i class="feather icon-user"></i></div>
-                                <div class="flex-grow-1">
                                     <div class="font-weight-bold text-dark">Dr. Diego Salinas</div>
                                     <span class="badge badge-light-warning">Pendiente</span>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-muted small">08 Jul 2026</div>
-                                </div>
-                            </div>
-                            <div class="actividad-item">
-                                <div class="actividad-avatar"><i class="feather icon-user"></i></div>
-                                <div class="flex-grow-1">
-                                    <div class="font-weight-bold text-dark">Dra. Valentina Díaz</div>
-                                    <span class="badge badge-light-success">Compró Plan Básico</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-muted small">05 Jul 2026</div>
-                                    <div class="text-c-green small font-weight-bold">+ $5.000</div>
                                 </div>
                             </div>
                         </div>
@@ -489,6 +440,9 @@
                     </div>
                 </div>
             </div>
+
+            </div>
+            <!--Cierre: bg-gris-->
 
         </div>
     </div>
