@@ -37292,6 +37292,54 @@ CARD TRASPASO CAJA
     border-radius: 8px;
 }
 
+/** ESTILOS DEL CALENDARIO (FLATPICKR) PARA TODO EL PROYECTO **/
+.flatpickr-calendar {
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(30, 40, 80, .15);
+    border: none;
+    font-family: inherit;
+}
+.flatpickr-months {
+    border-radius: 14px 14px 0 0;
+    padding-top: 10px;
+}
+.flatpickr-current-month {
+    font-weight: 700;
+    color: #2b2f3a;
+}
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg {
+    fill: #1a49a3 !important;
+}
+.flatpickr-weekday {
+    color: #8b93a7;
+    font-weight: 600;
+}
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background-color: #1a49a3;
+    border-color: #1a49a3;
+}
+.flatpickr-day.today {
+    border-color: #1a49a3;
+}
+.flatpickr-day:hover {
+    background-color: #eef2fb;
+}
+.flatpickr-day.today:hover {
+    background-color: #eef2fb;
+}
+.flatpickr-current-month .numInputWrapper span.arrowUp:after {
+    border-bottom-color: #1a49a3;
+}
+.flatpickr-current-month .numInputWrapper span.arrowDown:after {
+    border-top-color: #1a49a3;
+}
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+    padding: 10px;
+}
+
 
 
 
@@ -37421,3 +37469,53 @@ CARD TRASPASO CAJA
                 .filtro-item-icon select.select-filtro-reportes {
                     padding-left: 34px;
                 }
+
+
+
+/**CARD INVITACION REFERIDOS**/                                    
+                .invita-card {
+                    background: linear-gradient(135deg, #ffffff 0%, #cefff6 100%);
+                }
+                    .invita-icon-circle {
+                        width: 60px;
+                        height: 60px;
+                        min-width: 60px;
+                        border-radius: 50%;
+                        background-color: #31bebe;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.6rem;
+                    }
+                    .invita-codigo-box {
+                        background-color: #fff;
+                        border: 1px dashed #31bebe;
+                        border-radius: 10px;
+                        padding: 8px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                    .invita-codigo-texto {
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        color: #1f2957;
+                    }
+                    .invita-stats {
+                        border-top: 1px solid #ececf5;
+                        margin-top: 1rem;
+                        padding-top: 1rem;
+                    }
+                    .invita-stats .invita-stat-item {
+                        text-align: center;
+                    }
+                    .invita-stats .invita-stat-item h5 {
+                        color: #1f2957;
+                        font-weight: 700;
+                        margin-bottom: 0;
+                    }
+                    .invita-stats .invita-stat-item small {
+                        color: #5f6b7a;
+                    }
+                  

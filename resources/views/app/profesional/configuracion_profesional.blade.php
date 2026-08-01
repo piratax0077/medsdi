@@ -89,7 +89,7 @@
                                 <a href="{{ ROUTE('profesional.mis_procedimientos') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-3"
-                                        src="{{ asset('images/iconos/convenios.png') }}"
+                                        src="{{ asset('images/iconos/procedimiento-medico.png') }}"
 
                                         alt="Profesional">
                                         <h5 class="f-16">
