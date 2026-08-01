@@ -686,7 +686,9 @@
                                 </div>
                                 <div id="odonto_c" class="collapse" aria-labelledby="odonto" data-parent="#odonto">
                                     <div class="card-body-aten-a">
-                                        @include('atencion_odontologica.generales.odontograma_adulto')
+                                        @include('atencion_odontologica.generales.odontograma_adulto', [
+                                            'odontograma_historial' => $odontograma_historial ?? $odontograma ?? collect(),
+                                        ])
                                     </div>
                                 </div>
                             </div>

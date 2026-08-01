@@ -1,10 +1,5 @@
 @extends('template.paciente.template')
 @section('content')
-@php
-    $permisoBonoAutorizado = app()->environment('local') || (!empty(session('lic_token'))
-        && session('lic_estado') == 1
-        && session('lic_tipo') == 'bono');
-@endphp
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <!--Header-->

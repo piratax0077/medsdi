@@ -2276,9 +2276,10 @@
                         $('#div_cargando').hide();
                         $('#div_boton_buscar_paciente').show();
 
-                        console.log(JSON.parse(data));
-						if (data !== 'null') {
-							data = JSON.parse(data);
+                        if (data !== 'null' && data !== null) {
+                            if (typeof data === 'string') {
+                                data = JSON.parse(data);
+                            }
 
                             if(data.tipo_paciente == 'SI')
 							{
@@ -2432,13 +2433,12 @@
 
 								$('#reserva_hora_correo').val(data.email);
 
-                                if(data?.["direccion"] !== undefined)
-                                {
-                                    $('#region_agregar').val(data.direccion.ciudad.id_region);
-                                    buscar_ciudad(data.direccion.id_ciudad);
-                                    $('#reserva_hora_direccion').val(data.direccion.direccion);
-                                    $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
-                                }
+                                let direccion = data.direccion || {};
+                                let ciudad = direccion.ciudad || {};
+                                $('#region_agregar').val(ciudad.id_region || '');
+                                buscar_ciudad(direccion.id_ciudad || '');
+                                $('#reserva_hora_direccion').val(direccion.direccion || '');
+                                $('#reserva_hora_numero_dir').val(direccion.numero_dir || '');
 
 								$('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
@@ -2468,6 +2468,8 @@
 					})
 					.fail(function(jqXHR, ajaxOptions, thrownError) {
 						console.log(jqXHR, ajaxOptions, thrownError)
+						$('#div_cargando').hide();
+						$('#div_boton_buscar_paciente').show();
 					});
 			}
             else

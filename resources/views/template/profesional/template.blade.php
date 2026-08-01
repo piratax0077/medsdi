@@ -2529,8 +2529,11 @@
                     })
                     .done(function(data) {
                         console.log(data);
-                        console.log(JSON.parse(data));
-                        if (data !== 'null') {
+                        if (data !== 'null' && data !== null) {
+
+                            if (typeof data === 'string') {
+                                data = JSON.parse(data);
+                            }
 
                             $('#div_procedimiento').show();
                             let tipo_agenda = $('#id_tipo_agenda').val();
@@ -2545,7 +2548,6 @@
                                 $('#examenes').removeClass('d-block');
                                 $('#examenes').addClass('d-none');
                             }
-                            data = JSON.parse(data);
                             if (data.tipo_paciente == 'SI') {
 
                                 {{-- validacion para especialidad de pediatria --}}
@@ -2700,10 +2702,12 @@
 
 
                                 $('#reserva_hora_correo').val(data.email);
-                                $('#region_agregar').val(data.direccion.ciudad.id_region);
-                                buscar_ciudad(data.direccion.id_ciudad);
-                                $('#reserva_hora_direccion').val(data.direccion.direccion);
-                                $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+                                let direccion = data.direccion || {};
+                                let ciudad = direccion.ciudad || {};
+                                $('#region_agregar').val(ciudad.id_region || '');
+                                buscar_ciudad(direccion.id_ciudad || '');
+                                $('#reserva_hora_direccion').val(direccion.direccion || '');
+                                $('#reserva_hora_numero_dir').val(direccion.numero_dir || '');
 
                                 $('#reserva_hora_telefono_uno').val(data.telefono_uno);
 

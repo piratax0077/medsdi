@@ -48,4 +48,10 @@ return [
         ),
     ],
 
+    'personas_rapidas' => [
+        'url' => env('PERSONAS_RAPIDAS_API_URL', 'https://api.med-sdi.cl/api'),
+        'client_id' => env('PERSONAS_RAPIDAS_CLIENT_ID'),
+        'shared_secret' => env('PERSONAS_RAPIDAS_SHARED_SECRET'),
+    ],
+
 ];

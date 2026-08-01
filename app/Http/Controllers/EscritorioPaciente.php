@@ -197,6 +197,7 @@ class EscritorioPaciente extends Controller
                                 'paciente' => $paciente,
                                 'hora_medica' => $hora_medica,
                                 'mensajes' => $mensajes,
+                                'permisoBonoAutorizado' => $this->tienePermisoBonoActivo(),
                                 ]);
             }
 
@@ -263,10 +264,78 @@ class EscritorioPaciente extends Controller
         ]);
     }
 
+    /**
+     * Permite omitir la autorizacion solamente en el entorno local.
+     * En produccion comprueba el registro persistido para evitar que una
+     * sesion antigua mantenga habilitada la compra de bonos.
+     */
+    private function tienePermisoBonoActivo(): bool
+    {
+        $host = strtolower((string) request()->getHost());
+        $hostLocal = in_array($host, ['localhost', '127.0.0.1', '::1'], true)
+            || substr($host, -5) === '.test';
+
+        if (app()->environment('local') && $hostLocal) {
+            return true;
+        }
+
+        $token = trim((string) session('lic_token', ''));
+        $logId = session('lic_log_id');
+
+        if ($token === ''
+            || empty($logId)
+            || (int) session('lic_estado') !== 1
+            || session('lic_tipo') !== 'bono') {
+            $this->limpiarPermisoBonoSesion();
+            return false;
+        }
+
+        $autorizacion = LogUsersDevices::where('id', $logId)
+            ->where('token', $token)
+            ->where('id_user_recept', Auth::id())
+            ->where('tipo', 13)
+            ->where('estado', 1)
+            ->first();
+
+        if (!$autorizacion) {
+            $this->limpiarPermisoBonoSesion();
+            return false;
+        }
+
+        try {
+            $ahora = Carbon::now();
+            $vencida = ($autorizacion->fecha_termino
+                    && $ahora->greaterThan(Carbon::parse($autorizacion->fecha_termino)))
+                || ($autorizacion->fecha_exp
+                    && $ahora->greaterThan(Carbon::parse($autorizacion->fecha_exp)));
+        } catch (\Throwable $exception) {
+            $vencida = true;
+        }
+
+        if ($vencida) {
+            $autorizacion->estado = 3;
+            $autorizacion->save();
+            $this->limpiarPermisoBonoSesion();
+            return false;
+        }
+
+        return true;
+    }
+
+    private function limpiarPermisoBonoSesion(): void
+    {
+        session()->forget([
+            'lic_token',
+            'lic_log_id',
+            'lic_estado',
+            'lic_tipo',
+            'lic_fecha_termino',
+        ]);
+    }
+
     public function reservarBono()
     {
-        if (!app()->environment('local')
-            && (empty(session('lic_token')) || (int) session('lic_estado') !== 1)) {
+        if (!$this->tienePermisoBonoActivo()) {
             return redirect()
                 ->route('paciente.home')
                 ->with('warning', 'Debe autorizar el acceso desde la aplicación móvil para reservar bonos.');
@@ -1049,7 +1118,9 @@ class EscritorioPaciente extends Controller
 
         /* FIN --------------------------- HTML MODAL -------------------------- */
 
+        // La ficha web y la app móvil utilizan el mismo historial completo.
         $odontograma = $this->dameOdontogramaPaciente($paciente->id);
+        $odontograma_historial = $odontograma;
 
         return view('ficha_medica', [
             'layoutFicha' => $esFichaPropiaPaciente
@@ -1060,6 +1131,7 @@ class EscritorioPaciente extends Controller
                 : route('profesional.home'),
             'id_usuario' => $id_usuario,
             'odontograma' => $odontograma,
+            'odontograma_historial' => $odontograma_historial,
             'paciente' => $paciente,
             // 'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,

@@ -88,11 +88,18 @@
 
 
                             <div class="tab-pane fade" id="prof_info_personal_cont" role="tabpanel" aria-labelledby="prof_info_personal_cont-tab">
+                                <div id="persona_rapida_estado" class="alert py-2 px-3" style="display:none" role="status"></div>
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Rut</label>
-                                            <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_nuevo_profesional" id="rut_nuevo_profesional">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_nuevo_profesional" id="rut_nuevo_profesional" autocomplete="off">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-info btn-sm" id="btn_buscar_persona_rapida" onclick="buscarPersonaRapidaProfesional()"><i class="feather icon-search"></i> Buscar persona</button>
+                                                </div>
+                                            </div>
+                                            <small class="form-text text-muted">Busca el RUT en Personas Rápidas para completar los datos disponibles.</small>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -362,6 +369,63 @@
 </div>
 
 <script>
+
+    function mostrarEstadoPersonaRapida(tipo, mensaje) {
+        $('#persona_rapida_estado')
+            .removeClass('alert-info alert-success alert-warning alert-danger')
+            .addClass('alert-' + tipo).text(mensaje).show();
+    }
+
+    function buscarPersonaRapidaProfesional() {
+        const rut = $.trim($('#rut_nuevo_profesional').val());
+        const boton = $('#btn_buscar_persona_rapida');
+        if (!rut) {
+            mostrarEstadoPersonaRapida('warning', 'Ingresa un RUT antes de buscar.');
+            return;
+        }
+
+        boton.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Buscando');
+        mostrarEstadoPersonaRapida('info', 'Consultando Personas Rápidas…');
+
+        $.ajax({
+            url: "{{ route('adm_cm.personas_rapidas.buscar') }}",
+            type: 'GET',
+            dataType: 'json',
+            data: { rut: rut }
+        }).done(function(respuesta) {
+            if (!respuesta.ok || !respuesta.found || !respuesta.persona) {
+                mostrarEstadoPersonaRapida('warning', respuesta.message || 'El RUT no fue encontrado. Puedes completar el formulario manualmente.');
+                return;
+            }
+
+            const persona = respuesta.persona;
+            $('#rut_nuevo_profesional').val(persona.rut || rut);
+            $('#nombre_nuevo_profesional').val(persona.nombre1 || '');
+            $('#apellido1_nuevo_profesional').val(persona.appaterno || '');
+            $('#apellido2_nuevo_profesional').val(persona.apmaterno || '');
+            $('#email_nuevo_profesional').val(persona.email || '');
+            $('#telefono1_nuevo_profesional').val((persona.telefono || '').replace(/\D/g, ''));
+            $('#direccion_nuevo_profesional').val(persona.direccion || '');
+            mostrarEstadoPersonaRapida('success', 'Persona encontrada. Se completaron los datos disponibles; revísalos antes de registrar el contrato.');
+        }).fail(function(xhr) {
+            const mensaje = xhr.responseJSON && xhr.responseJSON.message
+                ? xhr.responseJSON.message : 'No fue posible consultar Personas Rápidas.';
+            mostrarEstadoPersonaRapida('danger', mensaje);
+        }).always(function() {
+            boton.prop('disabled', false).html('<i class="feather icon-search"></i> Buscar persona');
+        });
+    }
+
+    $(document).on('keydown', '#rut_nuevo_profesional', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            buscarPersonaRapidaProfesional();
+        }
+    });
+
+    $('#registrar_contratoprofesional').on('hidden.bs.modal', function() {
+        $('#persona_rapida_estado').hide().removeClass('alert-info alert-success alert-warning alert-danger').text('');
+    });
 
     $(document).ready(function() {
         $('#dias_laborales').select2();

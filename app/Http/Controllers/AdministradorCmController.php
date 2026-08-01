@@ -85,6 +85,8 @@ use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 // storage
 use Illuminate\Support\Facades\Storage;
@@ -222,76 +224,9 @@ class AdministradorCmController extends Controller
     }
 
     public function areaContratosNuevos(){
-        $institucion = '';
-        $tipo_institucion = '1';
-        $id_busqueda = Auth::user()->id;
-        if(Auth::user()->id == 3)
-        {
-            $id_busqueda = 5;
-            $registro = Instituciones::where('id', $id_busqueda)->first();
-        }
-        else
-        {
-            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
-        }
-
-        if($registro)
-        {
-            // var_dump($registro);
-            // var_dump($registro->UsuarioAdministrador()->first());
-            //var_dump($registro->UsuarioAdministrador()->first()->id);
-            /** INSTITUCION */
-            $institucion = $registro;
-            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
-            $tipo_institucion = 'institucion';
-
-        }
-        else
-        {
-            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
-            if($registro)
-            {
-                /** SERVICIOS */
-                $institucion = $registro;
-                $tipo_institucion = 'servicio';
-            }
-            else
-            {
-                /** busqueda por responsable */
-                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
-
-                if($responsable)
-                {
-                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
-                    if($registro)
-                    {
-                        // var_dump($registro);
-                        // var_dump($registro->UsuarioAdministrador()->first());
-                        /** INSTITUCION */
-                        $institucion = $registro;
-                        $tipo_institucion = 'institucion';
-
-                    }
-                    else
-                    {
-                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
-                        if($registro)
-                        {
-                            /** SERVICIOS */
-                            $institucion = $registro;
-                            $tipo_institucion = 'servicio';
-                        }
-                        else
-                        {
-                            return back()->with('error','Institución no encontrada');
-                        }
-                    }
-                }
-                else
-                {
-                    return back()->with('error','Institución no encontrada');
-                }
-            }
+        $institucion = $this->resolverInstitucionContratos(Auth::user()->id);
+        if (!$institucion || !$institucion->id_lugar_atencion) {
+            return back()->with('error', 'Institución o lugar de atención no encontrado');
         }
 
         $regiones = Region::all();
@@ -307,16 +242,20 @@ class AdministradorCmController extends Controller
 
 
 
+        $contratosProfesionales = ContratoDependienteProfesional::where('id_lugar_atencion', $institucion->id_lugar_atencion)
+            ->whereIn('id_profesional', $profesionales_contratados->pluck('id'))->get()->keyBy('id_profesional');
+        $tiposEspecialidad = TipoEspecialidad::whereIn('id', $contratosProfesionales->pluck('id_tipo_especialidad')->filter())->get()->keyBy('id');
+        $subtiposEspecialidad = SubTipoEspecialidad::whereIn('id', $contratosProfesionales->pluck('id_sub_tipo_especialidad')->filter())->get()->keyBy('id');
+
         foreach($profesionales_contratados as $profesional){
-            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+            $contrato = $contratosProfesionales->get($profesional->id);
             if($contrato){
                 $profesional->contrato = $contrato;
                 $profesional->es_convenio = false;
-                $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
-                $profesional->especialidad_contrato = $especialidad_contrato;
-                $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                $profesional->especialidad_contrato = $especialidades->firstWhere('id', $contrato->id_especialidad);
+                $tipo_especialidad = $tiposEspecialidad->get($contrato->id_tipo_especialidad);
                 if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
-                $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                $sub_tipo_especialidad = $subtiposEspecialidad->get($contrato->id_sub_tipo_especialidad);
                 if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
 
             }else{
@@ -325,69 +264,45 @@ class AdministradorCmController extends Controller
             $profesional->horas_semanales = 45;
         }
 
-        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $LugarAtencion = LugarAtencion::find($institucion->id_lugar_atencion);
 
         $lista_administrativo = array();
         if($LugarAtencion)
         {
-            $lista_administrativo = $LugarAtencion->AdministrativoInstitucion()->get();
+            $lista_administrativo = $LugarAtencion->AdministrativoInstitucion()->with('Direccion.Ciudad')->get();
 
-            if($lista_administrativo)
+            if($lista_administrativo->isNotEmpty())
             {
-                $array_roles = array();
+                $usuariosAdministrativos = User::with('roles')->whereIn('id', $lista_administrativo->pluck('id_admin')->filter())->get()->keyBy('id');
+                $tiposAdministrativos = TipoAdministrador::whereIn('id', $lista_administrativo->pluck('id_tipo_administrador')->filter())->get()->keyBy('id');
+                $contratosAdministrativos = ContratoDependiente::where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                    ->whereIn('id_empleado', $lista_administrativo->pluck('id'))->get()->keyBy('id_empleado');
                 foreach ($lista_administrativo as $key => $value)
                 {
-
-                    /** roles */
-                    $usuario = User::where('id', 2860)->first();
-
-                    $roles = $usuario->roles()->get();
-
-
-                    foreach ($roles as $key_2 => $value_2) {
-                        array_push($array_roles, $value_2->alias);
-                    }
-
-                    if(!empty($array_roles))
-                        $lista_administrativo[$key]->roles = implode(",",$array_roles);
-                    else
-                        $lista_administrativo[$key]->roles = '';
-
-                    /** tipo administrativo */
-                    $lista_administrativo[$key]->tipo_administrativo = TipoAdministrador::find($value->id_tipo_administrador);
-
-                    /** info contrato */
-                    $filtro_cont = array();
-                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
-                    $filtro_cont[] = array('id_empleado', $value->id);
-                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
+                    $usuario = $usuariosAdministrativos->get($value->id_admin);
+                    $lista_administrativo[$key]->roles = $usuario
+                        ? $usuario->roles->pluck('alias')->filter()->implode(',') : '';
+                    $lista_administrativo[$key]->tipo_administrativo = $tiposAdministrativos->get($value->id_tipo_administrador);
+                    $lista_administrativo[$key]->contrato = $contratosAdministrativos->get($value->id);
                 }
             }
         }
 
-        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
         $lista_mantencion = array();
         if($LugarAtencion)
         {
-            $lista_mantencion = $LugarAtencion->MantencionInstitucion()->get();
+            $lista_mantencion = $LugarAtencion->MantencionInstitucion()->with('Direccion.Ciudad')->get();
 
-            if($lista_mantencion)
+            if($lista_mantencion->isNotEmpty())
             {
+                $usuariosMantencion = User::with('roles')->whereIn('id', $lista_mantencion->pluck('id_admin')->filter())->get()->keyBy('id');
+                $contratosMantencion = ContratoDependiente::where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                    ->whereIn('id_empleado', $lista_mantencion->pluck('id'))->get()->keyBy('id_empleado');
                 foreach ($lista_mantencion as $key => $value)
                 {
-                    /** roles */
-                    $usuario = User::where('id', $value->id_admin)->first();
+                    $usuario = $usuariosMantencion->get($value->id_admin);
                     if($usuario){
-                        $roles = $usuario->roles()->get();
-                        $array_roles = array();
-                        foreach ($roles as $key_2 => $value_2) {
-                            array_push($array_roles, $value_2->name);
-                        }
-
-                        if(!empty($array_roles))
-                            $lista_mantencion[$key]->roles = implode(",",$array_roles);
-                        else
-                            $lista_mantencion[$key]->roles = '';
+                        $lista_mantencion[$key]->roles = $usuario->roles->pluck('name')->filter()->implode(',');
                     }
 
                     if($value->empresa == 1){
@@ -396,11 +311,7 @@ class AdministradorCmController extends Controller
                         $lista_mantencion[$key]->empresa = false;
                     }
 
-                    /** info contrato */
-                    $filtro_cont = array();
-                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
-                    $filtro_cont[] = array('id_empleado', $value->id);
-                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
+                    $lista_mantencion[$key]->contrato = $contratosMantencion->get($value->id);
                 }
             }
         }
@@ -442,6 +353,81 @@ class AdministradorCmController extends Controller
                 'tipo_convenio' => $tipo_convenio
             ]
         );
+    }
+
+    public function buscarPersonaRapida(Request $request)
+    {
+        $data = $request->validate([
+            'rut' => ['required', 'string', 'max:20'],
+        ]);
+        $clientId = config('services.personas_rapidas.client_id');
+        $sharedSecret = config('services.personas_rapidas.shared_secret');
+
+        if (!$clientId || !$sharedSecret) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'La conexión con Personas Rápidas no tiene credenciales configuradas.',
+            ], 503);
+        }
+
+        try {
+            $url = rtrim(config('services.personas_rapidas.url'), '/').'/personas-rapidas/buscar';
+            $query = ['rut' => $data['rut']];
+            ksort($query);
+            $timestamp = (string) time();
+            $nonce = (string) Str::uuid();
+            $userReference = (string) $request->user()->id;
+            $canonical = implode("\n", [
+                'GET',
+                parse_url($url, PHP_URL_PATH),
+                http_build_query($query, '', '&', PHP_QUERY_RFC3986),
+                hash('sha256', ''),
+                $timestamp,
+                $nonce,
+                $userReference,
+            ]);
+
+            $response = Http::acceptJson()
+                ->withHeaders([
+                    'X-PR-Client-Id' => $clientId,
+                    'X-PR-Timestamp' => $timestamp,
+                    'X-PR-Nonce' => $nonce,
+                    'X-PR-Signature' => hash_hmac('sha256', $canonical, $sharedSecret),
+                    'X-PR-User-Reference' => $userReference,
+                ])
+                ->timeout(30)
+                ->get($url, $query);
+        } catch (\Throwable $exception) {
+            report($exception);
+            return response()->json(['ok' => false, 'message' => 'No fue posible conectar con Personas Rápidas.'], 502);
+        }
+
+        if (in_array($response->status(), [401, 403], true)) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'MED-SDI no está autorizado: '.data_get($response->json(), 'message', 'firma o cliente inválido.'),
+            ], 502);
+        }
+        if (!$response->successful()) {
+            return response()->json(['ok' => false, 'message' => data_get($response->json(), 'message', 'La API no pudo procesar la búsqueda.')], 502);
+        }
+
+        return response()->json($response->json());
+    }
+
+    private function resolverInstitucionContratos($userId)
+    {
+        if ((int) $userId === 3) return Instituciones::find(5);
+
+        $registro = Instituciones::where('id_usuario', $userId)->first()
+            ?: Servicios::where('id_usuario', $userId)->first();
+        if ($registro) return $registro;
+
+        $responsable = AdminInstServ::where('id_admin', $userId)->first();
+        if (!$responsable) return null;
+
+        return Instituciones::where('id_responsable', $responsable->id)->first()
+            ?: Servicios::where('id_responsable', $responsable->id)->first();
     }
 
     public function agregar_area_cm(Request $request){

@@ -120,6 +120,24 @@ class VentaBonoController extends Controller
 
         $log = $registro['registro'];
 
+        // Esta ruta solo puede aprobar solicitudes de compra de bonos
+        // pertenecientes al paciente que mantiene la sesion activa.
+        if ((int) $log->tipo !== 13 || (int) $log->id_user_recept !== (int) Auth::id()) {
+            session()->forget([
+                'lic_token',
+                'lic_log_id',
+                'lic_estado',
+                'lic_tipo',
+                'lic_fecha_termino',
+            ]);
+
+            return [
+                'estado' => 0,
+                'estado_log' => 0,
+                'msj' => 'La autorizacion no corresponde a esta compra de bono.'
+            ];
+        }
+
         if ($log->estado == 0) {
             return [
                 'estado' => 1,
@@ -133,7 +151,7 @@ class VentaBonoController extends Controller
                 'lic_token' => $request->token,
                 'lic_log_id' => $log->id ?? session('lic_log_id'),
                 'lic_estado' => 1,
-                'lic_tipo' => session('lic_tipo') ?: 'bono',
+                'lic_tipo' => 'bono',
                 'lic_fecha_termino' => $log->fecha_termino ?? null,
             ]);
 

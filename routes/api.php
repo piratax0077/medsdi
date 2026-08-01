@@ -16,6 +16,7 @@ use App\Http\Controllers\CentroMedicoController;
 use App\Http\Controllers\MobileTwoFactorController;
 use App\Http\Controllers\MobilePushDeviceController;
 use App\Http\Controllers\EmergencyDoctorController;
+use App\Http\Controllers\RestControlController;
 
 
 
@@ -55,6 +56,14 @@ Route::middleware('auth:api')->prefix('emergency-doctor')->group(function () {
     Route::post('/links/{link}/decision', [EmergencyDoctorController::class, 'decide']);
     Route::delete('/links/{link}', [EmergencyDoctorController::class, 'revoke']);
     Route::post('/alerts', [EmergencyDoctorController::class, 'alert']);
+});
+
+Route::middleware('auth:api')->prefix('rest-controls')->group(function () {
+    Route::get('/', [RestControlController::class, 'overview']);
+    Route::get('/patients', [RestControlController::class, 'patients']);
+    Route::post('/', [RestControlController::class, 'store']);
+    Route::post('/{control}/decision', [RestControlController::class, 'decide']);
+    Route::post('/{control}/checkins', [RestControlController::class, 'checkin']);
 });
 
 Route::middleware('auth:api')->prefix('mobile-authorization')->group(function () {
