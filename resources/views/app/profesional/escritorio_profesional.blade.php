@@ -135,7 +135,7 @@
                     </div>
                 </div>
                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-3">
-                    <div class="card h-100 profesional-card p-3">
+                    <div class="card  profesional-card p-1">
                         <div class="card-body">
                             <div class="media">
                                 <div class="profesional-icon mr-4">
@@ -160,6 +160,39 @@
                             </a>
                         </div>
                     </div>
+
+                    <!--REFERIDOS -->
+                    <div class="card  invita-card p-1 mt-3">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="invita-icon-circle mr-3">
+                                    <i class="feather icon-users"></i>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="profesional-title mb-2">¡Invita a más colegas y obtén beneficios!</h4>
+                                    <p class="profesional-text mb-0">
+                                        Invita profesionales a unirse a MED-SDI. Cuando activen su plan, tú ganas
+                                        créditos para usar en el sistema.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{--<p class="text-muted small mb-1 mt-3">Tu código de referido</p>
+                            <div class="invita-codigo-box mb-3">
+                                <span class="invita-codigo-texto" id="codigo_referido_profesional">DRJUAN123</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copiar_codigo_referido();">
+                                    <i class="feather icon-copy"></i> Copiar
+                                </button>
+                            </div>--}}
+                             <div class="profesional-divider"></div>   
+                            <button type="button" class="btn btn-block profesional-btn">
+                                Invitar colegas
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                    <!--Cierre: Card Invita a más colegas-->
                 </div>
             </div>
 
@@ -227,4 +260,20 @@
 
     @include('app.profesional.modales.seleccionar_lugar_atencion')
 
+@endsection
+
+@section('page-script')
+    <script>
+        function copiar_codigo_referido() {
+            var codigo = document.getElementById('codigo_referido_profesional').innerText;
+            navigator.clipboard.writeText(codigo).then(function () {
+                swal({
+                    title: "Código copiado",
+                    text: "Comparte tu código de referido con tus colegas.",
+                    icon: "success",
+                    buttons: "Aceptar",
+                });
+            });
+        }
+    </script>
 @endsection
