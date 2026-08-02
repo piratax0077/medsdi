@@ -5,18 +5,43 @@
     <div class="pcoded-main-container">
         <div class="pcoded-content">
             <!--Header-->
+            <style>
+                .saludo-badge {
+                    display: inline-block;
+                    background-color: rgba(255, 255, 255, .18);
+                    border-radius: 30px;
+                    padding: 8px 22px;
+                    color: #fff;
+                }
+                .campo-icono-wrap {
+                    position: relative;
+                }
+                .campo-icono-wrap .campo-icono {
+                    position: absolute;
+                    top: 50%;
+                    left: 10px;
+                    transform: translateY(-50%);
+                    color: #6c757d;
+                    pointer-events: none;
+                    z-index: 3;
+                    font-size: .85rem;
+                }
+                .campo-icono-wrap .campo-con-icono {
+                    padding-left: 30px;
+                }
+            </style>
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio profesional</h5>
+                            <div class="page-header-title mt-3">
+                                <h4 class=" font-weight-bold text-white  text-capitalize">
+                                    Hola, {{ $profesional->nombre }} {{ $profesional->apellido_uno }}
+                                </h4>
+                                <h6 class="font-weight-bold text-white mb-0">
+                                    Bienvenido/a a tu escritorio profesional
+                                </h6>
                             </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="#">Mi escritorio </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -84,12 +109,18 @@
                                      <h6 class="text-white my-2 f-20"><i class="feather icon-calendar"></i> Mi agenda del día</h6>
                                 </div>
                                 <div class="col-md-4 d-inline text-right mt-1">
-									<select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm" onchange="buscar_hora_medica();">
-										<option value="">Seleccione Lugar</option>
-									</select>
+                                    <div class="campo-icono-wrap">
+                                        <i class="feather icon-map-pin campo-icono"></i>
+                                        <select name="lugares_atencion_agenda" id="lugares_atencion_agenda" class="form-control form-control-sm campo-con-icono" onchange="buscar_hora_medica();">
+                                            <option value="">Seleccione Lugar</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-sm-4 d-inline text-right mt-1">
-                                    <input type="date" onChange="buscar_hora_medica();" class="form-control form-control-sm" id="buscar_horas" name="buscar_horas" value="{{ $fecha_carga }}">
+                                    <div class="campo-icono-wrap">
+                                        <i class="feather icon-calendar campo-icono"></i>
+                                        <input type="text" class="form-control form-control-sm campo-con-icono" id="buscar_horas" name="buscar_horas" value="{{ $fecha_carga }}" autocomplete="off">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +193,7 @@
                     </div>
 
                     <!--REFERIDOS -->
-                    <div class="card  invita-card p-1 mt-3">
+                    <div class="card invita-card p-1 mt-3" style="cursor:pointer" onclick="window.location.href='{{ route('profesional.programa_referidos') }}';">
                         <div class="card-body">
                             <div class="media">
                                 <div class="invita-icon-circle mr-3">
@@ -184,11 +215,11 @@
                                     <i class="feather icon-copy"></i> Copiar
                                 </button>
                             </div>--}}
-                             <div class="profesional-divider"></div>   
-                            <button type="button" class="btn btn-block profesional-btn">
+                             <div class="profesional-divider"></div>
+                            <a href="{{ route('profesional.programa_referidos') }}" class="btn btn-block profesional-btn">
                                 Invitar colegas
                                 <i class="fas fa-chevron-right"></i>
-                            </button>
+                            </a>
 
                         </div>
                     </div>
@@ -263,7 +294,30 @@
 @endsection
 
 @section('page-script')
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
     <script>
+        $(document).ready(function () {
+            flatpickr('#buscar_horas', {
+                dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd-m-Y',
+                locale: {
+                    weekdays: {
+                        shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                        longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+                    },
+                    months: {
+                        shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                        longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                    },
+                    firstDayOfWeek: 1
+                },
+                onChange: function () {
+                    buscar_hora_medica();
+                }
+            });
+        });
+
         function copiar_codigo_referido() {
             var codigo = document.getElementById('codigo_referido_profesional').innerText;
             navigator.clipboard.writeText(codigo).then(function () {

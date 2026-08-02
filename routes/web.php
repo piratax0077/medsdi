@@ -621,6 +621,7 @@ Route::group([
 
     Route::get('Cargar_datos_contacto', [App\Http\Controllers\EscritorioProfesional::class, 'cargar_datos_contacto'])->name('profesional.cargar_datos_contacto');
     Route::get('Inicio', [App\Http\Controllers\EscritorioProfesional::class, 'index'])->name('profesional.home');
+    Route::view('Programa_referidos', 'app.profesional.programa_referidos')->name('profesional.programa_referidos');
     Route::get('Mis_pacientes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_pacientes'])->name('profesional.pacientes');
     Route::get('Mis_pacientes_ajax', [App\Http\Controllers\EscritorioProfesional::class, 'mis_pacientes_ajax'])->name('profesional.mis_pacientes.ajax');
     Route::get('Mis_pacientes/formulario_documento', [App\Http\Controllers\EscritorioProfesional::class, 'cargar_formulario_documento'])->name('profesional.formulario_documento');
