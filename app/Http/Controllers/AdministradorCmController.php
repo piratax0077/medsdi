@@ -94,11 +94,78 @@ use Illuminate\Support\Facades\Storage;
 // DB
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 
 use Carbon\Carbon;
 
 class AdministradorCmController extends Controller
 {
+    /** Rol de acceso correspondiente a cada cargo administrativo. */
+    private function roleNameForAdministratorType(int $typeId): ?string
+    {
+        return [
+            1 => 'Adm_Institucion',
+            2 => 'Adm_Comercial',
+            3 => 'AsistenteFarmacia',
+            4 => 'Ministerio',
+            5 => 'Contador',
+            6 => 'AdministradorBodega',
+            7 => 'AdministradorMedico',
+            8 => 'AdministradorTecnico',
+            9 => 'Vendedor',
+        ][$typeId] ?? null;
+    }
+
+    private function removeAdministratorRoleIfUnused(User $user, int $typeId): void
+    {
+        $roleName = $this->roleNameForAdministratorType($typeId);
+        if (!$roleName || !Role::where('name', $roleName)->exists()) {
+            return;
+        }
+
+        $stillAssigned = InstitucionAdministrador::where('id_usuario', $user->id)
+            ->where('id_tipo_administrador', $typeId)
+            ->where('estado', 1)
+            ->exists();
+
+        if (!$stillAssigned && $user->hasRole($roleName)) {
+            $user->removeRole($roleName);
+        }
+    }
+
+    private function isValidChileanRut(string $rut): bool
+    {
+        $clean = strtoupper(preg_replace('/[^0-9Kk]/', '', $rut));
+        if (!preg_match('/^\d{7,8}[0-9K]$/', $clean)) {
+            return false;
+        }
+
+        $body = substr($clean, 0, -1);
+        $providedDigit = substr($clean, -1);
+        $sum = 0;
+        $multiplier = 2;
+        for ($index = strlen($body) - 1; $index >= 0; $index--) {
+            $sum += intval($body[$index]) * $multiplier;
+            $multiplier = $multiplier === 7 ? 2 : $multiplier + 1;
+        }
+
+        $result = 11 - ($sum % 11);
+        $expectedDigit = $result === 11 ? '0' : ($result === 10 ? 'K' : (string) $result);
+        return $providedDigit === $expectedDigit;
+    }
+
+    private function legacyInstitutionColumnForAdministratorType(int $typeId): ?string
+    {
+        return [
+            1 => 'id_director_medico',
+            7 => 'id_director_medico',
+            2 => 'id_subdirector_medico',
+            3 => 'id_director_gestion_cuidado',
+            4 => 'id_director_comercial',
+            8 => 'id_director_tecnico',
+        ][$typeId] ?? null;
+    }
+
     public function index()
     {
         $institucion = '';
@@ -957,6 +1024,14 @@ class AdministradorCmController extends Controller
 
     public function eliminar_admin_cm(Request $req){
 
+            $validator = Validator::make($req->all(), [
+                'tipo_admin' => 'required|integer|exists:tipo_administrador,id',
+                'id_institucion' => 'required|integer|exists:instituciones,id',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['estado' => 0, 'msj' => $validator->errors()->first()], 422);
+            }
+
             $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;
@@ -972,6 +1047,19 @@ class AdministradorCmController extends Controller
 
             if($registro)
             {
+                $puedeAdministrar = Auth::user()->id == 3
+                    || intval($registro->id_usuario) === intval(Auth::user()->id)
+                    || InstitucionAdministrador::where('id_institucion', $registro->id)
+                        ->where('id_usuario', Auth::user()->id)
+                        ->where('estado', 1)
+                        ->exists();
+                if (!$puedeAdministrar) {
+                    return response()->json([
+                        'estado' => 0,
+                        'msj' => 'No tiene permisos para modificar esta institución.',
+                    ], 403);
+                }
+
                 // var_dump($registro);
                 // var_dump($registro->UsuarioAdministrador()->first());
                 //var_dump($registro->UsuarioAdministrador()->first()->id);
@@ -1102,15 +1190,21 @@ class AdministradorCmController extends Controller
             }
             $institucion->update();
 
-            // Eliminar de la tabla pivot
-            InstitucionAdministrador::where('id_institucion', $institucion->id)
+            // El rol debe retirarse al usuario asignado al cargo, no al
+            // administrador principal que está realizando la operación.
+            $asignacion = InstitucionAdministrador::where('id_institucion', $institucion->id)
                 ->where('id_tipo_administrador', $req->tipo_admin)
-                ->delete();
+                ->first();
 
-            // se elimina el rol de director medico
-            $rol = Role::where('name','AdministradorMedico')->first();
-            $usuario = User::where('id',$responsable->id)->first();
-            $usuario->removeRole($rol);
+            if ($asignacion) {
+                $idUsuarioAsignado = $asignacion->id_usuario;
+                $asignacion->delete();
+
+                $usuarioAsignado = User::find($idUsuarioAsignado);
+                if ($usuarioAsignado) {
+                    $this->removeAdministratorRoleIfUnused($usuarioAsignado, (int) $req->tipo_admin);
+                }
+            }
 
             // Cargar colección actualizada para el fragmento
             $administradores_cm = InstitucionAdministrador::where('id_institucion', $institucion->id)
@@ -1172,6 +1266,7 @@ class AdministradorCmController extends Controller
                 'ciudades' => $ciudades,
                 'cargo' => $req->tipo_admin,
                 'administradores_cm' => $administradores_cm,
+                'cargos' => TipoAdministrador::where('estado', 1)->orderBy('nombres')->get(),
             ])->render();
 
             return ['estado' => 1, 'mensaje' => 'Administrador eliminado', 'v' => $v];
@@ -2092,6 +2187,27 @@ class AdministradorCmController extends Controller
 
     public function editarDatosPerfilResponsableMedico(Request $req){
 
+        $validator = Validator::make($req->all(), [
+            'id_responsable' => 'required|integer|exists:profesionales,id',
+            'id_institucion' => 'required|integer|exists:instituciones,id',
+            'tipo_actual' => 'required|integer|exists:tipo_administrador,id',
+            'tipo_nuevo' => 'required|integer|exists:tipo_administrador,id',
+            'nombres' => 'required|string|max:100',
+            'apellido_uno' => 'required|string|max:100',
+            'apellido_dos' => 'nullable|string|max:100',
+            'sexo' => 'required|in:F,M',
+            'fecha_nac' => 'nullable|date|before_or_equal:today',
+            'email' => 'required|email|max:255',
+            'telefono_uno' => 'nullable|string|max:30',
+            'telefono_dos' => 'nullable|string|max:30',
+            'ciudad' => 'required|integer|exists:ciudades,id',
+            'direccion' => 'required|string|max:255',
+            'numero_dir' => 'required|string|max:30',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['estado' => 0, 'msj' => $validator->errors()->first()], 422);
+        }
+
         $institucion = '';
         $tipo_institucion = '1';
         $id_busqueda = Auth::user()->id;
@@ -2226,7 +2342,46 @@ class AdministradorCmController extends Controller
             }
         }
 
+        if (!($institucion instanceof Instituciones) || intval($institucion->id) !== intval($req->id_institucion)) {
+            return response()->json(['estado' => 0, 'msj' => 'No tiene permisos para modificar esta institución.'], 403);
+        }
+
         $profesional = Profesional::with(['Direccion'])->where('id', $req->id_responsable)->first();
+        if (!$profesional || !$profesional->id_usuario) {
+            return response()->json(['estado' => 0, 'msj' => 'Profesional o usuario asociado no encontrado.'], 404);
+        }
+
+        $asignacion = InstitucionAdministrador::where('id_institucion', $institucion->id)
+            ->where('id_tipo_administrador', $req->tipo_actual)
+            ->where('id_usuario', $profesional->id_usuario)
+            ->where('estado', 1)
+            ->first();
+        if (!$asignacion) {
+            return response()->json(['estado' => 0, 'msj' => 'La asignación administrativa ya no existe.'], 404);
+        }
+
+        $nuevoCargo = TipoAdministrador::where('id', $req->tipo_nuevo)->where('estado', 1)->first();
+        if (!$nuevoCargo) {
+            return response()->json(['estado' => 0, 'msj' => 'El cargo seleccionado no está disponible.'], 422);
+        }
+
+        if (intval($req->tipo_actual) !== intval($req->tipo_nuevo)) {
+            $rolNuevo = $this->roleNameForAdministratorType((int) $req->tipo_nuevo);
+            if (!$rolNuevo || !Role::where('name', $rolNuevo)->exists()) {
+                return response()->json(['estado' => 0, 'msj' => 'El nuevo cargo no tiene un rol configurado.'], 422);
+            }
+
+            $cargoOcupado = InstitucionAdministrador::where('id_institucion', $institucion->id)
+                ->where('id_tipo_administrador', $req->tipo_nuevo)
+                ->where('estado', 1)
+                ->exists();
+            if ($cargoOcupado) {
+                return response()->json([
+                    'estado' => 0,
+                    'msj' => 'El cargo seleccionado ya está asignado a otro administrador.',
+                ], 422);
+            }
+        }
 
         $profesional->nombre = $req->nombres;
         $profesional->apellido_uno = $req->apellido_uno;
@@ -2249,6 +2404,8 @@ class AdministradorCmController extends Controller
             $direccion->numero_dir = $req->numero_dir;
             if($direccion->save())
             {
+                $profesional->id_direccion = $direccion->id;
+                $profesional->save();
                 $success = true;
             }
             else
@@ -2265,6 +2422,8 @@ class AdministradorCmController extends Controller
             $direccion->numero_dir = $req->numero_dir;
             if($direccion->save())
             {
+                $profesional->id_direccion = $direccion->id;
+                $profesional->save();
                 $success = true;
             }
             else
@@ -2272,6 +2431,32 @@ class AdministradorCmController extends Controller
                 $success = false;
             }
         }
+        $usuario = User::find($profesional->id_usuario);
+        if ($usuario) {
+            $usuario->email = $req->email;
+            $usuario->save();
+        }
+
+        if (intval($req->tipo_actual) !== intval($req->tipo_nuevo)) {
+            $asignacion->id_tipo_administrador = $req->tipo_nuevo;
+            $asignacion->save();
+            if ($usuario) {
+                $usuario->assignRole($rolNuevo);
+                $this->removeAdministratorRoleIfUnused($usuario, (int) $req->tipo_actual);
+            }
+
+            $columnaAnterior = $this->legacyInstitutionColumnForAdministratorType((int) $req->tipo_actual);
+            $columnaNueva = $this->legacyInstitutionColumnForAdministratorType((int) $req->tipo_nuevo);
+            if ($columnaAnterior && intval($institucion->{$columnaAnterior}) === intval($profesional->id_usuario)) {
+                $institucion->{$columnaAnterior} = null;
+            }
+            if ($columnaNueva) {
+                $institucion->{$columnaNueva} = $profesional->id_usuario;
+            }
+            $institucion->save();
+        }
+
+        $cargos = TipoAdministrador::where('estado', 1)->orderBy('nombres')->get();
         $administradores_cm = InstitucionAdministrador::where('id_institucion', $institucion->id)
             ->where('estado', 1)
             ->get();
@@ -2285,6 +2470,7 @@ class AdministradorCmController extends Controller
             'institucion' => $institucion,
             'regiones' => $regiones,
             'ciudades' => $ciudades,
+            'cargos' => $cargos,
         ])->render();
 
         return ['estado' => 1, 'mensaje' => 'Datos actualizados', 'profesional' => $profesional, 'v' => $v];
@@ -9695,6 +9881,26 @@ class AdministradorCmController extends Controller
 
     public function editar_direccion_medica(Request $req){
 
+        $validator = Validator::make($req->all(), [
+            'cargo' => 'required|integer|exists:tipo_administrador,id',
+            'responsable' => 'required|integer|exists:profesionales,id',
+            'rut' => 'required|string|max:20',
+            'correo' => 'required|email|max:255',
+            'telefono' => 'required|string|max:30',
+            'direccion' => 'required|string|max:255',
+            'numero_dir' => 'required|string|max:30',
+            'region' => 'required|integer|exists:regiones,id',
+            'ciudad' => 'required|integer|exists:ciudades,id',
+            'id_institucion' => 'required|integer|exists:instituciones,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => $validator->errors()->first(),
+            ], 422);
+        }
+
         $institucion = '';
         $tipo_institucion = '1';
         $id_busqueda = Auth::user()->id;
@@ -9768,6 +9974,13 @@ class AdministradorCmController extends Controller
         }
 
 
+        if (intval($institucion->id) !== intval($req->id_institucion)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'No tiene permisos para administrar la institución indicada.',
+            ], 403);
+        }
+
         $regiones = Region::all();
         $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
 
@@ -9835,13 +10048,22 @@ class AdministradorCmController extends Controller
                 return ['estado' => 0, 'msj' => 'Profesional no encontrado'];
             }
 
+            $rutSolicitado = strtoupper(preg_replace('/[^0-9Kk]/', '', $req->rut));
+            $rutProfesional = strtoupper(preg_replace('/[^0-9Kk]/', '', $profesional->rut));
+            if (!$this->isValidChileanRut($req->rut)) {
+                return ['estado' => 0, 'msj' => 'El RUT ingresado no es válido'];
+            }
+            if ($rutSolicitado !== $rutProfesional) {
+                return ['estado' => 0, 'msj' => 'El RUT no corresponde al profesional seleccionado'];
+            }
+
             $user = User::find($profesional->id_usuario);
             if(!$user){
                 return ['estado' => 0, 'msj' => 'Usuario asociado al profesional no encontrado'];
             }
 
             // Tabla donde estan todos los tipos de administraciones medicas
-            $cargo = TipoAdministrador::where('id', $req->cargo)->first();
+            $cargo = TipoAdministrador::where('id', $req->cargo)->where('estado', 1)->first();
             if(!$cargo){
                 return ['estado' => 0, 'msj' => 'Cargo no encontrado'];
             }
@@ -9862,7 +10084,6 @@ class AdministradorCmController extends Controller
 
             DB::beginTransaction();
 
-            $profesional->rut = $req->rut;
             $profesional->email = $req->correo;
             $profesional->telefono_uno = $req->telefono;
             $profesional->save();
@@ -9880,48 +10101,57 @@ class AdministradorCmController extends Controller
             $profesional->save();
 
             $user->email = $req->correo;
+            $user->assignRole('Profesional');
 
             if($cargo->id == 1 || $cargo->id == 7){
                 $institucion->id_director_medico = intval($user->id);
-                $user->assignRole(3); // Profesional
-                $user->assignRole(23); // Director Médico
             }
 
             if($cargo->id == 2){
                 $institucion->id_subdirector_medico = intval($user->id);
-                $user->assignRole(3); // Profesional
-                $user->assignRole(8); // Administrador comercial
             }
-
 
             if($cargo->id == 3){
                 $institucion->id_director_gestion_cuidado = intval($user->id);
-                $user->assignRole(3); // Profesional
-                $user->assignRole(17); // Administrador farmacia
             }
-
-
 
             if($cargo->id == 4){
                 $institucion->id_director_comercial = intval($user->id);
-                $user->assignRole(19); // Profesional MINISTERIO
-            }
-
-            if($cargo->id == 5) {
-                $user->assignRole(3); // Profesional
-                $user->assignRole(9); // Contador
             }
 
             if($cargo->id == 8){
                 $institucion->id_director_tecnico = intval($user->id);
-                $user->assignRole(32); // Administrador Técnico
+            }
+
+            $roleName = $this->roleNameForAdministratorType((int) $cargo->id);
+            if (!$roleName || !Role::where('name', $roleName)->exists()) {
+                throw new \RuntimeException('El cargo seleccionado no tiene un rol de acceso configurado.');
+            }
+            $user->assignRole($roleName);
+
+            // Corrige el rol legado que antes se agregaba al cargo
+            // "Administrador de CM" como si fuera administración médica.
+            if ((int) $cargo->id === 1) {
+                $usaAdministracionMedica = InstitucionAdministrador::where('id_usuario', $user->id)
+                    ->where('id_tipo_administrador', 7)
+                    ->where('estado', 1)
+                    ->exists();
+                if (!$usaAdministracionMedica && $user->hasRole('AdministradorMedico')) {
+                    $user->removeRole('AdministradorMedico');
+                }
             }
 
 
             $institucion->update();
             $user->save();
 
-            // Guardar también en la tabla pivot (nueva arquitectura)
+            // Si el cargo cambia de persona, se conserva el usuario anterior
+            // para retirar su rol solamente cuando ya no lo usa otra institución.
+            $asignacionAnterior = InstitucionAdministrador::where('id_institucion', $institucion->id)
+                ->where('id_tipo_administrador', $cargo->id)
+                ->first();
+            $idUsuarioAnterior = $asignacionAnterior ? $asignacionAnterior->id_usuario : null;
+
             InstitucionAdministrador::updateOrCreate(
                 [
                     'id_institucion'        => $institucion->id,
@@ -9932,6 +10162,13 @@ class AdministradorCmController extends Controller
                     'estado'     => 1,
                 ]
             );
+
+            if ($idUsuarioAnterior && intval($idUsuarioAnterior) !== intval($user->id)) {
+                $usuarioAnterior = User::find($idUsuarioAnterior);
+                if ($usuarioAnterior) {
+                    $this->removeAdministratorRoleIfUnused($usuarioAnterior, (int) $cargo->id);
+                }
+            }
 
             // Cargar colección completa para el fragmento
             $administradores_cm = InstitucionAdministrador::where('id_institucion', $institucion->id)
@@ -9998,6 +10235,7 @@ class AdministradorCmController extends Controller
                 'ciudades' => $ciudades,
                 'cargo' => $cargo_str,
                 'administradores_cm' => $administradores_cm,
+                'cargos' => TipoAdministrador::where('estado', 1)->orderBy('nombres')->get(),
 
             ])->render();
             DB::commit();

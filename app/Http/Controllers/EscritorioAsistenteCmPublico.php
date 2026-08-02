@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asistente;
 use App\Models\AsistenteContactoEmergencia;
+use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
 use App\Models\BoxesCm;
@@ -62,13 +63,29 @@ class EscritorioAsistenteCmPublico extends Controller
 
         $contrato = ContratoDependiente::where($filtro)->whereIn('tipo_empleado',$array_tipo_empleado)->first();
 
-        if($contrato)
+        // El contrato es la fuente principal. Si el asistente todavia no tiene
+        // uno, se permite el acceso usando su asociacion activa al lugar de
+        // atencion.
+        $asociacion_lugar = null;
+        if (!$contrato) {
+            $asociacion_lugar = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
+                ->where('estado', 1)
+                ->first();
+        }
+
+        if($contrato || $asociacion_lugar)
         {
-            $id_lugar_atencion = $contrato->id_lugar_atencion;
+            $id_lugar_atencion = $contrato
+                ? $contrato->id_lugar_atencion
+                : $asociacion_lugar->id_lugar_atencion;
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
 
-            $id_institucion = $contrato->id_institucion;
-            $institucion = Instituciones::where('id', $id_institucion)->first();
+            $id_institucion = $contrato
+                ? $contrato->id_institucion
+                : $asociacion_lugar->id_institucion;
+            $institucion = $id_institucion
+                ? Instituciones::where('id', $id_institucion)->first()
+                : null;
             $profesionales = $lugares_atencion->profesionales()
             ->orderBy('apellido_uno','asc')
             ->get();
@@ -128,8 +145,7 @@ class EscritorioAsistenteCmPublico extends Controller
         }
         else
         {
-            return 'revisar el contrato';
-            return back()->with('error','Contrato de usuario no encontado');
+            return back()->with('error', 'El asistente no tiene un lugar de atencion activo asociado');
         }
 
     }

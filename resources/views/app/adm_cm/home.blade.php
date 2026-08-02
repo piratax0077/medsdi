@@ -233,7 +233,7 @@
                         'Dental'        => ['icon' => 'dental.png', 'route' => route('adm_cm.dental')],
                     ];
                 @endphp
-
+                @if(isset($areas_cm) && count($areas_cm) > 0)
                 @foreach($areas_cm as $area)
                     @if(isset($iconos[$area['tipo_area']]))
                         <div class="col">
@@ -248,7 +248,7 @@
                         </div>
                     @endif
                 @endforeach
-
+                @endif
                 <div class="col-md-12">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                         <a href="#">

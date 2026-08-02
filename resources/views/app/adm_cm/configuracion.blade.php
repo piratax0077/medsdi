@@ -8,6 +8,42 @@
         .select2-container--open {
             z-index: 9999999 !important;
         }
+
+        #a_area .modal-content {
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 18px 55px rgba(15, 35, 55, .28);
+            overflow: hidden;
+        }
+        #a_area .modal-header {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, #35bdbe 0%, #269caf 100%) !important;
+            border: 0;
+        }
+        #a_area .modal-title { font-weight: 700; letter-spacing: -.2px; }
+        #a_area .modal-body { padding: 1.5rem; background: #fbfcfd; }
+        #a_area .modal-footer { padding: 1rem 1.5rem; background: #fff; }
+        #a_area .form-group { margin-bottom: 1rem; }
+        #a_area .form-control { min-height: 42px; border-radius: 8px; }
+        #a_area .input-group .form-control { border-radius: 8px 0 0 8px; }
+        #a_area .input-group-append .btn { border-radius: 0 8px 8px 0; min-width: 46px; }
+        #a_area .admin-section-title {
+            color: #52606d;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        #a_area .selected-professional {
+            display: none;
+            border-radius: 8px;
+            padding: .65rem .85rem;
+            margin-top: .65rem;
+            background: #eaf8f8;
+            color: #177d83;
+            font-size: .85rem;
+        }
     </style>
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -2393,29 +2429,41 @@
     {{--  MODAL AREA  --}}
     <div id="a_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_area"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir Administradores del centro</h5>
+                    <div>
+                        <h5 class="modal-title text-white mb-1">Asignar administrador</h5>
+                        <small class="text-white-50">Busque un profesional y defina su cargo dentro del centro.</small>
+                    </div>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="form_asignar_administrador" autocomplete="off">
+                        <div class="admin-section-title">Profesional</div>
                         <div class="form-row">
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Rut</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control form-control-sm mb-2" name="rut_cargo" id="rut_cargo" placeholder="Ej: 12345678-9">
-                                        <input class="mt-2" type="hidden" id="responsable_cargo" value="0">
+                                        <input type="text" class="form-control" name="rut_cargo" id="rut_cargo"
+                                            placeholder="Ej: 12.345.678-9" inputmode="text" maxlength="12"
+                                            aria-describedby="ayuda_rut_cargo" oninput="formatearRutAdministrador(this)"
+                                            onkeydown="if(event.key === 'Enter'){ event.preventDefault(); buscar_profesional(); }">
+                                        <input type="hidden" id="responsable_cargo" value="0">
                                         <div class="input-group-append">
-                                            <button class="btn btn-info btn-sm" type="button" onclick="buscar_profesional()"><i class="feather icon-search"></i></button>
+                                            <button class="btn btn-info" type="button" onclick="buscar_profesional()" title="Buscar profesional"><i class="feather icon-search"></i></button>
                                         </div>
+                                    </div>
+                                    <small id="ayuda_rut_cargo" class="form-text text-muted">Se formatea automáticamente. Presione Enter o el botón buscar.</small>
+                                    <div id="profesional_cargo_seleccionado" class="selected-professional">
+                                        <i class="feather icon-check-circle mr-1"></i><span></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="admin-section-title mt-2">Cargo y contacto</div>
                         <div class="form-row">
                             <div class="col-sm-12">
                                 <div class="form-group fill">
@@ -2478,9 +2526,10 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto"
-                        onclick="editar_direccion_medica({{ $institucion->id }})"><i class="feather icon-save"></i> Guardar Cambios</button>
+                <div class="modal-footer justify-content-end">
+                    <button type="button" class="btn btn-light mr-2" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info px-4" id="btn_guardar_administrador"
+                        onclick="editar_direccion_medica({{ $institucion->id }})"><i class="feather icon-save mr-1"></i> Guardar asignación</button>
                 </div>
             </div>
         </div>
@@ -3588,8 +3637,6 @@
         });
         $(".js-example-basic-multiple").select2();
         $('#responsable_cargo_area').select2();
-        $('#responsable_cargo').select2();
-        $('#cargo').select2();
         $('#institucion_area').select2();
         $('#tipo_area').select2();
         $('#tabla_administradores_cm').DataTable({
@@ -3614,8 +3661,43 @@
         $('#a_otra_especialidad').modal('show');
     }
 
+    function formatearRutAdministrador(input) {
+        let limpio = input.value.toUpperCase().replace(/[^0-9K]/g, '').slice(0, 9);
+        if (limpio.length <= 1) {
+            input.value = limpio;
+        } else {
+            let cuerpo = limpio.slice(0, -1);
+            let dv = limpio.slice(-1);
+            input.value = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + dv;
+        }
+
+        input.setCustomValidity('');
+        $('#responsable_cargo').val(0);
+        $('#profesional_cargo_seleccionado').hide().find('span').text('');
+    }
+
+    function rutAdministradorValido(rut) {
+        let limpio = (rut || '').toUpperCase().replace(/[^0-9K]/g, '');
+        if (limpio.length < 8) return false;
+
+        let cuerpo = limpio.slice(0, -1);
+        let dv = limpio.slice(-1);
+        let suma = 0;
+        let multiplo = 2;
+        for (let i = cuerpo.length - 1; i >= 0; i--) {
+            suma += Number(cuerpo.charAt(i)) * multiplo;
+            multiplo = multiplo === 7 ? 2 : multiplo + 1;
+        }
+        let esperado = 11 - (suma % 11);
+        esperado = esperado === 11 ? '0' : (esperado === 10 ? 'K' : String(esperado));
+        return dv === esperado;
+    }
+
     /*-Añadir área**/
     function ag_area() {
+        $('#form_asignar_administrador')[0].reset();
+        $('#responsable_cargo').val(0);
+        $('#profesional_cargo_seleccionado').hide().find('span').text('');
         $('#a_area').modal('show');
     }
 
@@ -3976,6 +4058,9 @@
         var data = {
             _token: CSRF_TOKEN,
             id_responsable : $('#id_prof_adm_' + tipo_id).val(),
+            id_institucion : $('#id_institucion').val(),
+            tipo_actual    : tipo_id,
+            tipo_nuevo     : $('#perfil_cargo_adm_' + tipo_id).val(),
             nombres        : $('#perfil_nombre_adm_'       + tipo_id).val(),
             apellido_uno   : $('#perfil_apellido_uno_adm_' + tipo_id).val(),
             apellido_dos   : $('#perfil_apellido_dos_adm_' + tipo_id).val(),
@@ -3998,11 +4083,14 @@
                         location.reload();
                     }
                 } else {
-                    swal({ title: "Error", text: "No se pudo actualizar los datos", icon: "error", buttons: "Aceptar" });
+                    swal({ title: "Error", text: response.msj || "No se pudo actualizar los datos", icon: "error", buttons: "Aceptar" });
                 }
             })
-            .fail(function() {
-                swal({ title: "Error", text: "Error de conexión", icon: "error", buttons: "Aceptar" });
+            .fail(function(xhr) {
+                let mensaje = xhr.responseJSON && xhr.responseJSON.msj
+                    ? xhr.responseJSON.msj
+                    : "No se pudo actualizar el administrador";
+                swal({ title: "Error", text: mensaje, icon: "error", buttons: "Aceptar" });
             });
     }
 
@@ -5318,6 +5406,9 @@
 
         let url = "{{ route('adm_cm.editar_direccion_medica') }}";
 
+        let botonGuardar = $('#btn_guardar_administrador');
+        botonGuardar.prop('disabled', true).html('<span class="spinner-border spinner-border-sm mr-1"></span> Guardando...');
+
         $.ajax({
                 url: url,
                 type: "post",
@@ -5330,8 +5421,8 @@
                         // cerrar modal
                         $('#a_area').modal('hide');
                         swal({
-                            title: "Dirección Médica",
-                            text: "Dirección Médica Actualizada Correctamente",
+                            title: "Administrador asignado",
+                            text: data.msj || "El cargo y sus permisos fueron guardados correctamente",
                             icon: "success",
                             buttons: "Aceptar",
                             DangerMode: true,
@@ -5356,6 +5447,15 @@
                     });
                 }
             })
+            .fail(function(xhr) {
+                let mensaje = xhr.responseJSON && xhr.responseJSON.msj
+                    ? xhr.responseJSON.msj
+                    : 'No fue posible guardar la asignación. Intente nuevamente.';
+                swal({ title: "Error", text: mensaje, icon: "error", buttons: "Aceptar" });
+            })
+            .always(function() {
+                botonGuardar.prop('disabled', false).html('<i class="feather icon-save mr-1"></i> Guardar asignación');
+            });
     }
 
     function eliminar_area_cm(id) {
@@ -7546,6 +7646,18 @@
                 });
                 return;
             }
+            if (!rutAdministradorValido(rut)) {
+                $('#responsable_cargo').val(0);
+                $('#profesional_cargo_seleccionado').hide();
+                swal({
+                    title: "RUT inválido",
+                    text: "Revise el número y el dígito verificador.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                $('#rut_cargo').focus();
+                return;
+            }
             let url = "{{ route('profesional.buscador') }}";
                 $.ajax({
                     url: url,
@@ -7575,7 +7687,11 @@
                     let direccion = direccionCompleta;
                     let numero = '';
 
-                    $('#responsable_cargo').val(profesional.profesionales_id || 0);
+                    let nombreProfesional = [
+                        profesional.profesionales_nombre,
+                        profesional.profesionales_apellido_uno,
+                        profesional.profesionales_apellido_dos
+                    ].filter(Boolean).join(' ');
 
                     // Separa un numero final para completar el campo numero si viene en la direccion completa.
                     let matchDireccion = direccionCompleta.match(/^(.*?)(?:\s+(\d+[A-Za-z0-9\-\/]*))$/);
@@ -7585,6 +7701,11 @@
                     }
 
                     $('#rut_cargo').val(profesional.profesionales_rut || rut);
+                    formatearRutAdministrador(document.getElementById('rut_cargo'));
+                    $('#responsable_cargo').val(profesional.profesionales_id || 0);
+                    $('#profesional_cargo_seleccionado span')
+                        .text(nombreProfesional + ' · RUT ' + $('#rut_cargo').val());
+                    $('#profesional_cargo_seleccionado').show();
                     $('#correo_cargo').val(profesional.profesional_email || '');
                     $('#telefono_cargo').val(profesional.profesional_telefono_uno || '');
                     $('#direccion_cargo').val(direccion);

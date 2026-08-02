@@ -20,6 +20,9 @@
                         $dir = $prof ? $prof->Direccion()->first() : null;
                         $ciudad_dir = $dir ? $dir->Ciudad()->first() : null;
                         $region_dir = $ciudad_dir ? $ciudad_dir->Region()->first() : null;
+                        $fecha_nacimiento = $prof && $prof->fecha_nacimiento
+                            ? date('Y-m-d', strtotime($prof->fecha_nacimiento))
+                            : '';
                     @endphp
                     <tr>
                         <td class="pl-4">
@@ -76,6 +79,17 @@
                                                         <div class="form-group col-sm-12 col-md-12 mb-3">
                                                             <p class="font-weight-bolder">DATOS PERSONALES</p>
                                                         </div>
+                                                        <div class="form-group col-sm-12">
+                                                            <label class="floating-label-activo-sm">Cargo administrativo</label>
+                                                            <select class="form-control form-control-sm" id="perfil_cargo_adm_{{ $tipo_id }}">
+                                                                @foreach (($cargos ?? collect()) as $cargo_opcion)
+                                                                    <option value="{{ $cargo_opcion->id }}" @if((int)$cargo_opcion->id === (int)$tipo_id) selected @endif>
+                                                                        {{ $cargo_opcion->nombres }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <small class="form-text text-muted">Al cambiarlo se actualizará también el rol de acceso del usuario.</small>
+                                                        </div>
                                                         <div class="form-group col-sm-12 col-md-6">
                                                             <label class="floating-label-activo-sm">Rut</label>
                                                             <input type="text" class="form-control form-control-sm" id="perfil_rut_adm_{{ $tipo_id }}" value="{{ $prof->rut }}" disabled>
@@ -105,7 +119,7 @@
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6">
                                                             <label class="floating-label-activo-sm">Nacimiento</label>
-                                                            <input type="date" class="form-control form-control-sm" id="perfil_nac_adm_{{ $tipo_id }}" value="{{ $prof->fecha_nac }}">
+                                                            <input type="date" class="form-control form-control-sm" id="perfil_nac_adm_{{ $tipo_id }}" value="{{ $fecha_nacimiento }}" max="{{ date('Y-m-d') }}">
                                                         </div>
                                                     </div>
                                                     <div class="form-row mt-4">
