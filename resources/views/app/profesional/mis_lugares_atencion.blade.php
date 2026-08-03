@@ -32,12 +32,12 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header bg-info">
+                        <div class="card-header-principal ">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h4 class="text-white f-20 d-inline">Mis lugares de atención</h4>
-                                        <button type="button" class="btn btn-light btn-xs float-md-right d-inline" data-toggle="modal" data-target="#nuevo_lugar_atencion">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><i class="feather icon-home icono-primary"></i>
+                                        <h4 class="text-dark f-20 d-inline">Mis lugares de atención</h4>
+                                        <button type="button" class="btn btn-info float-md-right d-inline" data-toggle="modal" data-target="#nuevo_lugar_atencion">
                                             <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar lugar
                                         </button>
                                     </div>
@@ -122,8 +122,7 @@
                                             $ciudad = $direccion && method_exists($direccion, 'Ciudad')
                                                 ? $direccion->Ciudad()->first()
                                                 : null;
-
-                                            $direccionTexto = trim((optional($direccion)->direccion ?? '').' '.(optional($direccion)->numero_dir ?? ''));
+                                            $direccionTexto = trim(optional($direccion)->direccion ?? '');
                                             $ciudadTexto = optional($ciudad)->nombre ?? '';
                                             $tipoTexto = $l->tipo == 1 ? 'Centro Médico' : 'Consulta Particular';
                                         @endphp
@@ -248,18 +247,18 @@
                                     <input class="form-control form-control-sm" name="rut_lugar_atencion" id="rut_lugar_atencion" type="text" onkeyup="formatoRut(this);">
                                 </div>
                             </div>
-                            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <div class="col-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                     <input class="form-control form-control-sm" name="direccion_lugar_atencion" id="direccion_lugar_atencion" type="text">
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            {{--<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Nº</label>
                                     <input class="form-control form-control-sm" name="numero_lugar_atencion" id="numero_lugar_atencion" type="text">
                                 </div>
-                            </div>
+                            </div>--}}
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
@@ -329,7 +328,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="editar_lugar_atencion_titulo">Configurar lugar de atención</h5>
+                    <h5 class="modal-title text-white text-center" id="editar_lugar_atencion_titulo">Editar lugar de atención</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -344,18 +343,18 @@
                                 <input name="editar_nombre_lugar_atencion" id="editar_nombre_lugar_atencion" type="text" val="" class="form-control form-control-sm">
                             </div>
                         </div>
-                       <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                       <div class="col-12">
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Direcci&oacute;n&nbsp;/&nbsp;Calle</label>
+                                <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                 <input name="editar_direccion_lugar_atencion" id="editar_direccion_lugar_atencion" type="text" class="form-control form-control-sm">
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                        {{--<div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Nº</label>
                                 <input name="editar_numero_lugar_atencion" id="editar_numero_lugar_atencion" type="text" class="form-control form-control-sm">
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Regi&oacute;n</label>

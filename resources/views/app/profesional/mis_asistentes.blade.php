@@ -51,7 +51,7 @@
                         <div class="card-body">
                             <div style="overflow-x:auto;">
                                 <div class="table-responsive">
-                                    <table class="display table table-sm dt-responsive nowrap" style="width:100%">
+                                    <table class="display table table-striped table-sm dt-responsive nowrap tabla-asistentes" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>Lugar Atención</th>
@@ -98,7 +98,7 @@
                                                                 NO DISPONIBLE
                                                             @endif
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <button type="button"
                                                                 data-id-asistente="{{ $asis_la->id_asistente }}"
                                                                 data-id-lugar-atencion="{{ $asis_la->id_lugar_atencion ?? 0 }}"
@@ -111,7 +111,7 @@
                                                                 <i class="feather icon-shield"></i>
                                                             </button>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <button type="button"
                                                                 onclick="desasociar_asistente({{ $asis_la->id }})"
                                                                 class="btn btn-danger btn-sm btn-icon"
@@ -137,14 +137,107 @@
     </div>
 
     {{-- MODAL: Permisos del Asistente --}}
+    <style>
+        /* Neutraliza el borde negro grueso que Bootstrap 5 agrega bajo el encabezado */
+        .tabla-asistentes > :not(:first-child) {
+            border-top: 1px solid #eef0f5;
+        }
+
+        .permisos-modal-content {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .permisos-modal-header {
+            background: linear-gradient(120deg, #1a49a3 0%, #2DC2C1 100%);
+            border-bottom: none;
+            padding: 18px 24px;
+        }
+        .permisos-modal-header .modal-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .permisos-modal-header .close {
+            text-shadow: none;
+            opacity: .9;
+            font-weight: 400;
+            font-size: 1.5rem;
+        }
+        .permisos-modal-header .close:hover {
+            opacity: 1;
+        }
+        .permisos-modal-body {
+            padding: 20px 24px 8px;
+        }
+        .permisos-asistente-box {
+            display: flex;
+            align-items: center;
+            background-color: #f4f4f4;
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        .permisos-asistente-avatar {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            background-color: rgba(26, 73, 163, .1);
+            color: #1a49a3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-right: 12px;
+        }
+        .permisos-grupo-titulo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: .78rem;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            color: #343a40;
+            margin-bottom: 18px;
+        }
+        .permisos-grupo-titulo i {
+            margin-right: 6px;
+        }
+        .permisos-grupo + .permisos-grupo {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #f0f1f5;
+        }
+        .permiso-item {
+            border: 1px solid #eef0f5;
+            border-radius: 10px;
+            padding: 10px 12px;
+            height: 100%;
+            transition: border-color .2s ease, background-color .2s ease;
+        }
+        .permiso-item:hover {
+            border-color: #cfd9ee;
+            background-color: #f8f9fc;
+        }
+        .permiso-item .custom-control-label {
+            font-weight: 600;
+            color: #2b2f3a;
+            font-size: .9rem;
+            cursor: pointer;
+        }
+        .permisos-modal-footer {
+            border-top: 1px solid #f0f1f5;
+            padding: 14px 24px 20px;
+        }
+    </style>
+
     <div id="permisos_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permisos_rol" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white">
-                        <i class="feather icon-shield"></i> Permisos del Asistente
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content permisos-modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title f-20 text-white">
+                        Permisos del Asistente
                     </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cerrar_permisos_asistente_modal();">
                         <span aria-hidden="true">×</span>
                     </button>
 
@@ -152,10 +245,15 @@
                     <input type="hidden" id="permisos_rol_id_lugar_atencion" value="">
                 </div>
 
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <small class="text-muted">Asistente</small>
-                        <p class="font-weight-bold mb-0" id="permisos_rol_nombre_asistente">—</p>
+                <div class="modal-body permisos-modal-body">
+                    <div class="permisos-asistente-box mb-4">
+                        <div class="permisos-asistente-avatar">
+                            <i class="feather icon-user"></i>
+                        </div>
+                        <div>
+                            <small class="text-c-blue d-block">Asistente</small>
+                            <p class="font-weight-bold text-dark mb-0" id="permisos_rol_nombre_asistente">—</p>
+                        </div>
                     </div>
 
                     <div id="permisos_rol_spinner" class="text-center py-3" style="display:none;">
@@ -165,112 +263,146 @@
                     </div>
 
                     <div id="permisos_rol_contenido">
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_cotizar" data-permiso="permiso_cotizar">
-                                    <label class="custom-control-label" for="pa_permiso_cotizar">
-                                        <i class="feather icon-dollar-sign text-success"></i> Cotizar
-                                    </label>
+
+                            <h6 class="permisos-grupo-titulo mb-1"><i class="feather icon-calendar"></i> Agenda y horas</h6>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_confirmar_hora" data-permiso="permiso_confirmar_hora">
+                                            <label class="custom-control-label" for="pa_permiso_confirmar_hora">
+                                                <i class="feather icon-check-circle text-success"></i> Confirmar hora
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_anular_hora" data-permiso="permiso_anular_hora">
+                                            <label class="custom-control-label" for="pa_permiso_anular_hora">
+                                                <i class="feather icon-x-circle text-danger"></i> Anular hora
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_horas_extras" data-permiso="permiso_agendar_horas_extras">
+                                            <label class="custom-control-label" for="pa_permiso_agendar_horas_extras">
+                                                <i class="feather icon-calendar text-primary"></i> Agendar horas extras
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_examenes" data-permiso="permiso_agendar_examenes">
+                                            <label class="custom-control-label" for="pa_permiso_agendar_examenes">
+                                                <i class="feather icon-clipboard text-info"></i> Agendar exámenes
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_transcripcion_examenes" data-permiso="permiso_transcripcion_examenes">
+                                            <label class="custom-control-label" for="pa_permiso_transcripcion_examenes">
+                                                <i class="feather icon-file-text text-warning"></i> Transcripción de exámenes
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_confirmar_hora" data-permiso="permiso_confirmar_hora">
-                                    <label class="custom-control-label" for="pa_permiso_confirmar_hora">
-                                        <i class="feather icon-check-circle text-success"></i> Confirmar hora
-                                    </label>
+                            <h6 class="permisos-grupo-titulo mb-1"><i class="feather icon-users"></i> Pacientes</h6>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_ver_pacientes" data-permiso="permiso_ver_pacientes">
+                                            <label class="custom-control-label" for="pa_permiso_ver_pacientes">
+                                                <i class="feather icon-eye text-info"></i> Buscar pacientes
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_editar_pacientes" data-permiso="permiso_editar_pacientes">
+                                            <label class="custom-control-label" for="pa_permiso_editar_pacientes">
+                                                <i class="feather icon-edit text-warning"></i> Editar pacientes
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_anular_hora" data-permiso="permiso_anular_hora">
-                                    <label class="custom-control-label" for="pa_permiso_anular_hora">
-                                        <i class="feather icon-x-circle text-danger"></i> Anular hora
-                                    </label>
+                            <h6 class="permisos-grupo-titulo mb-1"><i class="feather icon-folder"></i> Archivos</h6>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_subir_ver_archivos" data-permiso="permiso_subir_ver_archivos">
+                                            <label class="custom-control-label" for="pa_permiso_subir_ver_archivos">
+                                                <i class="feather icon-upload-cloud text-primary"></i> Subir y ver archivos
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_eliminar_archivos" data-permiso="permiso_eliminar_archivos">
+                                            <label class="custom-control-label" for="pa_permiso_eliminar_archivos">
+                                                <i class="feather icon-trash-2 text-danger"></i> Eliminar archivos
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_subir_ver_archivos" data-permiso="permiso_subir_ver_archivos">
-                                    <label class="custom-control-label" for="pa_permiso_subir_ver_archivos">
-                                        <i class="feather icon-upload-cloud text-primary"></i> Subir y ver archivos
-                                    </label>
+                            <h6 class="permisos-grupo-titulo mb-1"><i class="feather icon-credit-card"></i> Finanzas</h6>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_cotizar" data-permiso="permiso_cotizar">
+                                            <label class="custom-control-label" for="pa_permiso_cotizar">
+                                                <i class="feather icon-file-text text-success"></i> Cotizar
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_eliminar_archivos" data-permiso="permiso_eliminar_archivos">
-                                    <label class="custom-control-label" for="pa_permiso_eliminar_archivos">
-                                        <i class="feather icon-trash-2 text-danger"></i> Eliminar archivos
-                                    </label>
+                                <div class="col-sm-12 col-md-6 mb-2">
+                                    <div class="permiso-item">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_entrega_caja" data-permiso="permiso_entrega_caja">
+                                            <label class="custom-control-label" for="pa_permiso_entrega_caja">
+                                                <i class="feather icon-credit-card text-success"></i> Entrega de caja
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                   
 
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_editar_pacientes" data-permiso="permiso_editar_pacientes">
-                                    <label class="custom-control-label" for="pa_permiso_editar_pacientes">
-                                        <i class="feather icon-edit text-warning"></i> Editar pacientes
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_ver_pacientes" data-permiso="permiso_ver_pacientes">
-                                    <label class="custom-control-label" for="pa_permiso_ver_pacientes">
-                                        <i class="feather icon-eye text-info"></i> Buscar pacientes
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_horas_extras" data-permiso="permiso_agendar_horas_extras">
-                                    <label class="custom-control-label" for="pa_permiso_agendar_horas_extras">
-                                        <i class="feather icon-calendar text-primary"></i> Agendar horas extras
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_examenes" data-permiso="permiso_agendar_examenes">
-                                    <label class="custom-control-label" for="pa_permiso_agendar_examenes">
-                                        <i class="feather icon-clipboard text-info"></i> Agendar exámenes
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_transcripcion_examenes" data-permiso="permiso_transcripcion_examenes">
-                                    <label class="custom-control-label" for="pa_permiso_transcripcion_examenes">
-                                        <i class="feather icon-file-text text-warning"></i> Transcripción de exámenes
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_entrega_caja" data-permiso="permiso_entrega_caja">
-                                    <label class="custom-control-label" for="pa_permiso_entrega_caja">
-                                        <i class="feather icon-credit-card text-success"></i> Entrega de caja
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-success btn-sm" id="permisos_rol_btn_guardar" onclick="guardar_permisos_asistente_modal()">
+                <div class="modal-footer permisos-modal-footer">
+                    <button type="button" class="btn btn-info" id="permisos_rol_btn_guardar" onclick="guardar_permisos_asistente_modal()">
                         <i class="feather icon-save"></i> Guardar permisos
                     </button>
                 </div>
@@ -362,7 +494,7 @@
             })
             .fail(function() {
                 $('#permisos_rol_spinner').hide();
-                $('#permisos_rol').modal('hide');
+                cerrar_permisos_asistente_modal();
 
                 swal({
                     title: 'Error',
@@ -371,6 +503,19 @@
                     buttons: 'Aceptar'
                 });
             });
+        };
+
+        window.cerrar_permisos_asistente_modal = function()
+        {
+            $('#permisos_rol').modal('hide');
+
+            // Respaldo: si el fondo oscuro queda pegado, se limpia manualmente
+            setTimeout(function () {
+                if (!$('.modal.show').length) {
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css('padding-right', '');
+                }
+            }, 300);
         };
 
         window.guardar_permisos_asistente_modal = function()
@@ -411,7 +556,7 @@
                         buttons: 'Aceptar'
                     });
 
-                    $('#permisos_rol').modal('hide');
+                    cerrar_permisos_asistente_modal();
                 } else {
                     swal({
                         title: 'Error',
