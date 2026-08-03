@@ -3,16 +3,16 @@
 
     <!--Container Completo-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content">
+        <div class="pcoded-content mb-3" style="margin-top: 140px">
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold"></h5>
+
                             </div>
-                            <ul class="breadcrumb">
+                            <ul class="breadcrumb  mt-n3">
                                 <li class="breadcrumb-item">
                                     <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 </li>
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <!--Cierre: Header-->
-            <div class="mt-3 pt-2 pb-3 bg-gris referidos-fondo-full">
+            <div class="">
 
             <style>
                 .referidos-fondo-full {
@@ -57,6 +57,7 @@
                     color: #fff;
                     padding: 18px 22px;
                     height: 100%;
+                    border: 2px solid #6dc8c8;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
@@ -131,8 +132,8 @@
                 .stat-icon-soft.icon-purple { background-color: rgba(160, 108, 193, .14); color: #A06CC1; }
                 .stat-icon-soft.icon-yellow { background-color: rgba(255, 186, 87, .18); color: #d99a2b; }
                 .referidos-codigo-box {
-                    background-color: #f8f9fc;
-                    border: 1px dashed #31bebe;
+                    background-color: #F5F5FB;
+                    border: 1px dashed #7857b4;
                     border-radius: 10px;
                     padding: 10px 14px;
                     display: flex;
@@ -142,11 +143,12 @@
                 .referidos-codigo-texto {
                     font-weight: 700;
                     letter-spacing: 1px;
-                    color: #1f2957;
+                    color: #7857b4;
+                    font-size: 1rem;
                 }
                 .referidos-enlace-texto {
                     font-size: .82rem;
-                    color: #5f6b7a;
+                    color:#7857b4;
                     word-break: break-all;
                 }
                 .compartir-icono {
@@ -231,19 +233,27 @@
                     margin-right: 10px;
                     font-size: 1.1rem;
                 }
+
+                .bg-referidos{
+                	background-color: #F4F2FA!important;
+                }
+
+                .header-referidos {
+                	background-color: #F4F2FA;
+                }
             </style>
 
             <!--Título + Créditos disponibles-->
-            <div class="row mb-3 mt-2">
+            <div class="row mb-4 mt-n4">
                 <div class="col-sm-12 col-md-7 col-lg-8 mb-3 mb-md-0 d-flex align-items-center">
                     <div>
-                        <h3 class="referidos-titulo text-dark">
+                        <h3 class="referidos-titulo text-white">
 ¡Invita colegas y obtén créditos!</h3>
-                        <p class="referidos-subtitulo text-dark mb-0">Cuando un profesional se registre con tu enlace y compre un plan, te regalamos créditos que puedes usar en el sistema.</p>
+                        <p class="referidos-subtitulo text-white mb-0">Cuando un profesional se registre con tu enlace y compre un plan, te regalamos créditos que puedes usar en el sistema.</p>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-5 col-lg-4">
-                    <a href="#" class="creditos-banner text-white text-decoration-none">
+                    <a href="#" class="creditos-banner text-white border-info text-decoration-none">
                         <div class="d-flex align-items-center">
                             <div class="creditos-icono">
                                 <i class="feather icon-credit-card"></i>
@@ -270,8 +280,8 @@
                             </div>
                             <div>
                                 <h4 class="mb-0 font-weight-bold text-dark">8</h4>
-                                <div class="small text-dark">Referidos registrados</div>
-                                <div class="text-muted" style="font-size:.75rem;">Total de profesionales invitados</div>
+                                <div class="small font-weight-bold text-dark">Referidos registrados</div>
+                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Total de profesionales invitados</div>
                             </div>
                         </div>
                     </div>
@@ -284,8 +294,8 @@
                             </div>
                             <div>
                                 <h4 class="mb-0 font-weight-bold text-dark">5</h4>
-                                <div class="small text-dark">Clientes activos</div>
-                                <div class="text-muted" style="font-size:.75rem;">Profesionales que ya compraron</div>
+                                <div class="small font-weight-bold text-dark">Clientes activos</div>
+                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Profesionales que ya compraron</div>
                             </div>
                         </div>
                     </div>
@@ -298,8 +308,8 @@
                             </div>
                             <div>
                                 <h4 class="mb-0 font-weight-bold text-dark">$20.000</h4>
-                                <div class="small text-dark">Créditos acumulados</div>
-                                <div class="text-muted" style="font-size:.75rem;">Equivale a 200 créditos</div>
+                                <div class="small font-weight-bold text-dark">Créditos acumulados</div>
+                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Equivale a 200 créditos</div>
                             </div>
                         </div>
                     </div>
@@ -312,8 +322,8 @@
                             </div>
                             <div>
                                 <h4 class="mb-0 font-weight-bold">2</h4>
-                                <div class="small text-dark">Pendientes de compra</div>
-                                <div class="text-muted" style="font-size:.75rem;">Aún no han comprado</div>
+                                <div class="small font-weight-bold text-dark">Pendientes de compra</div>
+                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Aún no han comprado</div>
                             </div>
                         </div>
                     </div>
@@ -323,24 +333,24 @@
             <!--Enlace / Cómo funciona / Actividad reciente-->
             <div class="row">
                 <div class="col-sm-12 col-lg-4 mb-3">
-                    <div class="card referidos-card h-100">
-                        <div class="card-header-principal bg-white">
+                    <div class="card bg-referidos referidos-card bg-referidos h-100">
+                        <div class="card-header-principal header-referidos">
                             <h6 class="mb-0 f-18 text-dark">Tu enlace de referido</h6>
-                            <div class="small text-muted">Comparte tu código o enlace único</div>
+                            <div class="small text-dark">Comparte tu código o enlace único</div>
                         </div>
-                        <div class="card-body">
-                            <p class="text-muted small mb-1">Tu código de referido</p>
+                        <div class="card-body bg-referidos">
+                            <h6 class="text-purple  mb-1">Tu código de referido</h6>
                             <div class="referidos-codigo-box mb-3">
                                 <span class="referidos-codigo-texto" id="codigo_referido">DRJUAN123</span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copiar_texto('codigo_referido', this);">
+                                <button type="button" class="btn btn-sm btn-purple" onclick="copiar_texto('codigo_referido', this);">
                                     <i class="feather icon-copy"></i> Copiar
                                 </button>
                             </div>
 
-                            <p class="text-muted small mb-1">Tu enlace personalizado</p>
+                            <h6 class="text-purple  mb-1">Tu enlace personalizado</h6>
                             <div class="referidos-codigo-box mb-3">
                                 <span class="referidos-enlace-texto" id="enlace_referido">https://saluddigitalintegrada.cl/registro?ref=DRJUAN123</span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copiar_texto('enlace_referido', this);">
+                                <button type="button" class="btn btn-sm btn-purple" onclick="copiar_texto('enlace_referido', this);">
                                     <i class="feather icon-copy"></i>
                                 </button>
                             </div>
@@ -432,14 +442,14 @@
             </div>
 
             <!--Info importante-->
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-12 mb-3">
                     <div class="info-bar">
                         <i class="feather icon-info"></i>
                         <span><strong>Importante:</strong> Los créditos se acreditan cuando el pago del plan es aprobado y el período de garantía (7 días) ha finalizado.</span>
                     </div>
                 </div>
-            </div>
+            </div>--}}
 
             </div>
             <!--Cierre: bg-gris-->
