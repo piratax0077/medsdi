@@ -35,8 +35,8 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title mt-3">
-                                <h4 class=" font-weight-bold text-white  text-capitalize">
-                                    Hola, {{ $profesional->nombre }} {{ $profesional->apellido_uno }}
+                                <h4 class="font-weight-bold text-white">
+                                    Hola, {{ mb_convert_case($profesional->nombre . ' ' . $profesional->apellido_uno, MB_CASE_TITLE, 'UTF-8') }}
                                 </h4>
                                 <h6 class="font-weight-bold text-white mb-0">
                                     Bienvenido/a a tu escritorio profesional
