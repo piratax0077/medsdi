@@ -514,6 +514,23 @@ class ficha_atencionController extends Controller
                     }
                 }
 
+                $presupuestos_dentales_por_ficha = collect();
+                $piezas_dentales_por_presupuesto = collect();
+                if ((int) $profesional->id_especialidad === 2 && !empty($ids_fichas_previas)) {
+                    $presupuestos_dentales_por_ficha = PresupuestosDental::whereIn('id_ficha_atencion', $ids_fichas_previas)
+                        ->where('id_paciente', $paciente->id)
+                        ->orderByDesc('id')
+                        ->get()
+                        ->groupBy('id_ficha_atencion');
+                    $ids_presupuestos_dentales = $presupuestos_dentales_por_ficha->flatten()->pluck('id')->all();
+                    if (!empty($ids_presupuestos_dentales)) {
+                        $piezas_dentales_por_presupuesto = OdontogramaPaciente::whereIn('id_presupuesto', $ids_presupuestos_dentales)
+                            ->where('presupuesto', 1)
+                            ->get(['id_presupuesto', 'estado'])
+                            ->groupBy('id_presupuesto');
+                    }
+                }
+
                 foreach ($fichas as $ficha_previa) {
                     $ficha_previa->btn_class_ficha = $btn_class_ficha_atencion_previa;
                     $ficha_previa->btn_class_evaluacion_especialidad = $btn_class_eval_especialidad;
@@ -521,6 +538,29 @@ class ficha_atencionController extends Controller
                     $tiene_recetas = isset($recetas_por_ficha[$ficha_previa->id]) && intval($recetas_por_ficha[$ficha_previa->id]) > 0;
                     $ficha_previa->tiene_recetas = $tiene_recetas;
                     $ficha_previa->btn_class_receta = $tiene_recetas ? 'btn-success-light-c' : 'btn-warning-light-c';
+
+                    if ((int) $profesional->id_especialidad === 2) {
+                        $presupuestoDental = optional($presupuestos_dentales_por_ficha->get($ficha_previa->id))->first();
+                        $piezasDental = $presupuestoDental
+                            ? $piezas_dentales_por_presupuesto->get($presupuestoDental->id, collect())
+                            : collect();
+                        $totalPiezas = $piezasDental->count();
+                        $piezasFinalizadas = $piezasDental->where('estado', 1)->count();
+                        $tieneEnProceso = $piezasDental->where('estado', 2)->isNotEmpty();
+                        $tieneControl = $piezasDental->where('estado', 3)->isNotEmpty();
+
+                        $ficha_previa->historial_dental_presupuesto_id = $presupuestoDental->id ?? null;
+                        $ficha_previa->historial_dental_pago = $presupuestoDental
+                            ? ($presupuestoDental->pago_completado ? 'Pagado' : 'Pago pendiente')
+                            : 'Sin presupuesto';
+                        $ficha_previa->historial_dental_estado_clinico = !$presupuestoDental
+                            ? 'Sin presupuesto'
+                            : (($totalPiezas > 0 && $piezasFinalizadas === $totalPiezas)
+                                ? 'Finalizado'
+                                : ($tieneEnProceso ? 'En proceso' : ($tieneControl ? 'Citado a control' : 'Pendiente')));
+                        $ficha_previa->historial_dental_piezas = $totalPiezas;
+                        $ficha_previa->historial_dental_piezas_finalizadas = $piezasFinalizadas;
+                    }
 
                     if ((int) $profesional->id_especialidad === 6) {
                         $control = $controles_psicologia_por_ficha->get($ficha_previa->id);
@@ -2613,7 +2653,19 @@ class ficha_atencionController extends Controller
 
         $marcas_implantes = MarcasImplantes::all();
 
-        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $id_ficha)->get();
+        // Una atención posterior puede usar una ficha distinta a aquella donde se
+        // originó el presupuesto. Los abonos pertenecen al presupuesto y deben
+        // consultarse por esa llave para que todas las pestañas muestren lo mismo.
+        $pagos_tratamientos_dentales = PagosPresupuestoDental::when(
+                $presupuesto_dental,
+                function ($query, $presupuesto) {
+                    $query->where('id_presupuesto', $presupuesto->id);
+                },
+                function ($query) use ($id_ficha) {
+                    $query->where('id_ficha_atencion', $id_ficha);
+                }
+            )
+            ->get();
 
         $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
@@ -4176,6 +4228,9 @@ class ficha_atencionController extends Controller
                     ->get();
         }
 
+        if ($tipo_paciente === 'infantil') {
+            $examenes = $this->combinarPiezasPlanificadasInfantiles($examenes, $id_paciente, $tipo_especialidad, 5);
+        }
         return $examenes;
     }
 
@@ -4211,6 +4266,9 @@ class ficha_atencionController extends Controller
                     ->get();
         }
 
+        if ($tipo_paciente === 'infantil') {
+            $examenes = $this->combinarPiezasPlanificadasInfantiles($examenes, $id_paciente, $tipo_especialidad, 6);
+        }
         return $examenes;
     }
 
@@ -4246,6 +4304,9 @@ class ficha_atencionController extends Controller
                     ->get();
         }
 
+        if ($tipo_paciente === 'infantil') {
+            $examenes = $this->combinarPiezasPlanificadasInfantiles($examenes, $id_paciente, $tipo_especialidad, 7);
+        }
         return $examenes;
     }
 
@@ -4281,7 +4342,60 @@ class ficha_atencionController extends Controller
                     ->get();
         }
 
+        if ($tipo_paciente === 'infantil') {
+            $examenes = $this->combinarPiezasPlanificadasInfantiles($examenes, $id_paciente, $tipo_especialidad, 8);
+        }
         return $examenes;
+    }
+
+    /**
+     * Agrega al selector de caras las piezas pediátricas que ya forman parte
+     * del plan de tratamiento, aunque todavía no tengan examen por pieza.
+     */
+    private function combinarPiezasPlanificadasInfantiles($examenes, $idPaciente, $tipoEspecialidad, $cuadrante)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        if (!$profesional) {
+            return $examenes;
+        }
+
+        $piezasPlanificadas = OdontogramaPaciente::select([
+                'id as id_odontograma',
+                'pieza as numero_pieza',
+                'diagnostico as diagnostico_plan',
+                'tratamiento as tratamiento_plan',
+                'caras as caras_plan',
+            ])
+            ->where('id_paciente', $idPaciente)
+            ->where('id_profesional', $profesional->id)
+            ->where('tipo_especialidad', $tipoEspecialidad)
+            ->where('presupuesto', 1)
+            ->whereRaw('CAST(pieza AS CHAR) LIKE ?', [$cuadrante.'.%'])
+            ->get();
+
+        $planesPorPieza = $piezasPlanificadas->keyBy(function ($registro) {
+            return (string) $registro->numero_pieza;
+        });
+
+        // Si la pieza ya tenía un examen, se conserva ese registro pero se le
+        // adjuntan los datos inmutables del plan para mostrarlos en la interfaz.
+        $examenes->each(function ($registro) use ($planesPorPieza) {
+            $plan = $planesPorPieza->get((string) $registro->numero_pieza);
+            if ($plan) {
+                $registro->setAttribute('id_odontograma', $plan->id_odontograma);
+                $registro->setAttribute('diagnostico_plan', $plan->diagnostico_plan);
+                $registro->setAttribute('tratamiento_plan', $plan->tratamiento_plan);
+                $registro->setAttribute('caras_plan', $plan->caras_plan);
+            }
+        });
+
+        return $examenes
+            ->concat($piezasPlanificadas)
+            ->unique(function ($registro) {
+                return (string) $registro->numero_pieza;
+            })
+            ->sortBy('numero_pieza')
+            ->values();
     }
 
     public function dameExamenesPiezaDentalPiezaEnd($id_paciente, $id_profesional, $id_ficha_atencion){

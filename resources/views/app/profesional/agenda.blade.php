@@ -265,13 +265,22 @@
                         @if($profesional->id_especialidad == 2 )
                             <div class="col-sm-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nº de presupuesto</label>
+                                    <label class="floating-label-activo-sm">Tipo de consulta / Nº de presupuesto</label>
                                     <select class="form-control form-control-sm" name="presupuesto_numero" id="presupuesto_numero" onchange="updateTotalValue()">
-                                        <option value="0">Seleccione</option>
+                                        <option value="" selected disabled>Seleccione el tipo de consulta</option>
+                                        <option value="primera">Primera consulta</option>
+                                        <option value="urgencia">Urgencia</option>
                                     </select>
                                 </div>
                                 <div id="contenedor_tratamientos_presupuesto">
-                                    Se utilizan <span id="cantidad_bloques_atencion">1</span> bloque de atención.
+                                    <div class="alert alert-info py-2 px-3 mb-3" role="status">
+                                        <i class="feather icon-clock mr-1"></i>
+                                        <strong>Duración estimada:</strong>
+                                        <span id="cantidad_bloques_atencion">1</span>
+                                        <span id="texto_bloques_atencion">bloque</span>
+                                        de atención
+                                        (<span id="minutos_bloques_atencion">15</span> minutos).
+                                    </div>
                                 </div>
                             </div>
 
@@ -464,7 +473,8 @@
                                             </div>
                                         </td>
                                         <td class="text-center align-middle status-circle" id="estado_pago">
-                                            <div class="circle bg-success"></div>
+                                            <div id="indicador_estado_pago" class="circle bg-danger" title="Sin pago" aria-label="Sin pago"></div>
+                                            <small id="texto_estado_pago" class="d-block mt-1 text-muted">Sin pago</small>
                                         </td>
                                     </tr>
                                     {{-- <tr class="paciente_view">
@@ -578,8 +588,8 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Segundo Apellido <span class="text-danger">*</span></label>
-                                        <input type="text" required class="form-control form-control-sm"
+                                        <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                        <input type="text" class="form-control form-control-sm"
                                             name="reserva_hora_apellido_dos" id="reserva_hora_apellido_dos">
                                     </div>
                                 </div>
@@ -643,7 +653,7 @@
 
                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger">*</span></label>
+                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto <span class="text-danger requerido-telefono-agenda">*</span></label>
                                         <input type="tel" class="form-control form-control-sm"
                                             name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno"
                                             oninput="validar_campos_minimos();"
@@ -768,6 +778,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-success d-none estado-pago-presupuesto-hora" role="alert"></div>
                     <div class="form-row mb-2">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="alert alert-danger">
@@ -907,8 +918,8 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group text-center my-2 pb-2">
-                                <div onclick="recepcion_pago();" class="btn btn-info"><i class="feather icon-check"></i> Recepcionar</div>
-                                <button class="btn btn-primary"><i class="fas fa-check"></i>Generar Boleta</button>
+                                <div onclick="recepcion_pago();" class="btn btn-info btn-recepcionar-pago"><i class="feather icon-check"></i> <span>Recepcionar</span></div>
+                                <button class="btn btn-primary btn-generar-boleta"><i class="fas fa-check"></i>Generar Boleta</button>
                             </div>
                         </div>
                     </div>
@@ -932,6 +943,7 @@
                                 aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body pb-0">
+                        <div class="alert alert-success d-none estado-pago-presupuesto-hora" role="alert"></div>
                         <div class="form-row mb-2">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="alert alert-danger">
@@ -1065,7 +1077,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="form-group text-center my-2 pb-2">
-                                    <div onclick="recepcion_pago();" class="btn btn-info"><i class="feather icon-check"></i> Recepcionar</div>
+                                    <div onclick="recepcion_pago();" class="btn btn-info btn-recepcionar-pago"><i class="feather icon-check"></i> <span>Recepcionar</span></div>
                                 </div>
                             </div>
                         </div>
@@ -1757,9 +1769,14 @@
             let apellido_uno = $('#reserva_hora_apellido_uno').val().trim();
             let telefono = $('#reserva_hora_telefono_uno').val().trim();
             let fecha_nac = $('#reserva_hora_fecha_nac').val().trim();
+            let es_agenda_dental = $('#id_tipo_agenda').val() === '2';
 
             // Validar campos mínimos
-            let campos_minimos_ok = (nombres !== '' && apellido_uno !== '' && telefono !== '');
+            let tipo_consulta_ok = !es_agenda_dental || ($('#presupuesto_numero').val() || '') !== '';
+            let telefono_ok = es_agenda_dental || telefono !== '';
+            let campos_minimos_ok = (nombres !== '' && apellido_uno !== '' && telefono_ok && tipo_consulta_ok);
+
+            $('.requerido-telefono-agenda').toggle(!es_agenda_dental);
 
             // Si hay fecha ingresada, validar que sea válida
             let fecha_valida = true;

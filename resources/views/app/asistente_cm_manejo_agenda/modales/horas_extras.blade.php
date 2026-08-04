@@ -447,9 +447,13 @@
                 $('#m_hora_extra_div_cargando').hide();
                 $('#m_hora_extra_div_boton_buscar_paciente').show();
 
-                if (data !== 'null')
+                if (data !== null && data !== 'null' && data !== '')
                 {
-                    data = JSON.parse(data);
+                    // jQuery convierte automaticamente una respuesta JSON en objeto.
+                    // Conservamos compatibilidad con respuestas antiguas que llegaban como texto.
+                    if (typeof data === 'string') {
+                        data = JSON.parse(data);
+                    }
                     if(data.tipo_paciente == 'SI')
                     {
                         //  console.log(data);

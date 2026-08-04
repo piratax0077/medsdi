@@ -331,6 +331,44 @@
                                                         .prop('disabled', false);
                                                     $('#contenedor_via_confirmacion').hide();
 
+                                                    const detalleDental = data.detalle_dental;
+                                                    $('#detalle_agenda_dental').toggleClass('d-none', !detalleDental);
+                                                    if (detalleDental) {
+                                                        const formatoDinero = valor => '$' + Number(valor || 0).toLocaleString('es-CL');
+                                                        const resumen = $('<div>');
+                                                        resumen.append($('<div>').append($('<strong>').text('Motivo: '), document.createTextNode(detalleDental.motivo || 'Consulta dental')));
+                                                        if (detalleDental.presupuesto) {
+                                                            resumen.append($('<div>').append(
+                                                                $('<strong>').text('Presupuesto: '),
+                                                                document.createTextNode('N° ' + detalleDental.presupuesto + ' · Abonado ' + formatoDinero(detalleDental.abonado) + ' · Saldo ' + formatoDinero(detalleDental.saldo))
+                                                            ));
+                                                        }
+                                                        $('#detalle_dental_resumen').empty().append(resumen);
+
+                                                        const badgePago = $('#detalle_dental_estado_pago').removeClass('badge-success badge-warning badge-danger');
+                                                        if (detalleDental.pago) {
+                                                            badgePago
+                                                                .text(detalleDental.pago)
+                                                                .addClass(detalleDental.pago === 'Pagado' ? 'badge-success' : (detalleDental.pago === 'Pago parcial' ? 'badge-warning' : 'badge-danger'))
+                                                                .show();
+                                                        } else {
+                                                            badgePago.hide();
+                                                        }
+
+                                                        const lista = $('<div>');
+                                                        if ((detalleDental.prestaciones || []).length) {
+                                                            lista.append($('<strong>').text('Trabajo programado:'));
+                                                            const ul = $('<ul class="mb-0 pl-4">');
+                                                            detalleDental.prestaciones.forEach(function(prestacion) {
+                                                                ul.append($('<li>').text(prestacion.nombre + ' — ' + prestacion.tratamiento + ' (' + prestacion.estado + ')'));
+                                                            });
+                                                            lista.append(ul);
+                                                        } else {
+                                                            lista.append($('<span class="text-muted">').text('No hay piezas específicas asociadas a esta hora.'));
+                                                        }
+                                                        $('#detalle_dental_prestaciones').empty().append(lista);
+                                                    }
+
                                                     //celeste
                                                     //Reservada
                                                     if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
@@ -357,6 +395,29 @@
                                                     {
                                                         console.log(data.paciente);
                                                         $('#modal_recepcion_bonos_api').modal('show');
+
+                                                        const pagoPresupuesto = data.pago_presupuesto;
+                                                        const presupuestoPagado = pagoPresupuesto && pagoPresupuesto.pagado;
+                                                        $('.estado-pago-presupuesto-hora').toggleClass('d-none', !pagoPresupuesto);
+                                                        if (pagoPresupuesto) {
+                                                            const formato = valor => '$' + Number(valor || 0).toLocaleString('es-CL');
+                                                            $('.estado-pago-presupuesto-hora')
+                                                                .toggleClass('alert-success', presupuestoPagado)
+                                                                .toggleClass('alert-warning', !presupuestoPagado)
+                                                                .attr('data-id-presupuesto', pagoPresupuesto.id)
+                                                                .attr('data-saldo-presupuesto', pagoPresupuesto.saldo)
+                                                                .attr('data-pagado-presupuesto', presupuestoPagado ? '1' : '0')
+                                                                .html(presupuestoPagado
+                                                                    ? `<strong>Presupuesto N° ${pagoPresupuesto.id} pagado.</strong> Saldo $0. Esta atención se recepcionará sin realizar un nuevo cobro.`
+                                                                    : `<strong>Presupuesto N° ${pagoPresupuesto.id} pendiente de pago.</strong> Abonado ${formato(pagoPresupuesto.abonado)} de ${formato(pagoPresupuesto.total)}. Saldo ${formato(pagoPresupuesto.saldo)}. Ingrese un abono para recepcionar e iniciar el tratamiento.`);
+                                                            $('#bono_valor_consulta').val(pagoPresupuesto.total);
+                                                            $('#bono_valor_abono_consulta').val(presupuestoPagado ? 0 : '');
+                                                            $('#bono_valor_saldo_consulta').val(pagoPresupuesto.saldo);
+                                                        }
+                                                        $('.bono_valor :input').prop('disabled', !!presupuestoPagado);
+                                                        $('.btn-recepcionar-pago span').text(presupuestoPagado ? 'Recepcionar sin cobro' : 'Recepcionar');
+                                                        $('.btn-generar-boleta').prop('disabled', !!presupuestoPagado)
+                                                            .attr('title', presupuestoPagado ? 'El presupuesto ya fue pagado' : '');
 
                                                         /** PESTAÑA DE RECIBIR PAGO */
                                                         $('#bono_paciente_rut').val(data.paciente.rut);
@@ -760,6 +821,18 @@
             let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
             let id_presupuesto = selectedOption.val();
 
+            $('#id_presupuesto').val(/^\d+$/.test(id_presupuesto) ? id_presupuesto : '');
+            $('#bono_valor_consulta').val(0);
+            mostrarDuracionAgendaDental(1);
+            if (typeof validar_campos_minimos === 'function') {
+                validar_campos_minimos();
+            }
+
+            // Primera consulta y urgencia no consultan ni alteran tratamientos.
+            if (!/^\d+$/.test(id_presupuesto)) {
+                return;
+            }
+
             $.ajax({
                 type:'post',
                 url: url,
@@ -774,7 +847,7 @@
                     let tratamientos = resp.tratamientos;
                     let todos = resp.todos;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
-                    var bloques = resp.bloques;
+                    var bloques = 0;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
@@ -785,7 +858,7 @@
 
                         $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} ${disabled}>
+                                <input class="form-check-input tratamiento-agenda-dental" type="checkbox" id="tratamiento${t.id}" data-id="${t.id}" data-tipo="pieza" data-estado-pago="${t.estado_pago || 'pendiente'}" data-bloques="${parseInt(t.cantidad_bloques) || 1}" onchange="recalcularBloquesAgendaDental()" ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
                         }
@@ -797,19 +870,75 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
+                                <input class="form-check-input tratamiento-agenda-dental" type="checkbox" id="tratamiento_gral${t.id}" data-id="${t.id}" data-tipo="grupo" data-estado-pago="${t.estado_pago || 'pendiente'}" data-bloques="${parseInt(t.cantidad_bloques) || 1}" onchange="recalcularBloquesAgendaDental()" ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
                         }
                     });
-                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
+                    $('#contenedor_tratamientos_presupuesto').append('<div id="mensaje_duracion_agenda_dental"></div>');
+                    mostrarDuracionAgendaDental(1);
+                    actualizarIndicadorPagoTratamientos();
                 },
                 error: function(error){
                     console.log(error);
                 }
             });
 
+        }
+
+        function recalcularBloquesAgendaDental() {
+            let bloques = 0;
+            $('.tratamiento-agenda-dental:checked').each(function() {
+                bloques += parseInt($(this).data('bloques')) || 1;
+            });
+            mostrarDuracionAgendaDental(Math.max(1, bloques));
+            actualizarIndicadorPagoTratamientos();
+        }
+
+        function actualizarIndicadorPagoTratamientos() {
+            const estados = $('.tratamiento-agenda-dental:checked').map(function() {
+                return String($(this).data('estado-pago') || 'pendiente').toLowerCase();
+            }).get();
+
+            let clase = 'bg-danger';
+            let texto = estados.length ? 'Pendiente de pago' : 'Seleccione un tratamiento';
+
+            if (estados.length && estados.every(estado => estado === 'ok' || estado === 'pagado')) {
+                clase = 'bg-success';
+                texto = 'Pagado';
+            } else if (estados.some(estado => estado === 'incompleto' || estado === 'parcial') ||
+                       (estados.some(estado => estado === 'ok' || estado === 'pagado') &&
+                        estados.some(estado => estado !== 'ok' && estado !== 'pagado'))) {
+                clase = 'bg-warning';
+                texto = 'Pago incompleto';
+            }
+
+            $('#estado_pago').html(`
+                <div id="indicador_estado_pago" class="circle ${clase}" title="${texto}" aria-label="${texto}"></div>
+                <small id="texto_estado_pago" class="d-block mt-1 text-muted">${texto}</small>
+            `);
+        }
+
+        function mostrarDuracionAgendaDental(bloques) {
+            bloques = Math.max(1, parseInt(bloques) || 1);
+            const minutos = bloques * 15;
+            const mensaje = `
+                <div class="alert alert-info py-2 px-3 mb-3" role="status">
+                    <i class="feather icon-clock mr-1"></i>
+                    <strong>Duración estimada:</strong>
+                    <span id="cantidad_bloques_atencion">${bloques}</span>
+                    <span id="texto_bloques_atencion">${bloques === 1 ? 'bloque' : 'bloques'}</span>
+                    de atención
+                    (<span id="minutos_bloques_atencion">${minutos}</span> minutos).
+                </div>`;
+
+            const contenedorMensaje = $('#mensaje_duracion_agenda_dental');
+            if (contenedorMensaje.length) {
+                contenedorMensaje.html(mensaje);
+            } else {
+                $('#contenedor_tratamientos_presupuesto').html(mensaje);
+            }
         }
 
         function handleCheckboxClick(id, isChecked, tipo = null) {
@@ -819,7 +948,7 @@
             $.ajax({
                 url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
                 method: 'POST',
-                data: { id: id, checked: isChecked,tipo: tipo, _token: CSRF_TOKEN },
+                data: { id: id, checked: isChecked, tipo: tipo, origen: 'agenda', _token: CSRF_TOKEN },
                 success: function(response) {
                     console.log('Servidor respondió:', response);
                     let bloques_actualizados = response.bloques;

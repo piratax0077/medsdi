@@ -1,9 +1,9 @@
-<div id="modal_insumos_urgencias" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_insumos_urgencias" aria-hidden="true">
+<div id="modal_insumos_urgencias" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="insumosUrgenciaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="insumosModalLabel">Insumos</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+            <div><h5 class="modal-title" id="insumosUrgenciaModalLabel">Agregar insumo de urgencia</h5><small>El insumo se incluirá automáticamente en el presupuesto de esta atención.</small></div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">&times;</button>
           </div>
           <div class="modal-body">
 
@@ -11,13 +11,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Profesional</label>
-                            <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
+                            <input type="text" class="form-control form-control-sm bg-light" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Paciente</label>
-                            <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
+                            <input type="text" class="form-control form-control-sm bg-light" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}" readonly>
                         </div>
                     </div>
                     <div class="col-md-2" id="tipo_insumo_select">
@@ -143,7 +143,7 @@
                     <div class="col-md-2">
                     <div class="form-group">
                         <label for="" class="floating-label-activo-sm">Total</label>
-                        <input type="text" name="total_urg" id="total_urg" class="form-control form-control-sm">
+                        <input type="text" name="total_urg" id="total_urg" class="form-control form-control-sm bg-light" readonly>
                     </div>
                 </div>
                     <div class="col-12 d-flex align-items-center">
@@ -151,8 +151,8 @@
                             <label for="" class="floating-label-activo-sm">Observaciones</label>
                             <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto_urg" id="insumos_obs_tto_urg" cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
                         </div>
-                        <button type="button" class="btn btn-icon btn-primary ml-2" onclick="guardar_insumo_urgencias()">
-                            <i class="feather icon-shopping-cart"></i>
+                        <button type="button" class="btn btn-info ml-2" onclick="guardar_insumo_urgencias()">
+                            <i class="feather icon-shopping-cart mr-1"></i>Agregar al presupuesto
                         </button>
                     </div>
 

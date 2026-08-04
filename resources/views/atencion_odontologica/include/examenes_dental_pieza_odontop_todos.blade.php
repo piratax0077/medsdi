@@ -50,11 +50,11 @@
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Intensidad</label>
                             <select name="intensidad_odontop1" id="intensidad_odontop1" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intensidad_odontop1','div_intensidad_odontop1','obs_intensidad_odontop1',4);">
-                                <option value="1" @if($examen->intensidad == 1) selected @endif>Leve</option>
-                                <option value="2" @if($examen->intensidad == 2) selected @endif>Moderada</option>
-                                <option value="3" @if($examen->intensidad == 3) selected @endif>Severa</option>
-                                <option value="4" @if($examen->intensidad == 4) selected @endif>Intensa</option>
-                                <option value="5" @if($examen->intensidad == 5) selected @endif>Otro (Describir)</option>
+                                <option value="1" @if($examen->intensidad_dolor == 1) selected @endif>Leve</option>
+                                <option value="2" @if($examen->intensidad_dolor == 2) selected @endif>Moderada</option>
+                                <option value="3" @if($examen->intensidad_dolor == 3) selected @endif>Severa</option>
+                                <option value="4" @if($examen->intensidad_dolor == 4) selected @endif>Intensa</option>
+                                <option value="5" @if($examen->intensidad_dolor == 5) selected @endif>Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_intensidad_odontop1" style="display:none;">

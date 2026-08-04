@@ -112,16 +112,16 @@
                                                                             title="Historia" data-content="cargar historia del diente">Ver
                                                                             historia</button></td>
                                                                     <td class="px-1 py-1">
-                                                                        <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_5"
+                                                                        <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_5" tabindex="-1" aria-readonly="true"
                                                                             name="diagnostico_{{ $loop->index + 1 }}_5">
-                                                                            <option value="0">Seleccione</option>
+                                                                            <option value="0">Sin diagnóstico asociado</option>
                                                                             @foreach($diagnosticos as $diagnostico)
-                                                                                <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                             @endforeach
                                                                         </select>
                                                                     </td>
                                                                     <td class="px-2 py-2">
-                                                                        <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_5" />
+                                                                        <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_5" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly title="El tratamiento proviene del plan y no se modifica aquí" />
 
                                                                         <input type="hidden" name="odontograma_{{ $loop->index + 1 }}_5" id="odontograma_{{ $loop->index + 1 }}_5" value="{{ $loop->index }}">
                                                                         <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_5" id="caraM_check_{{ $loop->index + 1 }}_5" value="0">
@@ -130,7 +130,7 @@
                                                                         <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_5" id="caraV_check_{{ $loop->index + 1 }}_5" value="0">
                                                                         <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_5" id="caraP_check_{{ $loop->index + 1 }}_5" value="0">
                                                                         <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }})">
-                                                                            Registrar
+                                                                            Guardar caras
                                                                         </button>
                                                                     </td>
                                                                 </tr>
@@ -236,16 +236,16 @@
                                                                         title="Historia" data-content="cargar historia del diente">Ver
                                                                         historia</button></td>
                                                                 <td class="px-1 py-1">
-                                                                    <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1  }}_6"
+                                                                    <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1  }}_6" tabindex="-1" aria-readonly="true"
                                                                         name="diagnostico_{{ $loop->index + 1  }}_6">
-                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="0">Sin diagnóstico asociado</option>
                                                                         @foreach($diagnosticos as $diagnostico)
-                                                                            <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                            <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td class="px-1 py-1">
-                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1  }}_6" id="tratamiento_{{ $loop->index + 1  }}_6" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1  }}_6" id="tratamiento_{{ $loop->index + 1  }}_6" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly title="El tratamiento proviene del plan y no se modifica aquí" />
 
                                                                     <input type="hidden" name="odontograma{{ $loop->index + 1 }}_6" id="odontograma{{ $loop->index + 1 }}_6" value="1">
                                                                     <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_6" id="caraM_check_{{ $loop->index + 1 }}_6" value="0">
@@ -254,7 +254,7 @@
                                                                     <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_6" id="caraV_check_{{ $loop->index + 1 }}_6" value="0">
                                                                     <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_6" id="caraP_check_{{ $loop->index + 1 }}_6" value="0">
                                                                     <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }})">
-                                                                        Registrar
+                                                                        Guardar caras
                                                                     </button>
                                                                 </td>
                                                             </tr>
@@ -360,16 +360,16 @@
                                                                         title="Historia" data-content="cargar historia del diente">Ver
                                                                         historia</button></td>
                                                                 <td class="px-1 py-1">
-                                                                    <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_7"
+                                                                    <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_7" tabindex="-1" aria-readonly="true"
                                                                         name="diagnostico_{{ $loop->index + 1 }}_7">
-                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="0">Sin diagnóstico asociado</option>
                                                                         @foreach($diagnosticos as $diagnostico)
-                                                                            <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                            <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td class="px-1 py-1">
-                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1 }}_7" id="tratamiento_{{ $loop->index + 1 }}_7" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1 }}_7" id="tratamiento_{{ $loop->index + 1 }}_7" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly title="El tratamiento proviene del plan y no se modifica aquí" />
 
                                                                     <input type="hidden" name="odontograma{{ $loop->index + 1 }}_7" id="odontograma{{ $loop->index + 1 }}_7" value="1">
                                                                     <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_7" id="caraM_check_{{ $loop->index + 1 }}_7" value="0">
@@ -378,7 +378,7 @@
                                                                     <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_7" id="caraV_check_{{ $loop->index + 1 }}_7" value="0">
                                                                     <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_7" id="caraP_check_{{ $loop->index + 1 }}_7" value="0">
                                                                     <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_septimo_cuadrante({{ $loop->index + 1 }})">
-                                                                        Registrar
+                                                                        Guardar caras
                                                                     </button>
                                                                 </td>
                                                             </tr>
@@ -484,16 +484,16 @@
                                                                         title="Historia" data-content="cargar historia del diente">Ver
                                                                         historia</button></td>
                                                                 <td class="px-1 py-1">
-                                                                    <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_8"
+                                                                    <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_8" tabindex="-1" aria-readonly="true"
                                                                         name="diagnostico_{{ $loop->index + 1 }}_8">
-                                                                        <option value="0">Seleccione</option>
+                                                                        <option value="0">Sin diagnóstico asociado</option>
                                                                         @foreach($diagnosticos as $diagnostico)
-                                                                            <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                            <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
                                                                 <td class="px-1 py-1">
-                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1 }}_8" id="tratamiento_{{ $loop->index + 1 }}_8" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                    <input type="text" name="tratamiento_{{ $loop->index + 1 }}_8" id="tratamiento_{{ $loop->index + 1 }}_8" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly title="El tratamiento proviene del plan y no se modifica aquí" />
 
                                                                     <input type="hidden" name="odontograma{{ $loop->index + 1 }}_8" id="odontograma{{ $loop->index + 1 }}_8" value="1">
                                                                     <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_8" id="caraM_check_{{ $loop->index + 1 }}_8" value="0">
@@ -502,7 +502,7 @@
                                                                     <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_8" id="caraV_check_{{ $loop->index + 1 }}_8" value="0">
                                                                     <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_8" id="caraP_check_{{ $loop->index + 1 }}_8" value="0">
                                                                     <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_octavo_cuadrante({{ $loop->index + 1 }})">
-                                                                        Registrar
+                                                                        Guardar caras
                                                                     </button>
                                                                 </td>
                                                             </tr>

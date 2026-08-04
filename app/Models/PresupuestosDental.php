@@ -9,4 +9,9 @@ class PresupuestosDental extends Model
 {
     use HasFactory;
     protected $table = 'presupuestos_dental';
+
+    protected $casts = [
+        'pago_completado' => 'boolean',
+        'fecha_pago_completo' => 'datetime',
+    ];
 }

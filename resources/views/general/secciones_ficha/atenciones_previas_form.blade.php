@@ -33,7 +33,7 @@
                                                         <th>Plan</th>
                                                         <th>Evolución</th>
                                                         @else
-                                                        <th>Diagnóstico</th>
+                                                        <th>{{ (int) $profesional->id_especialidad === 2 ? 'Resumen dental' : 'Diagnóstico' }}</th>
                                                         <th>Ficha clínica</th>
                                                         @if($profesional->id_tipo_especialidad != 8 && $profesional->id_especialidad != 16 && $profesional->id_sub_tipo_especialidad != 121)
                                                         <th>Ev. Especialidad</th>
@@ -112,7 +112,26 @@
                                                                     @endif
                                                                 </td>
                                                                 @else
-                                                                <td>{{ $f->hipotesis_diagnostico }}</td>
+                                                                <td>
+                                                                    @if((int) $profesional->id_especialidad === 2)
+                                                                        @if(!empty($f->historial_dental_presupuesto_id))
+                                                                            <div><strong>Presupuesto N° {{ $f->historial_dental_presupuesto_id }}</strong></div>
+                                                                            <span class="badge {{ $f->historial_dental_pago === 'Pagado' ? 'badge-success' : 'badge-warning' }}">
+                                                                                {{ $f->historial_dental_pago }}
+                                                                            </span>
+                                                                            <span class="badge {{ $f->historial_dental_estado_clinico === 'Finalizado' ? 'badge-success' : ($f->historial_dental_estado_clinico === 'En proceso' ? 'badge-primary' : 'badge-warning') }}">
+                                                                                Clínico: {{ $f->historial_dental_estado_clinico }}
+                                                                            </span>
+                                                                            <small class="d-block mt-1 text-muted">
+                                                                                {{ $f->historial_dental_piezas_finalizadas }} de {{ $f->historial_dental_piezas }} piezas finalizadas
+                                                                            </small>
+                                                                        @else
+                                                                            <span class="text-muted">Sin presupuesto dental asociado</span>
+                                                                        @endif
+                                                                    @else
+                                                                        {{ $f->hipotesis_diagnostico }}
+                                                                    @endif
+                                                                </td>
 
                                                                 <td>
                                                                     <button type="button"

@@ -3234,6 +3234,81 @@ class EscritorioProfesional extends Controller
 
         $paciente->presupuestos = $presupuestos_dentales;
 
+        $pagoPresupuesto = null;
+        $detalleDental = null;
+        if (!empty($hora_medica->id_presupuesto)) {
+            $presupuestoHora = PresupuestosDental::find($hora_medica->id_presupuesto);
+            if ($presupuestoHora) {
+                $totalPresupuesto = (int) ($presupuestoHora->valor_total ?? 0);
+                $totalAbonado = (int) PagosPresupuestoDental::where('id_presupuesto', $presupuestoHora->id)->sum('total');
+                $pagoCompletado = (bool) $presupuestoHora->pago_completado || ($totalPresupuesto > 0 && $totalAbonado >= $totalPresupuesto);
+                $pagoPresupuesto = [
+                    'id' => $presupuestoHora->id,
+                    'total' => $totalPresupuesto,
+                    'abonado' => $totalAbonado,
+                    'saldo' => max(0, $totalPresupuesto - $totalAbonado),
+                    'pagado' => $pagoCompletado,
+                ];
+
+                $prestacionesAgendadas = [];
+                foreach (($hora_medica->tratamientos_presupuesto ?? []) as $seleccion) {
+                    $tipo = $seleccion['tipo'] ?? null;
+                    $id = (int) ($seleccion['id'] ?? 0);
+
+                    if ($tipo === 'pieza') {
+                        $pieza = OdontogramaPaciente::find($id);
+                        if ($pieza && (int) $pieza->id_presupuesto === (int) $presupuestoHora->id) {
+                            $estadosPieza = [
+                                0 => 'Pendiente',
+                                1 => 'Finalizada',
+                                2 => 'En proceso',
+                                3 => 'Cancelada',
+                            ];
+                            $prestacionesAgendadas[] = [
+                                'tipo' => 'Pieza',
+                                'nombre' => 'Pieza '.$pieza->pieza,
+                                'tratamiento' => $pieza->tratamiento ?: 'Tratamiento dental',
+                                'estado' => isset($estadosPieza[(int) $pieza->estado])
+                                    ? $estadosPieza[(int) $pieza->estado]
+                                    : 'Pendiente',
+                            ];
+                        }
+                    } elseif ($tipo === 'grupo') {
+                        $grupo = ExamenesBocaGeneral::where('id', $id)
+                            ->where('id_paciente', $hora_medica->id_paciente)
+                            ->where('id_profesional', $hora_medica->id_profesional)
+                            ->first();
+                        if ($grupo) {
+                            $prestacionesAgendadas[] = [
+                                'tipo' => 'Grupo',
+                                'nombre' => $grupo->grupo ?: 'Grupo de piezas',
+                                'tratamiento' => $grupo->diagnostico_tratamiento ?: 'Tratamiento dental',
+                                'estado' => $grupo->atendido ? 'Finalizada' : 'Pendiente',
+                            ];
+                        }
+                    }
+                }
+
+                $detalleDental = [
+                    'presupuesto' => $presupuestoHora->id,
+                    'motivo' => $hora_medica->alias_examen ?: 'Tratamiento dental',
+                    'prestaciones' => $prestacionesAgendadas,
+                    'pago' => $pagoCompletado ? 'Pagado' : ($totalAbonado > 0 ? 'Pago parcial' : 'Pendiente de pago'),
+                    'abonado' => $totalAbonado,
+                    'saldo' => max(0, $totalPresupuesto - $totalAbonado),
+                ];
+            }
+        } elseif ($hora_medica->tipo_hora_medica === 'D') {
+            $detalleDental = [
+                'presupuesto' => null,
+                'motivo' => $hora_medica->alias_examen ?: 'Consulta dental',
+                'prestaciones' => [],
+                'pago' => null,
+                'abonado' => 0,
+                'saldo' => 0,
+            ];
+        }
+
         $edad = (\Carbon\Carbon::parse($paciente->fecha_nac)->age);
 
         $responsable = '';
@@ -3292,7 +3367,9 @@ class EscritorioProfesional extends Controller
             'responsable' => $responsable,
             'representante_info' => $representante_info,
             'procedimiento' => $procedimiento,
-            'voucher' => $voucher
+            'voucher' => $voucher,
+            'pago_presupuesto' => $pagoPresupuesto,
+            'detalle_dental' => $detalleDental,
         );
     }
 
@@ -6273,7 +6350,7 @@ return $ficha;
             ->join('diagnosticos_dental','odontogramas_pacientes.diagnostico','diagnosticos_dental.id')
             ->where('odontogramas_pacientes.id',$req->id)
             ->first();
-            if(!isset($req->origen) && !$req->origen == 'agenda'){
+            if($req->origen !== 'agenda'){
                 if($req->checked == 'true'){
                     $pieza->atendido = 1;
                     $pieza->save();
@@ -6285,9 +6362,9 @@ return $ficha;
                 }
             }
 
-            if($req->checked == 'true'){
+            if($req->origen === 'agenda' && $req->checked == 'true'){
                 return ['msj' => 'Pieza '.$pieza->pieza.' agendada con éxito', 'bloques' => $pieza->cantidad_bloques,'atendido' => 1];
-            }else{
+            }else if($req->origen === 'agenda'){
                 return ['msj' => 'Pieza '.$pieza->pieza.' desagendada con éxito', 'bloques' => $pieza->cantidad_bloques,'atendido' => 0];
             }
 
@@ -6297,6 +6374,13 @@ return $ficha;
                                     ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
                                     ->where('examenes_boca_general.id',$req->id)
                                     ->first();
+            if($req->origen === 'agenda') {
+                return [
+                    'msj' => $req->checked == 'true' ? 'Tratamiento agendado con éxito' : 'Tratamiento desagendado con éxito',
+                    'bloques' => $examen_boca_general->cantidad_bloques,
+                    'atendido' => $req->checked == 'true' ? 1 : 0,
+                ];
+            }
             if($req->checked == 'true'){
                 $examen_boca_general->atendido = 1;
                 $examen_boca_general->save();
@@ -7100,7 +7184,93 @@ return $ficha;
                 return ['mensaje' => 'OK', 'v' => $v];
             }
             if($tipo_examen == 'odontop'){
-                $v = view('atencion_odontologica.include.pieza_dental_examen_pieza_odontop',['counter' => $idCounter, 'tipo_examen' => $tipo_examen])->render();
+                $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+                $piezasProgramadas = [];
+                $tratamientosPresupuesto = collect();
+                $programacionVinculada = false;
+                if ($req->id_hora_medica) {
+                    $hora = HoraMedica::where('id', $req->id_hora_medica)
+                        ->where('id_paciente', $req->id_paciente)
+                        ->where('id_profesional', optional($profesional)->id)
+                        ->first();
+                    $programacionVinculada = (bool) optional($hora)->id_presupuesto;
+                    if ($programacionVinculada) {
+                        // Durante la atención se puede trabajar cualquier pieza pendiente del
+                        // presupuesto, aunque no haya sido la elegida originalmente al agendar.
+                        $tratamientosPresupuesto = OdontogramaPaciente::where('id_presupuesto', $hora->id_presupuesto)
+                            ->where('id_paciente', $req->id_paciente)
+                            ->where('id_profesional', $profesional->id)
+                            ->orderBy('pieza')
+                            ->get(['id', 'pieza', 'tratamiento', 'estado'])
+                            ->sortBy(fn ($tratamiento) => (int) $tratamiento->estado === 1 ? 1 : 0)
+                            ->values();
+                        $piezasProgramadas = $tratamientosPresupuesto
+                            ->pluck('pieza')->map(fn ($pieza) => (string) $pieza)->unique()->values()->all();
+                    }
+                }
+                if ($programacionVinculada && empty($piezasProgramadas)) {
+                    return [
+                        'mensaje' => 'SIN_PIEZAS_PENDIENTES',
+                        'detalle' => 'El presupuesto asociado a esta hora no contiene tratamientos por pieza.',
+                    ];
+                }
+                $historialPiezas = [];
+                if (!empty($piezasProgramadas)) {
+                    $etiquetasIntensidad = [1 => 'Leve', 2 => 'Moderada', 3 => 'Severa', 4 => 'Intensa', 5 => 'Otro'];
+                    $etiquetasModo = [1 => 'Pulsátil', 2 => 'Permanente', 3 => 'Otro'];
+                    $etiquetasLocalizacion = [1 => 'Localizado', 2 => 'Referido', 3 => 'Otro'];
+                    $etiquetasProvocacion = [1 => 'Frío', 2 => 'Calor', 3 => 'Actividad', 4 => 'Masticación', 5 => 'Otro'];
+
+                    $examenesPorPieza = ExamenesDentalPieza::where('id_paciente', $req->id_paciente)
+                        ->where('id_profesional', $profesional->id)
+                        ->where('tipo_examen', 3)
+                        ->whereIn('numero_pieza', $piezasProgramadas)
+                        ->orderByDesc('fecha_examen')
+                        ->orderByDesc('id')
+                        ->get()
+                        ->groupBy(fn ($examen) => (string) $examen->numero_pieza);
+
+                    foreach ($examenesPorPieza as $numeroPieza => $registros) {
+                        $ultimo = $registros->first();
+                        $resumen = $registros->take(10)->map(function ($examen) use ($etiquetasIntensidad, $etiquetasModo, $etiquetasLocalizacion, $etiquetasProvocacion) {
+                            $fecha = $examen->fecha_examen
+                                ? Carbon::parse($examen->fecha_examen)->format('d-m-Y')
+                                : optional($examen->created_at)->format('d-m-Y H:i');
+                            $datos = array_filter([
+                                'Zona de dolor: '.$examen->zona_dolor,
+                                'Intensidad: '.($etiquetasIntensidad[(int) $examen->intensidad_dolor] ?? $examen->intensidad_dolor),
+                                'Modo: '.($etiquetasModo[(int) $examen->modo_dolor] ?? $examen->modo_dolor),
+                                'Localización: '.($etiquetasLocalizacion[(int) $examen->localizacion] ?? $examen->localizacion),
+                                'Provocación: '.($etiquetasProvocacion[(int) $examen->provocacion_dolor] ?? $examen->provocacion_dolor),
+                                $examen->resp_calor ? 'Respuesta al calor: '.$examen->resp_calor : null,
+                                $examen->resp_frio ? 'Respuesta al frío: '.$examen->resp_frio : null,
+                                $examen->electrico ? 'Eléctrico: '.$examen->electrico : null,
+                                $examen->percusion ? 'Percusión: '.$examen->percusion : null,
+                                $examen->exploracion ? 'Exploración: '.$examen->exploracion : null,
+                                $examen->cavitaria ? 'Cavitaria: '.$examen->cavitaria : null,
+                                $examen->observaciones ? 'Observaciones: '.$examen->observaciones : null,
+                            ]);
+
+                            return trim(($fecha ? $fecha.' — ' : '').implode('; ', $datos));
+                        })->filter()->implode("\n");
+
+                        $historialPiezas[$numeroPieza] = [
+                            'ultimo' => $ultimo->only([
+                                'zona_dolor', 'intensidad_dolor', 'modo_dolor', 'localizacion',
+                                'provocacion_dolor', 'resp_calor', 'resp_frio', 'electrico',
+                                'percusion', 'exploracion', 'cavitaria', 'observaciones',
+                            ]),
+                            'resumen' => $resumen,
+                        ];
+                    }
+                }
+                $v = view('atencion_odontologica.include.pieza_dental_examen_pieza_odontop',[
+                    'counter' => $idCounter,
+                    'tipo_examen' => $tipo_examen,
+                    'piezasProgramadas' => $piezasProgramadas,
+                    'tratamientosPresupuesto' => $tratamientosPresupuesto,
+                    'historialPiezas' => $historialPiezas,
+                ])->render();
                 return ['mensaje' => 'OK', 'v' => $v];
             }
 
@@ -7128,6 +7298,7 @@ return $ficha;
     public function guardar_pieza_dental_examen_pieza_period(Request $req){
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
         $examen = new ExamenesDentalPeriodoncia;
         $examen->id_paciente = $req->id_paciente;
         $examen->id_lugar_atencion = $req->id_lugar_atencion;
@@ -7443,10 +7614,53 @@ return $ficha;
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
 
+        $tratamientoProgramado = null;
+        $piezasPresupuestoActual = null;
+        if ($req->tipo_examen === 'odontop' && $req->id_hora_medica) {
+            $hora = HoraMedica::where('id', $req->id_hora_medica)
+                ->where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->first();
+
+            if (!$hora || !$hora->id_presupuesto) {
+                return response()->json([
+                    'mensaje' => 'ERROR',
+                    'error' => 'La hora actual no tiene un presupuesto dental asociado.',
+                ], 422);
+            }
+
+            $piezasPresupuestoActual = OdontogramaPaciente::where('id_presupuesto', $hora->id_presupuesto)
+                ->where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->pluck('pieza')
+                ->map(function ($pieza) {
+                    return (string) $pieza;
+                })
+                ->unique()
+                ->values()
+                ->all();
+
+            $tratamientoProgramado = OdontogramaPaciente::where('id_presupuesto', $hora->id_presupuesto)
+                ->where('id_paciente', $req->id_paciente)
+                ->where('id_profesional', $profesional->id)
+                ->where('pieza', $req->numero_pieza)
+                ->whereIn('estado', [0, 2, 3])
+                ->first();
+
+            if (!$tratamientoProgramado) {
+                return response()->json([
+                    'mensaje' => 'ERROR',
+                    'error' => 'La pieza seleccionada no pertenece al presupuesto de esta atención o ya fue finalizada.',
+                ], 422);
+            }
+        }
+
         $examen = new ExamenesDentalPieza;
         $examen->numero_pieza = $req->numero_pieza;
         $examen->zona_dolor = $req->zona_dolor;
-        $examen->historia_anterior = $req->historia_anterior;
+        // El historial visible se genera desde registros previos; no se persiste
+        // nuevamente para evitar crecimiento recursivo y desbordes de columna.
+        $examen->historia_anterior = mb_substr((string) ($req->historia_anterior ?? ''), 0, 255);
         $examen->intensidad_dolor = $req->intensidad;
         $examen->modo_dolor = $req->modo_dolor;
         $examen->localizacion = $req->localizacion;
@@ -7479,7 +7693,10 @@ return $ficha;
                 $v = view('atencion_odontologica.include.examenes_dental_pieza_endodoncia_todos',['examenes' => $examenes])->render();
 
             }else{
-                $examenes = $this->dameExamenesPiezaDentalPiezaOdontop($req->id_paciente, $profesional->id_tipo_especialidad);
+                $examenes = $this->dameExamenesPiezaDentalPiezaOdontop(
+                    $req->id_paciente,
+                    $piezasPresupuestoActual
+                );
                 $v = view('atencion_odontologica.include.examenes_dental_pieza_odontop_todos',['examenes' => $examenes])->render();
             }
 
@@ -7546,7 +7763,15 @@ return $ficha;
 
                     ])->render();
                 }
-            return ['mensaje' => 'OK','v' => $v,'examenes' => $examenes, 'tipo_examen' => $tipo_examen, 'vista_presupuestos' => $vista_presupuestos];
+            return [
+                'mensaje' => 'OK',
+                'v' => $v,
+                'examenes' => $examenes,
+                'tipo_examen' => $tipo_examen,
+                'vista_presupuestos' => $vista_presupuestos,
+                'id_tratamiento_programado' => optional($tratamientoProgramado)->id,
+                'estado_tratamiento_programado' => optional($tratamientoProgramado)->estado,
+            ];
         }else{
             return ['mensaje' => 'error'];
         }
@@ -7918,14 +8143,20 @@ return $ficha;
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaOdontop($id_paciente){
+    public function dameExamenesPiezaDentalPiezaOdontop($id_paciente, $piezasPresupuesto = null){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
+        $query = ExamenesDentalPieza::where('id_paciente',$id_paciente)
         ->where('id_profesional',$profesional->id)
-        ->where('tipo_examen',3)
-        // ->where('estado',1)
-        ->get();
-        return $examenes;
+        ->where('tipo_examen',3);
+
+        if (is_array($piezasPresupuesto)) {
+            if (empty($piezasPresupuesto)) {
+                return collect();
+            }
+            $query->whereIn('numero_pieza', $piezasPresupuesto);
+        }
+
+        return $query->get();
     }
 
     public function dameExamenesPiezaDentalPieza($id_paciente, $tipo_especialidad, $id_ficha_atencion){
@@ -10688,7 +10919,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         if($presupuesto_dental){
             // $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
 
-        if($profesional->tipo_especialidad == 16){
+        if($profesional->id_tipo_especialidad == 16){
             $tratamientos_piezas = OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
                 'tratamientos_implantologia.descripcion',
@@ -10698,7 +10929,11 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 ->leftjoin('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
                 ->leftjoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_presupuesto', $presupuesto_dental->id)
-                ->where('odontogramas_pacientes.estado', 0)
+                ->whereIn('odontogramas_pacientes.estado', [0, 2, 3])
+                ->where(function ($query) {
+                    $query->whereNull('odontogramas_pacientes.atendido')
+                        ->orWhere('odontogramas_pacientes.atendido', 0);
+                })
                 ->get();
         }else{
             $tratamientos_piezas = OdontogramaPaciente::select(
@@ -10710,12 +10945,24 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 ->leftjoin('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
                 ->leftjoin('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_presupuesto', $presupuesto_dental->id)
-                ->where('odontogramas_pacientes.estado', 0)
+                ->whereIn('odontogramas_pacientes.estado', [0, 2, 3])
+                ->where(function ($query) {
+                    $query->whereNull('odontogramas_pacientes.atendido')
+                        ->orWhere('odontogramas_pacientes.atendido', 0);
+                })
                 ->get();
         }
 
             $bloques = 0;
             $todos = $this->dameTratamientosPresupuesto($presupuesto_dental->id_paciente, $profesional->id);
+            if ($presupuesto_dental->pago_completado) {
+                $tratamientos_piezas->each(function ($tratamiento) {
+                    $tratamiento->estado_pago = 'ok';
+                });
+                $todos->each(function ($tratamiento) {
+                    $tratamiento->estado_pago = 'ok';
+                });
+            }
         }else{
             $tratamientos_piezas = [];
             $bloques = 1;
@@ -10740,6 +10987,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             ->where('examenes_boca_general.id_paciente', $id_paciente)
             ->where('examenes_boca_general.id_profesional', $id_profesional)
             ->where('examenes_boca_general.terminado', 1)
+            ->where(function ($query) {
+                $query->whereNull('examenes_boca_general.atendido')
+                    ->orWhere('examenes_boca_general.atendido', 0);
+            })
             ->get();
         }else{
             $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor','tratamientos_dental.descripcion')
@@ -10748,6 +10999,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             ->where('examenes_boca_general.id_paciente', $id_paciente)
             ->where('examenes_boca_general.id_profesional', $id_profesional)
             ->where('examenes_boca_general.terminado', 1)
+            ->where(function ($query) {
+                $query->whereNull('examenes_boca_general.atendido')
+                    ->orWhere('examenes_boca_general.atendido', 0);
+            })
             ->get();
         }
 
@@ -11457,6 +11712,24 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
+        // Una reserva asociada al flujo odontológico siempre se registra como
+        // dental. Esto evita que un id_tipo_agenda heredado de la vista general
+        // la guarde como consulta (C) aunque incluya presupuesto o motivo dental.
+        $motivoDental = $request->input('motivo_dental');
+        if (!empty($request->id_presupuesto)
+            || in_array($motivoDental, ['primera', 'urgencia', 'tratamiento'], true)) {
+            $request->merge(['tipo_hora_medica' => 'D']);
+        }
+
+        if ($request->tipo_hora_medica === 'D'
+            && !in_array($request->motivo_dental, ['primera', 'urgencia', 'tratamiento'], true)) {
+            return json_encode([
+                'estado' => 'error',
+                'id_profesional' => $profesional ? $profesional->id : null,
+                'msj' => 'Debe seleccionar el tipo de consulta dental.',
+            ]);
+        }
+
         // var_dump( static::tipoHorario($profesional->id, $request->fecha_consulta) );
         // die();
 
@@ -11589,8 +11862,71 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $tiempo_consulta = $totales;
         }
 
+        $id_presupuesto = null;
+        $tratamientosPresupuesto = [];
+        if ($request->tipo_hora_medica === 'D' && !empty($request->id_presupuesto)) {
+            $presupuesto = PresupuestosDental::where('id', $request->id_presupuesto)
+                ->where('id_paciente', $paciente->id)
+                ->where('id_profesional', $profesional->id)
+                ->where('estado', 1)
+                ->first();
+
+            if (!$presupuesto) {
+                return json_encode([
+                    'estado' => 'error',
+                    'id_profesional' => $profesional->id,
+                    'msj' => 'El presupuesto seleccionado no está activo o no pertenece al paciente.',
+                ]);
+            }
+            $id_presupuesto = $presupuesto->id;
+
+            $seleccionados = collect($request->input('tratamientos_presupuesto', []));
+            if ($seleccionados->isEmpty()) {
+                return json_encode([
+                    'estado' => 'error',
+                    'id_profesional' => $profesional->id,
+                    'msj' => 'Debe seleccionar al menos una pieza o prestación para esta atención.',
+                ]);
+            }
+
+            foreach ($seleccionados as $seleccion) {
+                $tipo = $seleccion['tipo'] ?? null;
+                $id = (int) ($seleccion['id'] ?? 0);
+                $valido = $tipo === 'pieza'
+                    ? OdontogramaPaciente::where('id', $id)->where('id_presupuesto', $presupuesto->id)->where('estado', 0)->exists()
+                    : ($tipo === 'grupo' && ExamenesBocaGeneral::where('id', $id)
+                        ->where('id_paciente', $presupuesto->id_paciente)
+                        ->where('id_profesional', $presupuesto->id_profesional)
+                        ->where('presupuesto', 1)
+                        ->where(function ($query) {
+                            $query->whereNull('atendido')->orWhere('atendido', 0);
+                        })
+                        ->exists());
+
+                if (!$valido) {
+                    return json_encode([
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'Una de las prestaciones seleccionadas ya no está disponible.',
+                    ]);
+                }
+                $tratamientosPresupuesto[] = ['tipo' => $tipo, 'id' => $id];
+            }
+        }
+
+        if ($request->tipo_hora_medica === 'D') {
+            if ($request->motivo_dental === 'urgencia') {
+                $texto_alias_examen = 'Urgencia Dental';
+            } elseif ($id_presupuesto) {
+                $texto_alias_examen = 'Tratamiento Dental';
+            } else {
+                $texto_alias_examen = 'Primera Consulta Dental';
+            }
+        }
+
         $hora_medica = new HoraMedica();
-        $hora_medica->id_presupuesto = $request->id_presupuesto ?? null;
+        $hora_medica->id_presupuesto = $id_presupuesto;
+        $hora_medica->tratamientos_presupuesto = $tratamientosPresupuesto ?: null;
         $hora_medica->id_paciente = $request->reserva_hora_id;
         $hora_medica->id_profesional = $profesional->id;
         $hora_medica->id_ficha_otros_prof =null;
@@ -11756,6 +12092,14 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $datos = array();
         $error = array();
         $valido = 1;
+
+        if ($request->tipo_hora_medica === 'D'
+            && !in_array($request->motivo_dental, ['primera', 'urgencia'], true)) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Debe seleccionar el tipo de consulta dental.',
+            ], 422);
+        }
 
         /** validacion de correo en paciente - solo si viene email */
         $temp_valid_email = 0;
@@ -12112,7 +12456,9 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                         $texto_alias_examen = 'Consulta';
                         break;
                     case 'D': // 2
-                        $texto_alias_examen = 'Consulta Dental';
+                        $texto_alias_examen = $request->motivo_dental === 'urgencia'
+                            ? 'Urgencia Dental'
+                            : 'Primera Consulta Dental';
                         break;
                     case 'T': // 3
                         $texto_alias_examen = 'Consulta Telemedicina';
@@ -12507,6 +12853,61 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $error = array();
         $valido = 1;
         $hora_medica = null;
+        $presupuestoHoraPendiente = null;
+
+        $horaPresupuesto = HoraMedica::find($request->id_referencia);
+        if ($horaPresupuesto && !empty($horaPresupuesto->id_presupuesto)) {
+            $presupuestoPagado = PresupuestosDental::where('id', $horaPresupuesto->id_presupuesto)
+                ->where('id_paciente', $horaPresupuesto->id_paciente)
+                ->where('id_profesional', $horaPresupuesto->id_profesional)
+                ->first();
+
+            $abonadoPresupuesto = $presupuestoPagado
+                ? (int) PagosPresupuestoDental::where('id_presupuesto', $presupuestoPagado->id)->sum('total')
+                : 0;
+            $totalPresupuesto = (int) ($presupuestoPagado->valor_total ?? 0);
+            $estaPagado = $presupuestoPagado && (
+                (bool) $presupuestoPagado->pago_completado ||
+                ($totalPresupuesto > 0 && $abonadoPresupuesto >= $totalPresupuesto)
+            );
+
+            if ($estaPagado) {
+                if (!$presupuestoPagado->pago_completado) {
+                    $presupuestoPagado->pago_completado = true;
+                    $presupuestoPagado->fecha_pago_completo = Carbon::now();
+                    $presupuestoPagado->save();
+                }
+                $horaPresupuesto->id_estado = 4;
+                $horaPresupuesto->save();
+
+                return [
+                    'estado' => 1,
+                    'pago_presupuesto' => true,
+                    'msj' => 'Paciente recepcionado sin nuevo cobro. El presupuesto ya estaba pagado.',
+                    'hora_medica' => $horaPresupuesto,
+                ];
+            }
+
+            if ($presupuestoPagado) {
+                $saldoPresupuesto = max(0, $totalPresupuesto - $abonadoPresupuesto);
+                $montoAbono = (int) $request->valor_abono;
+
+                if ($montoAbono <= 0) {
+                    return [
+                        'estado' => 0,
+                        'msj' => 'Debe registrar un abono mayor a $0 antes de recepcionar e iniciar el tratamiento.',
+                    ];
+                }
+                if ($montoAbono > $saldoPresupuesto) {
+                    return [
+                        'estado' => 0,
+                        'msj' => 'El abono supera el saldo pendiente del presupuesto.',
+                    ];
+                }
+
+                $presupuestoHoraPendiente = $presupuestoPagado;
+            }
+        }
 
         if( $request->id_clase_bono != 8 && empty($request->convenio))
         {
@@ -12865,10 +13266,11 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 {
                     // código específico para dentistas
                     // verificamos si tiene algun presupuesto dental
-                     $presupuestos_dentales = PresupuestosDental::where('id_paciente',$bono->id_paciente)->where('estado',1)->first();
+                     $presupuestos_dentales = $presupuestoHoraPendiente
+                        ?: PresupuestosDental::where('id_paciente',$bono->id_paciente)->where('estado',1)->first();
                      if($presupuestos_dentales){
                         $pago = new PagosPresupuestoDental();
-                        $pago->id_presupuesto = $request->id_presupuesto ? $request->id_presupuesto : 0;
+                        $pago->id_presupuesto = $presupuestos_dentales->id;
                         $pago->id_profesional = $profesional->id;
                         $pago->id_paciente = $bono->id_paciente;
                         $pago->id_ficha_atencion = $request->id_referencia;
@@ -12876,8 +13278,25 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                         $pago->fecha_pago = date('Y-m-d');
                         $pago->metodo_pago = 'Bono';
                         $pago->id_metodo_pago = 1; // Bono
-                        $pago->total = $request->valor_abono;
-                        $pago->save();
+                        $pago->total = (int) $request->valor_abono;
+                        // Los abonos recibidos desde agenda deben quedar disponibles
+                        // hasta que el profesional defina su distribución.
+                        $pago->asignado = false;
+                        $pago->fecha_asignacion = null;
+                        if ($pago->total > 0) {
+                            $pago->save();
+
+                            $totalAbonadoActualizado = (int) PagosPresupuestoDental::where(
+                                'id_presupuesto',
+                                $presupuestos_dentales->id
+                            )->sum('total');
+                            if ((int) $presupuestos_dentales->valor_total > 0
+                                && $totalAbonadoActualizado >= (int) $presupuestos_dentales->valor_total) {
+                                $presupuestos_dentales->pago_completado = true;
+                                $presupuestos_dentales->fecha_pago_completo = Carbon::now();
+                                $presupuestos_dentales->save();
+                            }
+                        }
                     }
 
                 }

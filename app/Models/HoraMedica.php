@@ -11,6 +11,10 @@ class HoraMedica extends Model
     use HasFactory;
     protected $table = 'horas_medicas';
 
+    protected $casts = [
+        'tratamientos_presupuesto' => 'array',
+    ];
+
 	 protected $fillable = [
         'id_paciente',
         'descripcion',  // Reemplaza con el nombre real del primer campo

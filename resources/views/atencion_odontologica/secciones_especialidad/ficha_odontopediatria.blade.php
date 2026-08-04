@@ -89,7 +89,7 @@
                                                                 <a class="nav-link-aten text-reset" id="ex_oral_od_ped-tab" data-toggle="tab" href="#ex_oral_od_ped" role="tab" aria-controls="ex_oral_od_ped" aria-selected="true">Examen Oral</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="endo_od_ped_pieza-tab" data-toggle="tab" href="#endo_od_ped_pieza" role="tab" aria-controls="endo_od_ped_pieza" aria-selected="true">Examen Por Pieza</a>
+                                                                <a class="nav-link-aten text-reset" id="endo_od_ped_pieza-tab" data-toggle="tab" href="#endo_od_ped_pieza" role="tab" aria-controls="endo_od_ped_pieza" aria-selected="true" onclick="mostrar_pieza_dental_examen_odontop_(1)">Examen Por Pieza</a>
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="plan_od_ped-tab" data-toggle="tab" href="#plan_od_ped" role="tab" aria-controls="plan_od_ped" aria-selected="true" onclick="$('#table_piezas_presupuesto_odped').DataTable(); $('#table_insumos_odped').DataTable();">Planificación de tratamiento</a>
@@ -1209,7 +1209,7 @@
                                                                                                                 @elseif($o->estado == 1)
                                                                                                                     <span class="text-uppercase">Realizado</span>
                                                                                                                 @elseif($o->estado == 2)
-                                                                                                                    <span class="text-uppercase">Cancelado</span>
+                                                                                                                    <span class="text-uppercase">En proceso</span>
                                                                                                                 @elseif($o->estado == 3)
                                                                                                                     <span class="text-uppercase">Citado a Control</span>
                                                                                                                 @endif
@@ -2156,16 +2156,16 @@
                                                                                                                                     title="Historia" data-content="cargar historia del diente">Ver
                                                                                                                                     historia</button></td>
                                                                                                                             <td class="px-1 py-1">
-                                                                                                                                <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_5"
+                                                                                                                                <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_5" tabindex="-1" aria-readonly="true"
                                                                                                                                     name="diagnostico_{{ $loop->index + 1 }}_5">
-                                                                                                                                    <option value="0">Seleccione</option>
+                                                                                                                                    <option value="0">Sin diagnóstico asociado</option>
                                                                                                                                     @foreach($diagnosticos as $diagnostico)
-                                                                                                                                        <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                                                                        <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                                                                     @endforeach
                                                                                                                                 </select>
                                                                                                                             </td>
                                                                                                                             <td class="px-2 py-2">
-                                                                                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_5" />
+                                                                                                                                <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_5" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly />
 
                                                                                                                                 <input type="hidden" name="odontograma_{{ $loop->index + 1 }}_5" id="odontograma_{{ $loop->index + 1 }}_5" value="{{ $loop->index }}">
                                                                                                                                 <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_5" id="caraM_check_{{ $loop->index + 1 }}_5" value="0">
@@ -2174,7 +2174,7 @@
                                                                                                                                 <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_5" id="caraV_check_{{ $loop->index + 1 }}_5" value="0">
                                                                                                                                 <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_5" id="caraP_check_{{ $loop->index + 1 }}_5" value="0">
                                                                                                                                 <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_quinto_cuadrante({{ $loop->index + 1 }})">
-                                                                                                                                    Registrar
+                                                                                                                                    Guardar caras
                                                                                                                                 </button>
                                                                                                                             </td>
                                                                                                                         </tr>
@@ -2280,16 +2280,16 @@
                                                                                                                                 title="Historia" data-content="cargar historia del diente">Ver
                                                                                                                                 historia</button></td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1  }}_6"
+                                                                                                                            <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1  }}_6" tabindex="-1" aria-readonly="true"
                                                                                                                                 name="diagnostico_{{ $loop->index + 1  }}_6">
-                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="0">Sin diagnóstico asociado</option>
                                                                                                                                 @foreach($diagnosticos as $diagnostico)
-                                                                                                                                    <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                                                                    <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                                                                 @endforeach
                                                                                                                             </select>
                                                                                                                         </td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1  }}_6" id="tratamiento_{{ $loop->index + 1  }}_6" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1  }}_6" id="tratamiento_{{ $loop->index + 1  }}_6" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly />
 
                                                                                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_6" id="odontograma{{ $loop->index + 1 }}_6" value="1">
                                                                                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_6" id="caraM_check_{{ $loop->index + 1 }}_6" value="0">
@@ -2298,7 +2298,7 @@
                                                                                                                             <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_6" id="caraV_check_{{ $loop->index + 1 }}_6" value="0">
                                                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_6" id="caraP_check_{{ $loop->index + 1 }}_6" value="0">
                                                                                                                             <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_sexto_cuadrante({{ $loop->index + 1 }})">
-                                                                                                                                Registrar
+                                                                                                                                Guardar caras
                                                                                                                             </button>
                                                                                                                         </td>
                                                                                                                     </tr>
@@ -2404,16 +2404,16 @@
                                                                                                                                 title="Historia" data-content="cargar historia del diente">Ver
                                                                                                                                 historia</button></td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_7"
+                                                                                                                            <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_7" tabindex="-1" aria-readonly="true"
                                                                                                                                 name="diagnostico_{{ $loop->index + 1 }}_7">
-                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="0">Sin diagnóstico asociado</option>
                                                                                                                                 @foreach($diagnosticos as $diagnostico)
-                                                                                                                                    <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                                                                    <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                                                                 @endforeach
                                                                                                                             </select>
                                                                                                                         </td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1 }}_7" id="tratamiento_{{ $loop->index + 1 }}_7" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1 }}_7" id="tratamiento_{{ $loop->index + 1 }}_7" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly />
 
                                                                                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_7" id="odontograma{{ $loop->index + 1 }}_7" value="1">
                                                                                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_7" id="caraM_check_{{ $loop->index + 1 }}_7" value="0">
@@ -2422,7 +2422,7 @@
                                                                                                                             <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_7" id="caraV_check_{{ $loop->index + 1 }}_7" value="0">
                                                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_7" id="caraP_check_{{ $loop->index + 1 }}_7" value="0">
                                                                                                                             <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_septimo_cuadrante({{ $loop->index + 1 }})">
-                                                                                                                                Registrar
+                                                                                                                                Guardar caras
                                                                                                                             </button>
                                                                                                                         </td>
                                                                                                                     </tr>
@@ -2528,16 +2528,16 @@
                                                                                                                                 title="Historia" data-content="cargar historia del diente">Ver
                                                                                                                                 historia</button></td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_8"
+                                                                                                                            <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_8" tabindex="-1" aria-readonly="true"
                                                                                                                                 name="diagnostico_{{ $loop->index + 1 }}_8">
-                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="0">Sin diagnóstico asociado</option>
                                                                                                                                 @foreach($diagnosticos as $diagnostico)
-                                                                                                                                    <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                                                                    <option value="{{$diagnostico->id}}" {{ (string) ($pieza->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                                                                 @endforeach
                                                                                                                             </select>
                                                                                                                         </td>
                                                                                                                         <td class="px-1 py-1">
-                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1 }}_8" id="tratamiento_{{ $loop->index + 1 }}_8" class="form-control form-control-sm tratamiento-autocomplete" />
+                                                                                                                            <input type="text" name="tratamiento_{{ $loop->index + 1 }}_8" id="tratamiento_{{ $loop->index + 1 }}_8" class="form-control form-control-sm bg-light" value="{{ $pieza->tratamiento_plan ?? '' }}" readonly />
 
                                                                                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_8" id="odontograma{{ $loop->index + 1 }}_8" value="1">
                                                                                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_8" id="caraM_check_{{ $loop->index + 1 }}_8" value="0">
@@ -2546,7 +2546,7 @@
                                                                                                                             <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_8" id="caraV_check_{{ $loop->index + 1 }}_8" value="0">
                                                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_8" id="caraP_check_{{ $loop->index + 1 }}_8" value="0">
                                                                                                                             <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_octavo_cuadrante({{ $loop->index + 1 }})">
-                                                                                                                                Registrar
+                                                                                                                                Guardar caras
                                                                                                                             </button>
                                                                                                                         </td>
                                                                                                                     </tr>
@@ -2577,31 +2577,32 @@
                                     <div class="row">
                                         <div class="col-md-12 mt-3 mb-0">
                                             <h6 class="f-16 text-c-blue">Plan de tratamiento y presupuesto</h6>
-                                            <hr>
+                                            <p class="text-muted mb-2">Tratamientos asociados a cada pieza. Active o desactive su inclusión en el presupuesto, o seleccione registros para eliminarlos.</p>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="table-responsive">
-                                                <div class="table-responsive">
-                                                    <table class="table table-xs" id="table_odontograma">
+                                            <div class="card border-0 shadow-sm odontograma-plan-card">
+                                                <div class="card-body p-3">
+                                                    <div class="table-responsive">
+                                                    <table class="table table-sm table-hover mb-0" id="table_odontograma">
                                                         <thead>
                                                             <tr>
                                                                 <th>Fecha</th>
-                                                                <th>Prestación</th>
+                                                                <th>Tratamiento</th>
                                                                 <th>Caras</th>
                                                                 <th>Pieza</th>
                                                                 <th>Diagnóstico</th>
                                                                 <th>Valor</th>
                                                                 <th>Presupuesto</th>
-                                                                <th class="text-center">
-                                                                    Seleccionar
+                                                                <th class="text-center odontograma-acciones">
+                                                                    <span>Acciones</span>
                                                                     <button
                                                                         type="button"
                                                                         class="btn btn-outline-danger btn-sm ml-2"
                                                                         onclick="eliminar_seleccionados()"
                                                                         title="Eliminar tratamientos seleccionados">
-                                                                        <i class="fas fa-trash"></i>
+                                                                        <i class="fas fa-trash mr-1"></i> Eliminar
                                                                     </button>
                                                                 </th>
                                                             </tr>
@@ -2613,10 +2614,15 @@
                                     <tr>
                                         <td>{{ $odonto->fecha }}</td>
                                         <td>{{ $odonto->tratamiento }}</td>
-                                        <td>{{ $odonto->caras }}</td>
-                                        <td>{{ $odonto->pieza }}</td>
+                                        @php
+                                            $carasLectura = collect(explode('|', (string) $odonto->caras))
+                                                ->filter()
+                                                ->implode(', ');
+                                        @endphp
+                                        <td><span class="badge badge-light border caras-modo-lectura">{{ $carasLectura ?: 'Sin caras' }}</span></td>
+                                        <td><span class="badge badge-primary">{{ $odonto->pieza }}</span></td>
                                         <td>{{ $odonto->diagnostico }}</td>
-                                        <td>{{ number_format($odonto->valor,0,',','.') }}</td>
+                                        <td class="font-weight-bold">${{ number_format($odonto->valor,0,',','.') }}</td>
                                         {{-- <td>
                                             <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma({{ $odonto->id }})"><i class="feather icon-x"></i>Eliminar</button>
                                             @if($odonto->presupuesto == 0)
@@ -2658,10 +2664,78 @@
                                     @endif
                                                         </tbody>
                                                     </table>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                                    <style>
+                                        .plan-field-readonly {
+                                            pointer-events: none;
+                                            color: #495057;
+                                        }
+                                        .odontograma-plan-card {
+                                            border-radius: 10px;
+                                            overflow: hidden;
+                                        }
+                                        #table_odontograma thead th {
+                                            background: #eef3f8;
+                                            color: #24415f;
+                                            border-bottom: 2px solid #d9e3ec;
+                                            font-size: .75rem;
+                                            letter-spacing: .02em;
+                                            text-transform: uppercase;
+                                            vertical-align: middle;
+                                            white-space: nowrap;
+                                        }
+                                        .caras-modo-lectura {
+                                            min-width: 64px;
+                                            padding: .35rem .55rem;
+                                            color: #24415f;
+                                            font-size: .78rem;
+                                            letter-spacing: .08em;
+                                        }
+                                        #table_odontograma tbody td {
+                                            vertical-align: middle;
+                                            padding-top: .65rem;
+                                            padding-bottom: .65rem;
+                                        }
+                                        #table_odontograma tbody tr:hover {
+                                            background-color: #f7fbff;
+                                        }
+                                        #table_odontograma .custom-switch {
+                                            display: flex;
+                                            justify-content: center;
+                                            padding-left: 2.25rem;
+                                        }
+                                        .odontograma-acciones {
+                                            min-width: 145px;
+                                        }
+                                    </style>
+                                    <script>
+                                        function nombreEstadoTratamientoDental(estado) {
+                                            const estados = {
+                                                0: 'PENDIENTE',
+                                                1: 'FINALIZADO',
+                                                2: 'EN PROCESO',
+                                                3: 'CITADO A CONTROL'
+                                            };
+
+                                            return estados[parseInt(estado, 10)] || 'SIN ESTADO';
+                                        }
+
+                                        function formatearCarasLectura(caras) {
+                                            const carasValidas = ['M', 'O', 'D', 'V', 'P'];
+                                            const seleccionadas = String(caras || '')
+                                                .split('|')
+                                                .map(function(cara) { return cara.trim().toUpperCase(); })
+                                                .filter(function(cara, indice, lista) {
+                                                    return carasValidas.includes(cara) && lista.indexOf(cara) === indice;
+                                                });
+
+                                            return seleccionadas.length ? seleccionadas.join(', ') : 'Sin caras';
+                                        }
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -3427,7 +3501,7 @@
         if ($(this).hasClass('seleccionada')) {
             // Si ya está seleccionada, deseleccionarla
             $(this).removeClass('seleccionada');
-            const options = $('#paciente_piezas_dentales_ex_odped_urg').val().filter(item => item !== piezaNumero); // Filtra el elemento a eliminar
+            const options = ($('#paciente_piezas_dentales_ex_odped_urg').val() || []).filter(item => item !== piezaNumero); // Filtra el elemento a eliminar
             $('#paciente_piezas_dentales_ex_odped_urg').val(options).trigger('change');
         } else {
             // Si no está seleccionada, agregarla
@@ -3440,6 +3514,14 @@
 
             console.log(opcionesSeleccionadas);
             $('#paciente_piezas_dentales_ex_odped_urg').val(opcionesSeleccionadas).trigger('change');
+        }
+        $(this).attr('aria-pressed', $(this).hasClass('seleccionada') ? 'true' : 'false');
+    });
+
+    $('.pieza_odped_urg').on('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            $(this).trigger('click');
         }
     });
 
@@ -6637,7 +6719,7 @@
         function cargar_a_presupuesto_odped_g_confirmar(){
             console.log('cargando');
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_odped').val();
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_odped').val() || [];
             var ttoPiezas = $('#diag_presupuesto_pieza_g_odped').val();
             var diagnostico = $('#diagnostico_combo_g').val();
 
@@ -6732,7 +6814,7 @@
                             data.push([
                                 odonto.fecha,
                                 odonto.tratamiento,
-                                odonto.caras,
+                                formatearCarasLectura(odonto.caras),
                                 odonto.pieza,
                                 odonto.diagnostico,
                                 formatoMoneda(formatoMoneda(odonto.valor)),
@@ -6743,8 +6825,8 @@
 
                         // Agrega las nuevas filas
                         table_odp.rows.add(data).draw();
-                        $('#contenedor_examenes_grupos_dentales').empty();
-                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                        // Refrescar inmediatamente la sección visible de Caras y Cuadrantes.
+                        $('#contenedor_examenes_grupos_dentales_odontop').html(resp.vista_presupuestos);
 
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
@@ -7033,6 +7115,7 @@
         let data = {
             count: count,
             id_paciente: $('#id_paciente_fc').val(),
+            id_hora_medica: $('#hora_medica').val(),
             tipo_examen:'odontop',
             _token: CSRF_TOKEN
         }
@@ -7041,9 +7124,19 @@
             type:'post',
             url: url,
             data: data,
-            success: function(resp){
-                console.log(resp);
-                if(resp.mensaje == 'OK'){
+                success: function(resp){
+                    console.log(resp);
+                    if (resp.mensaje === 'SIN_PIEZAS_PENDIENTES') {
+                        $('#nueva_pieza_dental_odontop_examen').empty();
+                        swal({
+                            title: 'Sin piezas en el presupuesto',
+                            text: resp.detalle,
+                            icon: 'info',
+                            button: 'Aceptar'
+                        });
+                        return;
+                    }
+                    if(resp.mensaje == 'OK'){
                     $('#nueva_pieza_dental_odontop_examen').empty();
                     $('#nueva_pieza_dental_odontop_examen').append(resp.v);
 
@@ -7134,15 +7227,25 @@
                 success: function(resp) {
                     console.log(resp);
                     if(resp.mensaje == 'OK'){
+                        if (parseInt(estado) === 1) {
+                            $('#nueva_pieza_dental_odontop_examen').empty();
+                        }
                         swal({
-                            title: "Pieza guardada",
-                            text: "Pieza guardada correctamente",
+                            title: resp.presupuesto_clinicamente_finalizado
+                                ? "Presupuesto finalizado clínicamente"
+                                : (parseInt(estado) === 1 ? "Tratamiento finalizado" : "Estado actualizado"),
+                            text: resp.presupuesto_clinicamente_finalizado
+                                ? "Todas las piezas del presupuesto quedaron finalizadas. Ya no aparecerá como pendiente clínicamente."
+                                : (parseInt(estado) === 1
+                                ? "La pieza fue finalizada y se retiró de los tratamientos pendientes de esta atención."
+                                : "El estado de la pieza fue actualizado correctamente."),
                             icon: "success",
                             button: "Aceptar",
                         });
                     }
 
                     $('#modal_cambio_estado_tto').modal('hide');
+                    mostrar_pieza_dental_examen_odontop_(1);
 
                     let odontograma = resp.odontograma;
                     odontograma_global = resp.odontograma;
@@ -7319,11 +7422,7 @@
                                         var clase = 'bg-danger';
                                     }
 
-                                    if (odonto.estado == 0) {
-                                        var estado = 'PENDIENTE';
-                                    } else {
-                                        var estado = 'TERMINADO';
-                                    }
+                                    var estado = nombreEstadoTratamientoDental(odonto.estado);
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_piezas_odontograma.row.add([
                                         odonto.descripcion,
@@ -8079,6 +8178,7 @@
             pieza: pieza,
             cuadrante: cuadrante,
             posicion_pieza: posicion_pieza,
+            id_presupuesto: $('#id_presupuesto').val(),
             caraM: caraM,
             caraO: caraO,
             caraD: caraD,
@@ -8136,7 +8236,7 @@
                         data.push([
                             odonto.fecha,
                             odonto.tratamiento,
-                            odonto.caras,
+                            formatearCarasLectura(odonto.caras),
                             odonto.pieza,
                             odonto.diagnostico,
                             formatoMoneda(formatoMoneda(odonto.valor)),
@@ -8216,6 +8316,7 @@
             pieza: pieza,
             cuadrante: cuadrante,
             posicion_pieza: posicion_pieza,
+            id_presupuesto: $('#id_presupuesto').val(),
             caraM: caraM,
             caraO: caraO,
             caraD: caraD,
@@ -8272,7 +8373,7 @@
                         data.push([
                             odonto.fecha,
                             odonto.tratamiento,
-                            odonto.caras,
+                            formatearCarasLectura(odonto.caras),
                             odonto.pieza,
                             odonto.diagnostico,
                             formatoMoneda(formatoMoneda(odonto.valor)),
@@ -8349,6 +8450,7 @@
             pieza: pieza,
             cuadrante: cuadrante,
             posicion_pieza: posicion_pieza,
+            id_presupuesto: $('#id_presupuesto').val(),
             caraM: caraM,
             caraO: caraO,
             caraD: caraD,
@@ -8406,7 +8508,7 @@
                         data.push([
                             odonto.fecha,
                             odonto.tratamiento,
-                            odonto.caras,
+                            formatearCarasLectura(odonto.caras),
                             odonto.pieza,
                             odonto.diagnostico,
                             formatoMoneda(formatoMoneda(odonto.valor)),
@@ -8485,6 +8587,7 @@
             pieza: pieza,
             cuadrante: cuadrante,
             posicion_pieza: posicion_pieza,
+            id_presupuesto: $('#id_presupuesto').val(),
             caraM: caraM,
             caraO: caraO,
             caraD: caraD,
@@ -8542,7 +8645,7 @@
                         data.push([
                             odonto.fecha,
                             odonto.tratamiento,
-                            odonto.caras,
+                            formatearCarasLectura(odonto.caras),
                             odonto.pieza,
                             odonto.diagnostico,
                             formatoMoneda(formatoMoneda(odonto.valor)),
@@ -8703,7 +8806,7 @@
                                 data.push([
                                     odonto.fecha,
                                     odonto.tratamiento,
-                                    odonto.caras,
+                                    formatearCarasLectura(odonto.caras),
                                     odonto.pieza,
                                     odonto.diagnostico,
                                     formatoMoneda(formatoMoneda(odonto.valor)),
@@ -8916,7 +9019,7 @@
                                 data.push([
                                     odonto.fecha,
                                     odonto.tratamiento,
-                                    odonto.caras,
+                                    formatearCarasLectura(odonto.caras),
                                     odonto.pieza,
                                     odonto.diagnostico,
                                     formatoMoneda(formatoMoneda(odonto.valor)),
@@ -9012,11 +9115,7 @@
                                         var clase = 'bg-danger';
                                     }
 
-                                    if (odonto.estado == 0) {
-                                        var estado = 'PENDIENTE';
-                                    } else {
-                                        var estado = 'TERMINADO';
-                                    }
+                                    var estado = nombreEstadoTratamientoDental(odonto.estado);
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_presup_estado_pago.row.add([
                                         odonto.descripcion,
@@ -9105,11 +9204,7 @@
                                 } else {
                                     var clase = 'bg-danger';
                                 }
-                                if (odonto.estado == 0) {
-                                    var estado = 'TERMINADO';
-                                } else {
-                                    var estado = 'PENDIENTE';
-                                }
+                                var estado = nombreEstadoTratamientoDental(odonto.estado);
                                 // Agregar una nueva fila a la tabla
                                 let rowNode = table.row.add([
                                     odonto.localizacion,
@@ -9279,7 +9374,7 @@
                                 data.push([
                                     odonto.fecha,
                                     odonto.tratamiento,
-                                    odonto.caras,
+                                    formatearCarasLectura(odonto.caras),
                                     odonto.pieza,
                                     odonto.diagnostico,
                                     formatoMoneda(formatoMoneda(odonto.valor)),
@@ -9371,11 +9466,7 @@
                                     } else {
                                         var clase = 'bg-danger';
                                     }
-                                    if (odonto.estado == 0) {
-                                        var estado = 'PENDIENTE';
-                                    } else {
-                                        var estado = 'TERMINADO';
-                                    }
+                                    var estado = nombreEstadoTratamientoDental(odonto.estado);
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_presup.row.add([
                                         odonto.descripcion,
@@ -9460,11 +9551,7 @@
                                     } else {
                                         var clase = 'bg-danger';
                                     }
-                                    if (odonto.estado == 0) {
-                                        var estado = 'TERMINADO';
-                                    } else {
-                                        var estado = 'PENDIENTE';
-                                    }
+                                    var estado = nombreEstadoTratamientoDental(odonto.estado);
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table_presup.row.add([
                                         odonto.localizacion,
@@ -9635,6 +9722,7 @@
                 odontop_obs_ex_oral: odontop_obs_ex_oral,
                 count: count,
                 id_paciente: $('#id_paciente_fc').val(),
+                id_hora_medica: $('#hora_medica').val(),
                 tipo_examen: 'odontop',
                 _token: '{{ csrf_token() }}'
             }
@@ -9674,6 +9762,7 @@
             let data = {
                 count: count,
                 id_paciente: $('#id_paciente_fc').val(),
+                id_hora_medica: $('#hora_medica').val(),
                 tipo_examen: 'odontop',
                 _token: CSRF_TOKEN
             }
@@ -9684,6 +9773,16 @@
                 data: data,
                 success: function(resp) {
                     console.log(resp);
+                    if (resp.mensaje === 'SIN_PIEZAS_PENDIENTES') {
+                        $('#nueva_pieza_dental_odontop_examen').empty();
+                        swal({
+                            title: 'Sin piezas en el presupuesto',
+                            text: resp.detalle,
+                            icon: 'info',
+                            button: 'Aceptar'
+                        });
+                        return;
+                    }
                     if (resp.mensaje == 'OK') {
                         $('#nueva_pieza_dental_odontop_examen').empty();
                         $('#nueva_pieza_dental_odontop_examen').append(resp.v);

@@ -45,7 +45,7 @@
 @endphp
 
 <style>
-    .odontograma {
+    .odontograma-urgencia-adulto {
         display: flex;
         flex-direction: column;
         gap: 15px;
@@ -53,7 +53,7 @@
         margin-top:10px;
     }
 
-    .fila {
+    .odontograma-urgencia-adulto .fila-odontograma {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         gap: 5px;
@@ -66,7 +66,7 @@
         padding: 8px 5px;
         cursor: pointer;
         border-radius: 13px;
-        transition: 0.1s ease;
+        transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease;
         font-size:0.85rem;
         color: #2353b5;
         font-weight: 600;
@@ -86,14 +86,34 @@
     }
 
     .pieza_urg.seleccionada {
-        background-color: #a366d1;
+        background-color: #dc3545;
         color: #fff;
-        border-color: #601886;
+        border-color: #a71d2a;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, .18);
+    }
+
+    .pieza_urg:hover,
+    .pieza_urg:focus {
+        border-color: #2353b5;
+        box-shadow: 0 0 0 3px rgba(35, 83, 181, .16);
+        outline: none;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 1199.98px) {
+        .odontograma-urgencia-adulto {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .odontograma-urgencia-adulto .fila-odontograma {
+            min-width: 920px;
+        }
     }
 </style>
-    <div class="odontograma">
+    <div class="odontograma-urgencia-adulto" aria-label="Odontograma adulto de urgencia">
         <!-- Fila superior (1.8 al 1.1 y 2.1 al 2.8) -->
-        <div class="fila mb-3">
+        <div class="fila-odontograma mb-3">
             @for($i = 18; $i >= 11; $i--)
                 @php
                     $codigoPieza = '1.' . ($i % 10);
@@ -119,7 +139,7 @@
                             break;
                     }
                 @endphp
-                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}">
+                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -150,7 +170,7 @@
                             break;
                     }
                 @endphp
-                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}">
+                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -158,7 +178,7 @@
         </div>
 
         <!-- Fila inferior (4.8 al 4.1 y 3.1 al 3.8) -->
-        <div class="fila">
+        <div class="fila-odontograma">
             @for($i = 48; $i >= 41; $i--)
                 @php
                     $codigoPieza = '4.' . ($i % 10);
@@ -184,7 +204,7 @@
                             break;
                     }
                 @endphp
-                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}">
+                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -215,7 +235,7 @@
                             break;
                     }
                 @endphp
-                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}">
+                <div class="pieza_urg" data-pieza_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>

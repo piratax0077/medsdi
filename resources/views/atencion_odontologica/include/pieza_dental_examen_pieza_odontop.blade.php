@@ -6,8 +6,25 @@
                     <label class="floating-label-activo-sm">Pieza N°</label>
                     <select class="form-control form-control-sm" name="n_pieza_ex_pp_od_odontop{{ $counter }}" id="n_pieza_ex_pp_od_odontop{{ $counter }}">
                         <option value="0">Seleccione</option>
-                        @foreach (['5.5', '5.4', '5.3', '5.2', '5.1', '6.1', '6.2', '6.3', '6.4', '6.5', '8.5', '8.4', '8.3', '8.2', '8.1', '7.1', '7.2', '7.3', '7.4', '7.5'] as $pieza)
-                            <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                        @php
+                            $piezasDisponibles = !empty($piezasProgramadas)
+                                ? $piezasProgramadas
+                                : ['5.5', '5.4', '5.3', '5.2', '5.1', '6.1', '6.2', '6.3', '6.4', '6.5', '8.5', '8.4', '8.3', '8.2', '8.1', '7.1', '7.2', '7.3', '7.4', '7.5'];
+                        @endphp
+                        @foreach ($piezasDisponibles as $pieza)
+                            @php
+                                $tratamientoPieza = collect($tratamientosPresupuesto ?? [])->firstWhere('pieza', $pieza);
+                                $estadoPieza = [0 => 'Pendiente', 1 => 'Finalizada', 2 => 'En proceso', 3 => 'Citada a control'][$tratamientoPieza->estado ?? 0] ?? 'Pendiente';
+                                $piezaFinalizada = (int) ($tratamientoPieza->estado ?? 0) === 1;
+                                $detallePieza = $tratamientoPieza
+                                    ? ' — '.$tratamientoPieza->tratamiento.' ('.$estadoPieza.')'
+                                    : '';
+                            @endphp
+                            <option value="{{ $pieza }}"
+                                @if($piezaFinalizada) disabled @endif
+                                @if(!$piezaFinalizada && (count($piezasDisponibles) === 1 || in_array($pieza, $piezasSeleccionadas ?? []))) selected @endif>
+                                {{ $pieza }}{{ $detallePieza }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -21,7 +38,9 @@
             <div class="form-group col-sm-12 col-md-5">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Historial de la pieza</label>
-                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_odontop_hp_od{{ $counter }}" id="ex_odontop_hp_od{{ $counter }}"></textarea>
+                    <textarea class="form-control caja-texto form-control-sm" rows="3" readonly
+                        title="Resumen generado automáticamente con los exámenes anteriores de esta pieza"
+                        name="ex_odontop_hp_od{{ $counter }}" id="ex_odontop_hp_od{{ $counter }}"></textarea>
                 </div>
             </div>
         </div>
@@ -178,9 +197,48 @@
 <input type="hidden" name="tipo_examen" id="tipo_examen" value="{{ $tipo_examen }}">
 
 <script>
+    window['historialPiezasOdontop{{ $counter }}'] = @json($historialPiezas ?? []);
+
+    function cargarHistorialPiezaOdontop{{ $counter }}() {
+        const pieza = String($('#n_pieza_ex_pp_od_odontop{{ $counter }}').val() || '');
+        const registro = window['historialPiezasOdontop{{ $counter }}'][pieza] || null;
+        const ultimo = registro ? registro.ultimo : {};
+        const seleccionarValor = function(selector, valor, valorPredeterminado) {
+            const campo = $(selector);
+            campo.val(valor || valorPredeterminado);
+            if (campo.val() === null) {
+                campo.prop('selectedIndex', 0);
+            }
+        };
+
+        $('#ex_odontop_zdolor_od{{ $counter }}').val(ultimo.zona_dolor || '');
+        $('#ex_odontop_hp_od{{ $counter }}').val(registro ? registro.resumen : '');
+        $('#intensidad_odontop{{ $counter }}').val(ultimo.intensidad_dolor || '1').trigger('change');
+        $('#modo_dolor_odontop{{ $counter }}').val(ultimo.modo_dolor || '1').trigger('change');
+        $('#loc_dolor_odontop{{ $counter }}').val(ultimo.localizacion || '1').trigger('change');
+        $('#provocacion_dolor_odontop{{ $counter }}').val(ultimo.provocacion_dolor || '1').trigger('change');
+        seleccionarValor('#sel_odontop_resp_calor{{ $counter }}', ultimo.resp_calor, '');
+        seleccionarValor('#sel_odontop_resp_frio{{ $counter }}', ultimo.resp_frio, '');
+        seleccionarValor('#sel_odontop_resp_elect{{ $counter }}', ultimo.electrico, '');
+        seleccionarValor('#sel_odontop_resp_perc{{ $counter }}', ultimo.percusion, '');
+        seleccionarValor('#sel_odontop_resp_expl{{ $counter }}', ultimo.exploracion, '');
+        seleccionarValor('#sel_odontop_cavitaria{{ $counter }}', ultimo.cavitaria, '');
+        $('#obs_observaciones_odontop_{{ $counter }}').val(ultimo.observaciones || '');
+    }
 
     $(document).ready(function() {
-        $('#n_pieza_ex_pp_od_odontop{{ $counter }}').select2();
+        const selectorPieza = $('#n_pieza_ex_pp_od_odontop{{ $counter }}');
+        selectorPieza.select2();
+        selectorPieza.on('change', cargarHistorialPiezaOdontop{{ $counter }});
+
+        if (selectorPieza.val() === '0') {
+            const primeraPiezaDisponible = selectorPieza.find('option[value!="0"]:not(:disabled)').first().val();
+            if (primeraPiezaDisponible) {
+                selectorPieza.val(primeraPiezaDisponible).trigger('change');
+            }
+        } else {
+            cargarHistorialPiezaOdontop{{ $counter }}();
+        }
     });
 
     function ocultar_pieza_examen_pieza_odontop() {
@@ -190,7 +248,6 @@
      function guardar_pieza_examen_pieza_odontop(counter){
         let numero_pieza = $('#n_pieza_ex_pp_od_odontop'+counter).val();
         let zona_dolor = $('#ex_odontop_zdolor_od'+counter).val();
-        let ex_odontop_hp = $('#ex_odontop_hp_od'+counter).val();
         let intensidad = $('#intensidad_odontop'+counter).val();
         let modo_dolor = $('#modo_dolor_odontop'+counter).val();
         let localizacion = $('#loc_dolor_odontop'+counter).val();
@@ -202,7 +259,6 @@
         let resp_expl = $('#sel_odontop_resp_expl'+counter).val();
         let resp_cavitaria = $('#sel_odontop_cavitaria'+counter).val();
         let observaciones = $('#obs_observaciones_odontop_'+counter).val();
-        let historia_anterior = $('#ex_odontop_hp_od'+counter).val();
         let id_paciente = $('#id_paciente_fc').val();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_profesional = $('#id_profesional').val();
@@ -214,7 +270,6 @@
             _token: CSRF_TOKEN,
             numero_pieza : numero_pieza,
             zona_dolor : zona_dolor,
-            ex_odontop_hp : ex_odontop_hp,
             intensidad : intensidad,
             modo_dolor : modo_dolor,
             localizacion : localizacion,
@@ -226,13 +281,16 @@
             resp_expl: resp_expl,
             resp_cavitaria: resp_cavitaria,
             observaciones: observaciones,
-            historia_anterior: historia_anterior,
+            // El historial mostrado es un resumen calculado y no debe volver a
+            // guardarse dentro del nuevo registro.
+            historia_anterior: '',
             id_paciente: id_paciente,
             id_lugar_atencion: id_lugar_atencion,
             id_profesional: id_profesional,
             id_ficha_atencion: id_ficha_atencion,
             id_especialidad: id_especialidad,
-            tipo_examen: tipo_examen
+            tipo_examen: tipo_examen,
+            id_hora_medica: $('#hora_medica').val()
         }
 
         let valido = 1;
@@ -246,11 +304,6 @@
         if(zona_dolor == ''){
             valido = 0;
             mensaje += 'La zona de dolor es obligatoria.</br>';
-        }
-
-        if(ex_odontop_hp == ''){
-            valido = 0;
-            mensaje += 'La historia de la pieza es obligatoria.</br>';
         }
 
         if(observaciones == ''){
@@ -322,13 +375,19 @@
                         `);
                     });
                     
-                    swal({
-                        title: "Pieza dental guardada",
-                        text: "La pieza dental para examen odontopediátrico ha sido guardada correctamente.",
-                        icon: "success",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    });
+                    if (resp.id_tratamiento_programado) {
+                        $('#id_tratamiento').val(resp.id_tratamiento_programado);
+                        $('#estado_tto').val(String(resp.estado_tratamiento_programado ?? 0));
+                        $('#observaciones_tto').val('');
+                        $('#modal_cambio_estado_tto').modal('show');
+                    } else {
+                        swal({
+                            title: "Pieza dental guardada",
+                            text: "La pieza dental para examen odontopediátrico ha sido guardada correctamente.",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+                    }
 
                 }
             },
@@ -336,7 +395,7 @@
                 console.log(error);
                 return swal({
                     title: "Error al guardar",
-                    text: "Ha ocurrido un error al guardar los datos de odontopediatría.",
+                    text: error.responseJSON?.error || "Ha ocurrido un error al guardar los datos de odontopediatría.",
                     icon: "error",
                     buttons: "Aceptar",
                     DangerMode: true,

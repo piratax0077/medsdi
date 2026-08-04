@@ -1,3 +1,13 @@
+<style>
+    #presup_urgencia .urgencia-resumen { border:1px solid #cbd9ea; border-radius:12px; background:#fff; box-shadow:0 4px 13px rgba(31,55,86,.08); overflow:hidden; }
+    #presup_urgencia .urgencia-resumen-metrica { min-height:68px; padding:10px 8px; border-right:1px solid #edf1f6; }
+    #presup_urgencia .urgencia-resumen-metrica h5 { margin-bottom:3px!important; color:#63758a!important; font-size:.72rem; font-weight:700; text-transform:uppercase; }
+    #presup_urgencia .urgencia-resumen-metrica p { margin:0; color:#253d5a; font-size:1rem; font-weight:700; }
+    #presup_urgencia .urgencia-resumen-destacado { min-height:68px; padding:10px 12px; color:#fff; }
+    #presup_urgencia .urgencia-resumen-destacado h5, #presup_urgencia .urgencia-resumen-destacado p { margin:0; color:#fff!important; }
+    #presup_urgencia .urgencia-insumos-encabezado { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    @media (max-width:991.98px) { #presup_urgencia .urgencia-resumen-metrica { border-bottom:1px solid #edf1f6; } }
+</style>
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a">
         <div class="card-header-a" id="exam_odurg_ped">
@@ -1403,8 +1413,9 @@
                                                                     <!--INSUMOS Y GASTOS GENERALES-->
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                                                         <div class="card">
-                                                                            <div class="card-top">
-                                                                                <h6 class="text-uppercase text-c-blue">Insumos y gastos generales</h6>
+                                                                            <div class="card-top urgencia-insumos-encabezado">
+                                                                                <div><h6 class="text-uppercase text-c-blue mb-0">Insumos y gastos generales</h6><small class="text-muted">Insumos asociados exclusivamente a esta atención de urgencia.</small></div>
+                                                                                <button type="button" class="btn btn-info btn-sm" onclick="abrir_modal_insumos_urg()"><i class="fas fa-plus mr-1"></i>Agregar insumo</button>
                                                                             </div>
                                                                             <div class="card-body">
                                                                                 <div class="row">
@@ -1425,7 +1436,7 @@
                                                                                             </thead>
                                                                                             <tbody>
                                                                                                 @foreach ($insumos_tratamientos as $t)
-                                                                                                    @if ($t->urgencia == 1)
+                                                                                                    @if ($t->urgencia == 1 && $t->presupuesto == 1)
                                                                                                         @php $total = $t->cantidad * $t->valor @endphp
                                                                                                         @php
                                                                                                             $color = 'bg-danger'; // por defecto: error
@@ -1468,42 +1479,39 @@
                                                                     </div>
                                                                 </div>
                                                                 <!--TOTAL VALOR-->
-                                                                <div class="form-row align-items-center bg-light mx-1 p-3 text-center rounded-xl font-weight-bold borde-presupuesto"
-                                                                >
+                                                                <div class="row align-items-stretch mx-1 text-center font-weight-bold urgencia-resumen">
                                                                     <!-- Total -->
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                                    <div class="col-sm-6 col-md-4 col-lg urgencia-resumen-metrica">
                                                                         <h5 class="mb-0 text-c-blue">Total Grupo/Boca</h5>
                                                                         <p id="valores_examenes_presupuesto_conf_urg">$0</p>
                                                                     </div>
 
                                                                     <!-- Total Piezas -->
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                                    <div class="col-sm-6 col-md-4 col-lg urgencia-resumen-metrica">
                                                                         <h5 class="mb-0 text-c-blue">Total Piezas</h5>
                                                                         <p id="valores_piezas_presupuesto_conf_urg"></p>
                                                                     </div>
 
                                                                     <!-- Insumos -->
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                                    <div class="col-sm-6 col-md-4 col-lg urgencia-resumen-metrica">
                                                                         <h5 class="mb-0 text-c-blue">Insumos</h5>
                                                                         <p id="valores_insumos_presupuesto_conf_urg"></p>
                                                                     </div>
 
                                                                     <!-- Descuentos -->
-                                                                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                                    <div class="col-sm-6 col-md-4 col-lg urgencia-resumen-metrica">
                                                                         <h5 class="mb-0 text-c-blue">Descuentos</h5>
                                                                         <p id="valores_descuentos_presupuesto_conf_urg">$0.00</p>
                                                                     </div>
 
-                                                                    <div
-                                                                        class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2 bg-naranjo  rounded-pill py-1 my-1">
+                                                                    <div class="col-sm-6 col-md-4 col-lg-2 bg-naranjo urgencia-resumen-destacado d-flex flex-column justify-content-center">
                                                                         <h5 class="text-white">Total Final</h5>
                                                                         <p class="text-white" id="valores_total_final_presupuesto_conf_urg">$
                                                                             </p>
                                                                     </div>
 
 
-                                                                    <div
-                                                                        class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2 bg-info rounded-pill py-1 my-1">
+                                                                    <div class="col-sm-6 col-md-4 col-lg-2 bg-info urgencia-resumen-destacado d-flex flex-column justify-content-center">
                                                                         <h5 class="text-white">Abonado</h5>
                                                                         <p class="text-white" id="valores_total_abonado_presupuesto_conf_urg"> $0
                                                                             </p>
@@ -1531,6 +1539,9 @@
                                                                                 <button type="button" class="btn btn-outline-primary btn-sm" style="width: 85px;" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
                                                                                 <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
                                                                             </div> --}}
+                                                                </div>
+                                                                <div class="d-flex justify-content-end mt-2 mr-1 text-right">
+                                                                    <div><small class="text-muted d-block">Saldo pendiente</small><strong class="text-c-blue f-18" id="saldo_pendiente_presupuesto_urg">$0</strong></div>
                                                                 </div>
                                                             </form>
                                                         </div>
@@ -1772,6 +1783,7 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_paciente: $('#id_paciente').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             id_dcto: id_dcto
         };
 
@@ -1905,6 +1917,7 @@
                     $('#abonos_presup').val(formatoMoneda(0));
                     $('#subtotal_presup').val(formatoMoneda(0));
                     $('#valores_total_abonado_presupuesto_conf_urg').html(formatoMoneda(parseInt(response.pagos)));
+                    $('#saldo_pendiente_presupuesto_urg').html(formatoMoneda(Math.max(0, monto_pendiente)));
                     let todos = response.todos;
 
                     // let table_ = $('#presup_estado_pago_gral_urg').DataTable();
@@ -2219,7 +2232,7 @@
         function cargar_a_presupuesto_odped_g_urg_confirmar(){
             console.log('cargando');
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_odped_urg').val();
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex_odped_urg').val() || [];
             var ttoPiezas = $('#diag_presupuesto_pieza_g_odped_urg').val();
             var diagnostico = $('#diag_presupuesto_diagnostico_odped_urg').val();
 
@@ -2265,6 +2278,7 @@
                 id_paciente: $('#id_paciente_fc').val(),
                 id_presupuesto: $('#id_presupuesto').val(),
                 urgencia: 1,
+                tipo: 'odped',
                 _token: "{{ csrf_token() }}"
             }
             console.log(data);
@@ -2275,6 +2289,9 @@
                 success: function(resp) {
                     console.log(resp);
                     if (resp.status == 1) {
+                        if (resp.presupuesto && resp.presupuesto.id) {
+                            $('#id_presupuesto').val(resp.presupuesto.id);
+                        }
                         swal({
                             icon: 'success',
                             title: 'Info',
@@ -2313,8 +2330,7 @@
                             html += '</td>';
                             html += '</tr>';
                         });
-                        $('#contenedor_examenes_grupos_dentales').empty();
-                        $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                        $('#contenedor_examenes_grupos_dentales_odontop').html(resp.vista_presupuestos);
                         $('#table_odontograma tbody').html(html);
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
@@ -2717,7 +2733,7 @@
 
         function cargar_a_presupuesto_urg_confirmar() {
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_urg').val();
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_urg').val() || [];
             var ttoPiezas = $('#diag_presupuesto_pieza_g_urg').val();
             var diagnostico = $('#diagnostico_combo_g').val();
 
@@ -2774,6 +2790,9 @@
                 success: function(resp) {
                     console.log(resp);
                     if (resp.status == 1) {
+                        if (resp.presupuesto && resp.presupuesto.id) {
+                            $('#id_presupuesto').val(resp.presupuesto.id);
+                        }
                         swal({
                             icon: 'success',
                             title: 'Info',
@@ -3178,7 +3197,7 @@
                 piezasSelect.val(null).trigger('change');
 
                 // 2. Quitar clase seleccionada a todas las piezas
-                $('.pieza_implantologia_rehab').removeClass('seleccionada');
+                $('.pieza_urg').removeClass('seleccionada');
 
                 return; // Salimos de la función
             }
@@ -3202,7 +3221,7 @@
                 $(`.pieza_urg[data-pieza_urg="${pieza}"]`).addClass('seleccionada');
             });
             // Escuchar cambios en el Select2 para actualizar el odontograma visual
-            piezasSelect.on('change', function() {
+            piezasSelect.off('change.urgenciaOdontograma').on('change.urgenciaOdontograma', function() {
                 const piezasSeleccionadas = $(this).val() || [];
 
                 // Recorre todas las piezas visuales
@@ -3255,12 +3274,12 @@
                 $(`.pieza_odped_urg[data-pieza_odpediat_urg="${pieza}"]`).addClass('seleccionada');
             });
             // Escuchar cambios en el Select2 para actualizar el odontograma visual
-            piezasSelect.on('change', function() {
+            piezasSelect.off('change.urgenciaOdontograma').on('change.urgenciaOdontograma', function() {
                 const piezasSeleccionadas = $(this).val() || [];
 
                 // Recorre todas las piezas visuales
-                $('.pieza_urg').each(function() {
-                    const piezaNumero = $(this).data('pieza_urg').toString();
+                $('.pieza_odped_urg').each(function() {
+                    const piezaNumero = $(this).data('pieza_odpediat_urg').toString();
 
                     if (piezasSeleccionadas.includes(piezaNumero)) {
                         $(this).addClass('seleccionada');
@@ -3396,9 +3415,7 @@
                                 text: 'Se a agregado los insumos correctamente',
                                 title: 'Exito'
                             });
-                            let nuevo_insumo = resp.insumo;
-                            cargar_a_presupuesto_insumo(nuevo_insumo.id);
-                            $('#modal_insumos').modal('hide');
+                            $('#modal_insumos_urgencias').modal('hide');
                             //limpiar_formulario_insumo();
                             let insumos = resp.insumos;
                             console.log(insumos);
@@ -3453,6 +3470,9 @@
 
                             //Dibujar la tabla nuevamente con los nuevos datos
                             table.draw();
+                            actualizar_presupuesto_urgencia();
+                            $('#tipoInsumo_urg').val('0').trigger('change');
+                            $('#cantidad_urg, #precio_urg, #total_urg, #insumos_obs_tto_urg').val('');
                         }
                     },
                     error: function(error) {
@@ -4423,6 +4443,7 @@
                     id_paciente: id_paciente,
                     id_lugar_atencion: id_lugar_atencion,
                     id_profesional: id_profesional,
+                    id_presupuesto: $('#id_presupuesto').val(),
                     _token: CSRF_TOKEN
                 }
 

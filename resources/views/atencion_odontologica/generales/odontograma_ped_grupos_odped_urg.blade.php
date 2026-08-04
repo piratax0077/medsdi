@@ -1,5 +1,5 @@
 <style>
-    .odontograma {
+    .odontograma-urgencia-pediatrica {
         display: flex;
         flex-direction: column;
         gap: 15px;
@@ -7,7 +7,7 @@
         margin-top:10px;
     }
 
-    .fila {
+    .odontograma-urgencia-pediatrica .fila-odontograma {
         display: grid;
         grid-template-columns: repeat(10, 1fr);
         gap: 8px;
@@ -20,7 +20,7 @@
         padding: 8px 5px;
         cursor: pointer;
         border-radius: 13px;
-        transition: 0.1s ease;
+        transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease;
         font-size:0.85rem;
         color: #2353b5;
         font-weight: 600;
@@ -40,14 +40,34 @@
     }
 
     .pieza_odped_urg.seleccionada {
-        background-color: #a366d1;
+        background-color: #dc3545;
         color: #fff;
-        border-color: #601886;
+        border-color: #a71d2a;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, .18);
+    }
+
+    .pieza_odped_urg:hover,
+    .pieza_odped_urg:focus {
+        border-color: #2353b5;
+        box-shadow: 0 0 0 3px rgba(35, 83, 181, .16);
+        outline: none;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 1199.98px) {
+        .odontograma-urgencia-pediatrica {
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .odontograma-urgencia-pediatrica .fila-odontograma {
+            min-width: 680px;
+        }
     }
 </style>
-    <div class="odontograma">
+    <div class="odontograma-urgencia-pediatrica" aria-label="Odontograma pediátrico de urgencia">
         <!-- Fila superior (5.5 al 5.1 y 6.1 al 6.5) -->
-        <div class="fila">
+        <div class="fila-odontograma">
             @for($i = 55; $i >= 51; $i--)
                 @php
                     $codigoPieza = '5.' . ($i % 10);
@@ -56,7 +76,7 @@
                     // Siempre usar imagen de diente normal/sano
                     $imagen = "images/dientes/d{$codigoPiezaImagen}.png";
                 @endphp
-                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}">
+                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -70,7 +90,7 @@
                     // Siempre usar imagen de diente normal/sano
                     $imagen = "images/dientes/d{$codigoPiezaImagen}.png";
                 @endphp
-                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}">
+                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -78,7 +98,7 @@
         </div>
 
         <!-- Fila inferior (8.5 al 8.1 y 7.1 al 7.5) -->
-        <div class="fila">
+        <div class="fila-odontograma">
             @for($i = 85; $i >= 81; $i--)
                 @php
                     $codigoPieza = '8.' . ($i % 10);
@@ -87,7 +107,7 @@
                     // Siempre usar imagen de diente normal/sano
                     $imagen = "images/dientes/d{$codigoPiezaImagen}.png";
                 @endphp
-                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}">
+                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>
@@ -101,7 +121,7 @@
                     // Siempre usar imagen de diente normal/sano
                     $imagen = "images/dientes/d{$codigoPiezaImagen}.png";
                 @endphp
-                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}">
+                <div class="pieza_odped_urg" data-pieza_odpediat_urg="{{ $codigoPieza }}" role="button" tabindex="0" aria-pressed="false" aria-label="Pieza {{ $codigoPieza }}">
                     <img src="{{ asset($imagen) }}" alt="{{ $codigoPieza }}">
                     <span>{{ $codigoPieza }}</span>
                 </div>

@@ -10870,6 +10870,7 @@ setTimeout(function(){
                 odontop_obs_ex_oral: odontop_obs_ex_oral,
                 count: count,
                 id_paciente: $('#id_paciente_fc').val(),
+                id_hora_medica: $('#hora_medica').val(),
                 tipo_examen: 'odontop',
                 _token: '{{ csrf_token() }}'
             }

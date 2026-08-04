@@ -2636,16 +2636,17 @@
                                 // $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
                                 $('#contenedor_tratamientos_presupuesto').show();
                                 $('#presupuesto_numero').empty();
-                                $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
+                                $('#presupuesto_numero').append('<option value="" selected disabled>Seleccione el tipo de consulta</option>');
+                                $('#presupuesto_numero').append('<option value="primera">Primera consulta</option>');
+                                $('#presupuesto_numero').append('<option value="urgencia">Urgencia</option>');
                                 console.log(data.presupuestos);
                                 if (data.presupuestos?.length > 0) {
                                     data.presupuestos.forEach(p => {
+                                        const estadoPago = p.pago_completado ? ' · PAGADO, PENDIENTE DE ATENCIÓN' : '';
                                         $('#presupuesto_numero').append(
-                                            `<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`
+                                            `<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}${estadoPago}</option>`
                                             );
                                     });
-                                } else {
-                                    $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
                                 }
 
                                 if (data.edad < 18) {
@@ -2692,7 +2693,9 @@
                                 $('#reserva_hora_apellido_uno').val(data.apellido_uno);
                                 $('#reserva_hora_apellido_dos').val(data.apellido_dos);
                                 $('#presupuesto_numero').empty();
-                                $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                                $('#presupuesto_numero').append(`<option value="" selected disabled>Seleccione el tipo de consulta</option>`);
+                                $('#presupuesto_numero').append(`<option value="primera">Primera consulta</option>`);
+                                $('#presupuesto_numero').append(`<option value="urgencia">Urgencia</option>`);
                                 //$('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
 
                                 if (data.sexo != null)
@@ -3229,6 +3232,17 @@
             let reserva_hora_id = $('#reserva_hora_id_paciente').val();
             let id_lugar_atencion = $('#id_lugar_atencion').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
+            let seleccionDental = $('#presupuesto_numero').val() || '';
+            let idPresupuesto = /^\d+$/.test(seleccionDental) ? seleccionDental : '';
+            let motivoDental = seleccionDental === 'urgencia' ? 'urgencia' :
+                (seleccionDental === 'primera' ? 'primera' : (idPresupuesto ? 'tratamiento' : ''));
+            let tratamientosPresupuesto = [];
+            $('.tratamiento-agenda-dental:checked').each(function() {
+                tratamientosPresupuesto.push({
+                    id: parseInt($(this).data('id')),
+                    tipo: $(this).data('tipo')
+                });
+            });
             var tipo_agenda_text = 'C';
             var procedimiento = '';
             var proc_bloque = '';
@@ -3261,6 +3275,33 @@
                 case '4':
                     tipo_agenda_text = 'E'; //EXAMEN
                     break;
+            }
+
+            // Si el modal ofrece y tiene seleccionada una atención odontológica,
+            // debe prevalecer el tipo dental aunque id_tipo_agenda conserve el
+            // valor de la agenda general de consultas.
+            if (motivoDental) {
+                tipo_agenda_text = 'D';
+            }
+
+            if (tipo_agenda_text === 'D' && !motivoDental) {
+                swal({
+                    title: "Reserva dental",
+                    text: "Debe seleccionar Primera consulta, Urgencia o un presupuesto con tratamientos pendientes.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                return;
+            }
+
+            if (tipo_agenda_text === 'D' && motivoDental === 'tratamiento' && tratamientosPresupuesto.length === 0) {
+                swal({
+                    title: "Seleccione el tratamiento",
+                    text: "Marque al menos una pieza o prestación que se trabajará en esta atención.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                return;
             }
 
             console.log(tipo_agenda_text);
@@ -3303,6 +3344,9 @@
                         autorizacion_atencion: autorizacion_atencion,
                         procedimiento: procedimiento,
                         proc_bloque: proc_bloque,
+                        id_presupuesto: idPresupuesto,
+                        motivo_dental: motivoDental,
+                        tratamientos_presupuesto: tratamientosPresupuesto,
                     }
                 })
                 .done(function(data) {
@@ -3386,6 +3430,20 @@
                 case '4':
                     tipo_agenda_text = 'E'; //EXAMEN
                     break;
+            }
+
+            let seleccionDental = $('#presupuesto_numero').val() || '';
+            let motivoDental = seleccionDental === 'urgencia' ? 'urgencia' :
+                (seleccionDental === 'primera' ? 'primera' : '');
+
+            if (tipo_agenda_text === 'D' && !motivoDental) {
+                swal({
+                    title: "Reserva dental",
+                    text: "Debe seleccionar el tipo de consulta antes de agendar.",
+                    icon: "warning",
+                    buttons: "Aceptar",
+                });
+                return;
             }
 
             console.log(tipo_agenda_text);
@@ -3487,7 +3545,7 @@
 
             // if( edad > 18 )
             // Validación simplificada: si NO es dependiente, requiere teléfono (email es opcional)
-            if ($('#paciente_dependiente').prop('checked') == false) {
+            if (tipo_agenda_text !== 'D' && $('#paciente_dependiente').prop('checked') == false) {
                 if (reserva_hora_telefono_uno == '') {
                     swal({
                         title: "Error!",
@@ -3765,6 +3823,7 @@
                         reserva_hora_sms: reserva_hora_sms,
                         id_lugar_atencion: id_lugar_atencion,
                         tipo_hora_medica: tipo_agenda_text,
+                        motivo_dental: motivoDental,
                         /** representante */
                         reserva_hora_representante_info_libre: reserva_hora_representante_info_libre,
                         reserva_representante_nuevo_exitente: reserva_representante_nuevo_exitente,
@@ -6281,6 +6340,7 @@
             var bono_valor_bonificacion = $('#valor_bonificacion').val();
             var bono_valor_seguro = $('#valor_seguro').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
+            var bono_valor_abono = $('#bono_valor_abono_consulta').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
             var recepcion_programa = $('#recepcion_programa').val();
@@ -6292,6 +6352,12 @@
             var bono_id_tipo_bono = $('#bono_id_tipo_bono').val();
             var bono_id_clase_bono = $('#bono_id_clase_bono').val();
             var id_lugar_atencion = $('#id_lugar_atencion').val();
+            const estadoPresupuesto = $('.estado-pago-presupuesto-hora:visible').first();
+            const tienePresupuesto = estadoPresupuesto.length > 0;
+            const presupuestoPagado = tienePresupuesto && estadoPresupuesto.attr('data-pagado-presupuesto') === '1';
+            const idPresupuesto = tienePresupuesto ? estadoPresupuesto.attr('data-id-presupuesto') : '';
+            const saldoPresupuesto = Number(tienePresupuesto ? estadoPresupuesto.attr('data-saldo-presupuesto') : 0);
+            const montoAbono = Number(bono_valor_abono || 0);
 
             var mensaje = '';
             var valido = 1;
@@ -6311,6 +6377,15 @@
             if (bono_profesional_rut == '') {
                 mensaje += 'Campo requerido RUT DEL PROFESIONAL\n';
                 valido = 0;
+            }
+            if (tienePresupuesto && !presupuestoPagado) {
+                if (montoAbono <= 0) {
+                    mensaje += 'Debe ingresar un abono mayor a $0 para recepcionar e iniciar el tratamiento.\n';
+                    valido = 0;
+                } else if (montoAbono > saldoPresupuesto) {
+                    mensaje += 'El abono no puede superar el saldo pendiente del presupuesto.\n';
+                    valido = 0;
+                }
             }
             // if (parseInt(bono_id_clase_bono) !== 6 && parseInt(bono_id_clase_bono)  !== 2 && parseInt(bono_id_clase_bono)  !== 8) {
             //     if (bono_numero == '') {
@@ -6356,8 +6431,8 @@
                             numero_bono: bono_numero,
                             valor_bonificacion: bono_valor_bonificacion,
                             valor_seguro: bono_valor_seguro,
-                            valor_atencion: bono_valor_consulta,
-                            valor_abono: bono_valor_consulta,
+                            valor_atencion: presupuestoPagado ? 0 : bono_valor_consulta,
+                            valor_abono: presupuestoPagado ? 0 : bono_valor_abono,
                             glosa: '1',
                             id_profesional: bono_id_profesional,
                             id_asistente: '-1',
@@ -6365,6 +6440,7 @@
                             id_tipo_bono: bono_id_tipo_bono,
                             id_clase_bono: bono_id_clase_bono,
                             id_referencia: bono_hora_medica, //une bono a hora medica (para buscar id ficha atencion)
+                            id_presupuesto: idPresupuesto,
                             id_lugar_atencion: id_lugar_atencion,
                             numero_sesiones: bono_sn_sesiones
                         }
@@ -6377,8 +6453,8 @@
                             console.log('-----------------------');
                             if (data.estado == 1) {
                                 swal({
-                                    title: "Recepción de bonos y programas",
-                                    text: 'Pago Exitoso',
+                                    title: data.pago_presupuesto ? "Paciente recepcionado" : "Recepción de pagos",
+                                    text: data.pago_presupuesto ? data.msj : 'Pago exitoso',
                                     icon: "success",
                                     // buttons: "Aceptar",
                                     //SuccessMode: true,
@@ -6405,21 +6481,21 @@
                                 {{--  $('#bono_id_tipo_bono').val('');  --}}
 
                             } else {
-                                var mensaje = '';
+                                var mensaje = data.msj || 'No fue posible registrar la recepción.';
                                 if ((data.bono)) {
                                     if (data.bono.estado == 0) {
-                                        mensaje += bono.estado.msj;
+                                        mensaje += '\n' + (data.bono.mensaje || 'No fue posible registrar el pago.');
                                     }
-                                    if (data.hora_medica.estado == 0) {
-                                        mensaje += data.hora_medica.msj;
+                                    if (data.hora_medica && data.hora_medica.estado == 0) {
+                                        mensaje += '\n' + data.hora_medica.msj;
                                     }
-                                } else {
-                                    mensaje += data.error.id_referencia;
+                                } else if (data.error) {
+                                    mensaje += '\n' + Object.values(data.error).join('\n');
                                 }
 
                                 swal({
                                     title: "Recepción de bonos y programas",
-                                    text: 'Pago con Problemas.\n' + data.msj + '\n' + mensaje,
+                                    text: mensaje,
                                     icon: "error",
                                     // buttons: "Aceptar",
                                     //SuccessMode: true,

@@ -25,6 +25,17 @@
                          <div class="col-sm-6 col-md-6" id="seccion_examenes">
                         </div>
 
+                        <div class="col-sm-12 d-none" id="detalle_agenda_dental">
+                            <div class="border rounded p-3 mb-3 bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong class="text-primary"><i class="feather icon-clipboard mr-1"></i> Detalle de la atención dental</strong>
+                                    <span id="detalle_dental_estado_pago" class="badge"></span>
+                                </div>
+                                <div id="detalle_dental_resumen" class="mb-2"></div>
+                                <div id="detalle_dental_prestaciones"></div>
+                            </div>
+                        </div>
+
                         <div class="col-sm-12 col-md-12">
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
