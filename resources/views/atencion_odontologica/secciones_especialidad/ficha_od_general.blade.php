@@ -1,4 +1,4 @@
-<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+<div class="user-profile user-card mt-0 ficha-odontologia-general" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12">
@@ -20,9 +20,11 @@
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab"
+                            onclick="refrescar_caras_grupos()"
                             href="#evaluacion_general" role="tab" aria-controls="evaluacion_general"
                             aria-selected="false">Caras y grupos</a>
                     </li>
+
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
                     </li>  --}}
@@ -542,14 +544,157 @@
 
                         <div class="tab-pane fade" id="evaluacion_general" role="tabpanel"
                             aria-labelledby="evaluacion_general_tab">
+                            <style>
+                                #evaluacion_general .caras-grupos-shell {
+                                    --dental-blue: #174ea6;
+                                    --dental-blue-soft: #eaf2ff;
+                                    --dental-teal: #39aeb5;
+                                    --dental-border: #dbe4ee;
+                                    --dental-muted: #6c7d90;
+                                }
+
+                                #evaluacion_general .caras-grupos-shell > .card-body {
+                                    padding: 1.25rem;
+                                }
+
+                                #evaluacion_general .dentition-selector {
+                                    display: grid;
+                                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                                    gap: .5rem;
+                                    padding: .35rem;
+                                    margin-bottom: 1rem;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .75rem;
+                                    background: #f4f7fb;
+                                }
+
+                                #evaluacion_general .dentition-selector .nav-item,
+                                #evaluacion_general .dentition-selector .nav-link-aten {
+                                    width: 100%;
+                                }
+
+                                #evaluacion_general .dentition-selector .nav-link-aten {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    min-height: 42px;
+                                    border: 0;
+                                    border-radius: .55rem;
+                                    color: #5f7083 !important;
+                                    font-weight: 600;
+                                    transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+                                }
+
+                                #evaluacion_general .dentition-selector .nav-link-aten.active {
+                                    color: var(--dental-blue) !important;
+                                    background: #fff;
+                                    box-shadow: 0 2px 8px rgba(34, 72, 120, .14);
+                                }
+
+                                #evaluacion_general .dental-evaluation-panel {
+                                    margin: 0 !important;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .8rem !important;
+                                    box-shadow: 0 4px 14px rgba(34, 72, 120, .08) !important;
+                                    overflow: hidden;
+                                }
+
+                                #evaluacion_general .dental-evaluation-title {
+                                    margin: 0;
+                                    padding: 1rem 1.1rem;
+                                    border-bottom: 1px solid var(--dental-border);
+                                    background: linear-gradient(90deg, #f8fbff, #fff);
+                                }
+
+                                #evaluacion_general .dental-evaluation-title h6 {
+                                    margin: 0;
+                                    font-size: 1.05rem;
+                                    font-weight: 700;
+                                }
+
+                                #evaluacion_general .dental-group-tabs {
+                                    display: grid;
+                                    grid-template-columns: repeat(4, minmax(120px, 1fr));
+                                    gap: .4rem;
+                                    padding: .9rem 1rem .4rem;
+                                    overflow-x: auto;
+                                }
+
+                                #evaluacion_general .dental-group-tabs .nav-link-aten {
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    min-height: 38px;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .5rem;
+                                    background: #f7f9fc;
+                                    color: var(--dental-muted) !important;
+                                    font-weight: 600;
+                                }
+
+                                #evaluacion_general .dental-group-tabs .nav-link-aten.active {
+                                    border-color: #8db4f4;
+                                    background: var(--dental-blue-soft);
+                                    color: var(--dental-blue) !important;
+                                }
+
+                                #evaluacion_general .dental-evaluation-panel .tab-content .card {
+                                    margin: .55rem 1rem 1rem;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .75rem;
+                                    box-shadow: 0 3px 10px rgba(34, 72, 120, .08);
+                                }
+
+                                #evaluacion_general .dental-action-row {
+                                    padding: .25rem .75rem 0;
+                                }
+
+                                #evaluacion_general .dental-action-row .btn {
+                                    min-height: 42px;
+                                    border-radius: .55rem;
+                                    font-weight: 600;
+                                }
+
+                                #evaluacion_general .dental-plan-title {
+                                    margin: .75rem 1rem 0;
+                                    padding-bottom: .65rem;
+                                    border-bottom: 1px solid var(--dental-border);
+                                }
+
+                                #evaluacion_general .dental-plan-table {
+                                    margin: .75rem 1rem 1rem;
+                                    border: 1px solid var(--dental-border);
+                                    border-radius: .65rem;
+                                    overflow: hidden;
+                                }
+
+                                #evaluacion_general .dental-plan-table table {
+                                    margin-bottom: 0;
+                                }
+
+                                #evaluacion_general .dental-plan-table thead th {
+                                    border: 0;
+                                    background: #eaf0f6;
+                                    color: #34495e;
+                                    font-size: .78rem;
+                                    text-transform: uppercase;
+                                }
+
+                                @media (max-width: 767.98px) {
+                                    #evaluacion_general .caras-grupos-shell > .card-body { padding: .65rem; }
+                                    #evaluacion_general .dentition-selector { grid-template-columns: 1fr; }
+                                    #evaluacion_general .dental-group-tabs { display: flex; }
+                                    #evaluacion_general .dental-group-tabs .nav-item { min-width: 125px; }
+                                }
+                            </style>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card caras-grupos-shell">
                                         <div class="card-body">
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-10"
+                                                        <ul class="nav nav-tabs-aten nav-fill mb-10 dentition-selector"
                                                             id="gral_od_adulto" role="tablist">
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset active"
@@ -581,7 +726,7 @@
                                                                     <div class="tab-pane fade" id="eval_infts"
                                                                         role="tabpanel"
                                                                         aria-labelledby="eval_infts_tab">
-                                                                        @include('atencion_odontologica.generales.evaluacion_infantil')
+                                                                            @include('atencion_odontologica.generales.caras_cuadrantes')
                                                                     </div>
                                                         </div>
                                                     </div>
@@ -594,6 +739,8 @@
                             </div>
                         </div>
                         <!--CIERRE: EVALUACION--->
+
+                        <!--CIERRE: CARAS Y CUADRANTES--->
                         <!-- TRATAMIENTO-->
                         <div class="tab-pane fade" id="tratamiento" role="tabpanel"
                             aria-labelledby="tratamiento_tab">
@@ -1754,7 +1901,7 @@
                 valido = 0;
                 mensaje += '<li>Cantidad </li>';
             }
-            if (precio == '' || cantidad <= 0) {
+            if (precio == '' || precio < 0) {
                 valido = 0;
                 mensaje += '<li>Precio </li>';
             }
@@ -1926,9 +2073,7 @@
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
                         $('#subtotal_presup').val(formatoMoneda(total_general));
-                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
-                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
-                            total_general));
+                        $('#monto_total').html(formatoMoneda(total_general));
                         $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
 
 
@@ -2084,11 +2229,14 @@
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#table_pagos_reasignar_insumos tbody').append(`
                                 <tr>
-                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo" data-estado="${insumo.estado_pago || 'error'}"></td>
                                     <td>${insumo.insumos} ${insumo.nombre_marca}</td>
                                     <td>${insumo.cantidad}</td>
                                     <td>${formatoMoneda(insumo.valor)}</td>
                                     <td>${formatoMoneda(total)}</td>
+                                    <td class="estado-pago-reasignacion"></td>
+                                    <td class="monto-cubierto">$0</td>
+                                    <td class="monto-pendiente">${formatoMoneda(total)}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
                                             <i class="feather icon-x"></i>
@@ -3338,6 +3486,9 @@
                 type: 'post',
                 data: {
                     counter: counter,
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_presupuesto: $('#id_presupuesto').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(resp) {
@@ -4769,6 +4920,9 @@ setTimeout(function(){
                 type: 'post',
                 data: {
                     counter: counter,
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_presupuesto: $('#id_presupuesto').val(),
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(resp) {
@@ -5264,7 +5418,7 @@ setTimeout(function(){
 
         function cargar_a_presupuesto_impl_g_confirmar() {
             // Obtener los valores seleccionados en el select
-            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val();
+            var piezasSeleccionadas = $('#paciente_piezas_dentales_ex').val() || [];
             let diagnosticoPiezas = $('#diagnostico_combo_g_od_gral').val();
             var ttoPiezas = $('#diag_presupuesto_pieza_g').val();
 
@@ -5298,6 +5452,14 @@ setTimeout(function(){
                 return false;
             }
 
+            const grupoSeleccionado = document.getElementById('max_sup').checked
+                ? 'Maxilar superior'
+                : (document.getElementById('max_inf').checked ? 'Maxilar inferior' : null);
+            if (grupoSeleccionado) {
+                guardar_grupo_desde_planificacion(grupoSeleccionado, diagnosticoPiezas, ttoPiezas);
+                return;
+            }
+
             let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
             let data = {
                 piezas: piezasSeleccionadas,
@@ -5306,6 +5468,7 @@ setTimeout(function(){
                 id_ficha_atencion: $('#id_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_paciente: $('#id_paciente_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val(),
                 _token: "{{ csrf_token() }}"
             }
             console.log(data);
@@ -5372,7 +5535,9 @@ setTimeout(function(){
 
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
-                        $('#n_pieza_ex_pp1000').empty();
+                        const $selectorExamenPieza = $('#n_pieza_ex_pp_od_gral1000');
+                        const piezaExamenActual = $selectorExamenPieza.val();
+                        $selectorExamenPieza.empty().append('<option value="0">Seleccione</option>');
                         // Este array almacenará solo las piezas únicas
                         let piezasUnicas = [];
 
@@ -5428,17 +5593,32 @@ setTimeout(function(){
                                 </tr>
                             `);
                                 // ✅ Si la pieza no se ha agregado aún, la incluimos en el array
-                                if (!piezasAgregadas.has(odonto.pieza)) {
+                                // El examen por pieza sólo debe ofrecer procedimientos
+                                // pendientes. En el odontograma, estado 1 significa realizado.
+                                if (Number(odonto.estado) !== 1 && !piezasAgregadas.has(odonto.pieza)) {
                                     piezasAgregadas.add(odonto.pieza);
-                                    piezasUnicas.push(odonto.pieza);
+                                    piezasUnicas.push({
+                                        pieza: String(odonto.pieza),
+                                        tratamiento: odonto.tratamiento || odonto.descripcion || ''
+                                    });
                                 }
                             }
                         });
                         // 🔁 Ahora recorrer el array de piezas únicas y llenar los select
-                        piezasUnicas.forEach(function(pieza) {
-                            $('#n_pieza_ex_pp1000').append(
-                            `<option value="${pieza}">${pieza}</option>`);
+                        piezasUnicas.forEach(function(item) {
+                            const etiqueta = item.tratamiento
+                                ? `${item.pieza} — ${item.tratamiento}`
+                                : item.pieza;
+                            $selectorExamenPieza.append(new Option(etiqueta, item.pieza, false, false));
                         });
+                        const piezasDisponiblesExamen = piezasUnicas.map(function(item) { return item.pieza; });
+                        const piezaRecienAgregada = (piezasSeleccionadas || []).map(String).find(function(pieza) {
+                            return piezasDisponiblesExamen.includes(pieza);
+                        });
+                        const piezaASeleccionar = piezasDisponiblesExamen.includes(String(piezaExamenActual))
+                            ? String(piezaExamenActual)
+                            : (piezaRecienAgregada || '0');
+                        $selectorExamenPieza.val(piezaASeleccionar).trigger('change.select2');
                         let valores_boca_general = resp.valores[0];
                         let valores_odontograma = resp.valores[1];
                         let valores_insumos = resp.valores[2];
@@ -5455,9 +5635,7 @@ setTimeout(function(){
                         $('#total_presupuesto_dental').val(total_general);
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#subtotal_presup').val(formatoMoneda(total_general));
-                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
-                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
-                            total_general));
+                        $('#monto_total').html(formatoMoneda(total_general));
 
                         let table = $('#presup_estado_pago').DataTable();
                         table.clear().draw();
@@ -5504,9 +5682,12 @@ setTimeout(function(){
                         odontograma.forEach(function(odonto) {
                             if (odonto.presupuesto == 1) {
                                 let fila = `<tr>
-                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
-                            <td>${odonto.pieza}</td>
+                            <td><input type="checkbox" class="valor-checkbox" data-total="${odonto.valor}" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto" data-estado="${odonto.estado_pago || 'error'}"></td>
+                            <td><strong>${odonto.pieza}</strong><br><small class="text-muted">${odonto.tratamiento || odonto.descripcion || ''}</small></td>
                             <td>${formatoMoneda(odonto.valor)}</td>
+                            <td class="estado-pago-reasignacion"></td>
+                            <td class="monto-cubierto">$0</td>
+                            <td class="monto-pendiente">${formatoMoneda(odonto.valor)}</td>
                             <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                         </tr>`;
                                 $('#table_pagos_reasignar_odontograma tbody').append(fila);
@@ -5586,9 +5767,53 @@ setTimeout(function(){
                     $('#odon_adults').append(resp.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(resp.odontograma_paciente_vista);
+
+                    // La respuesta del guardado contiene el odontograma antes de
+                    // redistribuir los abonos. Obtener inmediatamente el estado
+                    // canónico para sincronizar tabla, totales y modal.
+                    if (resp.status == 1) {
+                        actualizar_presupuesto();
+                    }
                 },
                 error: function(error) {
                     console.log(error.responseText);
+                }
+            });
+        }
+
+        function guardar_grupo_desde_planificacion(localizacion, diagnostico, tratamiento) {
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('profesional.guardar_examen_boca_general') }}",
+                data: {
+                    fecha: new Date().toISOString().slice(0, 10),
+                    diagnostico: diagnostico,
+                    tratamiento: tratamiento,
+                    comentarios: 'SIN OBSERVACIONES',
+                    trabajo_terminado: 'No',
+                    agendar_control: 'No',
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_paciente: $('#id_paciente_fc').val(),
+                    id_profesional: $('#id_profesional_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    id_especialidad: $('#id_especialidad').val(),
+                    tipo_examen: 'gral',
+                    localizacion_examen: localizacion,
+                    especialidad_examen: 'tratamiento',
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    if (response.mensaje === 'OK' && response.examen) {
+                        cargar_a_presupuesto(response.examen.id, 'gral');
+                        grupos_odontograma_global = response.todos || grupos_odontograma_global;
+                        swal('Grupo agregado', localizacion + ' fue guardado como una sola prestación.', 'success');
+                    } else {
+                        swal('Error', 'No fue posible guardar el grupo seleccionado.', 'error');
+                    }
+                },
+                error: function (error) {
+                    const mensaje = error.responseJSON && (error.responseJSON.message || error.responseJSON.mensaje);
+                    swal('Error', mensaje || 'No fue posible guardar el grupo seleccionado.', 'error');
                 }
             });
         }
@@ -6675,9 +6900,7 @@ setTimeout(function(){
                         // guardamos el total en un input hidden
                         $('#total_presupuesto_dental').val(total_general);
                         $('#subtotal_presup').val(formatoMoneda(total_general));
-                        $('#monto_total').html(formatoMoneda(valores_insumos) + ' + ' + formatoMoneda(
-                            valores_odontograma + valores_boca_general) + ' = ' + formatoMoneda(
-                            total_general));
+                        $('#monto_total').html(formatoMoneda(total_general));
 
                         let table = $('#presup_estado_pago').DataTable();
                         table.clear().draw();
@@ -6725,9 +6948,12 @@ setTimeout(function(){
                         odontograma.forEach(function(odonto) {
                             if (odonto.presupuesto == 1) {
                                 let fila = `<tr>
-                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
-                                    <td>${odonto.pieza}</td>
+                                    <td><input type="checkbox" class="valor-checkbox" data-total="${odonto.valor}" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto" data-estado="${odonto.estado_pago || 'error'}"></td>
+                                    <td><strong>${odonto.pieza}</strong><br><small class="text-muted">${odonto.tratamiento || odonto.descripcion || ''}</small></td>
                                     <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td class="estado-pago-reasignacion"></td>
+                                    <td class="monto-cubierto">$0</td>
+                                    <td class="monto-pendiente">${formatoMoneda(odonto.valor)}</td>
                                     <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                                 </tr>`;
                                 $('#table_pagos_reasignar_odontograma tbody').append(fila);
@@ -6787,6 +7013,10 @@ setTimeout(function(){
                         </td>
                     </tr>
                     `);
+
+                    // Evitar mostrar estados de pago obsoletos después de agregar
+                    // una pieza durante la atención en vivo.
+                    actualizar_presupuesto();
 
                 },
                 error: function(error) {
@@ -10467,6 +10697,7 @@ setTimeout(function(){
                 id_profesional: $('#id_profesional_fc').val(),
                 id_lugar_atencion: $('#id_lugar_atencion').val(),
                 id_ficha_atencion: $('#id_fc').val(),
+                id_presupuesto: $('#id_presupuesto').val(),
                 _token: CSRF_TOKEN
             }
 
@@ -10477,6 +10708,8 @@ setTimeout(function(){
                 success: function(resp) {
                     console.log(resp);
                     if (resp.mensaje == 'OK') {
+                        $('#contenedor_pieza_dental_endo_gral').empty();
+                        $('#contenedor_pieza_dental_endo_gral').append(resp.vista_examenes || '');
                         $('#contenedor_nueva_pieza_dental').empty();
                         $('#contenedor_nueva_pieza_dental').append(resp.v);
 
@@ -10944,6 +11177,28 @@ setTimeout(function(){
             $('#modal_autorizacion_presupuesto').modal('hide');
         }
 
+         function refrescar_caras_grupos(){
+            $.ajax({
+                type: 'post',
+                url: '{{ ROUTE("dental.refrescar_caras_grupos") }}',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_paciente: $('#id_paciente').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val()
+                },
+                success: function(response){
+                    if (response.estado == 1) {
+                        $('#contenedor_examenes_grupos_dentales').closest('.dental-evaluation-panel').replaceWith(response.evaluacion_adulto_html);
+                        $('#contenedor_examenes_grupos_dentales_odontop').closest('.dental-evaluation-panel').replaceWith(response.caras_cuadrantes_html);
+                    }
+                },
+                error: function(xhr){
+                    console.log('Error al refrescar caras y grupos:', xhr);
+                }
+            });
+         }
+
          function actualizar_presupuesto(){
             // Obtener valores del formulario
 
@@ -11161,6 +11416,10 @@ setTimeout(function(){
                                 }
 
                             });
+
+                            if (typeof actualizarPendientesModalReasignacion === 'function') {
+                                actualizarPendientesModalReasignacion(response);
+                            }
                         }
 
                     } else {

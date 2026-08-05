@@ -13,7 +13,7 @@
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodoncica</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación General</a>
+                        <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" onclick="refrescar_caras_grupos()" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación General</a>
                     </li>
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
@@ -2542,7 +2542,7 @@
                                                             </div>
                                                             <!--NIÑOS-->
                                                             <div class="tab-pane fade" id="eval_infts" role="tabpanel" aria-labelledby="eval_infts_tab">
-                                                                @include('atencion_odontologica.generales.evaluacion_infantil')
+                                                                @include('atencion_odontologica.generales.caras_cuadrantes')
                                                             </div>
                                                         </div>
                                                     </div>
@@ -2936,6 +2936,28 @@
     </div>
 </div>
 <script>
+
+    function refrescar_caras_grupos(){
+        $.ajax({
+            type: 'post',
+            url: '{{ ROUTE("dental.refrescar_caras_grupos") }}',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_ficha_atencion: $('#id_fc').val(),
+                id_paciente: $('#id_paciente').val(),
+                id_lugar_atencion: $('#id_lugar_atencion').val()
+            },
+            success: function(response){
+                if (response.estado == 1) {
+                    $('#contenedor_examenes_grupos_dentales').closest('.dental-evaluation-panel').replaceWith(response.evaluacion_adulto_html);
+                    $('#contenedor_examenes_grupos_dentales_odontop').closest('.dental-evaluation-panel').replaceWith(response.caras_cuadrantes_html);
+                }
+            },
+            error: function(xhr){
+                console.log('Error al refrescar caras y grupos:', xhr);
+            }
+        });
+    }
 
     function indic_period_gen() {
         $('#m_recom_gen_period').modal('show');

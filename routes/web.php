@@ -688,6 +688,7 @@ Route::group([
     Route::post('/eliminar_grupo_dental_post_impl',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_grupo_dental_post_impl'])->name('profesional.eliminar_grupo_dental_post_impl');
     Route::post('/mostrar_nueva_pieza_dental_end_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_end'])->name('profesional.mostrar_nueva_pieza_dental_end');
     Route::post('/mostrar_nueva_pieza_dental_paciente_rx', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_rx'])->name('profesional.mostrar_nueva_pieza_dental_rx');
+    Route::post('/selector-odontograma/piezas', [App\Http\Controllers\EscritorioProfesional::class, 'piezas_selector_odontograma'])->name('profesional.selector_odontograma.piezas');
     Route::post('/mostrar_nueva_pieza_dental_paciente_rx_end', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_rx_end'])->name('profesional.mostrar_nueva_pieza_dental_rx_end');
     Route::post('/eliminar_nueva_pieza_dental_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_nueva_pieza_dental'])->name('profesional.eliminar_nueva_pieza_dental');
     Route::post('/eliminar_pieza_dental_paciente_rx', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_pieza_dental_rx'])->name('profesional.eliminar_pieza_dental_rx');
@@ -3242,6 +3243,7 @@ Route::post('/dental/actualizar_presupuesto_urg',[App\Http\Controllers\DentalCon
 Route::post('/dental/dame_prestaciones_presupuesto',[App\Http\Controllers\DentalController::class, 'dame_prestaciones_presupuesto'])->name('dental.dame_prestaciones_presupuesto');
 Route::post('/dental/eliminar_pedido_insumo',[App\Http\Controllers\DentalController::class, 'eliminar_pedido_insumos_materiales'])->name('dental.eliminar_pedido_insumos_materiales');
 Route::post('/dental/generar_pdf_pedido_insumos',[App\Http\Controllers\DentalController::class, 'generar_pdf_pedido_insumos'])->name('dental.generar_pdf_pedido_insumos');
+Route::post('/dental/refrescar_caras_grupos',[App\Http\Controllers\ficha_atencionController::class, 'refrescarCarasGrupos'])->name('dental.refrescar_caras_grupos');
 Route::post('/dental/guardar_pieza_periodonto',[App\Http\Controllers\DentalController::class, 'guardar_pieza_periodonto'])->name('dental.guardar_pieza_periodonto');
 Route::post('/dental/dame_tratamientos_pieza_impl',[App\Http\Controllers\DentalController::class, 'dame_tratamientos_pieza_impl'])->name('dental.dame_tratamientos_pieza_impl');
 Route::post('/dental/dame_tratamientos_pieza_gral',[App\Http\Controllers\DentalController::class, 'dame_tratamientos_pieza_gral'])->name('dental.dame_tratamientos_pieza_gral');

@@ -816,13 +816,22 @@
         }
 
         // Función para actualizar el input de valor total
+        let solicitudTratamientosAgendaDental = null;
+
         function updateTotalValue() {
             const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
             let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
             let id_presupuesto = selectedOption.val();
 
             $('#id_presupuesto').val(/^\d+$/.test(id_presupuesto) ? id_presupuesto : '');
+            $('#n_presupuesto_dental').val('');
             $('#bono_valor_consulta').val(0);
+            $('#contenedor_tratamientos_presupuesto').empty();
+            limpiarOdontogramaAgenda();
+            if (solicitudTratamientosAgendaDental) {
+                solicitudTratamientosAgendaDental.abort();
+                solicitudTratamientosAgendaDental = null;
+            }
             mostrarDuracionAgendaDental(1);
             if (typeof validar_campos_minimos === 'function') {
                 validar_campos_minimos();
@@ -833,7 +842,7 @@
                 return;
             }
 
-            $.ajax({
+            solicitudTratamientosAgendaDental = $.ajax({
                 type:'post',
                 url: url,
                 data:{
@@ -841,6 +850,7 @@
                     _token: CSRF_TOKEN
                 },
                 success: function(resp){
+                    if (String($('#presupuesto_numero').val()) !== String(id_presupuesto)) return;
                     console.log(resp);
                     $('#n_presupuesto_dental').val(id_presupuesto);
                     $('#id_presupuesto').val(id_presupuesto);
@@ -857,12 +867,13 @@
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
                         $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input tratamiento-agenda-dental" type="checkbox" id="tratamiento${t.id}" data-id="${t.id}" data-tipo="pieza" data-estado-pago="${t.estado_pago || 'pendiente'}" data-bloques="${parseInt(t.cantidad_bloques) || 1}" onchange="recalcularBloquesAgendaDental()" ${disabled}>
+                            <div class="form-check form-switch d-none tratamiento-pieza-agenda">
+                                <input class="form-check-input tratamiento-agenda-dental" type="checkbox" id="tratamiento${t.id}" data-id="${t.id}" data-tipo="pieza" data-pieza="${t.pieza}" data-estado-pago="${t.estado_pago || 'pendiente'}" data-bloques="${parseInt(t.cantidad_bloques) || 1}" onchange="recalcularBloquesAgendaDental()" ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
                         }
                     });
+                    cargarOdontogramaAgenda(tratamientos);
                     todos.forEach(t => {
                         if(t.presupuesto == 1){
                         var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
@@ -881,19 +892,112 @@
                     actualizarIndicadorPagoTratamientos();
                 },
                 error: function(error){
+                    if (error.statusText === 'abort') return;
                     console.log(error);
+                },
+                complete: function(xhr) {
+                    if (solicitudTratamientosAgendaDental === xhr) {
+                        solicitudTratamientosAgendaDental = null;
+                    }
                 }
             });
 
         }
 
+        function limpiarOdontogramaAgenda() {
+            const $selector = $('#selector_odontograma_agenda');
+            $('#selector_odontograma_agenda_wrapper').hide();
+            $('#piezas_odontograma_agenda').val('');
+            $selector.find('[data-selector-pieza]')
+                .prop('disabled', true)
+                .removeClass('is-enabled is-selected')
+                .removeAttr('data-bloques-agenda')
+                .attr('aria-pressed', 'false')
+                .attr('title', 'Pieza no disponible');
+            $selector.find('.selector-odontograma-generico__resumen')
+                .html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+        }
+
+        function cargarOdontogramaAgenda(tratamientos) {
+            const $selector = $('#selector_odontograma_agenda');
+            const disponibles = new Map();
+            (tratamientos || []).forEach(function(tratamiento) {
+                if (Number(tratamiento.presupuesto) === 1 && Number(tratamiento.atendido) !== 1 && tratamiento.pieza) {
+                    const pieza = String(tratamiento.pieza);
+                    const actual = disponibles.get(pieza) || { tratamiento: '', bloques: 0 };
+                    actual.tratamiento = tratamiento.tratamiento || actual.tratamiento || 'Procedimiento dental';
+                    actual.bloques += parseInt(tratamiento.cantidad_bloques) || 1;
+                    disponibles.set(pieza, actual);
+                }
+            });
+
+            limpiarOdontogramaAgenda();
+            if (!disponibles.size) return;
+
+            disponibles.forEach(function(datos, pieza) {
+                $selector.find('[data-selector-pieza="' + pieza + '"]')
+                    .prop('disabled', false)
+                    .addClass('is-enabled')
+                    .attr('data-bloques-agenda', datos.bloques)
+                    .attr('title', datos.tratamiento + ' · ' + datos.bloques + (datos.bloques === 1 ? ' bloque' : ' bloques'));
+            });
+            $('#selector_odontograma_agenda_wrapper').show();
+        }
+
+        $('#selector_odontograma_agenda').off('odontograma:change.agenda').on('odontograma:change.agenda', function(event, piezas) {
+            const seleccionadas = new Set((piezas || []).map(String));
+            $('.tratamiento-agenda-dental[data-tipo="pieza"]').each(function() {
+                if (!this.disabled) {
+                    this.checked = seleccionadas.has(String($(this).data('pieza')));
+                }
+            });
+            recalcularBloquesAgendaDental();
+        });
+        $('#selector_odontograma_agenda')
+            .off('click.recalcularAgenda', '.selector-odontograma-generico__pieza.is-enabled')
+            .on('click.recalcularAgenda', '.selector-odontograma-generico__pieza.is-enabled', function() {
+                setTimeout(recalcularBloquesAgendaDental, 0);
+            });
+
+        function obtenerTratamientosSeleccionadosAgendaDental() {
+            const piezas = new Set(
+                $('#selector_odontograma_agenda [data-selector-pieza].is-selected').map(function() {
+                    return String($(this).data('selector-pieza'));
+                }).get()
+            );
+            const tratamientos = [];
+
+            $('.tratamiento-agenda-dental[data-tipo="pieza"]').each(function() {
+                const seleccionado = piezas.has(String($(this).data('pieza')));
+                if (!this.disabled) this.checked = seleccionado;
+                if (seleccionado) {
+                    tratamientos.push({ id: parseInt($(this).data('id')), tipo: 'pieza' });
+                }
+            });
+            $('.tratamiento-agenda-dental[data-tipo="grupo"]:checked').each(function() {
+                tratamientos.push({ id: parseInt($(this).data('id')), tipo: 'grupo' });
+            });
+
+            return tratamientos.filter(function(item) { return Number.isInteger(item.id) && item.id > 0; });
+        }
+
         function recalcularBloquesAgendaDental() {
             let bloques = 0;
-            $('.tratamiento-agenda-dental:checked').each(function() {
+            $('#selector_odontograma_agenda [data-selector-pieza].is-selected').each(function() {
+                bloques += parseInt($(this).attr('data-bloques-agenda')) || 1;
+            });
+            $('.tratamiento-agenda-dental[data-tipo="grupo"]:checked').each(function() {
                 bloques += parseInt($(this).data('bloques')) || 1;
             });
             mostrarDuracionAgendaDental(Math.max(1, bloques));
             actualizarIndicadorPagoTratamientos();
+        }
+
+        function ajustarBloquesAgendaDental(valor) {
+            const bloques = Math.min(20, Math.max(1, parseInt(valor) || 1));
+            $('#cantidad_bloques_atencion').val(bloques);
+            $('#texto_bloques_atencion').text(bloques === 1 ? 'bloque' : 'bloques');
+            $('#minutos_bloques_atencion').text(bloques * 15);
         }
 
         function actualizarIndicadorPagoTratamientos() {
@@ -927,10 +1031,13 @@
                 <div class="alert alert-info py-2 px-3 mb-3" role="status">
                     <i class="feather icon-clock mr-1"></i>
                     <strong>Duración estimada:</strong>
-                    <span id="cantidad_bloques_atencion">${bloques}</span>
+                    <input type="number" id="cantidad_bloques_atencion" class="form-control form-control-sm d-inline-block mx-1"
+                        value="${bloques}" min="1" max="20" step="1" style="width:72px"
+                        onchange="ajustarBloquesAgendaDental(this.value)" oninput="ajustarBloquesAgendaDental(this.value)">
                     <span id="texto_bloques_atencion">${bloques === 1 ? 'bloque' : 'bloques'}</span>
                     de atención
                     (<span id="minutos_bloques_atencion">${minutos}</span> minutos).
+                    <small class="d-block mt-1">Las piezas calculan los bloques automáticamente; el profesional puede ajustar esta cantidad.</small>
                 </div>`;
 
             const contenedorMensaje = $('#mensaje_duracion_agenda_dental');
@@ -952,10 +1059,10 @@
                 success: function(response) {
                     console.log('Servidor respondió:', response);
                     let bloques_actualizados = response.bloques;
-                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
+                    let bloques_original = parseInt($('#cantidad_bloques_atencion').val() || $('#cantidad_bloques_atencion').text());
                     let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
                     if(bloques < 0) bloques = 0;
-                    $('#cantidad_bloques_atencion').html(bloques);
+                    ajustarBloquesAgendaDental(bloques);
                 },
                 error: function(error) {
                     console.error('Error al enviar datos:', error);

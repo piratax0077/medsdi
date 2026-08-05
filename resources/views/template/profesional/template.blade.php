@@ -3237,12 +3237,16 @@
             let motivoDental = seleccionDental === 'urgencia' ? 'urgencia' :
                 (seleccionDental === 'primera' ? 'primera' : (idPresupuesto ? 'tratamiento' : ''));
             let tratamientosPresupuesto = [];
-            $('.tratamiento-agenda-dental:checked').each(function() {
-                tratamientosPresupuesto.push({
-                    id: parseInt($(this).data('id')),
-                    tipo: $(this).data('tipo')
+            if (typeof obtenerTratamientosSeleccionadosAgendaDental === 'function') {
+                tratamientosPresupuesto = obtenerTratamientosSeleccionadosAgendaDental();
+            } else {
+                $('.tratamiento-agenda-dental:checked').each(function() {
+                    tratamientosPresupuesto.push({
+                        id: parseInt($(this).data('id')),
+                        tipo: $(this).data('tipo')
+                    });
                 });
-            });
+            }
             var tipo_agenda_text = 'C';
             var procedimiento = '';
             var proc_bloque = '';
@@ -3256,7 +3260,7 @@
                 });
                 if (proc_bloque === 0) proc_bloque = 1;
             } else {
-                proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
+                proc_bloque = parseInt($('#cantidad_bloques_atencion').val() || $('#cantidad_bloques_atencion').text()) || 1;
             }
 
             console.log(tipo_agenda);
@@ -3327,6 +3331,10 @@
                 autorizacion_atencion = 1;
             else
                 autorizacion_atencion = 0;
+
+            if (typeof preparar_cierre_agenda_por_guardado === 'function') {
+                preparar_cierre_agenda_por_guardado();
+            }
 
             $.ajax({
 

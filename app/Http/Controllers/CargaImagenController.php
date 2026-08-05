@@ -116,9 +116,8 @@ class CargaImagenController extends Controller
                 $paths[] = $path;
                 $urls[] = Storage::url($path); // Obtén la URL pública de la imagen
 
-                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
-                $publicPath = public_path('storage/images/' . basename($path));
-                File::copy(storage_path('app/public/' . $path), $publicPath);
+                // El enlace public/storage expone el disco público; no se debe
+                // duplicar manualmente el archivo ni depender de carpetas físicas.
             }
         }
 
@@ -303,11 +302,20 @@ class CargaImagenController extends Controller
         }
 
         // Obtener las imágenes anteriores si existen
+        // NOTA: el modelo ImagenesDentalPaciente castea 'paths_imagenes' a 'array',
+        // por lo que Eloquent ya entrega/almacena un array automáticamente.
+        // Llamar aquí a json_decode()/json_encode() manualmente provocaba doble
+        // codificación JSON (bug), dejando el campo inservible tras guardar.
         $imagenes_anteriores = [];
         if ($imagenes_rx->paths_imagenes) {
-            $decoded = json_decode($imagenes_rx->paths_imagenes);
-            foreach ($decoded as $item) {
-                $imagenes_anteriores[] = $item;
+            if (is_array($imagenes_rx->paths_imagenes)) {
+                $imagenes_anteriores = $imagenes_rx->paths_imagenes;
+            } else {
+                // Compatibilidad con registros antiguos corruptos (doble codificados)
+                $decoded = json_decode($imagenes_rx->paths_imagenes, true);
+                if (is_array($decoded)) {
+                    $imagenes_anteriores = $decoded;
+                }
             }
         }
 
@@ -330,8 +338,8 @@ class CargaImagenController extends Controller
             }
         }
 
-        // Guardar nuevamente todo el array
-        $imagenes_rx->paths_imagenes = json_encode($imagenes_anteriores);
+        // Guardar nuevamente todo el array (el cast 'array' del modelo se encarga de codificar a JSON)
+        $imagenes_rx->paths_imagenes = $imagenes_anteriores;
         $imagenes_rx->momento_imagen = $request->detalle;
 
         if ($imagenes_rx->save()) {

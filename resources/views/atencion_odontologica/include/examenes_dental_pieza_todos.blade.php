@@ -1,7 +1,80 @@
-@php $counter = 1; @endphp
+@php
+    $counter = 1;
+    $piezasConExamen = collect($examenes)->map(function ($examen) {
+        return (object) [
+            'pieza' => (string) $examen->numero_pieza,
+            'tratamiento' => $examen->tratamiento_procedimiento ?? null,
+        ];
+    });
+    $primeraPiezaExamen = optional(collect($examenes)->first())->numero_pieza;
+@endphp
+<div class="row examen-pieza-master-detail">
+    <div class="col-sm-12 col-lg-6 mb-3">
+        <div class="card h-100 mb-0">
+            <div class="card-body">
+                @include('atencion_odontologica.include.selector_odontograma', [
+                    'id' => 'selector_historial_examen_pieza',
+                    'inputId' => 'pieza_historial_examen_seleccionada',
+                    'counter' => 'historial',
+                    'multiple' => false,
+                    'compacto' => true,
+                    'soloPendientes' => false,
+                    'autoRefresh' => false,
+                    'piezasDisponibles' => $piezasConExamen,
+                    'piezasSeleccionadas' => $primeraPiezaExamen ? [(string) $primeraPiezaExamen] : [],
+                    'titulo' => 'Historial por pieza',
+                    'ayuda' => 'Seleccione una pieza para revisar sus antecedentes',
+                ])
+                <input type="hidden" id="pieza_historial_examen_seleccionada" value="{{ $primeraPiezaExamen ?: 0 }}">
+                <div class="alert alert-info mt-3 mb-0 py-2">
+                    Debajo se listan todas las piezas examinadas. Seleccione una pieza para resaltarla y saltar a su detalle.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-lg-6 examen-pieza-lista-detalle">
+        <div class="card detalle-examen-pieza-vacio" @if($examenes->isNotEmpty()) style="display:none" @endif>
+            <div class="card-body text-center py-5">
+                <i class="feather icon-info text-primary" style="font-size:2rem"></i>
+                <h5 class="mt-3">Esta pieza no tiene examen registrado</h5>
+                <p class="text-muted mb-0">Puede completar el formulario de nuevo examen para crear su primera evaluación.</p>
+            </div>
+        </div>
                                         @foreach ($examenes as $examen)
-                                        <div class="card">
+                                        <div class="card detalle-examen-pieza mb-3" data-detalle-pieza="{{ $examen->numero_pieza }}">
                                             <div class="card-body">
+                                                @php
+                                                    $estadoProcedimiento = (int) ($examen->estado_procedimiento ?? 0);
+
+                                                    $estadosProcedimiento = [
+                                                        0 => [
+                                                            'texto' => 'PENDIENTE',
+                                                            'clase' => 'badge-danger',
+                                                        ],
+                                                        1 => [
+                                                            'texto' => 'FINALIZADO',
+                                                            'clase' => 'badge-success',
+                                                        ],
+                                                        2 => [
+                                                            'texto' => 'EN PROCESO',
+                                                            'clase' => 'badge-info',
+                                                        ],
+                                                        3 => [
+                                                            'texto' => 'CITADO A CONTROL',
+                                                            'clase' => 'badge-warning',
+                                                        ],
+                                                    ];
+
+                                                    $estadoActual = $estadosProcedimiento[$estadoProcedimiento]
+                                                        ?? $estadosProcedimiento[0];
+
+                                                    $estadoTexto = $estadoActual['texto'];
+                                                    $estadoClase = $estadoActual['clase'];
+                                                @endphp
+                                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                                    <div><strong>Pieza {{ $examen->numero_pieza }}</strong><br><small class="text-muted">{{ $examen->tratamiento_procedimiento }}</small></div>
+                                                    <span class="badge {{ $estadoClase }} px-3 py-2">{{ $estadoTexto }}</span>
+                                                </div>
                                                 <div class="mb-3">
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -13,7 +86,7 @@
                                                         <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                                             <div class="form-group">
                                                                 <label class="floating-label-activo-sm">Historia Anterior</label>
-                                                                <input type="text" class="form-control form-control-sm" name="ex_grl_hp{{ $counter }}" id="ex_grl_hp{{ $counter }}" value="{{ $examen->historia_anterior }}">
+                                                                <textarea class="form-control form-control-sm" rows="3" name="ex_grl_hp{{ $counter }}" id="ex_grl_hp{{ $counter }}" readonly>{{ $examen->historial_registros ?? $examen->historia_anterior }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -168,6 +241,45 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @php $historialCompleto = $examen->historial_completo ?? collect(); @endphp
+                                                @if($historialCompleto->count() > 1)
+                                                <div class="mt-3">
+                                                    <h6 class="text-muted mb-2"><i class="feather icon-clock"></i> Historial de registros de esta pieza ({{ $historialCompleto->count() }})</h6>
+                                                    <div class="list-group">
+                                                        @php
+                                                            $textoIntensidad = [1 => 'Leve', 2 => 'Moderada', 3 => 'Severa', 4 => 'Intensa', 5 => 'Otro'];
+                                                            $textoModoDolor = [1 => 'Pulsátil', 2 => 'Permanente', 3 => 'Otro'];
+                                                            $textoLocalizacion = [1 => 'Localizado', 2 => 'Referido', 3 => 'Otro'];
+                                                            $textoProvocacion = [1 => 'Frío', 2 => 'Calor', 3 => 'Actividad', 4 => 'Masticación', 5 => 'Otro'];
+                                                        @endphp
+                                                        @foreach($historialCompleto as $registroHist)
+                                                            @php
+                                                                $fechaHist = $registroHist->fecha_examen
+                                                                    ? \Carbon\Carbon::parse($registroHist->fecha_examen)->format('d-m-Y')
+                                                                    : optional($registroHist->created_at)->format('d-m-Y H:i');
+                                                            @endphp
+                                                            <div class="list-group-item {{ $loop->first ? 'border-primary' : '' }}">
+                                                                <div class="d-flex justify-content-between align-items-start">
+                                                                    <strong>{{ $fechaHist ?: 'Sin fecha' }}</strong>
+                                                                    @if($loop->first)
+                                                                        <span class="badge badge-primary">Último</span>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="small text-muted mt-1">
+                                                                    Zona de dolor: {{ $registroHist->zona_dolor ?: '-' }} |
+                                                                    Intensidad: {{ $textoIntensidad[$registroHist->intensidad_dolor] ?? '-' }} |
+                                                                    Modo dolor: {{ $textoModoDolor[$registroHist->modo_dolor] ?? '-' }} |
+                                                                    Localización: {{ $textoLocalizacion[$registroHist->localizacion] ?? '-' }} |
+                                                                    Provocación: {{ $textoProvocacion[$registroHist->provocacion_dolor] ?? '-' }}
+                                                                    @if($registroHist->observaciones)
+                                                                        <br>Observaciones: {{ $registroHist->observaciones }}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                @endif
                                             </div>
                                             <div class="card-footer">
                                                 <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_pieza_dental_pieza({{ $examen->id }},'gral')"><i class="feather icon-x"></i></button>
@@ -175,3 +287,34 @@
                                         </div>
                                         @php $counter++; @endphp
                                         @endforeach
+    </div>
+</div>
+<script>
+(function(){
+    const $selector=$('#selector_historial_examen_pieza');
+    $selector.on('odontograma:change',function(event,piezas){
+        const pieza=(piezas||[])[0];
+        const $contenedor=$selector.closest('.examen-pieza-master-detail');
+        const $detalle=$contenedor.find('[data-detalle-pieza="'+pieza+'"]').first();
+        if(!$detalle.length){ return; }
+        // Todas las tarjetas ya están visibles; solo se resalta y se hace scroll a la elegida.
+        $contenedor.find('.detalle-examen-pieza').removeClass('border-primary');
+        $detalle.addClass('border-primary');
+        $detalle.get(0).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+})();
+</script>
+<style>
+@media (min-width: 992px) {
+    .examen-pieza-master-detail .detalle-examen-pieza .form-row > [class*="col-"] {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+@media (max-width: 991.98px) {
+    .examen-pieza-master-detail .detalle-examen-pieza .form-row > [class*="col-"] {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+</style>

@@ -1,9 +1,8 @@
-<div class="row bg-white shadow-sm rounded mx-1">
+<div class="row bg-white shadow-sm rounded mx-1 dental-evaluation-panel dental-evaluation-adult">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12 mt-3 mb-0">
-                <h6 class="f-16 text-c-blue">Evaluación Adulto</h6>
-                <hr>
+            <div class="col-md-12 dental-evaluation-title">
+                <h6 class="f-16 text-c-blue">Evaluación adulta por grupos dentales</h6>
             </div>
         </div>
 
@@ -14,7 +13,7 @@
             <div id="contenedor_examenes_grupos_dentales">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
+                        <ul class="nav nav-tabs-aten nav-fill mb-10 dental-group-tabs" id="orl_adulto" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link-aten text-reset active" id="grupo_1_tab" data-toggle="tab" href="#grupo_1" role="tab" aria-controls="grupo_1" aria-selected="true">Grupo I</a>
                             </li>
@@ -26,12 +25,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link-aten text-reset" id="grupo_4-tab" data-toggle="tab" href="#grupo_4" role="tab" aria-controls="grupo_4" aria-selected="true">Grupo IV</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="grupo_5-tab" data-toggle="tab" href="#grupo_5" role="tab" aria-control="grupo_5" aria-selected="false">Grupo V</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-aten text-reset" id="grupo_6-tab" data-toggle="tab" href="#grupo_6" role="tab" aria-control="grupo_6" aria-selected="false">Grupo VI</a>
                             </li>
                         </ul>
                     </div>
@@ -74,8 +67,8 @@
                                                                                     <option value="{{ $primer->numero_pieza }}"> {{ $primer->numero_pieza }} </option>
                                                                                 </select>
                                                                                 <div id="t53">
-                                                                                    <img src="{{ asset('images/dental/i/dientes/d18.png') }}"
-                                                                                        class="wid-40 py-1">
+                                                                                    <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $primer->numero_pieza).'.png') }}"
+                                                                                        class="wid-40 py-1" alt="{{ $primer->numero_pieza }}">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="align-middle text-center">
@@ -134,17 +127,17 @@
                                                                                     data-content="cargar historia del diente" onclick="info_odontograma('{{ $primer->numero_pieza }}')">Ver
                                                                                     historia</button></td>
                                                                             <td class="px-1 py-1">
-                                                                                <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_1"
+                                                                                <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_1" tabindex="-1" aria-readonly="true"
                                                                                     name="diagnostico_{{ $loop->index + 1 }}_1">
-                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option value="0">Sin diagnóstico asociado</option>
                                                                                     @foreach($diagnosticos as $diagnostico)
-                                                                                        <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                        <option value="{{$diagnostico->id}}" {{ (string) ($primer->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                     @endforeach
                                                                                 </select>
                                                                             </td>
                                                                             <td class="px-1 py-1">
-                                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_1" name="tratamiento_{{ $loop->index + 1 }}_1" placeholder="Tratamiento">
-                                                                                <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'gral')" style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
+                                                                                <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_1" value="{{ $primer->tratamiento_plan ?? '' }}" readonly />
+                                                                                <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'gral')" style="margin-top:15px" class="btn btn-info btn-sm">Guardar caras</button>
                                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                                     value="1">
                                                                                     <input type="hidden" name="cuadrante" id="cuadrante" value="1">
@@ -189,8 +182,8 @@
                                                                                     <option value="{{ $primer->numero_pieza }}"> {{ $primer->numero_pieza }} </option>
                                                                                 </select>
                                                                                 <div id="t53">
-                                                                                    <img src="{{ asset('images/dental/i/dientes/d18.png') }}"
-                                                                                        class="wid-40 py-1">
+                                                                                    <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $primer->numero_pieza).'.png') }}"
+                                                                                        class="wid-40 py-1" alt="{{ $primer->numero_pieza }}">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="align-middle text-center">
@@ -321,8 +314,8 @@
                                                                                     <option value="{{ $segundo->numero_pieza }}"> {{ $segundo->numero_pieza }}</option>
                                                                                 </select>
                                                                                 <div id="t53">
-                                                                                    <img src="{{ asset('images/dental/i/dientes/d21.png') }}"
-                                                                                        class="wid-40 py-1">
+                                                                                    <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $segundo->numero_pieza).'.png') }}"
+                                                                                        class="wid-40 py-1" alt="{{ $segundo->numero_pieza }}">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="align-middle text-center">
@@ -375,16 +368,16 @@
                                                                                     data-content="cargar historia del diente">Ver
                                                                                     historia</button></td>
                                                                             <td class="px-1 py-1">
-                                                                                <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_2"
+                                                                                <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_2" tabindex="-1" aria-readonly="true"
                                                                                     name="diagnostico_{{ $loop->index + 1 }}_2">
-                                                                                    <option value="0">Seleccione</option>
+                                                                                    <option value="0">Sin diagnóstico asociado</option>
                                                                                     @foreach($diagnosticos as $diagnostico)
-                                                                                        <option value="{{$diagnostico->id}}">{{$diagnostico->descripcion}} </option>
+                                                                                        <option value="{{$diagnostico->id}}" {{ (string) ($segundo->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
                                                                                     @endforeach
                                                                                 </select>
                                                                             </td>
                                                                             <td class="px-1 py-1">
-                                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_2" name="tratamiento_{{ $loop->index + 1 }}_2" placeholder="Tratamiento">
+                                                                                <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_2" value="{{ $segundo->tratamiento_plan ?? '' }}" readonly />
 
                                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}2" id="odontograma{{ $loop->index + 1 }}2"
                                                                                     value="1">
@@ -401,7 +394,7 @@
                                                                                 <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_2" id="caraP_check_{{ $loop->index + 1 }}_2"
                                                                                     value="0">
                                                                                 <button type="button" onclick="registrar_odontograma_segundo_cuadrante({{ $loop->index + 1 }},'gral')" class="btn btn-info btn-sm">
-                                                                                    Registrar
+                                                                                    Guardar caras
                                                                                 </button>
                                                                             </td>
                                                                         </tr>
@@ -430,8 +423,8 @@
                                                                                     <option value="{{ $segundo->numero_pieza }}"> {{ $segundo->numero_pieza }}</option>
                                                                                 </select>
                                                                                 <div id="t53">
-                                                                                    <img src="{{ asset('images/dental/i/dientes/d21.png') }}"
-                                                                                        class="wid-40 py-1">
+                                                                                    <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $segundo->numero_pieza).'.png') }}"
+                                                                                        class="wid-40 py-1" alt="{{ $segundo->numero_pieza }}">
                                                                                 </div>
                                                                             </td>
                                                                             <td class="align-middle text-center">
@@ -562,8 +555,8 @@
                                                                                 <option value="{{ $tercer->numero_pieza }}"> {{ $tercer->numero_pieza }} </option>
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d26.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $tercer->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $tercer->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -616,18 +609,16 @@
                                                                                 data-content="cargar historia del diente" onclick="info_odontograma('{{ $tercer->numero_pieza }}')">Ver
                                                                                 historia</button></td>
                                                                         <td class="px-1 py-1">
-                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_3"
+                                                                            <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_3" tabindex="-1" aria-readonly="true"
                                                                                 name="diagnostico_{{ $loop->index + 1 }}_3">
-                                                                                <option value="0">Diagnóstico</option>
-                                                                                <option value="01">Caries</option>
-                                                                                <option value="02">Fractura</option>
-                                                                                <option value="03">Periodontopatia</option>
-                                                                                <option value="04">Profilaxis</option>
-                                                                                <option value="05">Restos radiculares</option>
+                                                                                <option value="0">Sin diagnóstico asociado</option>
+                                                                                @foreach($diagnosticos as $diagnostico)
+                                                                                    <option value="{{$diagnostico->id}}" {{ (string) ($tercer->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </td>
                                                                         <td class="px-1 py-1">
-                                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_3" name="tratamiento_{{ $loop->index + 1 }}_3" placeholder="Tratamiento">
+                                                                            <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_3" value="{{ $tercer->tratamiento_plan ?? '' }}" readonly />
 
                                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_3" id="odontograma{{ $loop->index + 1 }}_3"
                                                                                 value="1">
@@ -644,7 +635,7 @@
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_3" id="caraP_check_{{ $loop->index + 1 }}_3"
                                                                                 value="0">
                                                                             <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_tercer_cuadrante({{ $loop->index + 1 }},'gral')">
-                                                                                Registrar
+                                                                                Guardar caras
                                                                             </button>
 
                                                                         </td>
@@ -675,8 +666,8 @@
                                                                                 <option value="{{ $tercer->numero_pieza }}"> {{ $tercer->numero_pieza }} </option>
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d26.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $tercer->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $tercer->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -811,8 +802,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $cuarto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $cuarto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -865,18 +856,16 @@
                                                                                 data-content="cargar historia del diente" onclick="info_odontograma('{{ $cuarto->numero_pieza }}')">Ver
                                                                                 historia</button></td>
                                                                         <td class="px-1 py-1">
-                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_4"
-                                                                                name="diagnostico_4">
-                                                                                <option value="0">Diagnóstico</option>
-                                                                                <option value="01">Caries</option>
-                                                                                <option value="02">Fractura</option>
-                                                                                <option value="03">periodontopatia</option>
-                                                                                <option value="04">profilaxis</option>
-                                                                                <option value="05">Restos radiculares</option>
+                                                                            <select class="form-control form-control-sm bg-light plan-field-readonly" id="diagnostico_{{ $loop->index + 1 }}_4" tabindex="-1" aria-readonly="true"
+                                                                                name="diagnostico_{{ $loop->index + 1 }}_4">
+                                                                                <option value="0">Sin diagnóstico asociado</option>
+                                                                                @foreach($diagnosticos as $diagnostico)
+                                                                                    <option value="{{$diagnostico->id}}" {{ (string) ($cuarto->diagnostico_plan ?? '') === (string) $diagnostico->id ? 'selected' : '' }}>{{$diagnostico->descripcion}} </option>
+                                                                                @endforeach
                                                                             </select>
                                                                         </td>
                                                                         <td class="px-1 py-1">
-                                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_4" name="tratamiento_{{ $loop->index + 1 }}_4" placeholder="Tratamiento">
+                                                                            <input type="text" class="form-control form-control-sm bg-light" id="tratamiento_{{ $loop->index + 1 }}_4" value="{{ $cuarto->tratamiento_plan ?? '' }}" readonly />
 
                                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_4" id="odontograma{{ $loop->index + 1 }}_4"
                                                                                 value="1">
@@ -891,7 +880,7 @@
                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_4" id="caraP_check_{{ $loop->index + 1 }}_4"
                                                                                 value="0">
                                                                             <button type="button" class="btn btn-info btn-sm" onclick="registrar_odontograma_cuarto_cuadrante({{ $loop->index + 1 }},'gral')">
-                                                                                Registrar
+                                                                                Guardar caras
                                                                             </button>
                                                                         </td>
                                                                     </tr>
@@ -925,8 +914,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $cuarto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $cuarto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -1025,6 +1014,8 @@
                                     </div>
                                 </div>
                             </div>
+                            {{-- Grupos V y VI deshabilitados: corresponden a cuadrantes odontopediátricos (5-8), ya cubiertos en la Evaluación Pediátrica (caras_cuadrantes.blade.php) --}}
+                            @if(false)
                             <!--GRUPO 5-->
                             <div class="tab-pane fade show" id="grupo_5" role="tabpanel" aria-labelledby="grupo_5-tab">
                                 <div class="card">
@@ -1060,8 +1051,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $quinto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $quinto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -1174,8 +1165,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $quinto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $quinto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -1309,8 +1300,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $sexto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $sexto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -1422,8 +1413,8 @@
 
                                                                             </select>
                                                                             <div id="t53">
-                                                                                <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
-                                                                                    class="wid-40 py-1">
+                                                                                <img src="{{ asset('images/dental/i/dientes/d'.str_replace('.', '', $sexto->numero_pieza).'.png') }}"
+                                                                                    class="wid-40 py-1" alt="{{ $sexto->numero_pieza }}">
                                                                             </div>
                                                                         </td>
                                                                         <td class="align-middle text-center">
@@ -1521,6 +1512,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -1616,6 +1608,13 @@
         </div>
     </div>
 </div>
+
+<style>
+    .plan-field-readonly {
+        pointer-events: none;
+        color: #495057;
+    }
+</style>
 
 <script>
     function registrar_odontograma_primer_cuadrante(count, tipo){
@@ -1718,7 +1717,7 @@ let switchPresupuesto = `
                             switchSeleccion
                         ]);
                         }
-                        
+
                     });
 
                     // Agrega las nuevas filas
@@ -1869,16 +1868,16 @@ let switchPresupuesto = `
                             switchSeleccion
                         ]);
                         }
-                        
+
                     });
 
                     // Agrega las nuevas filas
                     table.rows.add(data).draw();
 
-                    
+
                     $('#table_trabajos_presupuesto tbody').empty();
                     odontograma.forEach(function(odonto){
-                        
+
                         $('#table_trabajos_presupuesto tbody').append(`
                             <tr>
                                 <td>${odonto.fecha}</td>
@@ -2017,11 +2016,11 @@ let switchPresupuesto = `
                     // Agrega las nuevas filas
                     table.rows.add(data).draw();
 
-                    
+
                     $('#table_trabajos_presupuesto tbody').empty();
                     odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
-                            
+
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -2161,11 +2160,11 @@ let switchPresupuesto = `
                     // Agrega las nuevas filas
                     table.rows.add(data).draw();
 
-                    
+
                     $('#table_trabajos_presupuesto tbody').empty();
                     odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
-                            
+
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -2306,11 +2305,11 @@ let switchPresupuesto = `
                     // Agrega las nuevas filas
                     table.rows.add(data).draw();
 
-                    
+
                     $('#table_trabajos_presupuesto tbody').empty();
                     odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
-                            
+
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -2451,11 +2450,11 @@ let switchPresupuesto = `
                     // Agrega las nuevas filas
                     table.rows.add(data).draw();
 
-                    
+
                     $('#table_trabajos_presupuesto tbody').empty();
                     odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
-                            
+
                         $('#table_trabajos_presupuesto tbody').append(`
                             <tr>
                                 <td>${odonto.fecha}</td>
@@ -2583,16 +2582,16 @@ let switchPresupuesto = `
                                         switchSeleccion
                                     ]);
                                 }
-                                
+
                             });
 
                             // Agrega las nuevas filas
                             table_odontograma.rows.add(data).draw();
-                        
+
                         $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
                             if(odonto.presupuesto == 1){
-                                
+
                                 $('#table_trabajos_presupuesto tbody').append(`
                                     <tr>
                                         <td>${odonto.fecha}</td>
