@@ -37666,7 +37666,7 @@ SMALL PARA INFORMACIÓN
                         color: #5f6b7a;
                     }
                   
-/** FILAS ALTERNADAS (table-striped) MAS TENUES EN TODO EL PROYECTO **/
+/** FILAS ALTERNADAS  MAS TENUES EN TODO EL PROYECTO **/
 .table-striped > tbody > tr:nth-of-type(odd) > * {
     --bs-table-accent-bg: rgba(70, 128, 255, 0.035);
 }
@@ -37676,4 +37676,107 @@ SMALL PARA INFORMACIÓN
     background-color: rgba(70, 128, 255, 0.035);
 }
 
+/**ADVERTENCIA DE SESION **/
+.sdi-toast {
+    position: fixed;
+    top: 65px;
+    right: 20px;
+    z-index: 10500;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(30, 40, 80, .08), 0 12px 40px rgba(30, 40, 80, .28);
+    padding: 14px 36px 14px 14px;
+    overflow: hidden;
+    animation: sdi-toast-entrada .35s ease;
+}
+.sdi-toast.sdi-toast-salir {
+    animation: sdi-toast-salida .35s ease forwards;
+}
+@keyframes sdi-toast-entrada {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes sdi-toast-salida {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(30px); }
+}
+.sdi-toast-icono {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 50%;
+    background-color: rgba(255, 186, 87, .18);
+    color: #d99a2b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+.sdi-toast-titulo {
+    display: block;
+    color: #2b2f3a;
+    font-size: .92rem;
+    margin-bottom: 2px;
+}
+.sdi-toast-texto {
+    margin: 0;
+    color: #5f6b7a;
+    font-size: .85rem;
+    line-height: 1.4;
+}
+.sdi-toast-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: #8b93a7;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+.sdi-toast-cerrar:hover {
+    color: #2b2f3a;
+}
+.sdi-toast-progreso {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    background-color: #ffba57;
+    transform-origin: left;
+    animation: sdi-toast-progreso 45s linear forwards;
+}
+@keyframes sdi-toast-progreso {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+@media (max-width: 480px) {
+    .sdi-toast {
+        left: 16px;
+        right: 16px;
+        width: auto;
+        top: 80px;
+    }
+}
+
+/** PANEL INFORMACIÓN PACIENTE EN SIDEBAR (menu.blade.php) **/
+#info_cliente .text-uppercase {
+    text-transform: uppercase !important;
+}
+#info_cliente h6 {
+    text-transform: uppercase !important;
+}
+#listado_patologias_paciente li {
+    text-transform: uppercase;
+    font-size: 11px;
+}
 

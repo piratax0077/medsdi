@@ -5491,7 +5491,7 @@
                     @if (session('titulo_warning'))
                         title: "{{ session('titulo_warning') }}",
                     @else
-                        title: "Registro de Ficha Clínica.",
+                        title: "Advertencia",
                     @endif
                     text: "{{ session('warning') }}",
                     icon: "warning",
