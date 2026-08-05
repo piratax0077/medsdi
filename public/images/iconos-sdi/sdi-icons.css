@@ -1,0 +1,206 @@
+/* =============================================================================
+   ICONOS SDI - Hoja de estilos
+   =============================================================================
+
+   COMO SE USA
+   -----------
+       <i class="sdi sdi-lock"></i>
+
+       sdi        -> clase base, siempre va
+       sdi-lock   -> nombre del icono (ver demo.html para la lista completa)
+
+   El icono siempre toma el color del texto que lo rodea. Por eso funcionan
+   directamente las clases de Bootstrap:
+
+       <i class="sdi sdi-lock text-danger"></i>
+       <i class="sdi sdi-lock text-dark"></i>
+
+   ========================================================================== */
+
+
+/* -----------------------------------------------------------------------------
+   1. CLASE BASE
+   -----------------------------------------------------------------------------
+   El tamano del icono es 1em, es decir, del mismo alto que la letra que tiene
+   al lado. Asi el icono siempre queda proporcionado con el texto.
+   -------------------------------------------------------------------------- */
+.sdi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+
+    /* Las etiquetas <i> vienen en cursiva por defecto: lo anulamos */
+    font-style: normal;
+
+    /* Alinea el icono con la linea base del texto */
+    vertical-align: -0.125em;
+
+    /* Evita que el icono se aplaste dentro de un flex */
+    flex-shrink: 0;
+
+    /* No interfiere con los clics del elemento que lo contiene (ej. botones) */
+    -webkit-user-select: none;
+            user-select: none;
+}
+
+/* El <svg> lo inyecta sdi-icons.js dentro de la etiqueta <i> */
+.sdi > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    /* CLAVE: hace que el icono herede el color del texto */
+    fill: currentColor;
+}
+
+
+/* -----------------------------------------------------------------------------
+   2. TAMANOS RELATIVOS
+   -----------------------------------------------------------------------------
+   Crecen o se achican en proporcion al texto. Son los recomendados.
+   -------------------------------------------------------------------------- */
+.sdi-xs { font-size: 0.75em; }
+.sdi-sm { font-size: 0.875em; }
+.sdi-lg { font-size: 1.33em; }
+.sdi-xl { font-size: 1.5em; }
+.sdi-2x { font-size: 2em; }
+.sdi-3x { font-size: 3em; }
+.sdi-4x { font-size: 4em; }
+
+
+/* -----------------------------------------------------------------------------
+   3. TAMANOS FIJOS (en pixeles)
+   -----------------------------------------------------------------------------
+   Utiles cuando el icono va solo, sin texto al lado (por ejemplo dentro de
+   un boton redondo o de una tarjeta).
+   -------------------------------------------------------------------------- */
+.sdi-16 { font-size: 16px; }
+.sdi-20 { font-size: 20px; }
+.sdi-24 { font-size: 24px; }
+.sdi-32 { font-size: 32px; }
+.sdi-48 { font-size: 48px; }
+.sdi-64 { font-size: 64px; }
+
+
+/* -----------------------------------------------------------------------------
+   4. COLORES
+   -----------------------------------------------------------------------------
+   NO son obligatorios: si no pones ninguno, el icono usa el color del texto.
+   Tambien puedes usar las clases de Bootstrap (text-danger, text-dark, etc.).
+
+   Estos colores son los mismos que ya usa el sistema en style.css.
+   -------------------------------------------------------------------------- */
+.sdi-primary  { color: #1a49a3; }  /* azul institucional */
+.sdi-info     { color: #31bebe; }  /* turquesa */
+.sdi-success  { color: #72B02C; }  /* verde */
+.sdi-danger   { color: #ff5252; }  /* rojo */
+.sdi-warning  { color: #ffba57; }  /* amarillo */
+.sdi-purple   { color: #A06CC1; }  /* morado */
+.sdi-dark     { color: #343a40; }  /* gris oscuro */
+.sdi-muted    { color: #8b93a7; }  /* gris suave */
+.sdi-white    { color: #ffffff; }
+
+
+/* -----------------------------------------------------------------------------
+   5. AYUDAS DE ALINEACION
+   -------------------------------------------------------------------------- */
+
+/* Ancho fijo: alinea verticalmente varios iconos en una lista o menu */
+.sdi-fw {
+    width: 1.25em;
+}
+
+/* Separacion automatica cuando el icono va antes del texto */
+.sdi-espacio {
+    margin-right: 0.4em;
+}
+
+/* Separacion cuando el icono va despues del texto */
+.sdi-espacio-izq {
+    margin-left: 0.4em;
+}
+
+
+/* -----------------------------------------------------------------------------
+   6. ICONO DENTRO DE UN CIRCULO
+   -----------------------------------------------------------------------------
+   Uso:  <i class="sdi sdi-lock sdi-circulo sdi-primary"></i>
+   -------------------------------------------------------------------------- */
+.sdi-circulo {
+    width: 2.4em;
+    height: 2.4em;
+    padding: 0.6em;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.sdi-circulo.sdi-primary { background-color: rgba(26, 73, 163, 0.10); }
+.sdi-circulo.sdi-info    { background-color: rgba(49, 190, 190, 0.12); }
+.sdi-circulo.sdi-success { background-color: rgba(114, 176, 44, 0.12); }
+.sdi-circulo.sdi-danger  { background-color: rgba(255, 82, 82, 0.12); }
+.sdi-circulo.sdi-warning { background-color: rgba(255, 186, 87, 0.16); }
+.sdi-circulo.sdi-purple  { background-color: rgba(160, 108, 193, 0.12); }
+
+
+/* -----------------------------------------------------------------------------
+   7. ANIMACIONES
+   -----------------------------------------------------------------------------
+   Uso:  <i class="sdi sdi-reloj-1 sdi-girar"></i>   (util para "cargando...")
+   -------------------------------------------------------------------------- */
+.sdi-girar {
+    animation: sdi-girar 1.4s linear infinite;
+}
+
+@keyframes sdi-girar {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.sdi-latido {
+    animation: sdi-latido 1.6s ease-in-out infinite;
+}
+
+@keyframes sdi-latido {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.12); }
+}
+
+/* Accesibilidad: si la persona configuro su sistema para reducir el
+   movimiento, las animaciones se desactivan automaticamente. */
+@media (prefers-reduced-motion: reduce) {
+    .sdi-girar,
+    .sdi-latido {
+        animation: none;
+    }
+}
+
+
+/* -----------------------------------------------------------------------------
+   8. ROTACION Y ESPEJO
+   -------------------------------------------------------------------------- */
+.sdi-rotar-90  { transform: rotate(90deg); }
+.sdi-rotar-180 { transform: rotate(180deg); }
+.sdi-rotar-270 { transform: rotate(270deg); }
+
+.sdi-espejo-h { transform: scaleX(-1); }
+.sdi-espejo-v { transform: scaleY(-1); }
+
+
+/* -----------------------------------------------------------------------------
+   9. ESTADO DE CARGA
+   -----------------------------------------------------------------------------
+   Mientras el sprite todavia no se descarga, el espacio del icono ya queda
+   reservado (por el width/height de la clase base), asi la pagina no "salta".
+   -------------------------------------------------------------------------- */
+.sdi:empty {
+    opacity: 0;
+}
+
+.sdi:not(:empty) {
+    opacity: 1;
+    transition: opacity 0.15s ease;
+}
