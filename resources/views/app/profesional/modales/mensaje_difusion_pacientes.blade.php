@@ -2,12 +2,15 @@
 <div class="modal fade" id="modalMensajeDifusionPacientes" tabindex="-1" role="dialog" aria-labelledby="modalMensajeDifusionPacientesLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title" id="modalMensajeDifusionPacientesLabel">
-                    <i class="feather icon-radio mr-1"></i> Mensaje de difusión a mis pacientes
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
+            <div class="modal-header-sdi">
+                <div class="modal-header-sdi-textos">
+                    <h5 class="modal-title-sdi" id="modalMensajeDifusionPacientesLabel">
+                        <i class="feather icon-radio text-c-blue mr-1"></i> Mensaje de difusión a mis pacientes
+                    </h5>
+                    <p class="modal-subtitle-sdi">Envía un correo masivo a tus pacientes.</p>
+                </div>
+                <button type="button" class="btn-cerrar" data-dismiss="modal" aria-label="Cerrar" onclick="cerrar_modal_difusion_pacientes();">
+                    <i class="feather icon-x"></i>
                 </button>
             </div>
 
@@ -19,22 +22,22 @@
                 <div class="form-row">
                     <div class="form-group col-sm-12">
                         <label class="floating-label-activo-sm" for="asunto_mensaje_difusion_pacientes">Asunto</label>
-                        <input type="text" class="form-control form-control-sm" id="asunto_mensaje_difusion_pacientes" autocomplete="off" maxlength="150">
+                        <input type="text" class="form-control form-control-sm" placeholder="Escribe el asunto" id="asunto_mensaje_difusion_pacientes" autocomplete="off" maxlength="150">
                     </div>
 
                     <div class="form-group col-sm-12">
                         <label class="floating-label-activo-sm" for="contenido_mensaje_difusion_pacientes">Mensaje</label>
-                        <textarea class="form-control form-control-sm" id="contenido_mensaje_difusion_pacientes" rows="5" maxlength="2000"></textarea>
-                        <small class="text-muted">Máximo 2000 caracteres.</small>
+                        <textarea class="form-control form-control-sm" id="contenido_mensaje_difusion_pacientes" rows="5" maxlength="2000" placeholder="Escribe tu mensaje aquí"></textarea>
+                        <small class="text-muted">Máximo 0/2000 caracteres.</small>
                     </div>
                 </div>
             </div>
 
-            <div class="modal-footer d-flex justify-content-between">
-                <button type="button" class="btn btn-light btn-sm" data-dismiss="modal">
-                    Cancelar
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" onclick="cerrar_modal_difusion_pacientes();">
+                    <i class="feather icon-x"></i> Cerrar
                 </button>
-                <button type="button" class="btn btn-info btn-sm" id="btn_enviar_difusion_pacientes" onclick="enviar_mensaje_difusion_paciente_confirmar()">
+                <button type="button" class="btn btn-info" id="btn_enviar_difusion_pacientes" onclick="enviar_mensaje_difusion_paciente_confirmar()">
                     <i class="feather icon-mail"></i> Enviar difusión
                 </button>
             </div>
@@ -43,6 +46,18 @@
 </div>
 
 <script>
+    function cerrar_modal_difusion_pacientes() {
+        $('#modalMensajeDifusionPacientes').modal('hide');
+
+        // Respaldo: si el fondo oscuro queda pegado, se limpia manualmente
+        setTimeout(function () {
+            if (!$('.modal.show').length) {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+            }
+        }, 300);
+    }
+
     $('#modalMensajeDifusionPacientes').on('hidden.bs.modal', function () {
         $('#asunto_mensaje_difusion_pacientes').val('');
         $('#contenido_mensaje_difusion_pacientes').val('');
@@ -98,7 +113,7 @@
                             icon: 'success',
                             button: 'Aceptar'
                         }).then(function () {
-                            $('#modalMensajeDifusionPacientes').modal('hide');
+                            cerrar_modal_difusion_pacientes();
                         });
                     } else {
                         swal({

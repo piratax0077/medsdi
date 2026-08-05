@@ -44,18 +44,18 @@ File: style.css
 
 @font-face {
     font-family: 'Nunito';
-    src: url(../fonts/nunito/Nunito-Bold.ttf) format("truetype");
-    src: url(../fonts/nunito/Nunito-Bold.woff2) format("woff2");
-    src: url(../fonts/nunito/Nunito-Bold.woff) format("woff");
-    font-style: bold;
-    font-weight: 600;
+    src: url(../fonts/nunito/Nunito-Bold.woff2) format("woff2"),
+         url(../fonts/nunito/Nunito-Bold.woff) format("woff"),
+         url(../fonts/nunito/Nunito-Bold.ttf) format("truetype");
+    font-style: normal;
+    font-weight: 700 900;
   }
 
   @font-face {
     font-family: 'Nunito';
-    src: url(../fonts/nunito/Nunito-Regular.ttf) format("truetype");
-    src: url(../fonts/nunito/Nunito-Regular.woff2) format("woff2");
-    src: url(../fonts/nunito/Nunito-Regular.woff) format("woff");
+    src: url(../fonts/nunito/Nunito-Regular.woff2) format("woff2"),
+         url(../fonts/nunito/Nunito-Regular.woff) format("woff"),
+         url(../fonts/nunito/Nunito-Regular.ttf) format("truetype");
     font-style: normal;
     font-weight: 400;
   }
@@ -5330,18 +5330,20 @@ input[type="button"].btn-block {
 }
 
 
-/*****MODALES SDI**/
+
+/*======== MODALES SDI ULTIMO 2026-2027==========*/
 .modal-title-sdi {
     font-size: 1.3rem!important;
-    color: #fff;
+    color: #151718;
     margin-top: 7px;
+    font-weight: 800;
 }
 
 
 
 .modal-header-sdi {
     line-height:1.23;
-    background-color: #1CBEBE !important;
+    background-color: #fff !important;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -5354,16 +5356,61 @@ input[type="button"].btn-block {
 .modal-header-sdi .close {
     padding: 17px 8px!important;
     margin: 1px -10px auto!important;
-    background-color: rgba(18, 18, 18, 0.31)!important;
+    background-color: rgba(148, 148, 148, 0.31)!important;
     transition: 0.2s!important;
     border-radius:100px!important;
-
+    color:#151718!important;
+    font-size: 20px;
+    font-weight: bold!important;
 }
 .modal-header-sdi .close:hover {
     padding: 17px 8px!important;
     margin: 1px -10px auto!important;
-    background-color:#0f8282!important;
+    background-color: rgba(112, 112, 112, 0.31)!important;
     border-radius:100px!important;
+     color:#151718!important;
+}
+
+/* Contenedor de titulo + subtitulo dentro de modal-header-sdi.
+   min-width:0 permite que el texto se pueda encoger sin empujar el boton cerrar. */
+.modal-header-sdi-textos {
+    min-width: 0;
+}
+
+/* Subtitulo opcional debajo del .modal-title-sdi: mismo color, sin negrita */
+.modal-subtitle-sdi {
+    color: #151718;
+    font-weight: 400;
+    font-size: 0.85rem;
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+/* Boton cerrar alternativo (circular, contorno) para modal-header-sdi */
+.btn-cerrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    margin: 2px 0 0;
+    padding: 0;
+    background-color: transparent;
+    border: 1.5px solid #ced4da;
+    border-radius: 50%;
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1;
+    opacity: 1;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+
+.btn-cerrar:hover,
+.btn-cerrar:focus {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
 }
 
 
@@ -6139,8 +6186,8 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .alert-warning {
-    color: #85612d;
-    background-color: #fff1dd;
+    color: #9b6a13;
+    background-color: #fff5e6;
     border-color: #ffecd0;
 }
 
@@ -32699,7 +32746,7 @@ new-task label input[type=checkbox] {
     background-color: #4680ff;
     border: none!important;
     color: #fff;
-    padding: 1px 10px;
+    padding: 5px 10px;
     border-radius: 10px;
     margin-bottom: 5px;
     cursor: move;
@@ -33702,6 +33749,11 @@ padding: 0;
     color: #27afaf;
 }
 
+.bg-tfoot-info-claro {
+    background-color: rgba(19, 190, 190, 0.2);
+    font-weight: 600;
+    color: #27afaf;
+}
 
 .bg-tfoot-danger-claro {
     background-color: rgba(255, 82, 82, 0.2);
@@ -36745,8 +36797,108 @@ CARD TRASPASO CAJA
 }
 
 
+/**==============================PERMISOS==============================**/
+ .tabla-asistentes > :not(:first-child) {
+            border-top: 1px solid #eef0f5;
+        }
+
+        .permisos-modal-content {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .permisos-modal-header {
+            background: linear-gradient(120deg, #1a49a3 0%, #2DC2C1 100%);
+            border-bottom: none;
+            padding: 18px 24px;
+        }
+        .permisos-modal-header .modal-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .permisos-modal-header .close {
+            text-shadow: none;
+            opacity: .9;
+            font-weight: 400;
+            font-size: 1.5rem;
+        }
+        .permisos-modal-header .close:hover {
+            opacity: 1;
+        }
+        .permisos-modal-body {
+            padding: 20px 24px 8px;
+        }
+        .permisos-asistente-box {
+            display: flex;
+            align-items: center;
+            background-color: #f3f4f5;
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+        .permisos-asistente-avatar {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            background-color: rgba(26, 73, 163, .1);
+            color: #1a49a3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-right: 12px;
+        }
+        .permisos-grupo-titulo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: .85rem;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            color: #1a49a3;
+            margin-bottom: 8px!important;
+        }
+        .permisos-grupo-titulo i {
+            margin-right: 6px;
+        }
+        .permisos-grupo + .permisos-grupo {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #f0f1f5;
+        }
+        .permiso-item {
+            border: 1px solid #eef0f5;
+            border-radius: 10px;
+            padding: 10px 12px;
+            height: 100%;
+            transition: border-color .2s ease, background-color .2s ease;
+        }
+        .permiso-item:hover {
+            border-color: #cfd9ee;
+            background-color: #f8f9fc;
+        }
+        .permiso-item .custom-control-label {
+            font-weight: 600;
+            color: #2b2f3a;
+            font-size: .9rem;
+            cursor: pointer;
+        }
+        .permisos-modal-footer {
+            border-top: 1px solid #f0f1f5;
+            padding: 14px 24px 20px;
+        }
 
 
+
+/* ================================
+SMALL PARA INFORMACIÓN
+================================ */
+
+.small-informacion {
+    color: #1a49a3;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
 
 
 /* ================================
@@ -37341,181 +37493,180 @@ CARD TRASPASO CAJA
 /**ESTADISTICAS DEL PERFIL PROFESIONAL**/
 
 .reportes-titulo {
-    font-weight: 700;
-    color: #2b2f3a;
-    margin-bottom: 2px;
-}
-.reportes-subtitulo {
-    color: #8b93a7;
-    font-size: 0.95rem;
-}
-.kpi-card {
-    border: none;
-    border-radius: 14px;
-    transition: box-shadow .2s ease, transform .2s ease;
-}
-.kpi-card:hover {
-    box-shadow: 0 10px 25px rgba(30, 40, 80, .08);
-    transform: translateY(-2px);
-}
-.kpi-icon {
-    width: 54px;
-    height: 54px;
-    min-width: 54px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-}
-.kpi-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-right: 5px;
-}
-.bg-c-teal {
-    background-color: #17a2b8;
-}
-.text-c-teal {
-    color: #17a2b8;
-}
-.reportes-card {
-    border: none;
-    border-radius: 14px;
-}
-.reportes-card .card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #f0f1f5;
-    border-radius: 14px 14px 0 0 !important;
-}
+                    font-weight: 700;
+                    color: #2b2f3a;
+                    margin-bottom: 2px;
+                }
+                .reportes-subtitulo {
+                    color: #8b93a7;
+                    font-size: 0.95rem;
+                }
+                .kpi-card {
+                    border: none;
+                    border-radius: 14px;
+                    transition: box-shadow .2s ease, transform .2s ease;
+                }
+                .kpi-card:hover {
+                    box-shadow: 0 10px 25px rgba(30, 40, 80, .08);
+                    transform: translateY(-2px);
+                }
+                .kpi-icon {
+                    width: 54px;
+                    height: 54px;
+                    min-width: 54px;
+                    border-radius: 14px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.4rem;
+                }
+                .kpi-dot {
+                    display: inline-block;
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+                .bg-c-teal {
+                    background-color: #17a2b8;
+                }
+                .text-c-teal {
+                    color: #17a2b8;
+                }
+                .reportes-card {
+                    border: none;
+                    border-radius: 14px;
+                }
+                .reportes-card .card-header {
+                    background-color: #fff;
+                    border-bottom: 1px solid #f0f1f5;
+                    border-radius: 14px 14px 0 0 !important;
+                }
 
-.stat-mini-card {
-    background-color: #f8f9fc;
-    border-radius: 12px;
-    padding: 14px 16px;
-    height: 100%;
-}
-.stat-mini-card h3 {
-    font-weight: 700;
-    margin-bottom: 2px;
-}
-.doc-list-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #f0f1f5;
-}
-.doc-list-item:last-of-type {
-    border-bottom: none;
-}
-.doc-icon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    font-size: .95rem;
-}
-.filtros-reportes {
-    gap: 10px;
-}
-.filtro-item {
-    min-width: 180px;
-}
-.select-filtro-reportes {
-    border: 1px solid #1a49a3;
-    border-radius: 8px;
-    color: #333333;
-    background-color: #fff;
-    width: 100%;
-}
-.select-filtro-reportes:focus {
-    border-color: #1a49a3;
-    box-shadow: 0 0 0 .2rem rgba(26, 73, 163, .15);
-    outline: none;
-}
-@media (max-width: 767.98px) {
-    .filtros-reportes {
-        width: 100%;
-    }
-    .filtro-item {
-        min-width: 0;
-        width: 100%;
-    }
-}
-.filtro-item-icon {
-    position: relative;
-}
-.filtro-item-icon .filtro-icon {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%);
-    color: #1a49a3;
-    pointer-events: none;
-    z-index: 2;
-    font-size: 0.9rem;
-}
-.filtro-item-icon select.select-filtro-reportes {
-    padding-left: 34px;
-}
+                .stat-mini-card {
+                    background-color: #f8f9fc;
+                    border-radius: 12px;
+                    padding: 14px 16px;
+                    height: 100%;
+                }
+                .stat-mini-card h3 {
+                    font-weight: 700;
+                    margin-bottom: 2px;
+                }
+                .doc-list-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #f0f1f5;
+                }
+                .doc-list-item:last-of-type {
+                    border-bottom: none;
+                }
+                .doc-icon {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 12px;
+                    font-size: .95rem;
+                }
+                .filtros-reportes {
+                    gap: 10px;
+                }
+                .filtro-item {
+                    min-width: 180px;
+                }
+                .select-filtro-reportes {
+                    border: 1px solid #1a49a3;
+                    border-radius: 8px;
+                    color: #333333;
+                    background-color: #fff;
+                    width: 100%;
+                }
+                .select-filtro-reportes:focus {
+                    border-color: #1a49a3;
+                    box-shadow: 0 0 0 .2rem rgba(26, 73, 163, .15);
+                    outline: none;
+                }
+                @media (max-width: 767.98px) {
+                    .filtros-reportes {
+                        width: 100%;
+                    }
+                    .filtro-item {
+                        min-width: 0;
+                        width: 100%;
+                    }
+                }
+                .filtro-item-icon {
+                    position: relative;
+                }
+                .filtro-item-icon .filtro-icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 12px;
+                    transform: translateY(-50%);
+                    color: #1a49a3;
+                    pointer-events: none;
+                    z-index: 2;
+                    font-size: 0.9rem;
+                }
+                .filtro-item-icon select.select-filtro-reportes {
+                    padding-left: 34px;
+                }
 
 
 
 /**CARD INVITACION REFERIDOS**/                                    
-    .invita-card {
-        background: linear-gradient(135deg, #ffffff 0%, #cefff6 100%);
-    }
-        .invita-icon-circle {
-            width: 60px;
-            height: 60px;
-            min-width: 60px;
-            border-radius: 50%;
-            background-color: #31bebe;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-        }
-        .invita-codigo-box {
-            background-color: #fff;
-            border: 1px dashed #31bebe;
-            border-radius: 10px;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .invita-codigo-texto {
-            font-weight: 700;
-            letter-spacing: 1px;
-            color: #1f2957;
-        }
-        .invita-stats {
-            border-top: 1px solid #ececf5;
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-        .invita-stats .invita-stat-item {
-            text-align: center;
-        }
-        .invita-stats .invita-stat-item h5 {
-            color: #1f2957;
-            font-weight: 700;
-            margin-bottom: 0;
-        }
-        .invita-stats .invita-stat-item small {
-            color: #5f6b7a;
-        }
+                .invita-card {
+                    background: linear-gradient(135deg, #ffffff 0%, #cefff6 100%);
+                }
+                    .invita-icon-circle {
+                        width: 60px;
+                        height: 60px;
+                        min-width: 60px;
+                        border-radius: 50%;
+                        background-color: #31bebe;
+                        color: #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.6rem;
+                    }
+                    .invita-codigo-box {
+                        background-color: #fff;
+                        border: 1px dashed #31bebe;
+                        border-radius: 10px;
+                        padding: 8px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                    .invita-codigo-texto {
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        color: #1f2957;
+                    }
+                    .invita-stats {
+                        border-top: 1px solid #ececf5;
+                        margin-top: 1rem;
+                        padding-top: 1rem;
+                    }
+                    .invita-stats .invita-stat-item {
+                        text-align: center;
+                    }
+                    .invita-stats .invita-stat-item h5 {
+                        color: #1f2957;
+                        font-weight: 700;
+                        margin-bottom: 0;
+                    }
+                    .invita-stats .invita-stat-item small {
+                        color: #5f6b7a;
+                    }
                   
-/** FILAS ALTERNADAS (table-striped) MAS TENUES EN TODO EL PROYECTO PISA A BS5 **/
-
+/** FILAS ALTERNADAS (table-striped) MAS TENUES EN TODO EL PROYECTO **/
 .table-striped > tbody > tr:nth-of-type(odd) > * {
     --bs-table-accent-bg: rgba(70, 128, 255, 0.035);
 }
@@ -37524,3 +37675,5 @@ CARD TRASPASO CAJA
 .table-striped tbody tr:nth-of-type(2n+1) {
     background-color: rgba(70, 128, 255, 0.035);
 }
+
+
