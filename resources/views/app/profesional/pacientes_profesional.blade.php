@@ -14,7 +14,7 @@
     .busqueda-paciente-box {
         border: 1px solid #e6edf3;
         border-radius: 12px;
-        background: #f8fbfd;
+        background: #e6eaee;
         padding: 16px 18px;
         margin-bottom: 18px;
     }
@@ -65,7 +65,6 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis pacientes</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -83,11 +82,11 @@
             <!--Este formulario muestra los pacientes que alguna vez atendió el profesional (relacion: id_paciente/id_profesional)-->
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header text-center bg-info">
+                     <div class="card-header-principal bg-white">
                         <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg mb-1 align-botton d-flex justify-content-between">
-                                <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis pacientes</h4>
-                                <button class="btn btn-purple btn-sm  d-inline float-md-right" onclick="enviar_difusion_pacientes()"><i class="feather icon-mail"></i>  Enviar mensaje de difusión a mis pacientes</button>
+                            <div class="col-sm-12 col-md-12 col-lg mb-1 align-botton d-flex justify-content-between pl-0">
+                                <h5 class="text-white f-20 d-inline ml-4 mt-1 float-left"><i class="feather icon-users icono-primary"></i>Mis pacientes</h5>
+                                <button class="btn btn-purple  d-inline float-md-right" onclick="enviar_difusion_pacientes()"><i class="feather icon-mail"></i>  Enviar mensaje de difusión a mis pacientes</button>
                             </div>
                         </div>
                     </div>
@@ -117,7 +116,7 @@
                                     <button type="button" class="btn btn-info btn-sm" id="btn_buscar_paciente">
                                         <i class="feather icon-search"></i> Buscar
                                     </button>
-                                    <button type="button" class="btn btn-light btn-sm" id="btn_limpiar_busqueda_paciente">
+                                    <button type="button" class="btn btn-secondary btn-sm" id="btn_limpiar_busqueda_paciente">
                                         <i class="feather icon-x"></i> Limpiar
                                     </button>
                                 </div>
@@ -242,8 +241,8 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h4 class="modal-title text-white w-100 font-weight-bold">Emitir documentos</h4>
+                <div class="modal-header-sdi">
+                    <h4 class="modal-title-sdi">Emitir documentos</h4>
                     <button type="button" class="close" onclick="$('#modal_emitir_doc').modal('hide');" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

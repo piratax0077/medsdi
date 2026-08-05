@@ -137,104 +137,12 @@
     </div>
 
     {{-- MODAL: Permisos del Asistente --}}
-    <style>
-        /* Neutraliza el borde negro grueso que Bootstrap 5 agrega bajo el encabezado */
-        .tabla-asistentes > :not(:first-child) {
-            border-top: 1px solid #eef0f5;
-        }
-
-        .permisos-modal-content {
-            border: none;
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        .permisos-modal-header {
-            background: linear-gradient(120deg, #1a49a3 0%, #2DC2C1 100%);
-            border-bottom: none;
-            padding: 18px 24px;
-        }
-        .permisos-modal-header .modal-title {
-            font-weight: 700;
-            font-size: 1.05rem;
-        }
-        .permisos-modal-header .close {
-            text-shadow: none;
-            opacity: .9;
-            font-weight: 400;
-            font-size: 1.5rem;
-        }
-        .permisos-modal-header .close:hover {
-            opacity: 1;
-        }
-        .permisos-modal-body {
-            padding: 20px 24px 8px;
-        }
-        .permisos-asistente-box {
-            display: flex;
-            align-items: center;
-            background-color: #f4f4f4;
-            border-radius: 12px;
-            padding: 12px 16px;
-        }
-        .permisos-asistente-avatar {
-            width: 42px;
-            height: 42px;
-            min-width: 42px;
-            border-radius: 50%;
-            background-color: rgba(26, 73, 163, .1);
-            color: #1a49a3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            margin-right: 12px;
-        }
-        .permisos-grupo-titulo {
-            display: flex;
-            align-items: center;
-            font-weight: 700;
-            font-size: .78rem;
-            letter-spacing: .6px;
-            text-transform: uppercase;
-            color: #343a40;
-            margin-bottom: 18px;
-        }
-        .permisos-grupo-titulo i {
-            margin-right: 6px;
-        }
-        .permisos-grupo + .permisos-grupo {
-            margin-top: 18px;
-            padding-top: 18px;
-            border-top: 1px solid #f0f1f5;
-        }
-        .permiso-item {
-            border: 1px solid #eef0f5;
-            border-radius: 10px;
-            padding: 10px 12px;
-            height: 100%;
-            transition: border-color .2s ease, background-color .2s ease;
-        }
-        .permiso-item:hover {
-            border-color: #cfd9ee;
-            background-color: #f8f9fc;
-        }
-        .permiso-item .custom-control-label {
-            font-weight: 600;
-            color: #2b2f3a;
-            font-size: .9rem;
-            cursor: pointer;
-        }
-        .permisos-modal-footer {
-            border-top: 1px solid #f0f1f5;
-            padding: 14px 24px 20px;
-        }
-    </style>
 
     <div id="permisos_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permisos_rol" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content permisos-modal-content">
-                <div class="modal-header ">
-                    <h5 class="modal-title f-20 text-white">
+                <div class="modal-header-sdi">
+                    <h5 class="modal-title-sdi">
                         Permisos del Asistente
                     </h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="cerrar_permisos_asistente_modal();">
@@ -248,10 +156,11 @@
                 <div class="modal-body permisos-modal-body">
                     <div class="permisos-asistente-box mb-4">
                         <div class="permisos-asistente-avatar">
-                            <i class="feather icon-user"></i>
+                            <img class="img-radius" src="{{ asset('images/iconos/usuario_asistente.svg') }}" alt="Profesional">
+                            
                         </div>
                         <div>
-                            <small class="text-c-blue d-block">Asistente</small>
+                            <small class="small-informacion d-block">Asistente</small>
                             <p class="font-weight-bold text-dark mb-0" id="permisos_rol_nombre_asistente">—</p>
                         </div>
                     </div>
@@ -271,7 +180,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_confirmar_hora" data-permiso="permiso_confirmar_hora">
                                             <label class="custom-control-label" for="pa_permiso_confirmar_hora">
-                                                <i class="feather icon-check-circle text-success"></i> Confirmar hora
+                                                Confirmar hora
                                             </label>
                                         </div>
                                     </div>
@@ -282,7 +191,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_anular_hora" data-permiso="permiso_anular_hora">
                                             <label class="custom-control-label" for="pa_permiso_anular_hora">
-                                                <i class="feather icon-x-circle text-danger"></i> Anular hora
+                                                Anular hora
                                             </label>
                                         </div>
                                     </div>
@@ -293,7 +202,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_horas_extras" data-permiso="permiso_agendar_horas_extras">
                                             <label class="custom-control-label" for="pa_permiso_agendar_horas_extras">
-                                                <i class="feather icon-calendar text-primary"></i> Agendar horas extras
+                                                Agendar horas extras
                                             </label>
                                         </div>
                                     </div>
@@ -304,7 +213,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_agendar_examenes" data-permiso="permiso_agendar_examenes">
                                             <label class="custom-control-label" for="pa_permiso_agendar_examenes">
-                                                <i class="feather icon-clipboard text-info"></i> Agendar exámenes
+                                                 Agendar exámenes
                                             </label>
                                         </div>
                                     </div>
@@ -315,7 +224,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_transcripcion_examenes" data-permiso="permiso_transcripcion_examenes">
                                             <label class="custom-control-label" for="pa_permiso_transcripcion_examenes">
-                                                <i class="feather icon-file-text text-warning"></i> Transcripción de exámenes
+                                                Transcripción de exámenes
                                             </label>
                                         </div>
                                     </div>
@@ -329,7 +238,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_ver_pacientes" data-permiso="permiso_ver_pacientes">
                                             <label class="custom-control-label" for="pa_permiso_ver_pacientes">
-                                                <i class="feather icon-eye text-info"></i> Buscar pacientes
+                                                Buscar pacientes
                                             </label>
                                         </div>
                                     </div>
@@ -340,7 +249,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_editar_pacientes" data-permiso="permiso_editar_pacientes">
                                             <label class="custom-control-label" for="pa_permiso_editar_pacientes">
-                                                <i class="feather icon-edit text-warning"></i> Editar pacientes
+                                                Editar pacientes
                                             </label>
                                         </div>
                                     </div>
@@ -354,7 +263,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_subir_ver_archivos" data-permiso="permiso_subir_ver_archivos">
                                             <label class="custom-control-label" for="pa_permiso_subir_ver_archivos">
-                                                <i class="feather icon-upload-cloud text-primary"></i> Subir y ver archivos
+                                                 Subir y ver archivos
                                             </label>
                                         </div>
                                     </div>
@@ -365,21 +274,21 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_eliminar_archivos" data-permiso="permiso_eliminar_archivos">
                                             <label class="custom-control-label" for="pa_permiso_eliminar_archivos">
-                                                <i class="feather icon-trash-2 text-danger"></i> Eliminar archivos
+                                                Eliminar archivos
                                             </label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <h6 class="permisos-grupo-titulo mb-1"><i class="feather icon-credit-card"></i> Finanzas</h6>
+                            <h6 class="permisos-grupo-titulo mb-1">Finanzas</h6>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-6 mb-2">
                                     <div class="permiso-item">
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_cotizar" data-permiso="permiso_cotizar">
                                             <label class="custom-control-label" for="pa_permiso_cotizar">
-                                                <i class="feather icon-file-text text-success"></i> Cotizar
+                                               Cotizar
                                             </label>
                                         </div>
                                     </div>
@@ -390,7 +299,7 @@
                                         <div class="custom-control custom-switch">
                                             <input type="checkbox" class="custom-control-input permiso-asistente-check" id="pa_permiso_entrega_caja" data-permiso="permiso_entrega_caja">
                                             <label class="custom-control-label" for="pa_permiso_entrega_caja">
-                                                <i class="feather icon-credit-card text-success"></i> Entrega de caja
+                                                Entrega de caja
                                             </label>
                                         </div>
                                     </div>

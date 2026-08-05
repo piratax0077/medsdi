@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}" />
     <link rel="stylesheet" href="{{ asset('css/escritorio_paciente.css') }}?t={{ time() }}" />
 
+    <!-- Iconos SDI (libreria propia) - ver images/iconos-sdi/README.md -->
+    <link rel="stylesheet" href="{{ asset('images/iconos-sdi/sdi-icons.css') }}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
@@ -265,6 +268,9 @@
     </script>
 
     @yield('page-script')
+
+    <!-- Iconos SDI (libreria propia) - ver images/iconos-sdi/README.md -->
+    <script src="{{ asset('images/iconos-sdi/sdi-icons.js') }}" defer></script>
 
     <script>
 

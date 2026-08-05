@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iconos SDI - Catalogo</title>
+<link rel="stylesheet" href="sdi-icons.css">
+<style>
+    :root { --azul:#1a49a3; --gris:#8b93a7; }
+    * { box-sizing:border-box; }
+    body { font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif; margin:0; padding:32px; background:#f4f6f9; color:#2b2f3a; }
+    h1 { margin:0 0 4px; font-size:1.6rem; }
+    .sub { color:var(--gris); margin:0 0 24px; }
+    .barra { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-bottom:24px; }
+    .barra input { flex:1; min-width:220px; padding:10px 14px; border:2px solid var(--azul); border-radius:8px; font-size:.95rem; outline:none; }
+    .barra .dato { background:#fff; border-radius:8px; padding:10px 14px; font-size:.85rem; color:var(--gris); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:14px; }
+    .tarjeta { background:#fff; border:1px solid #eef0f5; border-radius:12px; padding:18px 10px; text-align:center;
+               cursor:pointer; font:inherit; transition:.2s; display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .tarjeta:hover { border-color:var(--azul); transform:translateY(-2px); box-shadow:0 8px 20px rgba(30,40,80,.08); }
+    .tarjeta .sdi { font-size:34px; color:var(--azul); }
+    .tarjeta .nombre { font-weight:700; font-size:.85rem; }
+    .tarjeta code { font-size:.72rem; color:var(--gris); word-break:break-all; }
+    .aviso { position:fixed; left:50%; bottom:28px; opacity:0; visibility:hidden;
+             transform:translateX(-50%) translateY(30px);
+             background:#1a49a3; color:#fff; padding:12px 22px; border-radius:30px; font-weight:600;
+             transition:opacity .25s, transform .25s, visibility .25s; box-shadow:0 8px 24px rgba(30,40,80,.25); }
+    .aviso.visible { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+    .vacio { text-align:center; color:var(--gris); padding:40px; display:none; }
+    .ejemplos { background:#fff; border-radius:12px; padding:20px; margin-bottom:24px; }
+    .ejemplos h2 { font-size:1rem; margin:0 0 14px; }
+    .ejemplos .fila { display:flex; flex-wrap:wrap; gap:22px; align-items:flex-end; margin-bottom:20px; }
+    .ejemplos .fila:last-child { margin-bottom:0; }
+    /* El tamano base va en .item (no en el icono) para que las clases
+       sdi-xs / sdi-lg / sdi-2x puedan multiplicarlo y se note la diferencia */
+    .ejemplos .item { text-align:center; font-size:22px; }
+    .ejemplos .item .sdi { display:block; margin:0 auto 8px; }
+    .ejemplos .item span { display:block; font-size:11px; color:var(--gris); }
+</style>
+</head>
+<body>
+
+<h1>Iconos SDI</h1>
+<p class="sub">Catalogo generado el 04-08-2026 15:23 &mdash; haz clic en cualquier icono para copiar su codigo.</p>
+
+<div class="ejemplos">
+    <h2>Tamanos</h2>
+    <div class="fila">
+        <div class="item"><i class="sdi sdi-lock sdi-xs"></i><span>sdi-xs</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-sm"></i><span>sdi-sm</span></div>
+        <div class="item"><i class="sdi sdi-lock"></i><span>normal</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-lg"></i><span>sdi-lg</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-xl"></i><span>sdi-xl</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-2x"></i><span>sdi-2x</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-3x"></i><span>sdi-3x</span></div>
+    </div>
+
+    <h2>Colores y efectos</h2>
+    <div class="fila">
+        <div class="item sdi-primary"><i class="sdi sdi-lock"></i><span>sdi-primary</span></div>
+        <div class="item sdi-info"><i class="sdi sdi-lock"></i><span>sdi-info</span></div>
+        <div class="item sdi-success"><i class="sdi sdi-lock"></i><span>sdi-success</span></div>
+        <div class="item sdi-danger"><i class="sdi sdi-lock"></i><span>sdi-danger</span></div>
+        <div class="item sdi-warning"><i class="sdi sdi-lock"></i><span>sdi-warning</span></div>
+        <div class="item sdi-purple"><i class="sdi sdi-lock"></i><span>sdi-purple</span></div>
+        <div class="item sdi-dark"><i class="sdi sdi-lock"></i><span>sdi-dark</span></div>
+        <div class="item"><i class="sdi sdi-lock sdi-circulo sdi-primary"></i><span>sdi-circulo</span></div>
+        <div class="item"><i class="sdi sdi-reloj-1 sdi-girar sdi-info"></i><span>sdi-girar</span></div>
+    </div>
+</div>
+
+<div class="barra">
+    <input type="search" id="buscador" placeholder="Buscar icono por nombre...">
+    <div class="dato"><strong>18</strong> iconos</div>
+    <div class="dato">sprite: <strong>26822 bytes</strong></div>
+</div>
+
+<div class="grid" id="grid">
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-advertencia&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-advertencia"></i>
+            <span class="nombre">advertencia</span>
+            <code>sdi-advertencia</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-antecedentes-1&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-antecedentes-1"></i>
+            <span class="nombre">antecedentes-1</span>
+            <code>sdi-antecedentes-1</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-archivo-descarga&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-archivo-descarga"></i>
+            <span class="nombre">archivo-descarga</span>
+            <code>sdi-archivo-descarga</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-calendario-1&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-calendario-1"></i>
+            <span class="nombre">calendario-1</span>
+            <code>sdi-calendario-1</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-cronicos&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-cronicos"></i>
+            <span class="nombre">cronicos</span>
+            <code>sdi-cronicos</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-emergencia-1&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-emergencia-1"></i>
+            <span class="nombre">emergencia-1</span>
+            <code>sdi-emergencia-1</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-estadisticas&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-estadisticas"></i>
+            <span class="nombre">estadisticas</span>
+            <code>sdi-estadisticas</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-flujo-caja-1&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-flujo-caja-1"></i>
+            <span class="nombre">flujo-caja-1</span>
+            <code>sdi-flujo-caja-1</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-flujo-caja-3&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-flujo-caja-3"></i>
+            <span class="nombre">flujo-caja-3</span>
+            <code>sdi-flujo-caja-3</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-iphone&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-iphone"></i>
+            <span class="nombre">iphone</span>
+            <code>sdi-iphone</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-lock&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-lock"></i>
+            <span class="nombre">lock</span>
+            <code>sdi-lock</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-medicamentos&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-medicamentos"></i>
+            <span class="nombre">medicamentos</span>
+            <code>sdi-medicamentos</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-otros-servicios&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-otros-servicios"></i>
+            <span class="nombre">otros-servicios</span>
+            <code>sdi-otros-servicios</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-portal-cronicos&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-portal-cronicos"></i>
+            <span class="nombre">portal-cronicos</span>
+            <code>sdi-portal-cronicos</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-registro-paciente&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-registro-paciente"></i>
+            <span class="nombre">registro-paciente</span>
+            <code>sdi-registro-paciente</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-registro-profesional-salud&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-registro-profesional-salud"></i>
+            <span class="nombre">registro-profesional-salud</span>
+            <code>sdi-registro-profesional-salud</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-reloj-1&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-reloj-1"></i>
+            <span class="nombre">reloj-1</span>
+            <code>sdi-reloj-1</code>
+        </button>
+        <button type="button" class="tarjeta" data-codigo="&lt;i class=&quot;sdi sdi-reloj-2&quot;&gt;&lt;/i&gt;" title="Clic para copiar el codigo">
+            <i class="sdi sdi-reloj-2"></i>
+            <span class="nombre">reloj-2</span>
+            <code>sdi-reloj-2</code>
+        </button>
+</div>
+
+<p class="vacio" id="vacio">No se encontro ningun icono con ese nombre.</p>
+
+<div class="aviso" id="aviso">Codigo copiado</div>
+
+<script src="sdi-icons.js"></script>
+<script>
+    // Buscador
+    var buscador = document.getElementById('buscador');
+    var tarjetas = document.querySelectorAll('.tarjeta');
+    var vacio    = document.getElementById('vacio');
+
+    buscador.addEventListener('input', function () {
+        var texto = this.value.toLowerCase().trim();
+        var visibles = 0;
+
+        tarjetas.forEach(function (t) {
+            var coincide = t.querySelector('.nombre').textContent.toLowerCase().indexOf(texto) !== -1;
+            t.style.display = coincide ? '' : 'none';
+            if (coincide) visibles++;
+        });
+
+        vacio.style.display = visibles === 0 ? 'block' : 'none';
+    });
+
+    // Copiar al portapapeles
+    var aviso = document.getElementById('aviso');
+
+    tarjetas.forEach(function (t) {
+        t.addEventListener('click', function () {
+            var codigo = this.getAttribute('data-codigo');
+
+            navigator.clipboard.writeText(codigo).then(function () {
+                aviso.textContent = 'Copiado: ' + codigo;
+                aviso.classList.add('visible');
+                setTimeout(function () { aviso.classList.remove('visible'); }, 1800);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
