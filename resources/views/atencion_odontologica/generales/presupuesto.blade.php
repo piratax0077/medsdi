@@ -21,6 +21,68 @@
         /* animation: pulse 1.5s infinite alternate; */
     }
 
+    /* Banner de convenio/descuento, alineado al mismo lenguaje visual de las cards del presupuesto */
+    .convenio-banner-card {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 18px;
+        background: #fff;
+        border: 1px solid #dce5ef;
+        border-left: 4px solid #2eb4bd;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(31, 55, 86, .06);
+    }
+    .convenio-banner-card.is-aplicado {
+        border-left-color: #2bb673;
+        background: #f4fbf7;
+    }
+    .convenio-banner-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .convenio-banner-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 46px;
+        padding: .35em .6em;
+        font-size: .85rem;
+        font-weight: 700;
+        color: #fff;
+        background: #2eb4bd;
+        border-radius: 20px;
+    }
+    .convenio-banner-card.is-aplicado .convenio-banner-badge {
+        background: #2bb673;
+    }
+    .convenio-banner-desc {
+        display: block;
+        color: #63758a;
+        font-weight: 400;
+        font-size: .88rem;
+    }
+    .convenio-banner-acciones {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .convenio-banner-estado:empty {
+        display: none;
+    }
+
+    /* Flex interno del banner de saldo (sin usar d-flex de Bootstrap para que .toggle()/.hide() no queden forzados a mostrarse por el !important) */
+    .saldo-banner-flex {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
     @keyframes pulse {
         0% {
             transform: scale(1);
@@ -412,8 +474,13 @@
                                                 <div class="media-body">
                                                     <h5 class="mt-0 mb-1">{{ $c->nombre_convenio }}</h5>
                                                     <p class="mb-2">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
-                                                    <a href="#" class="btn btn-primary btn-sm"
-                                                        @if ($paciente->prevision->nombre == $c->nombre_convenio) onclick="aplicar_convenio_tratamiento({{ $c->id }})" @endif>Aplicar</a>
+                                                    @if ($paciente->prevision->nombre == $c->nombre_convenio)
+                                                        @if ($presupuesto && (int) $presupuesto->id_convenio_aplicado === (int) $c->id)
+                                                            <a href="#" class="btn btn-danger btn-sm" onclick="quitar_convenio_tratamiento({{ $c->id }})">Quitar descuento</a>
+                                                        @else
+                                                            <a href="#" class="btn btn-primary btn-sm" onclick="aplicar_convenio_tratamiento({{ $c->id }})">Aplicar</a>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -437,6 +504,30 @@
                         $cantidadItemsPresupuesto = $cantidadPiezasPresupuesto + $cantidadGeneralesPresupuesto + $cantidadInsumosPresupuesto;
                         $totalClinicoPresupuesto = $valores + $valores_piezas + $valores_insumos + $valores_laboratorio;
                         $saldoClinicoPresupuesto = max(0, $totalClinicoPresupuesto - $valor_abonado);
+
+                        // Resumen por pieza para el visor gráfico del odontograma (piezas resaltadas + detalle al hacer clic)
+                        $piezasPresupuestoDetalle = collect($odontograma)
+                            ->where('presupuesto', 1)
+                            ->where('urgencia', 0)
+                            ->groupBy(fn ($o) => (string) $o->pieza)
+                            ->map(function ($tratamientos, $pieza) {
+                                $total = $tratamientos->sum('valor');
+                                $descuento = $tratamientos->sum(fn ($o) => $o->valor_descuento ?? 0);
+                                $aPagar = $total - $descuento;
+                                return [
+                                    'pieza' => $pieza,
+                                    'total' => $total,
+                                    'descuento' => $descuento,
+                                    'a_pagar' => $aPagar,
+                                    'tratamiento' => $tratamientos->count().' '.($tratamientos->count() === 1 ? 'prestación' : 'prestaciones').' · $'.number_format($aPagar, 0, ',', '.'),
+                                    'tratamientos' => $tratamientos->map(fn ($o) => [
+                                        'descripcion' => $o->descripcion,
+                                        'valor' => (float) $o->valor,
+                                        'descuento' => (float) ($o->valor_descuento ?? 0),
+                                    ])->values(),
+                                ];
+                            })
+                            ->values();
                     @endphp
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -457,10 +548,124 @@
                                         <h6 class="mb-1">Este presupuesto todavía no tiene prestaciones</h6>
                                         <p class="mb-0">Agregue tratamientos desde el odontograma o la planificación dental.</p>
                                     </div>
+
+                                    @if($piezasPresupuestoDetalle->isNotEmpty())
+                                    <div class="card-informacion mb-3" id="presupuesto_piezas_visor">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-7 col-xl-8 mb-3 mb-lg-0">
+                                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                                        'id' => 'selector_presupuesto_piezas',
+                                                        'inputId' => 'pieza_presupuesto_detalle',
+                                                        'counter' => 9500,
+                                                        'multiple' => false,
+                                                        'compacto' => true,
+                                                        'autoRefresh' => false,
+                                                        'mostrarMensajeVacio' => false,
+                                                        'estadosBloqueados' => [],
+                                                        'piezasDisponibles' => $piezasPresupuestoDetalle,
+                                                        'titulo' => 'Piezas del presupuesto',
+                                                        'ayuda' => 'Haga clic en una pieza resaltada para ver su detalle',
+                                                    ])
+                                                    <select class="d-none" id="pieza_presupuesto_detalle" name="pieza_presupuesto_detalle" tabindex="-1" aria-hidden="true"></select>
+                                                </div>
+                                                <div class="col-lg-5 col-xl-4">
+                                                    <div class="presupuesto-detalle-pieza" id="detalle_pieza_presupuesto" data-detalle='@json($piezasPresupuestoDetalle->keyBy('pieza'))'>
+                                                        <div class="text-muted text-center py-4" id="detalle_pieza_presupuesto_vacio">
+                                                            <i class="fas fa-hand-pointer mb-2 d-block" style="font-size:1.4rem;"></i>
+                                                            Seleccione una pieza resaltada para ver sus tratamientos y valores.
+                                                        </div>
+                                                        <div id="detalle_pieza_presupuesto_contenido" style="display:none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                <style>
+                                    #detalle_pieza_presupuesto{min-height:100%;padding:.9rem;border:1px solid #dce5ef;border-radius:.65rem;background:#f7f9fc;display:flex;flex-direction:column;justify-content:center}
+                                    #detalle_pieza_presupuesto_contenido .detalle-pieza-fila{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid #e3eaef}
+                                    #detalle_pieza_presupuesto_contenido .detalle-pieza-fila:last-of-type{border-bottom:none}
+                                    #detalle_pieza_presupuesto_contenido .detalle-pieza-total{display:flex;justify-content:space-between;align-items:center;padding-top:.5rem;margin-top:.4rem;border-top:2px solid #174ea6}
+                                    [data-pieza-presupuesto].presupuesto-pieza-activa > .card-informacion{border:2px solid #7434a4;box-shadow:0 0 0 3px rgba(116,52,164,.15);transition:box-shadow .2s ease}
+                                </style>
+                                <script>
+                                    $(document).on('odontograma:change', '#selector_presupuesto_piezas', function(e, piezasSeleccionadas){
+                                        const pieza = (piezasSeleccionadas && piezasSeleccionadas[0]) ? piezasSeleccionadas[0] : null;
+                                        const $detalle = $('#detalle_pieza_presupuesto');
+                                        const datosPorPieza = $detalle.data('detalle') || {};
+                                        const $vacio = $('#detalle_pieza_presupuesto_vacio');
+                                        const $contenido = $('#detalle_pieza_presupuesto_contenido');
+
+                                        $('[data-pieza-presupuesto]').removeClass('presupuesto-pieza-activa');
+
+                                        const info = pieza ? datosPorPieza[pieza] : null;
+                                        if(!info){
+                                            $contenido.hide().empty();
+                                            $vacio.show();
+                                            return;
+                                        }
+
+                                        let filas = info.tratamientos.map(function(t){
+                                            const descuentoTto = Number(t.descuento || 0);
+                                            const detalleDescuento = descuentoTto > 0 ? ' <small class="text-muted">(desc. '+formatoMoneda(descuentoTto)+')</small>' : '';
+                                            return '<div class="detalle-pieza-fila"><span>'+t.descripcion+detalleDescuento+'</span><strong>'+formatoMoneda(Number(t.valor) - descuentoTto)+'</strong></div>';
+                                        }).join('');
+
+                                        const totalDescuento = Number(info.descuento || 0);
+                                        const totalAPagar = info.a_pagar !== undefined ? Number(info.a_pagar) : Number(info.total);
+                                        const filaDescuento = totalDescuento > 0
+                                            ? '<div class="detalle-pieza-fila"><span>Descuento</span><strong class="text-danger">-'+formatoMoneda(totalDescuento)+'</strong></div>'
+                                            : '';
+
+                                        $contenido.html(
+                                            '<h6 class="mb-2">Pieza '+pieza+'</h6>'+
+                                            filas+
+                                            filaDescuento+
+                                            '<div class="detalle-pieza-total"><span class="font-weight-bold">Total pieza</span><span class="font-weight-bold text-c-blue">'+formatoMoneda(totalAPagar)+'</span></div>'
+                                        );
+                                        $vacio.hide();
+                                        $contenido.show();
+
+                                        const $card = $('[data-pieza-presupuesto="'+pieza+'"]').first();
+                                        if($card.length){
+                                            $card.addClass('presupuesto-pieza-activa');
+                                            $card[0].scrollIntoView({behavior:'smooth', block:'center'});
+                                        }
+                                    });
+
+                                    // Reconstruye el mapa de detalle por pieza (con descuentos actualizados) y refresca el panel si hay una pieza seleccionada
+                                    function sincronizarDetallePresupuestoClinico(listaOdontograma){
+                                        const $detalle = $('#detalle_pieza_presupuesto');
+                                        if(!$detalle.length){ return; }
+
+                                        const mapa = {};
+                                        (listaOdontograma || []).forEach(function(o){
+                                            if(o.presupuesto != 1 || o.urgencia != 0){ return; }
+                                            const pieza = String(o.pieza);
+                                            if(!mapa[pieza]){ mapa[pieza] = {pieza: pieza, total: 0, descuento: 0, a_pagar: 0, tratamientos: []}; }
+                                            const descuento = Number(o.valor_descuento) || 0;
+                                            const valor = Number(o.valor) || 0;
+                                            mapa[pieza].total += valor;
+                                            mapa[pieza].descuento += descuento;
+                                            mapa[pieza].a_pagar += valor - descuento;
+                                            mapa[pieza].tratamientos.push({descripcion: o.descripcion, valor: valor, descuento: descuento});
+                                        });
+
+                                        $detalle.data('detalle', mapa);
+
+                                        const piezaActivaBtn = $('#selector_presupuesto_piezas [data-selector-pieza].is-selected').first();
+                                        if(piezaActivaBtn.length){
+                                            $('#selector_presupuesto_piezas').trigger('odontograma:change', [[String(piezaActivaBtn.data('selector-pieza'))]]);
+                                        }
+                                    }
+                                </script>
+
                                 <div class="form-row" id="contenedor_piezas_dentales_presupuesto">
                                     @foreach ($odontograma as $o)
                                         @if ($o->presupuesto == 1 && $o->urgencia == 0)
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="{{ $o->pieza }}">
                                                 <div class="card-informacion">
                                                     <div class="card-body pb-0">
                                                         <div class="form-row">
@@ -760,7 +965,7 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-12">
                                                             <div id="contenedor_ordenes_trabajos_menores_dental">
-                                                               
+
                                                                 @if (isset($ordenes_tm))
                                                                     @foreach ($ordenes_tm as $o)
                                                                         <div class="row">
@@ -852,7 +1057,7 @@
 
                                                         <div class="col-sm-12 col-md-12">
                                                             <div id="contenedor_ordenes_trabajos_mayores_dental">
-                                                                
+
                                                                 @if (isset($ordenes_tmy))
                                                                     @foreach ($ordenes_tmy as $o)
                                                                         <div class="row">
@@ -953,11 +1158,11 @@
                                                     </div>
                                                     <div class="form-row">
                                                         <div class="col-md-12" id="contenedor_ordenes_trabajos_menores_dental_presup">
-                                                            
+
                                                         </div>
                                                         <div class="col-md-12" id="contenedor_ordenes_trabajos_mayores_dental_presup">
-                                                         
-                                                        </div> 
+
+                                                        </div>
                                                     </div>
                                                     <div class="form-row" id="resumen_costos_lab">
                                                         <div class="col-12">
@@ -1201,6 +1406,19 @@
                             <h6 class="tit-gen">Abonos y estados de pago</h6>
                         </div>
                     </div>
+                    <div class="row" id="banner_saldo_convenio_wrapper" style="display:none;">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="alert alert-success saldo-banner-alert mb-3" id="banner_saldo_a_favor" style="display:none;">
+                                <div class="saldo-banner-flex">
+                                    <div><i class="feather icon-info mr-1"></i> El paciente queda con <strong>saldo a favor</strong> de <strong id="banner_saldo_a_favor_monto">$0</strong> tras aplicar el descuento.</div>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="abrir_modal_devolucion()"><i class="feather icon-corner-up-left"></i> Registrar devolución</button>
+                                </div>
+                            </div>
+                            <div class="alert alert-warning mb-3" id="banner_saldo_pendiente" style="display:none;">
+                                <i class="feather icon-alert-triangle mr-1"></i> Tras el cambio de descuento, el presupuesto queda con un saldo <strong>pendiente</strong> de <strong id="banner_saldo_pendiente_monto">$0</strong>.
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <form>
@@ -1251,23 +1469,260 @@
                                     <div class="col-md-12">
                                         @foreach ($convenios_prevision as $c)
                                             @if ($paciente->prevision->nombre == $c->nombre_convenio)
-                                                <p class="promo-banner font-weight-bold my-3">{{ $paciente->prevision->nombre }}
-                                                    {{ $c->porcentaje }} % {{ $c->descripcion }}
-                                                    <button type="button"
-                                                        class="btn btn-info btn-sm btn-icon"
-                                                        onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i
-                                                            class="fas fa-check"></i></button>
-                                                    <button type="button"
-                                                        class="btn btn-light btn-sm btn-icon"
-                                                        onclick="generar_pdf()"><i
-                                                            class="fas fa-print"></i></button>
-                                                    <span id="mensaje" class="badge badge-success"></span>
-                                                </p>
+                                                @php
+                                                    $convenioYaAplicado = $presupuesto && (int) $presupuesto->id_convenio_aplicado === (int) $c->id;
+                                                @endphp
+                                                <div class="convenio-banner-card {{ $convenioYaAplicado ? 'is-aplicado' : '' }} my-3">
+                                                    <div class="convenio-banner-info">
+                                                        <span class="convenio-banner-badge">{{ $c->porcentaje }}%</span>
+                                                        <div>
+                                                            <strong>{{ $paciente->prevision->nombre }}</strong>
+                                                            <span class="convenio-banner-desc">{{ $c->descripcion }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="convenio-banner-acciones">
+                                                        <span id="mensaje" class="badge {{ $convenioYaAplicado ? 'badge-success' : '' }} convenio-banner-estado">{{ $convenioYaAplicado ? 'Descuento aplicado' : '' }}</span>
+                                                        @if ($convenioYaAplicado)
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="quitar_convenio_tratamiento({{ $c->id }})" title="Quitar descuento"><i class="fas fa-times"></i></button>
+                                                        @else
+                                                            <button type="button" class="btn btn-outline-success btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})" title="Aplicar descuento"><i class="fas fa-check"></i></button>
+                                                        @endif
+                                                        <button type="button" class="btn btn-outline-secondary btn-sm btn-icon" onclick="generar_pdf()" title="Imprimir"><i class="fas fa-print"></i></button>
+                                                    </div>
+                                                </div>
                                             @endif
                                         @endforeach
                                     </div>
 
                                 </div>
+
+                                @php
+                                    // Resumen por pieza para el visor gráfico: color según estado de pago + tooltip con estado clínico y valor a pagar
+                                    $piezasPagosDetalle = collect($odontograma)
+                                        ->where('presupuesto', 1)
+                                        ->where('urgencia', 0)
+                                        ->groupBy(fn ($o) => (string) $o->pieza)
+                                        ->map(function ($tratamientos, $pieza) {
+                                            $totalPagar = $tratamientos->sum(fn ($o) => $o->valor - ($o->valor_descuento ?? 0));
+                                            $estadosPago = $tratamientos->pluck('estado_pago')->filter()->unique();
+                                            $colorPago = $estadosPago->isEmpty() || $estadosPago->contains('error')
+                                                ? 'error'
+                                                : ($estadosPago->contains('incompleto') ? 'incompleto' : 'ok');
+                                            $etiquetaPago = ['ok' => 'Al día', 'incompleto' => 'Pago incompleto', 'error' => 'Pendiente de pago'][$colorPago];
+                                            $estadosClinicos = $tratamientos->map(function ($o) {
+                                                // match() es PHP 8+; producción corre PHP 7.3, se usa array-lookup en su lugar
+                                                $mapaEstadosClinicos = [1 => 'Terminado', 2 => 'En proceso', 3 => 'Citado a control'];
+                                                return $mapaEstadosClinicos[(int) $o->estado] ?? 'Pendiente';
+                                            })->unique()->values()->implode(', ');
+                                            return [
+                                                'pieza' => $pieza,
+                                                'color_pago' => $colorPago,
+                                                'tratamiento' => 'Pago: '.$etiquetaPago.' · Estado: '.$estadosClinicos.' · Valor a pagar: $'.number_format($totalPagar, 0, ',', '.'),
+                                            ];
+                                        })
+                                        ->values();
+                                @endphp
+                                @if($piezasPagosDetalle->isNotEmpty())
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                        <div class="card-informacion mb-3" id="presupuesto_pagos_visor">
+                                            <div class="card-body">
+                                                @include('atencion_odontologica.include.selector_odontograma', [
+                                                    'id' => 'selector_pagos_piezas',
+                                                    'inputId' => 'pieza_pagos_detalle',
+                                                    'counter' => 9600,
+                                                    'multiple' => false,
+                                                    'compacto' => true,
+                                                    'autoRefresh' => false,
+                                                    'mostrarMensajeVacio' => false,
+                                                    'estadosBloqueados' => [],
+                                                    'piezasDisponibles' => $piezasPagosDetalle,
+                                                    'titulo' => 'Estado de pago y clínico por pieza',
+                                                    'ayuda' => 'Haga clic en una pieza para filtrar su detalle en la tabla',
+                                                ])
+                                                <select class="d-none" id="pieza_pagos_detalle" name="pieza_pagos_detalle" tabindex="-1" aria-hidden="true"></select>
+                                                <div class="d-flex flex-wrap align-items-center mt-2" id="filtro_pieza_pagos_wrapper" style="display:none;">
+                                                    <span class="badge badge-primary px-2 py-1 mr-2" id="filtro_pieza_pagos_texto"></span>
+                                                    <button type="button" class="btn btn-link btn-sm p-0" id="btn_quitar_filtro_pieza_pagos">Quitar filtro</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+
+                                <style>
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza{position:relative}
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-ok::after,
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-incompleto::after,
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-error::after{
+                                        content:'';position:absolute;top:3px;right:3px;width:9px;height:9px;border-radius:50%;box-shadow:0 0 0 2px #fff;
+                                    }
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-ok::after{background:#2bb673}
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-incompleto::after{background:#f4b942}
+                                    #selector_pagos_piezas .selector-odontograma-generico__pieza.estado-pago-error::after{background:#e6534d}
+                                </style>
+                                <script>
+                                    // Calcula, por pieza, el color agregado según estado_pago de sus prestaciones (rojo si alguna sin pagar, amarillo si alguna incompleta, verde si todas ok)
+                                    function calcularColoresPagoPorPieza(listaOdontograma){
+                                        const mapa = {};
+                                        (listaOdontograma || []).forEach(function(o){
+                                            if(o.presupuesto != 1 || o.urgencia != 0){ return; }
+                                            const pieza = String(o.pieza);
+                                            if(!mapa[pieza]){ mapa[pieza] = { estados: [], clinicos: [], totalPagar: 0 }; }
+                                            const descuento = Number(o.valor_descuento) || 0;
+                                            mapa[pieza].estados.push(o.estado_pago || 'error');
+                                            mapa[pieza].totalPagar += (Number(o.valor) || 0) - descuento;
+                                            const clinico = Number(o.estado) === 1 ? 'Terminado' : (Number(o.estado) === 2 ? 'En proceso' : (Number(o.estado) === 3 ? 'Citado a control' : 'Pendiente'));
+                                            if(mapa[pieza].clinicos.indexOf(clinico) === -1){ mapa[pieza].clinicos.push(clinico); }
+                                        });
+
+                                        const resultado = {};
+                                        Object.keys(mapa).forEach(function(pieza){
+                                            const info = mapa[pieza];
+                                            let color = 'ok';
+                                            if(info.estados.indexOf('error') !== -1){ color = 'error'; }
+                                            else if(info.estados.indexOf('incompleto') !== -1){ color = 'incompleto'; }
+                                            const etiquetaPago = color === 'ok' ? 'Al día' : (color === 'incompleto' ? 'Pago incompleto' : 'Pendiente de pago');
+                                            resultado[pieza] = {
+                                                color: color,
+                                                tooltip: 'Pago: '+etiquetaPago+' · Estado: '+info.clinicos.join(', ')+' · Valor a pagar: '+formatoMoneda(info.totalPagar)
+                                            };
+                                        });
+                                        return resultado;
+                                    }
+
+                                    // Pinta los indicadores de color/tooltip sobre los botones del selector según el mapa de colores por pieza
+                                    function pintarEstadosPagoPiezas(mapaColores){
+                                        const $root = $('#selector_pagos_piezas');
+                                        if(!$root.length){ return; }
+                                        $root.find('[data-selector-pieza]').each(function(){
+                                            const $btn = $(this);
+                                            const pieza = String($btn.data('selector-pieza'));
+                                            $btn.removeClass('estado-pago-ok estado-pago-incompleto estado-pago-error');
+                                            const info = mapaColores[pieza];
+                                            if(info){
+                                                $btn.addClass('estado-pago-'+info.color).attr('title', info.tooltip);
+                                            }
+                                        });
+                                    }
+
+                                    // Punto único de sincronización: se llama tras cada acción AJAX que recalcula estado_pago/descuento (pagos, convenio, reasignación)
+                                    function sincronizarSelectorPagosPiezas(listaOdontograma){
+                                        pintarEstadosPagoPiezas(calcularColoresPagoPorPieza(listaOdontograma));
+                                    }
+
+                                    $(document).on('odontograma:change', '#selector_pagos_piezas', function(e, piezasSeleccionadas){
+                                        const pieza = (piezasSeleccionadas && piezasSeleccionadas[0]) ? piezasSeleccionadas[0] : null;
+                                        const table = $('#presup_estado_pago').DataTable();
+                                        if(pieza){
+                                            table.column(1).search('^'+$.fn.dataTable.util.escapeRegex(pieza)+'$', true, false).draw();
+                                            $('#filtro_pieza_pagos_texto').text('Mostrando pieza '+pieza);
+                                            $('#filtro_pieza_pagos_wrapper').show();
+                                        }else{
+                                            table.column(1).search('').draw();
+                                            $('#filtro_pieza_pagos_wrapper').hide();
+                                        }
+                                    });
+
+                                    $(document).on('click', '#btn_quitar_filtro_pieza_pagos', function(){
+                                        $('#selector_pagos_piezas [data-selector-pieza].is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+                                        $('#selector_pagos_piezas .selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+                                        $('#presup_estado_pago').DataTable().column(1).search('').draw();
+                                        $('#filtro_pieza_pagos_wrapper').hide();
+                                    });
+
+                                    let saldoAFavorDisponible = 0;
+
+                                    // Muestra/oculta los banners de saldo a favor o saldo pendiente tras aplicar/quitar un convenio
+                                    function manejarSaldoConvenio(resp, avisar){
+                                        const saldoAFavor = Number(resp.saldo_a_favor) || 0;
+                                        const saldoPendiente = Number(resp.saldo_pendiente) || 0;
+                                        saldoAFavorDisponible = saldoAFavor;
+
+                                        $('#banner_saldo_convenio_wrapper').toggle(saldoAFavor > 0 || saldoPendiente > 0);
+                                        $('#banner_saldo_a_favor').toggle(saldoAFavor > 0);
+                                        $('#banner_saldo_pendiente').toggle(saldoAFavor <= 0 && saldoPendiente > 0);
+                                        $('#banner_saldo_a_favor_monto').text(formatoMoneda(saldoAFavor));
+                                        $('#banner_saldo_pendiente_monto').text(formatoMoneda(saldoPendiente));
+
+                                        if(avisar && saldoAFavor > 0){
+                                            swal({
+                                                title: 'El paciente queda con saldo a favor',
+                                                text: 'Tras aplicar el descuento, lo abonado supera el nuevo total en '+formatoMoneda(saldoAFavor)+'. Puede registrar una devolución de dinero o dejarlo como abono para un próximo tratamiento.',
+                                                icon: 'info',
+                                                buttons: ['Dejarlo como abono', 'Registrar devolución'],
+                                            }).then((registrar) => {
+                                                if(registrar){ abrir_modal_devolucion(); }
+                                            });
+                                        }
+                                    }
+
+                                    function abrir_modal_devolucion(){
+                                        $('#devolucion_saldo_disponible').text(formatoMoneda(saldoAFavorDisponible));
+                                        $('#devolucion_monto').val(Math.round(saldoAFavorDisponible));
+                                        $('#devolucion_observaciones').val('');
+                                        $('#modalDevolucionPresupuesto').modal('show');
+                                    }
+
+                                    function confirmar_devolucion_presupuesto(){
+                                        const monto = parseInt(String($('#devolucion_monto').val()).replace(/[^0-9]/g, '')) || 0;
+                                        if(monto <= 0){
+                                            swal({title: 'Error', icon: 'error', text: 'Ingrese un monto de devolución mayor que cero.'});
+                                            return;
+                                        }
+                                        if(monto > saldoAFavorDisponible){
+                                            swal({title: 'Error', icon: 'error', text: 'El monto no puede superar el saldo a favor disponible ('+formatoMoneda(saldoAFavorDisponible)+').'});
+                                            return;
+                                        }
+
+                                        $.ajax({
+                                            type: 'post',
+                                            url: '{{ ROUTE("dental.registrar_devolucion_presupuesto") }}',
+                                            data: {
+                                                monto: monto,
+                                                metodo_pago: $('#devolucion_metodo').val(),
+                                                observaciones: $('#devolucion_observaciones').val(),
+                                                id_paciente: $('#id_paciente').val(),
+                                                id_ficha_atencion: $('#id_fc').val(),
+                                                id_lugar_atencion: $('#id_lugar_atencion').val(),
+                                                id_presupuesto: $('#id_presupuesto').val(),
+                                                _token: CSRF_TOKEN
+                                            },
+                                            success: function(resp){
+                                                if(resp.estado == 1){
+                                                    $('#modalDevolucionPresupuesto').modal('hide');
+                                                    swal({title: 'Devolución registrada', text: resp.mensaje, icon: 'success'});
+                                                    cargarTablaPagosPresupuesto(resp.pagos || []);
+                                                    sincronizarResumenPagoPresupuesto(resp.suma_pagado, null, resp.pagos);
+                                                    saldoAFavorDisponible = Math.max(0, saldoAFavorDisponible - monto);
+                                                    $('#banner_saldo_a_favor_monto').text(formatoMoneda(saldoAFavorDisponible));
+                                                    $('#banner_saldo_a_favor').toggle(saldoAFavorDisponible > 0);
+                                                    $('#banner_saldo_convenio_wrapper').toggle(saldoAFavorDisponible > 0);
+                                                    const tieneDcto = $('#tiene_dcto').val();
+                                                    if(tieneDcto && tieneDcto != 0){
+                                                        confirmar_aplicar_convenio_tratamiento(tieneDcto);
+                                                    }
+                                                }else{
+                                                    swal({title: 'Error', text: resp.mensaje, icon: 'error'});
+                                                }
+                                            },
+                                            error: function(error){
+                                                console.log(error.responseText);
+                                                swal({title: 'Error', text: 'No fue posible registrar la devolución.', icon: 'error'});
+                                            }
+                                        });
+                                    }
+
+                                    // Si el presupuesto quedó con un convenio aplicado (persistido en BD), lo recalculamos apenas carga la ficha
+                                    $(function(){
+                                        const tieneDctoInicial = $('#tiene_dcto').val();
+                                        if(tieneDctoInicial && tieneDctoInicial != 0){
+                                            confirmar_aplicar_convenio_tratamiento(tieneDctoInicial);
+                                        }
+                                    });
+                                </script>
+
                                 <!--P. POR PIEZAS-->
                                 <div class="form-row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
@@ -1612,7 +2067,7 @@
 
 
 <input type="hidden" id="total_presupuesto_dental" value="{{ $valores + $valores_piezas + $valores_insumos + $valores_laboratorio }}">
-<input type="hidden" name="tiene_dcto" id="tiene_dcto" value="0">
+<input type="hidden" name="tiene_dcto" id="tiene_dcto" value="{{ optional($presupuesto)->id_convenio_aplicado ?? 0 }}">
 <input type="hidden" name="tiene_reasignacion" id="tiene_reasignacion" value="0">
 <!-- MODAL INSUMOS -->
 <!-- Modal -->
@@ -1778,7 +2233,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Barra de Progreso del Presupuesto -->
                             <div class="mb-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -1786,12 +2241,12 @@
                                     <small class="text-muted" id="porcentaje_pago_presupuesto">0%</small>
                                 </div>
                                 <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" 
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%"
                                         id="barra_progreso_presupuesto" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Tabla de Pagos del Presupuesto -->
                             <div class="mt-4" id="seccion_pagos_presupuesto" style="display: none;">
                                 <h6 class="text-muted mb-3">
@@ -1819,7 +2274,7 @@
 
                         <hr class="my-3">
 
-                        
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-row">
@@ -1884,7 +2339,7 @@
                                 </div>
                             </div>
                         </div>
-            
+
                         <div class="form-row d-none">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-informacion">
@@ -1928,12 +2383,51 @@
                         </div>
                     </div>
                 </div>
-           		
-           
+
+
             </div>
             <!--<div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>-->
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DEVOLUCIÓN DE DINERO (saldo a favor) -->
+<div class="modal fade" id="modalDevolucionPresupuesto" tabindex="-1" aria-labelledby="modalDevolucionPresupuestoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDevolucionPresupuestoLabel">Registrar devolución de dinero</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info py-2 px-3 mb-3">
+                    Saldo a favor disponible: <strong id="devolucion_saldo_disponible">$0</strong>
+                </div>
+                <div class="form-group">
+                    <label for="devolucion_monto" class="floating-label-activo-sm">Monto a devolver</label>
+                    <input type="text" class="form-control form-control-sm" id="devolucion_monto" name="devolucion_monto">
+                </div>
+                <div class="form-group">
+                    <label for="devolucion_metodo" class="floating-label-activo-sm">Método de devolución</label>
+                    <select class="form-control form-control-sm" id="devolucion_metodo" name="devolucion_metodo">
+                        <option value="efectivo">Efectivo</option>
+                        <option value="tarjeta">Tarjeta</option>
+                        <option value="transferencia">Transferencia Bancaria</option>
+                    </select>
+                </div>
+                <div class="form-group mb-0">
+                    <label for="devolucion_observaciones" class="floating-label-activo-sm">Observaciones</label>
+                    <textarea class="form-control form-control-sm" id="devolucion_observaciones" name="devolucion_observaciones" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success btn-sm" onclick="confirmar_devolucion_presupuesto()"><i class="feather icon-corner-up-left"></i> Registrar devolución</button>
+            </div>
         </div>
     </div>
 </div>
@@ -1950,6 +2444,22 @@
 		        </button>
             </div>
             <div class="modal-body" id="modal_body_reasignar_presupuesto">
+                @php
+                    // Si el presupuesto tiene un convenio aplicado, todo lo que se compara/muestra aquí debe ser el monto YA descontado.
+                    $porcentajeDescuentoReasignacion = 0;
+                    if ($presupuesto && $presupuesto->id_convenio_aplicado) {
+                        $convenioReasignacion = \App\Models\EmpresasConvenios::find($presupuesto->id_convenio_aplicado);
+                        $porcentajeDescuentoReasignacion = $convenioReasignacion ? intval($convenioReasignacion->porcentaje) : 0;
+                    }
+                    $conDescuentoReasignacion = function ($valor) use ($porcentajeDescuentoReasignacion) {
+                        $valor = intval($valor);
+                        return $porcentajeDescuentoReasignacion > 0 ? (int) round($valor - ($valor * $porcentajeDescuentoReasignacion / 100)) : $valor;
+                    };
+                    $totalOdontogramaReasignacion = collect($odontograma)->where('presupuesto', 1)->where('urgencia', 0)->sum(fn ($o) => $conDescuentoReasignacion($o->valor));
+                    $totalGruposReasignacion = collect($todos)->where('presupuesto', 1)->sum(fn ($o) => $conDescuentoReasignacion($o->valor));
+                    $totalInsumosReasignacion = collect($insumos_tratamientos)->filter(fn ($i) => $i->presupuesto == 1 && $i->urgencia == 0)->sum(fn ($i) => $conDescuentoReasignacion($i->cantidad * $i->valor));
+                    $totalPresupuestoReasignacion = $totalOdontogramaReasignacion + $totalGruposReasignacion + $totalInsumosReasignacion;
+                @endphp
                 <div class="alert reasignacion-ayuda py-2" role="status">
                     <i class="feather icon-info mr-1"></i>
                     <strong>Distribución del nuevo abono:</strong> los insumos se cubren automáticamente, del más económico al más caro. Aquí sólo puede distribuir el remanente entre piezas y grupos.
@@ -1962,15 +2472,15 @@
 				                    <div class="col-md-7 mb-2 mb-md-0">
 				                        <div class="reasignacion-resumen">
 				                            <input type="hidden" id="total_presupuesto_a_pagar"
-				                                value="{{ $valores_piezas + $valores + $valores_insumos }}">
+				                                value="{{ $totalPresupuestoReasignacion }}">
 				                            <input type="hidden" name="total_abonado_presupuesto" id="total_abonado_presupuesto"
 				                                value="{{ $valor_abonado }}">
 				                            <input type="hidden" name="total_adeudado_presupuesto"
 				                                id="total_adeudado_presupuesto"
-				                                value="{{ $valores_piezas + $valores + $valores_insumos - $valor_abonado }}">
-				                            <div class="reasignacion-metrica"><small>Total presupuesto</small><strong id="monto_total">${{ number_format($valores_piezas + $valores + $valores_insumos, 0, ',', '.') }}</strong></div>
+				                                value="{{ $totalPresupuestoReasignacion - $valor_abonado }}">
+				                            <div class="reasignacion-metrica"><small>Total presupuesto</small><strong id="monto_total">${{ number_format($totalPresupuestoReasignacion, 0, ',', '.') }}</strong></div>
 				                            <div class="reasignacion-metrica"><small>Nuevo abono disponible</small><strong class="text-info" id="monto_abonado">$0</strong></div>
-				                            <div class="reasignacion-metrica"><small>Saldo pendiente</small><strong class="text-danger" id="monto_adeudado">${{ number_format(max(0, $valores_piezas + $valores + $valores_insumos - $valor_abonado), 0, ',', '.') }}</strong></div>
+				                            <div class="reasignacion-metrica"><small>Saldo pendiente</small><strong class="text-danger" id="monto_adeudado">${{ number_format(max(0, $totalPresupuestoReasignacion - $valor_abonado), 0, ',', '.') }}</strong></div>
 				                        </div>
 				                    </div>
 				                    <div class="col-md-5">
@@ -2011,15 +2521,20 @@
 						                        <tbody>
 						                            @foreach ($odontograma as $o)
 						                                @if ($o->presupuesto == 1 && $o->urgencia == 0)
+						                                    @php $valorNetoOdontoReasig = $conDescuentoReasignacion($o->valor); @endphp
 						                                    <tr>
 						                                        <td><input type="checkbox" class="valor-checkbox"
-						                                                data-total="{{ $o->valor }}" data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
+						                                                data-total="{{ $valorNetoOdontoReasig }}" data-valor="{{ $valorNetoOdontoReasig }}" data-id="{{ $o->id }}"
 			                                                data-info="odonto" data-estado="{{ $o->estado_pago ?: 'error' }}"></td>
 			                                        <td><strong>Pieza {{ $o->pieza }}</strong><br><small class="text-muted">{{ $o->tratamiento }}</small></td>
-			                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+			                                        <td>${{ number_format($valorNetoOdontoReasig, 0, ',', '.') }}
+			                                            @if($porcentajeDescuentoReasignacion > 0)
+			                                                <br><small class="text-muted"><s>${{ number_format($o->valor, 0, ',', '.') }}</s></small>
+			                                            @endif
+			                                        </td>
 			                                        <td class="estado-pago-reasignacion"></td>
 			                                        <td class="monto-cubierto">$0</td>
-			                                        <td class="monto-pendiente">${{ number_format($o->valor, 0, ',', '.') }}</td>
+			                                        <td class="monto-pendiente">${{ number_format($valorNetoOdontoReasig, 0, ',', '.') }}</td>
 						                                        <td>
 						                                            <button type="button" class="btn btn-danger btn-sm"
 						                                                onclick="eliminar_odontograma({{ $o->id }})"><i
@@ -2063,15 +2578,20 @@
 						                        <tbody>
 						                            @foreach ($todos as $o)
 						                                @if ($o->presupuesto == 1)
+						                                    @php $valorNetoGrupoReasig = $conDescuentoReasignacion($o->valor); @endphp
 						                                    <tr>
 						                                        <td><input type="checkbox" class="valor-checkbox"
-						                                                data-total="{{ $o->valor }}" data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
+						                                                data-total="{{ $valorNetoGrupoReasig }}" data-valor="{{ $valorNetoGrupoReasig }}" data-id="{{ $o->id }}"
 			                                                data-info="gral" data-estado="{{ $o->estado_pago ?: 'error' }}"></td>
 			                                        <td>{{ $o->diagnostico_tratamiento }}</td>
-			                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+			                                        <td>${{ number_format($valorNetoGrupoReasig, 0, ',', '.') }}
+			                                            @if($porcentajeDescuentoReasignacion > 0)
+			                                                <br><small class="text-muted"><s>${{ number_format($o->valor, 0, ',', '.') }}</s></small>
+			                                            @endif
+			                                        </td>
 			                                        <td class="estado-pago-reasignacion"></td>
 			                                        <td class="monto-cubierto">$0</td>
-			                                        <td class="monto-pendiente">${{ number_format($o->valor, 0, ',', '.') }}</td>
+			                                        <td class="monto-pendiente">${{ number_format($valorNetoGrupoReasig, 0, ',', '.') }}</td>
 						                                        <td>
 						                                            <button type="button" class="btn btn-danger btn-sm"
 						                                                onclick="eliminar_diagnostico({{ $o->id }},'gral',this)"><i
@@ -2116,10 +2636,13 @@
 						                        <tbody>
 						                            @foreach ($insumos_tratamientos as $i)
 						                                @if ($i->presupuesto == 1 && $i->urgencia == 0)
-						                                    @php $total = $i->cantidad * $i->valor; @endphp
+						                                    @php
+						                                        $total = $i->cantidad * $i->valor;
+						                                        $totalNetoInsumoReasig = $conDescuentoReasignacion($total);
+						                                    @endphp
 						                                    <tr>
 						                                        <td><input type="checkbox" class="valor-checkbox"
-						                                                data-valor="{{ $total }}" data-id="{{ $i->id }}"
+						                                                data-valor="{{ $totalNetoInsumoReasig }}" data-id="{{ $i->id }}"
 			                                                data-info="insumo" data-estado="{{ $i->estado_pago ?: 'error' }}"></td>
 						                                        <td>
                                                                     <strong>{{ $i->insumos }} {{ $i->nombre_marca }}</strong>
@@ -2132,10 +2655,14 @@
                                                                 </td>
 						                                        <td>{{ $i->cantidad }}</td>
 						                                        <td>${{ number_format($i->valor, 0, ',', '.') }}</td>
-			                                        <td>${{ number_format($i->cantidad * $i->valor, 0, ',', '.') }}</td>
+			                                        <td>${{ number_format($totalNetoInsumoReasig, 0, ',', '.') }}
+			                                            @if($porcentajeDescuentoReasignacion > 0)
+			                                                <br><small class="text-muted"><s>${{ number_format($total, 0, ',', '.') }}</s></small>
+			                                            @endif
+			                                        </td>
 			                                        <td class="estado-pago-reasignacion"></td>
 			                                        <td class="monto-cubierto">$0</td>
-			                                        <td class="monto-pendiente">${{ number_format($i->cantidad * $i->valor, 0, ',', '.') }}</td>
+			                                        <td class="monto-pendiente">${{ number_format($totalNetoInsumoReasig, 0, ',', '.') }}</td>
 						                                        <td>
 						                                            <button type="button" class="btn btn-danger btn-sm"
 						                                                onclick="eliminar_insumo({{ $i->id }})"><i
@@ -2657,7 +3184,7 @@
                 }
                 $('#bono_prevision').val(resp.id_prevision || 0).trigger('change');
                 $('#montoAbonado').val(formatoMoneda(resp.valor_atencion));
-                
+
                 // Cargar información del presupuesto en el resumen
                 cargarInformacionPresupuesto(resp.pagos || []);
             },
@@ -2831,6 +3358,9 @@
                             $(rowNode).addClass('text-center align-middle status-circle');
                         }
                     });
+
+                    sincronizarSelectorPagosPiezas(odontograma);
+                    sincronizarDetallePresupuestoClinico(odontograma);
 
                     let insumos = response.insumos;
                     console.log(insumos);
@@ -3130,6 +3660,8 @@
                             $(rowNode).addClass('text-center align-middle status-circle');
                         }
                     });
+                    sincronizarSelectorPagosPiezas(odontograma);
+                    sincronizarDetallePresupuestoClinico(odontograma);
                     let insumos = resp.insumos;
 
                     let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
@@ -3167,7 +3699,7 @@
                     odontograma.forEach(function(odonto) {
                         if (odonto.presupuesto == 1) {
                             $('#contenedor_piezas_dentales_presupuesto').append(`
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                         <div class="card-informacion">
                                             <div class="card-body pb-0">
                                                 <div class="form-row">
@@ -3181,15 +3713,15 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                                     </div>
                                                     <div class="form-group col-md-1">
                                                         <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor_descuento || 0)}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total prestación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor - (odonto.valor_descuento || 0))}" >
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex justify-content-center">
                                                         <button type="button" class="btn btn-danger-light-c btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
@@ -3309,9 +3841,9 @@
 
                     });
                     //actualizar_presupuesto();
-                   
+
                     console.log('Tabla de pagos actualizada');
-                    
+
                     // Actualizar información del presupuesto después de eliminar pago
                     setTimeout(cargarInformacionPresupuesto, 500);
                 }
@@ -3398,17 +3930,20 @@
             if (Number(grupo.presupuesto) !== 1 || Number(grupo.urgencia || 0) === 1) return;
 
             const id = parseInt(grupo.id);
-            const valor = parseInt(grupo.valor) || 0;
+            const valorBruto = parseInt(grupo.valor) || 0;
+            const valor = grupo.nuevo_valor !== undefined ? (parseInt(grupo.nuevo_valor) || 0) : valorBruto;
+            const tieneDescuento = valor !== valorBruto;
             const estado = String(grupo.estado_pago || 'error');
             const localizacion = $('<div>').text(grupo.localizacion || 'Grupo dental').html();
             const tratamiento = $('<div>').text(grupo.diagnostico_tratamiento || grupo.descripcion || '').html();
+            const valorTexto = formatoMoneda(valor) + (tieneDescuento ? ' <br><small class="text-muted"><s>'+formatoMoneda(valorBruto)+'</s></small>' : '');
             $tbody.append(`
                 <tr>
                     <td><input type="checkbox" class="valor-checkbox"
                         data-total="${valor}" data-valor="${valor}" data-id="${id}"
                         data-info="gral" data-estado="${estado}"></td>
                     <td><strong>${localizacion}</strong>${tratamiento ? '<br><small class="text-muted">' + tratamiento + '</small>' : ''}</td>
-                    <td>${formatoMoneda(valor)}</td>
+                    <td>${valorTexto}</td>
                     <td class="estado-pago-reasignacion"></td>
                     <td class="monto-cubierto">$0</td>
                     <td class="monto-pendiente">${formatoMoneda(valor)}</td>
@@ -3418,9 +3953,88 @@
         });
     }
 
+    function renderizarPiezasModalReasignacion(odontograma) {
+        const $tbody = $('#table_pagos_reasignar_odontograma tbody');
+        if (!$tbody.length || !Array.isArray(odontograma)) return;
+
+        $tbody.empty();
+        odontograma.forEach(function(pieza) {
+            if (Number(pieza.presupuesto) !== 1 || Number(pieza.urgencia || 0) === 1) return;
+
+            const id = parseInt(pieza.id);
+            const valorBruto = parseInt(pieza.valor) || 0;
+            const valor = pieza.nuevo_valor !== undefined ? (parseInt(pieza.nuevo_valor) || 0) : valorBruto;
+            const tieneDescuento = valor !== valorBruto;
+            const estado = String(pieza.estado_pago || 'error');
+            const tratamiento = $('<div>').text(pieza.tratamiento || '').html();
+            const valorTexto = formatoMoneda(valor) + (tieneDescuento ? ' <br><small class="text-muted"><s>'+formatoMoneda(valorBruto)+'</s></small>' : '');
+            $tbody.append(`
+                <tr>
+                    <td><input type="checkbox" class="valor-checkbox"
+                        data-total="${valor}" data-valor="${valor}" data-id="${id}"
+                        data-info="odonto" data-estado="${estado}"></td>
+                    <td><strong>Pieza ${pieza.pieza}</strong><br><small class="text-muted">${tratamiento}</small></td>
+                    <td>${valorTexto}</td>
+                    <td class="estado-pago-reasignacion"></td>
+                    <td class="monto-cubierto">$0</td>
+                    <td class="monto-pendiente">${formatoMoneda(valor)}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm"
+                        onclick="eliminar_odontograma(${id})"><i class="feather icon-x"></i></button></td>
+                </tr>`);
+        });
+    }
+
+    function renderizarInsumosModalReasignacion(insumos) {
+        const $tbody = $('#table_pagos_reasignar_insumos tbody');
+        if (!$tbody.length || !Array.isArray(insumos)) return;
+
+        $tbody.empty();
+        insumos.forEach(function(insumo) {
+            if (Number(insumo.presupuesto) !== 1 || Number(insumo.urgencia || 0) === 1) return;
+
+            const id = parseInt(insumo.id);
+            const cantidad = parseInt(insumo.cantidad) || 1;
+            const valorBruto = (parseInt(insumo.valor) || 0) * cantidad;
+            const valor = insumo.nuevo_valor !== undefined ? (parseInt(insumo.nuevo_valor) || 0) : valorBruto;
+            const tieneDescuento = valor !== valorBruto;
+            const estado = String(insumo.estado_pago || 'error');
+            const nombre = $('<div>').text((insumo.insumos || '') + ' ' + (insumo.nombre_marca || '')).html();
+            const valorTexto = formatoMoneda(valor) + (tieneDescuento ? ' <br><small class="text-muted"><s>'+formatoMoneda(valorBruto)+'</s></small>' : '');
+            $tbody.append(`
+                <tr>
+                    <td><input type="checkbox" class="valor-checkbox"
+                        data-valor="${valor}" data-id="${id}"
+                        data-info="insumo" data-estado="${estado}"></td>
+                    <td><strong>${nombre}</strong></td>
+                    <td>${cantidad}</td>
+                    <td>${formatoMoneda(parseInt(insumo.valor) || 0)}</td>
+                    <td>${valorTexto}</td>
+                    <td class="estado-pago-reasignacion"></td>
+                    <td class="monto-cubierto">$0</td>
+                    <td class="monto-pendiente">${formatoMoneda(valor)}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm"
+                        onclick="eliminar_insumo(${id})"><i class="feather icon-x"></i></button></td>
+                </tr>`);
+        });
+    }
+
     function abrirModalReasignarPresupuesto(datosActualizados) {
+        if (datosActualizados && Array.isArray(datosActualizados.odontograma)) {
+            renderizarPiezasModalReasignacion(datosActualizados.odontograma);
+        }
         if (datosActualizados && Array.isArray(datosActualizados.todos)) {
             renderizarGruposModalReasignacion(datosActualizados.todos);
+        }
+        if (datosActualizados && Array.isArray(datosActualizados.insumos)) {
+            renderizarInsumosModalReasignacion(datosActualizados.insumos);
+        }
+        if (datosActualizados && datosActualizados.total_presupuesto !== undefined) {
+            const totalNeto = parseInt(datosActualizados.total_presupuesto) || 0;
+            $('#total_presupuesto_a_pagar').val(totalNeto);
+            $('#monto_total').html(formatoMoneda(totalNeto));
+        }
+        if (datosActualizados && datosActualizados.total_adeudado !== undefined) {
+            $('#total_adeudado_presupuesto').val(parseInt(datosActualizados.total_adeudado) || 0);
         }
         $('#modalReasignarPresupuesto').modal('show');
         $('#table_pagos_reasignar_insumos').closest('.reasignacion-seccion').closest('.form-row').hide();
@@ -3570,6 +4184,9 @@
                         }
                     });
 
+                    sincronizarSelectorPagosPiezas(odontograma);
+                    sincronizarDetallePresupuestoClinico(odontograma);
+
                     let insumos = response.insumos;
                     console.log(insumos);
                     let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
@@ -3667,17 +4284,17 @@
         let total_presupuesto = parseInt($('#total_presupuesto_dental').val()) || 0;
         let monto_abonado = parseInt($('#montoAbonado').val().replace(/[^0-9]/g, '')) || 0;
         let monto_pendiente = total_presupuesto - monto_abonado;
-        
+
         // Actualizar valores en las cards
         $('#monto_abonado_presupuesto').text(formatoMoneda(monto_abonado));
         $('#total_deuda_presupuesto').text(formatoMoneda(total_presupuesto));
         $('#monto_pendiente_presupuesto').text(formatoMoneda(monto_pendiente));
-        
+
         // Actualizar barra de progreso
         let porcentaje = total_presupuesto > 0 ? (monto_abonado / total_presupuesto) * 100 : 0;
         $('#barra_progreso_presupuesto').css('width', porcentaje + '%');
         $('#porcentaje_pago_presupuesto').text(Math.round(porcentaje) + '%');
-        
+
         // Cargar tabla de pagos desde el DataTable existente
         cargarTablaPagosPresupuesto(pagosActualizados);
     }
@@ -3708,27 +4325,27 @@
             });
             return;
         }
-        
+
         // Obtener datos de la tabla DataTable existente
         const table = $('#table_pagos_presupuesto').DataTable();
         const data = table.rows().data();
-        
+
         if (data.length > 0) {
             $('#seccion_pagos_presupuesto').show();
-            
+
             data.each(function(row, index) {
                 const fecha = row[0] || 'N/A';
                 const metodo = row[1] || 'N/A';
                 const monto = row[2] || '$0';
                 const acciones = row[3] || '';
-                
+
                 // Extraer el ID del botón de eliminar para reutilizarlo
                 const eliminarBtn = $(acciones).find('button[onclick*="eliminar_pago_dental"]');
-                const idPago = eliminarBtn.length > 0 ? 
+                const idPago = eliminarBtn.length > 0 ?
                     eliminarBtn.attr('onclick').match(/\d+/)?.[0] : '';
-                
+
                 const convenio = $('#bono_prevision option:selected').text() || 'Sin convenio';
-                
+
                 const fila = `
                     <tr class="text-center">
                         <td class="align-middle">${fecha}</td>
@@ -3743,8 +4360,8 @@
                         <td class="align-middle">${convenio}</td>
                         <td class="align-middle">
                             ${idPago ? `
-                                <button type="button" 
-                                        class="btn btn-danger btn-sm" 
+                                <button type="button"
+                                        class="btn btn-danger btn-sm"
                                         onclick="eliminar_pago_dental(${idPago})"
                                         title="Eliminar pago">
                                     <i class="feather icon-trash-2"></i>
@@ -3886,6 +4503,7 @@
             id_paciente: $('#id_paciente').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
@@ -3896,7 +4514,7 @@
             data: data,
             success: function(resp) {
                 console.log(resp);
-                $('#mensaje').html('Descuento aplicado');
+                $('#mensaje').html('Descuento aplicado').addClass('badge-success');
                 $('#tiene_dcto').val(id);
                 // Cambiar el botón para que pase a ser "Quitar convenio"
                 const boton = document.querySelector(
@@ -3947,6 +4565,10 @@
                     }
                 });
 
+                sincronizarSelectorPagosPiezas(odontograma);
+                sincronizarDetallePresupuestoClinico(odontograma);
+                manejarSaldoConvenio(resp, true);
+
                 let insumos = resp.insumos;
 
                 let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
@@ -3984,7 +4606,7 @@
                 odontograma.forEach(function(odonto) {
                     if (odonto.presupuesto == 1) {
                         $('#contenedor_piezas_dentales_presupuesto').append(`
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                 <div class="card-informacion">
                                     <div class="card-body pb-0">
                                         <div class="form-row">
@@ -4180,9 +4802,9 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
+            id_presupuesto: $('#id_presupuesto').val(),
             monto_abonado: $('#abonos_presup').val(),
             tiene_dcto: $('#tiene_dcto').val(),
-            monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
 
@@ -4192,7 +4814,7 @@
             data: data,
             success: function(resp) {
                 console.log(resp);
-                $('#mensaje').html('Descuento retirado');
+                $('#mensaje').html('Descuento retirado').removeClass('badge-success');
                 $('#tiene_dcto').val(0);
                 // Cambiar el botón para que vuelva a ser "Aplicar convenio"
                 const boton = document.querySelector(
@@ -4243,11 +4865,15 @@
                     }
                 });
 
+                sincronizarSelectorPagosPiezas(odontograma);
+                sincronizarDetallePresupuestoClinico(odontograma);
+                manejarSaldoConvenio(resp, true);
+
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 odontograma.forEach(function(odonto) {
                     if (odonto.presupuesto == 1) {
                         $('#contenedor_piezas_dentales_presupuesto').append(`
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" data-pieza-presupuesto="${odonto.pieza}">
                                             <div class="card-informacion">
                                                 <div class="card-body pb-0">
                                                     <div class="form-row">
@@ -4261,15 +4887,15 @@
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
                                                             <label class="floating-label-activo-sm">Sub-Total</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
                                                             <label class="floating-label-activo-sm">Descuento</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(0)}">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
                                                             <label class="floating-label-activo-sm">Total prestación</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
                                                             <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
@@ -4542,15 +5168,15 @@
                 swal.close();
                 console.log(response);
                 if(response.estado == 'ok'){
-                    
+
                     $('#contenedor_ordenes_trabajos_menores_dental_presup').html(response.html);
                     $('#contenedor_ordenes_trabajos_mayores_dental_presup').empty();
-                    
+
                     // Generar HTML adicional para trabajos menores si existen en la respuesta
                     if(response.ordenes_trabajo_menor && response.ordenes_trabajo_menor.length > 0) {
                         // Llenar la tabla de trabajos menores
                         llenarTablaTrabajosMenores(response.ordenes_trabajo_menor);
-                        
+
                         let htmlTrabajosMenores = '';
                         response.ordenes_trabajo_menor.forEach(function(o) {
                             let estadoTexto = o.estado == 1 ? 'Pendiente' : 'Otro';
@@ -4605,7 +5231,7 @@
                     if(response.ordenes_trabajo_mayor && response.ordenes_trabajo_mayor.length > 0) {
                         // Llenar la tabla de trabajos mayores
                         llenarTablaTrabajosMayores(response.ordenes_trabajo_mayor);
-                        
+
                         let htmlTrabajosMayores = '';
                         response.ordenes_trabajo_mayor.forEach(function(o) {
                             let estadoTexto = o.estado == 1 ? 'Pendiente' : 'Otro';
@@ -4655,8 +5281,8 @@
                         // Usar contenedor diferente para no interferir con la línea original
                         $('#contenedor_ordenes_trabajos_mayores_dental').html(htmlTrabajosMayores);
                     }
-                    
-                    
+
+
                     // Reemplazar resumen
                     $('#resumen_costos_lab').replaceWith(response.resumen);
                     let valores_boca_general = response.valores[0];
@@ -4690,7 +5316,7 @@
     function llenarTablaTrabajosMenores(ordenes) {
         // Limpiar el tbody de la tabla
         $('#table_trabajos_menores_dental tbody').empty();
-        
+
         // Si hay órdenes, llenar la tabla
         if(ordenes && ordenes.length > 0) {
             ordenes.forEach(function(orden) {
@@ -4754,7 +5380,7 @@
     function llenarTablaTrabajosMayores(ordenes) {
         // Limpiar el tbody de la tabla
         $('#table_trabajos_mayores_dental tbody').empty();
-        
+
         // Si hay órdenes, llenar la tabla
         if(ordenes && ordenes.length > 0) {
             ordenes.forEach(function(orden) {
@@ -4769,7 +5395,7 @@
                         <td>${orden.trabajo_realizar || ''}</td>
                         <td>
                             <button type="button" class="btn btn-icon btn-primary" onclick="generar_pdf_trabajo_mayor_dental(${orden.id})">
-                                <i class="fas fa-eye"></i> 
+                                <i class="fas fa-eye"></i>
                             </button>
                             <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_trabajo_mayor_dental(${orden.id})">
                                 <i class="fas fa-trash"></i>

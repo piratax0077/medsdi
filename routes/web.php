@@ -3234,6 +3234,7 @@ Route::post('/dental/eliminar_insumos_tto',[App\Http\Controllers\DentalControlle
 Route::post('/dental/dame_insumos',[App\Http\Controllers\DentalController::class, 'dame_insumos_tipo'])->name('dental.dame_implantes_dental');
 Route::post('/dental/dame_bono_pago',[App\Http\Controllers\DentalController::class, 'dame_bono_pago'])->name('dental.dame_bono_pago');
 Route::post('/dental/pago_presupuesto',[App\Http\Controllers\DentalController::class, 'pago_presupuesto'])->name('dental.confirmar_pago_presupuesto_dental');
+Route::post('/dental/registrar_devolucion_presupuesto',[App\Http\Controllers\DentalController::class, 'registrar_devolucion_presupuesto_dental'])->name('dental.registrar_devolucion_presupuesto');
 Route::post('/dental/pago_urgencias',[App\Http\Controllers\DentalController::class, 'pago_urgencias'])->name('dental.confirmar_pago_urgencias_dental');
 Route::post('/dental/eliminar_pago_presupuesto',[App\Http\Controllers\DentalController::class, 'eliminar_pago_presupuesto'])->name('dental.eliminar_pago_presupuesto_dental');
 Route::post('/dental/eliminar_pago_urgencias',[App\Http\Controllers\DentalController::class, 'eliminar_pago_urgencias'])->name('dental.eliminar_pago_urgencias_dental');

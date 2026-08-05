@@ -444,9 +444,12 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                                             <h6 class="t-aten d-inline">Examen por pieza</h6>
-                                            {{-- <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_pieza_dental_examen(1000)"><i class="fas fa-plus"></i> Añadir pieza</button> --}}
                                         </div>
                                     </div>
+
+                                    <div id="pieza_dental_examen" class="form-row">
+                                    </div>
+                                    <div id="contenedor_nueva_pieza_dental" class="mb-3"></div>
 
                                     <div id="contenedor_pieza_dental_endo_gral" class="mb-3">
                                         @include('atencion_odontologica.include.examenes_dental_pieza_todos', ['examenes' => $examenes_pieza])
@@ -630,10 +633,6 @@
                                         @endforeach
                                         @endif
                                     </div>
-                                    <div id="pieza_dental_examen" class="form-row">
-                                    </div>
-                                    <div id="contenedor_nueva_pieza_dental"></div>
-
 
                                 </div>
 

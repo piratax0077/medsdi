@@ -2292,6 +2292,18 @@ class EscritorioProfesional extends Controller
         $porcentaje_descuento = intval($convenio->porcentaje);
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
+        // Persistimos qué convenio quedó aplicado para que se mantenga tras recargar la ficha.
+        $presupuesto = $request->filled('id_presupuesto')
+            ? PresupuestosDental::find($request->id_presupuesto)
+            : PresupuestosDental::where('id_paciente', $request->id_paciente)
+                ->where('id_ficha_atencion', $request->id_ficha_atencion)
+                ->where('estado', 1)
+                ->first();
+        if ($presupuesto) {
+            $presupuesto->id_convenio_aplicado = $convenio->id;
+            $presupuesto->save();
+        }
+
         $odontograma = $this->dameOdontogramaPaciente(
             $request->id_paciente,
             $request->id_ficha_atencion,
@@ -2418,7 +2430,8 @@ class EscritorioProfesional extends Controller
         // PAGO PROGRESIVO - Luego Odontograma
         foreach ($odontograma as $o) {
             if ($o->presupuesto == 1) {
-                $valor_real = max(intval($o->nuevo_valor) - intval($o->valor_descuento), 0); // evita negativos
+                // nuevo_valor ya es (valor - valor_descuento); restar valor_descuento otra vez duplicaba el descuento
+                $valor_real = max(intval($o->nuevo_valor), 0);
 
                 if ($resto_pago >= $valor_real) {
                     $o->estado_pago = 'ok';
@@ -2447,6 +2460,12 @@ class EscritorioProfesional extends Controller
             }
         }
 
+        // El profesional necesita saber si, tras aplicar el descuento, lo ya abonado
+        // supera el nuevo total (saldo a favor del paciente) o si aún queda un saldo pendiente.
+        $saldoDisponible = $total_abonado - $total_con_descuento;
+        $saldoAFavor = max(0, $saldoDisponible);
+        $saldoPendiente = max(0, -$saldoDisponible);
+
 
 
         return [
@@ -2457,6 +2476,8 @@ class EscritorioProfesional extends Controller
             'total_general' => $total_general,
             'total_con_descuento' => $total_con_descuento,
             'total_abonado' => $total_abonado,
+            'saldo_a_favor' => $saldoAFavor,
+            'saldo_pendiente' => $saldoPendiente,
             'total_lab' => $total_lab,
             'todos' => $todos
         ];

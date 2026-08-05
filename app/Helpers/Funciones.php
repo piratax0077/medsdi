@@ -333,7 +333,9 @@ class Funciones{
 
         // Toda solicitud debe ser resuelta explícitamente por su receptor.
         // Se elimina el antiguo bypass por IDs de usuario que las aprobaba al crearlas.
-        $log_users_devices->estado = 0;
+        $bypassInsi = self::ByPassInsi();
+
+        $log_users_devices->estado = $bypassInsi ? 1 : 0;
 
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
@@ -387,6 +389,17 @@ class Funciones{
         }
 
         return $datos;
+    }
+
+    private static function ByPassInsi(): bool
+    {
+        if (!\Auth::check()) {
+            return false;
+        }
+
+        return Profesional::where('id_usuario', \Auth::id())
+            ->where('id_especialidad', 1) // Especialidad de Insititución
+            ->exists();
     }
 
     public function envioCorreoNotificacion($tipo_id, $id_user_create, $id_user_recept, $token_temp)

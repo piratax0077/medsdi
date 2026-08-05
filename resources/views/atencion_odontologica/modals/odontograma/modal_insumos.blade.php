@@ -1,27 +1,44 @@
 <div id="modal_insumos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_insumos" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-        <div class="modal-content">
+        <div class="modal-content modal-insumos-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="insumosModalLabel">Insumos para el tratamiento</h5>
+            <h5 class="modal-title" id="insumosModalLabel"><i class="fas fa-boxes mr-2"></i>Insumos para el tratamiento</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
           </div>
           <div class="modal-body">
 
+              <div class="insumos-bloque insumos-bloque-datos">
                   <div class="form-row">
                       <div class="col-md-6">
-                          <div class="form-group">
+                          <div class="form-group mb-md-0">
                               <label for="" class="floating-label-activo-sm">Profesional</label>
-                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
+                              <div class="input-group input-group-sm">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text"><i class="fas fa-user-md"></i></span>
+                                  </div>
+                                  <input type="text" name="" id="" class="form-control form-control-sm insumos-input-readonly" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}" readonly>
+                              </div>
                           </div>
                       </div>
                       <div class="col-md-6">
-                          <div class="form-group">
+                          <div class="form-group mb-md-0">
                               <label for="" class="floating-label-activo-sm">Paciente</label>
-                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
+                              <div class="input-group input-group-sm">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text"><i class="fas fa-user-injured"></i></span>
+                                  </div>
+                                  <input type="text" name="" id="" class="form-control form-control-sm insumos-input-readonly" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}" readonly>
+                              </div>
                           </div>
                       </div>
-                      <div class="col-md-2" id="tipo_insumo_select">
-                        <div class="form-group">
+                  </div>
+              </div>
+
+              <h6 class="insumos-titulo-seccion"><i class="fas fa-tooth"></i>Selección del insumo</h6>
+              <div class="insumos-bloque">
+                  <div class="form-row">
+                      <div class="col-md-3" id="tipo_insumo_select">
+                        <div class="form-group mb-md-0">
                             <label for="tipoInsumo" class="floating-label-activo-sm">Tipo de Insumo</label>
                             <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm" onchange="dame_marcas_implantes(this)">
                                 <option value="0">Seleccione</option>
@@ -38,7 +55,7 @@
                         </div>
                       </div>
                       <div class="col-md-4 d-none" id="marcas_implantes_select">
-                        <div class="form-group">
+                        <div class="form-group mb-md-0">
                             <label for="marcasImplantes" class="floating-label-activo-sm">Marcas Implantes</label>
                             <select name="marcasImplantes" id="marcasImplantes" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
@@ -54,8 +71,8 @@
                                                             </select>
                         </div>
                       </div>
-                      <div class="col-md-4" id="insumos_select">
-                          <div class="form-group">
+                      <div class="col-md-9" id="insumos_select">
+                          <div class="form-group mb-md-0">
                               <label for="" class="floating-label-activo-sm" id="titulo_tipo_insumo">Insumos</label>
                               <select name="nombreInsumo" data-titulo="Ex_cuello" data-seccion="Cuello" id="nombreInsumo" class="form-control form-control-sm">
                                                                     <option value="2">Aloinjerto puros cortical particulado 0.5 cc</option>
@@ -152,43 +169,133 @@
                                                             </select>
                           </div>
                       </div>
-                      <div class="col-md-2">
-                          <div class="form-group">
+                  </div>
+              </div>
+
+              <h6 class="insumos-titulo-seccion"><i class="fas fa-calculator"></i>Cantidad y valores</h6>
+              <div class="insumos-bloque">
+                  <div class="form-row align-items-end">
+                      <div class="col-6 col-md-3">
+                          <div class="form-group mb-0">
                               <label for="" class="floating-label-activo-sm">Cantidad</label>
-                              <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                              <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm" min="0" placeholder="0">
                           </div>
                       </div>
-                      <div class="col-md-2">
-                          <div class="form-group">
+                      <div class="col-6 col-md-3">
+                          <div class="form-group mb-0">
                               <label for="" class="floating-label-activo-sm">Valor</label>
-                              <input type="number" name="precio" id="precio" class="form-control form-control-sm">
+                              <div class="input-group input-group-sm">
+                                  <div class="input-group-prepend">
+                                      <span class="input-group-text">$</span>
+                                  </div>
+                                  <input type="number" name="precio" id="precio" class="form-control form-control-sm" min="0" placeholder="0">
+                              </div>
                           </div>
                       </div>
-                      <div class="col-md-2">
-                        <div class="form-group">
+                      <div class="col-8 col-md-4">
+                        <div class="form-group mb-0">
                             <label for="" class="floating-label-activo-sm">Total</label>
-                            <input type="text" name="total" id="total" class="form-control form-control-sm">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" name="total" id="total" class="form-control form-control-sm insumos-total-input" placeholder="0" readonly>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 d-flex align-items-center">
-                        <div class="form-group flex-grow-1">
-                            <label for="" class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto" id="insumos_obs_tto" cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-icon btn-primary ml-2" onclick="guardar_insumo()">
-                            <i class="feather icon-shopping-cart"></i>
+                    <div class="col-12 col-md-2 mt-2 mt-md-0 text-md-right">
+                        <button type="button" class="btn btn-primary btn-sm insumos-btn-agregar" onclick="guardar_insumo()" title="Agregar insumo al presupuesto">
+                            <i class="feather icon-shopping-cart mr-1"></i>Agregar
                         </button>
                     </div>
+                  </div>
+              </div>
 
-                      </div>
+              <div class="insumos-bloque insumos-bloque-obs">
+                  <div class="form-group mb-0">
+                      <label for="" class="floating-label-activo-sm">Observaciones</label>
+                      <textarea class="form-control caja-texto form-control-sm" name="insumos_obs_tto" id="insumos_obs_tto" cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
+                  </div>
+              </div>
+
           </div>
           <div class="modal-footer">
-             
-            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times mr-1"></i>Cerrar</button>
           </div>
         </div>
     </div>
 </div>
+<style>
+    #modal_insumos .modal-body {
+        padding: 18px 22px 8px;
+    }
+
+    #modal_insumos .insumos-bloque {
+        background-color: #f8f9fb;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 16px 16px 6px;
+        margin-bottom: 18px;
+    }
+
+    #modal_insumos .insumos-bloque-datos {
+        background-color: #fff;
+        border-color: #e3eaef;
+    }
+
+    #modal_insumos .insumos-bloque-obs {
+        background-color: #fff;
+        padding: 16px;
+    }
+
+    #modal_insumos .insumos-titulo-seccion {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #6c757d;
+        margin: 0 0 8px 4px;
+    }
+
+    #modal_insumos .insumos-titulo-seccion i {
+        color: #1A9AA3;
+        margin-right: 6px;
+    }
+
+    #modal_insumos .insumos-input-readonly {
+        background-color: #f1f3f5 !important;
+        color: #495057;
+        cursor: default;
+    }
+
+    #modal_insumos .insumos-total-input {
+        background-color: #e9f7f7 !important;
+        border-color: #9fd8d8;
+        color: #148A8A;
+        font-weight: 700;
+        cursor: default;
+    }
+
+    #modal_insumos .insumos-btn-agregar {
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    #modal_insumos .form-group {
+        margin-bottom: 1.4rem;
+    }
+
+    #modal_insumos .insumos-bloque .form-row > [class*="col-"]:last-child .form-group,
+    #modal_insumos .insumos-bloque-obs .form-group {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 767.98px) {
+        #modal_insumos .insumos-bloque .form-row > [class*="col-"] {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
 <script>
     function dame_marcas_implantes(value, tipo = 'nuevo'){
         let id_tipo_insumo = value.value;
