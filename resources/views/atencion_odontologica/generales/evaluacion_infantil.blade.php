@@ -1,46 +1,15 @@
-<div class="row bg-white shadow-sm rounded mx-1">
+<div class="row bg-white shadow-sm rounded mx-1 dental-evaluation-panel dental-evaluation-pediatric">
     <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12 mt-3 mb-0">
-                <h6 class="f-16 text-c-blue">Evaluación Pediátrica</h6>
-                <hr>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-3 px-1 py-1">
-                <button type="button" class="btn btn-info btn-sm btn-block"
-                    onclick="tto_max_sup()";><i class="feather icon-file-plus"></i> Maxilar
-                    superior</button>
-            </div>
-            <div class="col-md-3 px-1 py-1">
-                <button type="button" class="btn btn-info btn-sm btn-block"
-                    onclick="tto_max_inf_ped()";><i class="feather icon-file-plus"></i> Maxilar
-                    inferior</button>
-            </div>
-            <div class="col-md-3 px-1 py-1">
-                <button type="button" class="btn btn-info btn-sm btn-block" onclick="tto_boca()";><i
-                        class="feather icon-file-plus"></i> Boca
-                    Completa</button>
-            </div>
-            <div class="col-md-3 px-1 py-1">
-                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="prest_lab();"><i
-                        class="feather icon-file-plus"></i>Solicitud en
-                    laboratorio</button>
+            <div class="col-md-12 dental-evaluation-title">
+                <h6 class="f-16 text-c-blue">Evaluación pediátrica por cuadrantes</h6>
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="card-a">
-                <div class="card-header-a" id="exam_esp">
-                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" style="background-color: #a077e8" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
-                        Examen por Cuadrantres Dentales
-                    </button>
-                </div>
-                <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
-                    <div class="card-body-aten-a shadow-none">
-                        <div id="form-endo-adulto">
+            <div id="form-endo-infantil">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
+                                    <ul class="nav nav-tabs-aten nav-fill mb-10 dental-group-tabs" id="orl_infantil" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link-aten text-reset active" id="grupo_5_tab" data-toggle="tab" href="#od_inf_grupo_5" role="tab" aria-controls="od_inf_grupo_5" aria-selected="true">CUADRANTE 5</a>
                                         </li>
@@ -777,18 +746,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row dental-plan-title">
             <div class="col-md-12 mt-3 mb-0">
                 <h6 class="f-16 text-c-blue">Plan de tratamiento y presupuesto</h6>
                 <hr>
             </div>
         </div>
-        <div class="row">
+        <div class="row dental-plan-table">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div class="table-responsive">

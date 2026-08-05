@@ -552,6 +552,7 @@
                 success: function(response){
                     console.log(response);
                     if(response.status == 1){
+                        $(document).trigger('odontograma:refresh');
                         swal({
                             title: 'Correcto!',
                             text: 'Se ha guardado la información del tratamiento',

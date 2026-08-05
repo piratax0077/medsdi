@@ -12,7 +12,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill" id="orl_adulto" role="tablist">
 
-                                
+
                                 <li class="nav-item">
                                     <a class="nav-link-aten text-reset active" id="ex_oral-tab" data-toggle="tab" href="#ex_oral" role="tab" aria-controls="ex_oral" aria-selected="true">Examen Oral</a>
                                 </li>
@@ -42,7 +42,7 @@
                                             {{-- <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nueva_pieza_dental(1000)"><i class="fas fa-plus"></i> Añadir pieza</button> --}}
                                         </div>
                                     </div>
-                                    
+
                                     <div id="contenedor_pieza_dental_odontodolor">
                                         @php $count = 1; @endphp
 
@@ -295,6 +295,18 @@
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
+                                                                        @foreach ($todos as $grupo)
+                                                                            @if($grupo->presupuesto == 1)
+                                                                                <tr>
+                                                                                    <td>{{ $grupo->localizacion }}</td>
+                                                                                    <td class="text-uppercase">{{ $grupo->descripcion }}</td>
+                                                                                    <td>{{ $grupo->diagnostico_tratamiento }}</td>
+                                                                                    <td>${{ number_format($grupo->valor,0,',','.') }}</td>
+                                                                                    <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_diagnostico({{ $grupo->id }},'gral')"><i class="feather icon-x"></i></button></td>
+                                                                                    <td><span class="text-uppercase">{{ $grupo->terminado ? 'Realizado' : 'Pendiente' }}</span></td>
+                                                                                </tr>
+                                                                            @endif
+                                                                        @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -403,136 +415,20 @@
                                                     </div> --}}
 
                                                     <div id="contenedor_pieza_dental_endorx">
-                                                        
+
 
                                                     </div>
                                                     <div id="pieza_dentalrx" class="form-row">
-                                                            
+
                                                         </div>
                                                         <div class="form-row" id="contenedor_examenes_oral_rx"></div>
 
                                                 </div>
                                                 <!--IMÁGENES-->
                                                 <div class="tab-pane fade show" id="imagenes_dent" role="tabpanel" aria-labelledby="imagenes_dent_tab">
-                                                    
+
                                                     <div id="contenedor_imagenes_dent">
-                                                        @php $count = 1; @endphp
-                                                        @foreach ($imagenes as $imagen)
-                                                            <div class="row mb-1">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        <div class="col-sm-4 mt-2">
-                                                                            <div class="card-informacion">
-                                                                                <div class="card-top text-center" id="img">
-                                                                                <h6 class="text-c-blue">Imagenes Pre</h6>
-                                                                                </div>
-                                                                                <div class="card-body">
-                                                                                    <!-- Contenedor de Imágenes -->
-                                                                                    <div class="form-row" id="contenedor_piezas_ex_oral">
-                                                                                        @php
-                                                                                            $imagenes_pre = collect($imagen->paths_imagenes)->filter(function ($item) {
-                                                                                                return isset($item['momento']) && $item['momento'] === 'Pre';
-                                                                                            });
-                                                                                        @endphp
-
-                                                                                        @if ($imagenes_pre->isNotEmpty())
-                                                                                            @foreach ($imagenes_pre as $path)
-                                                                                                <div>
-                                                                                                    <!-- Botón para ampliar imagen -->
-                                                                                                    <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                                                                        <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                                                            alt="Imagen del examen"
-                                                                                                            class="img-fluid mx-2 imagen_rx">
-                                                                                                    </a>
-                                                                                                    <!-- Mostrar ID asociado a la imagen Pre -->
-                                                                                                    @if (!empty($path['id_image_pre']))
-                                                                                                    <div class="mt-1 text-muted small">
-                                                                                                        ID Pre: {{ $path['id_image_pre'] }}
-                                                                                                    </div>
-                                                                                                    @endif
-                                                                                                    <!-- Botón para eliminar imagen -->
-                                                                                                    <button type="button"
-                                                                                                            class="btn btn-danger btn-sm my-2"
-                                                                                                            onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                        <i class="feather icon-x"></i>
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                            @endforeach
-                                                                                        @else
-                                                                                            <p>No hay imágenes disponibles para este examen.</p>
-                                                                                        @endif
-
-                                                                                    </div>
-
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-4 mt-2">
-                                                                            <div class="card-informacion">
-                                                                                <div class="card-top text-center" id="img">
-                                                                                    <h6 class="text-c-blue">Imágenes Post</h6>
-                                                                                </div>
-                                                                                <div class="card-body">
-                                                                                    <!-- Contenedor de Imágenes -->
-                                                                                    <div class="form-row" id="contenedor_piezas_ex_oral">
-                                                                                        @php
-                                                                                            $imagenes_post = collect($imagen->paths_imagenes ?? [])->filter(function ($item) {
-                                                                                                return isset($item['momento']) && $item['momento'] === 'Post';
-                                                                                            });
-                                                                                        @endphp
-
-                                                                                        @if ($imagenes_post->isNotEmpty())
-                                                                                            @foreach ($imagenes_post as $path)
-                                                                                            <hr>
-                                                                                                <div>
-                                                                                                    <!-- Botón para ampliar imagen -->
-                                                                                                    <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                                                                        <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                                                            alt="Imagen del examen"
-                                                                                                            class="img-fluid mx-2 imagen_rx">
-                                                                                                    </a>
-
-                                                                                                    <!-- Mostrar ID asociado a la imagen Post -->
-                                                                                                    @if (!empty($path['id_image_post']))
-                                                                                                        <div class="mt-1 text-muted small">
-                                                                                                            ID Post: {{ $path['id_image_post'] }}
-                                                                                                        </div>
-                                                                                                    @endif
-                                                                                                    <!-- Botón para eliminar imagen -->
-                                                                                                    <button type="button"
-                                                                                                            class="btn btn-danger btn-sm my-2"
-                                                                                                            onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                        <i class="feather icon-x"></i>
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                            @endforeach
-                                                                                        @else
-                                                                                            <p>No hay imágenes disponibles para este examen.</p>
-                                                                                        @endif
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-sm-4 mt-2">
-                                                                            <div class="form-group fill">
-                                                                                <input type="hidden" name="biopsia_odont{{ $count }}" id="biopsia_odont{{ $count }}" value="">
-                                                                                <div class="form-group fill">
-                                                                                    <label id="" name="" class="floating-label-activo-sm">Observaciones / Comentarios</label>
-                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia{{ $count }}" id="obs_result_biopsia{{ $count }}" disabled>{{ $imagen->observaciones }}</textarea>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="col-sm-12 mt-2">
-                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_pieza_dental_imagenes({{ $imagen->id }})">X</button>
-                                                                </div>
-                                                            </div>
-                                                        @php $count++; @endphp
-                                                        @endforeach
+                                                        @include('atencion_odontologica.include.imagenes_dental_todas', ['imagenes' => $imagenes])
                                                     </div>
 
                                                     <div id="contenedor_nueva_imagen_dent">
@@ -553,6 +449,8 @@
                                     </div>
 
                                     <div id="contenedor_pieza_dental_endo_gral" class="mb-3">
+                                        @include('atencion_odontologica.include.examenes_dental_pieza_todos', ['examenes' => $examenes_pieza])
+                                        @if(false)
                                         @php $counter = 1; @endphp
                                         @foreach ($examenes_pieza as $examen)
                                         <div class="card">
@@ -730,6 +628,7 @@
                                         </div>
                                         @php $counter++; @endphp
                                         @endforeach
+                                        @endif
                                     </div>
                                     <div id="pieza_dental_examen" class="form-row">
                                     </div>
@@ -1143,7 +1042,7 @@
                                                                             <th>Diagnóstico</th>
                                                                             <th>Tratamiento</th>
                                                                             <th>Valor</th>
-                                                                           
+
                                                                             <th>Accion</th>
                                                                              <th>Estado</th>
                                                                         </tr>
@@ -1156,7 +1055,7 @@
                                                                                 <td class="text-uppercase">{{ $o->diagnostico }}</td>
                                                                                 <td>{{ $o->descripcion }}</td>
                                                                                 <td>${{ number_format($o->valor,0,',','.') }}</td>
-                                                                                
+
                                                                                 <td>
                                                                                     <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button>
                                                                                     <button type="button" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza({{ $o->id }})"><i class="feather icon-repeat"></i> </button>
@@ -1167,7 +1066,7 @@
                                                                                     @elseif($o->estado == 1)
                                                                                         <span class="text-uppercase">Realizado</span>
                                                                                     @elseif($o->estado == 2)
-                                                                                        <span class="text-uppercase">Cancelado</span>
+                                                                                        <span class="text-uppercase">En proceso</span>
                                                                                     @elseif($o->estado == 3)
                                                                                         <span class="text-uppercase">Citado a Control</span>
                                                                                     @endif
@@ -1437,7 +1336,7 @@
                     let insumo = resp.insumo;
                     $('#id_insumo_editar').val(insumo.id);
                     $('#tipoInsumo_editar').val(insumo.id_tipo_insumo);
-                    
+
                     $('#cantidad_editar').val(insumo.cantidad);
                     $('#precio_editar').val(insumo.valor);
                     $('#total_editar').val(insumo.total);
@@ -1480,7 +1379,7 @@
             id_tipo_insumo: id,
             _token: CSRF_TOKEN
         }
-    
+
         $.ajax({
             type:'post',
             url: url,
@@ -1489,7 +1388,7 @@
                 console.log(resp);
                 $('#nombreInsumo_editar').empty();
                 let insumos = resp;
-                
+
                 insumos.forEach(e => {
                     $('#nombreInsumo_editar').append(`
                         <option value="${e.id}" ${nombreInsumoSeleccionado === e.descripcion ? 'selected' : ''}> ${e.descripcion} </option>
@@ -1603,7 +1502,7 @@
                         }
                         if(insumo.urgencia == 0){
                             let total = insumo.cantidad * insumo.valor;
-                            
+
                             table.row.add([
                                 insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
                                 insumo.observaciones,
@@ -1631,7 +1530,7 @@
                                 botones
                             ]);
                         }
-                        
+
                     });
 
                     //Dibujar la tabla nuevamente con los nuevos datos
@@ -2007,6 +1906,7 @@
             type: 'POST',
             data:{
                 id_paciente: $('#id_paciente_fc').val(),
+                id_ficha_atencion: $('#id_fc').val(),
                 seccion: "gral",
                 _token: '{{ csrf_token() }}'
             },
@@ -2015,14 +1915,14 @@
                 console.log("Imágenes recargadas correctamente.");
                 // Aquí podrías actualizar el DOM si es necesario
                 $('#pieza_dentalrx').html(response.v);
-                
+
             },
             error: function(error) {
                 console.error("Error al recargar imágenes:", error);
             }
         })
     }
-    
+
     function enviar_email_presupuesto_insumos(){
         let destinatarios = $('#selectDestinatarios').val();
         let correoLibre = $('#correoLibre').val();
@@ -2096,15 +1996,15 @@
             <div class="form-group">
                 <label class="floating-label-activo-sm" for="selectDestinatarios">Selecciona destinatarios:</label>
                 <select id="selectDestinatarios" class="form-control form-control-sm" multiple="multiple" style="width:100%">
-                    
-                    <option value="{{ $paciente->email }}">{{$paciente->nombres}} {{ $paciente->apellido_uno }} (Paciente)</option>  
+
+                    <option value="{{ $paciente->email }}">{{$paciente->nombres}} {{ $paciente->apellido_uno }} (Paciente)</option>
                     <option value="{{ $profesional->email }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} (Profesional)</option>
                     <option value="bodega@gmail.com">Bodega</option>
                     <option value="ejemplo@gmail.com">Dirección de presupuestos</option>
                 </select>
             </div>
-          
-          
+
+
           <small class="text-muted">Puedes seleccionar varios o escribir correos manualmente.</small>
           <hr>
           <div class="form-group">
@@ -2127,10 +2027,15 @@
     }
     function seleccionar_maxilar_superior() {
         const superiorActivo = document.getElementById("max_sup").checked;
-        const piezas = document.querySelectorAll('.pieza');
         const select = $('#paciente_piezas_dentales_ex');
+        const piezas = select.closest('.card-body').find('.pieza');
+        select.find('option').prop('selected', false);
+        document.getElementById('max_inf').checked = false;
+        document.getElementById('piezas_presup').checked = false;
+        piezas.removeClass('seleccionada');
 
-        piezas.forEach(pieza => {
+        piezas.each(function() {
+            const pieza = this;
             const codigo = pieza.getAttribute('data-pieza');
 
             if (codigo.startsWith('1.') || codigo.startsWith('2.')) {
@@ -2157,10 +2062,15 @@
     }
     function seleccionar_maxilar_inferior(){
         const superiorActivo = document.getElementById("max_inf").checked;
-        const piezas = document.querySelectorAll('.pieza');
         const select = $('#paciente_piezas_dentales_ex');
+        const piezas = select.closest('.card-body').find('.pieza');
+        select.find('option').prop('selected', false);
+        document.getElementById('max_sup').checked = false;
+        document.getElementById('piezas_presup').checked = false;
+        piezas.removeClass('seleccionada');
 
-        piezas.forEach(pieza => {
+        piezas.each(function() {
+            const pieza = this;
             const codigo = pieza.getAttribute('data-pieza');
 
             if (codigo.startsWith('3.') || codigo.startsWith('4.')) {
@@ -2187,6 +2097,31 @@
     }
 
         var odontograma_global = @json($odontograma);
+        var grupos_odontograma_global = @json($todos);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const seleccion = new Set(
+                (odontograma_global || []).filter(item => item.presupuesto == 1 && item.urgencia == 0).map(item => item.pieza)
+            );
+            (grupos_odontograma_global || []).forEach(function (grupo) {
+                if (grupo.presupuesto != 1) return;
+                const localizacion = String(grupo.localizacion || '').toLowerCase();
+                if (localizacion.includes('maxilar superior') || localizacion.includes('boca completa')) {
+                    ['1','2'].forEach(c => { for (let i = 1; i <= 8; i++) seleccion.add(c + '.' + i); });
+                    document.getElementById('max_sup').checked = true;
+                }
+                if (localizacion.includes('maxilar inferior') || localizacion.includes('boca completa')) {
+                    ['3','4'].forEach(c => { for (let i = 1; i <= 8; i++) seleccion.add(c + '.' + i); });
+                    document.getElementById('max_inf').checked = true;
+                }
+            });
+            const select = $('#paciente_piezas_dentales_ex');
+            select.val([...seleccion]).trigger('change');
+            const piezas = select.closest('.card-body').find('.pieza');
+            piezas.each(function () {
+                $(this).toggleClass('seleccionada', seleccion.has(String($(this).data('pieza'))));
+            });
+        });
 
     function seleccionar_piezas_presup() {
         const checkbox = document.getElementById('piezas_presup');

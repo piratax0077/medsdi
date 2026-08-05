@@ -27,7 +27,18 @@
                         <div class="col-sm-12 col-md-12 col-lg-2 col-xl-12">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Piezas N°</label>
-                                <select class="form-control form-control-sm select2" name="rx_numero_pieza" id="rx_numero_pieza" multiple>
+                                @include('atencion_odontologica.include.selector_odontograma', [
+                                    'id' => 'selector_rx_'.$counter,
+                                    'inputId' => 'rx_numero_pieza',
+                                    'counter' => $counter,
+                                    'multiple' => true,
+                                    'soloPendientes' => false,
+                                    'estadosBloqueados' => [],
+                                    'piezasDisponibles' => $piezasPresupuesto ?? collect(),
+                                    'titulo' => 'Piezas del presupuesto',
+                                    'ayuda' => 'Seleccione una o varias piezas activas',
+                                ])
+                                <select class="d-none" name="rx_numero_pieza" id="rx_numero_pieza" multiple tabindex="-1" aria-hidden="true">
                                     <option value="1.1">1.1</option>
                                     <option value="1.2">1.2</option>
                                     <option value="1.3">1.3</option>
@@ -128,16 +139,10 @@ if (typeof dropzone === 'undefined') {
     var dropzone;
 }
 $(document).ready(function(){
-    $('#rx_numero_pieza').select2({
-        width: '100%',
-        placeholder: 'Seleccionar pieza(s)',
-        allowClear: true
-    });
     // Configuración de Dropzone
     initDropzone();
 
 
-    $('#rx_numero_pieza'+counter).select2();
 });
 
 function initDropzone() {
@@ -171,7 +176,7 @@ function initDropzone() {
                 status: xhr ? xhr.status : 'N/A',
                 responseText: xhr ? xhr.responseText : 'N/A'
             });
-            
+
             // Mostrar mensaje de error más detallado
             let errorMsg = message;
             if (xhr && xhr.responseJSON && xhr.responseJSON.message) {
@@ -179,7 +184,7 @@ function initDropzone() {
             } else if (xhr && xhr.responseJSON && xhr.responseJSON.errors) {
                 errorMsg = Object.values(xhr.responseJSON.errors).flat().join(', ');
             }
-            
+
             // swal({
             //     title: "Error al subir imagen",
             //     text: errorMsg,
@@ -283,6 +288,7 @@ function guardar_nueva_pieza_ex_radio(counter){
         id_lugar_atencion: id_lugar_atencion,
         id_especialidad: id_especialidad,
         id_profesional: id_profesional,
+        id_presupuesto: $('#id_presupuesto').val(),
         informe_radiologo: informe_radiologo,
         observaciones_radiologo: observaciones_radiologo,
         id_fc: id_ficha_atencion
@@ -308,9 +314,6 @@ function guardar_nueva_pieza_ex_radio(counter){
                     title:'Exito',
                     text:'Pieza agregada correctamente'
                 });
-                setTimeout(() => {
-                    recargar_imagenes_od_gral();
-                }, 1000);
             } else {
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.mensaje);
@@ -322,7 +325,7 @@ function guardar_nueva_pieza_ex_radio(counter){
             // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
             if (dropzone.getQueuedFiles().length > 0) {
                 console.log("Iniciando carga de imágenes...");
-                
+
                 // Validar que todos los campos requeridos existan antes de procesar
                 const requiredFields = {
                     id_paciente: $('#id_paciente_fc').val(),
@@ -331,12 +334,12 @@ function guardar_nueva_pieza_ex_radio(counter){
                     id_profesional: $('#id_profesional_fc').val(),
                     id_examen: resp.rx.id
                 };
-                
+
                 console.log("Validando campos requeridos:", requiredFields);
-                
+
                 // Verificar si algún campo está vacío
                 const camposVacios = Object.entries(requiredFields).filter(([key, value]) => !value || value === '');
-                
+
                 // if (camposVacios.length > 0) {
                 //     console.error("Campos vacíos detectados:", camposVacios);
                 //     swal({
@@ -347,9 +350,15 @@ function guardar_nueva_pieza_ex_radio(counter){
                 //     });
                 //     return;
                 // }
-                
+
                 // Desvinculamos el evento "queuecomplete" antes de procesar la cola
                 dropzone.off("queuecomplete");
+
+                // Refrescar la galería cuando todas las imágenes hayan terminado.
+                dropzone.on("queuecomplete", function() {
+                    recargar_imagenes_od_gral();
+                    mostrar_nueva_pieza_ex_radio(1000);
+                });
 
                 // Procesar la cola de imágenes
                 dropzone.processQueue();  // Esto procesará la cola y subirá las imágenes
@@ -380,11 +389,13 @@ function guardar_nueva_pieza_ex_radio(counter){
                     dropzone.destroy();
                 }
 
+                recargar_imagenes_od_gral();
+                mostrar_nueva_pieza_ex_radio(1000);
+
                 // Re-inicializar el Dropzone nuevamente
                 //initDropzone();  // Asegúrate de que la función initDropzone esté disponible
 
             }
-            mostrar_nueva_pieza_ex_radio(1000);
         },
         error: function(error){
             console.log(error);
@@ -401,6 +412,7 @@ function recargar_imagenes_od_gral() {
         type: 'POST',
         data:{
             id_paciente: $('#id_paciente_fc').val(),
+            id_ficha_atencion: $('#id_fc').val(),
             seccion: "gral",
             _token: '{{ csrf_token() }}'
         },
@@ -410,11 +422,6 @@ function recargar_imagenes_od_gral() {
             // Aquí podrías actualizar el DOM si es necesario
             $('#pieza_dentalrx').html(response.v);
             // Si estás usando select2, asegúrate de re-inicializarlo
-            $('#rx_numero_pieza').select2({
-                width: '100%',
-                placeholder: 'Seleccionar pieza(s)',
-                allowClear: true
-            });
         },
         error: function(error) {
             console.error("Error al recargar imágenes:", error);

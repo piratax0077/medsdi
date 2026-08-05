@@ -272,6 +272,22 @@
                                         <option value="urgencia">Urgencia</option>
                                     </select>
                                 </div>
+                                <div id="selector_odontograma_agenda_wrapper" class="mb-3" style="display:none;">
+                                    @include('atencion_odontologica.include.selector_odontograma', [
+                                        'id' => 'selector_odontograma_agenda',
+                                        'inputId' => 'piezas_odontograma_agenda',
+                                        'counter' => 'agenda',
+                                        'multiple' => true,
+                                        'compacto' => true,
+                                        'soloPendientes' => false,
+                                        'autoRefresh' => false,
+                                        'mostrarMensajeVacio' => false,
+                                        'piezasDisponibles' => collect(),
+                                        'titulo' => 'Piezas del presupuesto',
+                                        'ayuda' => 'Seleccione las piezas que desea agendar',
+                                    ])
+                                    <input type="hidden" id="piezas_odontograma_agenda" value="">
+                                </div>
                                 <div id="contenedor_tratamientos_presupuesto">
                                     <div class="alert alert-info py-2 px-3 mb-3" role="status">
                                         <i class="feather icon-clock mr-1"></i>
@@ -529,7 +545,7 @@
                             <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
                                         class="feather icon-x"></i> Cancelar</button>
-                                <button type="button" onclick="preparar_cierre_agenda_por_guardado(); agendar_hora();" class="btn btn-info"><i
+                                <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
                                         class="feather icon-check"></i> Agendar hora</button>
                             </div>
                         </div>
@@ -835,7 +851,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-6 d-none">
                             <div class="input-group">
                                 <label class="floating-label-activo-sm">Convenio</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_prevision_txt" id="bono_prevision_txt" disabled="disabled" value="">

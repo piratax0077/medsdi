@@ -1,112 +1,74 @@
-@php $counter = 1000; @endphp
+@php
+    $counter = 1000;
+    // El selector gráfico solo debe ofrecer piezas sin urgencia asociada y que
+    // aún tengan una prestación pendiente o en proceso (no finalizada/cancelada).
+    $piezasDisponiblesEvolucion = collect($odontograma ?? [])
+        ->filter(fn ($odont) => ($odont->urgencia ?? 0) == 0)
+        ->filter(fn ($odont) => !in_array((int) ($odont->estado ?? 0), [1, 3], true))
+        ->unique(fn ($odont) => (string) $odont->pieza)
+        ->values();
+@endphp
 
 <div class="row">
     <div class="col-9">
-        <ul class="nav nav-tabs-aten nav-fill" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link-aten text-reset active" id="pieza-individual-tab" data-toggle="pill" href="#pieza-individual" role="tab" aria-controls="pieza-individual" aria-selected="true">Pieza Individual</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link-aten text-reset" id="grupo-piezas-tab" onclick="$('#n_pieza_evol_g1000').select2();" data-toggle="pill" href="#grupo-piezas" role="tab" aria-controls="grupo-piezas" aria-selected="false">Grupo de Piezas</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            
-            <!-- TAB PIEZA INDIVIDUAL -->
-            <div class="tab-pane fade show active" id="pieza-individual" role="tabpanel" aria-labelledby="pieza-individual-tab">
-                <div class="card-informacion">
-                    <div class="card-body">
-                        <div class="form-row align-items-center">
-                            <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Pieza N°</label>
-                                    <select name="n_pieza_evol{{ $counter }}" id="n_pieza_evol{{ $counter }}" class="form-control form-control-sm" onchange="dame_tratamientos_pieza_gral(this.value, {{ $counter }},'pieza')">
-                                        <option value="">Seleccione</option>
-                                        @foreach($odontograma as $odont)
-                                            @if($odont->urgencia == 0)
-                                            <option value="{{ $odont->pieza }}">{{ $odont->pieza }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select name="proc_evol{{ $counter }}" id="proc_evol{{ $counter }}" onchange="dame_estado_prestacion(this.value, {{ $counter }})" class="form-control form-control-sm">
-                                        <option value="">Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Evolución</label>
-                                    <textarea class="form-control form-control-sm" name="evolucion_evol{{ $counter }}" id="evolucion_evol{{ $counter }}" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-12 col-md-1">
-                                <button type="button" id="btn_cambiar_estado_{{ $counter }}" class="btn btn-warning btn-icon" onclick="cambiar_estado_pieza_evolucion({{ $counter }})" disabled><i class="feather icon-repeat"> </i> </button>
-                            </div>
-                            <div class="form-group col-sm-12">
-                                <div class="badge badge-warning" style="font-size: 15px;" id="estado_prestacion{{ $counter }}"></div>
-                            </div>
+        <div class="card-informacion">
+            <div class="card-body">
+                <div class="row align-items-stretch">
+                    <div class="form-group col-sm-12 col-lg-5 mb-3">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Piezas</label>
+                            @include('atencion_odontologica.include.selector_odontograma', [
+                                'id' => 'selector_evolucion_od_gral_'.$counter,
+                                'inputId' => 'n_pieza_evol_g'.$counter,
+                                'counter' => $counter,
+                                'multiple' => true,
+                                'compacto' => true,
+                                'piezasDisponibles' => $piezasDisponiblesEvolucion,
+                                'titulo' => 'Piezas disponibles',
+                                'ayuda' => 'Seleccione una o varias piezas',
+                            ])
+                            <select class="d-none" name="n_pieza_evol_g{{ $counter }}" id="n_pieza_evol_g{{ $counter }}" multiple="multiple" tabindex="-1" aria-hidden="true">
+                                @foreach($piezasDisponiblesEvolucion as $odont)
+                                    <option value="{{ $odont->pieza }}">{{ $odont->pieza }}</option>
+                                @endforeach
+                            </select>
                         </div>
-
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-sm btn-icon btn-outline-success" onclick="guardar_evolucion_tto_gral({{ $counter }})"><i class="feather icon-save"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB GRUPO DE PIEZAS -->
-            <div class="tab-pane fade" id="grupo-piezas" role="tabpanel" aria-labelledby="grupo-piezas-tab">
-                <div class="card-informacion">
-                    <div class="card-body">
+                    <div class="col-sm-12 col-lg-7">
                         <div class="form-row align-items-center">
-                            <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Piezas</label>
-                                    <select name="n_pieza_evol_g{{ $counter }}" id="n_pieza_evol_g{{ $counter }}" class="form-control form-control-sm" multiple="multiple" onchange="dame_tratamientos_pieza_gral(this.value, {{ $counter }},'grupo')">
-                                        @foreach($odontograma as $odont)
-                                            @if($odont->urgencia == 0)
-                                            <option value="{{ $odont->pieza }}">{{ $odont->pieza }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                            <div class="form-group col-sm-12 col-md-5">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select name="proc_od_gral_grupo{{ $counter }}" id="proc_od_gral_grupo{{ $counter }}" class="form-control form-control-sm">
+                                    <select name="proc_od_gral_grupo{{ $counter }}" id="proc_od_gral_grupo{{ $counter }}" onchange="dame_estado_prestacion(this.value, {{ $counter }})" class="form-control form-control-sm">
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group col-sm-12 col-md-7">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Observaciones</label>
                                     <input type="text" name="obs_od_gral_grupo{{ $counter }}" id="obs_od_gral_grupo{{ $counter }}" class="form-control form-control-sm" />
                                 </div>
                             </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group col-sm-12">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Evoluciones</label>
-                                    <input type="text" name="evoluciones_od_gral_grupo{{ $counter }}" id="evoluciones_od_gral_grupo{{ $counter }}" class="form-control form-control-sm" />
+                                    <label class="floating-label-activo-sm">Evolución</label>
+                                    <textarea class="form-control form-control-sm" name="evoluciones_od_gral_grupo{{ $counter }}" id="evoluciones_od_gral_grupo{{ $counter }}" rows="1" onfocus="this.rows=6" onblur="this.rows=1;"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group col-sm-12">
+                                <div class="badge badge-warning" style="font-size: 15px;" id="estado_prestacion{{ $counter }}"></div>
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-sm btn-outline-success" onclick="guardar_evolucion_tto_gral_grupo({{ $counter }})"><i class="feather icon-save"></i> Prestación terminada</button>
                     </div>
                 </div>
             </div>
-
-            <div id="contenedor_evoluciones_od_gral"></div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-sm btn-outline-success" onclick="guardar_evolucion_tto_gral_grupo({{ $counter }})"><i class="feather icon-save"></i> Guardar evolución</button>
+            </div>
         </div>
+
+        <div id="contenedor_evoluciones_od_gral"></div>
     </div>
     <div class="col-3">
         <div class="row">
@@ -191,6 +153,30 @@
 </div>
 
 <script>
+    // El include selector_odontograma dispara 'odontograma:change' con las piezas
+    // seleccionadas apenas el usuario hace clic; usamos ese hook directo en vez de
+    // depender del evento 'change' nativo del select oculto (más confiable).
+    $(document).on('odontograma:change', '#selector_evolucion_od_gral_1000', function(e, values){
+        values = values || [];
+        if(values.length){
+            dame_tratamientos_pieza_gral(values[0], 1000, 'grupo');
+        } else {
+            $('#proc_od_gral_grupo1000').empty().append('<option value="0">Seleccione</option>');
+            $('#estado_prestacion1000').html('');
+        }
+    });
+
+    // Respaldo por si el select oculto cambia por otra vía (ej. auto-refresh).
+    $(document).on('change', '#n_pieza_evol_g1000', function(){
+        let piezas = $(this).val() || [];
+        if(piezas.length){
+            dame_tratamientos_pieza_gral(piezas[0], 1000, 'grupo');
+        } else {
+            $('#proc_od_gral_grupo1000').empty().append('<option value="0">Seleccione</option>');
+            $('#estado_prestacion1000').html('');
+        }
+    });
+
     function guardar_pieza_dental_tto_gral(counter){
         // Aquí puedes agregar la lógica para guardar la pieza dental
         console.log("Guardando pieza dental:", counter);
@@ -371,111 +357,6 @@
         }
     }
 
-    function guardar_evolucion_tto_gral(counter){
-        let pieza = $('#n_pieza_evol' + counter).val();
-        let evolucion = $('#evolucion_evol' + counter).val();
-        let obs = $('#obs_evol' + counter).val();
-        let proc = $('#proc_evol' + counter).val();
-
-        let valido = 1;
-        let mensaje = "";
-
-        if(!pieza){
-            valido = 0;
-            mensaje += " - Pieza\n";
-        }
-        if(!evolucion){
-            valido = 0;
-            mensaje += " - Evolución\n";
-        }
-        // if(!obs){
-        //     valido = 0;
-        //     mensaje += " - Observaciones\n";
-        // }
-        if(!proc || proc == 0){
-            valido = 0;
-            mensaje += " - Procedimiento\n";
-        }
-
-        if(valido == 1){
-            // Guardar evolución
-            let data = {
-                pieza: pieza,
-                evolucion: evolucion,
-                obs: obs,
-                proc: proc,
-                id_ficha_atencion: $('#id_fc').val(),
-                id_paciente: $('#id_paciente').val(),
-                id_profesional: $('#id_profesional_fc').val(),
-                id_lugar_atencion: $('#id_lugar_atencion').val(),
-                id_presupuesto: $('#id_presupuesto').val(),
-                _token: CSRF_TOKEN
-            }
-
-            let url = "{{ route('dental.guardar_evolucion_od_gral') }}";
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                beforeSend: function(){
-                    swal({
-                        title: 'Cargando',
-                        text: 'Por favor espere...',
-                        icon: 'info',
-                        buttons: false,
-                        closeOnClickOutside: false
-                    });
-                },
-                success: function(response) {
-                    console.log(response);
-                    if (response.estado == 'ok') {
-                        swal({
-                            title: 'Éxito',
-                            text: 'Evolución guardada correctamente.',
-                            icon: 'success',
-                        });
-                        dame_evoluciones_od_gral();
-                        limpiar_evolucion();
-                    } else {
-                        swal({
-                            title: 'Error',
-                            text: 'Ocurrió un error al guardar la evolución.',
-                            icon: 'error',
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    swal.close();
-                    swal({
-                        title: 'Error',
-                        text: 'Ocurrió un error al guardar la evolución.',
-                        icon: 'error',
-                    });
-                }
-            });
-
-        }else{
-            swal({
-                title: 'Advertencia',
-                content:{
-                    element: "div",
-                    attributes: {
-                        innerHTML: "Debe completar los siguientes campos:<br>" + mensaje
-                    }
-                },
-                icon: 'warning',
-            });
-        }
-    }
-
-    function limpiar_evolucion(){
-        $('#n_pieza_evol1000').val(0);
-        $('#proc_evol1000').val(0);
-        $('#evolucion_evol1000').val("");
-        $('#btn_cambiar_estado_1000').prop('disabled', false);
-        $('#estado_prestacion1000').html('');
-    }
-
     function guardar_evolucion_tto_gral_grupo(counter){
         let piezas = $('#n_pieza_evol_g' + counter).val();
         let id_procedimiento = $('#proc_od_gral_grupo' + counter).val();
@@ -533,6 +414,7 @@
                             icon: 'success',
                         });
                         dame_evoluciones_od_gral();
+                        limpiar_evolucion_grupo(counter);
                     } else {
                         swal({
                             title: 'Error',
@@ -563,6 +445,17 @@
                 icon: 'warning',
             });
         }
+    }
+
+    function limpiar_evolucion_grupo(counter){
+        const $selector = $('#selector_evolucion_od_gral_' + counter);
+        $selector.find('.is-selected').removeClass('is-selected').attr('aria-pressed', 'false');
+        $selector.find('.selector-odontograma-generico__resumen').html('<span class="text-muted">Ninguna pieza seleccionada</span>');
+        $('#n_pieza_evol_g' + counter).val(null);
+        $('#proc_od_gral_grupo' + counter).empty().append('<option value="0">Seleccione</option>');
+        $('#obs_od_gral_grupo' + counter).val('');
+        $('#evoluciones_od_gral_grupo' + counter).val('');
+        $('#estado_prestacion' + counter).html('');
     }
 
     function dame_tratamientos_pieza_gral(pieza, counter, tipo){
@@ -598,16 +491,6 @@
                                 $('#proc_od_gral_grupo' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
                             }
                         });
-                    } else {
-                        $('#proc_evol' + counter).val(0);
-                        $('#proc_evol' + counter).empty();
-                        $('#proc_evol' + counter).append('<option value="0">Seleccione</option>');
-                        $.each(response.tratamientos, function(index, value) {
-                            if(value.urgencia == 0){
-                                $('#proc_evol' + counter).append('<option value="' + value.id + '">' + value.tratamiento + '</option>');
-                            }
-                                
-                        });
                     }
                 },
                 error: function(xhr, status, error) {
@@ -619,7 +502,7 @@
                     });
                 }
 
-                
+
             });
         }
     }
@@ -741,7 +624,7 @@
                 if(response.estado == 'ok'){
                     // Guardar las evoluciones en la variable global
                     evoluciones = response.evoluciones || [];
-                    
+
                     // También guardar datos adicionales si los necesitas
                     if(response.evoluciones_raw) {
                         window.evoluciones_od_gral_raw = response.evoluciones_raw;
@@ -749,17 +632,17 @@
                     if(response.total_evoluciones !== undefined) {
                         window.total_evoluciones_od_gral = response.total_evoluciones;
                     }
-                    
+
                     // Cargar las evoluciones en la tabla correspondiente
                     cargarTablaEvolucionesOdGral(response.evoluciones);
-                    
+
                     console.log('Evoluciones guardadas globalmente:', evoluciones);
                 }else{
                     // Limpiar las variables globales si no hay evoluciones
                     evoluciones = [];
                     window.evoluciones_od_gral_raw = [];
                     window.total_evoluciones_od_gral = 0;
-                    
+
                     // Limpiar la tabla si no hay evoluciones
                     limpiarTablaEvolucionesOdGral();
                 }
@@ -768,7 +651,7 @@
             error: function(error) {
                 swal.close();
                 console.log(error);
-                
+
                 // Limpiar las variables globales en caso de error
                 evoluciones = [];
                 window.evoluciones_od_gral_raw = [];
@@ -833,7 +716,7 @@
                                     <i class="feather icon-edit"></i> Modificar
                                 </button>
                             </div>
-                            
+
                         </div>
                     </div>
                 `;

@@ -1,24 +1,99 @@
+@php
+    /*
+     * Piezas disponibles para examen.
+     *
+     * Estados permitidos:
+     * 0 = Pendiente
+     * 2 = En proceso
+     * null = Sin estado definido
+     *
+     * Estados bloqueados:
+     * 1 = Finalizado / Realizado
+     * 3 = Cancelado / estado terminal
+     */
+    $piezasDisponiblesExamen = collect($piezasDisponibles ?? [])
+        ->filter(function ($pieza) {
+            $estado = is_object($pieza)
+                ? ($pieza->estado ?? null)
+                : (is_array($pieza) ? ($pieza['estado'] ?? null) : null);
+
+            return $estado === null
+                || $estado === ''
+                || !in_array((int) $estado, [1, 3], true);
+        })
+        ->unique(function ($pieza) {
+            return (string) (
+                is_object($pieza)
+                    ? ($pieza->pieza ?? '')
+                    : (is_array($pieza) ? ($pieza['pieza'] ?? '') : $pieza)
+            );
+        })
+        ->values();
+@endphp
+
 <div class="card-informacion">
     <div class="card-body">
-        <div class="form-row align-items-center">
-            <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+        <div class="row align-items-stretch nuevo-examen-pieza-layout">
+            <div class="form-group col-sm-12 col-lg-6 mb-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Pieza N°</label>
-                    <select class="form-control form-control-sm" name="n_pieza_ex_pp_od_gral{{ $counter }}" id="n_pieza_ex_pp_od_gral{{ $counter }}">
+                    @include('atencion_odontologica.include.selector_odontograma', [
+                        'id' => 'selector_examen_pieza_'.$counter,
+                        'inputId' => 'n_pieza_ex_pp_od_gral'.$counter,
+                        'counter' => $counter,
+                        'multiple' => false,
+                        'compacto' => true,
+                        'soloPendientes' => true,
+                        'estadosBloqueados' => [1, 3],
+                        'piezasDisponibles' => $piezasDisponiblesExamen,
+                        'titulo' => 'Procedimientos pendientes',
+                        'ayuda' => 'Seleccione la pieza que examinará',
+                    ])
+                    <select class="d-none" name="n_pieza_ex_pp_od_gral{{ $counter }}" id="n_pieza_ex_pp_od_gral{{ $counter }}" tabindex="-1" aria-hidden="true">
                         <option value="0">Seleccione</option>
-                         @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
-                            <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
-                        @endforeach
+                        @if($limitarAlPresupuesto ?? false)
+                            @foreach($piezasDisponiblesExamen as $piezaPresupuesto)
+                                @php
+                                    $numeroPieza = is_object($piezaPresupuesto)
+                                        ? ($piezaPresupuesto->pieza ?? null)
+                                        : ($piezaPresupuesto['pieza'] ?? null);
+
+                                    $tratamientoPieza = is_object($piezaPresupuesto)
+                                        ? ($piezaPresupuesto->tratamiento ?? null)
+                                        : ($piezaPresupuesto['tratamiento'] ?? null);
+                                @endphp
+
+                                @if($numeroPieza)
+                                    <option value="{{ $numeroPieza }}">
+                                        {{ $numeroPieza }}{{ $tratamientoPieza ? ' — '.$tratamientoPieza : '' }}
+                                    </option>
+                                @endif
+                            @endforeach
+                        @else
+                            @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
+                                <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                            @endforeach
+                        @endif
                     </select>
+                    @if($limitarAlPresupuesto ?? false)
+                        <small
+                            class="text-warning mensaje-presupuesto-sin-piezas"
+                            style="{{ $piezasDisponiblesExamen->isEmpty() ? '' : 'display:none;' }}"
+                        >
+                            Este presupuesto no tiene piezas disponibles.
+                        </small>
+                    @endif
                 </div>
             </div>
-            <div class="form-group col-sm-12 col-md-5">
+            <div class="col-sm-12 col-lg-6 nuevo-examen-pieza-formulario">
+            <div class="form-row align-items-center">
+            <div class="form-group col-sm-12 col-md-6">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Zona de Dolor</label>
                     <input type="text" class="form-control form-control-sm" name="ex_grl_zdolor_od_gral{{ $counter }}" id="ex_grl_zdolor_od_gral{{ $counter }}" value="">
                 </div>
             </div>
-            <div class="form-group col-sm-12 col-md-5">
+            <div class="form-group col-sm-12 col-md-6">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Historial de la pieza</label>
                     <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_grl_hp_od_gral{{ $counter }}" id="ex_grl_hp_od_gral{{ $counter }}"></textarea>
@@ -172,6 +247,8 @@
             <!--<button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_examen_pieza()">X</button>
             <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza({{ $counter }},'gral')"><i class="fas fa-save"></i></button>-->
         </div>
+            </div>
+        </div>
     </div>
     <div class="card-footer">
         {{-- <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_examen_pieza()"><i class="feather icon-x"></i></button> --}}
@@ -180,17 +257,37 @@
     </div>
 </div>
 
+<style>
+    .nuevo-examen-pieza-layout > [class*="col-"] {
+        min-width: 0;
+    }
+    .nuevo-examen-pieza-formulario {
+        padding-top: .25rem;
+    }
+    @media (min-width: 992px) {
+        .nuevo-examen-pieza-formulario .form-row > [class*="col-"] {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    @media (max-width: 991.98px) {
+        .nuevo-examen-pieza-formulario .form-row > [class*="col-"] {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+</style>
+
 <script>
 
     $(document).ready(function() {
-        $('#n_pieza_ex_pp_od_gral1000').select2();
     });
 
     function ocultar_pieza_examen_pieza() {
         $('#contenedor_nueva_pieza_dental').empty();
     }
 
-     function guardar_pieza_examen_pieza(counter){
+     function guardar_pieza_examen_pieza(counter, tipoExamen = 'gral'){
         let numero_pieza = $('#n_pieza_ex_pp_od_gral'+counter).val();
         let zona_dolor = $('#ex_grl_zdolor_od_gral'+counter).val();
         let historia_anterior = $('#ex_grl_hp_od_gral'+counter).val();
@@ -210,7 +307,7 @@
         let id_profesional = $('#id_profesional').val();
         let id_ficha_atencion = $('#id_fc').val();
         let id_especialidad = $('#id_especialidad').val();
-        let tipo_examen = 'gral';
+        let tipo_examen = tipoExamen;
 
         let data = {
             _token: CSRF_TOKEN,
@@ -233,7 +330,9 @@
             id_profesional: id_profesional,
             id_ficha_atencion: id_ficha_atencion,
             id_especialidad: id_especialidad,
-            tipo_examen: tipo_examen
+            tipo_examen: tipo_examen,
+            id_hora_medica: $('#hora_medica').val(),
+            id_presupuesto: $('#id_presupuesto').val()
         }
 
         let valido = 1;
@@ -327,14 +426,19 @@
                 `
                         );
                     });
-                    // si es 1 es examen general
-                    swal({
-                        title: "Pieza dental guardada",
-                        text: "La pieza dental para examen ha sido guardada correctamente.",
-                        icon: "success",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    });
+                    if (resp.id_tratamiento_programado) {
+                        $('#id_tratamiento').val(resp.id_tratamiento_programado);
+                        $('#estado_tto').val(String(resp.estado_tratamiento_programado ?? 0));
+                        $('#observaciones_tto').val('');
+                        $('#modal_cambio_estado_tto').modal('show');
+                    } else {
+                        swal({
+                            title: "Pieza dental guardada",
+                            text: "El examen fue guardado, pero no existe una prestación del presupuesto asociada para cambiar su estado.",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        });
+                    }
 
                 }
             },
@@ -342,7 +446,7 @@
                 console.log(error);
                 return swal({
                     title: "Error al guardar",
-                    text: "Ha ocurrido un error al guardar los datos.",
+                    text: error.responseJSON?.error || "Ha ocurrido un error al guardar los datos.",
                     icon: "error",
                     buttons: "Aceptar",
                     DangerMode: true,

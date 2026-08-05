@@ -317,10 +317,6 @@
                 console.log(resp);
                 $('#contenedor_imagenes_dent').empty();
                 $('#contenedor_imagenes_dent').append(resp.v);
-                if(seccion == 'gral'){
-                    $('#contenedor_pieza_dental_endorx').empty();
-                    $('#contenedor_pieza_dental_endorx').append(resp.v);
-                }
             },
             error: function(error){
                 console.log(error);
