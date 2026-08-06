@@ -148,10 +148,11 @@
                         </div>
 
                         <div id="nombre_paciente_menu" style="
-                            font-size:14px;
+                            font-size:12px;
                             font-weight:600;
                             color:#243746;
-                            text-transform:capitalize;
+                            font-family: 'Nunito', sans-serif;
+                            text-transform:uppercase!important;
                             line-height:1.35;">
                             {{ $paciente->nombres }}
                             {{ $paciente->apellido_uno }}
@@ -160,17 +161,17 @@
 
                         <div class="d-flex flex-wrap mt-2">
 
-                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:12px;color:#51606d;font-weight:600;">
+                            <span style="font-family: 'Nunito', sans-serif; display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#f5f7fa;border:1px solid #e2e8ee;font-size:12px;color:#51606d;font-weight:600; text-transform:uppercase!important;">
                                 <i class="fa fa-id-card mr-1"></i>
                                 <span id="rut_paciente_menu">{{ $paciente->rut }}</span>
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:12px;color:#158982;font-weight:600;">
+                            <span style="font-family: 'Nunito', sans-serif; display:inline-flex;align-items:center;padding:3px 10px;margin-right:6px;margin-bottom:6px;border-radius:18px;background:#edf9f8;border:1px solid #d7efea;font-size:12px;color:#158982;font-weight:600; text-transform:uppercase!important;">
                                 <i class="fa fa-birthday-cake mr-1"></i>
                                 <span id="edad_paciente_menu">{{ $paciente->edad }}</span>
                             </span>
 
-                            <span style="display:inline-flex;align-items:center;padding:3px 10px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:12px;color:#3f68af;font-weight:600;">
+                            <span style="font-family: 'Nunito', sans-serif; display:inline-flex;align-items:center;padding:3px 10px;margin-bottom:6px;border-radius:18px;background:#eef3ff;border:1px solid #dce6fb;font-size:12px;color:#3f68af;font-weight:600; text-transform:uppercase!important;">
                                 <i class="fa fa-shield mr-1"></i>
                                 {{ $paciente->prevision->nombre }}
                             </span>
@@ -190,7 +191,7 @@
                                 <i class="fa fa-heartbeat"></i>
                             </div>
 
-                            <div style="font-size:14px;font-weight:600;color:#34495e;">
+                            <div style="font-size:12px;font-weight:600;color:#34495e; text-transform:uppercase!important;">
                                 Patologías Crónicas
                             </div>
 
@@ -216,11 +217,12 @@
                                     border-radius:8px;
                                     padding:3px 6px;
                                     margin-bottom:6px;
-                                    font-size:14px;
-                                    font-weight:500; 
+                                    font-size:12px;
+                                    font-weight:600; 
+                                    font-family: 'Nunito', sans-serif;
                                     overflow-wrap: break-word;
                                     color:#43515c;
-                                    text-transform:capitalize;">
+                                    text-transform:uppercase!important;">
 
 
                                     {{ $a->antecedente_data->nombre }}

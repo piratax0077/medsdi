@@ -1,140 +1,215 @@
-<div id="indicar_examenes" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_indicar_examen"
+<div id="indicar_examenes" class="modal fade sdi-modal-examen" tabindex="-1" role="dialog" aria-labelledby="modal_indicar_examen"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg"  data-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen</h5>
-                <button type="button" class="close" aria-label="Close"  onclick="cerrarModalExamenesFicha();">
-                    <span aria-hidden="true">x</span>
+            <div class="modal-header py-3">
+                <h5 class="modal-title" id="modal_indicar_examen"> <i class="icono-agenda feather icon-activity"></i>Indicar Examen</h5>
+                <button type="button" class="close " aria-label="Close"  onclick="cerrarModalExamenesFicha();">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
 
-                <div class="form-row">
-                    <div class="col-sm-12 mt-2">
-                        <div class="form-group fill">
-                            <label class="floating-label">Tipo Examen</label>
+                <div class="sdi-examen-form">
+                    <div class="form-row">
+                        <div class="col-sm-12">
+                            <div class="sdi-campo">
+                                <label class="floating-label-activo-sm">Tipo de Examen</label>
+                                <select class="form-control form-control-sm" name="tipo_examen_d" id="tipo_examen_d">
+                                    <option value="0">Seleccione</option>
+                                    @foreach ($examenMedico as $exa)
+                                        <option value="{{ $exa->cod_examen }}">
+                                            {{ $exa->nombre_examen }}</option>
+                                    @endforeach
 
-                            <select class="form-control form-control-sm" name="tipo_examen_d" id="tipo_examen_d">
-                                <option value="0">Seleccione</option>
-                                @foreach ($examenMedico as $exa)
-                                    <option value="{{ $exa->cod_examen }}">
-                                        {{ $exa->nombre_examen }}</option>
-                                @endforeach
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 mt-2">
-                        <div class="form-group fill">
-                            <label class="floating-label-activo-sm">Sub-tipo de Examen</label>
-
-                            <select class="form-control form-control-sm" name="sub_tipo_examen_d" id="sub_tipo_examen_d">
-                                <option value="">Seleccione</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 mt-2">
-                        <div class="form-group fill">
-                            <label class="floating-label-activo-sm">Examen</label>
-                            <select class="form-control form-control-sm" name="examen_d" id="examen_d">
-                                <option value="">Seleccione</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 mt-2">
-                        <div class="form-group fill">
-                            <label class="floating-label">Lado</label>
-                            <select class="form-control form-control-sm" id="lado_d" name="lado_d">
-                                <option value="0" selected>No corresponde</option>
-                                <option value="Derecho">Derecho</option>
-                                <option value="Izquierdo">Izquierdo</option>
-                                <option value="Bilateral">Bilateral</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 mt-2">
-                        <div class="form-group fill">
-                            <label class="floating-label">Prioridad</label>
-                            <select class="form-control form-control-sm" id="prioridad_d" name="prioridad_d">
-                                {{--  <option value="0">Seleccione</option>  --}}
-                                <option value="1">Baja</option>
-                                <option value="2" selected>Media</option>
-                                <option value="3">Alta</option>
-                                <option value="4">Urgente</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="col-sm-12 mt-3">
-                        <div class="form-group mb-1">
-                            <label><strong>Con Contraste</strong></label>
-                            <div class="switch switch-success d-inline m-r-10">
-                                <input type="checkbox" id="imagenologia_con_contraste_d" disabled='disabled' >
-                                <label for="imagenologia_con_contraste_d" class="cr"></label>
+                                </select>
                             </div>
-                            <div class="alert-primary" id="mensaje_imagenologia_con_contraste_d" style="display:none;">Acaba de seleccionar Imagen con Constraste, El examen de Creatinina fue adjuntado correctamente.</div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="sdi-campo">
+                                <label class="floating-label-activo-sm">Sub-tipo de Examen</label>
+                                <select class="form-control form-control-sm" name="sub_tipo_examen_d" id="sub_tipo_examen_d">
+                                    <option value="">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="sdi-campo">
+                                <label class="floating-label-activo-sm">Examen</label>
+                                <select class="form-control form-control-sm" name="examen_d" id="examen_d">
+                                    <option value="">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="sdi-campo">
+                                <label class="floating-label-activo-sm">Lado</label>
+                                <select class="form-control form-control-sm" id="lado_d" name="lado_d">
+                                    <option value="0" selected>No corresponde</option>
+                                    <option value="Derecho">Derecho</option>
+                                    <option value="Izquierdo">Izquierdo</option>
+                                    <option value="Bilateral">Bilateral</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="sdi-campo">
+                                <label class="floating-label-activo-sm">Prioridad</label>
+                                <select class="form-control form-control-sm" id="prioridad_d" name="prioridad_d">
+                                    {{--  <option value="0">Seleccione</option>  --}}
+                                    <option value="1">Baja</option>
+                                    <option value="2" selected>Media</option>
+                                    <option value="3">Alta</option>
+                                    <option value="4">Urgente</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <button type="button" onclick="indicar_examen_cirugia_d();" id="agregar_examen_tabla" class="btn btn-success btn-sm float-right">
+
+                    <div class="sdi-examen-contraste">
+                        <div class="sdi-examen-contraste-texto">
+                            <strong>Con Contraste</strong>
+                            <small>Solo disponible en exámenes de imagenología</small>
+                        </div>
+                        <div class="switch switch-success d-inline m-r-10">
+                            <input type="checkbox" id="imagenologia_con_contraste_d" disabled='disabled' >
+                            <label for="imagenologia_con_contraste_d" class="cr"></label>
+                        </div>
+                    </div>
+                    <div class="alert alert-primary mt-2" id="mensaje_imagenologia_con_contraste_d" style="display:none;">Acaba de seleccionar Imagen con Constraste, El examen de Creatinina fue adjuntado correctamente.</div>
+                   
+                    <div class="sdi-examen-agregar mb-4">
+                        <button type="button" onclick="indicar_examen_cirugia_d();" id="agregar_examen_tabla" class="btn btn-success">
                             <i class="fa fa-plus"></i> Agregar Examen
                         </button>
                     </div>
-                    <div class="col-sm-12 mt-3">
-                        <!--**** Al agregar un examen, se debe cargar la tabla *****-->
-                        <!--Tabla-->
-                        <div class="table-responsive">
-                            <table id="tabla_examen_cirugia_d" class="table table-bordered table-sm tabla_examenes_ficha">
-                                <thead>
-                                    <tr>
-                                        <!-- <th class="text-center align-middle" style="display:none">ID Examen</th> -->
-                                        <th class="text-center align-middle">Fecha y Hora</th>
-                                        <th class="text-center align-middle">Nombre Examen</th>
-                                        <th class="text-center align-middle">Lado</th>
-                                        <th class="text-center align-middle">Tipo</th>
-                                        {{--  <th class="text-center align-middle">Sub-Tipo</th>  --}}
-                                        <th class="text-center align-middle">Prioridad</th>
-                                        <th class="text-center align-middle">Con Contraste</th>
-                                        <th class="text-center align-middle">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if(isset($examenes_solicitados))
-                                        @foreach($examenes_solicitados as $examen)
-                                            <tr>
-                                                <!-- <td class="text-center align-middle" style="display:none">{{ $examen->id }}</td> -->
-                                                <td class="text-center align-middle">{{ $examen->fecha }} {{ $examen->hora }} <br> {{ $examen->responsable }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->examen }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->lado }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->tipo_examen }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->prioridad }}</td>
-                                                <td class="text-center align-middle">{{ $examen->datos_examen->imagenologia_con_contraste ? $examen->datos_examen->imagenologia_con_contraste : 'N/C' }}</td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn btn-danger btn_remove btn-sm" onclick="eliminar_examen_cirugia_d({{ $examen->id }});"><i class="fas fa-trash"></i></div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--Cierre Tabla-->
+
+
+                    <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                    <!--Tabla-->
+                    <div class="tabla-sdi-responsive">
+                        <table id="tabla_examen_cirugia_d" class="table table-bordered tabla-sdi-sm  tabla_examenes_ficha">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="text-center align-middle" style="display:none">ID Examen</th> -->
+                                    <th>Fecha y Hora</th>
+                                    <th>Nombre Examen</th>
+                                    <th>Lado</th>
+                                    <th>Tipo</th>
+                                    {{--  <th>Sub-Tipo</th>  --}}
+                                    <th>Prioridad</th>
+                                    <th>Con Contraste</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($examenes_solicitados))
+                                    @foreach($examenes_solicitados as $examen)
+                                        <tr>
+                                            <!-- <td class="text-center align-middle" style="display:none">{{ $examen->id }}</td> -->
+                                            <td>{{ $examen->fecha }} {{ $examen->hora }} <br> {{ $examen->responsable }}</td>
+                                            <td>{{ $examen->datos_examen->examen }}</td>
+                                            <td>{{ $examen->datos_examen->lado }}</td>
+                                            <td>{{ $examen->datos_examen->tipo_examen }}</td>
+                                            <td>{{ $examen->datos_examen->prioridad }}</td>
+                                            <td>{{ $examen->datos_examen->imagenologia_con_contraste ? $examen->datos_examen->imagenologia_con_contraste : 'N/C' }}</td>
+                                            <td>
+                                                <div class="btn btn-danger btn_remove btn-icon" onclick="eliminar_examen_cirugia_d({{ $examen->id }});"><i class="fas fa-trash"></i></div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
+                    <!--Cierre Tabla-->
 
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer p-2">
                 {{--  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>  --}}
                 {{--  <button type="button" data-dismiss="modal" class="btn btn-info">Guardar</button>  --}}
                 {{--  <button type="button" onclick="alerta_registro_examen();" data-dismiss="modal" class="btn btn-info">Generar Orden de Examen</button>  --}}
-                <button type="button" onclick="registro_examen_ficha();" data-dismiss="modal" class="btn btn-info">Generar Orden de Examen</button>
+                <button type="button" onclick="registro_examen_ficha();" data-dismiss="modal" class="btn btn-info">
+                    <i class="feather icon-file-text"></i> Generar Orden de Examen
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /** DISEÑO MODAL INDICAR EXAMEN  **/
+    #indicar_examenes .modal-content {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 24px 60px rgba(30, 40, 80, .22);
+    }
+
+
+
+    /* Cuerpo */
+    #indicar_examenes .modal-body {
+        padding: 22px;
+    }
+    #indicar_examenes .sdi-campo {
+        margin-bottom: 19px;
+    }
+   
+    
+
+    /* Con contraste */
+    #indicar_examenes .sdi-examen-contraste {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 4px;
+        padding: 12px 16px;
+        background-color: #fff;
+        border: 1px solid #e6eaf1;
+        border-radius: 12px;
+    }
+    #indicar_examenes .sdi-examen-contraste-texto {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.3;
+    }
+    #indicar_examenes .sdi-examen-contraste-texto strong {
+        color: #2b2f3a;
+        font-size: .9rem;
+    }
+    #indicar_examenes .sdi-examen-contraste-texto small {
+        color: #8b93a7;
+        font-size: .74rem;
+    }
+    #indicar_examenes .sdi-examen-aviso {
+        margin-top: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: .82rem;
+    }
+
+    /* Boton agregar */
+    #indicar_examenes .sdi-examen-agregar {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+    }
+  
+   
+
+ 
+ 
+ 
+    @media (max-width: 575.98px) {
+        #indicar_examenes .modal-body { padding: 16px; }
+        #indicar_examenes .sdi-examen-contraste { flex-wrap: wrap; }
+        #indicar_examenes .sdi-examen-generar { width: 100%; }
+    }
+</style>
 
 <script>
     function indicar_examen_cirugia_d() {
@@ -218,7 +293,7 @@
                                 examen.tipo_examen,
                                 examen.prioridad,
                                 examen.imagenologia_con_contraste_d ? examen.imagenologia_con_contraste_d : 'N/C',
-                                `<div class="btn btn-danger btn_remove btn-sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
+                                `<div class="btn btn-danger btn_remove btn-icon" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
                             ]).draw(false); // Redibuja la tabla sin reiniciar la paginación
                         });
                     } else {
@@ -339,7 +414,7 @@
                             examen.tipo_examen,
                             examen.prioridad,
                             examen.imagenologia_con_contraste_d ? examen.imagenologia_con_contraste_d : 'N/C',
-                            `<div class="btn btn-danger btn_remove btn_sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
+                            `<div class="btn btn-danger btn_remove btn-icon btn_sm" onclick="eliminar_examen_cirugia_d(${resp.id});"><i class="fas fa-trash"></i></div>`
                         ]).draw(false); // Redibuja la tabla sin reiniciar la paginación
                     });
                     swal({

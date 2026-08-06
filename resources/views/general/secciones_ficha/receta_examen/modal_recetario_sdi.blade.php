@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1">Recetario SDI</h5>
+                <h5 class="modal-title text-white mt-1"><i class="icono-agenda feather icon-clipboard"></i>Recetario SDI</h5>
                 <input type="hidden" id="id_profesional" value="{{ @Auth::user()->id }}">
                 <button type="button" class="close" aria-label="Close" onclick="cerrarModalMedicamentosFicha_sdi();">
                     <span aria-hidden="true">×</span>
@@ -12,16 +12,16 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
 
                             <li class="nav-item">
-                                <a class="nav-link-wizard active " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Receta auto</a>
+                                <a class="nav-link-aten text-reset active" id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Receta auto</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-wizard" id="rec_manual_tab" data-toggle="pill" href="#rec_manual" role="tab" aria-controls="rec_manual" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Receta Manual</a>
+                                <a class="nav-link-aten text-reset" id="rec_manual_tab" data-toggle="pill" href="#rec_manual" role="tab" aria-controls="rec_manual" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Receta Manual</a>
                             </li>
 							<li class="nav-item">
-                                <a class="nav-link-wizard" id="rec_magistral_tab" data-toggle="pill" href="#rec_magistral" role="tab" aria-controls="rec_magistral" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Recetario Magistral</a>
+                                <a class="nav-link-aten text-reset" id="rec_magistral_tab" data-toggle="pill" href="#rec_magistral" role="tab" aria-controls="rec_magistral" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Recetario Magistral</a>
                             </li>
                         </ul>
                     </div>
@@ -45,7 +45,7 @@
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Composición:</label>
-                                            <div id="nombre_composicion_farmaco" name="nombre_composicion_farmaco" class="p-t-5"></div>
+                                            <div id="nombre_composicion_farmaco" name="nombre_composicion_farmaco" class="pt-2 pl-3"></div>
                                             <div id="mensaje_med_control" name="mensaje_med_control" class="alert-warning"></div>
 
                                         </div>
@@ -150,12 +150,12 @@
                                                         <input type="checkbox" id="medicamento_uso_cronico">
                                                         <label for="medicamento_uso_cronico" class="cr"></label>
                                                     </div>
-                                                    <div class="alert-primary" id="mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                                    <div class="alert alert-primary" id="mensaje_uso_cronico" style="display:none;">Medicamento marcado como de USO CRÓNICO.</div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <button type="button" onclick="indicar_medicamento_sdi()"
-                                                    class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento</button>
+                                                    class="btn btn-success float-right"><i class="feather icon-plus"></i> Agregar Medicamento</button>
                                             </div>
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
 
                                     <div class="col-sm-6 mt-2">
                                         <div class="form-group">
-                                            <label class="floating-label-activo-sm">Farmaco</label>
+                                            <label class="floating-label-activo-sm">Fármaco</label>
                                             <input type="text" id="manual_nombre_composicion_farmaco" name="manual_nombre_composicion_farmaco" class="form-control form-control-sm">
                                         </div>
                                     </div>
@@ -299,12 +299,12 @@
                                                         <input type="checkbox" id="manual_medicamento_uso_cronico">
                                                         <label for="manual_medicamento_uso_cronico" class="cr"></label>
                                                     </div>
-                                                    <div class="alert-primary" id="manual_mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                                    <div class="alert alert-primary" id="manual_mensaje_uso_cronico" style="display:none;">Medicamento marcado como de uso crónico. </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <button type="button" onclick="indicar_medicamento_manual_sdi()"
-                                                    class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento Manual</button>
+                                                    class="btn btn-success  float-right"><i class="feather icon-plus"></i> Agregar Medicamento Manual</button>
                                             </div>
                                         </div>
                                     </div>
@@ -316,7 +316,7 @@
 							<div class="tab-pane fade show" id="rec_magistral" role="tabpanel" aria-labelledby="rec_magistral_tab">
                                 <div class="row mb-3">
                                     <div class="col-sm-12">
-                                        <button type="button" onclick="agregar_componente();" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Componente a Receta Magistral</button>
+                                        <button type="button" onclick="agregar_componente();" class="btn btn-success btn-sm float-right"><i class="feather icon-plus"></i> Agregar Componente a Receta Magistral</button>
                                     </div>
                                 </div>
 
@@ -341,7 +341,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 mt-2">
-                                        <label class="label">Si Receta Magistra Posee Elementos con Control Debe seleccionar el Tipo de Control Adecuado</label>
+                                        <label class="label">Si la receta magistral posee elementos de control, es obligatorio seleccionar el tipo de control correspondiente.</label>
                                     </div>
                                 </div>
 
@@ -502,11 +502,12 @@
                                                         <input type="checkbox" id="magistral_medicamento_uso_cronico">
                                                         <label for="magistral_medicamento_uso_cronico" class="cr"></label>
                                                     </div>
-                                                    <div class="alert-primary" id="magistral_mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                                    <div class="alert alert-primary" id="magistral_mensaje_uso_cronico" style="display:none;">Medicamento marcado como de USO CRÓNICO. </div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <button type="button" onclick="indicar_medicamento_magistral_sdi()" class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento Magistral</button>
+                                                <button type="button" onclick="indicar_medicamento_magistral_sdi()" class="btn btn-success float-right"><i class="feather
+                                                     icon-plus"></i> Agregar Medicamento Magistral</button>
                                             </div>
                                         </div>
                                     </div>
@@ -514,14 +515,14 @@
                                 </div>
                             </div>
 
-                            <!--DIV DE TABLA -->
-                            <div class="row">
+                            <!--TABLA MEDICAMENTOS -->
+                            <div class="row mt-3">
                                 <div class="col-sm-12">
-                                    <div class="col-sm-12 mt-3">
+                                    <div class="">
                                         <!--**** Al agregar un medicamento, se debe cargar la tabla *****-->
                                         <!--Tabla-->
                                         <div class="table-responsive">
-                                            <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
+                                            <table id="tabla_medicamento_cirugia_sdi" class="table tabla-sdi-sm table-bordered table-xs">
                                                 <thead>
                                                     <tr>
                                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_tipo_control</td>
@@ -548,10 +549,10 @@
                                         </div>
                                         <!--Cierre: Tabla-->
                                     </div>
-                                    <div class="modal-footer">
+                                    <div class="modal-footer mt-3 pt-2">
                                         {{--  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>  --}}
                                         {{--  <button type="button" onclick="alerta_registro_medicamento_sdi();" data-dismiss="modal" class="btn btn-info">Generar Receta</button>  --}}
-                                        <button type="button" onclick="registrar_medicamentos_ficha_sdi();" data-dismiss="modal" class="btn btn-info">Generar Receta</button>
+                                        <button type="button" onclick="registrar_medicamentos_ficha_sdi();" data-dismiss="modal" class="btn btn-info"><i class="feather icon-clipboard mr-2"></i>Generar Receta</button>
                                     </div>
                                 </div>
                             </div>
@@ -571,7 +572,7 @@
                                         </div>
                                         <div class="col-sm-6 col-md-6">
                                             <div class="form-group fill">
-                                                <label class="floating-label">Tipo de control</label>
+                                                <label class="floating-label-activo-sm">Tipo de control</label>
                                                 <select class="form-control form-control-sm" id="tipo_control_receta_propia" name="tipo_control_receta_propia" onchange="buscar_cantidad_receta_propia();">
                                                     <option value="0">Seleccione una opción</option>
                                                     @foreach ($receta_control as $tipo_receta_control)
@@ -594,7 +595,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group fill">
-                                                <label class="floating-label">Tipo de control</label>
+                                                <label class="floating-label-activo-sm">Tipo de control</label>
                                                 <select class="form-control form-control-sm" id="tipo_control_recetas_totales" name="tipo_control_recetas_totales" onchange="buscar_cantidad_receta_totales();">
                                                     <option value="0">Seleccione una opción</option>
                                                     @foreach ($receta_control as $tipo_receta_control)
@@ -825,7 +826,7 @@
                                 if(value.con_contraste == 1)
                                     text_con_contraste = 'Con Contraste';
                                 html += '    <td class="text-center align-middle text-wrap">'+text_con_contraste+'</td>';
-                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn_remove" onclick="eliminar_examen_oft_contraste(\'row' + index + '\');">Quitar</div></td>';
+                                html += '    <td class="text-center align-middle text-wrap"><div name="remove" id="' + index +'" class="btn btn-danger btn-xs btn_remove" onclick="eliminar_examen_oft_contraste(\'row' + index + '\');">Quitar</div></td>';
                                 html += '</tr>';
                             }
                             else
@@ -1228,7 +1229,7 @@
                     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + medicamento_uso_cronico + '</td>' +
                     '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_cantidad_comprar + '</td>' +
                     '<td class="text-center align-middle text-wrap">' + cantidad_val + '</td>' +
-                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i + '" class="btn btn-danger btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
+                    '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i + '" class="btn btn-danger btn-xxs btn_remove" onclick="eliminar_medicamento_sdi(\'row' + i + '\');">Quitar</div></td>'+
                 '</tr>';
 
                 i++;
