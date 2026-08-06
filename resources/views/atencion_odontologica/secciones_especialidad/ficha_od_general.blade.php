@@ -1,3 +1,168 @@
+@php
+    /*
+     * Configuración de personalización de la ficha odontológica.
+     *
+     * El controlador puede enviar $plantilla como modelo, arreglo u objeto.
+     * Cuando no existe una plantilla guardada, se conserva el comportamiento
+     * histórico y se muestran todas las secciones.
+     */
+    $configuracionFichaOdontologica = $plantilla
+        ?? ($plantillaFicha
+        ?? ($configuracionFicha
+        ?? null));
+
+    /*
+     * La vista que abre la atención odontológica puede no enviar la plantilla.
+     * En ese caso se obtiene aquí la plantilla activa del profesional.
+     */
+    if (
+        empty($configuracionFichaOdontologica)
+        && isset($profesional)
+        && !empty($profesional->id)
+    ) {
+        $consultaPlantillaOdonto = \App\Models\PlantillaFichaMedica::with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ])
+            ->where('id_profesional', $profesional->id)
+            ->where('id_especialidad', $profesional->id_especialidad)
+            ->where(
+                'id_tipo_especialidad',
+                $profesional->id_tipo_especialidad
+            )
+            ->where('activa', 1);
+
+        /*
+         * La personalización se guarda usando 0 cuando el profesional no tiene
+         * subtipo de especialidad. Por eso la lectura debe utilizar el mismo
+         * criterio y no buscar NULL, ya que en ese caso nunca encontraría la
+         * plantilla guardada y la ficha volvería a mostrar todas las secciones.
+         */
+        $consultaPlantillaOdonto->where(
+            'id_sub_tipo_especialidad',
+            (int) ($profesional->id_sub_tipo_especialidad ?? 0)
+        );
+
+        /*
+         * Ante posibles plantillas antiguas duplicadas, se utiliza siempre la
+         * última configuración modificada, igual que en el controlador.
+         */
+        $configuracionFichaOdontologica = $consultaPlantillaOdonto
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    $seccionesPersonalizadasOdonto = data_get(
+        $configuracionFichaOdontologica,
+        'secciones',
+        []
+    );
+
+    if (is_string($seccionesPersonalizadasOdonto)) {
+        $seccionesPersonalizadasOdonto = json_decode($seccionesPersonalizadasOdonto, true) ?: [];
+    } elseif ($seccionesPersonalizadasOdonto instanceof \Illuminate\Support\Collection) {
+        $seccionesPersonalizadasOdonto = $seccionesPersonalizadasOdonto->toArray();
+    } elseif (is_object($seccionesPersonalizadasOdonto)) {
+        $seccionesPersonalizadasOdonto = json_decode(json_encode($seccionesPersonalizadasOdonto), true) ?: [];
+    }
+
+    $normalizarCodigoFichaOdonto = static function ($valor) {
+        return \Illuminate\Support\Str::slug((string) $valor, '_');
+    };
+
+    $buscarSeccionFichaOdonto = static function (array $alias) use (
+        $seccionesPersonalizadasOdonto,
+        $normalizarCodigoFichaOdonto
+    ) {
+        if (empty($seccionesPersonalizadasOdonto)) {
+            return null;
+        }
+
+        $aliasNormalizados = collect($alias)
+            ->map($normalizarCodigoFichaOdonto)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($seccionesPersonalizadasOdonto as $seccion) {
+            $codigo = $normalizarCodigoFichaOdonto(data_get($seccion, 'codigo', ''));
+            $nombre = $normalizarCodigoFichaOdonto(data_get($seccion, 'nombre', ''));
+
+            if (in_array($codigo, $aliasNormalizados, true) || in_array($nombre, $aliasNormalizados, true)) {
+                return $seccion;
+            }
+        }
+
+        return null;
+    };
+
+    $seccionVisibleFichaOdonto = static function (array $alias, bool $predeterminado = true) use (
+        $buscarSeccionFichaOdonto,
+        $seccionesPersonalizadasOdonto
+    ) {
+        if (empty($seccionesPersonalizadasOdonto)) {
+            return $predeterminado;
+        }
+
+        $seccion = $buscarSeccionFichaOdonto($alias);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        if ((bool) data_get($seccion, 'obligatoria', data_get($seccion, 'obligatorio', false))) {
+            return true;
+        }
+
+        return filter_var(data_get($seccion, 'visible', true), FILTER_VALIDATE_BOOLEAN);
+    };
+
+    $mostrarMotivoConsultaOdonto = $seccionVisibleFichaOdonto([
+        'motivo_consulta',
+        'motivo de la consulta y examen fisico general',
+    ]);
+
+    $mostrarUrgenciaOdonto = $seccionVisibleFichaOdonto([
+        'urgencia_odontologica',
+        'control_urgencias',
+        'urgencia odontologica',
+    ]);
+
+    $mostrarExamenOdontoGeneral = $seccionVisibleFichaOdonto([
+        'examen_odontologico_general',
+        'examen odontologico general',
+        'examen_odontologico',
+    ]);
+
+    $mostrarEvolucionesOdonto = $seccionVisibleFichaOdonto([
+        'evoluciones',
+        'control_odontologico',
+    ]);
+
+    // Estas dos secciones son obligatorias también desde el servidor.
+    $mostrarDiagnosticoOdonto = $seccionVisibleFichaOdonto([
+        'diagnostico',
+        'diagnosticos',
+    ]);
+
+    $mostrarRecetasExamenesOdonto = $seccionVisibleFichaOdonto([
+        'recetas_examenes',
+        'recetas y examenes',
+        'recetas_examenes_generales',
+    ]);
+@endphp
+
 <div class="user-profile user-card mt-0 ficha-odontologia-general" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
@@ -8,22 +173,26 @@
                             href="#atencion_dent_endo" role="tab" aria-controls="atencion_dent_endo"
                             aria-selected="true">Atención especialidad</a>
                     </li>
+
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="odontograma_gral_tab" data-toggle="tab"
                             href="#odontograma_gral" role="tab" aria-controls="odontograma_gral"
                             aria-selected="false">Odontograma</a>
                     </li>
+
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab"
                             href="#eval_periimpl" role="tab" aria-controls="eval_periimpl"
                             aria-selected="false">Evaluación-Periodontológica</a>
                     </li>
+
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab"
                             onclick="refrescar_caras_grupos()"
                             href="#evaluacion_general" role="tab" aria-controls="evaluacion_general"
                             aria-selected="false">Caras y grupos</a>
                     </li>
+
 
                     {{--  <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
@@ -33,6 +202,7 @@
                             data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto"
                             aria-selected="false">Presupuesto</a>
                     </li>
+
                 </ul>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -90,13 +260,20 @@
                             </div>
                             <!--Motivo consulta-->
 
-                            @include('atencion_odontologica.generales.motivo_consulta')
+                            @if($mostrarMotivoConsultaOdonto)
+                                @include('atencion_odontologica.generales.motivo_consulta')
+                            @endif
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                             <!--ODONTOLOGIA URGENCIA-->
-                            @include('atencion_odontologica.generales.control_urgencias')
-                            @include('atencion_odontologica.generales.odonto_gral')
+                            @if($mostrarUrgenciaOdonto)
+                                @include('atencion_odontologica.generales.control_urgencias')
+                            @endif
+                            @if($mostrarExamenOdontoGeneral)
+                                @include('atencion_odontologica.generales.odonto_gral')
+                            @endif
 
                             <!--CONTROL ODONTOLOGICO-->
+                            @if($mostrarEvolucionesOdonto)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="control_odontologico">
@@ -116,19 +293,24 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                             {{--  <!--FORMULARIO / SIGNOS VITALES Y OTROS-->
                             @include('general.secciones_ficha.signos_vitales')  --}}
 
                             {{--  <!--CRONICOS / GES / CONFIDENCIAL -->
                             @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
                             <!--Diagnóstico-->
-                            @include('general.secciones_ficha.diagnostico')
+                            @if($mostrarDiagnosticoOdonto)
+                                @include('general.secciones_ficha.diagnostico')
+                            @endif
                             <!--Diagnóstico-->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
+                                            @if($mostrarRecetasExamenesOdonto)
                                             @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -759,6 +941,35 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var primerTab = document.querySelector('#oft .nav-secciones');
+        var tabs = document.querySelectorAll('#oft .nav-secciones');
+
+        tabs.forEach(function (tab) {
+            tab.classList.remove('active');
+            tab.setAttribute('aria-selected', 'false');
+        });
+
+        document.querySelectorAll('#od_endo-contenido > .tab-pane').forEach(function (panel) {
+            panel.classList.remove('show', 'active');
+        });
+
+        if (primerTab) {
+            primerTab.classList.add('active');
+            primerTab.setAttribute('aria-selected', 'true');
+
+            var selectorPanel = primerTab.getAttribute('href');
+            if (selectorPanel && selectorPanel.charAt(0) === '#') {
+                var panel = document.querySelector(selectorPanel);
+                if (panel) {
+                    panel.classList.add('show', 'active');
+                }
+            }
+        }
+    });
+</script>
+
 @include('atencion_odontologica.modals.odontograma.tratamiento_boca_completa')
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_inferior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_superior')

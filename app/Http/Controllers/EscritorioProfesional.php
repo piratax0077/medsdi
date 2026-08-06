@@ -8969,81 +8969,468 @@ return $ficha;
      * de especialidad, tipo y subtipo de especialidad.
      */
     private function consultarPlantillaFichaProfesional(
-    $profesional,
-    bool $soloActiva = true,
-    bool $bloquear = false
-) {
-    $query = PlantillaFichaMedica::where(
-            'id_profesional',
-            $profesional->id
-        )
-        ->where(
-            'id_especialidad',
-            $profesional->id_especialidad
-        )
-        ->where(
-            'id_tipo_especialidad',
-            $profesional->id_tipo_especialidad
-        );
+        $profesional,
+        bool $soloActiva = true,
+        bool $bloquear = false
+    ) {
+        $query = PlantillaFichaMedica::where(
+                'id_profesional',
+                $profesional->id
+            )
+            ->where(
+                'id_especialidad',
+                $profesional->id_especialidad
+            )
+            ->where(
+                'id_tipo_especialidad',
+                $profesional->id_tipo_especialidad
+            );
 
-    if (!empty($profesional->id_sub_tipo_especialidad)) {
+        /*
+         * En la tabla profesionales, Odontología utiliza normalmente
+         * id_sub_tipo_especialidad = 0. La plantilla se guarda con ese mismo
+         * valor, por lo que debe consultarse como 0 y no como NULL.
+         */
         $query->where(
             'id_sub_tipo_especialidad',
-            $profesional->id_sub_tipo_especialidad
+            (int) ($profesional->id_sub_tipo_especialidad ?? 0)
         );
-    } else {
-        $query->whereNull(
-            'id_sub_tipo_especialidad'
-        );
-    }
 
-    if ($soloActiva) {
-        $query->where('activa', 1);
-    }
+        if ($soloActiva) {
+            $query->where('activa', 1);
+        }
 
-    if ($bloquear) {
-        $query->lockForUpdate();
-    }
+        /*
+        * Puede haber registros antiguos duplicados. Siempre se utiliza la
+        * plantilla más recientemente actualizada para que la pantalla de
+        * personalización y el guardado trabajen sobre la misma fila.
+        */
+        $query->orderByDesc('updated_at')
+            ->orderByDesc('id');
 
-    return $query->first();
-}
+        if ($bloquear) {
+            $query->lockForUpdate();
+        }
+
+        return $query->first();
+    }
 
     /**
      * Devuelve la configuración base según la subespecialidad del profesional.
      * Los códigos deben coincidir con los utilizados por cada Blade.
      */
+    /**
+     * Devuelve la estructura base de la ficha según el grupo clínico.
+     */
     private function obtenerSeccionesBasePlantilla(
-    $profesional
-): array {
-    if ((int) $profesional->id_especialidad === 6) {
-        return $this->seccionesBasePsicologia();
+        $profesional
+    ): array {
+        /*
+         * Grupo Odontología:
+         * id_especialidad = 2.
+         *
+         * La ficha concreta se determina por id_tipo_especialidad.
+         */
+        if ((int) $profesional->id_especialidad === 2) {
+            return $this->obtenerSeccionesBaseOdontologia(
+                $profesional
+            );
+        }
+
+        if ((int) $profesional->id_especialidad === 6) {
+            return $this->seccionesBasePsicologia();
+        }
+
+        if ((int) $profesional->id_sub_tipo_especialidad === 21) {
+            return $this->seccionesBaseOrl();
+        }
+
+        if ((int) $profesional->id_sub_tipo_especialidad === 11) {
+            return $this->seccionesBaseCirugiaDigestiva();
+        }
+
+        if ((int) $profesional->id_sub_tipo_especialidad === 19) {
+            return $this->seccionesBaseDermatologia();
+        }
+
+        if ((int) $profesional->id_sub_tipo_especialidad === 27) {
+            return $this->seccionesBaseGinecoObstetricia();
+        }
+
+        if (
+            (int) $profesional->id_especialidad === 1
+            && (int) $profesional->id_sub_tipo_especialidad === 40
+        ) {
+            return $this->seccionesBaseBroncopulmonar();
+        }
+
+        return $this->seccionesBaseGeneral();
     }
 
-    if ((int) $profesional->id_sub_tipo_especialidad === 21) {
-        return $this->seccionesBaseOrl();
+    /**
+     * Resuelve la ficha odontológica según los IDs reales de
+     * tipo_especialidades.
+     *
+     * Mientras una especialidad dental todavía no tenga su estructura propia,
+     * se utiliza Odontología General como base segura.
+     */
+    private function obtenerSeccionesBaseOdontologia(
+        $profesional
+    ): array {
+        $metodosPorTipo = [
+            14 => 'seccionesBaseCirugiaMaxilofacial',
+            15 => 'seccionesBaseEndodoncia',
+            16 => 'seccionesBaseImplantologia',
+            17 => 'seccionesBaseOdontologiaEstetica',
+            18 => 'seccionesBaseOdontologiaGeneral',
+            19 => 'seccionesBaseOdontopediatria',
+            20 => 'seccionesBaseOrtodoncia',
+            21 => 'seccionesBasePeriodoncia',
+            22 => 'seccionesBaseRehabilitacionOral',
+            23 => 'seccionesBaseRadiologiaDental',
+            24 => 'seccionesBaseRehabilitacionOral',
+            56 => 'seccionesBaseTrastornosTemporomandibulares',
+        ];
+
+        $idTipo = (int) $profesional->id_tipo_especialidad;
+        $metodo = $metodosPorTipo[$idTipo]
+            ?? 'seccionesBaseOdontologiaGeneral';
+
+        /*
+         * Evita errores mientras se construyen las nuevas fichas una por una.
+         */
+        if (!method_exists($this, $metodo)) {
+            return $this->seccionesBaseOdontologiaGeneral();
+        }
+
+        return $this->{$metodo}();
     }
 
-    if ((int) $profesional->id_sub_tipo_especialidad === 11) {
-        return $this->seccionesBaseCirugiaDigestiva();
+    /**
+     * Código estable de cada ficha dental.
+     */
+    private function obtenerCodigoFichaOdontologia(
+        $profesional
+    ): string {
+        $codigosPorTipo = [
+            14 => 'cirugia_maxilofacial',
+            15 => 'endodoncia',
+            16 => 'implantologia',
+            17 => 'odontologia_estetica',
+            18 => 'odontologia_general',
+            19 => 'odontopediatria',
+            20 => 'ortodoncia',
+            21 => 'periodoncia',
+            22 => 'rehabilitacion_oral',
+            23 => 'radiologia_dental',
+            24 => 'rehabilitacion_oral',
+            56 => 'trastornos_temporomandibulares',
+        ];
+
+        return $codigosPorTipo[
+            (int) $profesional->id_tipo_especialidad
+        ] ?? 'odontologia_general';
     }
 
-    if ((int) $profesional->id_sub_tipo_especialidad === 19) {
-        return $this->seccionesBaseDermatologia();
+    /**
+     * Nombre visible de cada ficha dental.
+     */
+    private function obtenerNombreFichaOdontologia(
+        $profesional
+    ): string {
+        $nombresPorTipo = [
+            14 => 'Cirugía Maxilofacial',
+            15 => 'Endodoncia',
+            16 => 'Implantología',
+            17 => 'Odontología Estética',
+            18 => 'Odontología General',
+            19 => 'Odontopediatría',
+            20 => 'Ortodoncia',
+            21 => 'Periodoncia',
+            22 => 'Rehabilitación Oral',
+            23 => 'Radiología Dental',
+            24 => 'Rehabilitación Oral',
+            56 => 'Trastornos Temporomandibulares',
+        ];
+
+        return $nombresPorTipo[
+            (int) $profesional->id_tipo_especialidad
+        ] ?? 'Odontología General';
     }
 
-    if ((int) $profesional->id_sub_tipo_especialidad === 27) {
-        return $this->seccionesBaseGinecoObstetricia();
+    private function esGrupoOdontologia($profesional): bool
+    {
+        return (int) $profesional->id_especialidad === 2;
     }
 
-    if (
-        (int) $profesional->id_especialidad === 1
-        && (int) $profesional->id_sub_tipo_especialidad === 40
-    ) {
-        return $this->seccionesBaseBroncopulmonar();
+    /**
+     * Determina si la ficha actual corresponde a Odontología General.
+     *
+     * Se comparan los nombres normalizados para que la lógica no dependa de
+     * IDs que podrían variar entre desarrollo, pruebas y producción.
+     */
+    private function esFichaOdontologiaGeneral($profesional): bool
+    {
+        return $this->esGrupoOdontologia($profesional)
+            && (int) $profesional->id_tipo_especialidad === 18;
     }
 
-    return $this->seccionesBaseGeneral();
-}
+    /**
+     * Estructura real de la ficha de atención de Odontología General.
+     *
+     * Los códigos coinciden con los utilizados por
+     * ficha_od_general.blade.php.
+     */
+    /**
+     * Secciones configurables dentro de la pestaña "Atención especialidad".
+     *
+     * Odontograma, evaluación periodontológica, caras y grupos y presupuesto
+     * forman parte obligatoria del flujo dental y no se exponen al
+     * personalizador.
+     */
+    /**
+     * Secciones y subsecciones configurables dentro de la pestaña
+     * "Atención especialidad" de Odontología General.
+     *
+     * Odontograma, evaluación periodontológica, caras y grupos y presupuesto
+     * permanecen siempre visibles y no forman parte del personalizador.
+     */
+    private function seccionesBaseOdontologiaGeneral(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de la consulta y examen físico general',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'antecedentes_especialidad',
+                        'nombre' => 'Antecedentes de la especialidad',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'observaciones_examen',
+                        'nombre' => 'Observaciones al examen de la especialidad',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'anestesia_local',
+                        'nombre' => 'Anestesia local',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'hemorragias',
+                        'nombre' => 'Hemorragias',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'fracturas',
+                        'nombre' => 'Fracturas',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'urgencia_odontologica',
+                'nombre' => 'Urgencia odontológica',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo_urgencia',
+                        'nombre' => 'Motivo consulta',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'evaluacion_diagnostica_adulto',
+                        'nombre' => 'Evaluación diagnóstica adulto',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'evaluacion_diagnostica_pediatrica',
+                        'nombre' => 'Evaluación diagnóstica pediátrica',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones_urgencia',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'presupuesto_urgencia',
+                        'nombre' => 'Presupuesto urgencia',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'examen_odontologico_general',
+                'nombre' => 'Examen odontológico general',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'examen_oral',
+                        'nombre' => 'Examen oral',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examen_por_pieza',
+                        'nombre' => 'Examen por pieza',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'planificacion_tratamiento',
+                        'nombre' => 'Planificación de tratamiento',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'intra_oral',
+                        'nombre' => 'Intra-Oral',
+                        'visible' => true,
+                        'tipo' => 'subtab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'extra_oral',
+                        'nombre' => 'Extra Oral',
+                        'visible' => true,
+                        'tipo' => 'subtab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examen_radiologico',
+                        'nombre' => 'Examen radiológico',
+                        'visible' => true,
+                        'tipo' => 'subtab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'imagenes',
+                        'nombre' => 'Imágenes',
+                        'visible' => true,
+                        'tipo' => 'subtab',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'evoluciones',
+                'nombre' => 'Evoluciones',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'registrar_evolucion',
+                        'nombre' => 'Registrar evolución',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'historial_evoluciones',
+                        'nombre' => 'Historial de evoluciones',
+                        'visible' => true,
+                        'tipo' => 'tabla',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hipotesis_diagnostica',
+                        'nombre' => 'Hipótesis diagnóstica',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'diagnostico_cie10',
+                        'nombre' => 'Diagnóstico CIE-10',
+                        'visible' => true,
+                        'tipo' => 'autocomplete',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'recetas_examenes',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'medicamentos',
+                        'nombre' => 'Medicamentos y recetas',
+                        'visible' => true,
+                        'tipo' => 'tabla',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examenes',
+                        'nombre' => 'Exámenes',
+                        'visible' => true,
+                        'tipo' => 'tabla',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
 
     private function seccionesBaseBroncopulmonar(): array
     {
@@ -9879,15 +10266,52 @@ return $ficha;
             ?? optional($especialidadActual)->nombre
             ?? 'Ficha médica';
 
-        $codigoEspecialidadFicha = \Illuminate\Support\Str::slug(
-            $nombreEspecialidadFicha,
+        /*
+         * Para Odontología se muestra el tipo dental concreto, ya que
+         * id_especialidad = 2 representa el grupo general.
+         */
+        if ($this->esGrupoOdontologia($profesional)) {
+            $nombreEspecialidadFicha =
+                $this->obtenerNombreFichaOdontologia($profesional);
+
+            $codigoEspecialidadFicha =
+                $this->obtenerCodigoFichaOdontologia($profesional);
+
+            $grupoEspecialidadFicha = 'Odontología';
+        } else {
+            $codigoEspecialidadFicha = \Illuminate\Support\Str::slug(
+                $nombreEspecialidadFicha,
+                '_'
+            );
+
+            $grupoEspecialidadFicha =
+                optional($especialidadActual)->nombre
+                ?? 'Ficha médica';
+        }
+
+        $codigoGrupoEspecialidadFicha = Str::slug(
+            $grupoEspecialidadFicha,
             '_'
         );
 
+        $esGrupoOdontologia =
+            $this->esGrupoOdontologia($profesional);
+
+        $codigoFichaClinica = $codigoEspecialidadFicha;
+
         /*
-        * Plantilla personalizada guardada para la combinación exacta.
-        */
-        $plantilla = PlantillaFichaMedica::with([
+         * Plantilla personalizada guardada para la combinación exacta.
+         * Se reutiliza el mismo método del guardado para evitar que ambas
+         * pantallas seleccionen filas diferentes cuando existen duplicados.
+         */
+        $plantilla = $this->consultarPlantillaFichaProfesional(
+            $profesional,
+            true,
+            false
+        );
+
+        if ($plantilla) {
+            $plantilla->load([
                 'secciones' => function ($query) {
                     $query->orderBy('orden');
                 },
@@ -9900,25 +10324,8 @@ return $ficha;
                 'secciones.subsecciones.campos' => function ($query) {
                     $query->orderBy('orden');
                 },
-            ])
-            ->where(
-                'id_profesional',
-                $profesional->id
-            )
-            ->where(
-                'id_especialidad',
-                $profesional->id_especialidad
-            )
-            ->where(
-                'id_tipo_especialidad',
-                $profesional->id_tipo_especialidad
-            )
-            ->where(
-                'id_sub_tipo_especialidad',
-                $profesional->id_sub_tipo_especialidad
-            )
-            ->where('activa', 1)
-            ->first();
+            ]);
+        }
 
         /*
         * Solo se usa cuando todavía no existe una plantilla guardada.
@@ -9926,6 +10333,28 @@ return $ficha;
         $seccionesBase = $this->obtenerSeccionesBasePlantilla(
             $profesional
         );
+
+        /*
+         * La plantilla guardada ya se carga directamente. No se invalida ni se
+         * reemplaza por null, porque eso provocaba que el frontend reconstruyera
+         * todas las secciones desde la configuración base al recargar.
+         */
+
+        Log::info('Plantilla enviada al personalizador', [
+            'plantilla_id' => optional($plantilla)->id,
+            'profesional_id' => $profesional->id,
+            'especialidad_id' => $profesional->id_especialidad,
+            'tipo_especialidad_id' => $profesional->id_tipo_especialidad,
+            'sub_tipo_especialidad_id' => $profesional->id_sub_tipo_especialidad,
+            'secciones' => $plantilla
+                ? $plantilla->secciones->map(function ($seccion) {
+                    return [
+                        'codigo' => $seccion->codigo,
+                        'visible' => (bool) $seccion->visible,
+                    ];
+                })->values()->all()
+                : [],
+        ]);
 
         return view(
             'app.profesional.personalizacion_ficha.index',
@@ -9937,6 +10366,10 @@ return $ficha;
                 'subTipoEspecialidadActual',
                 'nombreEspecialidadFicha',
                 'codigoEspecialidadFicha',
+                'grupoEspecialidadFicha',
+                'codigoGrupoEspecialidadFicha',
+                'esGrupoOdontologia',
+                'codigoFichaClinica',
                 'seccionesBase'
             )
         );
@@ -10034,6 +10467,27 @@ return $ficha;
         }
 
         $datos = $validator->validated();
+
+        Log::info('Personalización de ficha recibida', [
+            'usuario_id' => Auth::id(),
+            'secciones' => collect($datos['secciones'])->map(function ($seccion) {
+                return [
+                    'codigo' => $seccion['codigo'] ?? null,
+                    'visible' => $seccion['visible'] ?? null,
+                    'obligatoria' => $seccion['obligatoria'] ?? false,
+                    'subsecciones' => collect($seccion['subsecciones'] ?? [])
+                        ->map(function ($subseccion) {
+                            return [
+                                'codigo' => $subseccion['codigo'] ?? null,
+                                'visible' => $subseccion['visible'] ?? null,
+                            ];
+                        })
+                        ->values()
+                        ->all(),
+                ];
+            })->values()->all(),
+        ]);
+
         $profesional = Profesional::where('id_usuario', Auth::id())->first();
 
         if (!$profesional) {
@@ -10179,7 +10633,17 @@ return $ficha;
                 $atributosSeccion = array_intersect_key($datosSeccion, array_flip($columnasSeccion));
                 unset($atributosSeccion['campos'], $atributosSeccion['subsecciones']);
 
-                $seccion = $plantilla->secciones()->create($atributosSeccion);
+                /*
+                 * forceFill asegura que visible=false se persista incluso si
+                 * el modelo de sección todavía no declara visible en $fillable.
+                 */
+                $seccion = $plantilla->secciones()->getRelated();
+                $seccion->setAttribute(
+                    $plantilla->secciones()->getForeignKeyName(),
+                    $plantilla->getKey()
+                );
+                $seccion->forceFill($atributosSeccion);
+                $seccion->save();
 
                 if (method_exists($seccion, 'campos')) {
                     $modeloCampoSeccion = $seccion->campos()->getRelated();
@@ -10213,7 +10677,17 @@ return $ficha;
                     $atributosSubseccion = array_intersect_key($datosSubseccion, array_flip($columnasSubseccion));
                     unset($atributosSubseccion['campos']);
 
-                    $subseccion = $seccion->subsecciones()->create($atributosSubseccion);
+                    /*
+                     * Igual que en la sección, se fuerza la asignación para
+                     * conservar visible=false.
+                     */
+                    $subseccion = $seccion->subsecciones()->getRelated();
+                    $subseccion->setAttribute(
+                        $seccion->subsecciones()->getForeignKeyName(),
+                        $seccion->getKey()
+                    );
+                    $subseccion->forceFill($atributosSubseccion);
+                    $subseccion->save();
 
                     if (!method_exists($subseccion, 'campos')) {
                         continue;
@@ -10248,6 +10722,27 @@ return $ficha;
                 'secciones.subsecciones.campos' => function ($query) {
                     $query->orderBy('orden');
                 },
+            ]);
+
+            Log::info('Personalización de ficha persistida', [
+                'plantilla_id' => $plantilla->id,
+                'profesional_id' => $profesional->id,
+                'secciones' => $plantilla->secciones->map(function ($seccion) {
+                    return [
+                        'codigo' => $seccion->codigo,
+                        'visible' => $seccion->visible,
+                        'obligatoria' => $seccion->obligatoria,
+                        'subsecciones' => $seccion->subsecciones
+                            ->map(function ($subseccion) {
+                                return [
+                                    'codigo' => $subseccion->codigo,
+                                    'visible' => $subseccion->visible,
+                                ];
+                            })
+                            ->values()
+                            ->all(),
+                    ];
+                })->values()->all(),
             ]);
 
             return response()->json([

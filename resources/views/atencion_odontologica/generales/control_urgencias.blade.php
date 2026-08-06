@@ -1,3 +1,115 @@
+@php
+    /*
+     * Visibilidad de las subsecciones de Urgencia odontológica.
+     * Las funciones se definen en ficha_od_general.blade.php y quedan
+     * disponibles para esta vista incluida.
+     */
+    $subseccionUrgenciaVisible = static function (
+        array $aliasSubseccion,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaOdonto,
+        $normalizarCodigoFichaOdonto
+    ) {
+        $seccion = $buscarSeccionFichaOdonto([
+            'urgencia_odontologica',
+            'control_urgencias',
+            'urgencia odontologica',
+        ]);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        $subsecciones = data_get($seccion, 'subsecciones', []);
+
+        if ($subsecciones instanceof \Illuminate\Support\Collection) {
+            $subsecciones = $subsecciones->toArray();
+        } elseif (is_object($subsecciones)) {
+            $subsecciones = json_decode(json_encode($subsecciones), true) ?: [];
+        }
+
+        if (empty($subsecciones)) {
+            return $predeterminado;
+        }
+
+        $aliasNormalizados = collect($aliasSubseccion)
+            ->map($normalizarCodigoFichaOdonto)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($subsecciones as $subseccion) {
+            $codigo = $normalizarCodigoFichaOdonto(
+                data_get($subseccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaOdonto(
+                data_get($subseccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return filter_var(
+                    data_get($subseccion, 'visible', true),
+                    FILTER_VALIDATE_BOOLEAN
+                );
+            }
+        }
+
+        return $predeterminado;
+    };
+
+    $mostrarMotivoUrgencia = $subseccionUrgenciaVisible([
+        'motivo_urgencia',
+        'motivo consulta',
+    ]);
+
+    $mostrarEvaluacionAdultoUrgencia = $subseccionUrgenciaVisible([
+        'evaluacion_diagnostica_adulto',
+        'evaluacion diagnostica adulto',
+    ]) && (($profesional->id_tipo_especialidad ?? null) != 19);
+
+    $mostrarEvaluacionPediatricaUrgencia = $subseccionUrgenciaVisible([
+        'evaluacion_diagnostica_pediatrica',
+        'evaluacion diagnostica pediatrica',
+    ]);
+
+    $mostrarIndicacionesUrgencia = $subseccionUrgenciaVisible([
+        'indicaciones_urgencia',
+        'indicaciones',
+    ]);
+
+    $mostrarPresupuestoUrgencia = $subseccionUrgenciaVisible([
+        'presupuesto_urgencia',
+        'presupuesto urgencia',
+    ]);
+
+    /* La primera subsección visible queda seleccionada automáticamente. */
+    $subseccionUrgenciaActiva = collect([
+        'motivo_urgencia' => $mostrarMotivoUrgencia,
+        'eval_urg_ad' => $mostrarEvaluacionAdultoUrgencia,
+        'eval_urg_ped' => $mostrarEvaluacionPediatricaUrgencia,
+        'ind_urgencia' => $mostrarIndicacionesUrgencia,
+        'presup_urgencia' => $mostrarPresupuestoUrgencia,
+    ])->first(function ($visible) {
+        return $visible;
+    }, false);
+
+    if ($subseccionUrgenciaActiva !== false) {
+        $subseccionUrgenciaActiva = collect([
+            'motivo_urgencia' => $mostrarMotivoUrgencia,
+            'eval_urg_ad' => $mostrarEvaluacionAdultoUrgencia,
+            'eval_urg_ped' => $mostrarEvaluacionPediatricaUrgencia,
+            'ind_urgencia' => $mostrarIndicacionesUrgencia,
+            'presup_urgencia' => $mostrarPresupuestoUrgencia,
+        ])->search(true, true);
+    } else {
+        $subseccionUrgenciaActiva = null;
+    }
+@endphp
+
 <style>
     #presup_urgencia .urgencia-resumen { border:1px solid #cbd9ea; border-radius:12px; background:#fff; box-shadow:0 4px 13px rgba(31,55,86,.08); overflow:hidden; }
     #presup_urgencia .urgencia-resumen-metrica { min-height:68px; padding:10px 8px; border-right:1px solid #edf1f6; }
@@ -35,7 +147,7 @@
                                             <div class="nav flex-column nav-pills mb-3"
                                                 id="v-pills-tab" role="tablist"
                                                 aria-orientation="vertical">
-                                                <a class="nav-link-aten text-reset backdrop:active"
+                                                <a class="nav-link-aten text-reset backdrop:active {{ !$mostrarMotivoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'motivo_urgencia' ? 'active' : '') }}"
                                                     id="mot_urgencia_tab"
                                                     data-toggle="tab" href="#mot_urgencia"
                                                     role="tab"
@@ -43,7 +155,7 @@
                                                     aria-selected="false" onclick="$('#motivo_urg_odped').select2();">Motivo
                                                     consulta</a>
                                                 @if($profesional->id_tipo_especialidad != 19)
-                                                <a class="nav-link-aten text-reset "
+                                                <a class="nav-link-aten text-reset {{ !$mostrarEvaluacionAdultoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'eval_urg_ad' ? 'active' : '') }}"
                                                     id="eval_urg_ad_tab" data-toggle="tab"
                                                     href="#eval_urg_ad" role="tab"
                                                     aria-controls="eval_urg_ad"
@@ -51,20 +163,20 @@
                                                     onclick="$('#paciente_piezas_dentales_urg').select2(); $('#table_piezas_odonto_urg').DataTable(); $('#table_insumos_urg').DataTable();">Eval.
                                                     Diagnóstica Adulto</a>
                                                     @endif
-                                                <a class="nav-link-aten text-reset"
+                                                <a class="nav-link-aten text-reset {{ !$mostrarEvaluacionPediatricaUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'eval_urg_ped' ? 'active' : '') }}"
                                                     id="eval_urg_ped_tab"
                                                     data-toggle="tab" href="#eval_urg_ped"
                                                     role="tab"
                                                     aria-controls="eval_urg_ped"
                                                     aria-selected="false" onclick="$('#paciente_piezas_dentales_ex_odped_urg').select2(); $('#table_piezas_odonto_urg_ped').DataTable();">Eval. Diagnóstica
                                                     pediátrica</a>
-                                                <a class="nav-link-aten text-reset"
+                                                <a class="nav-link-aten text-reset {{ !$mostrarIndicacionesUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'ind_urgencia' ? 'active' : '') }}"
                                                     id="ind_urgencia_tab"
                                                     data-toggle="tab" onclick="proxima_atencion_paciente()" href="#ind_urgencia"
                                                     role="tab"
                                                     aria-controls="ind_urgencia"
                                                     aria-selected="false">Indicaciones</a>
-                                                <a class="nav-link-aten text-reset" id="presup_urgencia_tab" data-toggle="tab" href="#presup_urgencia" role="tab" aria-controls="presup_urgencia"
+                                                <a class="nav-link-aten text-reset {{ !$mostrarPresupuestoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'presup_urgencia' ? 'active' : '') }}" id="presup_urgencia_tab" data-toggle="tab" href="#presup_urgencia" role="tab" aria-controls="presup_urgencia"
                                                     aria-selected="false" onclick="$('#presup_estado_pago_urg').DataTable(); $('#presup_estado_pago_gral_urg').DataTable();actualizar_presupuesto_urgencia()">Presupuesto Urgencia</a>
                                                 {{--  <a class="nav-link-aten text-reset" id="fotos_oped_tab" data-toggle="tab" href="#fotos_oped" role="tab" aria-controls="fotos_oped" aria-selected="false">Fotos</a>  --}}
                                             </div>
@@ -72,7 +184,7 @@
                                         <div class="col-sm-10 ">
                                             <div class="tab-content"
                                                 id="v-pills-tabContent">
-                                                <div class="tab-pane fade show active"
+                                                <div class="tab-pane fade {{ !$mostrarMotivoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'motivo_urgencia' ? 'show active' : '') }}"
                                                     id="mot_urgencia" role="tabpanel"
                                                     aria-labelledby="mot_urgencia_tab">
                                                     <div class="col-sm-12 col-md-12">
@@ -158,7 +270,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade show "
+                                                <div class="tab-pane fade {{ !$mostrarEvaluacionAdultoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'eval_urg_ad' ? 'show active' : '') }}"
                                                     id="eval_urg_ad" role="tabpanel"
                                                     aria-labelledby="eval_urg_ad_tab">
 
@@ -616,7 +728,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade show " id="eval_urg_ped" role="tabpanel" aria-labelledby="eval_urg_ped_tab">
+                                                <div class="tab-pane fade {{ !$mostrarEvaluacionPediatricaUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'eval_urg_ped' ? 'show active' : '') }}" id="eval_urg_ped" role="tabpanel" aria-labelledby="eval_urg_ped_tab">
 
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1009,7 +1121,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade show "
+                                                <div class="tab-pane fade {{ !$mostrarIndicacionesUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'ind_urgencia' ? 'show active' : '') }}"
                                                     id="ind_urgencia" role="tabpanel"
                                                     aria-labelledby="ind_urgencia_tab">
                                                     <div class="col-sm-12 col-md-12">
@@ -1155,7 +1267,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade show" id="presup_urgencia" role="tabpanel"
+                                                <div class="tab-pane fade {{ !$mostrarPresupuestoUrgencia ? 'd-none' : ($subseccionUrgenciaActiva === 'presup_urgencia' ? 'show active' : '') }}" id="presup_urgencia" role="tabpanel"
                                                     aria-labelledby="presup_urgencia_tab">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -4234,9 +4346,9 @@
                                 botones
                             ]);
                         }else{
-                            
+
                         }
-                        
+
                     });
 
                     //Dibujar la tabla nuevamente con los nuevos datos
