@@ -90,32 +90,32 @@
 
                         </ul>
                     </li>
-                    <div id="info_cliente" class="mt-5 p-3" style="color:#1c9693; border: 1px solid  #5ebdba; margin: 8px;padding: 8px; margin-top: 125px; border-radius:15px; background-color:#d2f0f7; width: 200px;">
-                        <h6 class="mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">INFORMACION DEL PACIENTE</h6>
-                        <p style="color:#137370;" class="text-uppercase">{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</p>
-                        <p style="color:#137370;">{{ $paciente->edad }}</p>
-                        <p style="color:#137370;">{{ $paciente->rut }}</p>
-                        <p style="color:#137370;">{{ $paciente->prevision->nombre }}</p>
+                    <div id="info_cliente" class="mt-5 p-3">
+                        <h6 class="mb-3">INFORMACION DEL PACIENTE</h6>
+                        <p class="text-uppercase" style="font-size:11px!important; text-transform: uppercase!important;">{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</p>
+                        <p style="text-transform: uppercase;">{{ $paciente->edad }}</p>
+                        <p style="text-transform: uppercase;">{{ $paciente->rut }}</p>
+                        <p style="text-transform: uppercase;">{{ $paciente->prevision->nombre }}</p>
 
                         {{-- @if(isset($control_peso) && count($control_peso) > 0)
-                        <p style="color:#137370;">Obesidad</p>
+                        <p style="color:#137370; font-size:11px!important; text-transform: uppercase;">Obesidad</p>
                         @endif
                         @if (isset($hipertension) && count($hipertension) > 0)
-                        <p style="color:#137370;">Hipertensión</p>
+                        <p style="color:#137370; font-size:11px!important; text-transform: uppercase;">Hipertensión</p>
                         @endif
                         @if (isset($diabetes) && count($diabetes) > 0)
-                        <p style="color:#137370;">Diabetes</p>
+                        <p style="color:#137370; font-size:11px!important; text-transform: uppercase;">Diabetes</p>
                         @endif
                         @if (isset($contro) && count($contro) > 0)
-                        <p style="color:#137370;">Insuficiencia renal</p>
+                        <p style="color:#137370; font-size:11px!important; text-transform: uppercase;">Insuficiencia renal</p>
                         @endif --}}
                         <hr>
                         @if(isset($antecedentes) && count($antecedentes) > 0)
-                        <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
+                        <h6 class="mt-3 mb-3" style="font-size:11px!important; text-transform: uppercase;">PATOLOGÍAS CRONICAS</h6>
                         <ul id="listado_patologias_paciente">
                             @foreach ($antecedentes as $a)
                             @if($a->estado == 1 && $a->id_tipo_antecedente == 2)
-                                <li>{{ $a->antecedente_data->nombre }}</li>
+                                <li style="font-size:11px!important; text-transform: uppercase;">{{ $a->antecedente_data->nombre }}</li>
                             @endif
                             @endforeach
                         </ul>

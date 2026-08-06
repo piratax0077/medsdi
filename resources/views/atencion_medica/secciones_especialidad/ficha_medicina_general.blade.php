@@ -137,6 +137,60 @@
 
 
         $(document).ready(function() {
+
+            {{-- CASCADA DE EXAMENES DEL MODAL "Indicar Examen" (selects con sufijo _d) --}}
+            $('#tipo_examen_d').change(function(e) {
+                e.preventDefault();
+                var tipo_examen = $('#tipo_examen_d').val();
+
+                $("#sub_tipo_examen_d").empty();
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.sub_tipo_examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { tipo_examen: tipo_examen },
+                    })
+                    .done(function(response) {
+                        $('#sub_tipo_examen_d').append(`<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">${response[i].nombre_examen}</option>`);
+                        }
+
+                        /** ACTIVAR CHECKBOX DE CON CONTRASTE */
+                        if($('#tipo_examen_d').val() == 354) $('#imagenologia_con_contraste_d').removeAttr('disabled');
+                        else $('#imagenologia_con_contraste_d').attr('disabled','disabled');
+                    })
+                    .fail(function() { console.log("error"); });
+            });
+
+            {{-- buscar examenes por el sub tipo de examen --}}
+            $('#sub_tipo_examen_d').change(function(e) {
+                e.preventDefault();
+                var sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+                $("#examen_d").empty();
+                $.ajax({
+                        url: '{{ route('listar.examen') }}',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { sub_tipo_examen: sub_tipo_examen },
+                    })
+                    .done(function(response) {
+                        $('#examen_d').append(`<option value="0">Seleccione... </option>`);
+                        for (var i = 0; i < response.length; i++) {
+                            $('#examen_d').append(`<option value="${response[i].cod_examen}">${response[i].nombre_examen}</option>`);
+                        }
+                    })
+                    .fail(function() { console.log("error"); });
+            });
+
+            {{-- mostrar/ocultar mensaje de examenes con contraste --}}
+            $('#imagenologia_con_contraste_d').change(function(){
+                if($('#imagenologia_con_contraste_d').is(':checked')) $('#mensaje_imagenologia_con_contraste_d').show();
+                else $('#mensaje_imagenologia_con_contraste_d').hide();
+            });
+
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data

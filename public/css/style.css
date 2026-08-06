@@ -2326,7 +2326,8 @@ pre code {
     background-color: #fff;
     border-color: #c6d8ff;
     outline: 0;
-    box-shadow: 0 0 0 0rem rgba(70, 128, 255, 0.25);
+       box-shadow: 0 0 0 0.18rem rgba(70, 128, 255, 0.14);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .form-control::-webkit-input-placeholder {
@@ -6092,7 +6093,7 @@ a.badge-dark:focus, a.badge-dark.focus {
     padding: 0.75rem 1.25rem;
     margin-bottom: 1rem;
     border: 1px solid transparent;
-    border-radius: 0.25rem;
+    border-radius: 8px;
     font-weight: 600;
 }
 
@@ -35802,7 +35803,7 @@ margin-bottom: 0px;
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 1000;
+    z-index: 9999 !important;
     float: left;
     display: none;
     min-width: 160px;   
@@ -37768,15 +37769,65 @@ SMALL PARA INFORMACIÓN
     }
 }
 
-/** PANEL INFORMACIÓN PACIENTE EN SIDEBAR (menu.blade.php) **/
-#info_cliente .text-uppercase {
-    text-transform: uppercase !important;
+/** TABLA SDI - SM **/
+
+.tabla-sdi-responsive {
+    border: 1px solid #e6eaf1;
+    border-radius: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
-#info_cliente h6 {
-    text-transform: uppercase !important;
+.tabla-sdi-responsive .tabla-sdi-sm {
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
 }
-#listado_patologias_paciente li {
+
+.tabla-sdi-sm {
+    margin-bottom: 0;
+    background-color: #fff;
+    border: 1px solid #e6eaf1;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.tabla-sdi-sm thead td:not([hidden]),
+.tabla-sdi-sm thead th {
+    background-color: #eef2f7;
+    border-color: #e6eaf1;
+    color: #5f6b7a;
+    font-size: .7rem;
+    font-weight: 600;
     text-transform: uppercase;
-    font-size: 11px;
+    letter-spacing: .02em;
+    padding: 10px 8px;
+    vertical-align: middle;
+    white-space: nowrap;
 }
+.tabla-sdi-sm tbody td {
+    border-color: #eef1f6;
+    font-size: .8rem;
+    color: #2b2f3a;
+    padding: 9px 8px;
+    vertical-align: middle;
+}
+.tabla-sdi-sm tbody tr:hover td {
+    background-color: #f7fbfb;
+}
+.tabla-sdi-sm .btn_remove {
+    border-radius: 8px;
+}
+
+/* Ajuste en móvil: espaciado y tipografía más compactos */
+@media (max-width: 575.98px) {
+    .tabla-sdi-sm thead td:not([hidden]),
+    .tabla-sdi-sm thead th {
+        font-size: .64rem;
+        padding: 8px 6px;
+    }
+    .tabla-sdi-sm tbody td {
+        font-size: .74rem;
+        padding: 7px 6px;
+    }
+}
+
 
