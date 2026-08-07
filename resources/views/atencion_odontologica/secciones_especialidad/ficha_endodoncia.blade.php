@@ -1,3 +1,252 @@
+@php
+    /*
+     * Personalización de ficha para Endodoncia.
+     *
+     * Esta lógica se define en la misma vista para que las funciones queden
+     * disponibles en motivo_consulta.blade.php y control_urgencias.blade.php.
+     */
+    $configuracionFichaDental = null;
+    $seccionesPersonalizadasDental = [];
+
+    if (isset($profesional) && !empty($profesional->id)) {
+        $idEspecialidadDental = (int) ($profesional->id_especialidad ?? 0);
+        $idTipoEspecialidadDental = (int) ($profesional->id_tipo_especialidad ?? 0);
+        $idSubTipoEspecialidadDental = (int) ($profesional->id_sub_tipo_especialidad ?? 0);
+
+        $consultaPlantillaDental = \App\Models\PlantillaFichaMedica::with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ])
+            ->where('id_profesional', (int) $profesional->id)
+            ->where('id_especialidad', $idEspecialidadDental)
+            ->where('activa', 1)
+            ->where(function ($query) use ($idTipoEspecialidadDental) {
+                if ($idTipoEspecialidadDental > 0) {
+                    $query->where('id_tipo_especialidad', $idTipoEspecialidadDental);
+                } else {
+                    $query->where(function ($subQuery) {
+                        $subQuery->whereNull('id_tipo_especialidad')
+                            ->orWhere('id_tipo_especialidad', 0);
+                    });
+                }
+            })
+            ->where(function ($query) use ($idSubTipoEspecialidadDental) {
+                if ($idSubTipoEspecialidadDental > 0) {
+                    $query->where('id_sub_tipo_especialidad', $idSubTipoEspecialidadDental);
+                } else {
+                    $query->where(function ($subQuery) {
+                        $subQuery->whereNull('id_sub_tipo_especialidad')
+                            ->orWhere('id_sub_tipo_especialidad', 0);
+                    });
+                }
+            });
+
+        $configuracionFichaDental = $consultaPlantillaDental
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
+
+        $seccionesPersonalizadasDental = data_get(
+            $configuracionFichaDental,
+            'secciones',
+            []
+        );
+    }
+
+    if ($seccionesPersonalizadasDental instanceof \Illuminate\Support\Collection) {
+        $seccionesPersonalizadasDental = $seccionesPersonalizadasDental->toArray();
+    } elseif (is_string($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental = json_decode(
+            $seccionesPersonalizadasDental,
+            true
+        ) ?: [];
+    } elseif (is_object($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental = json_decode(
+            json_encode($seccionesPersonalizadasDental),
+            true
+        ) ?: [];
+    }
+
+    $normalizarCodigoFichaDental = static function ($valor) {
+        return \Illuminate\Support\Str::slug((string) $valor, '_');
+    };
+
+    $buscarSeccionFichaDental = static function (array $alias) use (
+        $seccionesPersonalizadasDental,
+        $normalizarCodigoFichaDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return null;
+        }
+
+        $aliasNormalizados = collect($alias)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($seccionesPersonalizadasDental as $seccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($seccion, 'codigo', '')
+            );
+
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($seccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return $seccion;
+            }
+        }
+
+        return null;
+    };
+
+    $seccionVisibleFichaDental = static function (
+        array $alias,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $seccionesPersonalizadasDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return $predeterminado;
+        }
+
+        $seccion = $buscarSeccionFichaDental($alias);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        if (
+            (bool) data_get(
+                $seccion,
+                'obligatoria',
+                data_get($seccion, 'obligatorio', false)
+            )
+        ) {
+            return true;
+        }
+
+        return in_array(
+            data_get($seccion, 'visible', true),
+            [true, 1, '1', 'true'],
+            true
+        );
+    };
+
+    $subseccionVisibleFichaDental = static function (
+        array $aliasSeccion,
+        array $aliasSubseccion,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $normalizarCodigoFichaDental
+    ) {
+        $seccion = $buscarSeccionFichaDental($aliasSeccion);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        $subsecciones = data_get($seccion, 'subsecciones', []);
+
+        if ($subsecciones instanceof \Illuminate\Support\Collection) {
+            $subsecciones = $subsecciones->toArray();
+        } elseif (is_object($subsecciones)) {
+            $subsecciones = json_decode(
+                json_encode($subsecciones),
+                true
+            ) ?: [];
+        }
+
+        foreach ($subsecciones as $subseccion) {
+            $aliasNormalizados = collect($aliasSubseccion)
+                ->map($normalizarCodigoFichaDental)
+                ->filter()
+                ->values()
+                ->all();
+
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'codigo', '')
+            );
+
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return in_array(
+                    data_get($subseccion, 'visible', true),
+                    [true, 1, '1', 'true'],
+                    true
+                );
+            }
+        }
+
+        return $predeterminado;
+    };
+
+    /*
+     * Alias de compatibilidad con componentes odontológicos anteriores.
+     */
+    $normalizarCodigoFichaOdonto = $normalizarCodigoFichaDental;
+    $buscarSeccionFichaOdonto = $buscarSeccionFichaDental;
+    $seccionVisibleFichaOdonto = $seccionVisibleFichaDental;
+
+    /*
+     * Secciones de Endodoncia.
+     * Los alias permiten compatibilidad mientras se consolidan los códigos
+     * definitivos de seccionesBaseEndodoncia() en el controlador.
+     */
+    $mostrarMotivoConsultaDental = $seccionVisibleFichaDental([
+        'motivo_consulta',
+        'motivo de la consulta y examen fisico general',
+    ]);
+
+    $mostrarUrgenciaDental = $seccionVisibleFichaDental([
+        'urgencia_odontologica',
+        'control_urgencias',
+        'urgencia odontologica',
+    ]);
+
+    $mostrarEndodonciaDental = $seccionVisibleFichaDental([
+        'endodoncia',
+        'evaluacion_endodoncia',
+        'examen_endodoncia',
+        'tratamiento_endodoncia',
+        'atencion_endodoncia',
+    ]);
+
+    $mostrarDiagnosticoDental = $seccionVisibleFichaDental([
+        'diagnostico',
+        'diagnosticos',
+    ]);
+
+    $mostrarRecetasExamenesDental = $seccionVisibleFichaDental([
+        'recetas_examenes',
+        'recetas y examenes',
+        'recetas_examenes_generales',
+    ]);
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
@@ -65,12 +314,18 @@
                                 <!--Cierre: Formulario / Menor de edad-->
                             </div>
                         <!--Motivo consulta-->
-                          @include('atencion_odontologica.generales.motivo_consulta')
+                          @if($mostrarMotivoConsultaDental)
+                              @include('atencion_odontologica.generales.motivo_consulta')
+                          @endif
 
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                             {{-- @include('atencion_odontologica.generales.odonto_gral') --}}
-@include('atencion_odontologica.generales.control_urgencias')
-                            @include('atencion_odontologica.generales.includes.endodoncia')
+@if($mostrarUrgenciaDental)
+                                @include('atencion_odontologica.generales.control_urgencias')
+                            @endif
+                            @if($mostrarEndodonciaDental)
+                                @include('atencion_odontologica.generales.includes.endodoncia')
+                            @endif
                             {{-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="hospitalizar_paciente">
@@ -85,8 +340,10 @@
                                     </div>
                                 </div>
                             </div> --}}
-                            @include('general.secciones_ficha.diagnostico')
-                         
+                            @if($mostrarDiagnosticoDental)
+                                @include('general.secciones_ficha.diagnostico')
+                            @endif
+
 
 
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -94,7 +351,9 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @if($mostrarRecetasExamenesDental)
+                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @endif
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
 
                                         </div>
@@ -527,7 +786,7 @@
                         <!--CIERRE: PRESUPUESTO--->
                     </div>
                 </form>
-            </div> 
+            </div>
 
 
         </div>
@@ -818,7 +1077,7 @@
                                     botones
                                 ]);
                             }
-                            
+
                         });
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table_endo.draw();
@@ -846,7 +1105,7 @@
 
 
     }
-    
+
     function eliminar_insumo(id){
         swal({
             title: "¿Esta seguro que desea ELIMINAR el insumo dental?",
@@ -988,7 +1247,7 @@
                                     botones
                                 ]);
                             }
-                            
+
                         });
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table_endo.draw();
@@ -1324,8 +1583,8 @@
                     }
 
                 });
-                
-            
+
+
         // mostrar_pieza_dental_examen_end(1000);
         // mostrar_nueva_pieza_ex_radio(1000);
         // mostrar_pieza_dental_examen(1000);
@@ -1769,7 +2028,7 @@
 
                         });
                     }
-                    
+
                 } else {
                     console.log('Error:', response.mensaje);
                 }
@@ -4854,7 +5113,7 @@ function mostrar_nueva_pieza_ex_radio_end(counter){
             console.log(resp);
             $('#nueva_pieza_end').empty();
             $('#nueva_pieza_end').append(resp.v);
-            
+
             // Esperar a que el DOM se actualice antes de inicializar Dropzone
             setTimeout(function() {
                 if (typeof initDropzoneEnd === 'function') {
@@ -4879,7 +5138,7 @@ function eliminar_pieza_dental_rx_end(id){
     .then((aceptar) => {
         if (aceptar) {
             confirmar_eliminar_pieza_dental_rx_end(id);
-        } 
+        }
     });
 }
 
@@ -4972,7 +5231,7 @@ function eliminar_pieza_dental_pieza(id,tipo){
     .then((aceptar) => {
         if (aceptar) {
             confirmar_eliminar_pieza_dental_pieza(id, tipo);
-        } 
+        }
     });
 }
 
@@ -4986,8 +5245,8 @@ function eliminar_pieza_dental_pieza(id,tipo){
         let mat_relleno_end_text = $('#mat_relleno_end option:selected').text();
         let valido = 1;
         let mensaje = '';
-       
-        
+
+
 
         let id_prot_prot_corona = $('#prot_prot_corona').val();
         let prot_prot_corona = $('#prot_prot_corona option:selected').text();

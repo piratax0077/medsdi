@@ -157,7 +157,7 @@
                     <div class="permisos-asistente-box mb-4">
                         <div class="permisos-asistente-avatar">
                             <img class="img-radius" src="{{ asset('images/iconos/usuario_asistente.svg') }}" alt="Profesional">
-                            
+
                         </div>
                         <div>
                             <small class="small-informacion d-block">Asistente</small>
@@ -305,7 +305,7 @@
                                     </div>
                                 </div>
                             </div>
-                   
+
 
                     </div>
                 </div>
@@ -381,6 +381,7 @@
                 }
             })
             .done(function(data) {
+                console.log('Permisos obtenidos:', data);
                 if (data && data.estado == 1 && data.permisos) {
                     let p = data.permisos;
 
@@ -457,6 +458,7 @@
                 data: data
             })
             .done(function(resp) {
+                console.log('Respuesta al guardar permisos:', resp);
                 if (resp && resp.estado == 1) {
                     swal({
                         title: 'Permisos actualizados',
@@ -475,10 +477,23 @@
                     });
                 }
             })
-            .fail(function() {
+            .fail(function(xhr) {
+
+                console.error('Error guardando permisos:', xhr);
+                console.error('Respuesta Laravel:', xhr.responseJSON);
+
+                let mensaje = 'Error al guardar los permisos.';
+
+                if (
+                    xhr.responseJSON &&
+                    xhr.responseJSON.msj
+                ) {
+                    mensaje = xhr.responseJSON.msj;
+                }
+
                 swal({
                     title: 'Error',
-                    text: 'Error de conexión. Intente nuevamente.',
+                    text: mensaje,
                     icon: 'error',
                     buttons: 'Aceptar'
                 });

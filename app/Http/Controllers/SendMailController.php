@@ -72,8 +72,8 @@ class SendMailController extends Controller
                 // 'indicaciones_medicas_documento',
                 // 'compra_bono',
                 'confirmacion_hora_telemedicina',
-'hora_confirmada_telemedicina',
-'recordatorio_telemedicina',
+                'hora_confirmada_telemedicina',
+                'recordatorio_telemedicina',
 
                 // PROFESIONAL
                 'profesional_usuario_creado', 'invitacion_profesional', 'invitacion_profesional_convenio',
@@ -94,6 +94,8 @@ class SendMailController extends Controller
 
                 // LEADS / USUARIOS POTENCIALES
                 'bienvenida_usuario_potencial',
+                // PACIENTE
+                'promocion_medsdi_paciente',
 
                  // LABORATORIO
                 'informe_terapia_voz',

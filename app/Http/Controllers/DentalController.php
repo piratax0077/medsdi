@@ -8357,66 +8357,66 @@ class DentalController extends Controller
     }
 
     public function getDiagnosticoDental(Request $request)
-{
-    $search = trim((string) $request->search);
+    {
+        $search = trim((string) $request->search);
 
-    $profesional = Profesional::where(
-        'id_usuario',
-        Auth::id()
-    )->first();
+        $profesional = Profesional::where(
+            'id_usuario',
+            Auth::id()
+        )->first();
 
-    if (!$profesional) {
-        return response()->json([], 404);
+        if (!$profesional) {
+            return response()->json([], 404);
+        }
+
+        $idTipoEspecialidad = (int) $profesional->id_tipo_especialidad;
+
+        $query = DiagnosticosDental::query()
+            ->select(
+                'id',
+                'descripcion',
+                'uco',
+                'valor',
+                'tipo_examen'
+            )
+            ->where('estado', 1)
+            ->whereRaw(
+                "FIND_IN_SET(?, REPLACE(id_especialidad, ' ', '')) > 0",
+                [$idTipoEspecialidad]
+            );
+
+        if ($search !== '') {
+            $query->where(
+                'descripcion',
+                'like',
+                $search . '%'
+            );
+        }
+
+        $diagnosticos = $query
+            ->orderBy('descripcion', 'asc')
+            ->limit(15)
+            ->get();
+
+        $response = [];
+
+        foreach ($diagnosticos as $diagnostico) {
+            $descripcion = mb_strtoupper(
+                $diagnostico->descripcion,
+                'UTF-8'
+            );
+
+            $response[] = [
+                'value' => $diagnostico->id,
+                'label' => $descripcion,
+                'descripcion' => $descripcion,
+                'control' => $diagnostico->tipo_examen,
+                'valor' => $diagnostico->valor,
+            ];
+        }
+
+        return response()->json($response);
     }
-
-    $idTipoEspecialidad = (int) $profesional->id_tipo_especialidad;
-
-    $query = DiagnosticosDental::query()
-        ->select(
-            'id',
-            'descripcion',
-            'uco',
-            'valor',
-            'tipo_examen'
-        )
-        ->where('estado', 1)
-        ->whereRaw(
-            "FIND_IN_SET(?, REPLACE(id_especialidad, ' ', '')) > 0",
-            [$idTipoEspecialidad]
-        );
-
-    if ($search !== '') {
-        $query->where(
-            'descripcion',
-            'like',
-            $search . '%'
-        );
-    }
-
-    $diagnosticos = $query
-        ->orderBy('descripcion', 'asc')
-        ->limit(15)
-        ->get();
-
-    $response = [];
-
-    foreach ($diagnosticos as $diagnostico) {
-        $descripcion = mb_strtoupper(
-            $diagnostico->descripcion,
-            'UTF-8'
-        );
-
-        $response[] = [
-            'value' => $diagnostico->id,
-            'label' => $descripcion,
-            'descripcion' => $descripcion,
-            'control' => $diagnostico->tipo_examen,
-            'valor' => $diagnostico->valor,
-        ];
-    }
-
-    return response()->json($response);
-}
 
     public function getDiagnosticoDentalUrg(Request $request)
     {

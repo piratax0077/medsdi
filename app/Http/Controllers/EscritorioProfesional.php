@@ -10430,6 +10430,176 @@ return $ficha;
         }
     }
 
+
+    /**
+     * Estructura configurable de la ficha de Endodoncia.
+     *
+     * Los códigos deben coincidir con los utilizados en
+     * ficha_endodoncia.blade.php.
+     */
+    private function seccionesBaseEndodoncia(): array
+    {
+        return [
+            [
+                'codigo' => 'motivo_consulta',
+                'nombre' => 'Motivo de la consulta y examen físico general',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'antecedentes_especialidad',
+                        'nombre' => 'Antecedentes de la especialidad',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'observaciones_examen',
+                        'nombre' => 'Observaciones al examen de la especialidad',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'anestesia_local',
+                        'nombre' => 'Anestesia local',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'hemorragias',
+                        'nombre' => 'Hemorragias',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'fracturas',
+                        'nombre' => 'Fracturas',
+                        'visible' => true,
+                        'tipo' => 'modal',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'urgencia_odontologica',
+                'nombre' => 'Urgencia odontológica',
+                'visible' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'motivo_urgencia',
+                        'nombre' => 'Motivo de consulta',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'evaluacion_diagnostica_adulto',
+                        'nombre' => 'Evaluación diagnóstica adulto',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'evaluacion_diagnostica_pediatrica',
+                        'nombre' => 'Evaluación diagnóstica pediátrica',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones_urgencia',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'presupuesto_urgencia',
+                        'nombre' => 'Presupuesto urgencia',
+                        'visible' => true,
+                        'tipo' => 'tab',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'endodoncia',
+                'nombre' => 'Evaluación y tratamiento endodóntico',
+                'visible' => true,
+                'tipo' => 'seccion',
+                'personalizada' => false,
+            ],
+            [
+                'codigo' => 'diagnostico',
+                'nombre' => 'Diagnóstico',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'hipotesis_diagnostica',
+                        'nombre' => 'Hipótesis diagnóstica',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'diagnostico_cie10',
+                        'nombre' => 'Diagnóstico CIE-10',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'indicaciones',
+                        'nombre' => 'Indicaciones',
+                        'visible' => true,
+                        'tipo' => 'campo',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+            [
+                'codigo' => 'recetas_examenes',
+                'nombre' => 'Recetas y exámenes',
+                'visible' => true,
+                'obligatoria' => true,
+                'tipo' => 'subsecciones',
+                'personalizada' => false,
+                'subsecciones' => [
+                    [
+                        'codigo' => 'recetas',
+                        'nombre' => 'Recetas',
+                        'visible' => true,
+                        'tipo' => 'seccion',
+                        'personalizada' => false,
+                    ],
+                    [
+                        'codigo' => 'examenes',
+                        'nombre' => 'Exámenes',
+                        'visible' => true,
+                        'tipo' => 'seccion',
+                        'personalizada' => false,
+                    ],
+                ],
+            ],
+        ];
+    }
+
     private function seccionesBaseImplantologia(): array
 {
     return [
@@ -13315,7 +13485,9 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 $datos['paciente']['estado'] = 1;
                 $datos['paciente']['msj'] = 'Paciente registrado';
 
-                /** CREACION DE USUARIO  */
+                if (filter_var(env('CREAR_USUARIO_PACIENTE_NUEVO', false),FILTER_VALIDATE_BOOLEAN)) {
+                    // Creación del usuario.
+                    /** CREACION DE USUARIO  */
                 if( $edad_paciente >= 18)
                 {
                     // Buscar usuario existente
@@ -13462,6 +13634,73 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                     }
                 }
                 /** CIERRE CREACION DE USUARIO  */
+                } else {
+                    // Correo promocional.
+                    /** ENVÍO PROMOCIONAL MED-SDI */
+                    if (!empty($paciente->email)) {
+                        $blade = 'promocion_medsdi_paciente';
+
+                        $to = [
+                            [
+                                'email' => $paciente->email,
+                                'name' => trim(
+                                    $paciente->nombres . ' '
+                                    . $paciente->apellido_uno . ' '
+                                    . $paciente->apellido_dos
+                                ),
+                            ],
+                        ];
+
+                        $cc = [];
+                        $bcc = [];
+
+                        $asunto = 'Conoce los beneficios de MED-SDI';
+
+                        $body = [
+                            'nombre' => trim(
+                                $paciente->nombres . ' '
+                                . $paciente->apellido_uno . ' '
+                                . $paciente->apellido_dos
+                            ),
+
+                            'profesional' => trim(
+                                $profesional->nombre . ' '
+                                . $profesional->apellido_uno . ' '
+                                . $profesional->apellido_dos
+                            ),
+
+                            'url_promocion' => env(
+                                'APP_URL',
+                                'https://med-sdi.cl'
+                            ),
+                        ];
+
+                        $archivo = '';
+                        $id_institucion = '';
+
+                        $resultadoPromocion = SendMailController::envioCorreo(
+                            $blade,
+                            $to,
+                            $cc,
+                            $bcc,
+                            $asunto,
+                            $body,
+                            $archivo,
+                            $id_institucion
+                        );
+
+                        $datos['paciente']['promocion_medsdi'] =
+                            $resultadoPromocion;
+                    } else {
+                        $datos['paciente']['promocion_medsdi'] = [
+                            'estado' => 0,
+                            'msj' => 'El paciente no tiene correo electrónico.',
+                        ];
+                    }
+                    /** CIERRE ENVÍO PROMOCIONAL MED-SDI */
+                }
+
+
 
                 /** REGISTRO DE REPRESENTANTE - SIMPLIFICADO (info libre) */
                 if( $edad_paciente < 18 || $request->dependiente == 1 )

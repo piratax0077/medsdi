@@ -974,8 +974,9 @@ Route::group([
     Route::post('/eliminar_evolucion_profesional', [App\Http\Controllers\EscritorioEnfermerasController::class, 'eliminar_evolucion_profesional'])->name('profesional.eliminar_evolucion_profesional_hosp');
     Route::post('/modificar_evolucion_profesional', [App\Http\Controllers\EscritorioEnfermerasController::class, 'modificar_evolucion_profesional'])->name('profesional.modificar_evolucion_profesional_hosp');
     Route::post('/generar_pdf_resumen_evoluciones', [App\Http\Controllers\EscritorioEnfermerasController::class, 'generar_pdf_resumen_evoluciones'])->name('profesional.generar_pdf_resumen_evoluciones_hosp');
-    Route::get('/asistente/get/permisos', [App\Http\Controllers\AdministradorCmController::class, 'get_permisos_asistente'])->name('profesional.asistente.get.permisos');
-    Route::post('/asistente/get/permisos/guardar', [App\Http\Controllers\AdministradorCmController::class, 'guardarAsistentesPermisos'])->name('profesional.asistente.guardar.permisos');
+    Route::get('/asistente/get/permisos',[App\Http\Controllers\AdministradorCmController::class, 'get_permisos_asistente_profesional'])->name('profesional.asistente.get.permisos');
+
+    Route::post('/asistente/get/permisos/guardar',[App\Http\Controllers\AdministradorCmController::class, 'guardar_permisos_asistente_profesional'])->name('profesional.asistente.guardar.permisos');
 
     // Menu Profesional
     Route::get('facturacion', [App\Http\Controllers\EscritorioProfesional::class, 'facturacion'])->name('profesional.facturacion');

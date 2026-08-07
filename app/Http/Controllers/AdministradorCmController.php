@@ -8230,38 +8230,292 @@ class AdministradorCmController extends Controller
      */
     public function get_permisos_asistente(Request $request)
     {
-        $id_asistente = $request->id_asistente;
-        $id_lugar_atencion = $request->id_lugar_atencion;
-
-        if (empty($id_asistente)) {
-            return response()->json(['estado' => 0, 'msj' => 'id_asistente requerido']);
-        }
-        if (empty($id_lugar_atencion)) {
-            return response()->json(['estado' => 0, 'msj' => 'id_lugar_atencion requerido']);
-        }
-
-        $permiso = PermisoAsistente::firstOrNew([
-            'id_asistente' => $id_asistente,
-            'id_lugar_atencion' => $id_lugar_atencion,
+        $validator = Validator::make($request->all(), [
+            'id_asistente' => 'required|integer|exists:asistentes,id',
+            'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $permiso = PermisoAsistente::where('id_asistente', $request->id_asistente)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->first();
+
         return response()->json([
-            'estado'   => 1,
+            'estado' => 1,
+
             'permisos' => [
-                'permiso_cotizar'            => (bool) $permiso->permiso_cotizar,
-                'permiso_confirmar_hora'     => (bool) $permiso->permiso_confirmar_hora,
-                'permiso_anular_hora'        => (bool) $permiso->permiso_anular_hora,
-                'permiso_subir_ver_archivos' => (bool) $permiso->permiso_subir_ver_archivos,
-                'permiso_eliminar_archivos'  => (bool) $permiso->permiso_eliminar_archivos,
-                'permiso_editar_pacientes'   => (bool) $permiso->permiso_editar_pacientes,
-                'permiso_ver_pacientes'      => (bool) $permiso->permiso_ver_pacientes,
-                'permiso_agendar_horas_extras' => (bool) $permiso->permiso_agendar_horas_extras,
-                'permiso_agendar_examenes' => (bool) $permiso->permiso_agendar_examenes,
-                'permiso_transcripcion_examenes' => (bool) $permiso->permiso_transcripcion_examenes,
-                'permiso_entrega_caja' => (bool) $permiso->permiso_entrega_caja,
+                'permiso_cotizar' => (bool) optional($permiso)->permiso_cotizar,
+                'permiso_confirmar_hora' => (bool) optional($permiso)->permiso_confirmar_hora,
+                'permiso_anular_hora' => (bool) optional($permiso)->permiso_anular_hora,
+                'permiso_subir_ver_archivos' => (bool) optional($permiso)->permiso_subir_ver_archivos,
+                'permiso_eliminar_archivos' => (bool) optional($permiso)->permiso_eliminar_archivos,
+                'permiso_editar_pacientes' => (bool) optional($permiso)->permiso_editar_pacientes,
+                'permiso_ver_pacientes' => (bool) optional($permiso)->permiso_ver_pacientes,
+                'permiso_agendar_horas_extras' => (bool) optional($permiso)->permiso_agendar_horas_extras,
+                'permiso_agendar_examenes' => (bool) optional($permiso)->permiso_agendar_examenes,
+                'permiso_transcripcion_examenes' => (bool) optional($permiso)->permiso_transcripcion_examenes,
+                'permiso_entrega_caja' => (bool) optional($permiso)->permiso_entrega_caja,
             ],
         ]);
     }
+
+    public function get_permisos_asistente_profesional(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'id_asistente' => 'required|integer|exists:asistentes,id',
+        'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => $validator->errors()->first(),
+        ], 422);
+    }
+
+    $profesional = Profesional::where(
+        'id_usuario',
+        Auth::user()->id
+    )->first();
+
+    if (!$profesional) {
+        return response()->json([
+            'estado' => 0,
+            'msj' => 'Profesional no encontrado.',
+        ], 404);
+    }
+
+    $permiso = PermisoAsistente::where(
+            'id_asistente',
+            $request->id_asistente
+        )
+        ->where(
+            'id_lugar_atencion',
+            $request->id_lugar_atencion
+        )
+        ->where(
+            'id_profesional',
+            $profesional->id
+        )
+        ->first();
+
+    return response()->json([
+        'estado' => 1,
+
+        'permisos' => [
+            'permiso_cotizar' =>
+                (bool) optional($permiso)->permiso_cotizar,
+
+            'permiso_confirmar_hora' =>
+                (bool) optional($permiso)->permiso_confirmar_hora,
+
+            'permiso_anular_hora' =>
+                (bool) optional($permiso)->permiso_anular_hora,
+
+            'permiso_subir_ver_archivos' =>
+                (bool) optional($permiso)->permiso_subir_ver_archivos,
+
+            'permiso_eliminar_archivos' =>
+                (bool) optional($permiso)->permiso_eliminar_archivos,
+
+            'permiso_editar_pacientes' =>
+                (bool) optional($permiso)->permiso_editar_pacientes,
+
+            'permiso_ver_pacientes' =>
+                (bool) optional($permiso)->permiso_ver_pacientes,
+
+            'permiso_agendar_horas_extras' =>
+                (bool) optional($permiso)->permiso_agendar_horas_extras,
+
+            'permiso_agendar_examenes' =>
+                (bool) optional($permiso)->permiso_agendar_examenes,
+
+            'permiso_transcripcion_examenes' =>
+                (bool) optional($permiso)->permiso_transcripcion_examenes,
+
+            'permiso_entrega_caja' =>
+                (bool) optional($permiso)->permiso_entrega_caja,
+        ],
+    ]);
+}
+
+public function guardar_permisos_asistente_profesional(Request $request)
+{
+    try {
+
+        $validator = Validator::make($request->all(), [
+            'id_asistente' => 'required|integer|exists:asistentes,id',
+            'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+
+            'permiso_cotizar' => 'required|boolean',
+            'permiso_confirmar_hora' => 'required|boolean',
+            'permiso_anular_hora' => 'required|boolean',
+            'permiso_subir_ver_archivos' => 'required|boolean',
+            'permiso_eliminar_archivos' => 'required|boolean',
+            'permiso_editar_pacientes' => 'required|boolean',
+            'permiso_ver_pacientes' => 'required|boolean',
+            'permiso_agendar_horas_extras' => 'required|boolean',
+            'permiso_agendar_examenes' => 'required|boolean',
+            'permiso_transcripcion_examenes' => 'required|boolean',
+            'permiso_entrega_caja' => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        /*
+         * Obtener profesional autenticado.
+         * No confiamos en un id_profesional enviado por Javascript.
+         */
+        $profesional = Profesional::where(
+            'id_usuario',
+            Auth::id()
+        )->first();
+
+        if (!$profesional) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'No se encontró el profesional asociado al usuario actual.',
+            ], 404);
+        }
+
+        /*
+         * Confirmar que el asistente está asociado al lugar.
+         */
+        $asistenteLugar = AsistenteLugarAtencion::where(
+                'id_asistente',
+                $request->id_asistente
+            )
+            ->where(
+                'id_lugar_atencion',
+                $request->id_lugar_atencion
+            )
+            ->first();
+
+        if (!$asistenteLugar) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El asistente no pertenece al lugar de atención seleccionado.',
+            ], 403);
+        }
+
+        /*
+         * Permisos específicos:
+         *
+         * asistente + lugar + profesional
+         */
+        $permiso = PermisoAsistente::where(
+                'id_asistente',
+                $request->id_asistente
+            )
+            ->where(
+                'id_lugar_atencion',
+                $request->id_lugar_atencion
+            )
+            ->where(
+                'id_profesional',
+                $profesional->id
+            )
+            ->first();
+
+        /*
+         * Si todavía no existen permisos para esta relación,
+         * creamos el registro.
+         */
+        if (!$permiso) {
+
+            $permiso = new PermisoAsistente();
+
+            $permiso->id_asistente =
+                $request->id_asistente;
+
+            $permiso->id_lugar_atencion =
+                $request->id_lugar_atencion;
+
+            $permiso->id_profesional =
+                $profesional->id;
+        }
+
+        $permiso->permiso_cotizar =
+            $request->boolean('permiso_cotizar');
+
+        $permiso->permiso_confirmar_hora =
+            $request->boolean('permiso_confirmar_hora');
+
+        $permiso->permiso_anular_hora =
+            $request->boolean('permiso_anular_hora');
+
+        $permiso->permiso_subir_ver_archivos =
+            $request->boolean('permiso_subir_ver_archivos');
+
+        $permiso->permiso_eliminar_archivos =
+            $request->boolean('permiso_eliminar_archivos');
+
+        $permiso->permiso_editar_pacientes =
+            $request->boolean('permiso_editar_pacientes');
+
+        $permiso->permiso_ver_pacientes =
+            $request->boolean('permiso_ver_pacientes');
+
+        $permiso->permiso_agendar_horas_extras =
+            $request->boolean('permiso_agendar_horas_extras');
+
+        $permiso->permiso_agendar_examenes =
+            $request->boolean('permiso_agendar_examenes');
+
+        $permiso->permiso_transcripcion_examenes =
+            $request->boolean('permiso_transcripcion_examenes');
+
+        $permiso->permiso_entrega_caja =
+            $request->boolean('permiso_entrega_caja');
+
+        $permiso->save();
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => 'Permisos guardados correctamente.',
+            'permiso' => [
+                'id' => $permiso->id,
+                'id_asistente' => $permiso->id_asistente,
+                'id_lugar_atencion' => $permiso->id_lugar_atencion,
+                'id_profesional' => $permiso->id_profesional,
+            ],
+        ]);
+
+    } catch (\Throwable $e) {
+
+        \Log::error(
+            'Error al guardar permisos del asistente para profesional',
+            [
+                'id_usuario' => Auth::id(),
+                'id_asistente' => $request->id_asistente,
+                'id_lugar_atencion' => $request->id_lugar_atencion,
+                'error' => $e->getMessage(),
+                'archivo' => $e->getFile(),
+                'linea' => $e->getLine(),
+            ]
+        );
+
+        return response()->json([
+            'estado' => 0,
+
+            // En local podremos ver exactamente qué está fallando.
+            'msj' => config('app.debug')
+                ? $e->getMessage()
+                : 'No fue posible guardar los permisos.',
+        ], 500);
+    }
+}
 
     /**
      * POST guardar permisos de un asistente
