@@ -7,7 +7,7 @@
                                                         src="{{ $paciente->foto_perfil ? asset('storage/' . $paciente->foto_perfil) : asset('images/iconos/usuario.svg') }}"
                                                         alt="User image">
 					<div class="user-details">
-						<div id="more-details">{{ @Auth::user()->name }}<i class="fa fa-caret-down"></i></div>
+						<div id="more-details"><h6 class="text-uppercase f-13 font-weight-bold">{{ @Auth::user()->name }}</h6></div>
 					</div>
 				</div>
 				<div id="nav-user-link">

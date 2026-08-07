@@ -75,7 +75,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-notification">
                                     <div class="pro-head font-weight-bold f-16 py-2">
-                                        <span>Cambiar escritorio</span>
+                                        <i class="feather icon-refresh-cw mr-1"></i><span>Cambiar escritorio</span>
                                     </div>
                                     <ul></ul>
                                     <ul class="pro-body">
@@ -139,15 +139,15 @@
                                 <i class="feather icon-user" style="font-size: 1.2rem!important;"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                <div class="pro-head font-weight-bold f-16 py-2">
-                                    <span>{{  @Auth::user()->name }}</span>
+                                <div class="pro-head font-weight-bold text-uppercase f-14 py-2">
+                                    <i class="feather icon-user mr-1"></i><span>{{  @Auth::user()->name }}</span>
                                 </div>
                                 {{--  <ul></ul>  --}}
                                 <ul class="pro-body">
                                     <li>
                                         <form action="{{ ROUTE('logout') }}" method="post" id="closeSession">
                                             @csrf
-                                            <a data-toggle="tooltip" title="Cerrar sesión" class="text-danger font-weight-bold" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
+                                            <a  class="text-danger font-weight-bold pointer" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
                                                 <i class="feather icon-power"></i> Cerrar sesión
                                             </a>
                                         </form>

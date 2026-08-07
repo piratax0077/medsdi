@@ -677,6 +677,7 @@ mark,
 .list-inline {
     padding-left: 0;
     list-style: none;
+    margin-top: 10px!important;
 }
 
 .list-inline-item {
@@ -3772,7 +3773,7 @@ input[type="button"].btn-block {
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
+    border-radius: 10px;
 }
 
 .dropdown-menu-left {
@@ -7619,6 +7620,7 @@ background: -moz-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(41, 159, 
 background: linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(41, 159, 180, 1) 100%, rgba(26, 154, 163, 1) 71%);
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#31BEBE", endColorstr="#1A9AA3", GradientType=0);
 }
+
 
 a.bg-info:hover, a.bg-info:focus,
 button.bg-info:hover,
@@ -22596,6 +22598,10 @@ pre[class*=language-]:before {
     font-size: 10px;
 }
 
+.f-13{
+    font-size: 13px;
+}
+
 .f-12 {
     font-size: 12px;
 }
@@ -23483,7 +23489,7 @@ pre[class*=language-]:before {
 
 .pcoded-header .dropdown .dropdown-menu {
     position: absolute;
-    min-width: 250px;
+    min-width: 260px;
 }
 
 .pcoded-header .dropdown .dropdown-menu li {
@@ -23603,7 +23609,12 @@ pre[class*=language-]:before {
     color: #fff;
     padding: 15px;
     position: relative;
-    background: #1cbebe;
+    background: #31BEBE; /* fallback color solido para navegadores muy antiguos */
+    background: -webkit-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Chrome/Safari/Android viejos */
+    background: -moz-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Firefox viejo */
+    background: -o-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Opera viejo */
+    background: linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* estandar moderno */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#31BEBE", endColorstr="#1A9AA3", GradientType=1); /* IE 6-9 */
     font-family: 'Nunito', sans-serif;
 }
 
@@ -23835,10 +23846,11 @@ pre[class*=language-]:before {
 
 .pcoded-navbar .main-menu-header + div .list-inline {
     display: flex;
-    width: 80%;
+    width: 83%;
     margin: 10px auto 0;
     border-top: 1px solid rgba(151, 167, 193, 0.2);
     border-bottom: 1px solid rgba(151, 167, 193, 0.2);
+    margin-top: 10px;
 }
 
 .pcoded-navbar .main-menu-header + div .list-inline .list-inline-item {
@@ -37621,51 +37633,51 @@ SMALL PARA INFORMACIÓN
 
 
 /**CARD INVITACION REFERIDOS**/                                    
-                .invita-card {
-                    background: linear-gradient(135deg, #ffffff 0%, #cefff6 100%);
-                }
-                    .invita-icon-circle {
-                        width: 60px;
-                        height: 60px;
-                        min-width: 60px;
-                        border-radius: 50%;
-                        background-color: #31bebe;
-                        color: #fff;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 1.6rem;
-                    }
-                    .invita-codigo-box {
-                        background-color: #fff;
-                        border: 1px dashed #31bebe;
-                        border-radius: 10px;
-                        padding: 8px 14px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                    }
-                    .invita-codigo-texto {
-                        font-weight: 700;
-                        letter-spacing: 1px;
-                        color: #1f2957;
-                    }
-                    .invita-stats {
-                        border-top: 1px solid #ececf5;
-                        margin-top: 1rem;
-                        padding-top: 1rem;
-                    }
-                    .invita-stats .invita-stat-item {
-                        text-align: center;
-                    }
-                    .invita-stats .invita-stat-item h5 {
-                        color: #1f2957;
-                        font-weight: 700;
-                        margin-bottom: 0;
-                    }
-                    .invita-stats .invita-stat-item small {
-                        color: #5f6b7a;
-                    }
+.invita-card {
+    background: linear-gradient(135deg, #ffffff 0%, #cefff6 100%);
+}
+    .invita-icon-circle {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        border-radius: 50%;
+        background-color: #31bebe;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+    .invita-codigo-box {
+        background-color: #fff;
+        border: 1px dashed #31bebe;
+        border-radius: 10px;
+        padding: 8px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .invita-codigo-texto {
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #1f2957;
+    }
+    .invita-stats {
+        border-top: 1px solid #ececf5;
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+    .invita-stats .invita-stat-item {
+        text-align: center;
+    }
+    .invita-stats .invita-stat-item h5 {
+        color: #1f2957;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+    .invita-stats .invita-stat-item small {
+        color: #5f6b7a;
+    }
                   
 /** FILAS ALTERNADAS  MAS TENUES EN TODO EL PROYECTO **/
 .table-striped > tbody > tr:nth-of-type(odd) > * {
@@ -37830,4 +37842,34 @@ SMALL PARA INFORMACIÓN
     }
 }
 
+/**-------COLORES DEGRADADOS-----**/
+
+.bg-info-d {
+    background: #31BEBE; /* fallback color solido para navegadores muy antiguos */
+    background: -webkit-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Chrome/Safari/Android viejos */
+    background: -moz-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Firefox viejo */
+    background: -o-linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* Opera viejo */
+    background: linear-gradient(75deg, rgba(49, 190, 190, 1) 0%, rgba(26, 154, 163, 1) 100%); /* estandar moderno */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#31BEBE", endColorstr="#1A9AA3", GradientType=1); /* IE 6-9 */
+}
+
+/**------- ENCABEZADO DE SECCION CON LINEA TENUE INFERIOR -----**/
+.titulo-seccion-sdi {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1a49a3;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    font-family: "Nunito", sans-serif;
+    margin: 0 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(26, 73, 163, 0.18);
+}
+.titulo-seccion-sdi i {
+    color: #1a49a3;
+    font-size: 0.88rem;
+    line-height: 1;
+}
 

@@ -8,10 +8,10 @@
                                 src="{{ $profesional->foto_perfil ? asset('storage/' . $profesional->foto_perfil) : asset('images/iconos/usuario_profesional.svg') }}"
                                 alt="User image">
                         <div class="user-details">
-                            <div id="more-details">{{ @Auth::user()->name }} <i class="fa fa-caret-down"></i></div>
+                            <div id="more-details"><h6 class="text-uppercase f-13 font-weight-bold">{{ @Auth::user()->name }} </h6></div>
                         </div>
                     </div>
-                    <div id="nav-user-link">
+                    <div id="nav-user-link mt-3">
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <a href="{{ route('profesional.mi_perfil') }}" data-toggle="tooltip" title="Mi perfil">
