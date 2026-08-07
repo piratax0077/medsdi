@@ -158,7 +158,7 @@
 
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
                             <div class="pro-head font-weight-bold f-16 py-2">
-                                <span>Cambiar escritorio</span>
+                                <i class="feather icon-refresh-cw mr-1"></i> <span>Cambiar escritorio</span>
                             </div>
 
                             <ul class="pro-body">
@@ -268,8 +268,8 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
-                            <div class="pro-head font-weight-bold f-16 py-2">
-                                <span>{{ Auth::user()->name }}</span>
+                            <div class="pro-head font-weight-bold text-uppercase f-14 py-2">
+                                <i class="feather icon-user mr-1"></i><span class="text-uppercase">{{ Auth::user()->name }}</span>
                             </div>
 
                             <ul class="pro-body">

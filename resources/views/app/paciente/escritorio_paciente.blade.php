@@ -19,6 +19,23 @@
                 </div>
             </div>
         </div>
+        <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title mt-3">
+                                <h4 class="font-weight-bold text-white">
+                                    Hola, {{ $paciente->nombres }}
+                                </h4>
+                                <h6 class="font-weight-bold text-white mb-0">
+                                    Bienvenido/a a tu escritorio de paciente
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         <!--Cierre: Header-->
 

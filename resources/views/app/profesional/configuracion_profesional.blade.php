@@ -70,16 +70,17 @@
                             </div>
                         </div>--}}
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
-                            <div class="card subir py-3">
-                                <a href="{{ ROUTE('profesional.medstudio') }}">
+                            <div class="card subir py-3" onclick="en_construccion()";>
+                                {{--<a href="{{ ROUTE('profesional.medstudio') }}">--}}
+                                <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-2"
-                                            src="{{ asset('images/iconos/medstudio.png') }}"
-                                            alt=" MedStudio">
-                                        <h5 class="mb-3">
-                                            MedStudio
+                                            src="{{ asset('images/iconos/diseno-talonario.svg') }}"
+                                            alt=" Diseño de Talonarios">
+                                        <h5 class="mb-2 mt-2">
+                                            Diseña tus talonarios
                                         </h5>
-                                        <!--<p class="text-dark">Diseña documentos clínicos únicos para tu consulta</p>-->
+                                
                                     </div>
                                 </a>
                             </div>
@@ -116,7 +117,7 @@
                         </div>
 
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 col-xxl-3">
-                            <div class="card subir py-3">
+                            <div class="card subir py-3" onclick="en_construccion()";>
                                 <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-60 text-center mb-3"

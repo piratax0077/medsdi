@@ -1,22 +1,23 @@
 <div id="en_construccion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="en_construccion" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class=" bg-info" style="text-align: center;height:60px">
-                <h3 class="modal-title text-white text-center">Sección en construcción</h3>
-            </div>
             <div class="modal-body">
-                <form>
+          
                     <div class="row">
+                        <div class="col-sm-12 text-center">
+                <h4 class="text-c-blue">Sección en construcción</h4>
+                <h6>Estamos trabajando en este módulo. Pronto estará disponible.</h6>
+            </div>
                         <div class="col-sm-12">
                             <div class="form-group fill">
                                 <img src="{{ asset('images/maintance/maintance.png') }}" alt="" class="img-fluid">
                             </div>
                         </div>
                     </div>
-                </form>
+             
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger align-middle" onclick="cerrarModal()"; data-dismiss="modal">Cerrar Modal</button>
+                <button type="button" class="btn btn-secondary align-middle" onclick="cerrarModal()"; data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
             </div>
         </div>
     </div>

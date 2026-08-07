@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 23.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 24.1.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#1CBEBE;}
-	.st1{fill:#FFFFFF;}
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:url(#SVGID_2_);}
+	.st2{fill:url(#SVGID_3_);}
 </style>
-<rect x="-2" y="-4" class="st0" width="208" height="206"/>
-<path class="st1" d="M99.7,109.5c-23.9,0-46.7,10.4-63.3,33c33.2,40.1,94.5,39.7,127.2-0.7C155.5,133.7,137.3,109.5,99.7,109.5z"/>
-<path class="st1" d="M70.7,65.8v-8.9c0-15.6,12.2-28.6,27.8-29.2c16.4-0.6,29.9,12.6,29.9,28.9v9.6c0,16.3-13.5,29.4-29.9,28.8
-	C82.9,94.4,70.7,81.4,70.7,65.8z"/>
-<g id="Capa_3">
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="27.8776" y1="32.9472" x2="184.0543" y2="178.146">
+	<stop  offset="4.218064e-02" style="stop-color:#31BABE"/>
+	<stop  offset="0.5883" style="stop-color:#36CDCD"/>
+	<stop  offset="0.9178" style="stop-color:#3ADBD7"/>
+</linearGradient>
+<rect x="-3.8" y="-3.8" class="st0" width="207.5" height="207.5"/>
+<g>
+	
+		<image style="overflow:visible;opacity:0.11;" width="111" height="147" xlink:href="495BE61C.png"  transform="matrix(1 0 0 1 45 23)">
+	</image>
+	<g>
+		<g>
+			<radialGradient id="SVGID_2_" cx="89.6171" cy="48.747" r="43.8459" fx="84.4428" fy="52.6274" gradientUnits="userSpaceOnUse">
+				<stop  offset="6.283997e-02" style="stop-color:#E6E6E6"/>
+				<stop  offset="0.5869" style="stop-color:#F8F8F8"/>
+				<stop  offset="0.7681" style="stop-color:#FFFFFF"/>
+			</radialGradient>
+			<circle class="st1" cx="99.5" cy="55.6" r="27.9"/>
+			
+				<radialGradient id="SVGID_3_" cx="90.296" cy="115.7988" r="43.8551" fx="56.2935" fy="143.4953" gradientTransform="matrix(0.6341 0.7732 -1.1252 0.9228 163.3388 -60.8821)" gradientUnits="userSpaceOnUse">
+				<stop  offset="0.2661" style="stop-color:#E6E6E6"/>
+				<stop  offset="0.6914" style="stop-color:#F8F8F8"/>
+				<stop  offset="1" style="stop-color:#FFFFFF"/>
+			</radialGradient>
+			<path class="st2" d="M143,151.4c-11.8,8.1-27,10.2-43.5,10.2s-31.7-2.2-43.5-10.2c-3.8-2.6-5.9-7.1-5.5-11.7
+				c3-32.4,27.6-47.8,49.1-47.8s46,15.3,49.1,47.8C148.9,144.2,146.9,148.7,143,151.4z"/>
+		</g>
+	</g>
 </g>
 </svg>

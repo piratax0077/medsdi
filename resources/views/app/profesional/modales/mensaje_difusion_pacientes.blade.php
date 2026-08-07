@@ -2,39 +2,36 @@
 <div class="modal fade" id="modalMensajeDifusionPacientes" tabindex="-1" role="dialog" aria-labelledby="modalMensajeDifusionPacientesLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header-sdi">
-                <div class="modal-header-sdi-textos">
-                    <h5 class="modal-title-sdi" id="modalMensajeDifusionPacientesLabel">
-                        <i class="feather icon-radio text-c-blue mr-1"></i> Mensaje de difusión a mis pacientes
-                    </h5>
-                    <p class="modal-subtitle-sdi">Envía un correo masivo a tus pacientes.</p>
-                </div>
-                <button type="button" class="btn-cerrar" data-dismiss="modal" aria-label="Cerrar" onclick="cerrar_modal_difusion_pacientes();">
-                    <i class="feather icon-x"></i>
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="modalMensajeDifusionPacientesLabel">
+                    <i class="feather icon-radio text-white mr-1"></i> Mensaje de difusión a mis pacientes
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar" onclick="cerrar_modal_difusion_pacientes();">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <div class="modal-body">
-                <div class="alert alert-warning mb-3">
-                    <strong>Importante:</strong> este mensaje será enviado a todos los pacientes que tengan atenciones asociadas a usted.
+                <div class="alert alert-primary mb-3">
+                    <i class="feather icon-info mr-1"></i> Este mensaje será enviado a todos los pacientes que tengan atenciones asociadas a usted.
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-sm-12">
                         <label class="floating-label-activo-sm" for="asunto_mensaje_difusion_pacientes">Asunto</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Escribe el asunto" id="asunto_mensaje_difusion_pacientes" autocomplete="off" maxlength="150">
+                        <input type="text" class="form-control form-control-sm" placeholder="Escribe el asunto" placeholder="Escriba el asunto" id="asunto_mensaje_difusion_pacientes" autocomplete="off" maxlength="150">
                     </div>
 
                     <div class="form-group col-sm-12">
                         <label class="floating-label-activo-sm" for="contenido_mensaje_difusion_pacientes">Mensaje</label>
-                        <textarea class="form-control form-control-sm" id="contenido_mensaje_difusion_pacientes" rows="5" maxlength="2000" placeholder="Escribe tu mensaje aquí"></textarea>
+                        <textarea class="form-control form-control-sm" id="contenido_mensaje_difusion_pacientes" rows="5" maxlength="2000" placeholder="Escriba la información que desea comunicar"></textarea>
                         <small class="text-muted">Máximo 0/2000 caracteres.</small>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer text-center">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" onclick="cerrar_modal_difusion_pacientes();">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal_difusion_pacientes();">
                     <i class="feather icon-x"></i> Cerrar
                 </button>
                 <button type="button" class="btn btn-info" id="btn_enviar_difusion_pacientes" onclick="enviar_mensaje_difusion_paciente_confirmar()">
@@ -49,12 +46,11 @@
     function cerrar_modal_difusion_pacientes() {
         $('#modalMensajeDifusionPacientes').modal('hide');
 
-        // Respaldo: si el fondo oscuro queda pegado, se limpia manualmente
+        // Respaldo: fuerza el cierre y limpia el backdrop si quedara pegado
         setTimeout(function () {
-            if (!$('.modal.show').length) {
-                $('.modal-backdrop').remove();
-                $('body').removeClass('modal-open').css('padding-right', '');
-            }
+            $('#modalMensajeDifusionPacientes').removeClass('show').css('display', 'none').attr('aria-hidden', 'true');
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
         }, 300);
     }
 
