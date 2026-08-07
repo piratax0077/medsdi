@@ -8400,6 +8400,11 @@ public function guardar_permisos_asistente_profesional(Request $request)
                 'id_lugar_atencion',
                 $request->id_lugar_atencion
             )
+            ->where(
+                'id_profesional',
+                $profesional->id
+            )
+            ->where('estado', 1)
             ->first();
 
         if (!$asistenteLugar) {

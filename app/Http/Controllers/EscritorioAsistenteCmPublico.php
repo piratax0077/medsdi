@@ -86,9 +86,19 @@ class EscritorioAsistenteCmPublico extends Controller
             $institucion = $id_institucion
                 ? Instituciones::where('id', $id_institucion)->first()
                 : null;
-            $profesionales = $lugares_atencion->profesionales()
-            ->orderBy('apellido_uno','asc')
-            ->get();
+            // Mostrar solamente los profesionales con los que esta asistente
+            // tiene una asociación activa en este lugar de atención.
+            $ids_profesionales_asociados = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
+                ->where('id_lugar_atencion', $id_lugar_atencion)
+                ->where('estado', 1)
+                ->whereNotNull('id_profesional')
+                ->pluck('id_profesional')
+                ->unique()
+                ->values();
+
+            $profesionales = Profesional::whereIn('id', $ids_profesionales_asociados)
+                ->orderBy('apellido_uno', 'asc')
+                ->get();
 
             foreach ($profesionales as $key_tipo_agenda => $value_tipo_agenda)
             {
@@ -128,10 +138,9 @@ class EscritorioAsistenteCmPublico extends Controller
                 'tipo_bonos' => $tipo_bonos,
                 'boxes' => $boxes,
                 'institucion' => $institucion,
-                'permisos_asistente' => PermisoAsistente::firstOrNew([
-                    'id_asistente' => $asistente->id,
-                    'id_lugar_atencion' => $id_lugar_atencion,
-                ]),
+                // Los permisos del escritorio son dinámicos por profesional.
+                // Se inicia sin permisos hasta que la asistente seleccione uno.
+                'permisos_asistente' => new PermisoAsistente(),
             );
 
             if (isset($asistente)) {
@@ -148,6 +157,65 @@ class EscritorioAsistenteCmPublico extends Controller
             return back()->with('error', 'El asistente no tiene un lugar de atencion activo asociado');
         }
 
+    }
+
+    /**
+     * Devuelve los permisos de la asistente autenticada para un profesional
+     * específico dentro del lugar de atención actual.
+     *
+     * La combinación válida es:
+     * asistente + profesional + lugar de atención.
+     */
+    public function permisosProfesionalSeleccionado(Request $request)
+    {
+        $request->validate([
+            'id_profesional' => 'required|integer|exists:profesionales,id',
+            'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+        ]);
+
+        $asistente = Asistente::where('id_usuario', Auth::id())->first();
+
+        if (!$asistente) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Asistente no encontrada.',
+            ], 404);
+        }
+
+        $asociacion = AsistenteLugarAtencion::where('id_asistente', $asistente->id)
+            ->where('id_profesional', $request->id_profesional)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->where('estado', 1)
+            ->first();
+
+        if (!$asociacion) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'No existe una asociación activa con el profesional seleccionado.',
+            ], 403);
+        }
+
+        $permiso = PermisoAsistente::where('id_asistente', $asistente->id)
+            ->where('id_profesional', $request->id_profesional)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->first();
+
+        return response()->json([
+            'estado' => 1,
+            'permisos' => [
+                'permiso_cotizar' => (bool) optional($permiso)->permiso_cotizar,
+                'permiso_confirmar_hora' => (bool) optional($permiso)->permiso_confirmar_hora,
+                'permiso_anular_hora' => (bool) optional($permiso)->permiso_anular_hora,
+                'permiso_subir_ver_archivos' => (bool) optional($permiso)->permiso_subir_ver_archivos,
+                'permiso_eliminar_archivos' => (bool) optional($permiso)->permiso_eliminar_archivos,
+                'permiso_editar_pacientes' => (bool) optional($permiso)->permiso_editar_pacientes,
+                'permiso_ver_pacientes' => (bool) optional($permiso)->permiso_ver_pacientes,
+                'permiso_agendar_horas_extras' => (bool) optional($permiso)->permiso_agendar_horas_extras,
+                'permiso_agendar_examenes' => (bool) optional($permiso)->permiso_agendar_examenes,
+                'permiso_transcripcion_examenes' => (bool) optional($permiso)->permiso_transcripcion_examenes,
+                'permiso_entrega_caja' => (bool) optional($permiso)->permiso_entrega_caja,
+            ],
+        ]);
     }
 
     public function registroPaciente()

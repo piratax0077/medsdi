@@ -17,12 +17,6 @@
 @endsection
 
 @section('content')
-    @php
-        $puede_confirmar_hora = (int)($permisos_asistente->permiso_confirmar_hora ?? 0) === 1;
-        $puede_ver_pacientes = (int)($permisos_asistente->permiso_ver_pacientes ?? 0) === 1;
-        $puede_entrega_caja = (int)($permisos_asistente->permiso_entrega_caja ?? 0) === 1;
-    @endphp
-
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -51,35 +45,31 @@
                 <div class="col-md-12 mb-3">
                     <div class="card-deck">
 
-                        @if($puede_confirmar_hora)
-                            <div class="card subir px-4 py-2">
-                                <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
-                                    <div class="row my-auto">
-                                        <div class="col-md-4 col-xs-12 d-inline">
-                                            <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                        </div>
-                                        <div class="col-md-8 col-xs-12 d-inline">
-                                            <h5 class="mt-1 mb-0">Confirmar Hora</h5>
-                                        </div>
+                        <div class="card subir px-4 py-2 permiso-profesional-ui" id="card_permiso_confirmar_hora" style="display:none;">
+                            <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
+                                <div class="row my-auto">
+                                    <div class="col-md-4 col-xs-12 d-inline">
+                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
-                                </a>
-                            </div>
-                        @endif
+                                    <div class="col-md-8 col-xs-12 d-inline">
+                                        <h5 class="mt-1 mb-0">Confirmar Hora</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
 
-                        @if($puede_ver_pacientes)
-                            <div class="card subir px-4 py-2">
-                                <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
-                                    <div class="row my-auto">
-                                        <div class="col-md-4 col-xs-12 d-inline">
-                                            <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                        </div>
-                                        <div class="col-md-8 col-xs-12 d-inline">
-                                            <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
-                                        </div>
+                        <div class="card subir px-4 py-2 permiso-profesional-ui" id="card_permiso_ver_pacientes" style="display:none;">
+                            <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
+                                <div class="row my-auto">
+                                    <div class="col-md-4 col-xs-12 d-inline">
+                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
-                                </a>
-                            </div>
-                        @endif
+                                    <div class="col-md-8 col-xs-12 d-inline">
+                                        <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
 
                         {{--
                         <div class="card subir px-4 py-2">
@@ -124,20 +114,18 @@
                         </div>
                         --}}
 
-                        @if($puede_entrega_caja)
-                            <div class="card subir px-4 py-2">
-                                <a href="{{ ROUTE('asistentecm.rendir') }}">
-                                    <div class="row my-auto">
-                                        <div class="col-md-4 col-xs-12 d-inline">
-                                            <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                        </div>
-                                        <div class="col-md-8 col-xs-12 d-inline">
-                                            <h5 class="mt-1 mb-0">Entrega de Caja</h5>
-                                        </div>
+                        <div class="card subir px-4 py-2 permiso-profesional-ui" id="card_permiso_entrega_caja" style="display:none;">
+                            <a href="{{ ROUTE('asistentecm.rendir') }}">
+                                <div class="row my-auto">
+                                    <div class="col-md-4 col-xs-12 d-inline">
+                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                     </div>
-                                </a>
-                            </div>
-                        @endif
+                                    <div class="col-md-8 col-xs-12 d-inline">
+                                        <h5 class="mt-1 mb-0">Entrega de Caja</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
 
                         {{--
                         <div class="card py-auto subir">
@@ -166,7 +154,7 @@
                                     <h5 class="text-c-blue f-14">AGENDA DE PROFESIONALES</h5>
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Seleccione Profesional</label>
-                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cargarAgendaProfesional(1, '');">
+                                        <select class="form-control form-control-sm" id="agenda_profesional_asistente" name="agenda_profesional_asistente" onchange="cambiarProfesionalAsistente();">
                                             <option value="">Seleccione</option>
                                             @if($profesionales)
                                                 @foreach($profesionales as $key_pro => $value_pro)
@@ -270,14 +258,92 @@
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
-        const PERMISO_CONFIRMAR_HORA = {{ $puede_confirmar_hora ? 1 : 0 }};
-        const PERMISO_VER_PACIENTES = {{ $puede_ver_pacientes ? 1 : 0 }};
-        const PERMISO_ENTREGA_CAJA = {{ $puede_entrega_caja ? 1 : 0 }};
+        let PERMISOS_PROFESIONAL = {
+            permiso_cotizar: false,
+            permiso_confirmar_hora: false,
+            permiso_anular_hora: false,
+            permiso_subir_ver_archivos: false,
+            permiso_eliminar_archivos: false,
+            permiso_editar_pacientes: false,
+            permiso_ver_pacientes: false,
+            permiso_agendar_horas_extras: false,
+            permiso_agendar_examenes: false,
+            permiso_transcripcion_examenes: false,
+            permiso_entrega_caja: false
+        };
+
+        function resetPermisosProfesional()
+        {
+            Object.keys(PERMISOS_PROFESIONAL).forEach(function(key) {
+                PERMISOS_PROFESIONAL[key] = false;
+            });
+            aplicarPermisosProfesionalUI();
+        }
+
+        function aplicarPermisosProfesionalUI()
+        {
+            $('#card_permiso_confirmar_hora').toggle(!!PERMISOS_PROFESIONAL.permiso_confirmar_hora);
+            $('#card_permiso_ver_pacientes').toggle(!!PERMISOS_PROFESIONAL.permiso_ver_pacientes);
+            $('#card_permiso_entrega_caja').toggle(!!PERMISOS_PROFESIONAL.permiso_entrega_caja);
+
+            if ($('#btn_ver_agregar_hora_extra').length) {
+                $('#btn_ver_agregar_hora_extra').prop('disabled', !PERMISOS_PROFESIONAL.permiso_agendar_horas_extras);
+            }
+
+            if ($('#btn_ver_agregar_hora_examen').length) {
+                $('#btn_ver_agregar_hora_examen').prop('disabled', !PERMISOS_PROFESIONAL.permiso_agendar_examenes);
+            }
+        }
+
+        function cargarPermisosProfesionalSeleccionado(id_profesional, id_lugar_atencion)
+        {
+            resetPermisosProfesional();
+
+            return $.ajax({
+                url: "{{ route('asistentecm.profesional.permisos') }}",
+                type: 'GET',
+                data: {
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion
+                }
+            }).done(function(data) {
+                if (data && data.estado == 1 && data.permisos) {
+                    Object.keys(PERMISOS_PROFESIONAL).forEach(function(key) {
+                        PERMISOS_PROFESIONAL[key] = !!data.permisos[key];
+                    });
+                }
+
+                aplicarPermisosProfesionalUI();
+            }).fail(function(xhr) {
+                resetPermisosProfesional();
+                console.error('No fue posible cargar permisos del profesional seleccionado.', xhr.responseJSON || xhr.responseText);
+            });
+        }
+
+        function cambiarProfesionalAsistente()
+        {
+            let id_profesional = $('#agenda_profesional_asistente').val();
+            let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+
+            if (!id_profesional) {
+                resetPermisosProfesional();
+                $('#tabla_info_profesional').hide();
+                $('#seccion_agenda_botones').hide();
+                $('#seccion_agenda_agendas').hide();
+                return;
+            }
+
+            cargarPermisosProfesionalSeleccionado(id_profesional, id_lugar_atencion)
+                .always(function() {
+                    cargarAgendaProfesional(1, '');
+                });
+        }
 
         var CalendarEl = null;
         $(document).ready(function()
         {
             $('#agenda_profesional_asistente').select2();
+            resetPermisosProfesional();
 
             {{--  CERRAR MODALES  --}}
             $("#cerrar_registro_paciente_hora").click(function() {
@@ -788,23 +854,23 @@
                                 switch (parseInt(tipo_agenda)) {
                                     case 1://consulta
                                         $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');
-                                        $('#btn_ver_agregar_hora_extra').attr('disabled', false);
-                                        $('#btn_ver_agregar_hora_examen').attr('disabled', false);
+                                        $('#btn_ver_agregar_hora_extra').prop('disabled', !PERMISOS_PROFESIONAL.permiso_agendar_horas_extras);
+                                        $('#btn_ver_agregar_hora_examen').prop('disabled', !PERMISOS_PROFESIONAL.permiso_agendar_examenes);
                                         break;
                                     case 2://dental
                                         $('#titulo_tipo_agenda').html('AGENDA DE DENTAL');
-                                        $('#btn_ver_agregar_hora_extra').attr('disabled', true);
-                                        $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                        $('#btn_ver_agregar_hora_extra').prop('disabled', true);
+                                        $('#btn_ver_agregar_hora_examen').prop('disabled', true);
                                         break;
                                     case 3://telemedicina
                                         $('#titulo_tipo_agenda').html('AGENDA DE TELEMEDICINA');
-                                        $('#btn_ver_agregar_hora_extra').attr('disabled', true);
-                                        $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                        $('#btn_ver_agregar_hora_extra').prop('disabled', true);
+                                        $('#btn_ver_agregar_hora_examen').prop('disabled', true);
                                         break;
                                     case 4://examen
                                         $('#titulo_tipo_agenda').html('AGENDA DE EXAMEN');
-                                        $('#btn_ver_agregar_hora_extra').attr('disabled', true);
-                                        $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                                        $('#btn_ver_agregar_hora_extra').prop('disabled', true);
+                                        $('#btn_ver_agregar_hora_examen').prop('disabled', true);
                                         break;
                                 }
 
@@ -1155,9 +1221,12 @@
                                                         if (data.estado_hora == 1 || data.estado_hora == 16) //else if (info.event.backgroundColor == '#FEAA32')
                                                         {
                                                             //'Reservada') //Hora pendiente
-                                                            $('#hm_anular_hora').show();
+                                                            if(PERMISOS_PROFESIONAL.permiso_anular_hora)
+                                                                $('#hm_anular_hora').show();
+                                                            else
+                                                                $('#hm_anular_hora').hide();
                                                             $('#hm_atender_hora').hide();
-                                                            if(PERMISO_CONFIRMAR_HORA === 1)
+                                                            if(PERMISOS_PROFESIONAL.permiso_confirmar_hora)
                                                                 $('#hm_confirmar_hora').show();
                                                             else
                                                                 $('#hm_confirmar_hora').hide();
@@ -1920,11 +1989,11 @@
         {{--  CONFIRMAR HORA OPCION --}}
         function opcion_confirmar_hora()
         {
-            if(PERMISO_CONFIRMAR_HORA !== 1)
+            if(!PERMISOS_PROFESIONAL.permiso_confirmar_hora)
             {
                 swal({
                     title: "Permiso denegado",
-                    text: "No tienes permiso para confirmar horas en este lugar de atencion.",
+                    text: "No tienes permiso para confirmar horas con el profesional seleccionado.",
                     icon: "error",
                 });
                 return;

@@ -1143,6 +1143,7 @@ Route::group([
 	Route::get('Paciente/cargar_info', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscar_paciente_rut'])->name('asistentecm.buscar_paciente_rut');
 
     Route::get('Profesional/informacion/buscar', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'buscarInfoProfesional'])->name('asistentecm.buscar_info_profesional');
+    Route::get('Profesional/permisos', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'permisosProfesionalSeleccionado'])->name('asistentecm.profesional.permisos');
     Route::get('Hora-Medica/buscar', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_hora_medica'])->name('asistentecm.buscar_hora_medica');
 
     /* 1.- Reservar Hora Médica */
