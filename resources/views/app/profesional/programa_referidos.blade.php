@@ -3,7 +3,7 @@
 
     <!--Container Completo-->
     <div class="pcoded-main-container">
-        <div class="pcoded-content mb-3" style="margin-top: 140px">
+        <div class="pcoded-content mb-3 referidos-content">
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
@@ -50,29 +50,88 @@
                 .referidos-card {
                     border: none;
                     border-radius: 14px;
+                    box-shadow: 0 2px 10px rgba(30, 40, 80, .06);
+                    /* Recorta el header y el card-body al radio de la tarjeta,
+                       si no sus fondos tapan las esquinas redondeadas */
+                    overflow: hidden;
                 }
+                /* Solo las tarjetas de estadistica reaccionan al cursor */
+                .referidos-card-stat {
+                    transition: transform .15s ease, box-shadow .15s ease;
+                }
+                .referidos-card-stat:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 10px 24px rgba(30, 40, 80, .11);
+                }
+                /* Jerarquia de texto de las estadisticas */
+                .stat-numero {
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: #2b2f3a;
+                    line-height: 1.1;
+                }
+                .stat-label {
+                    font-size: .82rem;
+                    font-weight: 700;
+                    color: #4a5468;
+                    line-height: 1.3;
+                }
+                .stat-hint {
+                    font-size: .72rem;
+                    color: #8b93a7;
+                    line-height: 1.3;
+                }
+                /* Banner de creditos compacto */
                 .creditos-banner {
                     background: linear-gradient(135deg, #31bebe 0%, #1a9d9d 100%);
-                    border-radius: 14px;
+                    border-radius: 12px;
                     color: #fff;
-                    padding: 18px 22px;
-                    height: 100%;
-                    border: 2px solid #6dc8c8;
+                    padding: 12px 16px;
+                    border: none;
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    box-shadow: 0 6px 16px rgba(26, 157, 157, .25);
+                    transition: transform .15s ease, box-shadow .15s ease;
+                }
+                .creditos-banner:hover {
+                    color: #fff;
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 22px rgba(26, 157, 157, .32);
                 }
                 .creditos-banner .creditos-icono {
-                    width: 46px;
-                    height: 46px;
-                    min-width: 46px;
-                    border-radius: 50%;
-                    background-color: rgba(255, 255, 255, .2);
+                    width: 38px;
+                    height: 38px;
+                    min-width: 38px;
+                    border-radius: 10px;
+                    background-color: rgba(255, 255, 255, .22);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 1.3rem;
-                    margin-right: 14px;
+                    font-size: 1.05rem;
+                    margin-right: 11px;
+                }
+                .creditos-label {
+                    font-size: .68rem;
+                    text-transform: uppercase;
+                    letter-spacing: .05em;
+                    opacity: .9;
+                    line-height: 1.3;
+                }
+                .creditos-monto {
+                    font-size: 1.25rem;
+                    font-weight: 800;
+                    line-height: 1.15;
+                }
+                .creditos-equiv {
+                    font-size: .7rem;
+                    opacity: .85;
+                    line-height: 1.3;
+                }
+                .creditos-flecha {
+                    font-size: .8rem;
+                    opacity: .85;
+                    margin-left: 10px;
                 }
                 .invita-banner {
                     background: linear-gradient(120deg, #eaf3fd 0%, #dcecfb 100%);
@@ -139,6 +198,8 @@
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
+                    flex-wrap: wrap;
+                    gap: 8px;
                 }
                 .referidos-codigo-texto {
                     font-weight: 700;
@@ -241,89 +302,156 @@
                 .header-referidos {
                 	background-color: #F4F2FA;
                 }
+
+                /* Separacion superior de la vista.
+                   OJO: debe ser 140px en todos los tamanos porque .page-header
+                   del sistema usa margin-top: -140px fijo. Si aqui se baja el
+                   valor, el breadcrumb se monta sobre el logo del header. */
+                .referidos-content {
+                    margin-top: 140px;
+                }
+
+                /* Reduce el espacio azul entre el breadcrumb y el contenido */
+                .referidos-content .page-header {
+                    margin-bottom: 10px;
+                }
+
+                /* Franja gris a todo el ancho detras del titulo y los creditos.
+                   Los margenes negativos compensan el padding de .pcoded-content */
+                .referidos-hero {
+                    background-color: #ecf0f5;
+                    margin-left: -22px;
+                    margin-right: -22px;
+                    padding: 26px 22px 20px;
+                    margin-bottom: 22px;
+                }
+
+                /* ---------- RESPONSIVE ---------- */
+
+                /* Movil */
+                @media (max-width: 767.98px) {
+                    .referidos-titulo {
+                        font-size: 1.3rem;
+                    }
+                    .referidos-subtitulo {
+                        font-size: .86rem;
+                    }
+                    .referidos-hero {
+                        padding: 20px 22px 16px;
+                    }
+                }
+
+                @media (max-width: 575.98px) {
+                    .referidos-hero {
+                        margin-left: -16px;
+                        margin-right: -16px;
+                        padding: 18px 16px 14px;
+                        margin-bottom: 16px;
+                    }
+                    /* El icono se apila sobre el texto para que no se aprieten */
+                    .referidos-stat {
+                        flex-direction: column;
+                        align-items: flex-start !important;
+                    }
+                    .referidos-stat .stat-icon-soft {
+                        margin-right: 0;
+                        margin-bottom: 8px;
+                    }
+                    .stat-numero {
+                        font-size: 1.3rem;
+                    }
+                    .stat-label {
+                        font-size: .78rem;
+                    }
+                    .referidos-codigo-box {
+                        justify-content: center;
+                    }
+                    .referidos-enlace-texto {
+                        font-size: .78rem;
+                    }
+                }
             </style>
 
             <!--Título + Créditos disponibles-->
-            <div class="row mb-4 mt-n4">
-                <div class="col-sm-12 col-md-7 col-lg-8 mb-3 mb-md-0 d-flex align-items-center">
-                    <div>
-                        <h3 class="referidos-titulo text-white">
-¡Invita colegas y obtén créditos!</h3>
-                        <p class="referidos-subtitulo text-white mb-0">Cuando un profesional se registre con tu enlace y compre un plan, te regalamos créditos que puedes usar en el sistema.</p>
+            <div class="referidos-hero">
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-8 mb-3 mb-lg-0">
+                        <h3 class="referidos-titulo">¡Invita colegas y obtén créditos!</h3>
+                        <p class="referidos-subtitulo mb-0">Cuando un profesional se registre con tu enlace y compre un plan, te regalamos créditos que puedes usar en el sistema.</p>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-5 col-lg-4">
-                    <a href="#" class="creditos-banner text-white border-info text-decoration-none">
-                        <div class="d-flex align-items-center">
-                            <div class="creditos-icono">
-                                <i class="feather icon-credit-card"></i>
+                    <div class="col-12 col-lg-4">
+                        <a href="#" class="creditos-banner text-white text-decoration-none">
+                            <div class="d-flex align-items-center">
+                                <div class="creditos-icono">
+                                    <i class="feather icon-credit-card"></i>
+                                </div>
+                                <div>
+                                    <div class="creditos-label">Créditos disponibles</div>
+                                    <div class="creditos-monto">$20.000</div>
+                                    <div class="creditos-equiv">Equivale a 200 créditos</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="small">Tus créditos disponibles</div>
-                                <h4 class="mb-0 text-white font-weight-bold">$20.000</h4>
-                                <div class="small">Equivale a 200 créditos</div>
-                            </div>
-                        </div>
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
+                            <i class="fas fa-chevron-right creditos-flecha"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
 
 
             <!--Estadísticas-->
             <div class="row">
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="card referidos-card h-100">
-                        <div class="card-body d-flex align-items-center">
+                <div class="col-6 col-lg-6 col-xl-3 mb-3">
+                    <div class="card referidos-card referidos-card-stat h-100">
+                        <div class="card-body d-flex align-items-center referidos-stat">
                             <div class="stat-icon-soft icon-purple">
                                 <i class="feather icon-user-plus"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold text-dark">8</h4>
-                                <div class="small font-weight-bold text-dark">Referidos registrados</div>
-                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Total de profesionales invitados</div>
+                                <div class="stat-numero">8</div>
+                                <div class="stat-label">Referidos registrados</div>
+                                <div class="stat-hint">Total de profesionales invitados</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="card referidos-card h-100">
-                        <div class="card-body d-flex align-items-center">
+                <div class="col-6 col-lg-6 col-xl-3 mb-3">
+                    <div class="card referidos-card referidos-card-stat h-100">
+                        <div class="card-body d-flex align-items-center referidos-stat">
                             <div class="stat-icon-soft icon-green">
                                 <i class="feather icon-check-circle"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold text-dark">5</h4>
-                                <div class="small font-weight-bold text-dark">Clientes activos</div>
-                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Profesionales que ya compraron</div>
+                                <div class="stat-numero">5</div>
+                                <div class="stat-label">Clientes activos</div>
+                                <div class="stat-hint">Profesionales que ya compraron</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="card referidos-card h-100">
-                        <div class="card-body d-flex align-items-center">
-                            <div class="stat-icon-soft icon-purple">
+                <div class="col-6 col-lg-6 col-xl-3 mb-3">
+                    <div class="card referidos-card referidos-card-stat h-100">
+                        <div class="card-body d-flex align-items-center referidos-stat">
+                            <div class="stat-icon-soft icon-blue">
                                 <i class="feather icon-credit-card"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold text-dark">$20.000</h4>
-                                <div class="small font-weight-bold text-dark">Créditos acumulados</div>
-                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Equivale a 200 créditos</div>
+                                <div class="stat-numero">$20.000</div>
+                                <div class="stat-label">Créditos acumulados</div>
+                                <div class="stat-hint">Equivale a 200 créditos</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="card referidos-card h-100">
-                        <div class="card-body d-flex align-items-center">
+                <div class="col-6 col-lg-6 col-xl-3 mb-3">
+                    <div class="card referidos-card referidos-card-stat h-100">
+                        <div class="card-body d-flex align-items-center referidos-stat">
                             <div class="stat-icon-soft icon-yellow">
                                 <i class="feather icon-star"></i>
                             </div>
                             <div>
-                                <h4 class="mb-0 font-weight-bold">2</h4>
-                                <div class="small font-weight-bold text-dark">Pendientes de compra</div>
-                                <div class="font-weight-bold text-dark" style="font-size:.75rem;">Aún no han comprado</div>
+                                <div class="stat-numero">2</div>
+                                <div class="stat-label">Pendientes de compra</div>
+                                <div class="stat-hint">Aún no han comprado</div>
                             </div>
                         </div>
                     </div>
@@ -333,7 +461,7 @@
             <!--Enlace / Cómo funciona / Actividad reciente-->
             <div class="row">
                 <div class="col-sm-12 col-lg-4 mb-3">
-                    <div class="card bg-referidos referidos-card bg-referidos h-100">
+                    <div class="card bg-referidos referidos-card h-100">
                         <div class="card-header-principal header-referidos">
                             <h6 class="mb-0 f-18 text-dark">Tu enlace de referido</h6>
                             <div class="small text-dark">Comparte tu código o enlace único</div>
@@ -350,7 +478,7 @@
                             <h6 class="text-purple  mb-1">Tu enlace personalizado</h6>
                             <div class="referidos-codigo-box mb-3">
                                 <span class="referidos-enlace-texto" id="enlace_referido">https://saluddigitalintegrada.cl/registro?ref=DRJUAN123</span>
-                                <button type="button" class="btn btn-sm btn-purple" onclick="copiar_texto('enlace_referido', this);">
+                                <button type="button" class="btn btn-sm btn-purple" title="Copiar enlace" aria-label="Copiar enlace" onclick="copiar_texto('enlace_referido', this);">
                                     <i class="feather icon-copy"></i>
                                 </button>
                             </div>
@@ -463,14 +591,47 @@
 @section('page-script')
     <script>
         function copiar_texto(idElemento, boton) {
-            var texto = document.getElementById(idElemento).innerText;
-            navigator.clipboard.writeText(texto).then(function () {
+            var elemento = document.getElementById(idElemento);
+
+            if (!elemento) {
+                return;
+            }
+
+            var texto = elemento.innerText;
+
+            // Confirmacion visual en el boton
+            function confirmar_copiado() {
                 var original = boton.innerHTML;
                 boton.innerHTML = '<i class="feather icon-check"></i>';
                 setTimeout(function () {
                     boton.innerHTML = original;
                 }, 1500);
-            });
+            }
+
+            // Respaldo para navegadores antiguos o cuando el sitio no va por https
+            function copiar_respaldo() {
+                var area = document.createElement('textarea');
+                area.value = texto;
+                area.style.position = 'fixed';
+                area.style.opacity = '0';
+                document.body.appendChild(area);
+                area.select();
+
+                try {
+                    document.execCommand('copy');
+                    confirmar_copiado();
+                } catch (e) {
+                    console.log('No se pudo copiar', e);
+                }
+
+                document.body.removeChild(area);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(texto).then(confirmar_copiado).catch(copiar_respaldo);
+            } else {
+                copiar_respaldo();
+            }
         }
     </script>
 @endsection
