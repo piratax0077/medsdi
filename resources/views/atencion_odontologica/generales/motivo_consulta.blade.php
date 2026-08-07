@@ -1,106 +1,66 @@
 @php
     /*
-     * Visibilidad de las subsecciones de "Motivo de consulta".
-     *
-     * Esta vista se incluye desde ficha_od_general.blade.php, por lo que
-     * comparte las funciones $buscarSeccionFichaOdonto y
-     * $normalizarCodigoFichaOdonto definidas en la ficha principal.
-     *
-     * Si todavía no existe una plantilla o la subsección no está registrada,
-     * se mantiene visible para conservar el comportamiento anterior.
+     * Componente común para cualquier especialidad odontológica.
+     * Si la ficha no cargó la configuración común, conserva todo visible.
      */
-    $subseccionMotivoVisible = static function (
+    $subseccionVisibleDentalDisponible =
+        isset($subseccionVisibleFichaDental)
+        && is_callable($subseccionVisibleFichaDental);
+
+    $resolverSubseccionMotivo = static function (
         array $aliasSubseccion,
         bool $predeterminado = true
     ) use (
-        $buscarSeccionFichaOdonto,
-        $normalizarCodigoFichaOdonto
+        $subseccionVisibleDentalDisponible,
+        $subseccionVisibleFichaDental
     ) {
-        $seccion = $buscarSeccionFichaOdonto([
-            'motivo_consulta',
-            'motivo de la consulta y examen fisico general',
-        ]);
-
-        if ($seccion === null) {
+        if (!$subseccionVisibleDentalDisponible) {
             return $predeterminado;
         }
 
-        $subsecciones = data_get($seccion, 'subsecciones', []);
-
-        if ($subsecciones instanceof \Illuminate\Support\Collection) {
-            $subsecciones = $subsecciones->toArray();
-        } elseif (is_object($subsecciones)) {
-            $subsecciones = json_decode(
-                json_encode($subsecciones),
-                true
-            ) ?: [];
-        }
-
-        if (empty($subsecciones)) {
-            return $predeterminado;
-        }
-
-        $aliasNormalizados = collect($aliasSubseccion)
-            ->map($normalizarCodigoFichaOdonto)
-            ->filter()
-            ->values()
-            ->all();
-
-        foreach ($subsecciones as $subseccion) {
-            $codigo = $normalizarCodigoFichaOdonto(
-                data_get($subseccion, 'codigo', '')
-            );
-
-            $nombre = $normalizarCodigoFichaOdonto(
-                data_get($subseccion, 'nombre', '')
-            );
-
-            if (
-                in_array($codigo, $aliasNormalizados, true)
-                || in_array($nombre, $aliasNormalizados, true)
-            ) {
-                return filter_var(
-                    data_get($subseccion, 'visible', true),
-                    FILTER_VALIDATE_BOOLEAN
-                );
-            }
-        }
-
-        return $predeterminado;
+        return $subseccionVisibleFichaDental(
+            [
+                'motivo_consulta',
+                'motivo de la consulta y examen fisico general',
+            ],
+            $aliasSubseccion,
+            $predeterminado
+        );
     };
 
-    $mostrarMotivoConsultaCampo = $subseccionMotivoVisible([
+    $mostrarMotivoConsultaCampo = $resolverSubseccionMotivo([
         'motivo',
         'motivo_consulta',
         'motivo de consulta',
     ]);
 
-    $mostrarAntecedentesEspecialidad = $subseccionMotivoVisible([
+    $mostrarAntecedentesEspecialidad = $resolverSubseccionMotivo([
         'antecedentes_especialidad',
         'antecedentes de la especialidad',
     ]);
 
-    $mostrarObservacionesExamen = $subseccionMotivoVisible([
+    $mostrarObservacionesExamen = $resolverSubseccionMotivo([
         'observaciones_examen',
         'observaciones al examen de la especialidad',
         'examen_fisico',
     ]);
 
-    $mostrarAnestesiaLocal = $subseccionMotivoVisible([
+    $mostrarAnestesiaLocal = $resolverSubseccionMotivo([
         'anestesia_local',
         'anestesia local',
     ]);
 
-    $mostrarHemorragias = $subseccionMotivoVisible([
+    $mostrarHemorragias = $resolverSubseccionMotivo([
         'hemorragias',
         'hemorragia',
     ]);
 
-    $mostrarFracturas = $subseccionMotivoVisible([
+    $mostrarFracturas = $resolverSubseccionMotivo([
         'fracturas',
         'fractura',
     ]);
 @endphp
+
 
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
     <div class="card-a">

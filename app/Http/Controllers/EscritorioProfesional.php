@@ -8968,11 +8968,7 @@ return $ficha;
      * Consulta la plantilla activa del profesional para la combinación exacta
      * de especialidad, tipo y subtipo de especialidad.
      */
-    private function consultarPlantillaFichaProfesional(
-        $profesional,
-        bool $soloActiva = true,
-        bool $bloquear = false
-    ) {
+    private function consultarPlantillaFichaProfesional($profesional,bool $soloActiva = true, bool $bloquear = false) {
         $query = PlantillaFichaMedica::where(
                 'id_profesional',
                 $profesional->id
@@ -10434,7 +10430,193 @@ return $ficha;
         }
     }
 
-    public function guardarConfiguracionFicha(Request $request)
+    private function seccionesBaseImplantologia(): array
+{
+    return [
+        [
+            'codigo' => 'motivo_consulta',
+            'nombre' => 'Motivo de la consulta y examen físico general',
+            'visible' => true,
+            'tipo' => 'subsecciones',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'motivo',
+                    'nombre' => 'Motivo de consulta',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'antecedentes_especialidad',
+                    'nombre' => 'Antecedentes de la especialidad',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'observaciones_examen',
+                    'nombre' => 'Observaciones al examen de la especialidad',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'anestesia_local',
+                    'nombre' => 'Anestesia local',
+                    'visible' => true,
+                    'tipo' => 'modal',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'hemorragias',
+                    'nombre' => 'Hemorragias',
+                    'visible' => true,
+                    'tipo' => 'modal',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'fracturas',
+                    'nombre' => 'Fracturas',
+                    'visible' => true,
+                    'tipo' => 'modal',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'evaluacion_pre_implante',
+            'nombre' => 'Examen Evaluación Pre-Implante',
+            'visible' => true,
+            'tipo' => 'seccion',
+            'personalizada' => false,
+        ],
+        [
+            'codigo' => 'tratamiento_implantologico',
+            'nombre' => 'Tratamiento implantológico',
+            'visible' => true,
+            'tipo' => 'seccion',
+            'personalizada' => false,
+        ],
+        [
+            'codigo' => 'tratamiento_rehabilitador',
+            'nombre' => 'Tratamiento rehabilitador',
+            'visible' => true,
+            'tipo' => 'subsecciones',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'plan_rehabilitacion',
+                    'nombre' => 'Plan de rehabilitación',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'tratamiento_rehabilitacion',
+                    'nombre' => 'Tratamiento de rehabilitación',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'control_post_implante',
+            'nombre' => 'Control Post Implante',
+            'visible' => true,
+            'tipo' => 'subsecciones',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'evaluacion_implante_unico',
+                    'nombre' => 'Evaluación implante único',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'evaluacion_grupos_implantes',
+                    'nombre' => 'Evaluación grupos de implante',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'instalacion_corona_protesis',
+                    'nombre' => 'Instalación de corona o prótesis',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'proximo_control_implante',
+                    'nombre' => 'Próximo control e indicaciones',
+                    'visible' => true,
+                    'tipo' => 'tab',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'diagnostico',
+            'nombre' => 'Diagnóstico',
+            'visible' => true,
+            'obligatoria' => true,
+            'tipo' => 'subsecciones',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'hipotesis_diagnostica',
+                    'nombre' => 'Hipótesis diagnóstica',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'diagnostico_cie10',
+                    'nombre' => 'Diagnóstico CIE-10',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'indicaciones',
+                    'nombre' => 'Indicaciones',
+                    'visible' => true,
+                    'tipo' => 'campo',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+        [
+            'codigo' => 'recetas_examenes',
+            'nombre' => 'Recetas y exámenes',
+            'visible' => true,
+            'obligatoria' => true,
+            'tipo' => 'subsecciones',
+            'personalizada' => false,
+            'subsecciones' => [
+                [
+                    'codigo' => 'recetas',
+                    'nombre' => 'Recetas',
+                    'visible' => true,
+                    'tipo' => 'seccion',
+                    'personalizada' => false,
+                ],
+                [
+                    'codigo' => 'examenes',
+                    'nombre' => 'Exámenes',
+                    'visible' => true,
+                    'tipo' => 'seccion',
+                    'personalizada' => false,
+                ],
+            ],
+        ],
+    ];
+}
+
+   public function guardarConfiguracionFicha(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id_especialidad' => 'required|integer|exists:especialidades,id',
@@ -10521,6 +10703,98 @@ return $ficha;
             $profesional
         );
 
+        /*
+         * Se aceptan únicamente las secciones base de la ficha actual y las
+         * secciones creadas manualmente por el profesional.
+         *
+         * Esto elimina secciones heredadas de una configuración antigua de
+         * Odontología General, por ejemplo urgencia_odontologica,
+         * examen_odontologico_general o evoluciones, cuando la ficha actual es
+         * Implantología.
+         */
+        $codigosBaseProfesional = collect($seccionesBaseProfesional)
+            ->pluck('codigo')
+            ->filter()
+            ->values()
+            ->all();
+
+        $datos['secciones'] = collect($datos['secciones'])
+            ->filter(function ($seccion) use ($codigosBaseProfesional) {
+                $codigo = $seccion['codigo'] ?? null;
+                $personalizada = filter_var(
+                    $seccion['personalizada'] ?? false,
+                    FILTER_VALIDATE_BOOLEAN
+                );
+
+                return $personalizada
+                    || ($codigo && in_array($codigo, $codigosBaseProfesional, true));
+            })
+            ->values()
+            ->all();
+
+        /*
+         * Se reconstruyen los datos técnicos desde la estructura base del
+         * servidor. De esta forma cada sección conserva el tipo, nombre,
+         * obligatoriedad y subsecciones correctas para Implantología.
+         */
+        foreach ($seccionesBaseProfesional as $seccionBase) {
+            if (empty($seccionBase['codigo'])) {
+                continue;
+            }
+
+            foreach ($datos['secciones'] as $indice => &$seccionEnviada) {
+                if (($seccionEnviada['codigo'] ?? null) !== $seccionBase['codigo']) {
+                    continue;
+                }
+
+                $visibleSolicitada = filter_var(
+                    $seccionEnviada['visible'] ?? true,
+                    FILTER_VALIDATE_BOOLEAN
+                );
+
+                $subseccionesEnviadas = collect(
+                    $seccionEnviada['subsecciones'] ?? []
+                )->keyBy('codigo');
+
+                $seccionNormalizada = array_merge(
+                    $seccionBase,
+                    [
+                        'visible' => $visibleSolicitada,
+                        'orden' => $seccionEnviada['orden'] ?? ($indice + 1),
+                        'personalizada' => false,
+                    ]
+                );
+
+                $seccionNormalizada['subsecciones'] = collect(
+                    $seccionBase['subsecciones'] ?? []
+                )->map(function ($subseccionBase, $indiceSubseccion) use ($subseccionesEnviadas) {
+                    $codigoSubseccion = $subseccionBase['codigo'] ?? null;
+                    $subseccionEnviada = $codigoSubseccion
+                        ? $subseccionesEnviadas->get($codigoSubseccion)
+                        : null;
+
+                    return array_merge(
+                        $subseccionBase,
+                        [
+                            'visible' => $subseccionEnviada
+                                ? filter_var(
+                                    $subseccionEnviada['visible'] ?? true,
+                                    FILTER_VALIDATE_BOOLEAN
+                                )
+                                : true,
+                            'orden' => $subseccionEnviada['orden']
+                                ?? ($indiceSubseccion + 1),
+                            'personalizada' => false,
+                        ]
+                    );
+                })->values()->all();
+
+                $seccionEnviada = $seccionNormalizada;
+                unset($seccionEnviada);
+                break;
+            }
+        }
+
         foreach ($seccionesBaseProfesional as $seccionBase) {
             $esObligatoria = !empty($seccionBase['obligatoria'])
                 || !empty($seccionBase['obligatorio']);
@@ -10575,7 +10849,7 @@ return $ficha;
             $plantilla->id_profesional = $profesional->id;
             $plantilla->id_especialidad = $profesional->id_especialidad;
             $plantilla->id_tipo_especialidad = $profesional->id_tipo_especialidad;
-            $plantilla->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidad;
+            $plantilla->id_sub_tipo_especialidad = (int) ($profesional->id_sub_tipo_especialidad ?? 0);
 
             $columnasPlantilla = \Illuminate\Support\Facades\Schema::getColumnListing($plantilla->getTable());
 
@@ -17298,5 +17572,303 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         }
 
         return response()->json($datos);
+    }
+
+    public function importarExcelDiagnosticosDental(){
+        return view('importar_diagnosticos_dental');
+    }
+
+    public function vistaImportarEspecialidadesDiagnosticos()
+    {
+        return view(
+            'app.profesional.configuracion.importar_especialidades_diagnosticos'
+        );
+    }
+
+    public function importarEspecialidadesDiagnosticos(Request $request)
+    {
+        $request->validate(
+    [
+        'archivo' => [
+            'required',
+            'file',
+            'max:10240',
+
+            function ($attribute, $archivo, $fail) {
+                $extension = strtolower(
+                    $archivo->getClientOriginalExtension()
+                );
+
+                $extensionesPermitidas = [
+                    'csv',
+                    'xlsx',
+                    'xls',
+                ];
+
+                if (!in_array(
+                    $extension,
+                    $extensionesPermitidas,
+                    true
+                )) {
+                    $fail(
+                        'El archivo debe tener extensión CSV, XLSX o XLS.'
+                    );
+                }
+            },
+        ],
+    ],
+    [
+        'archivo.required' =>
+            'Debe seleccionar un archivo.',
+
+        'archivo.file' =>
+            'El archivo seleccionado no es válido.',
+
+        'archivo.max' =>
+            'El archivo no puede superar los 10 MB.',
+    ]
+);
+
+        try {
+            /*
+            * toArray() retorna:
+            *
+            * [
+            *     0 => [ // primera hoja
+            *         0 => [encabezados],
+            *         1 => [primera fila],
+            *         ...
+            *     ]
+            * ]
+            */
+            $hojas = Excel::toArray([], $request->file('archivo'));
+
+            if (empty($hojas) || empty($hojas[0])) {
+                return back()->with(
+                    'error',
+                    'El archivo no contiene registros.'
+                );
+            }
+
+            $filas = $hojas[0];
+
+            /*
+            * Se obtiene la primera fila como encabezado.
+            */
+            $encabezadosOriginales = array_shift($filas);
+
+            $encabezados = collect($encabezadosOriginales)
+                ->map(function ($encabezado) {
+                    return \Illuminate\Support\Str::slug(
+                        trim((string) $encabezado),
+                        '_'
+                    );
+                })
+                ->toArray();
+
+            /*
+            * Columnas mínimas requeridas.
+            *
+            * Se recomienda actualizar por ID, porque la descripción puede
+            * repetirse o cambiar ligeramente.
+            */
+            $indiceId = array_search('id', $encabezados, true);
+
+            $indiceEspecialidades = array_search(
+                'id_especialidad',
+                $encabezados,
+                true
+            );
+
+            /*
+            * También se aceptan otros nombres para la columna.
+            */
+            if ($indiceEspecialidades === false) {
+                foreach ([
+                    'ids_especialidades',
+                    'especialidades',
+                    'id_especialidades',
+                ] as $nombreAlternativo) {
+                    $indiceEspecialidades = array_search(
+                        $nombreAlternativo,
+                        $encabezados,
+                        true
+                    );
+
+                    if ($indiceEspecialidades !== false) {
+                        break;
+                    }
+                }
+            }
+
+            if ($indiceId === false) {
+                return back()->with(
+                    'error',
+                    'El Excel debe tener una columna llamada "id".'
+                );
+            }
+
+            if ($indiceEspecialidades === false) {
+                return back()->with(
+                    'error',
+                    'El Excel debe tener una columna llamada "id_especialidad".'
+                );
+            }
+
+            $actualizados = 0;
+            $sinCambios = 0;
+            $noEncontrados = 0;
+            $omitidos = 0;
+            $errores = [];
+
+            DB::beginTransaction();
+
+            foreach ($filas as $numeroFila => $fila) {
+                /*
+                * Excel comienza visualmente en la fila 2 porque la primera
+                * contiene encabezados.
+                */
+                $numeroFilaExcel = $numeroFila + 2;
+
+                $idDiagnostico = $fila[$indiceId] ?? null;
+                $especialidades = $fila[$indiceEspecialidades] ?? null;
+
+                if (
+                    $idDiagnostico === null
+                    || $idDiagnostico === ''
+                ) {
+                    $omitidos++;
+                    continue;
+                }
+
+                /*
+                * Normaliza los IDs:
+                *
+                * "15, 16,16, 17" => "15,16,17"
+                */
+                $especialidadesNormalizadas =
+                    $this->normalizarIdsEspecialidadesDental(
+                        $especialidades
+                    );
+
+                /*
+                * Se permite dejar el campo vacío, pero también puedes cambiar
+                * este comportamiento si no quieres borrar información.
+                */
+                $diagnostico = DB::table('diagnosticos_dental')
+                    ->where('id', (int) $idDiagnostico)
+                    ->first();
+
+                if (!$diagnostico) {
+                    $noEncontrados++;
+
+                    $errores[] = [
+                        'fila' => $numeroFilaExcel,
+                        'id' => $idDiagnostico,
+                        'motivo' => 'Diagnóstico no encontrado.',
+                    ];
+
+                    continue;
+                }
+
+                $valorActual = $this->normalizarIdsEspecialidadesDental(
+                    $diagnostico->id_especialidad
+                );
+
+                if ($valorActual === $especialidadesNormalizadas) {
+                    $sinCambios++;
+                    continue;
+                }
+
+                DB::table('diagnosticos_dental')
+                    ->where('id', (int) $idDiagnostico)
+                    ->update([
+                        'id_especialidad' => $especialidadesNormalizadas,
+                        'updated_at' => now(),
+                    ]);
+
+                $actualizados++;
+            }
+
+            DB::commit();
+
+            Log::info('Importación de especialidades en diagnósticos dental', [
+                'usuario_id' => auth()->id(),
+                'actualizados' => $actualizados,
+                'sin_cambios' => $sinCambios,
+                'no_encontrados' => $noEncontrados,
+                'omitidos' => $omitidos,
+                'errores' => $errores,
+            ]);
+
+            return back()->with([
+                'success' => 'Importación procesada correctamente.',
+                'resultado_importacion' => [
+                    'actualizados' => $actualizados,
+                    'sin_cambios' => $sinCambios,
+                    'no_encontrados' => $noEncontrados,
+                    'omitidos' => $omitidos,
+                    'errores' => $errores,
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            Log::error(
+                'Error importando especialidades de diagnósticos dental',
+                [
+                    'usuario_id' => auth()->id(),
+                    'error' => $e->getMessage(),
+                    'archivo' => $e->getFile(),
+                    'linea' => $e->getLine(),
+                ]
+            );
+
+            return back()->with(
+                'error',
+                config('app.debug')
+                    ? $e->getMessage()
+                    : 'No fue posible procesar el archivo.'
+            );
+        }
+    }
+
+    /**
+     * Convierte una lista de especialidades a un formato consistente.
+     *
+     * Ejemplos:
+     * "15, 16, 17" => "15,16,17"
+     * "15;16;17"    => "15,16,17"
+     * "15 / 16"     => "15,16"
+     */
+    private function normalizarIdsEspecialidadesDental($valor): ?string
+    {
+        if ($valor === null || trim((string) $valor) === '') {
+            return null;
+        }
+
+        $ids = preg_split(
+            '/[,;|\/\s]+/',
+            trim((string) $valor)
+        );
+
+        $ids = collect($ids)
+            ->map(function ($id) {
+                return trim((string) $id);
+            })
+            ->filter(function ($id) {
+                return $id !== ''
+                    && ctype_digit($id)
+                    && (int) $id > 0;
+            })
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->unique()
+            ->sort()
+            ->values()
+            ->implode(',');
+
+        return $ids !== '' ? $ids : null;
     }
 }

@@ -559,7 +559,9 @@ Route::group(
         Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
 		Route::get('confidencial/solitar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacionConfidencial'])->name('solicitud.aprobacion.fmu.confidencial');
         Route::get('confidencial/validar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacionConfidencial'])->name('validar.aprobacion.fmu.confidencial');
-
+        Route::get('importar-excel-diagnosticos-dental', [App\Http\Controllers\EscritorioProfesional::class, 'importarExcelDiagnosticosDental'])->name('profesional.importar_excel_diagnosticos_dental');
+        Route::get('/diagnosticos-dental/importar-especialidades',[App\Http\Controllers\EscritorioProfesional::class, 'vistaImportarEspecialidadesDiagnosticos'])->name('diagnosticos.dental.importar.especialidades');
+        Route::post('/diagnosticos-dental/importar-especialidades',[App\Http\Controllers\EscritorioProfesional::class, 'importarEspecialidadesDiagnosticos'])->name('diagnosticos.dental.procesar.especialidades');
     }
 );
 

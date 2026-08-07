@@ -1,3 +1,294 @@
+@php
+    /*
+     * Configuración común para todas las fichas odontológicas.
+     *
+     * Debe incluirse al comienzo de cada ficha odontológica que necesite
+     * respetar la plantilla personalizada del profesional.
+     */
+    $configuracionFichaDental = $plantilla
+        ?? ($plantillaFicha
+        ?? ($configuracionFicha
+        ?? null));
+
+    if (
+        empty($configuracionFichaDental)
+        && isset($profesional)
+        && !empty($profesional->id)
+    ) {
+        $consultaPlantillaDental = \App\Models\PlantillaFichaMedica::with([
+                'secciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones' => function ($query) {
+                    $query->orderBy('orden');
+                },
+                'secciones.subsecciones.campos' => function ($query) {
+                    $query->orderBy('orden');
+                },
+            ])
+            ->where('id_profesional', $profesional->id)
+            ->where('id_especialidad', (int) ($profesional->id_especialidad ?? 0))
+            ->where('id_tipo_especialidad', (int) ($profesional->id_tipo_especialidad ?? 0))
+            ->where('id_sub_tipo_especialidad', (int) ($profesional->id_sub_tipo_especialidad ?? 0))
+            ->where('activa', 1);
+
+        $configuracionFichaDental = $consultaPlantillaDental
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
+    }
+
+    $seccionesPersonalizadasDental = data_get(
+        $configuracionFichaDental,
+        'secciones',
+        []
+    );
+
+    if (is_string($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental =
+            json_decode($seccionesPersonalizadasDental, true) ?: [];
+    } elseif (
+        $seccionesPersonalizadasDental instanceof
+        \Illuminate\Support\Collection
+    ) {
+        $seccionesPersonalizadasDental =
+            $seccionesPersonalizadasDental->toArray();
+    } elseif (is_object($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental = json_decode(
+            json_encode($seccionesPersonalizadasDental),
+            true
+        ) ?: [];
+    }
+
+    $normalizarCodigoFichaDental = static function ($valor) {
+        return \Illuminate\Support\Str::slug((string) $valor, '_');
+    };
+
+    $buscarSeccionFichaDental = static function (array $alias) use (
+        $seccionesPersonalizadasDental,
+        $normalizarCodigoFichaDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return null;
+        }
+
+        $aliasNormalizados = collect($alias)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($seccionesPersonalizadasDental as $seccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($seccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($seccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return $seccion;
+            }
+        }
+
+        return null;
+    };
+
+    $seccionVisibleFichaDental = static function (
+        array $alias,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $seccionesPersonalizadasDental
+    ) {
+        if (empty($seccionesPersonalizadasDental)) {
+            return $predeterminado;
+        }
+
+        $seccion = $buscarSeccionFichaDental($alias);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        if (
+            (bool) data_get(
+                $seccion,
+                'obligatoria',
+                data_get($seccion, 'obligatorio', false)
+            )
+        ) {
+            return true;
+        }
+
+        return filter_var(
+            data_get($seccion, 'visible', true),
+            FILTER_VALIDATE_BOOLEAN
+        );
+    };
+
+    $subseccionVisibleFichaDental = static function (
+        array $aliasSeccion,
+        array $aliasSubseccion,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $normalizarCodigoFichaDental
+    ) {
+        $seccion = $buscarSeccionFichaDental($aliasSeccion);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        $subsecciones = data_get($seccion, 'subsecciones', []);
+
+        if ($subsecciones instanceof \Illuminate\Support\Collection) {
+            $subsecciones = $subsecciones->toArray();
+        } elseif (is_object($subsecciones)) {
+            $subsecciones = json_decode(
+                json_encode($subsecciones),
+                true
+            ) ?: [];
+        }
+
+        if (empty($subsecciones)) {
+            return $predeterminado;
+        }
+
+        $aliasNormalizados = collect($aliasSubseccion)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($subsecciones as $subseccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return filter_var(
+                    data_get($subseccion, 'visible', true),
+                    FILTER_VALIDATE_BOOLEAN
+                );
+            }
+        }
+
+        return $predeterminado;
+    };
+
+    /*
+     * Alias temporales para otras vistas odontológicas antiguas que todavía
+     * utilicen los nombres previos. Esto evita romperlas durante la migración.
+     */
+    $configuracionFichaOdontologica = $configuracionFichaDental;
+    $seccionesPersonalizadasOdonto = $seccionesPersonalizadasDental;
+    $normalizarCodigoFichaOdonto = $normalizarCodigoFichaDental;
+    $buscarSeccionFichaOdonto = $buscarSeccionFichaDental;
+    $seccionVisibleFichaOdonto = $seccionVisibleFichaDental;
+@endphp
+
+
+@php
+    /*
+     * Secciones compartidas que Implantología toma desde la plantilla
+     * correspondiente a su especialidad, tipo y subtipo.
+     */
+    $mostrarMotivoConsultaDental = $seccionVisibleFichaDental([
+        'motivo_consulta',
+        'motivo de la consulta y examen fisico general',
+    ]);
+
+
+    $mostrarEvaluacionPreImplante = $seccionVisibleFichaDental([
+        'evaluacion_pre_implante',
+        'examen evaluacion pre implante',
+        'evaluacion pre implante',
+    ]);
+
+    $mostrarTratamientoImplantologico = $seccionVisibleFichaDental([
+        'tratamiento_implantologico',
+        'tratamiento implantologico',
+        'tratamiento pre implante',
+    ]);
+
+    $mostrarTratamientoRehabilitador = $seccionVisibleFichaDental([
+        'tratamiento_rehabilitador',
+        'tratamiento rehabilitador',
+    ]);
+
+    $mostrarControlPostImplante = $seccionVisibleFichaDental([
+        'control_post_implante',
+        'control post implante',
+    ]);
+
+    $mostrarDiagnosticoImplantologia = $seccionVisibleFichaDental([
+        'diagnostico',
+        'diagnosticos',
+    ]);
+
+    $mostrarRecetasExamenesImplantologia = $seccionVisibleFichaDental([
+        'recetas_examenes',
+        'recetas y examenes',
+        'recetas_examenes_generales',
+    ]);
+
+    $mostrarPlanRehabilitacion = $subseccionVisibleFichaDental(
+        ['tratamiento_rehabilitador', 'tratamiento rehabilitador'],
+        ['plan_rehabilitacion', 'plan de rehabilitacion']
+    );
+
+    $mostrarTratamientoRehabilitacion = $subseccionVisibleFichaDental(
+        ['tratamiento_rehabilitador', 'tratamiento rehabilitador'],
+        ['tratamiento_rehabilitacion', 'tratamiento de rehabilitacion']
+    );
+
+    $mostrarEvaluacionImplanteUnico = $subseccionVisibleFichaDental(
+        ['control_post_implante', 'control post implante'],
+        ['evaluacion_implante_unico', 'evaluacion implante unico']
+    );
+
+    $mostrarEvaluacionGruposImplantes = $subseccionVisibleFichaDental(
+        ['control_post_implante', 'control post implante'],
+        ['evaluacion_grupos_implantes', 'evaluacion grupos de implante']
+    );
+
+    $mostrarInstalacionCoronaProtesis = $subseccionVisibleFichaDental(
+        ['control_post_implante', 'control post implante'],
+        ['instalacion_corona_protesis', 'instalacion de corona o protesis']
+    );
+
+    $mostrarProximoControlImplante = $subseccionVisibleFichaDental(
+        ['control_post_implante', 'control post implante'],
+        ['proximo_control_implante', 'proximo control e indicaciones']
+    );
+
+    $tabRehabilitacionActivo = $mostrarPlanRehabilitacion
+        ? 'plan_rehab'
+        : ($mostrarTratamientoRehabilitacion ? 'tto_rehab' : null);
+
+    $tabPostImplanteActivo = $mostrarEvaluacionImplanteUnico
+        ? 'eval_post_implante'
+        : ($mostrarEvaluacionGruposImplantes
+            ? 'grupos_de_imp'
+            : ($mostrarInstalacionCoronaProtesis
+                ? 'corona_prot'
+                : ($mostrarProximoControlImplante ? 'prox_cont_imp' : null)));
+@endphp
+
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">
         <div class="row mx-0">
@@ -81,12 +372,19 @@
                                 <!--Cierre: Formulario / Menor de edad-->
                             </div>
                             <!--Motivo consulta-->
-                                 @include('atencion_odontologica.generales.motivo_consulta')
+                                 @if($mostrarMotivoConsultaDental)
+                                    @include('atencion_odontologica.generales.motivo_consulta')
+                                @endif
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                                  {{-- @include('atencion_odontologica.generales.includes.odontologia_general') --}}
-                                @include('atencion_odontologica.generales.includes.odontologia_preimplante')
-                                @include('atencion_odontologica.generales.includes.odontologia_tto_preimplante')
+                                @if($mostrarEvaluacionPreImplante)
+                                    @include('atencion_odontologica.generales.includes.odontologia_preimplante')
+                                @endif
+                                @if($mostrarTratamientoImplantologico)
+                                    @include('atencion_odontologica.generales.includes.odontologia_tto_preimplante')
+                                @endif
                             <!--TRATAMIENTO REHABILITADOR DE IMPLANTES-->
+                            @if($mostrarTratamientoRehabilitador)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="exam_esp_imp">
@@ -101,12 +399,16 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <ul class="nav nav-tabs-aten nav-fill mb-10" id="implantologia_control" role="tablist">
 
+                                                            @if($mostrarPlanRehabilitacion)
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="plan_rehab_tab" data-toggle="tab" href="#plan_rehab" role="tab" aria-controls="plan_rehab" aria-selected="true" onclick="$('#paciente_piezas_dentales_rehab_impl').select2();">Plan de Rehabilitación</a>
+                                                                <a class="nav-link-aten text-reset {{ $tabRehabilitacionActivo === 'plan_rehab' ? 'active' : '' }}" id="plan_rehab_tab" data-toggle="tab" href="#plan_rehab" role="tab" aria-controls="plan_rehab" aria-selected="true" onclick="$('#paciente_piezas_dentales_rehab_impl').select2();">Plan de Rehabilitación</a>
                                                             </li>
+                                                            @endif
+                                                            @if($mostrarTratamientoRehabilitacion)
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="tto_rehab_tab" data-toggle="tab" href="#tto_rehab" role="tab" aria-controls="tto_rehab" aria-selected="true" onclick="mostrar_nueva_pieza_dental_tto_rehab_impl(1000);">Tratamiento de Rehabilitación</a>
+                                                                <a class="nav-link-aten text-reset {{ $tabRehabilitacionActivo === 'tto_rehab' ? 'active' : '' }}" id="tto_rehab_tab" data-toggle="tab" href="#tto_rehab" role="tab" aria-controls="tto_rehab" aria-selected="true" onclick="mostrar_nueva_pieza_dental_tto_rehab_impl(1000);">Tratamiento de Rehabilitación</a>
                                                             </li>
+                                                            @endif
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -115,7 +417,7 @@
                                                         <div class="tab-content" id="v-pills-tabContent">
 
                                                             <!-- EVALUACION PLANIFICACION REHABILITACION IMPLANTE -->
-                                                            <div class="tab-pane fade show active" id="plan_rehab" role="tabpanel" aria-labelledby="plan_rehab_tab">
+                                                            <div class="tab-pane fade {{ $mostrarPlanRehabilitacion ? ($tabRehabilitacionActivo === 'plan_rehab' ? 'show active' : '') : 'd-none' }}" id="plan_rehab" role="tabpanel" aria-labelledby="plan_rehab_tab">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                                                                         <h6 class="t-aten d-inline"> Evaluación planificación rehabilitación implante</h6>
@@ -203,7 +505,7 @@
                                                                                         @include('atencion_odontologica.generales.odontograma_adulto_grupos_rehab')
                                                                                     </div>
                                                                                 </div>
-                                                                       
+
                                                                                         <div class="form-row mt-2">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="form-group">
@@ -267,7 +569,7 @@
                                                                                                 <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_rehab_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
                                                                                             </div>
                                                                                         </div>
-                                                                               
+
 
                                                                                 <!--<div class="form-row my-2">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
@@ -387,7 +689,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- TRATAMIENTO DE REHABILITACION DE IMPLANTE -->
-                                                            <div class="tab-pane fade" id="tto_rehab" role="tabpanel" aria-labelledby="tto_rehab_tab">
+                                                            <div class="tab-pane fade {{ $mostrarTratamientoRehabilitacion ? ($tabRehabilitacionActivo === 'tto_rehab' ? 'show active' : '') : 'd-none' }}" id="tto_rehab" role="tabpanel" aria-labelledby="tto_rehab_tab">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                                                                         <h6 class="t-aten"> Tratamiento de Rehabilitación</h6>
@@ -603,6 +905,8 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
+                            @if($mostrarControlPostImplante)
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="exam_control_post_impl">
@@ -617,16 +921,16 @@
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <ul class="nav nav-tabs-aten nav-fill mb-10" id="implantologia_control" role="tablist">
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="eval_post_implante_tab" data-toggle="tab" href="#eval_post_implante" role="tab" aria-controls="eval_post_implante" onclick=" mostrar_nueva_pieza_post_impl(1000);" aria-selected="true">Evaluación Implante Único</a>
+                                                                <a class="nav-link-aten text-reset {{ !$mostrarEvaluacionImplanteUnico ? 'd-none' : ($tabPostImplanteActivo === 'eval_post_implante' ? 'active' : '') }}" id="eval_post_implante_tab" data-toggle="tab" href="#eval_post_implante" role="tab" aria-controls="eval_post_implante" onclick=" mostrar_nueva_pieza_post_impl(1000);" aria-selected="true">Evaluación Implante Único</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="grupos_de_imp_tab" data-toggle="tab" href="#grupos_de_imp" role="tab" aria-controls="grupos_de_imp" aria-selected="true" onclick="mostrar_nuevo_grupo_post_impl(1000);">Evaluación Grupos de Implante</a>
+                                                                <a class="nav-link-aten text-reset {{ !$mostrarEvaluacionGruposImplantes ? 'd-none' : ($tabPostImplanteActivo === 'grupos_de_imp' ? 'active' : '') }}" id="grupos_de_imp_tab" data-toggle="tab" href="#grupos_de_imp" role="tab" aria-controls="grupos_de_imp" aria-selected="true" onclick="mostrar_nuevo_grupo_post_impl(1000);">Evaluación Grupos de Implante</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="corona_prot_tab" data-toggle="tab" href="#corona_prot" role="tab" aria-controls="corona_prot" onclick="mostrar_nuevo_pieza_pfu(1000);" aria-selected="true">Instalación de Corona |  Prótesis</a>
+                                                                <a class="nav-link-aten text-reset {{ !$mostrarInstalacionCoronaProtesis ? 'd-none' : ($tabPostImplanteActivo === 'corona_prot' ? 'active' : '') }}" id="corona_prot_tab" data-toggle="tab" href="#corona_prot" role="tab" aria-controls="corona_prot" onclick="mostrar_nuevo_pieza_pfu(1000);" aria-selected="true">Instalación de Corona |  Prótesis</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="prox_cont_imp_tab" data-toggle="tab" href="#prox_cont_imp" role="tab" aria-controls="prox_cont_imp" aria-selected="true" >Próximo control e Indicaciones</a>
+                                                                <a class="nav-link-aten text-reset {{ !$mostrarProximoControlImplante ? 'd-none' : ($tabPostImplanteActivo === 'prox_cont_imp' ? 'active' : '') }}" id="prox_cont_imp_tab" data-toggle="tab" href="#prox_cont_imp" role="tab" aria-controls="prox_cont_imp" aria-selected="true" >Próximo control e Indicaciones</a>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -635,7 +939,7 @@
                                                     <div class="col-sm-12 col-md-12 col-xl-12">
                                                         <div class="tab-content" id="v-pills-tabContent">
                                                             <!--EVALUACION POST IMPLANTE UNICO-->
-                                                            <div class="tab-pane fade show active" id="eval_post_implante" role="tabpanel" aria-labelledby="eval_post_implante_tab">
+                                                            <div class="tab-pane fade {{ !$mostrarEvaluacionImplanteUnico ? 'd-none' : ($tabPostImplanteActivo === 'eval_post_implante' ? 'show active' : '') }}" id="eval_post_implante" role="tabpanel" aria-labelledby="eval_post_implante_tab">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                                                                         <h6 class="t-aten"> Evaluación implante único</h6>
@@ -1443,7 +1747,7 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -2463,6 +2767,7 @@
                                     </div>
                                 </div>
                             </div>    --}}
+                            @endif
                             <!--CRONICOS / GES / CONFIDENCIAL -->
                             @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                             <!--Diagnóstico-->
@@ -2494,13 +2799,17 @@
                                     </div>
                                 </div>
                             </div> --}}
-                            @include('general.secciones_ficha.diagnostico_dental')
+                            @if($mostrarDiagnosticoImplantologia)
+                                @include('general.secciones_ficha.diagnostico_dental')
+                            @endif
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @if($mostrarRecetasExamenesImplantologia)
+                                                @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                            @endif
                                             <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
                                         </div>
                                     </div>
@@ -9080,7 +9389,7 @@ function ocultar_pieza_impl(counter){
 
                         });
                     }
-                    
+
                 } else {
                     console.log('Error:', response.mensaje);
                 }
@@ -10368,5 +10677,4 @@ function ocultar_pieza_impl(counter){
 
         }
 </script>
-
 

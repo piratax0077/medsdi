@@ -1,26 +1,21 @@
 @php
     /*
-     * Configuración de personalización de la ficha odontológica.
+     * Configuración común para todas las fichas odontológicas.
      *
-     * El controlador puede enviar $plantilla como modelo, arreglo u objeto.
-     * Cuando no existe una plantilla guardada, se conserva el comportamiento
-     * histórico y se muestran todas las secciones.
+     * Debe incluirse al comienzo de cada ficha odontológica que necesite
+     * respetar la plantilla personalizada del profesional.
      */
-    $configuracionFichaOdontologica = $plantilla
+    $configuracionFichaDental = $plantilla
         ?? ($plantillaFicha
         ?? ($configuracionFicha
         ?? null));
 
-    /*
-     * La vista que abre la atención odontológica puede no enviar la plantilla.
-     * En ese caso se obtiene aquí la plantilla activa del profesional.
-     */
     if (
-        empty($configuracionFichaOdontologica)
+        empty($configuracionFichaDental)
         && isset($profesional)
         && !empty($profesional->id)
     ) {
-        $consultaPlantillaOdonto = \App\Models\PlantillaFichaMedica::with([
+        $consultaPlantillaDental = \App\Models\PlantillaFichaMedica::with([
                 'secciones' => function ($query) {
                     $query->orderBy('orden');
                 },
@@ -35,71 +30,69 @@
                 },
             ])
             ->where('id_profesional', $profesional->id)
-            ->where('id_especialidad', $profesional->id_especialidad)
-            ->where(
-                'id_tipo_especialidad',
-                $profesional->id_tipo_especialidad
-            )
+            ->where('id_especialidad', (int) ($profesional->id_especialidad ?? 0))
+            ->where('id_tipo_especialidad', (int) ($profesional->id_tipo_especialidad ?? 0))
+            ->where('id_sub_tipo_especialidad', (int) ($profesional->id_sub_tipo_especialidad ?? 0))
             ->where('activa', 1);
 
-        /*
-         * La personalización se guarda usando 0 cuando el profesional no tiene
-         * subtipo de especialidad. Por eso la lectura debe utilizar el mismo
-         * criterio y no buscar NULL, ya que en ese caso nunca encontraría la
-         * plantilla guardada y la ficha volvería a mostrar todas las secciones.
-         */
-        $consultaPlantillaOdonto->where(
-            'id_sub_tipo_especialidad',
-            (int) ($profesional->id_sub_tipo_especialidad ?? 0)
-        );
-
-        /*
-         * Ante posibles plantillas antiguas duplicadas, se utiliza siempre la
-         * última configuración modificada, igual que en el controlador.
-         */
-        $configuracionFichaOdontologica = $consultaPlantillaOdonto
+        $configuracionFichaDental = $consultaPlantillaDental
             ->orderByDesc('updated_at')
             ->orderByDesc('id')
             ->first();
     }
 
-    $seccionesPersonalizadasOdonto = data_get(
-        $configuracionFichaOdontologica,
+    $seccionesPersonalizadasDental = data_get(
+        $configuracionFichaDental,
         'secciones',
         []
     );
 
-    if (is_string($seccionesPersonalizadasOdonto)) {
-        $seccionesPersonalizadasOdonto = json_decode($seccionesPersonalizadasOdonto, true) ?: [];
-    } elseif ($seccionesPersonalizadasOdonto instanceof \Illuminate\Support\Collection) {
-        $seccionesPersonalizadasOdonto = $seccionesPersonalizadasOdonto->toArray();
-    } elseif (is_object($seccionesPersonalizadasOdonto)) {
-        $seccionesPersonalizadasOdonto = json_decode(json_encode($seccionesPersonalizadasOdonto), true) ?: [];
+    if (is_string($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental =
+            json_decode($seccionesPersonalizadasDental, true) ?: [];
+    } elseif (
+        $seccionesPersonalizadasDental instanceof
+        \Illuminate\Support\Collection
+    ) {
+        $seccionesPersonalizadasDental =
+            $seccionesPersonalizadasDental->toArray();
+    } elseif (is_object($seccionesPersonalizadasDental)) {
+        $seccionesPersonalizadasDental = json_decode(
+            json_encode($seccionesPersonalizadasDental),
+            true
+        ) ?: [];
     }
 
-    $normalizarCodigoFichaOdonto = static function ($valor) {
+    $normalizarCodigoFichaDental = static function ($valor) {
         return \Illuminate\Support\Str::slug((string) $valor, '_');
     };
 
-    $buscarSeccionFichaOdonto = static function (array $alias) use (
-        $seccionesPersonalizadasOdonto,
-        $normalizarCodigoFichaOdonto
+    $buscarSeccionFichaDental = static function (array $alias) use (
+        $seccionesPersonalizadasDental,
+        $normalizarCodigoFichaDental
     ) {
-        if (empty($seccionesPersonalizadasOdonto)) {
+        if (empty($seccionesPersonalizadasDental)) {
             return null;
         }
 
         $aliasNormalizados = collect($alias)
-            ->map($normalizarCodigoFichaOdonto)
+            ->map($normalizarCodigoFichaDental)
             ->filter()
             ->values()
             ->all();
 
-        foreach ($seccionesPersonalizadasOdonto as $seccion) {
-            $codigo = $normalizarCodigoFichaOdonto(data_get($seccion, 'codigo', ''));
-            $nombre = $normalizarCodigoFichaOdonto(data_get($seccion, 'nombre', ''));
+        foreach ($seccionesPersonalizadasDental as $seccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($seccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($seccion, 'nombre', '')
+            );
 
-            if (in_array($codigo, $aliasNormalizados, true) || in_array($nombre, $aliasNormalizados, true)) {
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
                 return $seccion;
             }
         }
@@ -107,61 +100,143 @@
         return null;
     };
 
-    $seccionVisibleFichaOdonto = static function (array $alias, bool $predeterminado = true) use (
-        $buscarSeccionFichaOdonto,
-        $seccionesPersonalizadasOdonto
+    $seccionVisibleFichaDental = static function (
+        array $alias,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $seccionesPersonalizadasDental
     ) {
-        if (empty($seccionesPersonalizadasOdonto)) {
+        if (empty($seccionesPersonalizadasDental)) {
             return $predeterminado;
         }
 
-        $seccion = $buscarSeccionFichaOdonto($alias);
+        $seccion = $buscarSeccionFichaDental($alias);
 
         if ($seccion === null) {
             return $predeterminado;
         }
 
-        if ((bool) data_get($seccion, 'obligatoria', data_get($seccion, 'obligatorio', false))) {
+        if (
+            (bool) data_get(
+                $seccion,
+                'obligatoria',
+                data_get($seccion, 'obligatorio', false)
+            )
+        ) {
             return true;
         }
 
-        return filter_var(data_get($seccion, 'visible', true), FILTER_VALIDATE_BOOLEAN);
+        return filter_var(
+            data_get($seccion, 'visible', true),
+            FILTER_VALIDATE_BOOLEAN
+        );
     };
 
-    $mostrarMotivoConsultaOdonto = $seccionVisibleFichaOdonto([
+    $subseccionVisibleFichaDental = static function (
+        array $aliasSeccion,
+        array $aliasSubseccion,
+        bool $predeterminado = true
+    ) use (
+        $buscarSeccionFichaDental,
+        $normalizarCodigoFichaDental
+    ) {
+        $seccion = $buscarSeccionFichaDental($aliasSeccion);
+
+        if ($seccion === null) {
+            return $predeterminado;
+        }
+
+        $subsecciones = data_get($seccion, 'subsecciones', []);
+
+        if ($subsecciones instanceof \Illuminate\Support\Collection) {
+            $subsecciones = $subsecciones->toArray();
+        } elseif (is_object($subsecciones)) {
+            $subsecciones = json_decode(
+                json_encode($subsecciones),
+                true
+            ) ?: [];
+        }
+
+        if (empty($subsecciones)) {
+            return $predeterminado;
+        }
+
+        $aliasNormalizados = collect($aliasSubseccion)
+            ->map($normalizarCodigoFichaDental)
+            ->filter()
+            ->values()
+            ->all();
+
+        foreach ($subsecciones as $subseccion) {
+            $codigo = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'codigo', '')
+            );
+            $nombre = $normalizarCodigoFichaDental(
+                data_get($subseccion, 'nombre', '')
+            );
+
+            if (
+                in_array($codigo, $aliasNormalizados, true)
+                || in_array($nombre, $aliasNormalizados, true)
+            ) {
+                return filter_var(
+                    data_get($subseccion, 'visible', true),
+                    FILTER_VALIDATE_BOOLEAN
+                );
+            }
+        }
+
+        return $predeterminado;
+    };
+
+    /*
+     * Alias temporales para otras vistas odontológicas antiguas que todavía
+     * utilicen los nombres previos. Esto evita romperlas durante la migración.
+     */
+    $configuracionFichaOdontologica = $configuracionFichaDental;
+    $seccionesPersonalizadasOdonto = $seccionesPersonalizadasDental;
+    $normalizarCodigoFichaOdonto = $normalizarCodigoFichaDental;
+    $buscarSeccionFichaOdonto = $buscarSeccionFichaDental;
+    $seccionVisibleFichaOdonto = $seccionVisibleFichaDental;
+@endphp
+
+
+@php
+    $mostrarMotivoConsultaOdonto = $seccionVisibleFichaDental([
         'motivo_consulta',
         'motivo de la consulta y examen fisico general',
     ]);
 
-    $mostrarUrgenciaOdonto = $seccionVisibleFichaOdonto([
+    $mostrarUrgenciaOdonto = $seccionVisibleFichaDental([
         'urgencia_odontologica',
         'control_urgencias',
         'urgencia odontologica',
     ]);
 
-    $mostrarExamenOdontoGeneral = $seccionVisibleFichaOdonto([
+    $mostrarExamenOdontoGeneral = $seccionVisibleFichaDental([
         'examen_odontologico_general',
         'examen odontologico general',
         'examen_odontologico',
     ]);
 
-    $mostrarEvolucionesOdonto = $seccionVisibleFichaOdonto([
+    $mostrarEvolucionesOdonto = $seccionVisibleFichaDental([
         'evoluciones',
         'control_odontologico',
     ]);
 
-    // Estas dos secciones son obligatorias también desde el servidor.
-    $mostrarDiagnosticoOdonto = $seccionVisibleFichaOdonto([
+    $mostrarDiagnosticoOdonto = $seccionVisibleFichaDental([
         'diagnostico',
         'diagnosticos',
     ]);
 
-    $mostrarRecetasExamenesOdonto = $seccionVisibleFichaOdonto([
+    $mostrarRecetasExamenesOdonto = $seccionVisibleFichaDental([
         'recetas_examenes',
         'recetas y examenes',
         'recetas_examenes_generales',
     ]);
 @endphp
+
 
 <div class="user-profile user-card mt-0 ficha-odontologia-general" style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2 ">

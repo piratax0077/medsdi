@@ -1,114 +1,72 @@
 @php
     /*
-     * Visibilidad de las subsecciones de Urgencia odontológica.
-     * Las funciones se definen en ficha_od_general.blade.php y quedan
-     * disponibles para esta vista incluida.
+     * Componente común para cualquier especialidad odontológica.
+     * Si no existe una plantilla configurada, conserva todas las pestañas.
      */
-    $subseccionUrgenciaVisible = static function (
+    $subseccionVisibleDentalDisponible =
+        isset($subseccionVisibleFichaDental)
+        && is_callable($subseccionVisibleFichaDental);
+
+    $resolverSubseccionUrgencia = static function (
         array $aliasSubseccion,
         bool $predeterminado = true
     ) use (
-        $buscarSeccionFichaOdonto,
-        $normalizarCodigoFichaOdonto
+        $subseccionVisibleDentalDisponible,
+        $subseccionVisibleFichaDental
     ) {
-        $seccion = $buscarSeccionFichaOdonto([
-            'urgencia_odontologica',
-            'control_urgencias',
-            'urgencia odontologica',
-        ]);
-
-        if ($seccion === null) {
+        if (!$subseccionVisibleDentalDisponible) {
             return $predeterminado;
         }
 
-        $subsecciones = data_get($seccion, 'subsecciones', []);
-
-        if ($subsecciones instanceof \Illuminate\Support\Collection) {
-            $subsecciones = $subsecciones->toArray();
-        } elseif (is_object($subsecciones)) {
-            $subsecciones = json_decode(json_encode($subsecciones), true) ?: [];
-        }
-
-        if (empty($subsecciones)) {
-            return $predeterminado;
-        }
-
-        $aliasNormalizados = collect($aliasSubseccion)
-            ->map($normalizarCodigoFichaOdonto)
-            ->filter()
-            ->values()
-            ->all();
-
-        foreach ($subsecciones as $subseccion) {
-            $codigo = $normalizarCodigoFichaOdonto(
-                data_get($subseccion, 'codigo', '')
-            );
-            $nombre = $normalizarCodigoFichaOdonto(
-                data_get($subseccion, 'nombre', '')
-            );
-
-            if (
-                in_array($codigo, $aliasNormalizados, true)
-                || in_array($nombre, $aliasNormalizados, true)
-            ) {
-                return filter_var(
-                    data_get($subseccion, 'visible', true),
-                    FILTER_VALIDATE_BOOLEAN
-                );
-            }
-        }
-
-        return $predeterminado;
+        return $subseccionVisibleFichaDental(
+            [
+                'urgencia_odontologica',
+                'control_urgencias',
+                'urgencia odontologica',
+            ],
+            $aliasSubseccion,
+            $predeterminado
+        );
     };
 
-    $mostrarMotivoUrgencia = $subseccionUrgenciaVisible([
+    $mostrarMotivoUrgencia = $resolverSubseccionUrgencia([
         'motivo_urgencia',
         'motivo consulta',
     ]);
 
-    $mostrarEvaluacionAdultoUrgencia = $subseccionUrgenciaVisible([
+    $mostrarEvaluacionAdultoUrgencia = $resolverSubseccionUrgencia([
         'evaluacion_diagnostica_adulto',
         'evaluacion diagnostica adulto',
     ]) && (($profesional->id_tipo_especialidad ?? null) != 19);
 
-    $mostrarEvaluacionPediatricaUrgencia = $subseccionUrgenciaVisible([
+    $mostrarEvaluacionPediatricaUrgencia = $resolverSubseccionUrgencia([
         'evaluacion_diagnostica_pediatrica',
         'evaluacion diagnostica pediatrica',
     ]);
 
-    $mostrarIndicacionesUrgencia = $subseccionUrgenciaVisible([
+    $mostrarIndicacionesUrgencia = $resolverSubseccionUrgencia([
         'indicaciones_urgencia',
         'indicaciones',
     ]);
 
-    $mostrarPresupuestoUrgencia = $subseccionUrgenciaVisible([
+    $mostrarPresupuestoUrgencia = $resolverSubseccionUrgencia([
         'presupuesto_urgencia',
         'presupuesto urgencia',
     ]);
 
-    /* La primera subsección visible queda seleccionada automáticamente. */
     $subseccionUrgenciaActiva = collect([
         'motivo_urgencia' => $mostrarMotivoUrgencia,
         'eval_urg_ad' => $mostrarEvaluacionAdultoUrgencia,
         'eval_urg_ped' => $mostrarEvaluacionPediatricaUrgencia,
         'ind_urgencia' => $mostrarIndicacionesUrgencia,
         'presup_urgencia' => $mostrarPresupuestoUrgencia,
-    ])->first(function ($visible) {
-        return $visible;
-    }, false);
+    ])->search(true, true);
 
-    if ($subseccionUrgenciaActiva !== false) {
-        $subseccionUrgenciaActiva = collect([
-            'motivo_urgencia' => $mostrarMotivoUrgencia,
-            'eval_urg_ad' => $mostrarEvaluacionAdultoUrgencia,
-            'eval_urg_ped' => $mostrarEvaluacionPediatricaUrgencia,
-            'ind_urgencia' => $mostrarIndicacionesUrgencia,
-            'presup_urgencia' => $mostrarPresupuestoUrgencia,
-        ])->search(true, true);
-    } else {
+    if ($subseccionUrgenciaActiva === false) {
         $subseccionUrgenciaActiva = null;
     }
 @endphp
+
 
 <style>
     #presup_urgencia .urgencia-resumen { border:1px solid #cbd9ea; border-radius:12px; background:#fff; box-shadow:0 4px 13px rgba(31,55,86,.08); overflow:hidden; }
