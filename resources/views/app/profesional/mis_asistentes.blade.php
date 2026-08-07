@@ -39,10 +39,15 @@
                         <div class="card-header-principal bg-white">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
+                                    <div class="col-sm-12 col-md-7 col-lg-8 col-xl-8 pl-0">
                                         <h5 class="f-20 d-inline">
                                             <i class="feather icon-users icono-primary"></i> Mis asistentes
                                         </h5>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 text-md-right mt-2 mt-md-0 pr-0">
+                                        <button type="button" class="btn btn-info btn-sm" onclick="abrir_modal_asociar_asistente();">
+                                            <i class="feather icon-user-plus"></i> Asociar asistente
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -131,6 +136,81 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL: Buscar y asociar asistente --}}
+    <div id="modal_asociar_asistente" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="modal_asociar_asistente_titulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content asociar-asistente-modal-content">
+                <div class="modal-header-sdi">
+                    <h5 class="modal-title-sdi" id="modal_asociar_asistente_titulo">
+                        <i class="feather icon-user-plus mr-2"></i> Asociar asistente
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+
+                <div class="modal-body asociar-asistente-modal-body">
+                    <div class="alert alert-light border mb-4">
+                        <div class="d-flex align-items-start">
+                            <i class="feather icon-info text-info f-20 mr-2 mt-1"></i>
+                            <div>
+                                <strong>Asocia una asistente ya registrada en MedSDI.</strong>
+                                <div class="text-muted small mt-1">
+                                    Selecciona el lugar de atención y busca por RUT, nombre, apellido o correo electrónico.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="asociar_id_lugar_atencion" class="font-weight-bold">
+                            Lugar de atención <span class="text-danger">*</span>
+                        </label>
+                        <select id="asociar_id_lugar_atencion" class="form-control">
+                            <option value="">Seleccione un lugar de atención</option>
+                            @if (isset($lugares_atencion_profesional))
+                                @foreach ($lugares_atencion_profesional as $lugar_asociar)
+                                    <option value="{{ $lugar_asociar->id }}">{{ $lugar_asociar->nombre }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="buscar_asistente_asociar" class="font-weight-bold">
+                            Buscar asistente <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" id="buscar_asistente_asociar" class="form-control"
+                                placeholder="RUT, nombre, apellido o correo" autocomplete="off">
+                            <div class="input-group-append">
+                                <button type="button" id="btn_buscar_asistente_asociar" class="btn btn-info"
+                                    onclick="buscar_asistentes_para_asociar();">
+                                    <i class="feather icon-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                        <small class="form-text text-muted">Ingresa al menos 2 caracteres.</small>
+                    </div>
+
+                    <div id="asociar_asistente_spinner" class="text-center py-4" style="display:none;">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="sr-only">Buscando...</span>
+                        </div>
+                        <div class="text-muted mt-2">Buscando asistentes...</div>
+                    </div>
+
+                    <div id="asociar_asistente_mensaje" class="text-center text-muted py-4">
+                        Selecciona un lugar de atención y realiza una búsqueda.
+                    </div>
+
+                    <div id="asociar_asistente_resultados" class="asociar-asistente-resultados"></div>
                 </div>
             </div>
         </div>
@@ -319,6 +399,77 @@
         </div>
     </div>
 
+    <style>
+        .asociar-asistente-modal-content {
+            border: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, .15);
+        }
+
+        .asociar-asistente-modal-body {
+            padding: 1.5rem;
+        }
+
+        .asociar-asistente-resultados {
+            max-height: 390px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .asistente-resultado-card {
+            border: 1px solid #e6e9ef;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background: #fff;
+            transition: box-shadow .2s ease, border-color .2s ease;
+        }
+
+        .asistente-resultado-card:hover {
+            border-color: #c9dce6;
+            box-shadow: 0 5px 16px rgba(0, 0, 0, .06);
+        }
+
+        .asistente-resultado-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #edf7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 42px;
+            margin-right: 12px;
+            color: #17a2b8;
+            font-size: 18px;
+        }
+
+        .asistente-resultado-nombre {
+            font-weight: 600;
+            color: #263238;
+            margin-bottom: 2px;
+        }
+
+        .asistente-resultado-meta {
+            color: #6c757d;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .badge-asistente-asociada {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 10px;
+            border-radius: 20px;
+            background: #eef8f1;
+            color: #2f7d43;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    </style>
+
     @include('app.profesional.modales.nuevo_asistente')
 
     {{-- @include('app.contabilidad.modals.datos_profesional') --}}
@@ -327,6 +478,235 @@
 @section('page-script')
 
     <script>
+        let buscarAsistenteTimer = null;
+
+        window.abrir_modal_asociar_asistente = function() {
+            $('#buscar_asistente_asociar').val('');
+            $('#asociar_asistente_resultados').empty();
+            $('#asociar_asistente_spinner').hide();
+            $('#asociar_asistente_mensaje')
+                .text('Selecciona un lugar de atención y realiza una búsqueda.')
+                .show();
+
+            $('#modal_asociar_asistente').modal('show');
+
+            setTimeout(function () {
+                $('#buscar_asistente_asociar').trigger('focus');
+            }, 300);
+        };
+
+        window.buscar_asistentes_para_asociar = function() {
+            const buscar = $.trim($('#buscar_asistente_asociar').val());
+            const idLugarAtencion = $('#asociar_id_lugar_atencion').val();
+
+            if (!idLugarAtencion) {
+                swal({
+                    title: 'Lugar de atención requerido',
+                    text: 'Selecciona el lugar de atención donde deseas asociar a la asistente.',
+                    icon: 'warning',
+                    buttons: 'Aceptar'
+                });
+                return;
+            }
+
+            if (buscar.length < 2) {
+                $('#asociar_asistente_resultados').empty();
+                $('#asociar_asistente_mensaje')
+                    .text('Ingresa al menos 2 caracteres para buscar.')
+                    .show();
+                return;
+            }
+
+            $('#asociar_asistente_mensaje').hide();
+            $('#asociar_asistente_resultados').empty();
+            $('#asociar_asistente_spinner').show();
+            $('#btn_buscar_asistente_asociar').prop('disabled', true);
+
+            $.ajax({
+                url: "{{ route('profesional.buscar_asistentes_asociar') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    buscar: buscar,
+                    id_lugar_atencion: idLugarAtencion
+                }
+            })
+            .done(function(resp) {
+                if (!resp || resp.estado != 1) {
+                    $('#asociar_asistente_mensaje')
+                        .text((resp && resp.msj) ? resp.msj : 'No fue posible realizar la búsqueda.')
+                        .show();
+                    return;
+                }
+
+                renderizar_asistentes_para_asociar(resp.asistentes || []);
+            })
+            .fail(function(xhr) {
+                let mensaje = 'No fue posible buscar asistentes.';
+
+                if (xhr.responseJSON && xhr.responseJSON.msj) {
+                    mensaje = xhr.responseJSON.msj;
+                }
+
+                $('#asociar_asistente_mensaje').text(mensaje).show();
+            })
+            .always(function() {
+                $('#asociar_asistente_spinner').hide();
+                $('#btn_buscar_asistente_asociar').prop('disabled', false);
+            });
+        };
+
+        window.renderizar_asistentes_para_asociar = function(asistentes) {
+            const $contenedor = $('#asociar_asistente_resultados');
+            $contenedor.empty();
+
+            if (!asistentes.length) {
+                $('#asociar_asistente_mensaje')
+                    .text('No se encontraron asistentes con ese criterio de búsqueda.')
+                    .show();
+                return;
+            }
+
+            $('#asociar_asistente_mensaje').hide();
+
+            asistentes.forEach(function(asistente) {
+                const nombre = escapeHtmlAsistente(asistente.nombre_completo || 'Sin nombre');
+                const rut = escapeHtmlAsistente(asistente.rut || 'RUT no disponible');
+                const email = escapeHtmlAsistente(asistente.email || 'Correo no disponible');
+                const telefono = escapeHtmlAsistente(asistente.telefono_uno || 'Teléfono no disponible');
+
+                let accion = '';
+
+                if (asistente.asociada) {
+                    accion = `
+                        <span class="badge-asistente-asociada">
+                            <i class="feather icon-check mr-1"></i> Ya asociada
+                        </span>`;
+                } else {
+                    accion = `
+                        <button type="button" class="btn btn-info btn-sm"
+                            onclick="asociar_asistente_profesional(${Number(asistente.id)}, this)">
+                            <i class="feather icon-user-plus"></i> Asociar
+                        </button>`;
+                }
+
+                $contenedor.append(`
+                    <div class="asistente-resultado-card">
+                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                            <div class="d-flex align-items-center mr-3 mb-2 mb-sm-0">
+                                <div class="asistente-resultado-avatar">
+                                    <i class="feather icon-user"></i>
+                                </div>
+                                <div>
+                                    <div class="asistente-resultado-nombre">${nombre}</div>
+                                    <div class="asistente-resultado-meta">
+                                        <span><i class="feather icon-credit-card mr-1"></i>${rut}</span><br>
+                                        <span><i class="feather icon-mail mr-1"></i>${email}</span>
+                                        &nbsp;·&nbsp;
+                                        <span><i class="feather icon-phone mr-1"></i>${telefono}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>${accion}</div>
+                        </div>
+                    </div>`);
+            });
+        };
+
+        window.asociar_asistente_profesional = function(idAsistente, btn) {
+            const idLugarAtencion = $('#asociar_id_lugar_atencion').val();
+
+            if (!idLugarAtencion || !idAsistente) {
+                return;
+            }
+
+            const $btn = $(btn);
+            const textoOriginal = $btn.html();
+
+            $btn.prop('disabled', true).html(
+                '<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span> Asociando...'
+            );
+
+            $.ajax({
+                url: "{{ route('profesional.agregar_asistente_lugar_atencion') }}",
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    id_asistente: idAsistente,
+                    id_lugar_atencion: idLugarAtencion
+                }
+            })
+            .done(function(resp) {
+                if (resp && resp.estado == 1) {
+                    swal({
+                        title: 'Asistente asociada',
+                        text: resp.msj || 'La asistente fue asociada correctamente.',
+                        icon: 'success',
+                        buttons: 'Aceptar'
+                    }).then(function() {
+                        window.location.reload();
+                    });
+                } else {
+                    swal({
+                        title: 'No fue posible asociar',
+                        text: (resp && resp.msj) ? resp.msj : 'La asistente no pudo ser asociada.',
+                        icon: 'warning',
+                        buttons: 'Aceptar'
+                    });
+                    $btn.prop('disabled', false).html(textoOriginal);
+                }
+            })
+            .fail(function(xhr) {
+                let mensaje = 'Ocurrió un error al asociar la asistente.';
+
+                if (xhr.responseJSON && xhr.responseJSON.msj) {
+                    mensaje = xhr.responseJSON.msj;
+                }
+
+                swal({
+                    title: 'Error',
+                    text: mensaje,
+                    icon: 'error',
+                    buttons: 'Aceptar'
+                });
+
+                $btn.prop('disabled', false).html(textoOriginal);
+            });
+        };
+
+        window.escapeHtmlAsistente = function(valor) {
+            return $('<div>').text(valor == null ? '' : String(valor)).html();
+        };
+
+        $(document).on('keyup', '#buscar_asistente_asociar', function(e) {
+            if (e.keyCode === 13) {
+                clearTimeout(buscarAsistenteTimer);
+                buscar_asistentes_para_asociar();
+                return;
+            }
+
+            clearTimeout(buscarAsistenteTimer);
+            buscarAsistenteTimer = setTimeout(function() {
+                const valor = $.trim($('#buscar_asistente_asociar').val());
+                if (valor.length >= 3 && $('#asociar_id_lugar_atencion').val()) {
+                    buscar_asistentes_para_asociar();
+                }
+            }, 450);
+        });
+
+        $(document).on('change', '#asociar_id_lugar_atencion', function() {
+            $('#asociar_asistente_resultados').empty();
+            const valor = $.trim($('#buscar_asistente_asociar').val());
+
+            if (valor.length >= 2 && $(this).val()) {
+                buscar_asistentes_para_asociar();
+            } else {
+                $('#asociar_asistente_mensaje')
+                    .text('Selecciona un lugar de atención y realiza una búsqueda.')
+                    .show();
+            }
+        });
+
         window.abrirPermisosDesdeBoton = function(btn) {
             let idAsistente = $(btn).data('id-asistente');
             let idLugarAtencion = $(btn).data('id-lugar-atencion');

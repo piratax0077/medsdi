@@ -777,6 +777,7 @@ Route::group([
 
     Route::get('buscar_hora_medica', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_hora_medica'])->name('profesional.buscar_hora_medica');
     Route::get('buscar_asistente', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_asistente'])->name('profesional.buscar_asistente');
+    Route::get('buscar_asistentes_asociar', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_asistentes_asociar'])->name('profesional.buscar_asistentes_asociar');
     Route::get('buscar_asistente_profesional', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_asistente_profesional'])->name('profesional.buscar_asistente_profesional');
     Route::get('agregar_asistente_lugar_atencion', [App\Http\Controllers\EscritorioProfesional::class, 'agregar_asistente_lugar_atencion'])->name('profesional.agregar_asistente_lugar_atencion');
     Route::get('cambio_estado_asistente', [App\Http\Controllers\EscritorioProfesional::class, 'cambio_estado_asistente'])->name('profesional.cambio_estado_asistente');

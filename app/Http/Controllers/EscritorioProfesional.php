@@ -3031,14 +3031,16 @@ class EscritorioProfesional extends Controller
         $asistentes = $profesional->Asistentes()->get();
         $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_profesional', $profesional->id)->get();
 
-        // dd($asistentes_lugar_atencion);
+        // Lugares disponibles para asociar una asistente desde el modal.
+        $lugares_atencion_profesional = $profesional->LugaresAtencion()->get();
 
         return view('app.profesional.mis_asistentes')->with([
             'asistentes' => $asistentes,
             'region' => $region,
             'asistentes_lugar_atencion' => $asistentes_lugar_atencion,
+            'lugares_atencion_profesional' => $lugares_atencion_profesional,
             'profesional' => $profesional
-            ]);
+        ]);
     }
 
     public function crear_asistente(Request $request)
@@ -8559,6 +8561,112 @@ return $ficha;
         }
     }
 
+    /**
+     * Busca asistentes existentes para asociarlos al profesional autenticado.
+     * Permite buscar por RUT, nombre, apellidos o correo y marca si la
+     * asistente ya está asociada al lugar de atención seleccionado.
+     */
+    public function buscar_asistentes_asociar(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'buscar' => 'required|string|min:2|max:100',
+            'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Debe ingresar al menos 2 caracteres y seleccionar un lugar de atención.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$profesional) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Profesional no encontrado.',
+            ], 404);
+        }
+
+        // Evita consultar/asociar asistentes usando un lugar ajeno al profesional.
+        $lugarPertenece = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->exists();
+
+        if (!$lugarPertenece) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El lugar de atención seleccionado no pertenece al profesional.',
+            ], 403);
+        }
+
+        $buscar = trim($request->buscar);
+        $buscarRut = preg_replace('/[^0-9kK]/', '', $buscar);
+
+        $query = Asistente::query()
+            ->where(function ($q) use ($buscar, $buscarRut) {
+                $q->where('nombres', 'like', '%' . $buscar . '%')
+                    ->orWhere('apellido_uno', 'like', '%' . $buscar . '%')
+                    ->orWhere('apellido_dos', 'like', '%' . $buscar . '%')
+                    ->orWhere('email', 'like', '%' . $buscar . '%')
+                    ->orWhereRaw(
+                        "CONCAT_WS(' ', COALESCE(nombres,''), COALESCE(apellido_uno,''), COALESCE(apellido_dos,'')) LIKE ?",
+                        ['%' . $buscar . '%']
+                    );
+
+                if ($buscarRut !== '') {
+                    $q->orWhereRaw(
+                        "REPLACE(REPLACE(LOWER(rut), '.', ''), '-', '') LIKE ?",
+                        ['%' . strtolower($buscarRut) . '%']
+                    );
+                }
+            })
+            ->orderBy('nombres')
+            ->orderBy('apellido_uno')
+            ->limit(20)
+            ->get([
+                'id',
+                'rut',
+                'nombres',
+                'apellido_uno',
+                'apellido_dos',
+                'email',
+                'telefono_uno',
+            ]);
+
+        $idsAsociadas = AsistenteLugarAtencion::where('id_profesional', $profesional->id)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->whereIn('id_asistente', $query->pluck('id'))
+            ->pluck('id_asistente')
+            ->all();
+
+        $asistentes = $query->map(function ($asistente) use ($idsAsociadas) {
+            return [
+                'id' => $asistente->id,
+                'rut' => $asistente->rut,
+                'nombres' => $asistente->nombres,
+                'apellido_uno' => $asistente->apellido_uno,
+                'apellido_dos' => $asistente->apellido_dos,
+                'nombre_completo' => trim(
+                    ($asistente->nombres ?? '') . ' ' .
+                    ($asistente->apellido_uno ?? '') . ' ' .
+                    ($asistente->apellido_dos ?? '')
+                ),
+                'email' => $asistente->email,
+                'telefono_uno' => $asistente->telefono_uno,
+                'asociada' => in_array($asistente->id, $idsAsociadas),
+            ];
+        })->values();
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => $asistentes->count() ? 'Asistentes encontrados.' : 'No se encontraron asistentes.',
+            'asistentes' => $asistentes,
+        ]);
+    }
+
     public function buscar_asistente(Request $request)
     {
         $profesional = '';
@@ -8603,20 +8711,74 @@ return $ficha;
 
     public function agregar_asistente_lugar_atencion(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'id_asistente' => 'required|integer|exists:asistentes,id',
+            'id_lugar_atencion' => 'required|integer|exists:lugares_atencion,id',
+            'examen' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Los datos enviados para asociar la asistente no son válidos.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        if (!$profesional) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Profesional no encontrado.',
+            ], 404);
+        }
+
+        $lugarPertenece = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->exists();
+
+        if (!$lugarPertenece) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'El lugar de atención seleccionado no pertenece al profesional.',
+            ], 403);
+        }
+
+        $existente = AsistenteLugarAtencion::where('id_asistente', $request->id_asistente)
+            ->where('id_lugar_atencion', $request->id_lugar_atencion)
+            ->where('id_profesional', $profesional->id)
+            ->first();
+
+        if ($existente) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'Esta asistente ya se encuentra asociada a este lugar de atención.',
+                'registro' => $existente,
+            ]);
+        }
 
         $asistente_lugar_atencion = new AsistenteLugarAtencion();
         $asistente_lugar_atencion->id_asistente = $request->id_asistente;
         $asistente_lugar_atencion->id_lugar_atencion = $request->id_lugar_atencion;
         $asistente_lugar_atencion->id_profesional = $profesional->id;
-        if(!empty($request->examen))
-            $asistente_lugar_atencion->examen = $request->examen;
 
-        if (!$asistente_lugar_atencion->save()) {
-            return 'error';
+        if (!empty($request->examen)) {
+            $asistente_lugar_atencion->examen = $request->examen;
         }
 
-        return json_encode($asistente_lugar_atencion);
+        if (!$asistente_lugar_atencion->save()) {
+            return response()->json([
+                'estado' => 0,
+                'msj' => 'No fue posible asociar la asistente.',
+            ], 500);
+        }
+
+        return response()->json([
+            'estado' => 1,
+            'msj' => 'Asistente asociada correctamente.',
+            'registro' => $asistente_lugar_atencion,
+        ]);
     }
 
     public function ver_paciente($id)
