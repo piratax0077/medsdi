@@ -1633,56 +1633,68 @@ class DentalController extends Controller
         return back()->with('success', 'Diagnósticos importados correctamente.');
     }
 
-    public function guardarDiagnosticoLaboratorio(Request $request){
+    public function guardarDiagnosticoLaboratorio(Request $request)
+    {
         try {
-            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $request->validate([
+                'trabajo_id' => 'required|integer',
+                'existe_laboratorio' => 'required|in:0,1',
+            ]);
 
-            // preguntar si existe el diagnóstico para el profesional
-            $diagnostico = DiagnosticosDental::find($request->trabajo_id);
+            $profesional = Profesional::where('id_usuario', Auth::id())->first();
 
-            $diagnostico->laboratorio = $request->existe_laboratorio;
-
-            if($diagnostico->save()){
-                $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
-                $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
-                $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
-                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
-                        ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
-                        ->get();
-                // Crear un array asociativo para un acceso más rápido
-                $mis_trabajos_profesional_map = [];
-                foreach ($mis_trabajos_profesional as $trabajo_profesional) {
-                    $mis_trabajos_profesional_map[$trabajo_profesional->id_diagnostico] = $trabajo_profesional->laboratorio;
-                }
-
-                // Agregar el atributo 'laboratorio' a los trabajos
-                foreach ($trabajos as $trabajo) {
-                    if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
-                        $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
-                    } else {
-                        $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
-                    }
-                }
-
-                foreach($procedimientos as $procedimiento){
-                    if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
-                        $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
-                    } else {
-                        $procedimiento->laboratorio = 0; // O el valor por defecto que prefieras
-                    }
-                }
-
-                $procedimientos = $mis_trabajos_profesional;
-
-                return ['status' => 1, 'mensaje' => 'Diagnóstico guardado correctamente','procedimientos' => $procedimientos, 'trabajos' => $trabajos];
-            }else{
-                return ['status' => 0, 'mensaje' => 'Error al guardar diagnóstico'];
+            if (!$profesional) {
+                return response()->json([
+                    'status' => 0,
+                    'mensaje' => 'Profesional no encontrado.',
+                ], 404);
             }
-        } catch (\Exception $e) {
-            //throw $th;
-            return $e->getMessage();
-        }
 
+            /*
+             * trabajo_id corresponde al ID de diagnosticos_dental_profesional.
+             * El laboratorio es una configuración propia de cada profesional,
+             * por lo tanto no se modifica diagnosticos_dental (catálogo maestro).
+             */
+            $trabajo = DiagnosticosDentalProfesional::where('id', $request->trabajo_id)
+                ->where('id_profesional', $profesional->id)
+                ->first();
+
+            if (!$trabajo) {
+                return response()->json([
+                    'status' => 0,
+                    'mensaje' => 'El tratamiento no pertenece al profesional autenticado.',
+                ], 404);
+            }
+
+            $trabajo->laboratorio = (int) $request->existe_laboratorio;
+            $trabajo->save();
+
+            return response()->json([
+                'status' => 1,
+                'mensaje' => 'Configuración de laboratorio actualizada correctamente.',
+                'trabajo' => [
+                    'id' => $trabajo->id,
+                    'id_diagnostico' => $trabajo->id_diagnostico,
+                    'laboratorio' => (int) $trabajo->laboratorio,
+                ],
+            ]);
+
+        } catch (\Throwable $e) {
+            \Log::error('Error al actualizar laboratorio de tratamiento dental', [
+                'id_usuario' => Auth::id(),
+                'trabajo_id' => $request->trabajo_id,
+                'error' => $e->getMessage(),
+                'archivo' => $e->getFile(),
+                'linea' => $e->getLine(),
+            ]);
+
+            return response()->json([
+                'status' => 0,
+                'mensaje' => config('app.debug')
+                    ? $e->getMessage()
+                    : 'No fue posible actualizar la configuración de laboratorio.',
+            ], 500);
+        }
     }
 
     public function cargar_tratamiento_presupuesto(Request $request){
