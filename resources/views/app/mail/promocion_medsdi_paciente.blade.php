@@ -69,7 +69,7 @@
             <table role="presentation" border="0" width="100%" cellspacing="0" cellpadding="0">
               <tr>
                 <td align="left" valign="middle" width="55%" class="header-logo-td">
-                  <img src="https://www.med-sdi.cl/images/sdi-color-h.svg" alt="MED-SDI" width="132" style="width:132px;display:block;">
+                  <img src="{{ asset('images/sdi-color-h.svg') }}" alt="MED-SDI" width="132" style="width:132px;display:block;">
                 </td>
                 <td align="right" valign="middle" width="45%" class="header-status-td">
                   <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:12px;line-height:16px;font-weight:600;letter-spacing:1px;color:#31bebe;text-transform:uppercase;">Hora registrada</p>
@@ -92,7 +92,7 @@
         <tr>
           <td class="px" style="padding:24px 32px 6px;">
             <p class="heading" style="margin:0 0 10px;font-size:21px;line-height:28px;font-weight:700;color:#123a5c;">Hola {{ $detalle['body']['nombre'] ?? 'Paciente' }} </p>
-            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:15px;line-height:24px;color:#5a6b7d;">Tu hora médica fue registrada correctamente. Queremos contarte que <strong style="color:#123a5c;">MED-SDI</strong> también dispone de herramientas digitales para ayudarte a gestionar tu atención de salud de forma simple, segura y ordenada.</p>
+            <p style="margin:0;font-family:'Inter',Helvetica,Arial,sans-serif;font-size:17px;line-height:26px;color:#5a6b7d;">¡Tu hora médica fue registrada correctamente!</p>
           </td>
         </tr>
 
