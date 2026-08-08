@@ -2,19 +2,382 @@
 
 @section('page-styles')
 <style>
-p {
-    color: #59636d;
-    word-wrap: break-word !important;
-    font-size: 14px;
-}
-.ui-autocomplete {
+    :root {
+        --medsdi-primary: #2f80ed;
+        --medsdi-primary-dark: #2468c4;
+        --medsdi-primary-soft: #eaf4ff;
+        --medsdi-secondary: #6c63ff;
+        --medsdi-success: #27ae60;
+        --medsdi-danger: #eb5757;
+        --medsdi-warning: #f2c94c;
+        --medsdi-bg: #f7f9fc;
+        --medsdi-border: #e4eaf1;
+        --medsdi-text: #25324b;
+        --medsdi-muted: #7a8699;
+    }
+
+    p {
+        color: #59636d;
+        word-wrap: break-word !important;
+        font-size: 14px;
+    }
+
+    .pcoded-content {
+        background: var(--medsdi-bg);
+    }
+
+    .medsdi-hero {
+        border-radius: 18px;
+        background: linear-gradient(135deg, #2f80ed 0%, #5b6cff 100%);
+        color: #fff;
+        padding: 24px 26px;
+        box-shadow: 0 10px 28px rgba(47, 128, 237, .18);
+        margin-bottom: 22px;
+    }
+
+    .medsdi-hero h4 {
+        color: #fff;
+        margin-bottom: 6px;
+        font-weight: 700;
+    }
+
+    .medsdi-hero p {
+        color: rgba(255,255,255,.88);
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+
+    .medsdi-card {
+        border: 1px solid var(--medsdi-border);
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(31, 45, 61, .06);
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .medsdi-card .card-header {
+        background: #fff !important;
+        border-bottom: 1px solid var(--medsdi-border);
+        padding: 16px 18px;
+    }
+
+    .medsdi-card-title {
+        margin: 0;
+        color: var(--medsdi-text);
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .medsdi-card-title i {
+        color: var(--medsdi-primary);
+        margin-right: 8px;
+    }
+
+    .medsdi-card .card-body {
+        padding: 18px;
+    }
+
+    .medsdi-uco-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--medsdi-primary);
+    }
+
+    .medsdi-help {
+        color: var(--medsdi-muted);
+        font-size: 12px;
+    }
+
+    .medsdi-btn-primary {
+        background: var(--medsdi-primary);
+        border-color: var(--medsdi-primary);
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(47, 128, 237, .18);
+    }
+
+    .medsdi-btn-primary:hover,
+    .medsdi-btn-primary:focus {
+        background: var(--medsdi-primary-dark);
+        border-color: var(--medsdi-primary-dark);
+        color: #fff;
+    }
+
+    .medsdi-btn-soft {
+        background: var(--medsdi-primary-soft);
+        color: var(--medsdi-primary);
+        border: 1px solid #cfe5ff;
+        border-radius: 9px;
+        font-weight: 600;
+    }
+
+    .medsdi-btn-soft:hover {
+        background: #dceeff;
+        color: var(--medsdi-primary-dark);
+    }
+
+    .medsdi-form-label {
+        color: var(--medsdi-text);
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .medsdi-card .form-control {
+        border: 1px solid #dfe6ee;
+        border-radius: 10px;
+        min-height: 38px;
+        box-shadow: none;
+    }
+
+    .medsdi-card .form-control:focus {
+        border-color: var(--medsdi-primary);
+        box-shadow: 0 0 0 3px rgba(47, 128, 237, .10);
+    }
+
+    .medsdi-table-card .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .medsdi-table-wrap {
+        overflow-x: auto;
+    }
+
+    #table_procedimientos_propios_dental {
+        border-collapse: separate !important;
+        border-spacing: 0 8px !important;
+    }
+
+    #table_procedimientos_propios_dental thead th {
+        border: 0 !important;
+        color: #6b778c;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .35px;
+        background: #f8fafc;
+        padding: 12px 14px;
+    }
+
+    #table_procedimientos_propios_dental tbody tr {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(31, 45, 61, .05);
+    }
+
+    #table_procedimientos_propios_dental tbody td {
+        border-top: 1px solid #edf1f5 !important;
+        border-bottom: 1px solid #edf1f5 !important;
+        vertical-align: middle;
+        padding: 13px 14px;
+    }
+
+    #table_procedimientos_propios_dental tbody td:first-child {
+        border-left: 1px solid #edf1f5 !important;
+        border-radius: 10px 0 0 10px;
+        font-weight: 600;
+        color: var(--medsdi-text);
+    }
+
+    #table_procedimientos_propios_dental tbody td:last-child {
+        border-right: 1px solid #edf1f5 !important;
+        border-radius: 0 10px 10px 0;
+    }
+
+    .medsdi-badge-value {
+        display: inline-flex;
+        align-items: center;
+        background: #eef8f2;
+        color: var(--medsdi-success);
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    .medsdi-action-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 4px;
+        border: 0;
+    }
+
+    .medsdi-action-edit {
+        background: #fff5df;
+        color: #b7791f;
+    }
+
+    .medsdi-action-delete {
+        background: #fff0f0;
+        color: var(--medsdi-danger);
+    }
+
+    .medsdi-modal .modal-content {
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 18px 50px rgba(31,45,61,.18);
+    }
+
+    .medsdi-modal .modal-header {
+        background: linear-gradient(135deg, #2f80ed 0%, #5b6cff 100%);
+        color: #fff;
+        border-bottom: 0;
+        padding: 18px 22px;
+    }
+
+    .medsdi-modal .modal-title {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .medsdi-modal .modal-body {
+        padding: 22px;
+        background: #fbfcfe;
+    }
+
+    .ui-autocomplete {
         z-index: 9999999 !important;
         position: absolute;
         background: #fff;
-        border: 1px solid #545454;
+        border: 1px solid var(--medsdi-border);
+        border-radius: 10px;
         padding: 6px;
         text-transform: uppercase;
         cursor: pointer;
+        box-shadow: 0 10px 30px rgba(31,45,61,.12);
+    }
+
+    .arancel-quick-card {
+        border: 1px solid #dfe8f4;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        padding: 14px;
+        margin-bottom: 14px;
+    }
+
+    .arancel-step {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+        color: var(--medsdi-text);
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .arancel-step-number {
+        width: 25px;
+        height: 25px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--medsdi-primary-soft);
+        color: var(--medsdi-primary);
+        font-size: 12px;
+        flex: 0 0 25px;
+    }
+
+    .arancel-preview {
+        border-radius: 12px;
+        background: #eef8f2;
+        border: 1px solid #d8efdf;
+        padding: 12px 14px;
+    }
+
+    .arancel-preview small {
+        display: block;
+        color: #688273;
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+
+    .arancel-preview strong {
+        color: var(--medsdi-success);
+        font-size: 22px;
+    }
+
+    .bloque-quick-btn {
+        border: 1px solid #dce6f1;
+        background: #fff;
+        color: #5c6b7a;
+        border-radius: 8px;
+        min-width: 34px;
+        height: 32px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-right: 4px;
+        margin-bottom: 5px;
+    }
+
+    .bloque-quick-btn:hover,
+    .bloque-quick-btn.active {
+        background: var(--medsdi-primary-soft);
+        color: var(--medsdi-primary);
+        border-color: #bcdcff;
+    }
+
+    .medsdi-switch-box {
+        border: 1px solid #e5ebf2;
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: #fafcff;
+    }
+
+    .arancel-table-tools {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+    }
+
+    .arancel-search {
+        position: relative;
+        flex: 1 1 280px;
+        max-width: 440px;
+    }
+
+    .arancel-search i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #8a98a8;
+        z-index: 2;
+    }
+
+    .arancel-search input {
+        padding-left: 36px;
+        border: 1px solid #dfe6ee;
+        border-radius: 10px;
+        height: 38px;
+        width: 100%;
+        outline: none;
+    }
+
+    .arancel-summary-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: #f4f7fb;
+        color: #687789;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    @media (max-width: 991px) {
+        .medsdi-hero { padding: 20px; }
     }
 </style>
 @endsection
@@ -41,94 +404,116 @@ p {
         </div>
 
 
-        <div class="row bg-gris">
-            <div class="col-12">
-                <div class="card-informacion bg-purple mt-3">
-                    <div class="card-body text-center">
-                        <h5 class="text-white mb-0">Estimado Profesional {{ Auth::user()->name }} rogamos personalizar su listado de aranceles editando el procedimiento, número de bloques y valor.</h5>
-                    </div>
+        <div class="medsdi-hero mt-3">
+            <div class="d-flex align-items-start justify-content-between flex-wrap">
+                <div>
+                    <h4><i class="feather icon-dollar-sign mr-2"></i>Configuración de aranceles</h4>
+                    <p>Personaliza tus tratamientos, cantidad de bloques, UCO y valores para utilizarlos en presupuestos odontológicos.</p>
+                </div>
+                <div class="mt-2 mt-md-0 text-right">
+                    <small class="d-block" style="opacity:.8;">Profesional</small>
+                    <strong>{{ Auth::user()->name }}</strong>
                 </div>
             </div>
         </div>
         <div class="row">
              <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3">
-                <div class="card">
-                    <div class="card-header bg-info">
-                        <h6 class="f-18 text-white">UCO</h6>
+                <div class="card medsdi-card mb-3">
+                    <div class="card-header">
+                        <h6 class="medsdi-card-title"><i class="feather icon-dollar-sign"></i>Valor UCO</h6>
                     </div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label class="floating-label-activo-sm" for="valor_uco">Valor UCO</label>
-                                <input type="number" name="valor_uco" id="valor_uco" class="form-control form-control-sm" placeholder="Ingrese el valor de la UCO">
+                                <label class="medsdi-form-label" for="valor_uco">Valor UCO</label><div class="medsdi-help mb-2">Define el valor base utilizado para recalcular tus aranceles.</div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                    <input type="number" name="valor_uco" id="valor_uco" class="form-control form-control-sm" value="{{ $valor_uco }}" placeholder="Ingrese el valor de la UCO">
+                                </div>
                             </div>
                             <div class="col-md-12">
-                                <button class="btn btn-primary btn-sm btn-block" type="button" onclick="recalcular_presupuestos()"><i class="feather icon-check"></i> Recalcular aranceles</button>
+                                <button class="btn medsdi-btn-primary btn-sm btn-block" type="button" onclick="recalcular_presupuestos()"><i class="feather icon-check"></i> Recalcular aranceles</button>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="card">
-                    <div class="card-header bg-info">
-                        <h6 class="f-18 text-white">Ingresar procedimiento &nbsp; &nbsp; {{ $profesional->TipoEspecialidad()->first()->nombre }}</h6>
+                <div class="card medsdi-card">
+                    <div class="card-header">
+                        <h6 class="medsdi-card-title"><i class="feather icon-plus-circle"></i>Nuevo procedimiento</h6>
+                        <small class="medsdi-help">{{ $profesional->TipoEspecialidad()->first()->nombre }}</small>
                     </div>
                     <div class="card-body">
-                        <div class="form-row">
-                            <div class="col-md-12 mb-3">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm" for="nombre_procedimiento_impl">Nombre del procedimiento</label>
-                                    @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
-                                    <input type="text" name="nombre_procedimiento_impl" id="nombre_procedimiento_impl" class="form-control form-control-sm">
-                                    @else
-                                    <input type="text" name="nombre_procedimiento" id="nombre_procedimiento" class="form-control form-control-sm" placeholder="Ingrese el nombre del procedimiento">
-                                    @endif
+                        <div class="arancel-quick-card">
+                            <div class="arancel-step"><span class="arancel-step-number">1</span> Selecciona el tratamiento</div>
+                            <div class="form-group mb-2">
+                                @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
+                                    <input type="text" name="nombre_procedimiento_impl" id="nombre_procedimiento_impl" class="form-control" placeholder="Buscar tratamiento..." autocomplete="off">
+                                @else
+                                    <input type="text" name="nombre_procedimiento" id="nombre_procedimiento" class="form-control" placeholder="Buscar tratamiento por nombre..." autocomplete="off">
+                                @endif
+                            </div>
+                            <div class="diagnostico_activo"></div>
+                            <div class="diagnostico_inactivo" style="display:none;"></div>
+                            <input type="hidden" name="id_procedimiento" id="id_procedimiento">
+                        </div>
+
+                        <div class="arancel-quick-card">
+                            <div class="arancel-step"><span class="arancel-step-number">2</span> Define bloques y UCO</div>
+                            <div class="form-group mb-2">
+                                <label for="cantidad_bloques_buscador" class="medsdi-form-label">Bloques de atención</label>
+                                <input type="number" min="1" name="cantidad_bloques_buscador" id="cantidad_bloques_buscador" class="form-control form-control-sm" placeholder="Ej: 2">
+                                <div class="mt-2">
+                                    @for($i = 1; $i <= 6; $i++)
+                                        <button type="button" class="bloque-quick-btn" data-bloques="{{ $i }}">{{ $i }}</button>
+                                    @endfor
                                 </div>
-                                <div class="col-md-12 mt-2 diagnostico_activo"></div>
-                                <div class="col-md-12 mt-2 diagnostico_inactivo" style="display: none;"></div>
-                                <input type="hidden" name="id_procedimiento" id="id_procedimiento">
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="cantidad_uco_buscador" class="medsdi-form-label">Cantidad de UCO</label>
+                                <input type="number" min="0" step="0.01" name="cantidad_uco_buscador" id="cantidad_uco_buscador" class="form-control form-control-sm" placeholder="Ej: 4">
+                            </div>
+                            <div class="medsdi-switch-box">
+                                <div class="custom-control custom-switch">
+                                    <input class="custom-control-input" type="checkbox" id="tiene_lab_buscador">
+                                    <label class="custom-control-label" for="tiene_lab_buscador">Requiere laboratorio dental</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cantidad_bloques_buscador" class="floating-label-activo-sm">Cantidad de bloques</label>
-                                    <input type="number" name="cantidad_bloques_buscador" id="cantidad_bloques_buscador" class="form-control form-control-sm">
-                                </div>
 
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="cantidad_uco_buscador" class="floating-label-activo-sm">Cantidad de UCO</label>
-                                    <input type="number" name="cantidad_uco_buscador" id="cantidad_uco_buscador" class="form-control form-control-sm">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="tiene_lab_buscador">
-                                    <label class="form-check-label" for="existeLaboratorioDental">
-                                        ¿Laboratorio?
-                                    </label>
-                                </div>
-                            </div>
+                        <div class="arancel-preview mb-3">
+                            <small>Valor estimado del tratamiento</small>
+                            <strong id="valor_tratamiento_preview">$0</strong>
+                            <div class="medsdi-help mt-1"><span id="uco_preview">0 UCO</span> × $<span id="valor_uco_preview">{{ number_format($valor_uco,0,',','.') }}</span></div>
                         </div>
                         @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
-                            <button class="btn btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar</button>
+                            <button class="btn medsdi-btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar arancel</button>
                         @else
-                            <button class="btn btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar</button>
+                            <button class="btn medsdi-btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar arancel</button>
                         @endif
+                        <button type="button" class="btn btn-light btn-sm btn-block" onclick="limpiarFormularioArancel()"><i class="feather icon-rotate-ccw"></i> Limpiar campos</button>
 
                     </div>
                 </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-                <div class="card">
-                    <div class="card-header bg-info">
-                        <h5 class="text-white d-inline">Trabajos y aranceles calculados con un valor de uco de $ <span id="valor_uco_header">{{ number_format($valor_uco,0,',','.') }}</span>
-                            <button class="btn btn-light btn-xs float-md-right d-inline" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button"><i class="fas fa-plus"></i> Agregar nuevo Diagnóstico/Trabajo</button>
-                        </h5>
+                <div class="card medsdi-card medsdi-table-card">
+                    <div class="card-header">
+                        <div>
+                            <h5 class="medsdi-card-title mb-1"><i class="feather icon-list"></i>Mis trabajos y aranceles</h5>
+                            <small class="medsdi-help">Valor UCO actual: $<span id="valor_uco_header">{{ number_format($valor_uco,0,',','.') }}</span></small>
+                        </div>
+                        <button class="btn medsdi-btn-soft btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button"><i class="feather icon-plus"></i> Agregar procedimiento</button>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pt-2">
+                        <div class="arancel-table-tools">
+                            <div class="arancel-search">
+                                <i class="feather icon-search"></i>
+                                <input type="text" id="buscar_arancel_tabla" placeholder="Buscar dentro de mis aranceles...">
+                            </div>
+                            <span class="arancel-summary-badge"><i class="feather icon-layers"></i> {{ count($mis_trabajos_profesional ?? []) }} tratamientos configurados</span>
+                        </div>
+                        <div class="medsdi-table-wrap">
                         <table class="display table w-100 table-striped dt-responsive nowrap dataTable no-footer dtr-inline collapsed" id="table_procedimientos_propios_dental">
                             <thead>
                                 <tr>
@@ -146,10 +531,10 @@ p {
                                     <tr>
                                         <td>{{ $mi_trabajo->descripcion }}</td>
                                         <td>{{ $mi_trabajo->cantidad_uco }}</td>
-                                        <td>${{ number_format($mi_trabajo->valor,0,',','.') }}</td>
+                                        <td><span class="medsdi-badge-value">${{ number_format($mi_trabajo->valor,0,',','.') }}</span></td>
                                         <td>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}"  @if($mi_trabajo->laboratorio == 1) checked @endif>
+                                                <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onchange="guardarLaboratorio({{ $mi_trabajo->id }})" @if((int)$mi_trabajo->laboratorio === 1) checked @endif>
                                                 <label class="form-check-label" for="existeLaboratorioDental{{ $mi_trabajo->id }}">
                                                     ¿Laboratorio?
                                                 </label>
@@ -157,14 +542,15 @@ p {
                                         </td>
                                         <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                                         <td>
-                                            <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
-                                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
+                                            <button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                            <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
                                 @endif
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,24 +558,24 @@ p {
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
+<div class="modal fade medsdi-modal" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
+          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel"><i class="feather icon-plus-circle mr-2"></i>Agregar nuevo procedimiento / trabajo</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="form-row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm" for="nombre_procedimiento_nuevo">Nombre del procedimiento</label>
+                        <label class="medsdi-form-label" for="nombre_procedimiento_nuevo">Nombre del procedimiento</label>
                         <input type="text" name="nombre_procedimiento_nuevo" id="nombre_procedimiento_nuevo" class="form-control form-control-sm">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm" for="cantidad_uco">Cantidad UCO</label>
+                        <label class="medsdi-form-label" for="cantidad_uco">Cantidad UCO</label>
                         <input type="number" name="cantidad_uco" id="cantidad_uco" class="form-control form-control-sm">
                     </div>
                 </div>
@@ -210,7 +596,7 @@ p {
             </div>
 
 
-            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
+            <button type="button" class="btn medsdi-btn-primary btn-sm float-right" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
             {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -228,7 +614,7 @@ p {
                             <td>{{ $mi_trabajo->uco }}</td>
                             <td>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
+                                    <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onchange="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
                                     <label class="form-check-label" for="existeLaboratorioDental{{ $mi_trabajo->id }}">
                                         ¿Laboratorio?
                                     </label>
@@ -236,8 +622,8 @@ p {
                             </td>
                             <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                             <td>
-                                <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
-                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
+                                <button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -254,78 +640,216 @@ p {
 
 @section('page-script')
     <script>
-        function recalcular_presupuestos(){
-            var valor_uco = $('#valor_uco').val();
-            if(valor_uco == ''){
-                swal({
-                    title: 'Error',
-                    text: 'Debe ingresar el valor de la UCO',
-                    icon: 'error'
-                });
-                return;
-            }
+        function formatoCLP(valor) {
+            return '$' + (Number(valor || 0)).toLocaleString('es-CL', { maximumFractionDigits: 0 });
+        }
 
-            let url = "{{ route('profesional.recalcular_presupuestos') }}";
-            let data = {
-                valor_uco: valor_uco,
-                _token: '{{ csrf_token() }}'
-            }
+        function actualizarPreviewArancel() {
+            const uco = parseFloat($('#cantidad_uco_buscador').val()) || 0;
+            const valorUco = parseFloat($('#valor_uco').val()) || 0;
+            $('#valor_tratamiento_preview').text(formatoCLP(uco * valorUco));
+            $('#uco_preview').text(uco.toLocaleString('es-CL') + ' UCO');
+            $('#valor_uco_preview').text(valorUco.toLocaleString('es-CL', { maximumFractionDigits: 0 }));
+        }
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                success: function(response) {
-                    console.log(response);
-                    if(response.status == "ok"){
-                        $('#valor_uco_header').text(parseFloat(valor_uco).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
-                        swal({
-                            title: 'Éxito',
-                            text: 'Se han recalculado los presupuestos correctamente',
-                            icon: 'success'
-                        });
-                        let trabajos = response.mis_trabajos_profesional;
-                        let table = $('#table_procedimientos_propios_dental').DataTable(); // Accede a la instancia de DataTable
-                        // Limpia los datos de la tabla correctamente
-                        table.clear();
-                        // Agrega las nuevas filas
-                        trabajos.forEach(trabajo => {
-                            trabajo.valor = parseFloat(trabajo.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-                            console.log(trabajo);
-                            const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
-                            table.row.add([
-                                trabajo.descripcion,
-                                trabajo.cantidad_uco,
-                                '$'+trabajo.valor,
+        function limpiarFormularioArancel() {
+            $('#nombre_procedimiento, #nombre_procedimiento_impl').val('');
+            $('#id_procedimiento').val('');
+            $('#cantidad_bloques_buscador').val('');
+            $('#cantidad_uco_buscador').val('');
+            $('#tiene_lab_buscador').prop('checked', false);
+            $('.bloque-quick-btn').removeClass('active');
+            $('.diagnostico_activo').empty();
+            $('.diagnostico_inactivo').empty().hide();
+            actualizarPreviewArancel();
+            const $campo = $('#nombre_procedimiento_impl').length ? $('#nombre_procedimiento_impl') : $('#nombre_procedimiento');
+            $campo.trigger('focus');
+        }
 
-                                `
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
-                                    <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
-                                        ¿Laboratorio?
-                                    </label>
-                                </div>
-                                `,
-                                trabajo.cantidad_bloques,
-                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${trabajo.id})"><i class="eather icon-x"></i></button>
-                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="eather icon-edit"></i></button>`
-                            ]);
-                        });
-                        // Dibuja la tabla nuevamente
-                        table.draw();
-                    }else{
-                        swal({
-                            title: 'Error',
-                            text: 'No se han podido recalcular los presupuestos',
-                            icon: 'error'
-                        });
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
+        $(document).ready(function() {
+            actualizarPreviewArancel();
+
+            $('#cantidad_uco_buscador, #valor_uco').on('input change', actualizarPreviewArancel);
+
+            $('.bloque-quick-btn').on('click', function() {
+                $('.bloque-quick-btn').removeClass('active');
+                $(this).addClass('active');
+                $('#cantidad_bloques_buscador').val($(this).data('bloques')).trigger('change');
+            });
+
+            $('#cantidad_bloques_buscador').on('input change', function() {
+                const valor = String($(this).val());
+                $('.bloque-quick-btn').removeClass('active').filter(function() {
+                    return String($(this).data('bloques')) === valor;
+                }).addClass('active');
+            });
+
+            $('#buscar_arancel_tabla').on('keyup input', function() {
+                if ($.fn.DataTable && $.fn.DataTable.isDataTable('#table_procedimientos_propios_dental')) {
+                    $('#table_procedimientos_propios_dental').DataTable().search(this.value).draw();
                 }
             });
+        });
+
+        function recalcular_presupuestos() {
+
+    var valor_uco = $('#valor_uco').val();
+
+    if (valor_uco == '') {
+        swal({
+            title: 'Error',
+            text: 'Debe ingresar el valor de la UCO',
+            icon: 'error'
+        });
+        return;
+    }
+
+    let url = "{{ route('profesional.recalcular_presupuestos') }}";
+
+    let data = {
+        valor_uco: valor_uco,
+        _token: '{{ csrf_token() }}'
+    };
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: data,
+
+        success: function(response) {
+
+            console.log(response);
+
+            if (response.status == "ok") {
+
+                $('#valor_uco_header').text(
+                    parseFloat(valor_uco).toLocaleString('es-CL', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    })
+                );
+
+                swal({
+                    title: 'Éxito',
+                    text: 'Se han recalculado los aranceles correctamente',
+                    icon: 'success'
+                });
+
+                let trabajos = response.mis_trabajos_profesional;
+
+                let table = $('#table_procedimientos_propios_dental').DataTable();
+
+                table.clear();
+
+                trabajos.forEach(trabajo => {
+
+                    let valorFormateado = parseFloat(trabajo.valor).toLocaleString(
+                        'es-CL',
+                        {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }
+                    );
+
+                    const isChecked =
+                        parseInt(trabajo.laboratorio) === 1
+                            ? 'checked'
+                            : '';
+
+                    table.row.add([
+
+                        // PROCEDIMIENTO
+                        `<span class="font-weight-600">
+                            ${trabajo.descripcion}
+                        </span>`,
+
+                        // UCO
+                        `<span class="medsdi-uco-badge">
+                            ${trabajo.cantidad_uco}
+                        </span>`,
+
+                        // VALOR
+                        `<span class="medsdi-badge-value">
+                            $${valorFormateado}
+                        </span>`,
+
+                        // LABORATORIO
+                        `
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                value="${trabajo.id}"
+                                id="existeLaboratorioDental${trabajo.id}"
+                                onchange="guardarLaboratorio(${trabajo.id})"
+                                ${isChecked}
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="existeLaboratorioDental${trabajo.id}">
+                                ¿Laboratorio?
+                            </label>
+                        </div>
+                        `,
+
+                        // BLOQUES
+                        `<span class="medsdi-bloques-badge">
+                            ${trabajo.cantidad_bloques}
+                        </span>`,
+
+                        // ACCIONES
+                        `
+                        <button
+                            class="medsdi-action-btn medsdi-action-delete"
+                            type="button"
+                            title="Eliminar"
+                            onclick="eliminar_procedimiento(${trabajo.id})">
+
+                            <i class="feather icon-x"></i>
+                        </button>
+
+                        <button
+                            class="medsdi-action-btn medsdi-action-edit"
+                            type="button"
+                            title="Editar"
+                            onclick="mostrar_procedimiento(${trabajo.id})">
+
+                            <i class="feather icon-edit"></i>
+                        </button>
+                        `
+                    ]);
+
+                });
+
+                table.draw(false);
+
+            } else {
+
+                swal({
+                    title: 'Error',
+                    text: 'No se han podido recalcular los aranceles',
+                    icon: 'error'
+                });
+
+            }
+
+        },
+
+        error: function(xhr) {
+
+            console.error(xhr);
+
+            swal({
+                title: 'Error',
+                text: 'Ocurrió un problema al recalcular los aranceles.',
+                icon: 'error'
+            });
+
         }
+
+    });
+}
 
         function agregar_otro_procedimiento() {
             var nombre_procedimiento_nuevo = $('#nombre_procedimiento_nuevo').val();
@@ -371,18 +895,18 @@ p {
                         table_procedimientos_propios.row.add([
                             p.descripcion,
                             p.uco,
-                            '$'+p.valor,
+                            `<span class="medsdi-badge-value">$${p.valor}</span>`,
                             `
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onchange="guardarLaboratorio(${p.id})" ${isChecked_p}>
                                 <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                     ¿Laboratorio?
                                 </label>
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas feather icon-x"></i></button>
-                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
+                            `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="fas feather icon-x"></i></button>
+                            <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
 
@@ -405,13 +929,13 @@ p {
                             trabajo.uco,
                             `
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
+                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onchange="guardarLaboratorio(${trabajo.id})" ${isChecked}>
                                 <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
                                     ¿Laboratorio?
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
+                            `<button class="medsdi-action-btn medsdi-action-edit" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -469,18 +993,18 @@ p {
                         table_procedimientos_propios.row.add([
                             p.descripcion,
                             p.uco,
-                            '$'+p.valor,
+                            `<span class="medsdi-badge-value">$${p.valor}</span>`,
                             `
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" ${isChecked_p}>
+                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onchange="guardarLaboratorio(${p.id})" ${isChecked_p}>
                                 <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                     ¿Laboratorio?
                                 </label>
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
-                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
+                            `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                            <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
 
@@ -503,13 +1027,13 @@ p {
                             trabajo.uco,
                             `
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
+                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onchange="guardarLaboratorio(${trabajo.id})" ${isChecked}>
                                 <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}">
                                     ¿Laboratorio?
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
+                            `<button class="medsdi-action-btn medsdi-action-edit" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -567,118 +1091,64 @@ p {
         }
 
         function guardarLaboratorio(trabajoId) {
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var existeLaboratorio = $('#existeLaboratorioDental' + trabajoId).is(':checked') ? 1 : 0;
+            const $checkbox = $('#existeLaboratorioDental' + trabajoId);
+
+            if (!$checkbox.length) {
+                console.error('No se encontró el checkbox del tratamiento:', trabajoId);
+                return;
+            }
+
+            const nuevoEstado = $checkbox.is(':checked') ? 1 : 0;
+            const estadoAnterior = nuevoEstado === 1 ? false : true;
+
+            $checkbox.prop('disabled', true);
 
             $.ajax({
-                url: "{{ route('dental.guardarLaboratorio') }}", // Asegúrate de que esta ruta exista en tus rutas
+                url: "{{ route('dental.guardarLaboratorio') }}",
                 type: 'POST',
+                dataType: 'json',
                 data: {
-                    _token: CSRF_TOKEN,
+                    _token: '{{ csrf_token() }}',
                     trabajo_id: trabajoId,
-                    existe_laboratorio: existeLaboratorio
+                    existe_laboratorio: nuevoEstado
                 },
                 success: function(response) {
-                    return console.log(response);
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental').empty();
-                    procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += '<td><button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="feather icon-x"></i></button></td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental').append(html);
+                    if (parseInt(response.status) === 1) {
+                        // No reconstruimos DataTables: el resto de la fila no cambió
+                        // y así se conservan todos los estilos MedSDI.
+                        $checkbox
+                            .prop('checked', parseInt(response.trabajo.laboratorio) === 1)
+                            .prop('disabled', false);
+
+                        return;
+                    }
+
+                    $checkbox
+                        .prop('checked', estadoAnterior)
+                        .prop('disabled', false);
+
+                    swal({
+                        title: 'No fue posible guardar',
+                        text: response.mensaje || 'No se pudo actualizar el laboratorio.',
+                        icon: 'error'
                     });
+                },
+                error: function(xhr) {
+                    $checkbox
+                        .prop('checked', estadoAnterior)
+                        .prop('disabled', false);
 
-                    // Actualizar la tabla DataTable
-                    let trabajos = response.trabajos;
-                    let table = $('#table_aranceles_dental').DataTable(); // Accede a la instancia de DataTable
+                    let mensaje = 'No fue posible actualizar el laboratorio.';
 
-                    // Limpia los datos de la tabla correctamente
-                    table.clear();
+                    if (xhr.responseJSON && xhr.responseJSON.mensaje) {
+                        mensaje = xhr.responseJSON.mensaje;
+                    }
 
-                    // Agrega las nuevas filas
-                    trabajos.forEach(trabajo => {
-                        const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
-                        table.row.add([
-                            trabajo.descripcion,
-                            trabajo.valor,
-                            trabajo.uco,
-                            `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorio(${trabajo.id})" ${isChecked}>
-                                <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
-                                    ¿Laboratorio?
-                                </label>
-                            </div>
-                            `,
-                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
-                        ]);
+                    swal({
+                        title: 'Error',
+                        text: mensaje,
+                        icon: 'error'
                     });
-
-                    // Dibuja la tabla nuevamente
-                    table.draw();
-                    // Maneja la respuesta del servidor aquí
-                    alert('Estado del laboratorio guardado correctamente');
-                },
-                error: function(xhr, status, error) {
-                    // Maneja los errores aquí
-                    alert('Error al guardar el estado del laboratorio');
-                }
-            });
-        }
-
-        function guardarLaboratorioIndex(trabajoId){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var existeLaboratorio = $('#existeLaboratorioDental' + trabajoId).is(':checked') ? 1 : 0;
-
-            $.ajax({
-                url: "{{ route('dental.guardarLaboratorio') }}", // Asegúrate de que esta ruta exista en tus rutas
-                type: 'POST',
-                data: {
-                    _token: CSRF_TOKEN,
-                    trabajo_id: trabajoId,
-                    existe_laboratorio: existeLaboratorio
-                },
-                success: function(response) {
-                    console.log(response);
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental').empty();
-                    procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += '<td><button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="feather icon-x"></i></button></td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental').append(html);
-                    });
-                    // Maneja la respuesta del servidor aquí
-                    alert('Estado del laboratorio guardado correctamente');
-                },
-                error: function(xhr, status, error) {
-                    // Maneja los errores aquí
-                    alert('Error al guardar el estado del laboratorio');
                 }
             });
         }
@@ -742,6 +1212,8 @@ p {
                         $('#cantidad_bloques_buscador').val('');
                         $('#cantidad_uco_buscador').val('');
                         $('#tiene_lab_buscador').prop('checked', false);
+                        $('.bloque-quick-btn').removeClass('active');
+                        actualizarPreviewArancel();
 
                         // Actualizar procedimientos propios
                         let procedimientos = response.mis_trabajos_profesional;
@@ -757,18 +1229,18 @@ p {
                             table_procedimientos_propios.row.add([
                                 p.descripcion,
                                 p.cantidad_uco,
-                                '$'+valor,
+                                `<span class="medsdi-badge-value">$${valor}</span>`,
                                 `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}"  ${isChecked_p}>
+                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onchange="guardarLaboratorio(${p.id})" ${isChecked_p}>
                                     <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                         ¿Laboratorio?
                                     </label>
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
-                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="eather icon-edit"></i></button>`
+                                `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                                <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                             ]);
                         });
 
@@ -791,13 +1263,13 @@ p {
                                 trabajo.uco,
                                 `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
+                                    <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onchange="guardarLaboratorio(${trabajo.id})" ${isChecked}>
                                     <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
                                         ¿Laboratorio?
                                     </label>
                                 </div>
                                 `,
-                                `<button class="btn btn-warning btn-icon role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
+                                `<button class="medsdi-action-btn medsdi-action-edit role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                             ]);
                         });
 
@@ -879,18 +1351,18 @@ p {
                             table_procedimientos_propios.row.add([
                                 p.descripcion,
                                 p.cantidad_uco,
-                                '$'+p.valor,
+                                `<span class="medsdi-badge-value">$${p.valor}</span>`,
                                 `
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onchange="guardarLaboratorio(${p.id})" ${isChecked_p}>
                                     <label class="form-check-label" for="existeLaboratorioDental${p.id}">
                                         ¿Laboratorio?
                                     </label>
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="eather icon-x"></i></button>
-                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="eather icon-edit"></i></button>`
+                                `<button class="medsdi-action-btn medsdi-action-delete" type="button" title="Eliminar" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                                <button class="medsdi-action-btn medsdi-action-edit" type="button" title="Editar" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                             ]);
                         });
 
